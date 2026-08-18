@@ -138,3 +138,68 @@ footer {
     width: 220px;
   }
 }
+.form-page {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 20px;
+}
+
+.form-box {
+  width: 100%;
+  max-width: 450px;
+  background: white;
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.form-box h1 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.form-box > p {
+  text-align: center;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.form-box label {
+  display: block;
+  margin: 15px 0 7px;
+  font-weight: bold;
+}
+
+.form-box input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+}
+
+.form-box input:focus {
+  border-color: #2563eb;
+}
+
+.register-btn,
+.login-btn {
+  width: 100%;
+  border: none;
+  margin-top: 25px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.login-text {
+  margin-top: 20px !important;
+}
+
+.login-text a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: bold;
+}
