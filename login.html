@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Smart Money</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header class="navbar">
+    <div class="logo">Smart Money</div>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="register.html">Register</a>
+    </nav>
+  </header>
+
+  <main class="form-page">
+
+    <div class="form-box">
+
+      <h1>Welcome Back</h1>
+      <p>Login to your Smart Money account</p>
+
+      <form id="loginForm">
+
+        <label for="email">Gmail</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="Enter your Gmail"
+          required
+        >
+
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter your password"
+          required
+        >
+
+        <button type="submit" class="btn login-btn">
+          Login
+        </button>
+
+      </form>
+
+      <p class="login-text">
+        Don't have an account?
+        <a href="register.html">Create Account</a>
+      </p>
+
+    </div>
+
+  </main>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      alert("Login system will be connected to the database next.");
+    });
+  </script>
+
+</body>
+</html>
