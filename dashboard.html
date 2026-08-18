@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Smart Money</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header class="navbar">
+    <div class="logo">Smart Money</div>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="profile.html">Profile</a>
+      <a href="login.html">Logout</a>
+    </nav>
+  </header>
+
+  <main class="dashboard">
+
+    <div class="dashboard-header">
+      <div>
+        <h1>My Dashboard</h1>
+        <p>Welcome to Smart Money</p>
+      </div>
+
+      <div class="referral-box">
+        <span>My Referral ID</span>
+        <strong id="referralId">SM-XXXXXX</strong>
+      </div>
+    </div>
+
+    <section class="stats">
+
+      <div class="stat-card">
+        <h3>Today's Revenue</h3>
+        <p id="todayRevenue">₹0</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>7 Days Revenue</h3>
+        <p id="sevenDayRevenue">₹0</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>30 Days Revenue</h3>
+        <p id="thirtyDayRevenue">₹0</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>Lifetime Revenue</h3>
+        <p id="lifetimeRevenue">₹0</p>
+      </div>
+
+    </section>
+
+    <section class="dashboard-grid">
+
+      <div class="dashboard-card">
+        <h2>My Referrals</h2>
+
+        <div class="referral-summary">
+          <div>
+            <span>Total Referrals</span>
+            <strong id="totalReferrals">0</strong>
+          </div>
+
+          <div>
+            <span>Active Referrals</span>
+            <strong id="activeReferrals">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-card">
+        <h2>My Package</h2>
+
+        <p class="package-name" id="userPackage">
+          No Package
+        </p>
+
+        <p>Commission will be calculated after an eligible sale is recorded.</p>
+      </div>
+
+    </section>
+
+    <section class="dashboard-card transactions">
+      <h2>Recent Transactions</h2>
+
+      <div class="empty-state">
+        <p>No transactions yet.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>© 2026 Smart Money. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
