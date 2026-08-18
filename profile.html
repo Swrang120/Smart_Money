@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - Smart Money</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header class="navbar">
+    <div class="logo">Smart Money</div>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="login.html">Logout</a>
+    </nav>
+  </header>
+
+  <main class="form-page">
+
+    <div class="form-box">
+
+      <h1>My Profile</h1>
+      <p>Manage your Smart Money account</p>
+
+      <div class="profile-photo">
+        <div class="avatar">SM</div>
+      </div>
+
+      <form id="profileForm">
+
+        <label for="name">Full Name</label>
+        <input
+          type="text"
+          id="name"
+          placeholder="Your full name"
+          required
+        >
+
+        <label for="email">Gmail</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="Your Gmail"
+          required
+        >
+
+        <label for="mobile">Mobile Number</label>
+        <input
+          type="tel"
+          id="mobile"
+          placeholder="Your mobile number"
+          required
+        >
+
+        <label for="referralId">Referral ID</label>
+        <input
+          type="text"
+          id="referralId"
+          value="SM-XXXXXX"
+          readonly
+        >
+
+        <button type="submit" class="btn login-btn">
+          Save Profile
+        </button>
+
+      </form>
+
+      <hr class="profile-divider">
+
+      <h2>Change Password</h2>
+
+      <form id="passwordForm">
+
+        <label for="oldPassword">Old Password</label>
+        <input
+          type="password"
+          id="oldPassword"
+          placeholder="Enter old password"
+          required
+        >
+
+        <label for="newPassword">New Password</label>
+        <input
+          type="password"
+          id="newPassword"
+          placeholder="Enter new password"
+          required
+        >
+
+        <label for="confirmNewPassword">Confirm New Password</label>
+        <input
+          type="password"
+          id="confirmNewPassword"
+          placeholder="Confirm new password"
+          required
+        >
+
+        <button type="submit" class="btn login-btn">
+          Change Password
+        </button>
+
+      </form>
+
+    </div>
+
+  </main>
+
+  <footer>
+    <p>© 2026 Smart Money. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
