@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Smart Money</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header class="navbar">
+    <div class="logo">Smart Money</div>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </header>
+
+  <main class="form-page">
+
+    <div class="form-box">
+
+      <h1>Create Account</h1>
+      <p>Join Smart Money</p>
+
+      <form id="registerForm">
+
+        <label for="name">Full Name</label>
+        <input
+          type="text"
+          id="name"
+          placeholder="Enter your full name"
+          required
+        >
+
+        <label for="email">Gmail</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="Enter your Gmail"
+          required
+        >
+
+        <label for="mobile">Mobile Number</label>
+        <input
+          type="tel"
+          id="mobile"
+          placeholder="Enter mobile number"
+          required
+        >
+
+        <label for="photo">Profile Photo</label>
+        <input
+          type="file"
+          id="photo"
+          accept="image/*"
+          required
+        >
+
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Create password"
+          required
+        >
+
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Confirm password"
+          required
+        >
+
+        <label for="referral">Referral ID</label>
+        <input
+          type="text"
+          id="referral"
+          placeholder="Enter referral ID (optional)"
+        >
+
+        <button type="submit" class="btn register-btn">
+          Create Account
+        </button>
+
+      </form>
+
+      <p class="login-text">
+        Already have an account?
+        <a href="login.html">Login</a>
+      </p>
+
+    </div>
+
+  </main>
+
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+      }
+
+      alert("Registration form submitted successfully!");
+    });
+  </script>
+
+</body>
+</html>
