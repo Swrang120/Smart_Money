@@ -203,3 +203,148 @@ footer {
   text-decoration: none;
   font-weight: bold;
 }
+.dashboard {
+  padding: 40px 7%;
+  min-height: 80vh;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.dashboard-header h1 {
+  margin-bottom: 8px;
+}
+
+.dashboard-header p {
+  color: #666;
+}
+
+.referral-box {
+  background: white;
+  padding: 18px 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.referral-box span {
+  display: block;
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.referral-box strong {
+  font-size: 20px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.stat-card {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card h3 {
+  color: #666;
+  font-size: 15px;
+  margin-bottom: 15px;
+}
+
+.stat-card p {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-bottom: 25px;
+}
+
+.dashboard-card {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-card h2 {
+  margin-bottom: 20px;
+}
+
+.referral-summary {
+  display: flex;
+  gap: 50px;
+}
+
+.referral-summary span {
+  display: block;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.referral-summary strong {
+  font-size: 25px;
+}
+
+.package-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.transactions {
+  margin-bottom: 30px;
+}
+
+.empty-state {
+  padding: 25px;
+  text-align: center;
+  background: #f8fafc;
+  border-radius: 10px;
+  color: #666;
+}
+
+@media (max-width: 900px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard {
+    padding: 25px 5%;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .referral-box {
+    text-align: left;
+  }
+
+  .stats,
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .referral-summary {
+    gap: 30px;
+  }
+}
