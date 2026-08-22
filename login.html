@@ -1,3 +1,5 @@
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
   // ================================
   // SUPABASE CONNECTION
@@ -19,7 +21,7 @@
   // LOGIN FORM
   // ================================
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", function () {
 
     const loginForm =
       document.getElementById("loginForm");
@@ -41,10 +43,6 @@
         event.preventDefault();
 
 
-        // ================================
-        // GET FORM VALUES
-        // ================================
-
         const email =
           document
             .getElementById("email")
@@ -57,29 +55,18 @@
             .value;
 
 
-        // ================================
-        // BASIC CHECK
-        // ================================
-
         if (!email || !password) {
           alert("Please enter Gmail and password.");
           return;
         }
 
 
-        // ================================
-        // BUTTON
-        // ================================
-
         loginButton.disabled = true;
-        loginButton.textContent = "Logging in...";
+        loginButton.textContent =
+          "Logging in...";
 
 
         try {
-
-          // ================================
-          // SUPABASE LOGIN
-          // ================================
 
           const { data, error } =
             await supabaseClient.auth.signInWithPassword({
@@ -91,62 +78,46 @@
             });
 
 
-          // ================================
-          // ERROR CHECK
-          // ================================
-
           if (error) {
             throw error;
           }
 
 
           if (!data || !data.user) {
-            throw new Error("Login failed. Please try again.");
+            throw new Error(
+              "Login failed. Please try again."
+            );
           }
 
-
-          // ================================
-          // LOGIN SUCCESS
-          // ================================
 
           alert("Login successful!");
 
 
-          // Go to home page
-          window.location.href = "index.html";
+          window.location.href =
+            "index.html";
 
 
         } catch (error) {
 
-          console.error("Login Error:", error);
+          console.error(
+            "Login Error:",
+            error
+          );
 
 
-          // Friendly error messages
-
-          if (
-            error.message &&
-            error.message.toLowerCase().includes("invalid login")
-          ) {
-
-            alert(
-              "Invalid Gmail or password."
-            );
-
-          } else {
-
-            alert(
-              "Login failed: " +
-              (error.message || "Something went wrong.")
-            );
-
-          }
+          alert(
+            "Login failed: " +
+            (error.message ||
+             "Something went wrong.")
+          );
 
 
         } finally {
 
           loginButton.disabled = false;
 
-          loginButton.textContent = "Login";
+          loginButton.textContent =
+            "Login";
 
         }
 
