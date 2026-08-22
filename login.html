@@ -1,4 +1,8 @@
 <script>
+  // ================================
+  // SUPABASE CONNECTION
+  // ================================
+
   const SUPABASE_URL =
     "https://rvprrulkjegvicbnjuft.supabase.co";
 
@@ -11,65 +15,144 @@
   );
 
 
-  document
-    .getElementById("loginForm")
-    .addEventListener("submit", async function(event) {
+  // ================================
+  // LOGIN FORM
+  // ================================
 
-      event.preventDefault();
+  document.addEventListener("DOMContentLoaded", () => {
 
-      const email =
-        document.getElementById("email").value.trim();
+    const loginForm =
+      document.getElementById("loginForm");
 
-      const password =
-        document.getElementById("password").value;
-
-
-      const loginButton =
-        document.querySelector(".login-btn");
-
-      loginButton.disabled = true;
-      loginButton.textContent = "Logging in...";
+    const loginButton =
+      document.querySelector(".login-btn");
 
 
-      try {
-
-        const { data, error } =
-          await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-          });
+    if (!loginForm) {
+      console.error("Login form not found.");
+      return;
+    }
 
 
-        if (error) {
-          throw error;
+    loginForm.addEventListener(
+      "submit",
+      async function (event) {
+
+        event.preventDefault();
+
+
+        // ================================
+        // GET FORM VALUES
+        // ================================
+
+        const email =
+          document
+            .getElementById("email")
+            .value
+            .trim();
+
+        const password =
+          document
+            .getElementById("password")
+            .value;
+
+
+        // ================================
+        // BASIC CHECK
+        // ================================
+
+        if (!email || !password) {
+          alert("Please enter Gmail and password.");
+          return;
         }
 
 
-        if (!data.user) {
-          throw new Error("Login failed.");
+        // ================================
+        // BUTTON
+        // ================================
+
+        loginButton.disabled = true;
+        loginButton.textContent = "Logging in...";
+
+
+        try {
+
+          // ================================
+          // SUPABASE LOGIN
+          // ================================
+
+          const { data, error } =
+            await supabaseClient.auth.signInWithPassword({
+
+              email: email,
+
+              password: password
+
+            });
+
+
+          // ================================
+          // ERROR CHECK
+          // ================================
+
+          if (error) {
+            throw error;
+          }
+
+
+          if (!data || !data.user) {
+            throw new Error("Login failed. Please try again.");
+          }
+
+
+          // ================================
+          // LOGIN SUCCESS
+          // ================================
+
+          alert("Login successful!");
+
+
+          // Go to home page
+          window.location.href = "index.html";
+
+
+        } catch (error) {
+
+          console.error("Login Error:", error);
+
+
+          // Friendly error messages
+
+          if (
+            error.message &&
+            error.message.toLowerCase().includes("invalid login")
+          ) {
+
+            alert(
+              "Invalid Gmail or password."
+            );
+
+          } else {
+
+            alert(
+              "Login failed: " +
+              (error.message || "Something went wrong.")
+            );
+
+          }
+
+
+        } finally {
+
+          loginButton.disabled = false;
+
+          loginButton.textContent = "Login";
+
         }
-
-
-        alert("Login successful!");
-
-        window.location.href = "index.html";
-
-
-      } catch (error) {
-
-        console.error(error);
-
-        alert(
-          "Login failed: " + error.message
-        );
-
-
-      } finally {
-
-        loginButton.disabled = false;
-        loginButton.textContent = "Login";
 
       }
 
-    });
+    );
+
+  });
 </script>
