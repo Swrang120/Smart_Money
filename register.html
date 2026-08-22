@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Register - Smart Money</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -18,6 +20,7 @@
     </nav>
   </header>
 
+
   <main class="form-page">
 
     <div class="form-box">
@@ -25,9 +28,12 @@
       <h1>Create Account</h1>
       <p>Join Smart Money</p>
 
+
       <form id="registerForm">
 
+        <!-- Full Name -->
         <label for="name">Full Name</label>
+
         <input
           type="text"
           id="name"
@@ -35,7 +41,10 @@
           required
         >
 
+
+        <!-- Email -->
         <label for="email">Gmail</label>
+
         <input
           type="email"
           id="email"
@@ -43,7 +52,10 @@
           required
         >
 
+
+        <!-- Mobile -->
         <label for="mobile">Mobile Number</label>
+
         <input
           type="tel"
           id="mobile"
@@ -51,7 +63,10 @@
           required
         >
 
+
+        <!-- Profile Photo -->
         <label for="photo">Profile Photo</label>
+
         <input
           type="file"
           id="photo"
@@ -59,7 +74,10 @@
           required
         >
 
+
+        <!-- Password -->
         <label for="password">Password</label>
+
         <input
           type="password"
           id="password"
@@ -67,7 +85,10 @@
           required
         >
 
+
+        <!-- Confirm Password -->
         <label for="confirmPassword">Confirm Password</label>
+
         <input
           type="password"
           id="confirmPassword"
@@ -75,18 +96,28 @@
           required
         >
 
+
+        <!-- Referral -->
         <label for="referral">Referral ID</label>
+
         <input
           type="text"
           id="referral"
           placeholder="Enter referral ID (optional)"
         >
 
-        <button type="submit" class="btn register-btn">
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="btn register-btn"
+          id="registerButton"
+        >
           Create Account
         </button>
 
       </form>
+
 
       <p class="login-text">
         Already have an account?
@@ -97,20 +128,203 @@
 
   </main>
 
+
+  <!-- Supabase JavaScript Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
   <script>
-    document.getElementById("registerForm").addEventListener("submit", function(event) {
-      event.preventDefault();
 
-      const password = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirmPassword").value;
+    // ================================
+    // SUPABASE CONNECTION
+    // ================================
 
-      if (password !== confirmPassword) {
-        alert("Passwords do not match.");
-        return;
-      }
+    const SUPABASE_URL =
+      "https://rvprrulkjegvicbnjuft.supabase.co";
 
-      alert("Registration form submitted successfully!");
-    });
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+    // ================================
+    // REGISTER FORM
+    // ================================
+
+    document
+      .getElementById("registerForm")
+      .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        // Get form values
+        const name =
+          document.getElementById("name").value.trim();
+
+        const email =
+          document.getElementById("email").value.trim();
+
+        const mobile =
+          document.getElementById("mobile").value.trim();
+
+        const password =
+          document.getElementById("password").value;
+
+        const confirmPassword =
+          document.getElementById("confirmPassword").value;
+
+        const referral =
+          document.getElementById("referral").value.trim();
+
+        const photo =
+          document.getElementById("photo").files[0];
+
+
+        // ================================
+        // PASSWORD CHECK
+        // ================================
+
+        if (password !== confirmPassword) {
+
+          alert("Passwords do not match.");
+
+          return;
+        }
+
+
+        // ================================
+        // BUTTON
+        // ================================
+
+        const registerButton =
+          document.getElementById("registerButton");
+
+        registerButton.disabled = true;
+
+        registerButton.textContent =
+          "Creating Account...";
+
+
+        try {
+
+          // ================================
+          // CREATE SUPABASE AUTH ACCOUNT
+          // ================================
+
+          const { data, error } =
+            await supabaseClient.auth.signUp({
+
+              email: email,
+
+              password: password,
+
+              options: {
+
+                data: {
+                  full_name: name,
+                  mobile: mobile
+                }
+
+              }
+
+            });
+
+
+          // Auth error
+          if (error) {
+
+            throw error;
+
+          }
+
+
+          // ================================
+          // USER CHECK
+          // ================================
+
+          const user = data.user;
+
+
+          if (!user) {
+
+            throw new Error(
+              "Account could not be created."
+            );
+
+          }
+
+
+          // ================================
+          // SAVE PROFILE
+          // ================================
+
+          const { error: profileError } =
+            await supabaseClient
+              .from("profiles")
+              .insert({
+
+                user_id: user.id,
+
+                full_name: name,
+
+                email: email,
+
+                mobile: mobile,
+
+                referral_id: referral || null
+
+              });
+
+
+          // Profile error
+          if (profileError) {
+
+            throw profileError;
+
+          }
+
+
+          // ================================
+          // SUCCESS
+          // ================================
+
+          alert(
+            "Account created successfully!"
+          );
+
+
+          // Go to login page
+          window.location.href =
+            "login.html";
+
+
+        } catch (error) {
+
+          console.error(error);
+
+          alert(
+            "Registration failed: " +
+            error.message
+          );
+
+
+        } finally {
+
+          registerButton.disabled = false;
+
+          registerButton.textContent =
+            "Create Account";
+
+        }
+
+      });
+
   </script>
 
 </body>
