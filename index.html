@@ -1,9 +1,8 @@
-index.html
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,11 +35,17 @@ index.html
   <a href="index.html" class="logo">Smart Money</a>
 
   <nav>
+
     <a href="index.html">Home</a>
+
     <a href="#about">About</a>
+
     <a href="#packages">Packages</a>
+
     <a href="#contact">Contact</a>
+
     <a href="login.html">Login</a>
+
   </nav>
 
 </header>
@@ -106,7 +111,6 @@ index.html
   </div>
 
 
-
   <div class="hero-visual">
 
     <div class="hero-glow"></div>
@@ -122,10 +126,12 @@ index.html
 
 
       <div class="growth-line">
+
         <span></span>
         <span></span>
         <span></span>
         <span></span>
+
       </div>
 
     </div>
@@ -195,7 +201,6 @@ index.html
         </div>
 
 
-
         <div class="info-mini-card">
 
           <div class="mini-icon">🚀</div>
@@ -240,7 +245,6 @@ index.html
       </div>
 
 
-
       <div class="visual-card pink-card">
 
         <span>SUCCESS</span>
@@ -252,7 +256,6 @@ index.html
         </strong>
 
       </div>
-
 
 
       <div class="experience-badge">
@@ -295,7 +298,7 @@ index.html
     </h2>
 
     <p>
-      Select a package that matches your journey.
+      Click any package to view complete details and choose it.
     </p>
 
   </div>
@@ -305,10 +308,12 @@ index.html
   <div class="package-container">
 
 
-    <!-- STARTER / LOW PACKAGE -->
+    <!-- =========================
+         STARTER PACKAGE
+    ========================= -->
 
     <a
-      href="register.html?package=Low"
+      href="starter.html"
       class="package starter-package"
     >
 
@@ -336,7 +341,6 @@ index.html
         </div>
 
       </div>
-
 
 
       <div class="package-body">
@@ -383,7 +387,7 @@ index.html
 
 
         <div class="package-button">
-          Choose Package →
+          View Details →
         </div>
 
 
@@ -393,10 +397,12 @@ index.html
 
 
 
-    <!-- MEDIUM PACKAGE -->
+    <!-- =========================
+         MEDIUM PACKAGE
+    ========================= -->
 
     <a
-      href="register.html?package=Medium"
+      href="medium.html"
       class="package medium-package"
     >
 
@@ -424,7 +430,6 @@ index.html
         </div>
 
       </div>
-
 
 
       <div class="package-body">
@@ -471,7 +476,7 @@ index.html
 
 
         <div class="package-button">
-          Choose Package →
+          View Details →
         </div>
 
 
@@ -481,10 +486,12 @@ index.html
 
 
 
-    <!-- HIGH / PREMIUM PACKAGE -->
+    <!-- =========================
+         PREMIUM PACKAGE
+    ========================= -->
 
     <a
-      href="register.html?package=High"
+      href="premium.html"
       class="package high-package"
     >
 
@@ -512,7 +519,6 @@ index.html
         </div>
 
       </div>
-
 
 
       <div class="package-body">
@@ -559,7 +565,7 @@ index.html
 
 
         <div class="package-button">
-          Choose Package →
+          View Details →
         </div>
 
 
@@ -597,7 +603,6 @@ index.html
     </div>
 
 
-
     <div class="feature-grid">
 
 
@@ -617,7 +622,6 @@ index.html
       </div>
 
 
-
       <div class="feature-card">
 
         <div class="feature-icon">
@@ -634,7 +638,6 @@ index.html
       </div>
 
 
-
       <div class="feature-card">
 
         <div class="feature-icon">
@@ -649,7 +652,6 @@ index.html
         </p>
 
       </div>
-
 
 
       <div class="feature-card">
@@ -687,7 +689,6 @@ index.html
 
     <div class="support-info">
 
-
       <span class="support-tag">
         ✦ NEED HELP?
       </span>
@@ -704,7 +705,6 @@ index.html
         service se related help chahiye, hamari support team
         se contact karein.
       </p>
-
 
 
       <div class="support-card">
@@ -726,7 +726,6 @@ index.html
       </div>
 
 
-
       <div class="support-card">
 
         <div class="support-icon">
@@ -744,7 +743,6 @@ index.html
         </div>
 
       </div>
-
 
 
       <div class="support-card">
@@ -772,10 +770,7 @@ index.html
 
 
 
-    <!-- SUPPORT FORM -->
-
     <div class="support-form-box">
-
 
       <span class="form-small-tag">
         CONTACT US
@@ -790,7 +785,6 @@ index.html
       <p>
         Hamari team aapse jaldi contact karegi.
       </p>
-
 
 
       <form id="supportForm">
@@ -867,7 +861,6 @@ index.html
     </div>
 
 
-
     <div>
 
       <h3>Quick Links</h3>
@@ -889,7 +882,6 @@ index.html
       </a>
 
     </div>
-
 
 
     <div>
@@ -916,7 +908,6 @@ index.html
   </div>
 
 
-
   <div class="footer-bottom">
     © 2026 Smart Money. All Rights Reserved.
   </div>
@@ -926,26 +917,27 @@ index.html
 
 
 
-<!-- =========================
-     JAVASCRIPT
-========================= -->
-
 <script>
 
   const supportForm = document.getElementById("supportForm");
 
-  supportForm.addEventListener("submit", function(event) {
+  if (supportForm) {
 
-    event.preventDefault();
+    supportForm.addEventListener("submit", function(event) {
 
-    alert("Thank you! Your message has been received.");
+      event.preventDefault();
 
-    supportForm.reset();
+      alert("Thank you! Your message has been received.");
 
-  });
+      supportForm.reset();
+
+    });
+
+  }
 
 </script>
 
 
 </body>
+
 </html>
