@@ -550,180 +550,122 @@ a {
   color: var(--muted);
 }
 
-
 /* =====================================
-   PACKAGES
+   PACKAGES - FIXED
 ===================================== */
 
 .packages {
-  padding: 100px 7%;
-
+  padding: 90px 7%;
   background:
-    radial-gradient(
-      circle at top left,
-      rgba(124, 58, 237, 0.10),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      rgba(236, 72, 153, 0.10),
-      transparent 30%
-    ),
+    radial-gradient(circle at top left, rgba(124,58,237,0.10), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(236,72,153,0.10), transparent 35%),
     #f7f8fc;
 }
 
-/* IMPORTANT:
-   HTML mein class="package-container"
-   isliye yahan simple selector use kiya hai
-*/
-
 .package-container {
   max-width: 1150px;
-
-  margin: auto;
-
+  margin: 0 auto;
   display: grid;
-
   grid-template-columns: repeat(3, 1fr);
-
   gap: 25px;
 }
-
 
 /* PACKAGE CARD */
 
 .package {
   display: block;
-
+  background: white;
   color: var(--text);
   text-decoration: none;
-
-  overflow: hidden;
-
-  background: white;
-
-  border: 1px solid var(--border);
-
   border-radius: 20px;
-
-  box-shadow:
-    0 12px 30px rgba(15, 23, 42, 0.08);
-
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 12px 30px rgba(15,23,42,0.10);
   transition: 0.3s ease;
 }
 
 .package:hover {
-  transform: translateY(-9px);
-
-  box-shadow:
-    0 25px 55px rgba(15, 23, 42, 0.15);
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px rgba(15,23,42,0.18);
 }
 
-
-/* PACKAGE TOP */
+/* TOP BANNER */
 
 .package-banner {
+  height: 190px;
+  padding: 24px;
   position: relative;
-
-  min-height: 190px;
-
-  padding: 25px;
-
   overflow: hidden;
-
   color: white;
 }
 
 .package-banner::after {
   content: "";
-
   position: absolute;
-
-  width: 250px;
-  height: 250px;
-
-  right: -100px;
-  bottom: -140px;
-
-  border: 2px solid rgba(255, 255, 255, 0.25);
-
+  width: 230px;
+  height: 230px;
   border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.25);
+  right: -100px;
+  bottom: -130px;
 }
+
+/* STARTER COLOR */
 
 .starter-package .package-banner {
-  background: linear-gradient(
-    135deg,
-    #ff9d00,
-    #ff5c35
-  );
+  background: linear-gradient(135deg, #ff9d00, #ff5c35);
 }
+
+/* MEDIUM COLOR */
 
 .medium-package .package-banner {
-  background: linear-gradient(
-    135deg,
-    #0f766e,
-    #159a80
-  );
+  background: linear-gradient(135deg, #0f766e, #1f9d7a);
 }
+
+/* PREMIUM COLOR */
 
 .high-package .package-banner {
-  background: linear-gradient(
-    135deg,
-    #7c3aed,
-    #ec4899
-  );
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
 }
-
 
 /* BADGE */
 
 .package-badge {
   position: absolute;
-
   top: 16px;
   right: 16px;
-
-  z-index: 2;
-
-  padding: 6px 11px;
-
-  background: rgba(255, 255, 255, 0.22);
-
+  background: rgba(255,255,255,0.22);
+  color: white;
+  padding: 6px 10px;
   border-radius: 20px;
-
   font-size: 10px;
   font-weight: 800;
+  z-index: 2;
 }
-
 
 /* BANNER CONTENT */
 
 .package-banner-content {
   position: relative;
   z-index: 2;
-
-  margin-top: 30px;
 }
 
 .package-small-icon {
   display: block;
-
-  font-size: 38px;
-
-  margin-bottom: 15px;
+  font-size: 35px;
+  margin-bottom: 12px;
 }
 
 .package-banner-content h3 {
-  font-size: 26px;
+  font-size: 25px;
   line-height: 1.2;
-  margin-bottom: 8px;
+  margin-bottom: 7px;
 }
 
 .package-banner-content p {
-  color: rgba(255, 255, 255, 0.88);
   font-size: 13px;
+  opacity: 0.9;
 }
-
 
 /* PACKAGE BODY */
 
@@ -735,144 +677,87 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  margin-bottom: 8px;
 }
 
 .package-title-row h3 {
-  font-size: 23px;
+  font-size: 22px;
 }
 
 .popular-dot {
-  color: var(--primary);
-  font-size: 15px;
+  color: #f59e0b;
+  font-size: 18px;
 }
-
-.medium-package .popular-dot {
-  color: #0f766e;
-}
-
-.starter-package .popular-dot {
-  color: #f97316;
-}
-
-.high-package .popular-dot {
-  color: #ec4899;
-}
-
-
-/* STARS */
 
 .stars {
-  margin-bottom: 20px;
-
   color: #f59e0b;
-
-  font-size: 13px;
-
   letter-spacing: 2px;
+  margin: 12px 0 18px;
+  font-size: 13px;
 }
-
 
 /* PRICE */
 
 .package-price-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-
-  padding: 17px 0;
-
-  border-top: 1px solid #edf0f5;
-  border-bottom: 1px solid #edf0f5;
+  justify-content: space-between;
+  padding: 18px 0;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .package-price-row strong {
-  font-size: 27px;
+  font-size: 30px;
   color: var(--dark);
 }
 
 .package-price-row span {
-  color: var(--muted);
   font-size: 12px;
+  color: var(--muted);
+  background: #f1f5f9;
+  padding: 5px 9px;
+  border-radius: 20px;
 }
 
-
-/* REFERRAL */
+/* COMMISSION */
 
 .package-info {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  gap: 12px;
-
+  flex-direction: column;
+  gap: 5px;
   padding: 18px 0;
-
-  font-size: 13px;
 }
 
 .package-info span {
+  font-size: 13px;
   color: var(--muted);
 }
 
 .package-info strong {
-  color: var(--primary);
+  font-size: 20px;
+  color: #059669;
 }
 
-.medium-package .package-info strong {
-  color: #0f766e;
-}
-
-.starter-package .package-info strong {
-  color: #ea580c;
-}
-
-
-/* PACKAGE BUTTON */
+/* BUTTON */
 
 .package-button {
   width: 100%;
-
-  padding: 14px;
-
   text-align: center;
-
+  padding: 14px;
   border-radius: 10px;
-
   color: white;
-
   font-size: 14px;
   font-weight: 700;
-
   background: linear-gradient(
     135deg,
     var(--primary),
     var(--secondary)
   );
-
   transition: 0.3s;
 }
 
-.medium-package .package-button {
-  background: linear-gradient(
-    135deg,
-    #0f766e,
-    #159a80
-  );
-}
-
-.starter-package .package-button {
-  background: linear-gradient(
-    135deg,
-    #ff8a00,
-    #ff5c35
-  );
-}
-
 .package:hover .package-button {
-  box-shadow:
-    0 8px 20px rgba(124, 58, 237, 0.22);
+  transform: scale(1.02);
 }
 
 
