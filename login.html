@@ -1,12 +1,9 @@
+<!-- Supabase Library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  // ================================
   // SUPABASE CONNECTION
-  // ================================
-
-  const SUPABASE_URL =
-    "https://rvprrulkjegvicbnjuft.supabase.co";
+  const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
 
   const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
@@ -17,113 +14,75 @@
   );
 
 
-  // ================================
   // LOGIN FORM
-  // ================================
-
-  document.addEventListener("DOMContentLoaded", function () {
-
-    const loginForm =
-      document.getElementById("loginForm");
-
-    const loginButton =
-      document.querySelector(".login-btn");
+  const loginForm = document.getElementById("loginForm");
+  const loginButton = document.querySelector(".login-btn");
 
 
-    if (!loginForm) {
-      console.error("Login form not found.");
+  loginForm.addEventListener("submit", async function (event) {
+
+    event.preventDefault();
+
+    const email = document
+      .getElementById("email")
+      .value
+      .trim();
+
+    const password = document
+      .getElementById("password")
+      .value;
+
+
+    if (!email || !password) {
+      alert("Please enter email and password.");
       return;
     }
 
 
-    loginForm.addEventListener(
-      "submit",
-      async function (event) {
-
-        event.preventDefault();
+    loginButton.disabled = true;
+    loginButton.textContent = "Logging in...";
 
 
-        const email =
-          document
-            .getElementById("email")
-            .value
-            .trim();
+    try {
 
-        const password =
-          document
-            .getElementById("password")
-            .value;
+      const { data, error } =
+        await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
 
 
-        if (!email || !password) {
-          alert("Please enter Gmail and password.");
-          return;
-        }
-
-
-        loginButton.disabled = true;
-        loginButton.textContent =
-          "Logging in...";
-
-
-        try {
-
-          const { data, error } =
-            await supabaseClient.auth.signInWithPassword({
-
-              email: email,
-
-              password: password
-
-            });
-
-
-          if (error) {
-            throw error;
-          }
-
-
-          if (!data || !data.user) {
-            throw new Error(
-              "Login failed. Please try again."
-            );
-          }
-
-
-          alert("Login successful!");
-
-
-          window.location.href =
-            "index.html";
-
-
-        } catch (error) {
-
-          console.error(
-            "Login Error:",
-            error
-          );
-
-
-          alert(
-            "Login failed: " +
-            (error.message ||
-             "Something went wrong.")
-          );
-
-
-        } finally {
-
-          loginButton.disabled = false;
-
-          loginButton.textContent =
-            "Login";
-
-        }
-
+      if (error) {
+        throw error;
       }
 
-    );
+
+      if (!data.user) {
+        throw new Error("Login failed.");
+      }
+
+
+      alert("Login successful!");
+
+      // Home page par bhejo
+      window.location.href = "./index.html";
+
+
+    } catch (error) {
+
+      console.error("Login error:", error);
+
+      alert(
+        "Login failed: " +
+        (error.message || "Something went wrong.")
+      );
+
+    } finally {
+
+      loginButton.disabled = false;
+      loginButton.textContent = "Login";
+
+    }
 
   });
 </script>
