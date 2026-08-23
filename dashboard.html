@@ -101,5 +101,54 @@
     <p>© 2026 Smart Money. All rights reserved.</p>
   </footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // ================================
+  // SUPABASE CONNECTION
+  // ================================
+
+  const SUPABASE_URL =
+    "https://rvprrulkjegvicbnjuft.supabase.co";
+
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+  // ================================
+  // CHECK LOGIN
+  // ================================
+
+  document.addEventListener("DOMContentLoaded", async function () {
+
+    const {
+      data: { session },
+      error
+    } = await supabaseClient.auth.getSession();
+
+
+    // Agar user login nahi hai
+    if (!session) {
+
+      alert("Please login first.");
+
+      window.location.href = "login.html";
+
+      return;
+
+    }
+
+
+    // Logged-in user email console mein
+    console.log(
+      "Logged in user:",
+      session.user.email
+    );
+
+  });
+</script>
 </body>
 </html>
