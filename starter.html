@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +10,13 @@
   <title>Starter Package - Smart Money</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
+
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
   <style>
 
@@ -21,6 +26,7 @@
       box-sizing: border-box;
     }
 
+
     body {
       font-family: "Inter", Arial, sans-serif;
       background: #f6f7fb;
@@ -28,22 +34,32 @@
       line-height: 1.6;
     }
 
+
     a {
       text-decoration: none;
     }
 
 
-    /* NAVBAR */
+    /* =========================
+       NAVBAR
+    ========================= */
 
     .navbar {
       width: 100%;
       min-height: 72px;
       padding: 0 7%;
+
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: linear-gradient(135deg, #111827, #1e293b);
+
+      background: linear-gradient(
+        135deg,
+        #111827,
+        #1e293b
+      );
     }
+
 
     .logo {
       color: white;
@@ -51,10 +67,12 @@
       font-weight: 800;
     }
 
+
     .logo::before {
       content: "✦";
       margin-right: 8px;
     }
+
 
     .navbar nav {
       display: flex;
@@ -62,12 +80,20 @@
       align-items: center;
     }
 
+
     .navbar nav a {
       color: #cbd5e1;
+
       padding: 9px 13px;
+
       border-radius: 8px;
+
       font-size: 14px;
+      font-weight: 500;
+
+      transition: 0.3s;
     }
+
 
     .navbar nav a:hover {
       color: white;
@@ -75,39 +101,47 @@
     }
 
 
-    /* PAGE */
+    /* =========================
+       PAGE
+    ========================= */
 
     .package-page {
-      min-height: calc(100vh - 72px);
-      padding: 80px 7%;
+      padding: 75px 7%;
 
       background:
+
         radial-gradient(
           circle at top left,
           rgba(255, 157, 0, 0.15),
           transparent 30%
         ),
+
         radial-gradient(
           circle at bottom right,
           rgba(236, 72, 153, 0.10),
           transparent 30%
         ),
+
         #f6f7fb;
     }
 
+
     .package-container {
-      max-width: 1100px;
+      max-width: 1150px;
       margin: auto;
 
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 50px;
+      grid-template-columns: 1.1fr 0.9fr;
 
-      align-items: center;
+      gap: 55px;
+
+      align-items: start;
     }
 
 
-    /* LEFT SIDE */
+    /* =========================
+       LEFT SIDE
+    ========================= */
 
     .package-tag {
       display: inline-block;
@@ -119,8 +153,9 @@
       font-size: 12px;
       font-weight: 800;
 
-      letter-spacing: 0.5px;
+      letter-spacing: 0.7px;
     }
+
 
     .package-info h1 {
       font-size: 48px;
@@ -131,7 +166,9 @@
       color: #111827;
     }
 
+
     .package-info h1 span {
+
       background: linear-gradient(
         135deg,
         #ff8a00,
@@ -140,10 +177,12 @@
 
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+
     }
 
+
     .package-description {
-      max-width: 550px;
+      max-width: 620px;
 
       color: #64748b;
 
@@ -153,22 +192,26 @@
     }
 
 
-    /* FEATURES */
+    /* =========================
+       FEATURES
+    ========================= */
 
     .features {
       display: grid;
       gap: 14px;
 
-      margin-bottom: 32px;
+      margin-bottom: 25px;
     }
 
+
     .feature {
+
       display: flex;
       align-items: center;
 
-      gap: 13px;
+      gap: 14px;
 
-      padding: 15px 18px;
+      padding: 16px 18px;
 
       background: white;
 
@@ -176,12 +219,17 @@
 
       border-radius: 14px;
 
-      box-shadow: 0 5px 18px rgba(15, 23, 42, 0.05);
+      box-shadow:
+        0 5px 18px
+        rgba(15, 23, 42, 0.05);
+
     }
 
+
     .feature-icon {
-      width: 38px;
-      height: 38px;
+
+      width: 42px;
+      height: 42px;
 
       display: flex;
       align-items: center;
@@ -189,24 +237,129 @@
 
       flex-shrink: 0;
 
-      border-radius: 10px;
+      border-radius: 11px;
 
       background: #fff3e6;
 
-      font-size: 18px;
+      font-size: 19px;
+
     }
 
-    .feature span {
+
+    .feature-content h3 {
+
       font-size: 14px;
-      font-weight: 600;
+
+      margin-bottom: 2px;
+
+      color: #1e293b;
+
     }
 
 
-    /* BACK BUTTON */
+    .feature-content p {
+
+      font-size: 12px;
+
+      color: #64748b;
+
+    }
+
+
+    /* =========================
+       WITHDRAWAL BOX
+    ========================= */
+
+    .withdrawal-details {
+
+      margin-top: 25px;
+
+      padding: 25px;
+
+      background: white;
+
+      border-radius: 18px;
+
+      border: 1px solid #e5e7eb;
+
+      box-shadow:
+        0 8px 25px
+        rgba(15, 23, 42, 0.06);
+
+    }
+
+
+    .withdrawal-details h2 {
+
+      font-size: 19px;
+
+      margin-bottom: 18px;
+
+      color: #111827;
+
+    }
+
+
+    .withdrawal-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 14px;
+
+    }
+
+
+    .withdrawal-item {
+
+      padding: 14px;
+
+      background: #fff7ed;
+
+      border-radius: 12px;
+
+    }
+
+
+    .withdrawal-item span {
+
+      display: block;
+
+      color: #64748b;
+
+      font-size: 11px;
+
+      margin-bottom: 5px;
+
+      text-transform: uppercase;
+
+      font-weight: 700;
+
+    }
+
+
+    .withdrawal-item strong {
+
+      font-size: 15px;
+
+      color: #ea580c;
+
+    }
+
+
+    /* =========================
+       BACK BUTTON
+    ========================= */
 
     .back-btn {
+
       display: inline-flex;
+
       align-items: center;
+
+      margin-top: 25px;
 
       padding: 13px 20px;
 
@@ -220,29 +373,50 @@
 
       font-size: 14px;
       font-weight: 700;
+
+      transition: 0.3s;
+
     }
+
 
     .back-btn:hover {
+
       background: #f8fafc;
+
+      transform: translateY(-2px);
+
     }
 
 
-    /* PACKAGE CARD */
+    /* =========================
+       PACKAGE CARD
+    ========================= */
 
     .package-card {
+
+      position: sticky;
+
+      top: 30px;
+
       overflow: hidden;
 
       background: white;
 
       border-radius: 24px;
 
-      box-shadow: 0 25px 60px rgba(15, 23, 42, 0.15);
+      box-shadow:
+        0 25px 60px
+        rgba(15, 23, 42, 0.15);
+
     }
 
 
-    /* CARD TOP */
+    /* =========================
+       CARD TOP
+    ========================= */
 
     .card-top {
+
       position: relative;
 
       padding: 40px 35px;
@@ -253,14 +427,19 @@
 
       color: white;
 
-      background: linear-gradient(
-        135deg,
-        #ff9d00,
-        #ff5c35
-      );
+      background:
+
+        linear-gradient(
+          135deg,
+          #ff9d00,
+          #ff5c35
+        );
+
     }
 
+
     .card-top::after {
+
       content: "";
 
       position: absolute;
@@ -271,12 +450,17 @@
       right: -100px;
       bottom: -150px;
 
-      border: 2px solid rgba(255,255,255,0.25);
+      border:
+        2px solid
+        rgba(255,255,255,0.25);
 
       border-radius: 50%;
+
     }
 
+
     .popular-badge {
+
       position: absolute;
 
       top: 20px;
@@ -286,106 +470,219 @@
 
       border-radius: 20px;
 
-      background: rgba(255,255,255,0.22);
+      background:
+        rgba(255,255,255,0.22);
 
       font-size: 10px;
+
       font-weight: 800;
+
     }
+
 
     .package-icon {
+
       position: relative;
+
       z-index: 2;
 
-      font-size: 45px;
+      font-size: 48px;
 
       margin-bottom: 18px;
+
     }
 
+
     .card-top h2 {
+
       position: relative;
+
       z-index: 2;
 
       font-size: 30px;
 
       margin-bottom: 8px;
+
     }
+
 
     .card-top p {
+
       position: relative;
+
       z-index: 2;
 
-      color: rgba(255,255,255,0.88);
+      color:
+        rgba(255,255,255,0.90);
 
       font-size: 14px;
+
     }
 
 
-    /* CARD BODY */
+    /* =========================
+       CARD BODY
+    ========================= */
 
     .card-body {
+
       padding: 32px;
+
     }
+
 
     .price-section {
-      padding-bottom: 25px;
 
-      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 22px;
+
+      border-bottom:
+        1px solid #e5e7eb;
+
     }
 
+
     .price-label {
+
       display: block;
 
       margin-bottom: 5px;
 
       color: #64748b;
 
-      font-size: 13px;
+      font-size: 12px;
+
+      font-weight: 700;
+
+      letter-spacing: 0.5px;
+
     }
 
+
     .price {
+
       color: #111827;
 
       font-size: 42px;
+
       font-weight: 800;
+
     }
 
 
-    /* COMMISSION */
+    /* =========================
+       COMMISSION
+    ========================= */
 
     .commission-box {
-      margin: 25px 0;
 
-      padding: 18px;
+      margin: 22px 0;
 
-      border-radius: 14px;
+      padding: 20px;
+
+      border-radius: 15px;
 
       background: #f0fdf4;
 
-      border: 1px solid #bbf7d0;
+      border:
+        1px solid #bbf7d0;
+
     }
 
+
     .commission-box span {
+
       display: block;
 
       color: #64748b;
 
-      font-size: 12px;
+      font-size: 11px;
+
+      font-weight: 700;
+
+      letter-spacing: 0.5px;
+
     }
 
+
     .commission-box strong {
+
       display: block;
 
       margin-top: 5px;
 
       color: #059669;
 
-      font-size: 26px;
+      font-size: 30px;
+
     }
 
 
-    /* BUTTON */
+    .commission-box p {
+
+      margin-top: 5px;
+
+      color: #64748b;
+
+      font-size: 11px;
+
+    }
+
+
+    /* =========================
+       PACKAGE SUMMARY
+    ========================= */
+
+    .summary {
+
+      display: grid;
+
+      gap: 10px;
+
+      margin-bottom: 22px;
+
+    }
+
+
+    .summary-row {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      padding-bottom: 10px;
+
+      border-bottom:
+        1px solid #f1f5f9;
+
+    }
+
+
+    .summary-row span {
+
+      color: #64748b;
+
+      font-size: 12px;
+
+    }
+
+
+    .summary-row strong {
+
+      color: #1e293b;
+
+      font-size: 13px;
+
+    }
+
+
+    /* =========================
+       BUTTON
+    ========================= */
 
     .register-btn {
+
       display: block;
 
       width: 100%;
@@ -399,37 +696,93 @@
       color: white;
 
       font-size: 15px;
+
       font-weight: 800;
 
-      background: linear-gradient(
-        135deg,
-        #ff8a00,
-        #ff5c35
-      );
+      background:
 
-      box-shadow: 0 10px 25px rgba(255, 92, 53, 0.25);
+        linear-gradient(
+          135deg,
+          #ff8a00,
+          #ff5c35
+        );
+
+      box-shadow:
+        0 10px 25px
+        rgba(255, 92, 53, 0.25);
 
       transition: 0.3s;
+
     }
+
 
     .register-btn:hover {
-      transform: translateY(-3px);
+
+      transform:
+        translateY(-3px);
+
     }
 
-    .secure-text {
+
+    .payment-note {
+
       margin-top: 16px;
+
+      padding: 12px;
 
       text-align: center;
 
-      color: #94a3b8;
+      background: #f8fafc;
+
+      border-radius: 10px;
+
+      color: #64748b;
 
       font-size: 11px;
+
     }
 
 
-    /* FOOTER */
+    /* =========================
+       IMPORTANT NOTICE
+    ========================= */
+
+    .notice {
+
+      margin-top: 22px;
+
+      padding: 16px;
+
+      border-radius: 12px;
+
+      background: #eff6ff;
+
+      border: 1px solid #bfdbfe;
+
+      color: #475569;
+
+      font-size: 12px;
+
+    }
+
+
+    .notice strong {
+
+      display: block;
+
+      margin-bottom: 5px;
+
+      color: #2563eb;
+
+    }
+
+
+    /* =========================
+       FOOTER
+    ========================= */
 
     footer {
+
       padding: 22px;
 
       text-align: center;
@@ -439,61 +792,108 @@
       background: #111827;
 
       font-size: 13px;
+
     }
 
 
-    /* MOBILE */
+    /* =========================
+       MOBILE
+    ========================= */
 
-    @media (max-width: 800px) {
+    @media (max-width: 850px) {
 
       .navbar {
+
         padding: 14px 5%;
+
         flex-direction: column;
+
         gap: 10px;
+
       }
+
 
       .logo {
-        font-size: 18px;
+
+        font-size: 19px;
+
       }
+
 
       .navbar nav {
+
         flex-wrap: wrap;
+
         justify-content: center;
+
       }
+
 
       .navbar nav a {
+
         padding: 6px 8px;
+
         font-size: 11px;
+
       }
+
 
       .package-page {
-        padding: 55px 20px;
+
+        padding: 50px 20px;
+
       }
+
 
       .package-container {
+
         grid-template-columns: 1fr;
+
         gap: 40px;
+
       }
+
 
       .package-info {
+
         text-align: center;
+
       }
+
 
       .package-description {
+
         margin-left: auto;
         margin-right: auto;
+
       }
+
 
       .features {
+
         text-align: left;
+
       }
+
 
       .package-info h1 {
+
         font-size: 38px;
+
       }
 
-      .back-btn {
-        justify-content: center;
+
+      .package-card {
+
+        position: static;
+
+      }
+
+
+      .withdrawal-grid {
+
+        grid-template-columns: 1fr;
+
       }
 
     }
@@ -506,7 +906,9 @@
 <body>
 
 
-<!-- NAVBAR -->
+<!-- =========================
+     NAVBAR
+========================= -->
 
 <header class="navbar">
 
@@ -514,104 +916,311 @@
     Smart Money
   </a>
 
+
   <nav>
-    <a href="index.html">Home</a>
-    <a href="index.html#about">About</a>
-    <a href="index.html#packages">Packages</a>
-    <a href="login.html">Login</a>
+
+    <a href="index.html">
+      Home
+    </a>
+
+    <a href="index.html#about">
+      About
+    </a>
+
+    <a href="index.html#packages">
+      Packages
+    </a>
+
+    <a href="login.html">
+      Login
+    </a>
+
   </nav>
 
 </header>
 
 
 
-<!-- PACKAGE DETAILS -->
+<!-- =========================
+     PACKAGE PAGE
+========================= -->
 
 <section class="package-page">
+
 
   <div class="package-container">
 
 
-    <!-- LEFT SIDE -->
+    <!-- =========================
+         LEFT INFORMATION
+    ========================= -->
 
     <div class="package-info">
 
+
       <span class="package-tag">
-        ✦ STARTER PACKAGE
+        ✦ LOW / STARTER PACKAGE
       </span>
 
+
       <h1>
+
         Start Your
+
         <br>
-        <span>Growth Journey</span>
+
+        <span>
+          Growth Journey
+        </span>
+
       </h1>
 
+
       <p class="package-description">
-        The Starter Package is designed for people who want
-        to begin their Smart Money journey and explore
-        networking opportunities step by step.
+
+        The Starter Package is designed for users who want
+        to begin their Smart Money journey and start building
+        their network step by step.
+
       </p>
 
 
+
+      <!-- FEATURES -->
+
       <div class="features">
 
-        <div class="feature">
-          <div class="feature-icon">🚀</div>
-          <span>Starter Package Access</span>
-        </div>
 
         <div class="feature">
-          <div class="feature-icon">🤝</div>
-          <span>Start Building Your Network</span>
+
+          <div class="feature-icon">
+            🚀
+          </div>
+
+          <div class="feature-content">
+
+            <h3>
+              Starter Package Access
+            </h3>
+
+            <p>
+              Get access to the Starter level of the platform.
+            </p>
+
+          </div>
+
         </div>
 
-        <div class="feature">
-          <div class="feature-icon">💰</div>
-          <span>Referral Commission Opportunity</span>
-        </div>
+
 
         <div class="feature">
-          <div class="feature-icon">🛟</div>
-          <span>Customer Support Available</span>
+
+          <div class="feature-icon">
+            🤝
+          </div>
+
+          <div class="feature-content">
+
+            <h3>
+              Build Your Network
+            </h3>
+
+            <p>
+              Start connecting and growing your referral network.
+            </p>
+
+          </div>
+
         </div>
+
+
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            💰
+          </div>
+
+          <div class="feature-content">
+
+            <h3>
+              50% Referral Commission
+            </h3>
+
+            <p>
+              Commission rules apply according to the platform policy.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            🛟
+          </div>
+
+          <div class="feature-content">
+
+            <h3>
+              Customer Support
+            </h3>
+
+            <p>
+              Get assistance from the Smart Money support team.
+            </p>
+
+          </div>
+
+        </div>
+
 
       </div>
 
 
-      <a href="index.html#packages" class="back-btn">
+
+      <!-- WITHDRAWAL DETAILS -->
+
+      <div class="withdrawal-details">
+
+
+        <h2>
+          💳 Withdrawal Information
+        </h2>
+
+
+        <div class="withdrawal-grid">
+
+
+          <div class="withdrawal-item">
+
+            <span>
+              Minimum Withdrawal
+            </span>
+
+            <strong>
+              ₹100
+            </strong>
+
+          </div>
+
+
+
+          <div class="withdrawal-item">
+
+            <span>
+              Maximum Withdrawal
+            </span>
+
+            <strong>
+              ₹1,000
+            </strong>
+
+          </div>
+
+
+
+          <div class="withdrawal-item">
+
+            <span>
+              Processing Time
+            </span>
+
+            <strong>
+              Day 1
+            </strong>
+
+          </div>
+
+
+
+          <div class="withdrawal-item">
+
+            <span>
+              Withdrawal Fee
+            </span>
+
+            <strong>
+              2%
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="notice">
+
+        <strong>
+          ℹ Important Information
+        </strong>
+
+        Referral commissions, withdrawals and processing
+        are subject to verification and applicable platform rules.
+        Results and earnings are not guaranteed.
+
+      </div>
+
+
+
+      <a
+        href="index.html#packages"
+        class="back-btn"
+      >
         ← Back To Packages
       </a>
+
 
     </div>
 
 
 
-    <!-- RIGHT PACKAGE CARD -->
+    <!-- =========================
+         RIGHT PACKAGE CARD
+    ========================= -->
 
     <div class="package-card">
 
+
       <div class="card-top">
+
 
         <span class="popular-badge">
           START HERE
         </span>
 
+
         <div class="package-icon">
           🚀
         </div>
+
 
         <h2>
           Starter Package
         </h2>
 
+
         <p>
           Begin your Smart Money journey.
         </p>
 
+
       </div>
 
 
+
       <div class="card-body">
+
+
+        <!-- PRICE -->
 
         <div class="price-section">
 
@@ -626,6 +1235,9 @@
         </div>
 
 
+
+        <!-- COMMISSION -->
+
         <div class="commission-box">
 
           <span>
@@ -633,39 +1245,130 @@
           </span>
 
           <strong>
-            ₹399
+            50%
           </strong>
+
+          <p>
+            Referral commission according to applicable platform rules.
+          </p>
 
         </div>
 
+
+
+        <!-- SUMMARY -->
+
+        <div class="summary">
+
+
+          <div class="summary-row">
+
+            <span>
+              Package
+            </span>
+
+            <strong>
+              Low / Starter
+            </strong>
+
+          </div>
+
+
+          <div class="summary-row">
+
+            <span>
+              Withdrawal Range
+            </span>
+
+            <strong>
+              ₹100 - ₹1,000
+            </strong>
+
+          </div>
+
+
+          <div class="summary-row">
+
+            <span>
+              Processing Schedule
+            </span>
+
+            <strong>
+              Day 1
+            </strong>
+
+          </div>
+
+
+          <div class="summary-row">
+
+            <span>
+              Withdrawal Fee
+            </span>
+
+            <strong>
+              2%
+            </strong>
+
+          </div>
+
+
+          <div class="summary-row">
+
+            <span>
+              Support
+            </span>
+
+            <strong>
+              Available
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- BUY BUTTON -->
 
         <a
           href="register.html?package=Low"
           class="register-btn"
         >
-          Choose Starter Package →
+          Buy Starter Package →
         </a>
 
 
-        <p class="secure-text">
-          🔒 Continue to registration securely
-        </p>
+        <div class="payment-note">
+
+          💳 Payment options will be shown during
+          the registration and payment process.
+
+        </div>
+
 
       </div>
+
 
     </div>
 
 
   </div>
 
+
 </section>
 
 
 
-<!-- FOOTER -->
+<!-- =========================
+     FOOTER
+========================= -->
 
 <footer>
+
   © 2026 Smart Money. All Rights Reserved.
+
 </footer>
 
 
