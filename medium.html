@@ -2,13 +2,12 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Medium Package - Smart Money</title>
-
-  <link rel="stylesheet" href="style.css">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
 
@@ -18,13 +17,888 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
   >
+
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      background: #f6f7fb;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+
+    /* =========================
+       NAVBAR
+    ========================= */
+
+    .navbar {
+      width: 100%;
+      min-height: 72px;
+      padding: 0 7%;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      background: linear-gradient(
+        135deg,
+        #111827,
+        #1e293b
+      );
+    }
+
+    .logo {
+      color: white;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .logo::before {
+      content: "✦";
+      margin-right: 8px;
+    }
+
+    .navbar nav {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .navbar nav a {
+      color: #cbd5e1;
+      padding: 9px 13px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .navbar nav a:hover {
+      color: white;
+      background: rgba(255,255,255,0.10);
+    }
+
+
+    /* =========================
+       PAGE
+    ========================= */
+
+    .package-page {
+      padding: 75px 7%;
+      min-height: calc(100vh - 72px);
+
+      background:
+
+        radial-gradient(
+          circle at top left,
+          rgba(139, 92, 246, 0.16),
+          transparent 30%
+        ),
+
+        radial-gradient(
+          circle at bottom right,
+          rgba(236, 72, 153, 0.12),
+          transparent 30%
+        ),
+
+        #f6f7fb;
+    }
+
+
+    .package-container {
+      max-width: 1150px;
+      margin: auto;
+
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+
+      gap: 55px;
+
+      align-items: start;
+    }
+
+
+    /* =========================
+       LEFT SIDE
+    ========================= */
+
+    .package-tag {
+      display: inline-block;
+
+      margin-bottom: 18px;
+
+      color: #7c3aed;
+
+      font-size: 12px;
+      font-weight: 800;
+
+      letter-spacing: 0.7px;
+    }
+
+
+    .package-info h1 {
+      font-size: 48px;
+      line-height: 1.15;
+
+      margin-bottom: 20px;
+
+      color: #111827;
+    }
+
+
+    .package-info h1 span {
+
+      background: linear-gradient(
+        135deg,
+        #7c3aed,
+        #ec4899
+      );
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+    }
+
+
+    .package-description {
+      max-width: 620px;
+
+      color: #64748b;
+
+      margin-bottom: 30px;
+
+      font-size: 16px;
+    }
+
+
+    /* =========================
+       FEATURES
+    ========================= */
+
+    .features {
+      display: grid;
+      gap: 14px;
+
+      margin-bottom: 25px;
+    }
+
+
+    .feature {
+
+      display: flex;
+      align-items: center;
+
+      gap: 14px;
+
+      padding: 16px 18px;
+
+      background: white;
+
+      border: 1px solid #e5e7eb;
+
+      border-radius: 14px;
+
+      box-shadow:
+        0 5px 18px
+        rgba(15, 23, 42, 0.05);
+
+    }
+
+
+    .feature-icon {
+
+      width: 42px;
+      height: 42px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      flex-shrink: 0;
+
+      border-radius: 11px;
+
+      background: #f3e8ff;
+
+      font-size: 19px;
+
+    }
+
+
+    .feature-content h3 {
+
+      font-size: 14px;
+
+      margin-bottom: 2px;
+
+      color: #1e293b;
+
+    }
+
+
+    .feature-content p {
+
+      font-size: 12px;
+
+      color: #64748b;
+
+    }
+
+
+    /* =========================
+       WITHDRAWAL DETAILS
+    ========================= */
+
+    .withdrawal-details {
+
+      margin-top: 25px;
+
+      padding: 25px;
+
+      background: white;
+
+      border-radius: 18px;
+
+      border: 1px solid #e5e7eb;
+
+      box-shadow:
+        0 8px 25px
+        rgba(15, 23, 42, 0.06);
+
+    }
+
+
+    .withdrawal-details h2 {
+
+      font-size: 19px;
+
+      margin-bottom: 18px;
+
+      color: #111827;
+
+    }
+
+
+    .withdrawal-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 14px;
+
+    }
+
+
+    .withdrawal-item {
+
+      padding: 14px;
+
+      background: #faf5ff;
+
+      border-radius: 12px;
+
+    }
+
+
+    .withdrawal-item span {
+
+      display: block;
+
+      color: #64748b;
+
+      font-size: 11px;
+
+      margin-bottom: 5px;
+
+      text-transform: uppercase;
+
+      font-weight: 700;
+
+    }
+
+
+    .withdrawal-item strong {
+
+      font-size: 15px;
+
+      color: #7c3aed;
+
+    }
+
+
+    /* =========================
+       BACK BUTTON
+    ========================= */
+
+    .back-btn {
+
+      display: inline-flex;
+
+      align-items: center;
+
+      margin-top: 25px;
+
+      padding: 13px 20px;
+
+      border-radius: 10px;
+
+      color: #475569;
+
+      background: white;
+
+      border: 1px solid #e5e7eb;
+
+      font-size: 14px;
+      font-weight: 700;
+
+      transition: 0.3s;
+
+    }
+
+
+    .back-btn:hover {
+
+      background: #f8fafc;
+
+      transform: translateY(-2px);
+
+    }
+
+
+    /* =========================
+       PACKAGE CARD
+    ========================= */
+
+    .package-card {
+
+      position: sticky;
+
+      top: 30px;
+
+      overflow: hidden;
+
+      background: white;
+
+      border-radius: 24px;
+
+      box-shadow:
+        0 25px 60px
+        rgba(15, 23, 42, 0.15);
+
+    }
+
+
+    /* =========================
+       CARD TOP
+    ========================= */
+
+    .card-top {
+
+      position: relative;
+
+      padding: 40px 35px;
+
+      min-height: 240px;
+
+      overflow: hidden;
+
+      color: white;
+
+      background:
+
+        linear-gradient(
+          135deg,
+          #7c3aed,
+          #ec4899
+        );
+
+    }
+
+
+    .card-top::after {
+
+      content: "";
+
+      position: absolute;
+
+      width: 280px;
+      height: 280px;
+
+      right: -100px;
+      bottom: -150px;
+
+      border:
+        2px solid
+        rgba(255,255,255,0.25);
+
+      border-radius: 50%;
+
+    }
+
+
+    .popular-badge {
+
+      position: absolute;
+
+      top: 20px;
+      right: 20px;
+
+      padding: 7px 13px;
+
+      border-radius: 20px;
+
+      background:
+        rgba(255,255,255,0.22);
+
+      font-size: 10px;
+
+      font-weight: 800;
+
+    }
+
+
+    .package-icon {
+
+      position: relative;
+
+      z-index: 2;
+
+      font-size: 48px;
+
+      margin-bottom: 18px;
+
+    }
+
+
+    .card-top h2 {
+
+      position: relative;
+
+      z-index: 2;
+
+      font-size: 30px;
+
+      margin-bottom: 8px;
+
+    }
+
+
+    .card-top p {
+
+      position: relative;
+
+      z-index: 2;
+
+      color:
+        rgba(255,255,255,0.90);
+
+      font-size: 14px;
+
+    }
+
+
+    /* =========================
+       CARD BODY
+    ========================= */
+
+    .card-body {
+
+      padding: 32px;
+
+    }
+
+
+    .price-section {
+
+      padding-bottom: 22px;
+
+      border-bottom:
+        1px solid #e5e7eb;
+
+    }
+
+
+    .price-label {
+
+      display: block;
+
+      margin-bottom: 5px;
+
+      color: #64748b;
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      letter-spacing: 0.5px;
+
+    }
+
+
+    .price {
+
+      color: #111827;
+
+      font-size: 42px;
+
+      font-weight: 800;
+
+    }
+
+
+    /* =========================
+       COMMISSION
+    ========================= */
+
+    .commission-box {
+
+      margin: 22px 0;
+
+      padding: 20px;
+
+      border-radius: 15px;
+
+      background: #f0fdf4;
+
+      border:
+        1px solid #bbf7d0;
+
+    }
+
+
+    .commission-box span {
+
+      display: block;
+
+      color: #64748b;
+
+      font-size: 11px;
+
+      font-weight: 700;
+
+      letter-spacing: 0.5px;
+
+    }
+
+
+    .commission-box strong {
+
+      display: block;
+
+      margin-top: 5px;
+
+      color: #059669;
+
+      font-size: 30px;
+
+    }
+
+
+    .commission-box p {
+
+      margin-top: 5px;
+
+      color: #64748b;
+
+      font-size: 11px;
+
+    }
+
+
+    /* =========================
+       SUMMARY
+    ========================= */
+
+    .summary {
+
+      display: grid;
+
+      gap: 10px;
+
+      margin-bottom: 22px;
+
+    }
+
+
+    .summary-row {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      padding-bottom: 10px;
+
+      border-bottom:
+        1px solid #f1f5f9;
+
+    }
+
+
+    .summary-row span {
+
+      color: #64748b;
+
+      font-size: 12px;
+
+    }
+
+
+    .summary-row strong {
+
+      color: #1e293b;
+
+      font-size: 13px;
+
+    }
+
+
+    /* =========================
+       BUY BUTTON
+    ========================= */
+
+    .register-btn {
+
+      display: block;
+
+      width: 100%;
+
+      padding: 16px;
+
+      text-align: center;
+
+      border-radius: 12px;
+
+      color: white;
+
+      font-size: 15px;
+
+      font-weight: 800;
+
+      background:
+
+        linear-gradient(
+          135deg,
+          #7c3aed,
+          #ec4899
+        );
+
+      box-shadow:
+        0 10px 25px
+        rgba(124, 58, 237, 0.25);
+
+      transition: 0.3s;
+
+    }
+
+
+    .register-btn:hover {
+
+      transform:
+        translateY(-3px);
+
+    }
+
+
+    .payment-note {
+
+      margin-top: 16px;
+
+      padding: 12px;
+
+      text-align: center;
+
+      background: #f8fafc;
+
+      border-radius: 10px;
+
+      color: #64748b;
+
+      font-size: 11px;
+
+    }
+
+
+    /* =========================
+       NOTICE
+    ========================= */
+
+    .notice {
+
+      margin-top: 22px;
+
+      padding: 16px;
+
+      border-radius: 12px;
+
+      background: #eff6ff;
+
+      border: 1px solid #bfdbfe;
+
+      color: #475569;
+
+      font-size: 12px;
+
+    }
+
+
+    .notice strong {
+
+      display: block;
+
+      margin-bottom: 5px;
+
+      color: #2563eb;
+
+    }
+
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+
+      padding: 22px;
+
+      text-align: center;
+
+      color: #94a3b8;
+
+      background: #111827;
+
+      font-size: 13px;
+
+    }
+
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 850px) {
+
+      .navbar {
+
+        padding: 14px 5%;
+
+        flex-direction: column;
+
+        gap: 10px;
+
+      }
+
+
+      .logo {
+
+        font-size: 19px;
+
+      }
+
+
+      .navbar nav {
+
+        flex-wrap: wrap;
+
+        justify-content: center;
+
+      }
+
+
+      .navbar nav a {
+
+        padding: 6px 8px;
+
+        font-size: 11px;
+
+      }
+
+
+      .package-page {
+
+        padding: 50px 20px;
+
+      }
+
+
+      .package-container {
+
+        grid-template-columns: 1fr;
+
+        gap: 40px;
+
+      }
+
+
+      .package-info {
+
+        text-align: center;
+
+      }
+
+
+      .package-description {
+
+        margin-left: auto;
+        margin-right: auto;
+
+      }
+
+
+      .features {
+
+        text-align: left;
+
+      }
+
+
+      .package-info h1 {
+
+        font-size: 38px;
+
+      }
+
+
+      .package-card {
+
+        position: static;
+
+      }
+
+
+      .withdrawal-grid {
+
+        grid-template-columns: 1fr;
+
+      }
+
+    }
+
+  </style>
+
 </head>
 
 
 <body>
 
 
-<!-- NAVBAR -->
+<!-- =========================
+     NAVBAR
+========================= -->
 
 <header class="navbar">
 
@@ -32,253 +906,483 @@
     Smart Money
   </a>
 
+
   <nav>
-    <a href="index.html">Home</a>
-    <a href="index.html#about">About</a>
-    <a href="index.html#packages" class="active">Packages</a>
-    <a href="index.html#contact">Contact</a>
-    <a href="login.html">Login</a>
+
+    <a href="index.html">
+      Home
+    </a>
+
+    <a href="index.html#about">
+      About
+    </a>
+
+    <a href="index.html#packages">
+      Packages
+    </a>
+
+    <a href="login.html">
+      Login
+    </a>
+
   </nav>
 
 </header>
 
 
 
-<!-- PACKAGE DETAILS -->
+<!-- =========================
+     PACKAGE PAGE
+========================= -->
 
-<section class="package-detail-page">
+<section class="package-page">
 
-  <div class="package-detail-container">
+  <div class="package-container">
 
 
-    <!-- LEFT SIDE -->
+    <!-- =========================
+         LEFT INFORMATION
+    ========================= -->
 
-    <div class="package-detail-info">
+    <div class="package-info">
 
-      <span class="section-tag">
-        ✦ SMART MONEY PACKAGE
+
+      <span class="package-tag">
+        ✦ MEDIUM / GROWTH PACKAGE
       </span>
 
+
       <h1>
-        Medium
-        <span>Growth Package</span>
+
+        Grow Your
+
+        <br>
+
+        <span>
+          Network Faster
+        </span>
+
       </h1>
 
-      <p class="package-detail-description">
-        Take your journey to the next level with the Medium Growth Package.
-        This package is designed for users who want to build their network
-        and explore bigger opportunities.
+
+      <p class="package-description">
+
+        The Medium Growth Package is designed for users who
+        want to take the next step in their Smart Money journey,
+        build a stronger network and explore more opportunities.
+
       </p>
 
 
-      <div class="package-detail-card medium-detail-card">
 
-        <div class="detail-package-icon">
+      <!-- FEATURES -->
+
+      <div class="features">
+
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            📈
+          </div>
+
+          <div class="feature-content">
+
+            <h3>
+              Medium Package Access
+            </h3>
+
+            <p>
+              Get access to the Medium Growth level of the platform.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            🤝
+          </div>
+
+          <div class="feature-content">
+
+            <h3>
+              Build a Stronger Network
+            </h3>
+
+            <p>
+              Continue expanding and managing your referral network.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            💰
+          </div>
+
+          <div class="feature-content">
+
+            <h3>
+              60% Referral Commission
+            </h3>
+
+            <p>
+              Commission is subject to applicable platform rules and verification.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            📊
+          </div>
+
+          <div class="feature-content">
+
+            <h3>
+              Track Your Progress
+            </h3>
+
+            <p>
+              Stay updated with your account activity and growth progress.
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            🛟
+          </div>
+
+          <div class="feature-content">
+
+            <h3>
+              Customer Support
+            </h3>
+
+            <p>
+              Get assistance from the Smart Money support team.
+            </p>
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+
+      <!-- WITHDRAWAL DETAILS -->
+
+      <div class="withdrawal-details">
+
+
+        <h2>
+          💳 Withdrawal Information
+        </h2>
+
+
+        <div class="withdrawal-grid">
+
+
+          <div class="withdrawal-item">
+
+            <span>
+              Minimum Withdrawal
+            </span>
+
+            <strong>
+              ₹50
+            </strong>
+
+          </div>
+
+
+
+          <div class="withdrawal-item">
+
+            <span>
+              Maximum Withdrawal
+            </span>
+
+            <strong>
+              ₹15,000
+            </strong>
+
+          </div>
+
+
+
+          <div class="withdrawal-item">
+
+            <span>
+              Processing Time
+            </span>
+
+            <strong>
+              Day 2
+            </strong>
+
+          </div>
+
+
+
+          <div class="withdrawal-item">
+
+            <span>
+              Withdrawal Fee
+            </span>
+
+            <strong>
+              2%
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="notice">
+
+        <strong>
+          ℹ Important Information
+        </strong>
+
+        Referral commissions, withdrawals and processing
+        are subject to verification and applicable platform rules.
+        Results and earnings are not guaranteed.
+
+      </div>
+
+
+
+      <a
+        href="index.html#packages"
+        class="back-btn"
+      >
+        ← Back To Packages
+      </a>
+
+
+    </div>
+
+
+
+    <!-- =========================
+         RIGHT PACKAGE CARD
+    ========================= -->
+
+    <div class="package-card">
+
+
+      <div class="card-top">
+
+
+        <span class="popular-badge">
+          POPULAR
+        </span>
+
+
+        <div class="package-icon">
           📈
         </div>
 
-        <span class="detail-badge">
-          POPULAR CHOICE
-        </span>
 
         <h2>
           Medium Package
         </h2>
 
+
         <p>
-          Build • Connect • Grow
+          Build your network and grow further.
         </p>
 
-      </div>
-
-
-      <!-- FEATURES -->
-
-      <div class="package-features">
-
-        <h3>
-          Package Features
-        </h3>
-
-        <div class="feature-item">
-          <span>✓</span>
-          Smart networking opportunities
-        </div>
-
-        <div class="feature-item">
-          <span>✓</span>
-          Growth focused package access
-        </div>
-
-        <div class="feature-item">
-          <span>✓</span>
-          Referral program access
-        </div>
-
-        <div class="feature-item">
-          <span>✓</span>
-          Account and progress tracking
-        </div>
-
-        <div class="feature-item">
-          <span>✓</span>
-          Customer support assistance
-        </div>
-
-      </div>
-
-    </div>
-
-
-
-    <!-- RIGHT SIDE PRICE CARD -->
-
-    <div class="package-purchase-card">
-
-      <span class="purchase-tag">
-        GROW YOUR NETWORK
-      </span>
-
-      <h2>
-        Medium Package
-      </h2>
-
-      <p class="purchase-subtitle">
-        A popular choice for your growth journey.
-      </p>
-
-
-      <div class="price-box">
-
-        <span>
-          Package Price
-        </span>
-
-        <strong>
-          ₹899
-        </strong>
 
       </div>
 
 
-      <div class="commission-box">
 
-        <span>
-          Referral Commission
-        </span>
+      <div class="card-body">
 
-        <strong>
-          ₹699
-        </strong>
+
+        <!-- PRICE -->
+
+        <div class="price-section">
+
+          <span class="price-label">
+            PACKAGE PRICE
+          </span>
+
+          <strong class="price">
+            ₹899
+          </strong>
+
+        </div>
+
+
+
+        <!-- COMMISSION -->
+
+        <div class="commission-box">
+
+          <span>
+            REFERRAL COMMISSION
+          </span>
+
+          <strong>
+            60%
+          </strong>
+
+          <p>
+            Referral commission according to applicable platform rules.
+          </p>
+
+        </div>
+
+
+
+        <!-- SUMMARY -->
+
+        <div class="summary">
+
+
+          <div class="summary-row">
+
+            <span>
+              Package
+            </span>
+
+            <strong>
+              Medium / Growth
+            </strong>
+
+          </div>
+
+
+          <div class="summary-row">
+
+            <span>
+              Withdrawal Range
+            </span>
+
+            <strong>
+              ₹50 - ₹15,000
+            </strong>
+
+          </div>
+
+
+          <div class="summary-row">
+
+            <span>
+              Processing Schedule
+            </span>
+
+            <strong>
+              Day 2
+            </strong>
+
+          </div>
+
+
+          <div class="summary-row">
+
+            <span>
+              Withdrawal Fee
+            </span>
+
+            <strong>
+              2%
+            </strong>
+
+          </div>
+
+
+          <div class="summary-row">
+
+            <span>
+              Support
+            </span>
+
+            <strong>
+              Available
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- BUY BUTTON -->
+
+        <a
+          href="register.html?package=Medium"
+          class="register-btn"
+        >
+          Buy Medium Package →
+        </a>
+
+
+        <div class="payment-note">
+
+          💳 Payment options will be shown during
+          the registration and payment process.
+
+        </div>
+
 
       </div>
 
-
-      <div class="package-summary">
-
-        <div>
-          <span>Package Type</span>
-          <strong>Medium</strong>
-        </div>
-
-        <div>
-          <span>Category</span>
-          <strong>Growth</strong>
-        </div>
-
-        <div>
-          <span>Support</span>
-          <strong>Available</strong>
-        </div>
-      </div>
-
-
-      <a
-        href="register.html?package=Medium"
-        class="package-detail-btn"
-      >
-        Choose Medium Package →
-      </a>
-
-
-      <a
-        href="index.html#packages"
-        class="back-link"
-      >
-        ← Back to Packages
-      </a>
 
     </div>
 
 
   </div>
+
 
 </section>
 
 
 
-<!-- FOOTER -->
+<!-- =========================
+     FOOTER
+========================= -->
 
-<footer class="main-footer">
+<footer>
 
-  <div class="footer-content">
-
-    <div class="footer-brand">
-
-      <h2>
-        ✦ Smart Money
-      </h2>
-
-      <p>
-        Smart Money Referral Marketing Platform.
-        Build your network, discover opportunities
-        and grow together.
-      </p>
-
-    </div>
-
-
-    <div>
-
-      <h3>Quick Links</h3>
-
-      <a href="index.html">Home</a>
-      <a href="index.html#about">About Us</a>
-      <a href="index.html#packages">Packages</a>
-      <a href="index.html#contact">Contact</a>
-
-    </div>
-
-
-    <div>
-
-      <h3>Contact Us</h3>
-
-      <p>
-        📧 Swrangartist@proton.me
-      </p>
-
-      <p>
-        📞 +91 8099473948
-      </p>
-
-      <p>
-        ⏰ Mon - Sat
-        <br>
-        10:00 AM - 6:00 PM
-      </p>
-
-    </div>
-
-  </div>
-
-
-  <div class="footer-bottom">
-    © 2026 Smart Money. All Rights Reserved.
-  </div>
+  © 2026 Smart Money. All Rights Reserved.
 
 </footer>
 
 
 </body>
+
 </html>
