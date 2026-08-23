@@ -2,8 +2,8 @@
 // SUPABASE CONFIG
 // ================================
 
-const SUPABASE_URL = "PASTE_YOUR_SUPABASE_URL_HERE";
-const SUPABASE_ANON_KEY = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
+const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 
 // Supabase client
 const supabaseClient = supabase.createClient(
@@ -32,7 +32,7 @@ async function loadProfile() {
       .from("profiles")
       .select("*")
       .eq("user_id", user.id)
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.log("Profile load error:", error);
@@ -47,7 +47,7 @@ async function loadProfile() {
     }
 
   } catch (error) {
-    console.log(error);
+    console.log("Load error:", error);
   }
 }
 
@@ -56,83 +56,135 @@ async function loadProfile() {
 // SAVE PROFILE
 // ================================
 
-document.getElementById("profileForm")?.addEventListener("submit", async function (e) {
+document.getElementById("profileForm")?.addEventListener(
+  "submit",
+  async function (e) {
 
-  e.preventDefault();
+    e.preventDefault();
 
-  const {
-    data: { user },
-    error: userError
-  } = await supabaseClient.auth.getUser();
+    const {
+      data: { user },
+      error: userError
+    } = await supabaseClient.auth.getUser();
 
-  if (userError || !user) {
-    alert("Please login first");
-    return;
+    if (userError || !user) {
+      alert("Please login first");
+      return;
+    }
+
+    const fullName =
+      document.getElementById("name").value.trim();
+
+    const email =
+      document.getElementById("email").value.trim();
+
+    const mobile =
+      document.getElementById("mobile").value.trim();
+
+    const referralId =
+      document.getElementById("referralId").value.trim();
+
+    // Check if profile already exists
+    const { data: existingProfile, error: checkError } =
+      await supabaseClient
+        .from("profiles")
+        .select("id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+    if (checkError) {
+      console.log(checkError);
+      alert("Profile check error: " + checkError.message);
+      return;
+    }
+
+    let result;
+
+    // Update existing profile
+    if (existingProfile) {
+      result = await supabaseClient
+        .from("profiles")
+        .update({
+          full_name: fullName,
+          email: email,
+          mobile: mobile
+        })
+        .eq("user_id", user.id);
+
+    } else {
+
+      // Create new profile
+      result = await supabaseClient
+        .from("profiles")
+        .insert({
+          user_id: user.id,
+          full_name: fullName,
+          email: email,
+          mobile: mobile,
+          referral_id: referralId
+        });
+    }
+
+    if (result.error) {
+      console.log(result.error);
+      alert("Profile save nahi hua: " + result.error.message);
+    } else {
+      alert("Profile successfully saved!");
+    }
+
   }
-
-  const fullName = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const mobile = document.getElementById("mobile").value.trim();
-
-  const { error } = await supabaseClient
-    .from("profiles")
-    .upsert({
-      user_id: user.id,
-      full_name: fullName,
-      email: email,
-      mobile: mobile
-    });
-
-  if (error) {
-    console.log(error);
-    alert("Profile save nahi hua: " + error.message);
-  } else {
-    alert("Profile successfully saved!");
-  }
-
-});
+);
 
 
 // ================================
 // CHANGE PASSWORD
 // ================================
 
-document.getElementById("passwordForm")?.addEventListener("submit", async function (e) {
+document.getElementById("passwordForm")?.addEventListener(
+  "submit",
+  async function (e) {
 
-  e.preventDefault();
+    e.preventDefault();
 
-  const newPassword = document.getElementById("newPassword").value;
-  const confirmPassword = document.getElementById("confirmNewPassword").value;
+    const newPassword =
+      document.getElementById("newPassword").value;
 
-  if (newPassword !== confirmPassword) {
-    alert("New passwords match nahi kar rahe");
-    return;
+    const confirmPassword =
+      document.getElementById("confirmNewPassword").value;
+
+    if (newPassword !== confirmPassword) {
+      alert("New passwords match nahi kar rahe");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      alert("Password kam se kam 6 characters ka hona chahiye");
+      return;
+    }
+
+    const { error } =
+      await supabaseClient.auth.updateUser({
+        password: newPassword
+      });
+
+    if (error) {
+      alert("Password change error: " + error.message);
+    } else {
+      alert("Password successfully changed!");
+      document.getElementById("passwordForm").reset();
+    }
+
   }
-
-  if (newPassword.length < 6) {
-    alert("Password kam se kam 6 characters ka hona chahiye");
-    return;
-  }
-
-  const { error } = await supabaseClient.auth.updateUser({
-    password: newPassword
-  });
-
-  if (error) {
-    alert("Password change error: " + error.message);
-  } else {
-    alert("Password successfully changed!");
-
-    document.getElementById("passwordForm").reset();
-  }
-
-});
+);
 
 
 // ================================
 // LOAD PROFILE WHEN PAGE OPENS
 // ================================
 
-document.addEventListener("DOMContentLoaded", function () {
-  loadProfile();
-});
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+    loadProfile();
+  }
+);
