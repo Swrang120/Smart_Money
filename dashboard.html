@@ -1,154 +1,627 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Dashboard - Smart Money</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
 
+
 <body>
 
+  <!-- NAVBAR -->
   <header class="navbar">
-    <div class="logo">Smart Money</div>
+
+    <div class="logo">
+      Smart Money
+    </div>
 
     <nav>
       <a href="index.html">Home</a>
       <a href="profile.html">Profile</a>
       <a href="login.html">Logout</a>
     </nav>
+
   </header>
 
+
+  <!-- DASHBOARD -->
   <main class="dashboard">
 
-    <div class="dashboard-header">
-      <div>
-        <h1>My Dashboard</h1>
-        <p>Welcome to Smart Money</p>
-      </div>
 
-      <div class="referral-box">
-        <span>My Referral ID</span>
-        <strong id="referralId">SM-XXXXXX</strong>
-      </div>
-    </div>
+    <!-- WELCOME SECTION -->
+    <section class="dashboard-hero">
 
-    <section class="stats">
+      <div class="hero-content">
 
-      <div class="stat-card">
-        <h3>Today's Revenue</h3>
-        <p id="todayRevenue">₹0</p>
-      </div>
+        <span class="hero-badge">
+          SMART MONEY ACCOUNT
+        </span>
 
-      <div class="stat-card">
-        <h3>7 Days Revenue</h3>
-        <p id="sevenDayRevenue">₹0</p>
-      </div>
+        <h1>
+          Welcome Back! 👋
+        </h1>
 
-      <div class="stat-card">
-        <h3>30 Days Revenue</h3>
-        <p id="thirtyDayRevenue">₹0</p>
-      </div>
-
-      <div class="stat-card">
-        <h3>Lifetime Revenue</h3>
-        <p id="lifetimeRevenue">₹0</p>
-      </div>
-
-    </section>
-
-    <section class="dashboard-grid">
-
-      <div class="dashboard-card">
-        <h2>My Referrals</h2>
-
-        <div class="referral-summary">
-          <div>
-            <span>Total Referrals</span>
-            <strong id="totalReferrals">0</strong>
-          </div>
-
-          <div>
-            <span>Active Referrals</span>
-            <strong id="activeReferrals">0</strong>
-          </div>
-        </div>
-      </div>
-
-      <div class="dashboard-card">
-        <h2>My Package</h2>
-
-        <p class="package-name" id="userPackage">
-          No Package
+        <p>
+          Manage your earnings, referrals, packages and
+          transactions from one secure dashboard.
         </p>
 
-        <p>Commission will be calculated after an eligible sale is recorded.</p>
+        <div class="hero-actions">
+
+          <a href="index.html#packages" class="primary-btn">
+            Explore Packages
+          </a>
+
+          <a href="profile.html" class="secondary-btn">
+            My Profile
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- REFERRAL CARD -->
+      <div class="hero-referral-card">
+
+        <span class="small-label">
+          YOUR REFERRAL ID
+        </span>
+
+        <strong id="referralId">
+          SM-XXXXXX
+        </strong>
+
+        <p>
+          Share your referral ID and grow your network.
+        </p>
+
+        <button
+          class="copy-btn"
+          id="copyReferralButton"
+        >
+          📋 Copy Referral ID
+        </button>
+
       </div>
 
     </section>
 
-    <section class="dashboard-card transactions">
-      <h2>Recent Transactions</h2>
 
-      <div class="empty-state">
-        <p>No transactions yet.</p>
+
+    <!-- OVERVIEW -->
+    <section class="section-heading">
+
+      <div>
+
+        <span>
+          OVERVIEW
+        </span>
+
+        <h2>
+          Your Earnings
+        </h2>
+
       </div>
+
+
+      <div class="live-status">
+
+        <span class="live-dot"></span>
+
+        Live Updates
+
+      </div>
+
     </section>
+
+
+
+    <!-- STATS -->
+    <section class="stats premium-stats">
+
+
+      <div class="stat-card premium-card">
+
+        <div class="stat-icon">
+          📅
+        </div>
+
+        <div>
+
+          <span>
+            Today's Revenue
+          </span>
+
+          <h3 id="todayRevenue">
+            ₹0
+          </h3>
+
+          <small>
+            Today's earnings
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="stat-card premium-card">
+
+        <div class="stat-icon">
+          📈
+        </div>
+
+        <div>
+
+          <span>
+            7 Days Revenue
+          </span>
+
+          <h3 id="sevenDayRevenue">
+            ₹0
+          </h3>
+
+          <small>
+            Last 7 days
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="stat-card premium-card">
+
+        <div class="stat-icon">
+          📊
+        </div>
+
+        <div>
+
+          <span>
+            30 Days Revenue
+          </span>
+
+          <h3 id="thirtyDayRevenue">
+            ₹0
+          </h3>
+
+          <small>
+            Monthly performance
+          </small>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="stat-card premium-card highlight-card">
+
+        <div class="stat-icon">
+          💰
+        </div>
+
+        <div>
+
+          <span>
+            Lifetime Revenue
+          </span>
+
+          <h3 id="lifetimeRevenue">
+            ₹0
+          </h3>
+
+          <small>
+            All-time earnings
+          </small>
+
+        </div>
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- MAIN GRID -->
+    <section class="premium-dashboard-grid">
+
+
+      <!-- REFERRALS -->
+      <div class="dashboard-card premium-panel">
+
+        <div class="card-header">
+
+          <div>
+
+            <span class="card-label">
+              NETWORK
+            </span>
+
+            <h2>
+              My Referrals
+            </h2>
+
+          </div>
+
+          <div class="panel-icon">
+            👥
+          </div>
+
+        </div>
+
+
+        <div class="referral-summary premium-referrals">
+
+
+          <div class="referral-stat">
+
+            <span>
+              Total Referrals
+            </span>
+
+            <strong id="totalReferrals">
+              0
+            </strong>
+
+          </div>
+
+
+          <div class="referral-stat active-referral">
+
+            <span>
+              Active Referrals
+            </span>
+
+            <strong id="activeReferrals">
+              0
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+        <div class="panel-footer">
+
+          Build your network and earn commission on
+          eligible package purchases.
+
+        </div>
+
+      </div>
+
+
+
+      <!-- PACKAGE -->
+      <div class="dashboard-card premium-panel package-panel">
+
+        <div class="card-header">
+
+          <div>
+
+            <span class="card-label">
+              MEMBERSHIP
+            </span>
+
+            <h2>
+              My Package
+            </h2>
+
+          </div>
+
+          <div class="panel-icon">
+            💎
+          </div>
+
+        </div>
+
+
+        <div class="package-display">
+
+          <div class="package-status">
+            CURRENT PACKAGE
+          </div>
+
+
+          <h3
+            class="package-name"
+            id="userPackage"
+          >
+            No Package
+          </h3>
+
+
+          <p>
+            Choose a package to access package benefits
+            and eligible referral commission.
+          </p>
+
+
+          <a
+            href="index.html#packages"
+            class="package-btn"
+          >
+            View Packages →
+          </a>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- WALLET -->
+      <div class="dashboard-card premium-panel wallet-panel">
+
+        <div class="card-header">
+
+          <div>
+
+            <span class="card-label">
+              WALLET
+            </span>
+
+            <h2>
+              Available Balance
+            </h2>
+
+          </div>
+
+          <div class="panel-icon">
+            👛
+          </div>
+
+        </div>
+
+
+        <h3
+          class="wallet-balance"
+          id="walletBalance"
+        >
+          ₹0
+        </h3>
+
+
+        <p>
+          Eligible earnings available for withdrawal
+          will appear here.
+        </p>
+
+
+        <button
+          class="withdraw-btn"
+          id="withdrawButton"
+        >
+          Withdraw Earnings
+        </button>
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- TRANSACTIONS -->
+    <section class="dashboard-card transactions premium-transactions">
+
+
+      <div class="card-header">
+
+        <div>
+
+          <span class="card-label">
+            ACTIVITY
+          </span>
+
+          <h2>
+            Recent Transactions
+          </h2>
+
+        </div>
+
+
+        <button class="view-all-btn">
+          View All →
+        </button>
+
+      </div>
+
+
+      <div class="empty-state premium-empty">
+
+        <div class="empty-icon">
+          📋
+        </div>
+
+        <h3>
+          No Transactions Yet
+        </h3>
+
+        <p>
+          Your package purchases, referral commissions
+          and withdrawal activity will appear here.
+        </p>
+
+      </div>
+
+
+    </section>
+
 
   </main>
 
+
+
+  <!-- FOOTER -->
   <footer>
-    <p>© 2026 Smart Money. All rights reserved.</p>
+
+    <p>
+      © 2026 Smart Money. All rights reserved.
+    </p>
+
   </footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  // ================================
-  // SUPABASE CONNECTION
-  // ================================
-
-  const SUPABASE_URL =
-    "https://rvprrulkjegvicbnjuft.supabase.co";
-
-  const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
 
 
-  // ================================
-  // CHECK LOGIN
-  // ================================
 
-  document.addEventListener("DOMContentLoaded", async function () {
-
-    const {
-      data: { session },
-      error
-    } = await supabaseClient.auth.getSession();
+  <!-- SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
-    // Agar user login nahi hai
-    if (!session) {
+  <script>
 
-      alert("Please login first.");
+    // =====================================
+    // SUPABASE CONNECTION
+    // =====================================
 
-      window.location.href = "login.html";
+    const SUPABASE_URL =
+      "https://rvprrulkjegvicbnjuft.supabase.co";
 
-      return;
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 
-    }
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      );
 
 
-    // Logged-in user email console mein
-    console.log(
-      "Logged in user:",
-      session.user.email
+
+    // =====================================
+    // CHECK LOGIN
+    // =====================================
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      async function () {
+
+
+        const {
+          data: { session }
+        } =
+        await supabaseClient
+          .auth
+          .getSession();
+
+
+        // User logged in nahi hai
+        if (!session) {
+
+          alert(
+            "Please login first."
+          );
+
+
+          window.location.href =
+            "login.html";
+
+
+          return;
+
+        }
+
+
+        console.log(
+          "Logged in user:",
+          session.user.email
+        );
+
+
+
+        // =====================================
+        // COPY REFERRAL ID
+        // =====================================
+
+        const copyButton =
+          document.getElementById(
+            "copyReferralButton"
+          );
+
+
+        const referralId =
+          document.getElementById(
+            "referralId"
+          );
+
+
+        copyButton.addEventListener(
+          "click",
+          async function () {
+
+            try {
+
+              await navigator.clipboard.writeText(
+                referralId.textContent.trim()
+              );
+
+
+              copyButton.textContent =
+                "✓ Copied!";
+
+
+              setTimeout(function () {
+
+                copyButton.textContent =
+                  "📋 Copy Referral ID";
+
+              }, 2000);
+
+
+            } catch (error) {
+
+              alert(
+                "Could not copy referral ID."
+              );
+
+            }
+
+          }
+        );
+
+
+
+        // =====================================
+        // WITHDRAW BUTTON
+        // =====================================
+
+        const withdrawButton =
+          document.getElementById(
+            "withdrawButton"
+          );
+
+
+        withdrawButton.addEventListener(
+          "click",
+          function () {
+
+            alert(
+              "Withdrawal system will be available after wallet and package verification are connected."
+            );
+
+          }
+        );
+
+
+      }
     );
 
-  });
-</script>
+  </script>
+
+
 </body>
+
 </html>
