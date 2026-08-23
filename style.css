@@ -315,8 +315,6 @@ body {
   min-height: calc(100vh - 150px);
 }
 
-/* Dashboard Header */
-
 .dashboard-header {
   display: flex;
   justify-content: space-between;
@@ -332,16 +330,10 @@ body {
   margin-bottom: 5px;
 }
 
-.dashboard-header h1::first-letter {
-  color: var(--primary);
-}
-
 .dashboard-header p {
   color: var(--muted);
   font-size: 15px;
 }
-
-/* Referral Box */
 
 .referral-box {
   min-width: 210px;
@@ -515,9 +507,11 @@ body {
 
 .dashboard-card p:not(.package-name) {
   color: var(--muted);
- /* ================================
+}
+
+/* =========================================
    CUSTOMER SUPPORT
-================================ */
+========================================= */
 
 .support-section {
   padding: 80px 20px;
@@ -580,6 +574,7 @@ body {
   justify-content: center;
   border-radius: 12px;
   font-size: 22px;
+  flex-shrink: 0;
 }
 
 .support-card h3 {
@@ -601,8 +596,9 @@ body {
   font-weight: 600;
 }
 
-
-/* FORM */
+/* =========================================
+   SUPPORT FORM
+========================================= */
 
 .support-form-box {
   background: #fff;
@@ -636,11 +632,13 @@ body {
   font-size: 15px;
   outline: none;
   box-sizing: border-box;
+  font-family: inherit;
 }
 
 #supportForm input:focus,
 #supportForm textarea:focus {
   border-color: #8b2be2;
+  box-shadow: 0 0 0 3px rgba(139,43,226,0.1);
 }
 
 #supportForm textarea {
@@ -663,10 +661,9 @@ body {
   opacity: 0.9;
 }
 
-
-/* ================================
+/* =========================================
    FOOTER
-================================ */
+========================================= */
 
 .main-footer {
   background: #151b2b;
@@ -717,12 +714,69 @@ body {
   font-size: 14px;
 }
 
-
-/* ================================
+/* =========================================
    MOBILE RESPONSIVE
-================================ */
+========================================= */
 
 @media (max-width: 768px) {
+
+  .navbar {
+    padding: 15px 5%;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .navbar nav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero {
+    padding: 70px 20px;
+  }
+
+  .hero h1 {
+    font-size: 34px;
+  }
+
+  .hero p {
+    font-size: 15px;
+  }
+
+  .buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .packages {
+    padding: 50px 15px;
+  }
+
+  .packages h2 {
+    font-size: 30px;
+  }
+
+  .package {
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .dashboard {
+    padding: 30px 15px 50px;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
 
   .support-section {
     padding: 50px 15px;
@@ -744,6 +798,27 @@ body {
   .footer-content {
     grid-template-columns: 1fr;
     gap: 30px;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .referral-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .support-card {
+    align-items: flex-start;
+  }
+
+  .navbar a {
+    padding: 8px 9px;
+    font-size: 13px;
   }
 
 }
