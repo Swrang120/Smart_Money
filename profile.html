@@ -2,89 +2,164 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile - Smart Money</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>My Profile - Smart Money</title>
+
   <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
+  <!-- NAVBAR -->
+
   <header class="navbar">
-    <div class="logo">Smart Money</div>
+
+    <div class="logo">
+      Smart Money
+    </div>
 
     <nav>
       <a href="index.html">Home</a>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="login.html">Logout</a>
+
+      <a href="dashboard.html">
+        Dashboard
+      </a>
+
+      <a href="#" id="logoutBtn">
+        Logout
+      </a>
     </nav>
+
   </header>
+
+
+  <!-- PROFILE -->
 
   <main class="form-page">
 
     <div class="form-box">
 
-      <h1>My Profile</h1>
-      <p>Manage your Smart Money account</p>
+      <div class="profile-top">
 
-      <div class="profile-photo">
-        <div class="avatar">SM</div>
+        <div class="avatar" id="avatar">
+          SM
+        </div>
+
+        <h1>My Profile</h1>
+
+        <p>
+          Manage your Smart Money account
+        </p>
+
       </div>
+
+
+      <!-- PROFILE FORM -->
 
       <form id="profileForm">
 
-        <label for="name">Full Name</label>
+        <label for="name">
+          Full Name
+        </label>
+
         <input
           type="text"
           id="name"
-          placeholder="Your full name"
+          placeholder="Enter your full name"
           required
         >
 
-        <label for="email">Gmail</label>
+
+        <label for="email">
+          Email Address
+        </label>
+
         <input
           type="email"
           id="email"
-          placeholder="Your Gmail"
-          required
-        >
-
-        <label for="mobile">Mobile Number</label>
-        <input
-          type="tel"
-          id="mobile"
-          placeholder="Your mobile number"
-          required
-        >
-
-        <label for="referralId">Referral ID</label>
-        <input
-          type="text"
-          id="referralId"
-          value="SM-XXXXXX"
           readonly
         >
 
-        <button type="submit" class="btn login-btn">
+
+        <label for="mobile">
+          Mobile Number
+        </label>
+
+        <input
+          type="tel"
+          id="mobile"
+          placeholder="Enter your mobile number"
+        >
+
+
+        <label for="referralId">
+          Your Referral ID
+        </label>
+
+        <div class="referral-input">
+
+          <input
+            type="text"
+            id="referralId"
+            readonly
+          >
+
+          <button
+            type="button"
+            id="copyReferralBtn"
+            class="copy-btn"
+          >
+            Copy
+          </button>
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="btn login-btn"
+          id="saveProfileBtn"
+        >
           Save Profile
         </button>
 
       </form>
 
+
       <hr class="profile-divider">
 
-      <h2>Change Password</h2>
+
+      <!-- PASSWORD -->
+
+      <h2>
+        Change Password
+      </h2>
+
 
       <form id="passwordForm">
 
-        <label for="oldPassword">Old Password</label>
+        <label for="oldPassword">
+          Current Password
+        </label>
+
         <input
           type="password"
           id="oldPassword"
-          placeholder="Enter old password"
+          placeholder="Enter current password"
           required
         >
 
-        <label for="newPassword">New Password</label>
+
+        <label for="newPassword">
+          New Password
+        </label>
+
         <input
           type="password"
           id="newPassword"
@@ -92,7 +167,11 @@
           required
         >
 
-        <label for="confirmNewPassword">Confirm New Password</label>
+
+        <label for="confirmNewPassword">
+          Confirm New Password
+        </label>
+
         <input
           type="password"
           id="confirmNewPassword"
@@ -100,19 +179,654 @@
           required
         >
 
-        <button type="submit" class="btn login-btn">
+
+        <button
+          type="submit"
+          class="btn login-btn"
+          id="changePasswordBtn"
+        >
           Change Password
         </button>
 
       </form>
 
+
+      <p
+        id="message"
+        style="
+          text-align:center;
+          margin-top:15px;
+          font-size:14px;
+        "
+      >
+      </p>
+
     </div>
 
   </main>
 
+
+  <!-- FOOTER -->
+
   <footer>
-    <p>© 2026 Smart Money. All rights reserved.</p>
+
+    <p>
+      © 2026 Smart Money. All rights reserved.
+    </p>
+
   </footer>
+
+
+
+  <!-- SUPABASE -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+  <script>
+
+    // =====================================
+    // SUPABASE CONNECTION
+    // =====================================
+
+    const SUPABASE_URL =
+      "https://rvprrulkjegvicbnjuft.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      );
+
+
+    // =====================================
+    // GLOBAL USER
+    // =====================================
+
+    let currentUser = null;
+
+
+    // =====================================
+    // SHOW MESSAGE
+    // =====================================
+
+    function showMessage(text, color = "#16a34a") {
+
+      const message =
+        document.getElementById("message");
+
+      message.textContent = text;
+
+      message.style.color = color;
+
+    }
+
+
+    // =====================================
+    // CREATE REFERRAL ID
+    // =====================================
+
+    function generateReferralId() {
+
+      const random =
+        Math.random()
+          .toString(36)
+          .substring(2, 8)
+          .toUpperCase();
+
+      return "SM-" + random;
+
+    }
+
+
+    // =====================================
+    // LOAD PROFILE
+    // =====================================
+
+    async function loadProfile() {
+
+      const {
+        data: { session }
+      } =
+        await supabaseClient.auth.getSession();
+
+
+      // LOGIN CHECK
+
+      if (!session) {
+
+        alert("Please login first.");
+
+        window.location.href =
+          "login.html";
+
+        return;
+
+      }
+
+
+      currentUser =
+        session.user;
+
+
+      // EMAIL
+
+      document.getElementById(
+        "email"
+      ).value =
+        currentUser.email;
+
+
+      // GET PROFILE FROM DATABASE
+
+      const {
+        data: profile,
+        error
+      } =
+        await supabaseClient
+          .from("profiles")
+          .select("*")
+          .eq(
+            "id",
+            currentUser.id
+          )
+          .maybeSingle();
+
+
+      // PROFILE EXISTS
+
+      if (profile) {
+
+        document.getElementById(
+          "name"
+        ).value =
+          profile.full_name || "";
+
+
+        document.getElementById(
+          "mobile"
+        ).value =
+          profile.mobile || "";
+
+
+        document.getElementById(
+          "referralId"
+        ).value =
+          profile.referral_id || "";
+
+
+        updateAvatar(
+          profile.full_name
+        );
+
+      }
+
+
+      // PROFILE DOES NOT EXIST
+
+      else {
+
+        const referralId =
+          generateReferralId();
+
+
+        await supabaseClient
+          .from("profiles")
+          .insert({
+
+            id:
+              currentUser.id,
+
+            email:
+              currentUser.email,
+
+            full_name:
+              "",
+
+            mobile:
+              "",
+
+            referral_id:
+              referralId
+
+          });
+
+
+        document.getElementById(
+          "referralId"
+        ).value =
+          referralId;
+
+      }
+
+    }
+
+
+    // =====================================
+    // UPDATE AVATAR
+    // =====================================
+
+    function updateAvatar(name) {
+
+      const avatar =
+        document.getElementById(
+          "avatar"
+        );
+
+
+      if (!name) {
+
+        avatar.textContent =
+          "SM";
+
+        return;
+
+      }
+
+
+      const words =
+        name
+          .trim()
+          .split(" ");
+
+
+      let initials =
+        words[0]
+          .charAt(0)
+          .toUpperCase();
+
+
+      if (words.length > 1) {
+
+        initials +=
+          words[
+            words.length - 1
+          ]
+            .charAt(0)
+            .toUpperCase();
+
+      }
+
+
+      avatar.textContent =
+        initials;
+
+    }
+
+
+    // =====================================
+    // SAVE PROFILE
+    // =====================================
+
+    document
+      .getElementById("profileForm")
+      .addEventListener(
+        "submit",
+        async function(event) {
+
+          event.preventDefault();
+
+
+          const name =
+            document
+              .getElementById("name")
+              .value
+              .trim();
+
+
+          const mobile =
+            document
+              .getElementById("mobile")
+              .value
+              .trim();
+
+
+          const button =
+            document
+              .getElementById(
+                "saveProfileBtn"
+              );
+
+
+          button.textContent =
+            "Saving...";
+
+          button.disabled =
+            true;
+
+
+          const {
+            error
+          } =
+            await supabaseClient
+              .from("profiles")
+              .upsert({
+
+                id:
+                  currentUser.id,
+
+                email:
+                  currentUser.email,
+
+                full_name:
+                  name,
+
+                mobile:
+                  mobile,
+
+                referral_id:
+                  document
+                    .getElementById(
+                      "referralId"
+                    )
+                    .value
+
+              });
+
+
+          button.textContent =
+            "Save Profile";
+
+          button.disabled =
+            false;
+
+
+          if (error) {
+
+            console.error(error);
+
+            showMessage(
+              "Profile save failed: " +
+              error.message,
+              "#dc2626"
+            );
+
+            return;
+
+          }
+
+
+          updateAvatar(name);
+
+
+          showMessage(
+            "Profile saved successfully!"
+          );
+
+        }
+      );
+
+
+    // =====================================
+    // COPY REFERRAL ID
+    // =====================================
+
+    document
+      .getElementById(
+        "copyReferralBtn"
+      )
+      .addEventListener(
+        "click",
+        async function() {
+
+          const referralId =
+            document
+              .getElementById(
+                "referralId"
+              )
+              .value;
+
+
+          await navigator
+            .clipboard
+            .writeText(
+              referralId
+            );
+
+
+          const button =
+            document
+              .getElementById(
+                "copyReferralBtn"
+              );
+
+
+          button.textContent =
+            "Copied!";
+
+
+          setTimeout(
+            function() {
+
+              button.textContent =
+                "Copy";
+
+            },
+            2000
+          );
+
+        }
+      );
+
+
+    // =====================================
+    // CHANGE PASSWORD
+    // =====================================
+
+    document
+      .getElementById(
+        "passwordForm"
+      )
+      .addEventListener(
+        "submit",
+        async function(event) {
+
+          event.preventDefault();
+
+
+          const oldPassword =
+            document
+              .getElementById(
+                "oldPassword"
+              )
+              .value;
+
+
+          const newPassword =
+            document
+              .getElementById(
+                "newPassword"
+              )
+              .value;
+
+
+          const confirmPassword =
+            document
+              .getElementById(
+                "confirmNewPassword"
+              )
+              .value;
+
+
+          // PASSWORD MATCH
+
+          if (
+            newPassword !==
+            confirmPassword
+          ) {
+
+            showMessage(
+              "New passwords do not match.",
+              "#dc2626"
+            );
+
+            return;
+
+          }
+
+
+          // MINIMUM LENGTH
+
+          if (
+            newPassword.length < 6
+          ) {
+
+            showMessage(
+              "Password must be at least 6 characters.",
+              "#dc2626"
+            );
+
+            return;
+
+          }
+
+
+          const button =
+            document
+              .getElementById(
+                "changePasswordBtn"
+              );
+
+
+          button.textContent =
+            "Checking...";
+
+          button.disabled =
+            true;
+
+
+          // VERIFY CURRENT PASSWORD
+
+          const {
+            error: loginError
+          } =
+            await supabaseClient
+              .auth
+              .signInWithPassword({
+
+                email:
+                  currentUser.email,
+
+                password:
+                  oldPassword
+
+              });
+
+
+          if (loginError) {
+
+            button.textContent =
+              "Change Password";
+
+            button.disabled =
+              false;
+
+
+            showMessage(
+              "Current password is incorrect.",
+              "#dc2626"
+            );
+
+            return;
+
+          }
+
+
+          button.textContent =
+            "Changing...";
+
+
+          // UPDATE PASSWORD
+
+          const {
+            error
+          } =
+            await supabaseClient
+              .auth
+              .updateUser({
+
+                password:
+                  newPassword
+
+              });
+
+
+          button.textContent =
+            "Change Password";
+
+          button.disabled =
+            false;
+
+
+          if (error) {
+
+            showMessage(
+              error.message,
+              "#dc2626"
+            );
+
+            return;
+
+          }
+
+
+          document
+            .getElementById(
+              "passwordForm"
+            )
+            .reset();
+
+
+          showMessage(
+            "Password changed successfully!"
+          );
+
+        }
+      );
+
+
+    // =====================================
+    // LOGOUT
+    // =====================================
+
+    document
+      .getElementById(
+        "logoutBtn"
+      )
+      .addEventListener(
+        "click",
+        async function(event) {
+
+          event.preventDefault();
+
+
+          await supabaseClient
+            .auth
+            .signOut();
+
+
+          window.location.href =
+            "login.html";
+
+        }
+      );
+
+
+    // =====================================
+    // START
+    // =====================================
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      loadProfile
+    );
+
+  </script>
+
 
 </body>
 </html>
