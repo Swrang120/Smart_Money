@@ -1,88 +1,197 @@
-<!-- Supabase Library -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!DOCTYPE html>
+<html lang="en">
 
-<script>
-  // SUPABASE CONNECTION
-  const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+  <title>Login - Smart Money</title>
 
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
+  <link rel="stylesheet" href="style.css">
+</head>
 
+<body>
 
-  // LOGIN FORM
-  const loginForm = document.getElementById("loginForm");
-  const loginButton = document.querySelector(".login-btn");
+  <header class="navbar">
 
+    <div class="logo">Smart Money</div>
 
-  loginForm.addEventListener("submit", async function (event) {
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="register.html">Register</a>
+    </nav>
 
-    event.preventDefault();
-
-    const email = document
-      .getElementById("email")
-      .value
-      .trim();
-
-    const password = document
-      .getElementById("password")
-      .value;
+  </header>
 
 
-    if (!email || !password) {
-      alert("Please enter email and password.");
-      return;
-    }
+  <main class="form-page">
+
+    <div class="form-box">
+
+      <h1>Welcome Back</h1>
+
+      <p>Login to your Smart Money account</p>
 
 
-    loginButton.disabled = true;
-    loginButton.textContent = "Logging in...";
+      <form id="loginForm">
+
+        <label for="email">Gmail</label>
+
+        <input
+          type="email"
+          id="email"
+          placeholder="Enter your Gmail"
+          required
+        >
 
 
-    try {
+        <label for="password">Password</label>
 
-      const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
-          email: email,
-          password: password
-        });
-
-
-      if (error) {
-        throw error;
-      }
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter your password"
+          required
+        >
 
 
-      if (!data.user) {
-        throw new Error("Login failed.");
-      }
+        <button
+          type="submit"
+          class="btn login-btn"
+        >
+          Login
+        </button>
+
+      </form>
 
 
-      alert("Login successful!");
+      <p class="login-text">
 
-      // Home page par bhejo
-      window.location.href = "./index.html";
+        Don't have an account?
+
+        <a href="register.html">
+          Create Account
+        </a>
+
+      </p>
+
+    </div>
+
+  </main>
 
 
-    } catch (error) {
+  <!-- SUPABASE LIBRARY -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-      console.error("Login error:", error);
 
-      alert(
-        "Login failed: " +
-        (error.message || "Something went wrong.")
+  <!-- LOGIN SYSTEM -->
+  <script>
+
+    const SUPABASE_URL =
+      "https://rvprrulkjegvicbnjuft.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
       );
 
-    } finally {
 
-      loginButton.disabled = false;
-      loginButton.textContent = "Login";
+    const loginForm =
+      document.getElementById("loginForm");
 
-    }
 
-  });
-</script>
+    const loginButton =
+      document.querySelector(".login-btn");
+
+
+    loginForm.addEventListener(
+      "submit",
+      async function(event) {
+
+        event.preventDefault();
+
+
+        const email =
+          document
+            .getElementById("email")
+            .value
+            .trim();
+
+
+        const password =
+          document
+            .getElementById("password")
+            .value;
+
+
+        loginButton.disabled = true;
+
+        loginButton.textContent =
+          "Logging in...";
+
+
+        try {
+
+          const { data, error } =
+            await supabaseClient
+              .auth
+              .signInWithPassword({
+
+                email: email,
+
+                password: password
+
+              });
+
+
+          if (error) {
+            throw error;
+          }
+
+
+          if (!data.user) {
+            throw new Error(
+              "Login failed."
+            );
+          }
+
+
+          alert(
+            "Login successful!"
+          );
+
+
+          window.location.href =
+            "index.html";
+
+
+        } catch (error) {
+
+          alert(
+            "Login failed: " +
+            error.message
+          );
+
+
+        } finally {
+
+          loginButton.disabled = false;
+
+          loginButton.textContent =
+            "Login";
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+
+</html>
