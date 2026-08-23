@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Starter Package - Smart Money</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      background: #f6f7fb;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+
+    /* NAVBAR */
+
+    .navbar {
+      width: 100%;
+      min-height: 72px;
+      padding: 0 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #111827, #1e293b);
+    }
+
+    .logo {
+      color: white;
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .logo::before {
+      content: "✦";
+      margin-right: 8px;
+    }
+
+    .navbar nav {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .navbar nav a {
+      color: #cbd5e1;
+      padding: 9px 13px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .navbar nav a:hover {
+      color: white;
+      background: rgba(255,255,255,0.10);
+    }
+
+
+    /* PAGE */
+
+    .package-page {
+      min-height: calc(100vh - 72px);
+      padding: 80px 7%;
+
+      background:
+        radial-gradient(
+          circle at top left,
+          rgba(255, 157, 0, 0.15),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at bottom right,
+          rgba(236, 72, 153, 0.10),
+          transparent 30%
+        ),
+        #f6f7fb;
+    }
+
+    .package-container {
+      max-width: 1100px;
+      margin: auto;
+
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+
+      align-items: center;
+    }
+
+
+    /* LEFT SIDE */
+
+    .package-tag {
+      display: inline-block;
+
+      margin-bottom: 18px;
+
+      color: #ea580c;
+
+      font-size: 12px;
+      font-weight: 800;
+
+      letter-spacing: 0.5px;
+    }
+
+    .package-info h1 {
+      font-size: 48px;
+      line-height: 1.15;
+
+      margin-bottom: 20px;
+
+      color: #111827;
+    }
+
+    .package-info h1 span {
+      background: linear-gradient(
+        135deg,
+        #ff8a00,
+        #ff5c35
+      );
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .package-description {
+      max-width: 550px;
+
+      color: #64748b;
+
+      margin-bottom: 30px;
+
+      font-size: 16px;
+    }
+
+
+    /* FEATURES */
+
+    .features {
+      display: grid;
+      gap: 14px;
+
+      margin-bottom: 32px;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+
+      gap: 13px;
+
+      padding: 15px 18px;
+
+      background: white;
+
+      border: 1px solid #e5e7eb;
+
+      border-radius: 14px;
+
+      box-shadow: 0 5px 18px rgba(15, 23, 42, 0.05);
+    }
+
+    .feature-icon {
+      width: 38px;
+      height: 38px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      flex-shrink: 0;
+
+      border-radius: 10px;
+
+      background: #fff3e6;
+
+      font-size: 18px;
+    }
+
+    .feature span {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+
+    /* BACK BUTTON */
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+
+      padding: 13px 20px;
+
+      border-radius: 10px;
+
+      color: #475569;
+
+      background: white;
+
+      border: 1px solid #e5e7eb;
+
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .back-btn:hover {
+      background: #f8fafc;
+    }
+
+
+    /* PACKAGE CARD */
+
+    .package-card {
+      overflow: hidden;
+
+      background: white;
+
+      border-radius: 24px;
+
+      box-shadow: 0 25px 60px rgba(15, 23, 42, 0.15);
+    }
+
+
+    /* CARD TOP */
+
+    .card-top {
+      position: relative;
+
+      padding: 40px 35px;
+
+      min-height: 240px;
+
+      overflow: hidden;
+
+      color: white;
+
+      background: linear-gradient(
+        135deg,
+        #ff9d00,
+        #ff5c35
+      );
+    }
+
+    .card-top::after {
+      content: "";
+
+      position: absolute;
+
+      width: 280px;
+      height: 280px;
+
+      right: -100px;
+      bottom: -150px;
+
+      border: 2px solid rgba(255,255,255,0.25);
+
+      border-radius: 50%;
+    }
+
+    .popular-badge {
+      position: absolute;
+
+      top: 20px;
+      right: 20px;
+
+      padding: 7px 13px;
+
+      border-radius: 20px;
+
+      background: rgba(255,255,255,0.22);
+
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .package-icon {
+      position: relative;
+      z-index: 2;
+
+      font-size: 45px;
+
+      margin-bottom: 18px;
+    }
+
+    .card-top h2 {
+      position: relative;
+      z-index: 2;
+
+      font-size: 30px;
+
+      margin-bottom: 8px;
+    }
+
+    .card-top p {
+      position: relative;
+      z-index: 2;
+
+      color: rgba(255,255,255,0.88);
+
+      font-size: 14px;
+    }
+
+
+    /* CARD BODY */
+
+    .card-body {
+      padding: 32px;
+    }
+
+    .price-section {
+      padding-bottom: 25px;
+
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .price-label {
+      display: block;
+
+      margin-bottom: 5px;
+
+      color: #64748b;
+
+      font-size: 13px;
+    }
+
+    .price {
+      color: #111827;
+
+      font-size: 42px;
+      font-weight: 800;
+    }
+
+
+    /* COMMISSION */
+
+    .commission-box {
+      margin: 25px 0;
+
+      padding: 18px;
+
+      border-radius: 14px;
+
+      background: #f0fdf4;
+
+      border: 1px solid #bbf7d0;
+    }
+
+    .commission-box span {
+      display: block;
+
+      color: #64748b;
+
+      font-size: 12px;
+    }
+
+    .commission-box strong {
+      display: block;
+
+      margin-top: 5px;
+
+      color: #059669;
+
+      font-size: 26px;
+    }
+
+
+    /* BUTTON */
+
+    .register-btn {
+      display: block;
+
+      width: 100%;
+
+      padding: 16px;
+
+      text-align: center;
+
+      border-radius: 12px;
+
+      color: white;
+
+      font-size: 15px;
+      font-weight: 800;
+
+      background: linear-gradient(
+        135deg,
+        #ff8a00,
+        #ff5c35
+      );
+
+      box-shadow: 0 10px 25px rgba(255, 92, 53, 0.25);
+
+      transition: 0.3s;
+    }
+
+    .register-btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .secure-text {
+      margin-top: 16px;
+
+      text-align: center;
+
+      color: #94a3b8;
+
+      font-size: 11px;
+    }
+
+
+    /* FOOTER */
+
+    footer {
+      padding: 22px;
+
+      text-align: center;
+
+      color: #94a3b8;
+
+      background: #111827;
+
+      font-size: 13px;
+    }
+
+
+    /* MOBILE */
+
+    @media (max-width: 800px) {
+
+      .navbar {
+        padding: 14px 5%;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .logo {
+        font-size: 18px;
+      }
+
+      .navbar nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .navbar nav a {
+        padding: 6px 8px;
+        font-size: 11px;
+      }
+
+      .package-page {
+        padding: 55px 20px;
+      }
+
+      .package-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .package-info {
+        text-align: center;
+      }
+
+      .package-description {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .features {
+        text-align: left;
+      }
+
+      .package-info h1 {
+        font-size: 38px;
+      }
+
+      .back-btn {
+        justify-content: center;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+  <a href="index.html" class="logo">
+    Smart Money
+  </a>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#packages">Packages</a>
+    <a href="login.html">Login</a>
+  </nav>
+
+</header>
+
+
+
+<!-- PACKAGE DETAILS -->
+
+<section class="package-page">
+
+  <div class="package-container">
+
+
+    <!-- LEFT SIDE -->
+
+    <div class="package-info">
+
+      <span class="package-tag">
+        ✦ STARTER PACKAGE
+      </span>
+
+      <h1>
+        Start Your
+        <br>
+        <span>Growth Journey</span>
+      </h1>
+
+      <p class="package-description">
+        The Starter Package is designed for people who want
+        to begin their Smart Money journey and explore
+        networking opportunities step by step.
+      </p>
+
+
+      <div class="features">
+
+        <div class="feature">
+          <div class="feature-icon">🚀</div>
+          <span>Starter Package Access</span>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🤝</div>
+          <span>Start Building Your Network</span>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">💰</div>
+          <span>Referral Commission Opportunity</span>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">🛟</div>
+          <span>Customer Support Available</span>
+        </div>
+
+      </div>
+
+
+      <a href="index.html#packages" class="back-btn">
+        ← Back To Packages
+      </a>
+
+    </div>
+
+
+
+    <!-- RIGHT PACKAGE CARD -->
+
+    <div class="package-card">
+
+      <div class="card-top">
+
+        <span class="popular-badge">
+          START HERE
+        </span>
+
+        <div class="package-icon">
+          🚀
+        </div>
+
+        <h2>
+          Starter Package
+        </h2>
+
+        <p>
+          Begin your Smart Money journey.
+        </p>
+
+      </div>
+
+
+      <div class="card-body">
+
+        <div class="price-section">
+
+          <span class="price-label">
+            PACKAGE PRICE
+          </span>
+
+          <strong class="price">
+            ₹560
+          </strong>
+
+        </div>
+
+
+        <div class="commission-box">
+
+          <span>
+            REFERRAL COMMISSION
+          </span>
+
+          <strong>
+            ₹399
+          </strong>
+
+        </div>
+
+
+        <a
+          href="register.html?package=Low"
+          class="register-btn"
+        >
+          Choose Starter Package →
+        </a>
+
+
+        <p class="secure-text">
+          🔒 Continue to registration securely
+        </p>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- FOOTER -->
+
+<footer>
+  © 2026 Smart Money. All Rights Reserved.
+</footer>
+
+
+</body>
+
+</html>
