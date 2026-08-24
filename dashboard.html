@@ -64,11 +64,11 @@
     /* PROFILE HEADER CARD */
     .profile-card {
       background: #ffffff; border-radius: 20px; padding: 20px; display: flex; align-items: center; gap: 15px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 20px; position: relative; border: 1px solid #f1f5f9;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 20px; position: relative; border: 1px solid #f1f5f9; overflow: hidden;
     }
     .package-badge {
-      position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #f59e0b, #d97706);
-      color: #fff; font-size: 10px; padding: 4px 12px; border-bottom-left-radius: 12px; font-weight: 700; text-transform: uppercase;
+      position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff; font-size: 10px; padding: 5px 14px; border-bottom-left-radius: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
     }
     .profile-img { width: 68px; height: 68px; border-radius: 50%; object-fit: cover; border: 3px solid #7c3aed; }
     .user-info h2 { margin: 0; font-size: 17px; font-weight: 700; color: #0f172a; }
@@ -149,7 +149,7 @@
   
   <!-- USER PROFILE CARD -->
   <div class="profile-card">
-    <div class="package-badge" id="activePackage">Starter</div>
+    <div class="package-badge" id="activePackage">Basic Package</div>
     <div>
       <img id="userAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=User" class="profile-img" alt="Profile" onclick="openProfileSettingsModal()" style="cursor:pointer;">
     </div>
@@ -200,6 +200,7 @@
 <div id="withdrawModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px; color:#0f172a;">💸 Withdrawal Request</h3>
+    <p style="font-size: 11px; color: #64748b; margin-top: -5px; margin-bottom: 12px;">Basic Package: Min ₹100 | Max ₹800 | Fee: 2% | Limit: 1 Time/Day</p>
     
     <div id="setupBankSection">
       <p style="font-size:12px; color:#64748b; margin-bottom:10px;">Select Transfer Method:</p>
@@ -224,7 +225,7 @@
     <!-- Payout Request Form -->
     <div id="payoutSection" style="display:none;">
       <p style="font-size:13px; color:#10b981; font-weight:600;">✅ Account Details: <b id="savedMethodInfo"></b></p>
-      <p style="font-size:12px; color:#64748b;">Withdrawal Limit: ₹100 - ₹10,000</p>
+      <p style="font-size:12px; color:#64748b;">Withdrawal Limit: ₹100 - ₹800 (Fee: 2%)</p>
       <input type="number" id="withdrawAmount" class="input-field" placeholder="Enter Amount (₹)">
       <p id="withdrawError" style="color:#ef4444; font-size:12px; display:none; margin-bottom:10px;"></p>
       <button onclick="processWithdrawal()" class="btn-action" style="background:#10b981;">Request Payout</button>
@@ -269,6 +270,14 @@
   let currentUserId = null;
   let userReferralCode = "";
 
+  // Package Rules Constants (Basic Package)
+  const PACKAGE_RULES = {
+    minWithdraw: 100,
+    maxWithdraw: 800,
+    feePercent: 2,
+    dailyLimitCount: 1
+  };
+
   function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("active");
     document.getElementById("sidebarOverlay").classList.toggle("active");
@@ -310,7 +319,10 @@
         userReferralCode = profile.referral_code || defaultCode;
         document.getElementById("userName").innerText = profile.full_name || defaultName;
         document.getElementById("myRefCode").innerText = userReferralCode;
-        if(profile.package_name) document.getElementById("activePackage").innerText = profile.package_name;
+        
+        // Show package name or default to Basic Package (₹299)
+        const packageName = profile.package_name || "Basic Package";
+        document.getElementById("activePackage").innerText = packageName;
         
         const finalAvatar = profile.avatar_url || defaultAvatar;
         document.getElementById("userAvatar").src = finalAvatar;
@@ -393,15 +405,4 @@
       const acc = document.getElementById("accNum").value.trim();
       const ifsc = document.getElementById("ifscCode").value.trim();
       if(!holder || !acc || !ifsc) { alert("Please fill all details!"); return; }
-      updatePayload.account_holder = holder;
-      updatePayload.account_number = acc;
-      updatePayload.ifsc_code = ifsc;
-    }
-
-    const { error } = await supabaseClient.from('profiles').update(updatePayload).eq('user_id', currentUserId);
-    if(error) { alert("Error saving: " + error.message); return; }
-
-    alert("Details Saved!");
-    savedPaymentData = updatePayload;
-    document.getElementById("setupBankSection").style.display = "none";
-    document.getElementById("payoutSection").style.dis
+      updatePayload.acco
