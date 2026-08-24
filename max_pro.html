@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Max Pro Package (₹4,499) - Smart Money</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background: #0f172a; color: #f8fafc; margin: 0; padding-bottom: 40px; }
+
+    /* NAVBAR */
+    .navbar {
+      background: #1e293b;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .brand-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .brand-logo span {
+      font-weight: 800; font-size: 20px;
+      background: linear-gradient(135deg, #f59e0b, #ec4899);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .back-btn { background: #334155; border: none; font-size: 14px; font-weight: 600; cursor: pointer; color: #cbd5e1; padding: 6px 12px; border-radius: 8px; text-decoration: none; }
+
+    /* CONTAINER */
+    .container { max-width: 480px; margin: 25px auto; padding: 0 15px; }
+
+    /* PACKAGE HERO CARD */
+    .package-hero {
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      color: #ffffff; border-radius: 22px; padding: 25px; text-align: center;
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4); margin-bottom: 20px; position: relative; border: 1px solid rgba(255,255,255,0.2);
+    }
+    .package-hero h1 { margin: 5px 0 10px 0; font-size: 24px; font-weight: 800; }
+    .price-tag { font-size: 36px; font-weight: 800; color: #fbbf24; margin: 10px 0; }
+    .package-desc { font-size: 13px; opacity: 0.95; line-height: 1.5; }
+
+    /* FEATURES LIST CARD */
+    .card {
+      background: #1e293b; border-radius: 18px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      margin-bottom: 20px; border: 1px solid #334155;
+    }
+    .card h3 { margin-top: 0; font-size: 16px; color: #f8fafc; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+    
+    .feature-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-bottom: 1px dashed #334155; font-size: 13.5px; }
+    .feature-row:last-child { border-bottom: none; }
+    .feature-label { color: #94a3b8; font-weight: 500; }
+    .feature-value { color: #f8fafc; font-weight: 700; text-align: right; }
+
+    /* ACTION BUTTON */
+    .btn-buy {
+      width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; border: none;
+      padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 15px;
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4); transition: transform 0.2s;
+    }
+    .btn-buy:active { transform: scale(0.98); }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <a href="dashboard.html" class="brand-logo">
+    <span>Smart Money</span>
+  </a>
+  <a href="dashboard.html" class="back-btn">← Dashboard</a>
+</header>
+
+<div class="container">
+  
+  <!-- PACKAGE HERO -->
+  <div class="package-hero">
+    <span style="background: rgba(0,0,0,0.3); padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #fbbf24;">👑 VIP Exclusive Access</span>
+    <h1>Max Pro Package</h1>
+    <div class="price-tag">₹4,499 <span style="font-size:14px; color:#fff; font-weight:400;">/ One Time</span></div>
+    <p class="package-desc">Ultimate digital power-pack built for elite creators and top affiliate earners seeking maximum rewards.</p>
+  </div>
+
+  <!-- PACKAGE DETAILS SPECIFICATIONS -->
+  <div class="card">
+    <h3>💎 Elite VIP Specifications</h3>
+    
+    <div class="feature-row">
+      <span class="feature-label">Package Price</span>
+      <span class="feature-value" style="color:#fbbf24;">₹4,499 (One Time)</span>
+    </div>
+    <div class="feature-row">
+      <span class="feature-label">Direct Commission</span>
+      <span class="feature-value" style="color:#10b981;">85% (₹2,500.15 / Sale)</span>
+    </div>
+    <div class="feature-row">
+      <span class="feature-label">Minimum Withdrawal</span>
+      <span class="feature-value">₹100</span>
+    </div>
+    <div class="feature-row">
+      <span class="feature-label">Maximum Withdrawal</span>
+      <span class="feature-value">₹30,000 per request</span>
+    </div>
+    <div class="feature-row">
+      <span class="feature-label">Daily Withdrawal Limit</span>
+      <span class="feature-value" style="color:#38bdf8;">Unlimited Daily</span>
+    </div>
+    <div class="feature-row">
+      <span class="feature-label">Withdrawal Charges</span>
+      <span class="feature-value" style="color:#34d399;">0% (Zero Fee)</span>
+    </div>
+    <div class="feature-row">
+      <span class="feature-label">Profile Badge</span>
+      <span class="feature-value" style="color:#f43f5e;">👑 VIP Highlighted Status</span>
+    </div>
+    <div class="feature-row">
+      <span class="feature-label">Support Level</span>
+      <span class="feature-value">☎️ Direct 24/7 VIP Support</span>
+    </div>
+  </div>
+
+  <!-- PURCHASE OR ACTIVATE BUTTON -->
+  <button onclick="buyMaxProPackage()" class="btn-buy">👑 Activate Max Pro VIP (₹4,499)</button>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  async function buyMaxProPackage() {
+    try {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session || !session.user) {
+        alert("Pehle login karna zaroori hai!");
+        window.location.href = "login.html";
+        return;
+      }
+
+      const { error } = await supabaseClient
+        .from('profiles')
+        .update({ package_name: 'Max Pro Package' })
+        .eq('user_id', session.user.id);
+
+      if (error) {
+        alert("Activation Error: " + error.message);
+        return;
+      }
+
+      alert("🎉 Congratulation! Max Pro VIP Package successfully activated!");
+      window.location.href = "dashboard.html";
+    } catch (err) {
+      console.error(err);
+      alert("Kuch error aa gaya. Dobara try karein.");
+    }
+  }
+</script>
+
+</body>
+</html>
