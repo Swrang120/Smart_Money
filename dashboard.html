@@ -28,7 +28,7 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
     .nav-right { display: flex; align-items: center; gap: 12px; }
-    .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #6366f1; cursor: pointer; }
+    .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #6366f1; cursor: pointer; background: #e2e8f0; }
     .menu-btn { background: #f8fafc; border: 1px solid #e2e8f0; font-size: 20px; cursor: pointer; color: #475569; padding: 6px 10px; border-radius: 10px; }
 
     /* SIDEBAR DRAWER */
@@ -70,10 +70,8 @@
       position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #3b82f6, #1d4ed8);
       color: #fff; font-size: 10px; padding: 5px 14px; border-bottom-left-radius: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
     }
-    .package-badge.vip {
-      background: linear-gradient(135deg, #f59e0b, #ec4899);
-      color: #fff;
-    }
+    .package-badge.vip { background: linear-gradient(135deg, #f59e0b, #ec4899); color: #fff; }
+    
     .profile-img-wrap { position: relative; cursor: pointer; }
     .profile-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #8b5cf6; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background: #475569; }
     
@@ -91,8 +89,7 @@
 
     /* STATS STACK */
     .stats-stack { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
-    .v-card { border-radius: 20px; padding: 20px; color: #ffffff; box-shadow: 0 8px 20px rgba(0,0,0,0.08); transition: transform 0.2s; }
-    .v-card:active { transform: scale(0.98); }
+    .v-card { border-radius: 20px; padding: 20px; color: #ffffff; box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
     .v-card h2 { margin: 0; font-size: 28px; font-weight: 800; }
     .v-card p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.95; }
     .card-divider { border-top: 1px solid rgba(255,255,255,0.2); margin-top: 15px; padding-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 500; }
@@ -105,25 +102,19 @@
     /* MODAL STYLES */
     .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.6); z-index:999; justify-content:center; align-items:center; backdrop-filter: blur(3px); }
     .modal-box { background:#ffffff; padding:25px; border-radius:22px; width:90%; max-width:420px; box-shadow:0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
-    .input-field { width:100%; padding:11px 14px; margin-bottom:12px; border-radius:12px; border:1px solid #cbd5e1; font-size:13.5px; box-sizing:border-box; outline: none; transition: border-color 0.2s; }
-    .input-field:focus { border-color: #6366f1; }
+    .input-field { width:100%; padding:11px 14px; margin-bottom:12px; border-radius:12px; border:1px solid #cbd5e1; font-size:13.5px; box-sizing:border-box; outline: none; }
     .btn-action { width:100%; background: linear-gradient(135deg, #6366f1, #4f46e5); color:#fff; border:none; padding:13px; border-radius:12px; font-weight:700; cursor:pointer; font-size:14px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
   </style>
 </head>
 <body>
 
-<!-- SIDEBAR OVERLAY -->
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-<!-- SIDEBAR NAVIGATION MENU -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a href="dashboard.html" class="brand-logo">
-      <span>✦ Smart Money</span>
-    </a>
+    <a href="dashboard.html" class="brand-logo"><span>✦ Smart Money</span></a>
     <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
   </div>
-  
   <ul class="sidebar-menu">
     <li><a href="dashboard.html" class="active"><span>🏠</span> Dashboard Home</a></li>
     <li><a href="basic.html"><span>📦</span> Basic Package (₹299)</a></li>
@@ -132,16 +123,12 @@
     <li><button onclick="copyRefLink()"><span>🔗</span> Copy Affiliate Link</button></li>
     <li><button onclick="openWithdrawalModal()"><span>💸</span> Request Withdrawal</button></li>
     <li><button onclick="openProfileSettingsModal()"><span>💳</span> Bank / UPI / Details</button></li>
-    <li><button onclick="openProfileSettingsModal()"><span>🔒</span> Security & Password</button></li>
     <li><button id="sideLogoutBtn" style="color:#ef4444;"><span>🚪</span> Logout</button></li>
   </ul>
 </aside>
 
-<!-- NAVBAR -->
 <header class="navbar">
-  <a href="dashboard.html" class="brand-logo">
-    <span>Smart Money</span>
-  </a>
+  <a href="dashboard.html" class="brand-logo"><span>Smart Money</span></a>
   <div class="nav-right">
     <img id="navAvatar" src="" class="nav-avatar" alt="Profile" onclick="openProfileSettingsModal()" title="Click to edit profile">
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
@@ -149,114 +136,44 @@
 </header>
 
 <div class="dash-container">
-  
-  <!-- USER PROFILE CARD -->
   <div class="profile-card">
     <div class="package-badge" id="activePackageBadge">Basic Package</div>
     <div class="profile-img-wrap" onclick="openProfileSettingsModal()" title="Change Profile Photo">
       <img id="userAvatar" src="" class="profile-img" alt="Profile">
     </div>
     <div class="user-info">
-      <h2 id="userName">Loading... <span id="vipTitleIcon" style="display:none; font-size:15px;" title="VIP Member">👑</span></h2>
+      <h2 id="userName">Loading... <span id="vipTitleIcon" style="display:none; font-size:15px;">👑</span></h2>
       <p id="userEmail">user@gmail.com</p>
       <p>ID: <b id="myRefCode" style="color:#c4b5fd;">SM-USER</b></p>
       <button class="copy-btn" onclick="copyRefLink()">📋 Copy Affiliate Link</button>
     </div>
   </div>
 
-  <!-- WALLET BALANCE DISPLAY -->
   <div class="balance-card">
-    <span style="font-size: 11px; color:#64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Available Wallet Balance</span>
+    <span style="font-size: 11px; color:#64748b; font-weight: 700; text-transform: uppercase;">Available Wallet Balance</span>
     <h1 style="margin: 6px 0 0 0; color: #10b981; font-size: 32px;" id="walletBalance">₹0.00</h1>
   </div>
 
-  <!-- REVENUE STATS -->
   <div class="stats-stack">
-    <div class="v-card bg-today">
-      <h2 id="todayEarn">₹0</h2>
-      <p>Today's Revenue</p>
-      <div class="card-divider"><span>View full details</span><span>›</span></div>
-    </div>
-
-    <div class="v-card bg-7days">
-      <h2 id="weekEarn">₹0</h2>
-      <p>7 Days Revenue</p>
-      <div class="card-divider"><span>View full details</span><span>›</span></div>
-    </div>
-
-    <div class="v-card bg-30days">
-      <h2 id="monthEarn">₹0</h2>
-      <p>30 Days Revenue</p>
-      <div class="card-divider"><span>View full details</span><span>›</span></div>
-    </div>
-
-    <div class="v-card bg-alltime">
-      <h2 id="totalEarn">₹0</h2>
-      <p>All Time Revenue</p>
-      <div class="card-divider"><span>View full details</span><span>›</span></div>
-    </div>
-  </div>
-
-</div>
-
-<!-- WITHDRAWAL MODAL POPUP -->
-<div id="withdrawModal" class="modal-overlay">
-  <div class="modal-box">
-    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px; color:#0f172a;">💸 Withdrawal Request</h3>
-    <p id="packageLimitNotice" style="font-size: 11.5px; color: #64748b; margin-top: -5px; margin-bottom: 15px;">Loading package limits...</p>
-    
-    <div id="setupBankSection">
-      <p style="font-size:12.5px; color:#475569; margin-bottom:8px; font-weight: 600;">Select Transfer Method:</p>
-      <div style="display:flex; gap:20px; margin-bottom:15px;">
-        <label style="cursor:pointer; font-size:13px;"><input type="radio" name="payMethod" value="UPI" checked onclick="togglePayMethod('UPI')"> UPI ID</label>
-        <label style="cursor:pointer; font-size:13px;"><input type="radio" name="payMethod" value="BANK" onclick="togglePayMethod('BANK')"> Bank Account</label>
-      </div>
-
-      <div id="upiForm">
-        <input type="text" id="upiInput" class="input-field" placeholder="Enter UPI ID (e.g. user@upi)">
-      </div>
-
-      <div id="bankForm" style="display:none;">
-        <input type="text" id="accHolder" class="input-field" placeholder="Account Holder Name">
-        <input type="text" id="accNum" class="input-field" placeholder="Bank Account Number">
-        <input type="text" id="ifscCode" class="input-field" placeholder="IFSC Code">
-      </div>
-
-      <button onclick="savePaymentDetails()" class="btn-action">Save Account Details</button>
-    </div>
-
-    <div id="payoutSection" style="display:none;">
-      <p style="font-size:13px; color:#10b981; font-weight:600; margin-bottom:10px;">✅ Account: <b id="savedMethodInfo"></b></p>
-      <input type="number" id="withdrawAmount" class="input-field" placeholder="Enter Amount (₹)">
-      <p id="withdrawError" style="color:#ef4444; font-size:12px; display:none; margin-bottom:10px;"></p>
-      <button onclick="processWithdrawal()" class="btn-action" style="background:#10b981; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">Request Payout</button>
-    </div>
-
-    <button onclick="closeModal('withdrawModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:10px; cursor:pointer; font-weight: 500;">Close</button>
+    <div class="v-card bg-today"><h2 id="todayEarn">₹0</h2><p>Today's Revenue</p></div>
+    <div class="v-card bg-7days"><h2 id="weekEarn">₹0</h2><p>7 Days Revenue</p></div>
+    <div class="v-card bg-30days"><h2 id="monthEarn">₹0</h2><p>30 Days Revenue</p></div>
+    <div class="v-card bg-alltime"><h2 id="totalEarn">₹0</h2><p>All Time Revenue</p></div>
   </div>
 </div>
 
-<!-- PROFILE SETTINGS & PHOTO UPLOAD MODAL -->
+<!-- PROFILE SETTINGS MODAL -->
 <div id="profileSettingsModal" class="modal-overlay">
   <div class="modal-box">
-    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px; color:#0f172a;">⚙️ Edit Profile & Photo</h3>
-    
+    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">⚙️ Edit Profile & Photo</h3>
     <label style="font-size:12px; font-weight:600; color:#475569;">Full Name</label>
     <input type="text" id="editFullName" class="input-field" placeholder="Your Name">
-
     <label style="font-size:12px; font-weight:600; color:#475569;">Upload Profile Photo (From Device)</label>
     <input type="file" id="editAvatarFile" class="input-field" accept="image/*" style="padding: 8px; background: #f8fafc;">
-
     <label style="font-size:12px; font-weight:600; color:#475569;">UPI ID / Bank Detail</label>
     <input type="text" id="editUpiId" class="input-field" placeholder="UPI ID or Account Info">
-
-    <hr style="border:0; border-top:1px solid #f1f5f9; margin:10px 0;">
-
-    <label style="font-size:12px; font-weight:600; color:#475569;">New Password (Optional)</label>
-    <input type="password" id="editPassword" class="input-field" placeholder="Enter new password">
-
-    <button onclick="updateUserProfile()" class="btn-action" id="saveProfileBtn" style="margin-top:5px;">Save Profile Changes</button>
-    <button onclick="closeModal('profileSettingsModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer; font-weight:500;">Cancel</button>
+    <button onclick="updateUserProfile()" class="btn-action" id="saveProfileBtn">Save Profile Changes</button>
+    <button onclick="closeModal('profileSettingsModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer;">Cancel</button>
   </div>
 </div>
 
@@ -266,28 +183,15 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  let userBalance = 0; 
-  let savedPaymentData = null;
   let currentUserId = null;
   let userReferralCode = "";
-  let currentPackageName = "Basic Package";
-
-  function getActivePackageRules() {
-    if (currentPackageName === "Max Pro Package") {
-      return { minWithdraw: 100, maxWithdraw: 30000, feePercent: 0, dailyLimitText: "Unlimited Daily Withdrawals" };
-    } else {
-      return { minWithdraw: 100, maxWithdraw: 800, feePercent: 2, dailyLimitText: "1 Time / Day" };
-    }
-  }
 
   function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("active");
     document.getElementById("sidebarOverlay").classList.toggle("active");
   }
 
-  // Generate Smart Money Custom Default Logo Avatar using Name Initials/Brand
   function getSmartMoneyAvatar(name) {
-    const initials = name ? name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : "SM";
     return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name || 'Smart Money')}&backgroundColor=6366f1,8b5cf6,ec4899&fontFamily=Poppins`;
   }
 
@@ -296,6 +200,7 @@
       const { data: { session } } = await supabaseClient.auth.getSession();
 
       if (!session || !session.user) {
+        // Agar login nahi hai toh login page par bhej do
         window.location.href = "login.html";
         return;
       }
@@ -325,7 +230,7 @@
         document.getElementById("userName").innerText = finalName;
         document.getElementById("myRefCode").innerText = userReferralCode;
         
-        currentPackageName = profile.package_name || "Basic Package";
+        let currentPackageName = profile.package_name || "Basic Package";
         const badgeEl = document.getElementById("activePackageBadge");
         badgeEl.innerText = currentPackageName;
 
@@ -340,10 +245,7 @@
 
         document.getElementById("editFullName").value = finalName;
         document.getElementById("editUpiId").value = profile.upi_id || "";
-
-        userBalance = profile.balance || 0;
-        document.getElementById("walletBalance").innerText = "₹" + userBalance.toFixed(2);
-        savedPaymentData = profile;
+        document.getElementById("walletBalance").innerText = "₹" + (profile.balance || 0).toFixed(2);
       }
 
     } catch (err) {
@@ -364,40 +266,43 @@
   async function updateUserProfile() {
     const newName = document.getElementById("editFullName").value.trim();
     const newUpi = document.getElementById("editUpiId").value.trim();
-    const newPassword = document.getElementById("editPassword").value.trim();
     const fileInput = document.getElementById("editAvatarFile");
-
     let btn = document.getElementById("saveProfileBtn");
+    
     btn.innerText = "Saving...";
     btn.disabled = true;
-
     let updates = { full_name: newName, upi_id: newUpi };
 
     try {
-      // Handle file upload to Supabase Storage 'avatars' bucket
       if (fileInput.files && fileInput.files[0]) {
         const file = fileInput.files[0];
         const fileExt = file.name.split('.').pop();
-        const fileName = `${currentUserId}_${Math.random().toString(36.substring(2)}.${fileExt}`;
-        const filePath = `${fileName}`;
+        const fileName = `${currentUserId}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+        
+        const { error: uploadErr } = await supabaseClient.storage.from('avatars').upload(fileName, file);
+        if (uploadErr) { alert("Upload Error: " + uploadErr.message); btn.innerText = "Save Profile Changes"; btn.disabled = false; return; }
 
-        const { error: uploadErr } = await supabaseClient.storage
-          .from('avatars')
-          .upload(filePath, file);
-
-        if (uploadErr) {
-          alert("Photo Upload Error: " + uploadErr.message);
-          btn.innerText = "Save Profile Changes";
-          btn.disabled = false;
-          return;
-        }
-
-        const { data: publicURLData } = supabaseClient.storage
-          .from('avatars')
-          .getPublicUrl(filePath);
-
+        const { data: publicURLData } = supabaseClient.storage.from('avatars').getPublicUrl(fileName);
         updates.avatar_url = publicURLData.publicUrl;
       }
 
-      const { error } = await supabaseClient.from('profiles').update(updates).eq('user_id', currentUserId);
-      if(error) { alert("Error updating profile: " + error.message); btn.innerText = "Save Profile Changes"; btn
+      await supabaseClient.from('profiles').update(updates).eq('user_id', currentUserId);
+      alert("🎉 Profile successfully updated!");
+      location.reload();
+    } catch(err) {
+      alert("Error aa gaya: " + err.message);
+      btn.innerText = "Save Profile Changes";
+      btn.disabled = false;
+    }
+  }
+
+  function closeModal(id) { document.getElementById(id).style.display = "none"; }
+  function copyRefLink() {
+    const code = document.getElementById("myRefCode").innerText;
+    navigator.clipboard.writeText(`${window.location.origin}/register.html?ref=${code}`);
+    alert("Affiliate Referral Link Copied!");
+  }
+</script>
+
+</body>
+</html>
