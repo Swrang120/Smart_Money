@@ -3,302 +3,235 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Money - Affiliate Dashboard</title>
+  <title>Smart Money - Grow Together</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body { background: #f1f5f9; color: #1e293b; margin: 0; padding-bottom: 40px; }
+    body { background: #f8fafc; color: #1e293b; margin: 0; padding: 0; }
 
+    /* NAVBAR */
     .navbar {
       background: #ffffff;
-      padding: 12px 20px;
+      padding: 15px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
       position: sticky; top: 0; z-index: 100;
     }
     .brand-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
     .brand-logo span {
-      font-weight: 800; font-size: 20px;
+      font-weight: 800; font-size: 22px;
       background: linear-gradient(135deg, #6366f1, #ec4899);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .nav-right { display: flex; align-items: center; gap: 12px; }
-    .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #6366f1; cursor: pointer; background: #e2e8f0; }
-    .menu-btn { background: #f8fafc; border: 1px solid #e2e8f0; font-size: 20px; cursor: pointer; color: #475569; padding: 6px 10px; border-radius: 10px; }
+    .nav-buttons { display: flex; gap: 10px; align-items: center; }
+    .btn-login { text-decoration: none; color: #6366f1; font-weight: 600; font-size: 14px; padding: 8px 14px; border-radius: 10px; }
+    .btn-register { text-decoration: none; background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; font-weight: 600; font-size: 14px; padding: 8px 16px; border-radius: 10px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
 
-    .sidebar-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); z-index: 998; display: none;
+    /* HERO SECTION */
+    .hero {
+      text-align: center;
+      padding: 40px 20px 20px 20px;
+      background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
     }
-    .sidebar {
-      position: fixed; top: 0; left: -300px; width: 300px; height: 100%;
-      background: #ffffff; z-index: 999; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 5px 0 25px rgba(0,0,0,0.1); display: flex; flex-direction: column; overflow-y: auto;
+    .hero h1 { font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 10px; line-height: 1.3; }
+    .hero h1 span {
+      background: linear-gradient(135deg, #6366f1, #ec4899);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .sidebar.active { left: 0; }
-    .sidebar-overlay.active { display: block; }
+    .hero p { font-size: 14px; color: #64748b; max-width: 600px; margin: 0 auto 20px auto; line-height: 1.5; }
 
-    .sidebar-header { padding: 20px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
-    .sidebar-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #64748b; }
+    /* PACKAGES SECTION */
+    .packages-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px 15px;
+    }
+    .section-header { text-align: center; margin-bottom: 30px; }
+    .section-header h2 { font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 5px; }
+    .section-header h2 span { background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .section-header p { font-size: 13px; color: #64748b; }
 
-    .sidebar-menu { list-style: none; padding: 15px 10px; margin: 0; }
-    .sidebar-menu li { margin-bottom: 4px; }
-    .sidebar-menu a, .sidebar-menu button {
-      display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 16px;
-      color: #475569; text-decoration: none; font-size: 14px; font-weight: 500;
-      border-radius: 12px; border: none; background: transparent; cursor: pointer; text-align: left;
-      transition: all 0.2s;
-    }
-    .sidebar-menu a.active { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #ffffff; font-weight: 600; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
-    .sidebar-menu a:hover, .sidebar-menu button:hover { background: #f8fafc; color: #6366f1; }
-    
-    .dash-container { max-width: 480px; margin: 20px auto; padding: 0 15px; }
-
-    .profile-card {
-      background: linear-gradient(135deg, #1e1b4b, #312e81); border-radius: 22px; padding: 22px; display: flex; align-items: center; gap: 16px;
-      box-shadow: 0 10px 30px rgba(49, 46, 129, 0.25); margin-bottom: 20px; position: relative; border: 1px solid rgba(255,255,255,0.1); overflow: hidden;
-    }
-    .package-badge {
-      position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-      color: #fff; font-size: 10px; padding: 5px 14px; border-bottom-left-radius: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
-    }
-    .package-badge.vip { background: linear-gradient(135deg, #f59e0b, #ec4899); color: #fff; }
-    
-    .profile-img-wrap { position: relative; cursor: pointer; }
-    .profile-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #8b5cf6; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background: #475569; }
-    
-    .user-info h2 { margin: 0; font-size: 18px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 6px; }
-    .user-info p { margin: 3px 0; font-size: 12.5px; color: #cbd5e1; }
-    .copy-btn {
-      background: rgba(139, 92, 246, 0.25); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.4); padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; transition: 0.2s;
-    }
-    .copy-btn:hover { background: rgba(139, 92, 246, 0.4); color: #fff; }
-
-    .balance-card {
-      background: #ffffff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 20px; text-align: center; border: 1px solid #e2e8f0;
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
     }
 
-    .stats-stack { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
-    .v-card { border-radius: 20px; padding: 20px; color: #ffffff; box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
-    .v-card h2 { margin: 0; font-size: 28px; font-weight: 800; }
-    .v-card p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.95; }
+    .package-card {
+      background: #ffffff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: transform 0.2s;
+    }
+    .package-card:hover { transform: translateY(-5px); }
 
-    .bg-today { background: linear-gradient(135deg, #7c3aed, #a855f7); }
-    .bg-7days { background: linear-gradient(135deg, #2563eb, #3b82f6); }
-    .bg-30days { background: linear-gradient(135deg, #e11d48, #f43f5e); }
-    .bg-alltime { background: linear-gradient(135deg, #0284c7, #38bdf8); }
+    .pkg-top { padding: 20px; color: #fff; position: relative; }
+    .pkg-top.starter { background: linear-gradient(135deg, #f97316, #ea580c); }
+    .pkg-top.growth { background: linear-gradient(135deg, #10b981, #059669); }
+    .pkg-top.premium { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+    .pkg-top.vip { background: linear-gradient(135deg, #1e1b4b, #312e81); border-bottom: 3px solid #f59e0b; }
 
-    .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.6); z-index:999; justify-content:center; align-items:center; backdrop-filter: blur(3px); }
-    .modal-box { background:#ffffff; padding:25px; border-radius:22px; width:90%; max-width:420px; box-shadow:0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
-    .input-field { width:100%; padding:11px 14px; margin-bottom:12px; border-radius:12px; border:1px solid #cbd5e1; font-size:13.5px; box-sizing:border-box; outline: none; }
-    .btn-action { width:100%; background: linear-gradient(135deg, #6366f1, #4f46e5); color:#fff; border:none; padding:13px; border-radius:12px; font-weight:700; cursor:pointer; font-size:14px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
+    .pkg-tag {
+      position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.2);
+      font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase;
+    }
+
+    .pkg-top h3 { margin: 0 0 5px 0; font-size: 18px; font-weight: 700; }
+    .pkg-top p { margin: 0; font-size: 12px; opacity: 0.9; }
+
+    .pkg-body { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
+    .pkg-price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px; }
+    .pkg-price { font-size: 22px; font-weight: 800; color: #0f172a; }
+    .pkg-level { font-size: 12px; font-weight: 600; color: #64748b; }
+
+    .pkg-features { list-style: none; padding: 0; margin: 0 0 20px 0; font-size: 13px; color: #475569; }
+    .pkg-features li { margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .pkg-features li::before { content: "✓"; color: #10b981; font-weight: 700; }
+
+    .btn-buy {
+      display: block; text-align: center; background: #f1f5f9; color: #334155; font-weight: 700;
+      padding: 11px; border-radius: 12px; text-decoration: none; font-size: 13px; transition: 0.2s;
+    }
+    .package-card:hover .btn-buy { background: #6366f1; color: #fff; }
+    .package-card.vip-card:hover .btn-buy { background: #f59e0b; color: #fff; }
+    .package-card.vip-card .btn-buy { background: #fef3c7; color: #d97706; }
+
+    footer { text-align: center; padding: 30px; font-size: 12px; color: #94a3b8; border-top: 1px solid #e2e8f0; margin-top: 40px; }
   </style>
 </head>
 <body>
 
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <a href="dashboard.html" class="brand-logo"><span>✦ Smart Money</span></a>
-    <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
-  </div>
-  <ul class="sidebar-menu">
-    <li><a href="dashboard.html" class="active"><span>🏠</span> Dashboard Home</a></li>
-    <li><a href="index.html"><span>🌐</span> Home / Landing Page</a></li>
-    <li><a href="basic.html"><span>📦</span> Basic Package (₹299)</a></li>
-    <li><a href="max_pro.html" style="color:#d97706; font-weight:700;"><span>👑</span> Max Pro Package (₹4,499)</a></li>
-    <li><button onclick="openProfileSettingsModal()"><span>👤</span> Edit Profile & Photo</button></li>
-    <li><button onclick="copyRefLink()"><span>🔗</span> Copy Affiliate Link</button></li>
-    <li><button onclick="openProfileSettingsModal()"><span>💳</span> Bank / UPI Details</button></li>
-    <li><button id="sideLogoutBtn" style="color:#ef4444;"><span>🚪</span> Logout</button></li>
-  </ul>
-</aside>
-
-<header class="navbar">
-  <a href="dashboard.html" class="brand-logo"><span>Smart Money</span></a>
-  <div class="nav-right">
-    <img id="navAvatar" src="" class="nav-avatar" alt="Profile" onclick="openProfileSettingsModal()" title="Click to edit profile">
-    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-  </div>
-</header>
-
-<div class="dash-container">
-  
-  <div class="profile-card">
-    <div class="package-badge" id="activePackageBadge">Basic Package</div>
-    <div class="profile-img-wrap" onclick="openProfileSettingsModal()" title="Change Profile Photo">
-      <img id="userAvatar" src="" class="profile-img" alt="Profile">
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="index.html" class="brand-logo"><span>Smart Money</span></a>
+    <div class="nav-buttons">
+      <a href="login.html" class="btn-login">Login</a>
+      <a href="register.html" class="btn-register">Register</a>
     </div>
-    <div class="user-info">
-      <h2 id="userName">Loading... <span id="vipTitleIcon" style="display:none; font-size:15px;">👑</span></h2>
-      <p id="userEmail">user@gmail.com</p>
-      <p>ID: <b id="myRefCode" style="color:#c4b5fd;">SM-USER</b></p>
-      <button class="copy-btn" onclick="copyRefLink()">📋 Copy Affiliate Link</button>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <h1>Discover A Better Way To <span>Grow Together</span></h1>
+    <p>Smart Money is designed for people who want to build a strong network and explore new opportunities. Choose your package and start your journey today.</p>
+  </section>
+
+  <!-- PACKAGES CONTAINER -->
+  <div class="packages-container">
+    <div class="section-header">
+      <h2>Choose The Perfect <span>Growth Package</span></h2>
+      <p>Click any package to view complete details and choose it.</p>
     </div>
-  </div>
 
-  <div class="balance-card">
-    <span style="font-size: 11px; color:#64748b; font-weight: 700; text-transform: uppercase;">Available Wallet Balance</span>
-    <h1 style="margin: 6px 0 0 0; color: #10b981; font-size: 32px;" id="walletBalance">₹0.00</h1>
-  </div>
-
-  <div class="stats-stack">
-    <div class="v-card bg-today"><h2 id="todayEarn">₹0</h2><p>Today's Revenue</p></div>
-    <div class="v-card bg-7days"><h2 id="weekEarn">₹0</h2><p>7 Days Revenue</p></div>
-    <div class="v-card bg-30days"><h2 id="monthEarn">₹0</h2><p>30 Days Revenue</p></div>
-    <div class="v-card bg-alltime"><h2 id="totalEarn">₹0</h2><p>All Time Revenue</p></div>
-  </div>
-
-</div>
-
-<div id="profileSettingsModal" class="modal-overlay">
-  <div class="modal-box">
-    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">⚙️ Edit Profile & Photo</h3>
-    <label style="font-size:12px; font-weight:600; color:#475569;">Full Name</label>
-    <input type="text" id="editFullName" class="input-field" placeholder="Your Name">
-    <label style="font-size:12px; font-weight:600; color:#475569;">Upload Profile Photo (From Device)</label>
-    <input type="file" id="editAvatarFile" class="input-field" accept="image/*" style="padding: 8px; background: #f8fafc;">
-    <label style="font-size:12px; font-weight:600; color:#475569;">UPI ID / Bank Detail</label>
-    <input type="text" id="editUpiId" class="input-field" placeholder="UPI ID or Account Info">
-    <button onclick="updateUserProfile()" class="btn-action" id="saveProfileBtn">Save Profile Changes</button>
-    <button onclick="closeModal('profileSettingsModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer;">Cancel</button>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-
-  let currentUserId = null;
-  let userReferralCode = "";
-
-  function toggleSidebar() {
-    document.getElementById("sidebar").classList.toggle("active");
-    document.getElementById("sidebarOverlay").classList.toggle("active");
-  }
-
-  function getSmartMoneyAvatar(name) {
-    return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name || 'Smart Money')}&backgroundColor=6366f1,8b5cf6,ec4899&fontFamily=Poppins`;
-  }
-
-  document.addEventListener("DOMContentLoaded", async function() {
-    try {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (!session || !session.user) {
-        window.location.href = "login.html";
-        return;
-      }
-
-      currentUserId = session.user.id;
-      const userEmail = session.user.email || "user@gmail.com";
-      document.getElementById("userEmail").innerText = userEmail;
-
-      const defaultName = session.user.user_metadata?.full_name || userEmail.split('@')[0];
-      const defaultCode = "SM-" + currentUserId.substring(0, 5).toUpperCase();
-      const defaultAvatar = getSmartMoneyAvatar(defaultName);
+    <div class="packages-grid">
       
-      document.getElementById("userName").innerText = defaultName;
-      document.getElementById("myRefCode").innerText = defaultCode;
-      document.getElementById("userAvatar").src = defaultAvatar;
-      document.getElementById("navAvatar").src = defaultAvatar;
+      <!-- Starter Package -->
+      <div class="package-card">
+        <div class="pkg-top starter">
+          <span class="pkg-tag">Start Here</span>
+          <h3>Starter Package</h3>
+          <p>Begin your Smart Money journey.</p>
+        </div>
+        <div class="pkg-body">
+          <div>
+            <div class="pkg-price-row">
+              <span class="pkg-price">₹560</span>
+              <span class="pkg-level">Low Package</span>
+            </div>
+            <ul class="pkg-features">
+              <li>Referral Commission (50%): <b>₹280</b></li>
+              <li>Instant Payout System</li>
+              <li>Basic Training & Support</li>
+            </ul>
+          </div>
+          <a href="register.html" class="btn-buy">View Details & Buy →</a>
+        </div>
+      </div>
 
-      const { data: profile } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .eq('user_id', currentUserId)
-        .maybeSingle();
+      <!-- Growth Package -->
+      <div class="package-card">
+        <div class="pkg-top growth">
+          <span class="pkg-tag">Popular</span>
+          <h3>Growth Package</h3>
+          <p>Build your network and grow faster.</p>
+        </div>
+        <div class="pkg-body">
+          <div>
+            <div class="pkg-price-row">
+              <span class="pkg-price">₹899</span>
+              <span class="pkg-level">Medium Package</span>
+            </div>
+            <ul class="pkg-features">
+              <li>Referral Commission (60%): <b>₹539.40</b></li>
+              <li>Advanced Network Tools</li>
+              <li>Priority Support</li>
+            </ul>
+          </div>
+          <a href="register.html" class="btn-buy">View Details & Buy →</a>
+        </div>
+      </div>
 
-      if (profile) {
-        userReferralCode = profile.referral_code || defaultCode;
-        const finalName = profile.full_name || defaultName;
-        document.getElementById("userName").innerText = finalName;
-        document.getElementById("myRefCode").innerText = userReferralCode;
-        
-        let currentPackageName = profile.package_name || "Basic Package";
-        const badgeEl = document.getElementById("activePackageBadge");
-        badgeEl.innerText = currentPackageName;
+      <!-- Premium Package -->
+      <div class="package-card">
+        <div class="pkg-top premium">
+          <span class="pkg-tag">Premium</span>
+          <h3>Premium Package</h3>
+          <p>Premium access for bigger opportunities.</p>
+        </div>
+        <div class="pkg-body">
+          <div>
+            <div class="pkg-price-row">
+              <span class="pkg-price">₹1,499</span>
+              <span class="pkg-level">High Package</span>
+            </div>
+            <ul class="pkg-features">
+              <li>Referral Commission (70%): <b>₹1,049.30</b></li>
+              <li>High-Tier Earning Potential</li>
+              <li>Dedicated Support Manager</li>
+            </ul>
+          </div>
+          <a href="register.html" class="btn-buy">View Details & Buy →</a>
+        </div>
+      </div>
 
-        if (currentPackageName === "Max Pro Package") {
-          badgeEl.classList.add("vip");
-          document.getElementById("vipTitleIcon").style.display = "inline-block";
-        }
-        
-        const finalAvatar = profile.avatar_url || getSmartMoneyAvatar(finalName);
-        document.getElementById("userAvatar").src = finalAvatar;
-        document.getElementById("navAvatar").src = finalAvatar;
+      <!-- Super Premium VIP -->
+      <div class="package-card vip-card">
+        <div class="pkg-top vip">
+          <span class="pkg-tag" style="background:#f59e0b; color:#fff;">VIP Exclusive</span>
+          <h3>Super Premium</h3>
+          <p>Unlimited withdrawal & VIP personal support.</p>
+        </div>
+        <div class="pkg-body">
+          <div>
+            <div class="pkg-price-row">
+              <span class="pkg-price">₹2,499</span>
+              <span class="pkg-level" style="color:#d97706; font-weight:700;">VIP Profit</span>
+            </div>
+            <ul class="pkg-features">
+              <li>Referral Commission (75%): <b>₹1,874.25</b></li>
+              <li>Daily Withdrawal Limit: <b>₹100 - ₹10,000</b></li>
+              <li>Withdrawal Fee: <b>0% (No Fees)</b></li>
+            </ul>
+          </div>
+          <a href="register.html" class="btn-buy">View VIP Details & Buy →</a>
+        </div>
+      </div>
 
-        document.getElementById("editFullName").value = finalName;
-        document.getElementById("editUpiId").value = profile.upi_id || "";
-        document.getElementById("walletBalance").innerText = "₹" + (profile.balance || 0).toFixed(2);
-      }
+    </div>
+  </div>
 
-    } catch (err) {
-      console.log("Dashboard Load Error:", err);
-    }
-
-    document.getElementById("sideLogoutBtn").addEventListener("click", async function() {
-      await supabaseClient.auth.signOut();
-      window.location.href = "login.html";
-    });
-  });
-
-  function openProfileSettingsModal() {
-    if(document.getElementById("sidebar").classList.contains("active")) toggleSidebar();
-    document.getElementById("profileSettingsModal").style.display = "flex";
-  }
-
-  async function updateUserProfile() {
-    const newName = document.getElementById("editFullName").value.trim();
-    const newUpi = document.getElementById("editUpiId").value.trim();
-    const fileInput = document.getElementById("editAvatarFile");
-    let btn = document.getElementById("saveProfileBtn");
-    
-    btn.innerText = "Saving...";
-    btn.disabled = true;
-    let updates = { full_name: newName, upi_id: newUpi };
-
-    try {
-      if (fileInput.files && fileInput.files[0]) {
-        const file = fileInput.files[0];
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${currentUserId}_${Math.random().toString(36).substring(2)}.${fileExt}`;
-        
-        const { error: uploadErr } = await supabaseClient.storage.from('avatars').upload(fileName, file);
-        if (uploadErr) { 
-          alert("Upload Error: " + uploadErr.message); 
-          btn.innerText = "Save Profile Changes"; 
-          btn.disabled = false; 
-          return; 
-        }
-
-        const { data: publicURLData } = supabaseClient.storage.from('avatars').getPublicUrl(fileName);
-        updates.avatar_url = publicURLData.publicUrl;
-      }
-
-      await supabaseClient.from('profiles').update(updates).eq('user_id', currentUserId);
-      alert("🎉 Profile successfully updated!");
-      location.reload();
-    } catch(err) {
-      alert("Error aa gaya: " + err.message);
-      btn.innerText = "Save Profile Changes";
-      btn.disabled = false;
-    }
-  }
-
-  function closeModal(id) { document.getElementById(id).style.display = "none"; }
-  function copyRefLink() {
-    const code = document.getElementById("myRefCode").innerText;
-    navigator.clipboard.writeText(`${window.location.origin}/register.html?ref=${code}`);
-    alert("Affiliate Referral Link Copied!");
-  }
-</script>
+  <footer>
+    <p>&copy; 2026 Smart Money. All rights reserved.</p>
+  </footer>
 
 </body>
 </html>
