@@ -11,7 +11,6 @@
     * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     body { background: #f1f5f9; color: #1e293b; margin: 0; padding-bottom: 40px; }
 
-    /* NAVBAR */
     .navbar {
       background: #ffffff;
       padding: 12px 20px;
@@ -31,7 +30,6 @@
     .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #6366f1; cursor: pointer; background: #e2e8f0; }
     .menu-btn { background: #f8fafc; border: 1px solid #e2e8f0; font-size: 20px; cursor: pointer; color: #475569; padding: 6px 10px; border-radius: 10px; }
 
-    /* SIDEBAR DRAWER */
     .sidebar-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); z-index: 998; display: none;
@@ -58,10 +56,8 @@
     .sidebar-menu a.active { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #ffffff; font-weight: 600; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
     .sidebar-menu a:hover, .sidebar-menu button:hover { background: #f8fafc; color: #6366f1; }
     
-    /* MAIN CONTAINER */
     .dash-container { max-width: 480px; margin: 20px auto; padding: 0 15px; }
 
-    /* PROFILE CARD */
     .profile-card {
       background: linear-gradient(135deg, #1e1b4b, #312e81); border-radius: 22px; padding: 22px; display: flex; align-items: center; gap: 16px;
       box-shadow: 0 10px 30px rgba(49, 46, 129, 0.25); margin-bottom: 20px; position: relative; border: 1px solid rgba(255,255,255,0.1); overflow: hidden;
@@ -82,26 +78,10 @@
     }
     .copy-btn:hover { background: rgba(139, 92, 246, 0.4); color: #fff; }
 
-    /* BALANCE CARD */
     .balance-card {
       background: #ffffff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 20px; text-align: center; border: 1px solid #e2e8f0;
     }
 
-    /* PRODUCTS / PACKAGES QUICK SECTION */
-    .section-title { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-    .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
-    .product-card {
-      background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 15px; text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: transform 0.2s; text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between;
-    }
-    .product-card:active { transform: scale(0.97); }
-    .product-card.vip-prod { border: 2px solid #f59e0b; background: linear-gradient(135deg, #fffbeb, #ffffff); }
-    .product-card h4 { margin: 8px 0 4px 0; font-size: 14px; font-weight: 700; color: #1e293b; }
-    .product-card p { margin: 0; font-size: 12px; color: #64748b; font-weight: 600; }
-    .prod-btn { margin-top: 10px; background: #f1f5f9; color: #475569; font-size: 11px; padding: 6px; border-radius: 8px; font-weight: 600; }
-    .product-card.vip-prod .prod-btn { background: #f59e0b; color: #fff; }
-
-    /* STATS STACK */
     .stats-stack { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
     .v-card { border-radius: 20px; padding: 20px; color: #ffffff; box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
     .v-card h2 { margin: 0; font-size: 28px; font-weight: 800; }
@@ -112,7 +92,6 @@
     .bg-30days { background: linear-gradient(135deg, #e11d48, #f43f5e); }
     .bg-alltime { background: linear-gradient(135deg, #0284c7, #38bdf8); }
 
-    /* MODAL STYLES */
     .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.6); z-index:999; justify-content:center; align-items:center; backdrop-filter: blur(3px); }
     .modal-box { background:#ffffff; padding:25px; border-radius:22px; width:90%; max-width:420px; box-shadow:0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
     .input-field { width:100%; padding:11px 14px; margin-bottom:12px; border-radius:12px; border:1px solid #cbd5e1; font-size:13.5px; box-sizing:border-box; outline: none; }
@@ -123,7 +102,6 @@
 
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-<!-- 3-LINE DRAWER MENU -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <a href="dashboard.html" class="brand-logo"><span>✦ Smart Money</span></a>
@@ -151,7 +129,6 @@
 
 <div class="dash-container">
   
-  <!-- USER PROFILE CARD -->
   <div class="profile-card">
     <div class="package-badge" id="activePackageBadge">Basic Package</div>
     <div class="profile-img-wrap" onclick="openProfileSettingsModal()" title="Change Profile Photo">
@@ -165,37 +142,11 @@
     </div>
   </div>
 
-  <!-- WALLET BALANCE -->
   <div class="balance-card">
     <span style="font-size: 11px; color:#64748b; font-weight: 700; text-transform: uppercase;">Available Wallet Balance</span>
     <h1 style="margin: 6px 0 0 0; color: #10b981; font-size: 32px;" id="walletBalance">₹0.00</h1>
   </div>
 
-  <!-- PRODUCTS / PACKAGES QUICK SECTION -->
-  <div class="section-title">
-    <span>📦 Growth Packages / Products</span>
-  </div>
-  <div class="products-grid">
-    <a href="basic.html" class="product-card">
-      <div>
-        <span style="font-size: 24px;">📦</span>
-        <h4>Basic Package</h4>
-        <p style="color:#6366f1;">₹299 Only</p>
-      </div>
-      <div class="prod-btn">View Details</div>
-    </a>
-
-    <a href="max_pro.html" class="product-card vip-prod">
-      <div>
-        <span style="font-size: 24px;">👑</span>
-        <h4>Max Pro VIP</h4>
-        <p style="color:#d97706;">₹4,499</p>
-      </div>
-      <div class="prod-btn">Explore VIP</div>
-    </a>
-  </div>
-
-  <!-- REVENUE STATS STACK -->
   <div class="stats-stack">
     <div class="v-card bg-today"><h2 id="todayEarn">₹0</h2><p>Today's Revenue</p></div>
     <div class="v-card bg-7days"><h2 id="weekEarn">₹0</h2><p>7 Days Revenue</p></div>
@@ -205,7 +156,6 @@
 
 </div>
 
-<!-- PROFILE SETTINGS MODAL -->
 <div id="profileSettingsModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">⚙️ Edit Profile & Photo</h3>
@@ -241,7 +191,6 @@
   document.addEventListener("DOMContentLoaded", async function() {
     try {
       const { data: { session } } = await supabaseClient.auth.getSession();
-
       if (!session || !session.user) {
         window.location.href = "login.html";
         return;
