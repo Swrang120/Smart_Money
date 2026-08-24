@@ -1512,3 +1512,188 @@ a {
     gap: 30px;
   }
 }
+/* =========================================
+   REGISTER / LOGIN FORM PAGE
+========================================= */
+
+.form-page {
+  min-height: calc(100vh - 72px);
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  padding: 60px 20px;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(124, 58, 237, 0.12),
+      transparent 35%
+    ),
+    #f6f7fb;
+}
+
+
+.form-box {
+  width: 100%;
+  max-width: 520px;
+
+  padding: 35px;
+
+  background: white;
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 20px 50px
+    rgba(15, 23, 42, 0.12);
+
+  border:
+    1px solid #e5e7eb;
+}
+
+
+.form-box h1 {
+  font-size: 30px;
+
+  color: #111827;
+
+  margin-bottom: 8px;
+}
+
+
+.form-box > p {
+  color: #64748b;
+
+  font-size: 14px;
+
+  margin-bottom: 25px;
+}
+
+
+/* FORM */
+
+.form-box form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0;
+}
+
+
+.form-box label {
+  display: block;
+
+  margin-top: 16px;
+
+  margin-bottom: 7px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  color: #334155;
+}
+
+
+.form-box input {
+  display: block;
+
+  width: 100%;
+
+  padding: 14px 15px;
+
+  border:
+    1px solid #dbe1ea;
+
+  border-radius: 10px;
+
+  outline: none;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  transition: 0.2s;
+}
+
+
+.form-box input:focus {
+  border-color: #7c3aed;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(124, 58, 237, 0.10);
+}
+
+
+/* FILE INPUT */
+
+.form-box input[type="file"] {
+  padding: 10px;
+}
+
+
+/* BUTTON */
+
+.register-btn {
+  width: 100%;
+
+  border: none;
+
+  margin-top: 20px;
+
+  cursor: pointer;
+
+  font-family: inherit;
+}
+
+
+.register-btn:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+
+/* LOGIN TEXT */
+
+.login-text {
+  margin-top: 22px !important;
+
+  text-align: center;
+
+  font-size: 13px !important;
+}
+
+
+.login-text a {
+  color: #7c3aed;
+
+  font-weight: 700;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+  .form-page {
+    padding: 30px 15px;
+  }
+
+
+  .form-box {
+    padding: 25px 18px;
+
+    border-radius: 16px;
+  }
+
+
+  .form-box h1 {
+    font-size: 26px;
+  }
+
+}
