@@ -61,7 +61,7 @@
     /* MAIN CONTAINER */
     .dash-container { max-width: 480px; margin: 20px auto; padding: 0 15px; }
 
-    /* COLORFUL & STYLISH PROFILE HEADER CARD */
+    /* PROFILE CARD */
     .profile-card {
       background: linear-gradient(135deg, #1e1b4b, #312e81); border-radius: 22px; padding: 22px; display: flex; align-items: center; gap: 16px;
       box-shadow: 0 10px 30px rgba(49, 46, 129, 0.25); margin-bottom: 20px; position: relative; border: 1px solid rgba(255,255,255,0.1); overflow: hidden;
@@ -106,7 +106,6 @@
     .v-card { border-radius: 20px; padding: 20px; color: #ffffff; box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
     .v-card h2 { margin: 0; font-size: 28px; font-weight: 800; }
     .v-card p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.95; }
-    .card-divider { border-top: 1px solid rgba(255,255,255,0.2); margin-top: 15px; padding-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 500; }
 
     .bg-today { background: linear-gradient(135deg, #7c3aed, #a855f7); }
     .bg-7days { background: linear-gradient(135deg, #2563eb, #3b82f6); }
@@ -124,6 +123,7 @@
 
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
+<!-- 3-LINE DRAWER MENU -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <a href="dashboard.html" class="brand-logo"><span>✦ Smart Money</span></a>
@@ -131,11 +131,12 @@
   </div>
   <ul class="sidebar-menu">
     <li><a href="dashboard.html" class="active"><span>🏠</span> Dashboard Home</a></li>
+    <li><a href="index.html"><span>🌐</span> Home / Landing Page</a></li>
     <li><a href="basic.html"><span>📦</span> Basic Package (₹299)</a></li>
     <li><a href="max_pro.html" style="color:#d97706; font-weight:700;"><span>👑</span> Max Pro Package (₹4,499)</a></li>
     <li><button onclick="openProfileSettingsModal()"><span>👤</span> Edit Profile & Photo</button></li>
     <li><button onclick="copyRefLink()"><span>🔗</span> Copy Affiliate Link</button></li>
-    <li><button onclick="openProfileSettingsModal()"><span>💳</span> Bank / UPI / Details</button></li>
+    <li><button onclick="openProfileSettingsModal()"><span>💳</span> Bank / UPI Details</button></li>
     <li><button id="sideLogoutBtn" style="color:#ef4444;"><span>🚪</span> Logout</button></li>
   </ul>
 </aside>
@@ -321,7 +322,12 @@
         const fileName = `${currentUserId}_${Math.random().toString(36).substring(2)}.${fileExt}`;
         
         const { error: uploadErr } = await supabaseClient.storage.from('avatars').upload(fileName, file);
-        if (uploadErr) { alert("Upload Error: " + uploadErr.message); btn.innerText = "Save Profile Changes"; btn.disabled = false; return; }
+        if (uploadErr) { 
+          alert("Upload Error: " + uploadErr.message); 
+          btn.innerText = "Save Profile Changes"; 
+          btn.disabled = false; 
+          return; 
+        }
 
         const { data: publicURLData } = supabaseClient.storage.from('avatars').getPublicUrl(fileName);
         updates.avatar_url = publicURLData.publicUrl;
