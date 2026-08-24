@@ -70,8 +70,12 @@
       position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #2563eb, #1d4ed8);
       color: #fff; font-size: 10px; padding: 5px 14px; border-bottom-left-radius: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
     }
+    .package-badge.vip {
+      background: linear-gradient(135deg, #f59e0b, #db2777);
+      color: #fff;
+    }
     .profile-img { width: 68px; height: 68px; border-radius: 50%; object-fit: cover; border: 3px solid #7c3aed; }
-    .user-info h2 { margin: 0; font-size: 17px; font-weight: 700; color: #0f172a; }
+    .user-info h2 { margin: 0; font-size: 17px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 6px; }
     .user-info p { margin: 2px 0; font-size: 12px; color: #64748b; }
     .copy-btn {
       background: #f3e8ff; color: #7c3aed; border: none; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px;
@@ -106,37 +110,31 @@
 <!-- SIDEBAR OVERLAY -->
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-<!-- SIDEBAR NAVIGATION MENU -->
+<!-- SIDEBAR NAVIGATION MENU (Fully Working Fixed Links) -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a href="index.html" class="brand-logo">
+    <a href="dashboard.html" class="brand-logo">
       <span>✦ Smart Money</span>
     </a>
     <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
   </div>
   
   <ul class="sidebar-menu">
-    <li><a href="starter.html"><span>📖</span> My Courses</a></li>
-    <li><a href="dashboard.html" class="active"><span>🏠</span> Affiliate Dashboard</a></li>
+    <li><a href="dashboard.html" class="active"><span>🏠</span> Dashboard Home</a></li>
+    <li><a href="basic.html"><span>📦</span> Basic Package (₹299)</a></li>
+    <li><a href="max_pro.html" style="color:#d97706; font-weight:700;"><span>👑</span> Max Pro Package (₹4,499)</a></li>
     <li><button onclick="openProfileSettingsModal()"><span>👤</span> My Profile / Settings</button></li>
-    <li><a href="index.html"><span>📄</span> Applied Jobs</a></li>
-    <li><button onclick="copyRefLink()"><span>🔗</span> Affiliate Link</button></li>
-    <li><button onclick="openProfileSettingsModal()"><span>💳</span> KYC / Bank Details</button></li>
-    <li><a href="super_premium.html"><span>📋</span> My Plan</a></li>
-    <li><button onclick="openWithdrawalModal()"><span>💸</span> Withdrawal Request</button></li>
-    <li><a href="super_premium.html"><span>🚀</span> Upgrade Request</a></li>
-    <li><a href="index.html"><span>👥</span> My Team</a></li>
-    <li><a href="index.html"><span>🏆</span> Leaderboard</a></li>
-    <li><a href="dashboard.html"><span>💼</span> Wallet Transaction</a></li>
-    <li><button onclick="openProfileSettingsModal()"><span>🔒</span> Security (Password)</button></li>
-    <li><a href="index.html#contact"><span>☎️</span> Support & Help</a></li>
+    <li><button onclick="copyRefLink()"><span>🔗</span> Copy Affiliate Link</button></li>
+    <li><button onclick="openWithdrawalModal()"><span>💸</span> Request Withdrawal</button></li>
+    <li><button onclick="openProfileSettingsModal()"><span>💳</span> Bank / UPI / KYC</button></li>
+    <li><button onclick="openProfileSettingsModal()"><span>🔒</span> Security & Password</button></li>
     <li><button id="sideLogoutBtn" style="color:#ef4444;"><span>🚪</span> Logout</button></li>
   </ul>
 </aside>
 
 <!-- NAVBAR -->
 <header class="navbar">
-  <a href="index.html" class="brand-logo">
+  <a href="dashboard.html" class="brand-logo">
     <span>Smart Money</span>
   </a>
   <div class="nav-right">
@@ -149,12 +147,12 @@
   
   <!-- USER PROFILE CARD -->
   <div class="profile-card">
-    <div class="package-badge" id="activePackage">Basic Package</div>
+    <div class="package-badge" id="activePackageBadge">Basic Package</div>
     <div>
       <img id="userAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=User" class="profile-img" alt="Profile" onclick="openProfileSettingsModal()" style="cursor:pointer;">
     </div>
     <div class="user-info">
-      <h2 id="userName">Smart Money Member</h2>
+      <h2 id="userName">Smart Money Member <span id="vipTitleIcon" style="display:none; font-size:15px;" title="VIP Member">👑</span></h2>
       <p id="userEmail">user@gmail.com</p>
       <p>ID: <b id="myRefCode" style="color:#7c3aed;">SM-USER</b></p>
       <button class="copy-btn" onclick="copyRefLink()">📋 Copy Affiliate Link</button>
@@ -200,7 +198,7 @@
 <div id="withdrawModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px; color:#0f172a;">💸 Withdrawal Request</h3>
-    <p style="font-size: 11px; color: #64748b; margin-top: -5px; margin-bottom: 12px;">Basic Package: Min ₹100 | Max ₹800 | Fee: 2% | Limit: 1 Time/Day</p>
+    <p id="packageLimitNotice" style="font-size: 11px; color: #64748b; margin-top: -5px; margin-bottom: 12px;">Loading package limits...</p>
     
     <div id="setupBankSection">
       <p style="font-size:12px; color:#64748b; margin-bottom:10px;">Select Transfer Method:</p>
@@ -225,7 +223,6 @@
     <!-- Payout Request Form -->
     <div id="payoutSection" style="display:none;">
       <p style="font-size:13px; color:#10b981; font-weight:600;">✅ Account Details: <b id="savedMethodInfo"></b></p>
-      <p style="font-size:12px; color:#64748b;">Withdrawal Limit: ₹100 - ₹800 (Fee: 2%)</p>
       <input type="number" id="withdrawAmount" class="input-field" placeholder="Enter Amount (₹)">
       <p id="withdrawError" style="color:#ef4444; font-size:12px; display:none; margin-bottom:10px;"></p>
       <button onclick="processWithdrawal()" class="btn-action" style="background:#10b981;">Request Payout</button>
@@ -269,14 +266,27 @@
   let savedPaymentData = null;
   let currentUserId = null;
   let userReferralCode = "";
+  let currentPackageName = "Basic Package";
 
-  // Package Rules Constants (Basic Package)
-  const PACKAGE_RULES = {
-    minWithdraw: 100,
-    maxWithdraw: 800,
-    feePercent: 2,
-    dailyLimitCount: 1
-  };
+  // Dynamic package rule handlers based on user's active package
+  function getActivePackageRules() {
+    if (currentPackageName === "Max Pro Package") {
+      return {
+        minWithdraw: 100,
+        maxWithdraw: 30000,
+        feePercent: 0,
+        dailyLimitText: "Unlimited Daily Withdrawals"
+      };
+    } else {
+      // Default Basic Package rules
+      return {
+        minWithdraw: 100,
+        maxWithdraw: 800,
+        feePercent: 2,
+        dailyLimitText: "1 Time / Day"
+      };
+    }
+  }
 
   function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("active");
@@ -285,7 +295,6 @@
 
   document.addEventListener("DOMContentLoaded", async function() {
     try {
-      // 1. Session check
       const { data: { session }, error: sessionErr } = await supabaseClient.auth.getSession();
 
       if (!session || !session.user) {
@@ -297,7 +306,6 @@
       const userEmail = session.user.email || "user@gmail.com";
       document.getElementById("userEmail").innerText = userEmail;
 
-      // Fast Fallback setup
       const defaultName = session.user.user_metadata?.full_name || userEmail.split('@')[0];
       const defaultCode = "SM-" + currentUserId.substring(0, 5).toUpperCase();
       
@@ -308,7 +316,6 @@
       document.getElementById("userAvatar").src = defaultAvatar;
       document.getElementById("navAvatar").src = defaultAvatar;
 
-      // 2. Fetch Profile from Supabase Database
       const { data: profile } = await supabaseClient
         .from('profiles')
         .select('*')
@@ -320,9 +327,15 @@
         document.getElementById("userName").innerText = profile.full_name || defaultName;
         document.getElementById("myRefCode").innerText = userReferralCode;
         
-        // Show package name or default to Basic Package (₹299)
-        const packageName = profile.package_name || "Basic Package";
-        document.getElementById("activePackage").innerText = packageName;
+        currentPackageName = profile.package_name || "Basic Package";
+        const badgeEl = document.getElementById("activePackageBadge");
+        badgeEl.innerText = currentPackageName;
+
+        // Apply VIP Highlighting Style if Max Pro Package
+        if (currentPackageName === "Max Pro Package") {
+          badgeEl.classList.add("vip");
+          document.getElementById("vipTitleIcon").style.display = "inline-block";
+        }
         
         const finalAvatar = profile.avatar_url || defaultAvatar;
         document.getElementById("userAvatar").src = finalAvatar;
@@ -376,6 +389,11 @@
   function openWithdrawalModal() {
     if(document.getElementById("sidebar").classList.contains("active")) toggleSidebar();
     document.getElementById("withdrawModal").style.display = "flex";
+    
+    // Update dynamic modal information based on package
+    const rules = getActivePackageRules();
+    document.getElementById("packageLimitNotice").innerText = `${currentPackageName}: Min ₹${rules.minWithdraw} | Max ₹${rules.maxWithdraw.toLocaleString()} | Fee: ${rules.feePercent}% | ${rules.dailyLimitText}`;
+
     if(savedPaymentData && (savedPaymentData.payment_type || savedPaymentData.upi_id)) {
       document.getElementById("setupBankSection").style.display = "none";
       document.getElementById("payoutSection").style.display = "block";
@@ -405,4 +423,54 @@
       const acc = document.getElementById("accNum").value.trim();
       const ifsc = document.getElementById("ifscCode").value.trim();
       if(!holder || !acc || !ifsc) { alert("Please fill all details!"); return; }
-      updatePayload.acco
+      updatePayload.account_holder = holder;
+      updatePayload.account_number = acc;
+      updatePayload.ifsc_code = ifsc;
+    }
+
+    const { error } = await supabaseClient.from('profiles').update(updatePayload).eq('user_id', currentUserId);
+    if(error) { alert("Error saving: " + error.message); return; }
+
+    alert("Details Saved!");
+    savedPaymentData = updatePayload;
+    document.getElementById("setupBankSection").style.display = "none";
+    document.getElementById("payoutSection").style.display = "block";
+    document.getElementById("savedMethodInfo").innerText = selectedType === 'UPI' ? `UPI (${updatePayload.upi_id})` : `Bank (${updatePayload.account_number})`;
+  }
+
+  function processWithdrawal() {
+    const amt = parseFloat(document.getElementById("withdrawAmount").value);
+    const errText = document.getElementById("withdrawError");
+    const rules = getActivePackageRules();
+
+    if (userBalance <= 0) {
+      errText.innerText = "❌ Balance nahi hai.";
+      errText.style.display = "block"; return;
+    }
+    if (!amt || amt < rules.minWithdraw || amt > rules.maxWithdraw) {
+      errText.innerText = `❌ ${currentPackageName} Limit: Min ₹${rules.minWithdraw} & Max ₹${rules.maxWithdraw.toLocaleString()}.`;
+      errText.style.display = "block"; return;
+    }
+    if (amt > userBalance) {
+      errText.innerText = "❌ Insufficient Balance!";
+      errText.style.display = "block"; return;
+    }
+
+    errText.style.display = "none";
+    const feeAmount = (amt * rules.feePercent) / 100;
+    const netAmount = amt - feeAmount;
+    
+    alert(`₹${amt} ka withdrawal request successful submit ho gaya!\nFee (${rules.feePercent}%): ₹${feeAmount.toFixed(2)}\nNet Payable: ₹${netAmount.toFixed(2)} (${rules.dailyLimitText})`);
+    closeModal('withdrawModal');
+  }
+
+  function closeModal(id) { document.getElementById(id).style.display = "none"; }
+  function copyRefLink() {
+    const code = document.getElementById("myRefCode").innerText;
+    navigator.clipboard.writeText(`${window.location.origin}/register.html?ref=${code}`);
+    alert("Affiliate Referral Link Copied!");
+  }
+</script>
+
+</body>
+</html>
