@@ -179,7 +179,7 @@
     <div class="mid-card">
       <h4 style="color:#9ca3af; margin:0;">AVAILABLE BALANCE</h4>
       <h1 style="color:#10b981; margin: 15px 0;" id="walletBalance">₹0.00</h1>
-      <a href="#" class="btn-action">Withdraw Earnings →</a>
+      <a href="#" class="btn-action" id="openWithdrawBtn">Withdraw Earnings →</a>
     </div>
 
     <div class="mid-card">
@@ -189,7 +189,7 @@
     </div>
   </div>
 
-  <!-- NEW BOTTOM SECTION (REFERRAL TEAM & TRANSACTIONS) -->
+  <!-- BOTTOM SECTION (REFERRAL NETWORK) -->
   <div class="table-card">
     <h3>👥 Direct Referral Network</h3>
     <table>
@@ -212,12 +212,58 @@
 
 </div>
 
-<!-- SUPABASE LOGIC -->
+<!-- WITHDRAWAL MODAL POPUP -->
+<div id="withdrawModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:999; justify-content:center; align-items:center;">
+  <div style="background:#1f2937; padding:25px; border-radius:15px; width:90%; max-width:420px; color:#fff; border:1px solid #374151; max-height:90vh; overflow-y:auto;">
+    <h3 style="margin-top:0; border-bottom:1px solid #374151; padding-bottom:10px;">💸 Withdraw Earnings</h3>
+    
+    <!-- STEP 1: Choose and Add Payment Details -->
+    <div id="setupBankSection">
+      <p style="font-size:13px; color:#9ca3af; margin-bottom:10px;">Select Payment Transfer Method:</p>
+      
+      <div style="display:flex; gap:20px; margin-bottom:15px;">
+        <label style="cursor:pointer; font-size:14px;"><input type="radio" name="payMethod" value="UPI" checked onclick="togglePayMethod('UPI')"> UPI ID</label>
+        <label style="cursor:pointer; font-size:14px;"><input type="radio" name="payMethod" value="BANK" onclick="togglePayMethod('BANK')"> Bank Account</label>
+      </div>
+
+      <!-- UPI Form -->
+      <div id="upiForm">
+        <input type="text" id="upiInput" placeholder="Enter UPI ID (e.g. 9876543210@paytm)" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #374151; background:#111827; color:#fff; box-sizing:border-box;">
+      </div>
+
+      <!-- Bank Details Form -->
+      <div id="bankForm" style="display:none;">
+        <input type="text" id="accHolder" placeholder="Account Holder Name" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #374151; background:#111827; color:#fff; box-sizing:border-box;">
+        <input type="text" id="accNum" placeholder="Bank Account Number" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #374151; background:#111827; color:#fff; box-sizing:border-box;">
+        <input type="password" id="confirmAccNum" placeholder="Confirm Bank Account Number" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #374151; background:#111827; color:#fff; box-sizing:border-box;">
+        <input type="text" id="ifscCode" placeholder="IFSC Code (e.g. SBIN0001234)" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #374151; background:#111827; color:#fff; box-sizing:border-box;">
+      </div>
+
+      <button onclick="savePaymentDetails()" style="width:100%; background:#8b5cf6; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;">Save Account Details</button>
+    </div>
+
+    <!-- STEP 2: Enter Withdrawal Amount -->
+    <div id="payoutSection" style="display:none;">
+      <p style="font-size:13px; color:#10b981;">✅ Saved Details: <b id="savedMethodInfo"></b></p>
+      <input type="number" id="withdrawAmount" placeholder="Enter Amount (₹)" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #374151; background:#111827; color:#fff; box-sizing:border-box;">
+      <p id="withdrawError" style="color:#ef4444; font-size:12px; display:none; margin-bottom:10px;"></p>
+      <button onclick="processWithdrawal()" style="width:100%; background:#10b981; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;">Request Payout</button>
+    </div>
+
+    <button onclick="closeModal()" style="width:100%; background:transparent; color:#9ca3af; border:none; padding:8px; margin-top:10px; cursor:pointer;">Close</button>
+  </div>
+</div>
+
+<!-- SUPABASE LOGIC & FUNCTIONALITY -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  let userBalance = 0; 
+  let savedPaymentData = null;
+  let currentUserId = null;
 
   document.addEventListener("DOMContentLoaded", async function() {
     const { data: { session } } = await supabaseClient.auth.getSession();
@@ -227,101 +273,121 @@
       return;
     }
 
+    currentUserId = session.user.id;
+
     // Load User Profile Data
     const { data: profile } = await supabaseClient
       .from('profiles')
       .select('*')
-      .eq('id', session.user.id)
+      .eq('id', currentUserId)
       .single();
 
     if (profile) {
       document.getElementById("userName").innerText = profile.full_name || "User";
       document.getElementById("myRefCode").innerText = profile.referral_code || "N/A";
+      userBalance = profile.balance || 0;
+      document.getElementById("walletBalance").innerText = "₹" + userBalance.toFixed(2);
+      savedPaymentData = profile;
     }
 
-    // Logout Functionality
+    // Logout
     document.getElementById("logoutBtn").addEventListener("click", async function() {
       await supabaseClient.auth.signOut();
       window.location.href = "login.html";
     });
+
+    // Modal Trigger
+    document.getElementById("openWithdrawBtn").addEventListener("click", function(e) {
+      e.preventDefault();
+      document.getElementById("withdrawModal").style.display = "flex";
+      
+      if(savedPaymentData && savedPaymentData.payment_type) {
+        document.getElementById("setupBankSection").style.display = "none";
+        document.getElementById("payoutSection").style.display = "block";
+        
+        let infoText = savedPaymentData.payment_type === 'UPI' 
+          ? `UPI (${savedPaymentData.upi_id})` 
+          : `Bank Acc (A/C: ${savedPaymentData.account_number})`;
+        document.getElementById("savedMethodInfo").innerText = infoText;
+      } else {
+        document.getElementById("setupBankSection").style.display = "block";
+        document.getElementById("payoutSection").style.display = "none";
+      }
+    });
   });
 
-  function copyRefLink() {
-    const code = document.getElementById("myRefCode").innerText;
-    const fullLink = `${window.location.origin}/register.html?ref=${code}`;
-    navigator.clipboard.writeText(fullLink);
-    alert("Referral Link Copied: " + fullLink);
-  }
-</script>
-<!-- WITHDRAWAL MODAL POPUP -->
-<div id="withdrawModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:999; justify-content:center; align-items:center;">
-  <div style="background:#1f2937; padding:25px; border-radius:15px; width:90%; max-width:400px; color:#fff; border:1px solid #374151;">
-    <h3 style="margin-top:0;">💸 Withdraw Earnings</h3>
-    
-    <!-- STEP 1: Add Bank/UPI Details -->
-    <div id="setupBankSection">
-      <p style="font-size:13px; color:#9ca3af;">Withdrawal ke liye pehle apni UPI ID ya Bank details add karein:</p>
-      <input type="text" id="upiInput" placeholder="Enter UPI ID (e.g. 9876543210@paytm)" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #374151; background:#111827; color:#fff; box-sizing:border-box;">
-      <button onclick="saveBankDetails()" style="width:100%; background:#8b5cf6; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer;">Save Account Details</button>
-    </div>
-
-    <!-- STEP 2: Enter Withdrawal Amount -->
-    <div id="payoutSection" style="display:none;">
-      <p style="font-size:13px; color:#10b981;">✅ Connected UPI: <b id="savedUpi"></b></p>
-      <input type="number" id="withdrawAmount" placeholder="Enter Amount (₹)" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #374151; background:#111827; color:#fff; box-sizing:border-box;">
-      <p id="withdrawError" style="color:#ef4444; font-size:12px; display:none; margin-bottom:10px;"></p>
-      <button onclick="processWithdrawal()" style="width:100%; background:#10b981; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer;">Request Payout</button>
-    </div>
-
-    <button onclick="closeModal()" style="width:100%; background:transparent; color:#9ca3af; border:none; padding:8px; margin-top:10px; cursor:pointer;">Close</button>
-  </div>
-</div>
-
-<script>
-  let userBalance = 0; // Current User Balance
-  let userUpi = "";    // Saved User UPI
-
-  // Button click Handler
-  document.querySelector(".btn-action[href='#']").addEventListener("click", function(e) {
-    e.preventDefault();
-    document.getElementById("withdrawModal").style.display = "flex";
-    
-    // Check if UPI exists
-    if(userUpi) {
-      document.getElementById("setupBankSection").style.display = "none";
-      document.getElementById("payoutSection").style.display = "block";
-      document.getElementById("savedUpi").innerText = userUpi;
+  function togglePayMethod(type) {
+    if(type === 'UPI') {
+      document.getElementById('upiForm').style.display = 'block';
+      document.getElementById('bankForm').style.display = 'none';
     } else {
-      document.getElementById("setupBankSection").style.display = "block";
-      document.getElementById("payoutSection").style.display = "none";
+      document.getElementById('upiForm').style.display = 'none';
+      document.getElementById('bankForm').style.display = 'block';
     }
-  });
+  }
 
-  function saveBankDetails() {
-    const upi = document.getElementById("upiInput").value.trim();
-    if(!upi) {
-      alert("Kripya valid UPI ID enter karein!");
+  // Save Payment Details to Supabase Database
+  async function savePaymentDetails() {
+    const selectedType = document.querySelector('input[name="payMethod"]:checked').value;
+    let updatePayload = { payment_type: selectedType };
+
+    if(selectedType === 'UPI') {
+      const upiVal = document.getElementById("upiInput").value.trim();
+      if(!upiVal) { alert("Please enter a valid UPI ID!"); return; }
+      updatePayload.upi_id = upiVal;
+    } else {
+      const holder = document.getElementById("accHolder").value.trim();
+      const acc = document.getElementById("accNum").value.trim();
+      const confirmAcc = document.getElementById("confirmAccNum").value.trim();
+      const ifsc = document.getElementById("ifscCode").value.trim();
+
+      if(!holder || !acc || !confirmAcc || !ifsc) {
+        alert("Please fill all bank details!");
+        return;
+      }
+      if(acc !== confirmAcc) {
+        alert("Bank Account Numbers do not match!");
+        return;
+      }
+      updatePayload.account_holder = holder;
+      updatePayload.account_number = acc;
+      updatePayload.ifsc_code = ifsc;
+    }
+
+    const { error } = await supabaseClient
+      .from('profiles')
+      .update(updatePayload)
+      .eq('id', currentUserId);
+
+    if(error) {
+      alert("Error saving payment details: " + error.message);
       return;
     }
-    userUpi = upi;
-    alert("Bank/UPI Details Successfully Saved!");
+
+    alert("Payment Details Saved Successfully!");
+    savedPaymentData = updatePayload;
     document.getElementById("setupBankSection").style.display = "none";
     document.getElementById("payoutSection").style.display = "block";
-    document.getElementById("savedUpi").innerText = userUpi;
+    
+    let infoText = selectedType === 'UPI' ? `UPI (${updatePayload.upi_id})` : `Bank Acc (${updatePayload.account_number})`;
+    document.getElementById("savedMethodInfo").innerText = infoText;
   }
 
+  // Strict Withdrawal Logic
   function processWithdrawal() {
     const amt = parseFloat(document.getElementById("withdrawAmount").value);
     const errText = document.getElementById("withdrawError");
 
+    // Zero / Low Balance Validation
     if (userBalance <= 0) {
       errText.innerText = "❌ Aapke paas withdrawal ke liye koi balance nahi hai (₹0 Available).";
       errText.style.display = "block";
       return;
     }
 
+    // Invalid Amount or Amount Greater Than Balance Check
     if (!amt || amt <= 0 || amt > userBalance) {
-      errText.innerText = "❌ Please Enter a Valid Amount (Max: ₹" + userBalance + ")";
+      errText.innerText = "❌ Please enter a valid amount (Max Available: ₹" + userBalance + ")";
       errText.style.display = "block";
       return;
     }
@@ -333,6 +399,13 @@
 
   function closeModal() {
     document.getElementById("withdrawModal").style.display = "none";
+  }
+
+  function copyRefLink() {
+    const code = document.getElementById("myRefCode").innerText;
+    const fullLink = `${window.location.origin}/register.html?ref=${code}`;
+    navigator.clipboard.writeText(fullLink);
+    alert("Referral Link Copied: " + fullLink);
   }
 </script>
 
