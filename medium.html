@@ -2,24 +2,14 @@
 <html lang="en">
 
 <head>
-
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Medium Package - Smart Money</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
-
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
-  >
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-
     * {
       margin: 0;
       padding: 0;
@@ -37,25 +27,15 @@
       text-decoration: none;
     }
 
-
-    /* =========================
-       NAVBAR
-    ========================= */
-
+    /* NAVBAR */
     .navbar {
       width: 100%;
       min-height: 72px;
       padding: 0 7%;
-
       display: flex;
       justify-content: space-between;
       align-items: center;
-
-      background: linear-gradient(
-        135deg,
-        #111827,
-        #1e293b
-      );
+      background: linear-gradient(135deg, #111827, #1e293b);
     }
 
     .logo {
@@ -89,1300 +69,673 @@
       background: rgba(255,255,255,0.10);
     }
 
-
-    /* =========================
-       PAGE
-    ========================= */
-
+    /* PAGE */
     .package-page {
       padding: 75px 7%;
       min-height: calc(100vh - 72px);
-
-      background:
-
-        radial-gradient(
-          circle at top left,
-          rgba(139, 92, 246, 0.16),
-          transparent 30%
-        ),
-
-        radial-gradient(
-          circle at bottom right,
-          rgba(236, 72, 153, 0.12),
-          transparent 30%
-        ),
-
-        #f6f7fb;
+      background: radial-gradient(circle at top left, rgba(139, 92, 246, 0.16), transparent 30%),
+                  radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.12), transparent 30%),
+                  #f6f7fb;
     }
-
 
     .package-container {
       max-width: 1150px;
       margin: auto;
-
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
-
       gap: 55px;
-
       align-items: start;
     }
 
-
-    /* =========================
-       LEFT SIDE
-    ========================= */
-
+    /* LEFT SIDE */
     .package-tag {
       display: inline-block;
-
       margin-bottom: 18px;
-
       color: #7c3aed;
-
       font-size: 12px;
       font-weight: 800;
-
       letter-spacing: 0.7px;
     }
-
 
     .package-info h1 {
       font-size: 48px;
       line-height: 1.15;
-
       margin-bottom: 20px;
-
       color: #111827;
     }
 
-
     .package-info h1 span {
-
-      background: linear-gradient(
-        135deg,
-        #7c3aed,
-        #ec4899
-      );
-
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-
     }
-
 
     .package-description {
       max-width: 620px;
-
       color: #64748b;
-
       margin-bottom: 30px;
-
       font-size: 16px;
     }
 
-
-    /* =========================
-       FEATURES
-    ========================= */
-
+    /* FEATURES */
     .features {
       display: grid;
       gap: 14px;
-
       margin-bottom: 25px;
     }
 
-
     .feature {
-
       display: flex;
       align-items: center;
-
       gap: 14px;
-
       padding: 16px 18px;
-
       background: white;
-
       border: 1px solid #e5e7eb;
-
       border-radius: 14px;
-
-      box-shadow:
-        0 5px 18px
-        rgba(15, 23, 42, 0.05);
-
+      box-shadow: 0 5px 18px rgba(15, 23, 42, 0.05);
     }
 
-
     .feature-icon {
-
       width: 42px;
       height: 42px;
-
       display: flex;
       align-items: center;
       justify-content: center;
-
       flex-shrink: 0;
-
       border-radius: 11px;
-
       background: #f3e8ff;
-
       font-size: 19px;
-
     }
-
 
     .feature-content h3 {
-
       font-size: 14px;
-
       margin-bottom: 2px;
-
       color: #1e293b;
-
     }
-
 
     .feature-content p {
-
       font-size: 12px;
-
       color: #64748b;
-
     }
 
-
-    /* =========================
-       WITHDRAWAL DETAILS
-    ========================= */
-
+    /* WITHDRAWAL DETAILS */
     .withdrawal-details {
-
       margin-top: 25px;
-
       padding: 25px;
-
       background: white;
-
       border-radius: 18px;
-
       border: 1px solid #e5e7eb;
-
-      box-shadow:
-        0 8px 25px
-        rgba(15, 23, 42, 0.06);
-
+      box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
     }
-
 
     .withdrawal-details h2 {
-
       font-size: 19px;
-
       margin-bottom: 18px;
-
       color: #111827;
-
     }
-
 
     .withdrawal-grid {
-
       display: grid;
-
-      grid-template-columns:
-        1fr 1fr;
-
+      grid-template-columns: 1fr 1fr;
       gap: 14px;
-
     }
-
 
     .withdrawal-item {
-
       padding: 14px;
-
       background: #faf5ff;
-
       border-radius: 12px;
-
     }
-
 
     .withdrawal-item span {
-
       display: block;
-
       color: #64748b;
-
       font-size: 11px;
-
       margin-bottom: 5px;
-
       text-transform: uppercase;
-
       font-weight: 700;
-
     }
-
 
     .withdrawal-item strong {
-
       font-size: 15px;
-
       color: #7c3aed;
-
     }
 
-
-    /* =========================
-       BACK BUTTON
-    ========================= */
-
+    /* BACK BUTTON */
     .back-btn {
-
       display: inline-flex;
-
       align-items: center;
-
       margin-top: 25px;
-
       padding: 13px 20px;
-
       border-radius: 10px;
-
       color: #475569;
-
       background: white;
-
       border: 1px solid #e5e7eb;
-
       font-size: 14px;
       font-weight: 700;
-
       transition: 0.3s;
-
     }
-
 
     .back-btn:hover {
-
       background: #f8fafc;
-
       transform: translateY(-2px);
-
     }
 
-
-    /* =========================
-       PACKAGE CARD
-    ========================= */
-
+    /* PACKAGE CARD */
     .package-card {
-
       position: sticky;
-
       top: 30px;
-
       overflow: hidden;
-
       background: white;
-
       border-radius: 24px;
-
-      box-shadow:
-        0 25px 60px
-        rgba(15, 23, 42, 0.15);
-
+      box-shadow: 0 25px 60px rgba(15, 23, 42, 0.15);
     }
 
-
-    /* =========================
-       CARD TOP
-    ========================= */
-
+    /* CARD TOP */
     .card-top {
-
       position: relative;
-
       padding: 40px 35px;
-
       min-height: 240px;
-
       overflow: hidden;
-
       color: white;
-
-      background:
-
-        linear-gradient(
-          135deg,
-          #7c3aed,
-          #ec4899
-        );
-
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
     }
-
 
     .card-top::after {
-
       content: "";
-
       position: absolute;
-
       width: 280px;
       height: 280px;
-
       right: -100px;
       bottom: -150px;
-
-      border:
-        2px solid
-        rgba(255,255,255,0.25);
-
+      border: 2px solid rgba(255,255,255,0.25);
       border-radius: 50%;
-
     }
-
 
     .popular-badge {
-
       position: absolute;
-
       top: 20px;
       right: 20px;
-
       padding: 7px 13px;
-
       border-radius: 20px;
-
-      background:
-        rgba(255,255,255,0.22);
-
+      background: rgba(255,255,255,0.22);
       font-size: 10px;
-
       font-weight: 800;
-
     }
-
 
     .package-icon {
-
       position: relative;
-
       z-index: 2;
-
       font-size: 48px;
-
       margin-bottom: 18px;
-
     }
-
 
     .card-top h2 {
-
       position: relative;
-
       z-index: 2;
-
       font-size: 30px;
-
       margin-bottom: 8px;
-
     }
-
 
     .card-top p {
-
       position: relative;
-
       z-index: 2;
-
-      color:
-        rgba(255,255,255,0.90);
-
+      color: rgba(255,255,255,0.90);
       font-size: 14px;
-
     }
 
-
-    /* =========================
-       CARD BODY
-    ========================= */
-
+    /* CARD BODY */
     .card-body {
-
       padding: 32px;
-
     }
-
 
     .price-section {
-
       padding-bottom: 22px;
-
-      border-bottom:
-        1px solid #e5e7eb;
-
+      border-bottom: 1px solid #e5e7eb;
     }
-
 
     .price-label {
-
       display: block;
-
       margin-bottom: 5px;
-
       color: #64748b;
-
       font-size: 12px;
-
       font-weight: 700;
-
       letter-spacing: 0.5px;
-
     }
-
 
     .price {
-
       color: #111827;
-
       font-size: 42px;
-
       font-weight: 800;
-
     }
 
-
-    /* =========================
-       COMMISSION
-    ========================= */
-
+    /* COMMISSION */
     .commission-box {
-
       margin: 22px 0;
-
       padding: 20px;
-
       border-radius: 15px;
-
       background: #f0fdf4;
-
-      border:
-        1px solid #bbf7d0;
-
+      border: 1px solid #bbf7d0;
     }
-
 
     .commission-box span {
-
       display: block;
-
       color: #64748b;
-
       font-size: 11px;
-
       font-weight: 700;
-
       letter-spacing: 0.5px;
-
     }
-
 
     .commission-box strong {
-
       display: block;
-
       margin-top: 5px;
-
       color: #059669;
-
       font-size: 30px;
-
     }
-
 
     .commission-box p {
-
       margin-top: 5px;
-
       color: #64748b;
-
       font-size: 11px;
-
     }
 
-
-    /* =========================
-       SUMMARY
-    ========================= */
-
+    /* SUMMARY */
     .summary {
-
       display: grid;
-
       gap: 10px;
-
       margin-bottom: 22px;
-
     }
-
 
     .summary-row {
-
       display: flex;
-
       justify-content: space-between;
-
       align-items: center;
-
       padding-bottom: 10px;
-
-      border-bottom:
-        1px solid #f1f5f9;
-
+      border-bottom: 1px solid #f1f5f9;
     }
-
 
     .summary-row span {
-
       color: #64748b;
-
       font-size: 12px;
-
     }
-
 
     .summary-row strong {
-
       color: #1e293b;
-
       font-size: 13px;
-
     }
 
-
-    /* =========================
-       BUY BUTTON
-    ========================= */
-
+    /* BUY BUTTON */
     .register-btn {
-
       display: block;
-
       width: 100%;
-
       padding: 16px;
-
       text-align: center;
-
       border-radius: 12px;
-
       color: white;
-
       font-size: 15px;
-
       font-weight: 800;
-
-      background:
-
-        linear-gradient(
-          135deg,
-          #7c3aed,
-          #ec4899
-        );
-
-      box-shadow:
-        0 10px 25px
-        rgba(124, 58, 237, 0.25);
-
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
+      box-shadow: 0 10px 25px rgba(124, 58, 237, 0.25);
       transition: 0.3s;
-
+      border: none;
+      cursor: pointer;
     }
-
 
     .register-btn:hover {
-
-      transform:
-        translateY(-3px);
-
+      transform: translateY(-3px);
     }
-
 
     .payment-note {
-
       margin-top: 16px;
-
       padding: 12px;
-
       text-align: center;
-
       background: #f8fafc;
-
       border-radius: 10px;
-
       color: #64748b;
-
       font-size: 11px;
-
     }
 
-
-    /* =========================
-       NOTICE
-    ========================= */
-
+    /* NOTICE */
     .notice {
-
       margin-top: 22px;
-
       padding: 16px;
-
       border-radius: 12px;
-
       background: #eff6ff;
-
       border: 1px solid #bfdbfe;
-
       color: #475569;
-
       font-size: 12px;
-
     }
-
 
     .notice strong {
-
       display: block;
-
       margin-bottom: 5px;
-
       color: #2563eb;
-
     }
 
+    /* MODAL STYLES */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      padding: 20px;
+    }
 
-    /* =========================
-       FOOTER
-    ========================= */
+    .modal-card {
+      background: white;
+      width: 100%;
+      max-width: 450px;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      position: relative;
+    }
 
-    footer {
+    .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #64748b;
+      cursor: pointer;
+    }
 
-      padding: 22px;
+    .modal-card h2 {
+      font-size: 22px;
+      color: #111827;
+      margin-bottom: 6px;
+    }
 
-      text-align: center;
-
-      color: #94a3b8;
-
-      background: #111827;
-
+    .modal-card p {
       font-size: 13px;
-
+      color: #64748b;
+      margin-bottom: 20px;
     }
 
+    .form-group {
+      margin-bottom: 14px;
+      text-align: left;
+    }
 
-    /* =========================
-       MOBILE
-    ========================= */
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: #7c3aed;
+    }
+
+    .ref-label {
+      color: #e63946 !important;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 22px;
+      text-align: center;
+      color: #94a3b8;
+      background: #111827;
+      font-size: 13px;
+    }
 
     @media (max-width: 850px) {
-
-      .navbar {
-
-        padding: 14px 5%;
-
-        flex-direction: column;
-
-        gap: 10px;
-
-      }
-
-
-      .logo {
-
-        font-size: 19px;
-
-      }
-
-
-      .navbar nav {
-
-        flex-wrap: wrap;
-
-        justify-content: center;
-
-      }
-
-
-      .navbar nav a {
-
-        padding: 6px 8px;
-
-        font-size: 11px;
-
-      }
-
-
-      .package-page {
-
-        padding: 50px 20px;
-
-      }
-
-
-      .package-container {
-
-        grid-template-columns: 1fr;
-
-        gap: 40px;
-
-      }
-
-
-      .package-info {
-
-        text-align: center;
-
-      }
-
-
-      .package-description {
-
-        margin-left: auto;
-        margin-right: auto;
-
-      }
-
-
-      .features {
-
-        text-align: left;
-
-      }
-
-
-      .package-info h1 {
-
-        font-size: 38px;
-
-      }
-
-
-      .package-card {
-
-        position: static;
-
-      }
-
-
-      .withdrawal-grid {
-
-        grid-template-columns: 1fr;
-
-      }
-
+      .navbar { padding: 14px 5%; flex-direction: column; gap: 10px; }
+      .logo { font-size: 19px; }
+      .navbar nav { flex-wrap: wrap; justify-content: center; }
+      .navbar nav a { padding: 6px 8px; font-size: 11px; }
+      .package-page { padding: 50px 20px; }
+      .package-container { grid-template-columns: 1fr; gap: 40px; }
+      .package-info { text-align: center; }
+      .package-description { margin-left: auto; margin-right: auto; }
+      .features { text-align: left; }
+      .package-info h1 { font-size: 38px; }
+      .package-card { position: static; }
+      .withdrawal-grid { grid-template-columns: 1fr; }
     }
-
   </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =========================
-     NAVBAR
-========================= -->
-
+<!-- NAVBAR -->
 <header class="navbar">
-
-  <a href="index.html" class="logo">
-    Smart Money
-  </a>
-
-
+  <a href="index.html" class="logo">Smart Money</a>
   <nav>
-
-    <a href="index.html">
-      Home
-    </a>
-
-    <a href="index.html#about">
-      About
-    </a>
-
-    <a href="index.html#packages">
-      Packages
-    </a>
-
-    <a href="login.html">
-      Login
-    </a>
-
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#packages">Packages</a>
+    <a href="login.html">Login</a>
   </nav>
-
 </header>
 
-
-
-<!-- =========================
-     PACKAGE PAGE
-========================= -->
-
+<!-- PACKAGE PAGE -->
 <section class="package-page">
-
   <div class="package-container">
 
-
-    <!-- =========================
-         LEFT INFORMATION
-    ========================= -->
-
+    <!-- LEFT INFORMATION -->
     <div class="package-info">
-
-
-      <span class="package-tag">
-        ✦ MEDIUM / GROWTH PACKAGE
-      </span>
-
-
-      <h1>
-
-        Grow Your
-
-        <br>
-
-        <span>
-          Network Faster
-        </span>
-
-      </h1>
-
-
+      <span class="package-tag">✦ MEDIUM / GROWTH PACKAGE</span>
+      <h1>Grow Your <br><span>Network Faster</span></h1>
       <p class="package-description">
-
-        The Medium Growth Package is designed for users who
-        want to take the next step in their Smart Money journey,
-        build a stronger network and explore more opportunities.
-
+        The Medium Growth Package is designed for users who want to take the next step in their Smart Money journey, build a stronger network and explore more opportunities.
       </p>
 
-
-
       <!-- FEATURES -->
-
       <div class="features">
-
-
         <div class="feature">
-
-          <div class="feature-icon">
-            📈
-          </div>
-
+          <div class="feature-icon">📈</div>
           <div class="feature-content">
-
-            <h3>
-              Medium Package Access
-            </h3>
-
-            <p>
-              Get access to the Medium Growth level of the platform.
-            </p>
-
+            <h3>Medium Package Access</h3>
+            <p>Get access to the Medium Growth level platform.</p>
           </div>
-
         </div>
 
-
-
         <div class="feature">
-
-          <div class="feature-icon">
-            🤝
-          </div>
-
+          <div class="feature-icon">🤝</div>
           <div class="feature-content">
-
-            <h3>
-              Build a Stronger Network
-            </h3>
-
-            <p>
-              Continue expanding and managing your referral network.
-            </p>
-
+            <h3>Build a Stronger Network</h3>
+            <p>Expand and manage your referral network with higher limits.</p>
           </div>
-
         </div>
 
-
-
         <div class="feature">
-
-          <div class="feature-icon">
-            💰
-          </div>
-
+          <div class="feature-icon">💰</div>
           <div class="feature-content">
-
-            <h3>
-              60% Referral Commission
-            </h3>
-
-            <p>
-              Commission is subject to applicable platform rules and verification.
-            </p>
-
+            <h3>60% Referral Commission</h3>
+            <p>Earn ₹539.40 per successful referral purchase.</p>
           </div>
-
         </div>
 
-
-
         <div class="feature">
-
-          <div class="feature-icon">
-            📊
-          </div>
-
+          <div class="feature-icon">📊</div>
           <div class="feature-content">
-
-            <h3>
-              Track Your Progress
-            </h3>
-
-            <p>
-              Stay updated with your account activity and growth progress.
-            </p>
-
+            <h3>Track Your Progress</h3>
+            <p>Stay updated with detailed team and income activity.</p>
           </div>
-
         </div>
 
-
-
         <div class="feature">
-
-          <div class="feature-icon">
-            🛟
-          </div>
-
+          <div class="feature-icon">🛟</div>
           <div class="feature-content">
-
-            <h3>
-              Customer Support
-            </h3>
-
-            <p>
-              Get assistance from the Smart Money support team.
-            </p>
-
+            <h3>Customer Support</h3>
+            <p>Get assistance from the Smart Money support team.</p>
           </div>
-
         </div>
-
-
       </div>
-
-
 
       <!-- WITHDRAWAL DETAILS -->
-
       <div class="withdrawal-details">
-
-
-        <h2>
-          💳 Withdrawal Information
-        </h2>
-
-
+        <h2>💳 Withdrawal Information</h2>
         <div class="withdrawal-grid">
-
-
           <div class="withdrawal-item">
-
-            <span>
-              Minimum Withdrawal
-            </span>
-
-            <strong>
-              ₹50
-            </strong>
-
+            <span>Minimum Withdrawal</span>
+            <strong>₹100</strong>
           </div>
-
-
-
           <div class="withdrawal-item">
-
-            <span>
-              Maximum Withdrawal
-            </span>
-
-            <strong>
-              ₹15,000
-            </strong>
-
+            <span>Maximum Withdrawal</span>
+            <strong>₹3,000</strong>
           </div>
-
-
-
           <div class="withdrawal-item">
-
-            <span>
-              Processing Time
-            </span>
-
-            <strong>
-              Day 2
-            </strong>
-
+            <span>Daily Frequency</span>
+            <strong>2 Times / Day</strong>
           </div>
-
-
-
           <div class="withdrawal-item">
-
-            <span>
-              Withdrawal Fee
-            </span>
-
-            <strong>
-              2%
-            </strong>
-
+            <span>Processing Time</span>
+            <strong>Within 7 Days</strong>
           </div>
-
-
+          <div class="withdrawal-item">
+            <span>Withdrawal Fee</span>
+            <strong>2%</strong>
+          </div>
         </div>
-
-
       </div>
-
-
 
       <div class="notice">
-
-        <strong>
-          ℹ Important Information
-        </strong>
-
-        Referral commissions, withdrawals and processing
-        are subject to verification and applicable platform rules.
-        Results and earnings are not guaranteed.
-
+        <strong>ℹ Important Information</strong>
+        Referral ID is strictly compulsory to purchase this package and create an account.
       </div>
 
-
-
-      <a
-        href="index.html#packages"
-        class="back-btn"
-      >
-        ← Back To Packages
-      </a>
-
-
+      <a href="index.html#packages" class="back-btn">← Back To Packages</a>
     </div>
 
-
-
-    <!-- =========================
-         RIGHT PACKAGE CARD
-    ========================= -->
-
+    <!-- RIGHT PACKAGE CARD -->
     <div class="package-card">
-
-
       <div class="card-top">
-
-
-        <span class="popular-badge">
-          POPULAR
-        </span>
-
-
-        <div class="package-icon">
-          📈
-        </div>
-
-
-        <h2>
-          Medium Package
-        </h2>
-
-
-        <p>
-          Build your network and grow further.
-        </p>
-
-
+        <span class="popular-badge">POPULAR</span>
+        <div class="package-icon">📈</div>
+        <h2>Medium Package</h2>
+        <p>Build your network and grow further.</p>
       </div>
-
-
 
       <div class="card-body">
-
-
-        <!-- PRICE -->
-
         <div class="price-section">
-
-          <span class="price-label">
-            PACKAGE PRICE
-          </span>
-
-          <strong class="price">
-            ₹899
-          </strong>
-
+          <span class="price-label">PACKAGE PRICE</span>
+          <strong class="price">₹899</strong>
         </div>
-
-
-
-        <!-- COMMISSION -->
 
         <div class="commission-box">
-
-          <span>
-            REFERRAL COMMISSION
-          </span>
-
-          <strong>
-            60%
-          </strong>
-
-          <p>
-            Referral commission according to applicable platform rules.
-          </p>
-
+          <span>REFERRAL COMMISSION</span>
+          <strong>60% (₹539.40)</strong>
+          <p>Earn ₹539.40 for every referral who joins using your ID.</p>
         </div>
-
-
-
-        <!-- SUMMARY -->
 
         <div class="summary">
-
-
           <div class="summary-row">
-
-            <span>
-              Package
-            </span>
-
-            <strong>
-              Medium / Growth
-            </strong>
-
+            <span>Package</span>
+            <strong>Medium / Growth</strong>
           </div>
-
-
           <div class="summary-row">
-
-            <span>
-              Withdrawal Range
-            </span>
-
-            <strong>
-              ₹50 - ₹15,000
-            </strong>
-
+            <span>Withdrawal Limit</span>
+            <strong>₹100 - ₹3,000</strong>
           </div>
-
-
           <div class="summary-row">
-
-            <span>
-              Processing Schedule
-            </span>
-
-            <strong>
-              Day 2
-            </strong>
-
+            <span>Withdrawal Frequency</span>
+            <strong>2 Times / Day</strong>
           </div>
-
-
           <div class="summary-row">
-
-            <span>
-              Withdrawal Fee
-            </span>
-
-            <strong>
-              2%
-            </strong>
-
+            <span>Processing Time</span>
+            <strong>Within 7 Days</strong>
           </div>
-
-
           <div class="summary-row">
-
-            <span>
-              Support
-            </span>
-
-            <strong>
-              Available
-            </strong>
-
+            <span>Withdrawal Fee</span>
+            <strong>2%</strong>
           </div>
-
-
         </div>
 
-
-
-        <!-- BUY BUTTON -->
-
-        <a
-          href="register.html?package=Medium"
-          class="register-btn"
-        >
+        <!-- TRIGGER MODAL BUTTON -->
+        <button onclick="openBuyModal()" class="register-btn">
           Buy Medium Package →
-        </a>
-
+        </button>
 
         <div class="payment-note">
-
-          💳 Payment options will be shown during
-          the registration and payment process.
-
+          💳 Complete form and enter valid Referral ID to proceed.
         </div>
-
-
       </div>
-
-
     </div>
 
-
   </div>
-
-
 </section>
 
+<!-- PURCHASE & REGISTRATION MODAL -->
+<div id="buyModal" class="modal-overlay">
+  <div class="modal-card">
+    <span class="modal-close" onclick="closeBuyModal()">&times;</span>
+    <h2>Buy Medium Package</h2>
+    <p>Price: <strong>₹899</strong> | Enter details to create account</p>
 
+    <form id="mediumBuyForm">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="buyName" placeholder="Enter your full name" required>
+      </div>
 
-<!-- =========================
-     FOOTER
-========================= -->
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="buyEmail" placeholder="Enter email address" required>
+      </div>
 
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="buyPassword" placeholder="Create password" required>
+      </div>
+
+      <div class="form-group">
+        <label class="ref-label">Referral ID (Compulsory)*</label>
+        <input type="text" id="buyReferralId" placeholder="Enter valid Referral ID (e.g. SM-123456)" required>
+      </div>
+
+      <button type="submit" class="register-btn" style="margin-top: 15px;">
+        Proceed To Payment →
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- FOOTER -->
 <footer>
-
   © 2026 Smart Money. All Rights Reserved.
-
 </footer>
 
+<script>
+  function openBuyModal() {
+    document.getElementById('buyModal').style.display = 'flex';
+  }
+
+  function closeBuyModal() {
+    document.getElementById('buyModal').style.display = 'none';
+  }
+
+  document.getElementById('mediumBuyForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const refId = document.getElementById('buyReferralId').value.trim();
+    if (!refId) {
+      alert("Referral ID ke bina account create nahi ho sakta!");
+      return;
+    }
+    // Temporary redirect to payment confirmation page
+    window.location.href = "payment.html?pkg=medium&ref=" + encodeURIComponent(refId);
+  });
+</script>
 
 </body>
-
 </html>
