@@ -3,21 +3,13 @@
 
 <head>
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Premium Package - Smart Money</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
-  >
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-
     * {
       margin: 0;
       padding: 0;
@@ -40,16 +32,13 @@
     }
 
     /* NAVBAR */
-
     .navbar {
       width: 100%;
       min-height: 72px;
       padding: 0 7%;
-
       display: flex;
       justify-content: space-between;
       align-items: center;
-
       background: linear-gradient(135deg, #111827, #1e293b);
     }
 
@@ -86,87 +75,57 @@
     }
 
     /* MAIN PAGE */
-
     .package-page {
       min-height: calc(100vh - 72px);
       padding: 75px 7%;
-
-      background:
-        radial-gradient(
-          circle at top left,
-          rgba(168, 85, 247, 0.16),
-          transparent 32%
-        ),
-        radial-gradient(
-          circle at bottom right,
-          rgba(236, 72, 153, 0.13),
-          transparent 30%
-        ),
-        #f6f7fb;
+      background: radial-gradient(circle at top left, rgba(168, 85, 247, 0.16), transparent 32%),
+                  radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.13), transparent 30%),
+                  #f6f7fb;
     }
 
     .package-container {
       max-width: 1150px;
       margin: auto;
-
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 55px;
-
       align-items: start;
     }
 
     /* LEFT SIDE */
-
     .package-tag {
       display: inline-block;
       margin-bottom: 18px;
-
       color: #7c3aed;
-
       font-size: 12px;
       font-weight: 800;
-
       letter-spacing: 0.8px;
     }
 
     .package-info h1 {
       font-size: 50px;
       line-height: 1.15;
-
       margin-bottom: 20px;
-
       color: #111827;
     }
 
     .package-info h1 span {
-      background: linear-gradient(
-        135deg,
-        #7c3aed,
-        #ec4899
-      );
-
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .package-description {
       max-width: 570px;
-
       color: #64748b;
-
       margin-bottom: 28px;
-
       font-size: 16px;
     }
 
     /* FEATURES */
-
     .features-title {
       margin-bottom: 15px;
-
       color: #111827;
-
       font-size: 19px;
       font-weight: 800;
     }
@@ -174,41 +133,29 @@
     .features {
       display: grid;
       gap: 13px;
-
       margin-bottom: 30px;
     }
 
     .feature {
       display: flex;
       align-items: center;
-
       gap: 13px;
-
       padding: 15px 18px;
-
       background: white;
-
       border: 1px solid #e5e7eb;
-
       border-radius: 14px;
-
       box-shadow: 0 5px 18px rgba(15, 23, 42, 0.05);
     }
 
     .feature-icon {
       width: 40px;
       height: 40px;
-
       display: flex;
       align-items: center;
       justify-content: center;
-
       flex-shrink: 0;
-
       border-radius: 11px;
-
       background: #f3e8ff;
-
       font-size: 18px;
     }
 
@@ -229,25 +176,17 @@
     }
 
     /* BACK BUTTON */
-
     .back-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-
       padding: 13px 20px;
-
       border-radius: 10px;
-
       color: #475569;
-
       background: white;
-
       border: 1px solid #e5e7eb;
-
       font-size: 14px;
       font-weight: 700;
-
       transition: 0.3s;
     }
 
@@ -257,187 +196,131 @@
     }
 
     /* PACKAGE CARD */
-
     .package-card {
       overflow: hidden;
-
       background: white;
-
       border-radius: 24px;
-
       box-shadow: 0 25px 60px rgba(15, 23, 42, 0.16);
     }
 
     /* CARD TOP */
-
     .card-top {
       position: relative;
-
       padding: 40px 35px;
-
       min-height: 245px;
-
       overflow: hidden;
-
       color: white;
-
-      background: linear-gradient(
-        135deg,
-        #7c3aed,
-        #ec4899
-      );
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
     }
 
     .card-top::before {
       content: "";
-
       position: absolute;
-
       width: 280px;
       height: 280px;
-
       right: -100px;
       bottom: -150px;
-
       border: 2px solid rgba(255,255,255,0.22);
-
       border-radius: 50%;
     }
 
     .card-top::after {
       content: "";
-
       position: absolute;
-
       width: 160px;
       height: 160px;
-
       left: -70px;
       top: -70px;
-
       border: 2px solid rgba(255,255,255,0.15);
-
       border-radius: 50%;
     }
 
     .popular-badge {
       position: absolute;
-
       top: 20px;
       right: 20px;
-
       padding: 7px 14px;
-
       border-radius: 20px;
-
       background: rgba(255,255,255,0.20);
-
       font-size: 10px;
       font-weight: 800;
-
       letter-spacing: 0.5px;
-
       z-index: 2;
     }
 
     .package-icon {
       position: relative;
       z-index: 2;
-
       font-size: 48px;
-
       margin-bottom: 18px;
     }
 
     .card-top h2 {
       position: relative;
       z-index: 2;
-
       font-size: 30px;
-
       margin-bottom: 8px;
     }
 
     .card-top p {
       position: relative;
       z-index: 2;
-
       color: rgba(255,255,255,0.88);
-
       font-size: 14px;
     }
 
     /* CARD BODY */
-
     .card-body {
       padding: 32px;
     }
 
     .price-section {
       padding-bottom: 22px;
-
       border-bottom: 1px solid #e5e7eb;
     }
 
     .price-label {
       display: block;
-
       margin-bottom: 5px;
-
       color: #64748b;
-
       font-size: 12px;
       font-weight: 700;
-
       letter-spacing: 0.5px;
     }
 
     .price {
       color: #111827;
-
       font-size: 42px;
       font-weight: 800;
     }
 
     /* COMMISSION */
-
     .commission-box {
       margin: 22px 0;
-
       padding: 18px;
-
       border-radius: 14px;
-
       background: #f0fdf4;
-
       border: 1px solid #bbf7d0;
     }
 
     .commission-box span {
       display: block;
-
       color: #64748b;
-
       font-size: 12px;
       font-weight: 700;
     }
 
     .commission-box strong {
       display: block;
-
       margin-top: 5px;
-
       color: #059669;
-
       font-size: 27px;
     }
 
     /* DETAILS */
-
     .details-box {
       display: grid;
       gap: 12px;
-
       margin-bottom: 25px;
     }
 
@@ -445,13 +328,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-
       gap: 15px;
-
       padding: 13px 15px;
-
       background: #f8fafc;
-
       border-radius: 11px;
     }
 
@@ -467,32 +346,20 @@
     }
 
     /* BUY BUTTON */
-
     .register-btn {
       display: block;
-
       width: 100%;
-
       padding: 16px;
-
       text-align: center;
-
       border-radius: 12px;
-
       color: white;
-
       font-size: 15px;
       font-weight: 800;
-
-      background: linear-gradient(
-        135deg,
-        #7c3aed,
-        #ec4899
-      );
-
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
       box-shadow: 0 10px 25px rgba(124, 58, 237, 0.28);
-
       transition: 0.3s;
+      border: none;
+      cursor: pointer;
     }
 
     .register-btn:hover {
@@ -502,352 +369,316 @@
 
     .secure-text {
       margin-top: 16px;
-
       text-align: center;
-
       color: #94a3b8;
-
       font-size: 11px;
     }
 
     /* IMPORTANT NOTE */
-
     .important-note {
       margin-top: 18px;
-
       padding: 13px 15px;
-
       background: #fff7ed;
-
       border: 1px solid #fed7aa;
-
       border-radius: 12px;
-
       color: #9a3412;
-
       font-size: 11px;
-
       line-height: 1.6;
     }
 
-    /* FOOTER */
+    /* MODAL STYLES */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      padding: 20px;
+    }
 
+    .modal-card {
+      background: white;
+      width: 100%;
+      max-width: 450px;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #64748b;
+      cursor: pointer;
+    }
+
+    .modal-card h2 {
+      font-size: 22px;
+      color: #111827;
+      margin-bottom: 6px;
+    }
+
+    .modal-card p {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: #7c3aed;
+    }
+
+    .ref-label {
+      color: #e63946 !important;
+    }
+
+    /* FOOTER */
     footer {
       padding: 22px;
-
       text-align: center;
-
       color: #94a3b8;
-
       background: #111827;
-
       font-size: 13px;
     }
 
-    /* MOBILE */
-
     @media (max-width: 850px) {
-
-      .navbar {
-        padding: 14px 5%;
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .logo {
-        font-size: 18px;
-      }
-
-      .navbar nav {
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .navbar nav a {
-        padding: 6px 8px;
-        font-size: 11px;
-      }
-
-      .package-page {
-        padding: 55px 20px;
-      }
-
-      .package-container {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-
-      .package-info {
-        text-align: center;
-      }
-
-      .package-description {
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .features-title,
-      .features {
-        text-align: left;
-      }
-
-      .package-info h1 {
-        font-size: 38px;
-      }
-
-      .back-btn {
-        width: 100%;
-      }
-
+      .navbar { padding: 14px 5%; flex-direction: column; gap: 10px; }
+      .logo { font-size: 18px; }
+      .navbar nav { flex-wrap: wrap; justify-content: center; }
+      .navbar nav a { padding: 6px 8px; font-size: 11px; }
+      .package-page { padding: 55px 20px; }
+      .package-container { grid-template-columns: 1fr; gap: 40px; }
+      .package-info { text-align: center; }
+      .package-description { margin-left: auto; margin-right: auto; }
+      .features-title, .features { text-align: left; }
+      .package-info h1 { font-size: 38px; }
+      .back-btn { width: 100%; }
     }
-
   </style>
-
 </head>
 
 <body>
 
 <header class="navbar">
-
-  <a href="index.html" class="logo">
-    Smart Money
-  </a>
-
+  <a href="index.html" class="logo">Smart Money</a>
   <nav>
-
     <a href="index.html">Home</a>
-
     <a href="index.html#about">About</a>
-
-    <a href="index.html#packages" class="active">
-      Packages
-    </a>
-
-    <a href="index.html#contact">
-      Contact
-    </a>
-
-    <a href="login.html">
-      Login
-    </a>
-
+    <a href="index.html#packages" class="active">Packages</a>
+    <a href="index.html#contact">Contact</a>
+    <a href="login.html">Login</a>
   </nav>
-
 </header>
 
-
 <section class="package-page">
-
   <div class="package-container">
 
     <!-- LEFT SIDE -->
-
     <div class="package-info">
-
-      <span class="package-tag">
-        ✦ PREMIUM SMART MONEY PACKAGE
-      </span>
-
-      <h1>
-        Premium
-        <br>
-        <span>Growth Package</span>
-      </h1>
-
+      <span class="package-tag">✦ PREMIUM SMART MONEY PACKAGE</span>
+      <h1>Premium <br><span>Growth Package</span></h1>
       <p class="package-description">
-        The Premium Package is designed for users who want
-        higher referral benefits, bigger withdrawal limits
-        and faster growth opportunities in their Smart Money journey.
+        The Premium Package is designed for users who want highest referral benefits, maximum withdrawal limits and maximum earning potential on Smart Money.
       </p>
 
-      <h3 class="features-title">
-        What You Get
-      </h3>
+      <h3 class="features-title">What You Get</h3>
 
       <div class="features">
-
         <div class="feature">
           <div class="feature-icon">👑</div>
-
           <div class="feature-text">
-            <strong>Premium Package Access</strong>
-            <span>Get access to the Premium growth package.</span>
+            <strong>Premium Tier Access</strong>
+            <span>Unlock top-tier referral privileges and benefits.</span>
           </div>
         </div>
 
         <div class="feature">
           <div class="feature-icon">💰</div>
-
           <div class="feature-text">
             <strong>70% Referral Commission</strong>
-            <span>Earn commission based on successful referrals.</span>
+            <span>Earn ₹1,049.30 for every direct user registration.</span>
           </div>
         </div>
 
         <div class="feature">
           <div class="feature-icon">💸</div>
-
           <div class="feature-text">
-            <strong>₹30 – ₹20,000 Withdrawal Range</strong>
-            <span>Minimum ₹30 and maximum ₹20,000 per withdrawal.</span>
+            <strong>Highest Withdrawal Limits</strong>
+            <span>Withdraw up to ₹5,000 per request, 3 times daily.</span>
           </div>
         </div>
 
         <div class="feature">
           <div class="feature-icon">⏳</div>
-
           <div class="feature-text">
-            <strong>Withdrawal Processing Time</strong>
-            <span>Withdrawal processing can take up to 5 days.</span>
-          </div>
-        </div>
-
-        <div class="feature">
-          <div class="feature-icon">⚡</div>
-
-          <div class="feature-text">
-            <strong>Fast Status Update</strong>
-            <span>Successful withdrawal status is updated within 24 hours.</span>
+            <strong>Fast Processing Window</strong>
+            <span>All payout processing handled within 7 days.</span>
           </div>
         </div>
 
         <div class="feature">
           <div class="feature-icon">🛟</div>
-
           <div class="feature-text">
-            <strong>Customer Support</strong>
-            <span>Support is available during official support hours.</span>
+            <strong>VIP Customer Support</strong>
+            <span>Priority help and fast response from support team.</span>
           </div>
         </div>
-
       </div>
 
-      <a href="index.html#packages" class="back-btn">
-        ← Back To Packages
-      </a>
-
+      <a href="index.html#packages" class="back-btn">← Back To Packages</a>
     </div>
 
-
     <!-- RIGHT PACKAGE CARD -->
-
     <div class="package-card">
-
       <div class="card-top">
-
-        <span class="popular-badge">
-          PREMIUM ACCESS
-        </span>
-
-        <div class="package-icon">
-          👑
-        </div>
-
-        <h2>
-          Premium Package
-        </h2>
-
-        <p>
-          Premium • Growth • Opportunity
-        </p>
-
+        <span class="popular-badge">PREMIUM ACCESS</span>
+        <div class="package-icon">👑</div>
+        <h2>Premium Package</h2>
+        <p>Highest Earnings • Max Limits • Full Access</p>
       </div>
 
-
       <div class="card-body">
-
         <div class="price-section">
-
-          <span class="price-label">
-            PACKAGE PRICE
-          </span>
-
-          <strong class="price">
-            ₹1,499
-          </strong>
-
+          <span class="price-label">PACKAGE PRICE</span>
+          <strong class="price">₹1,499</strong>
         </div>
-
 
         <div class="commission-box">
-
-          <span>
-            REFERRAL COMMISSION
-          </span>
-
-          <strong>
-            70%
-          </strong>
-
+          <span>REFERRAL COMMISSION</span>
+          <strong>70% (₹1,049.30)</strong>
         </div>
 
-
         <div class="details-box">
-
           <div class="detail-row">
-            <span>Package Type</span>
+            <span>Package Tier</span>
             <strong>High / Premium</strong>
           </div>
-
           <div class="detail-row">
-            <span>Withdrawal Range</span>
-            <strong>₹30 – ₹20,000</strong>
+            <span>Withdrawal Limit</span>
+            <strong>₹100 – ₹5,000</strong>
           </div>
-
+          <div class="detail-row">
+            <span>Withdrawal Frequency</span>
+            <strong>3 Times / Day</strong>
+          </div>
+          <div class="detail-row">
+            <span>Processing Schedule</span>
+            <strong>Within 7 Days</strong>
+          </div>
           <div class="detail-row">
             <span>Withdrawal Fee</span>
             <strong>2%</strong>
           </div>
-
-          <div class="detail-row">
-            <span>Processing Time</span>
-            <strong>Up to 5 Days</strong>
-          </div>
-
-          <div class="detail-row">
-            <span>Status Update</span>
-            <strong>Within 24 Hours</strong>
-          </div>
-
         </div>
-
 
         <!-- BUY BUTTON -->
+        <button onclick="openBuyModal()" class="register-btn">
+          Buy Premium Package →
+        </button>
 
-        <a
-          href="login.html?package=High"
-          class="register-btn"
-        >
-          Choose Premium Package →
-        </a>
-
-
-        <p class="secure-text">
-          🔒 Continue securely to login and payment
-        </p>
-
+        <p class="secure-text">🔒 Safe & Encrypted Payment Setup</p>
 
         <div class="important-note">
-
-          <strong>Important:</strong>
-          Referral commission is calculated according to the
-          applicable referral rules. Withdrawal requests are
-          subject to verification and the applicable 2% withdrawal fee.
-
+          <strong>Mandatory Requirement:</strong>
+          A valid Referral ID is strictly mandatory to complete the registration and purchase process.
         </div>
-
       </div>
-
     </div>
 
   </div>
-
 </section>
 
+<!-- PURCHASE & REGISTRATION MODAL -->
+<div id="buyModal" class="modal-overlay">
+  <div class="modal-card">
+    <span class="modal-close" onclick="closeBuyModal()">&times;</span>
+    <h2>Buy Premium Package</h2>
+    <p>Price: <strong>₹1,499</strong> | Create account to continue</p>
+
+    <form id="premiumBuyForm">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="buyName" placeholder="Enter your full name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="buyEmail" placeholder="Enter email address" required>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="buyPassword" placeholder="Create password" required>
+      </div>
+
+      <div class="form-group">
+        <label class="ref-label">Referral ID (Compulsory)*</label>
+        <input type="text" id="buyReferralId" placeholder="Enter valid Referral ID (e.g. SM-123456)" required>
+      </div>
+
+      <button type="submit" class="register-btn" style="margin-top: 15px;">
+        Proceed To Payment →
+      </button>
+    </form>
+  </div>
+</div>
 
 <footer>
   © 2026 Smart Money. All Rights Reserved.
 </footer>
+
+<script>
+  function openBuyModal() {
+    document.getElementById('buyModal').style.display = 'flex';
+  }
+
+  function closeBuyModal() {
+    document.getElementById('buyModal').style.display = 'none';
+  }
+
+  document.getElementById('premiumBuyForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const refId = document.getElementById('buyReferralId').value.trim();
+    if (!refId) {
+      alert("Referral ID compulsory hai!");
+      return;
+    }
+    // Temporary redirect to payment setup page
+    window.location.href = "payment.html?pkg=premium&ref=" + encodeURIComponent(refId);
+  });
+</script>
 
 </body>
 </html>
