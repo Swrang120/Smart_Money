@@ -31,7 +31,7 @@
     .nav-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; }
     .menu-btn { background: #f1f5f9; border: none; font-size: 22px; cursor: pointer; color: #0f172a; padding: 5px 10px; border-radius: 8px; }
 
-    /* SIDEBAR DRAWER (RICHIND STYLE) */
+    /* SIDEBAR DRAWER */
     .sidebar-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); z-index: 998; display: none;
@@ -106,7 +106,7 @@
 <!-- SIDEBAR OVERLAY -->
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-<!-- SIDEBAR NAVIGATION MENU (FULL RICHIND STYLE) -->
+<!-- SIDEBAR NAVIGATION MENU -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <a href="index.html" class="brand-logo">
@@ -140,7 +140,7 @@
     <span>Smart Money</span>
   </a>
   <div class="nav-right">
-    <img id="navAvatar" src="https://via.placeholder.com/150" class="nav-avatar" alt="Profile" onclick="openProfileSettingsModal()" style="cursor:pointer;">
+    <img id="navAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=User" class="nav-avatar" alt="Profile" onclick="openProfileSettingsModal()" style="cursor:pointer;">
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
   </div>
 </header>
@@ -151,12 +151,12 @@
   <div class="profile-card">
     <div class="package-badge" id="activePackage">Starter</div>
     <div>
-      <img id="userAvatar" src="https://via.placeholder.com/150" class="profile-img" alt="Profile" onclick="openProfileSettingsModal()" style="cursor:pointer;">
+      <img id="userAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=User" class="profile-img" alt="Profile" onclick="openProfileSettingsModal()" style="cursor:pointer;">
     </div>
     <div class="user-info">
-      <h2 id="userName">Loading...</h2>
-      <p id="userEmail">user@example.com</p>
-      <p>ID: <b id="myRefCode" style="color:#7c3aed;">Fetching...</b></p>
+      <h2 id="userName">Smart Money Member</h2>
+      <p id="userEmail">user@gmail.com</p>
+      <p>ID: <b id="myRefCode" style="color:#7c3aed;">SM-USER</b></p>
       <button class="copy-btn" onclick="copyRefLink()">📋 Copy Affiliate Link</button>
     </div>
   </div>
@@ -275,42 +275,58 @@
   }
 
   document.addEventListener("DOMContentLoaded", async function() {
-    const { data: { session } } = await supabaseClient.auth.getSession();
+    try {
+      // 1. Session check
+      const { data: { session }, error: sessionErr } = await supabaseClient.auth.getSession();
 
-    if (!session) {
-      window.location.href = "login.html";
-      return;
-    }
+      if (!session || !session.user) {
+        window.location.href = "login.html";
+        return;
+      }
 
-    currentUserId = session.user.id;
-    if(session.user.email) {
-      document.getElementById("userEmail").innerText = session.user.email;
-    }
+      currentUserId = session.user.id;
+      const userEmail = session.user.email || "user@gmail.com";
+      document.getElementById("userEmail").innerText = userEmail;
 
-    const { data: profile } = await supabaseClient
-      .from('profiles')
-      .select('*')
-      .eq('user_id', currentUserId)
-      .single();
-
-    if (profile) {
-      userReferralCode = profile.referral_code || "SM-" + currentUserId.substring(0, 5).toUpperCase();
-      document.getElementById("userName").innerText = profile.full_name || "User";
-      document.getElementById("myRefCode").innerText = userReferralCode;
-      if(profile.package_name) document.getElementById("activePackage").innerText = profile.package_name;
+      // Fast Fallback setup
+      const defaultName = session.user.user_metadata?.full_name || userEmail.split('@')[0];
+      const defaultCode = "SM-" + currentUserId.substring(0, 5).toUpperCase();
       
-      const avatarUrl = profile.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.full_name || 'User'}`;
-      document.getElementById("userAvatar").src = avatarUrl;
-      document.getElementById("navAvatar").src = avatarUrl;
+      document.getElementById("userName").innerText = defaultName;
+      document.getElementById("myRefCode").innerText = defaultCode;
+      
+      const defaultAvatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${defaultName}`;
+      document.getElementById("userAvatar").src = defaultAvatar;
+      document.getElementById("navAvatar").src = defaultAvatar;
 
-      // Populate Settings inputs
-      document.getElementById("editFullName").value = profile.full_name || "";
-      document.getElementById("editAvatarUrl").value = profile.avatar_url || "";
-      document.getElementById("editUpiId").value = profile.upi_id || "";
+      // 2. Fetch Profile from Supabase Database
+      const { data: profile } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('user_id', currentUserId)
+        .maybeSingle();
 
-      userBalance = profile.balance || 0;
-      document.getElementById("walletBalance").innerText = "₹" + userBalance.toFixed(2);
-      savedPaymentData = profile;
+      if (profile) {
+        userReferralCode = profile.referral_code || defaultCode;
+        document.getElementById("userName").innerText = profile.full_name || defaultName;
+        document.getElementById("myRefCode").innerText = userReferralCode;
+        if(profile.package_name) document.getElementById("activePackage").innerText = profile.package_name;
+        
+        const finalAvatar = profile.avatar_url || defaultAvatar;
+        document.getElementById("userAvatar").src = finalAvatar;
+        document.getElementById("navAvatar").src = finalAvatar;
+
+        document.getElementById("editFullName").value = profile.full_name || defaultName;
+        document.getElementById("editAvatarUrl").value = profile.avatar_url || "";
+        document.getElementById("editUpiId").value = profile.upi_id || "";
+
+        userBalance = profile.balance || 0;
+        document.getElementById("walletBalance").innerText = "₹" + userBalance.toFixed(2);
+        savedPaymentData = profile;
+      }
+
+    } catch (err) {
+      console.log("Dashboard Load Error:", err);
     }
 
     document.getElementById("sideLogoutBtn").addEventListener("click", async function() {
@@ -330,11 +346,7 @@
     const newUpi = document.getElementById("editUpiId").value.trim();
     const newPassword = document.getElementById("editPassword").value.trim();
 
-    let updates = {
-      full_name: newName,
-      avatar_url: newAvatar,
-      upi_id: newUpi
-    };
+    let updates = { full_name: newName, avatar_url: newAvatar, upi_id: newUpi };
 
     const { error } = await supabaseClient.from('profiles').update(updates).eq('user_id', currentUserId);
     if(error) { alert("Error updating profile: " + error.message); return; }
@@ -392,21 +404,4 @@
     alert("Details Saved!");
     savedPaymentData = updatePayload;
     document.getElementById("setupBankSection").style.display = "none";
-    document.getElementById("payoutSection").style.display = "block";
-    document.getElementById("savedMethodInfo").innerText = selectedType === 'UPI' ? `UPI (${updatePayload.upi_id})` : `Bank (${updatePayload.account_number})`;
-  }
-
-  function processWithdrawal() {
-    const amt = parseFloat(document.getElementById("withdrawAmount").value);
-    const errText = document.getElementById("withdrawError");
-
-    if (userBalance <= 0) {
-      errText.innerText = "❌ Balance nahi hai.";
-      errText.style.display = "block"; return;
-    }
-    if (!amt || amt < 100 || amt > 10000) {
-      errText.innerText = "❌ Limit: Minimum ₹100 & Maximum ₹10,000.";
-      errText.style.display = "block"; return;
-    }
-    if (amt > userBalance) {
-      errText.innerText = "❌ Insu
+    document.getElementById("payoutSection").style.dis
