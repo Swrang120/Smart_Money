@@ -1,201 +1,553 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Register - Smart Money</title>
 
   <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
-  <header class="navbar">
-    <div class="logo">Smart Money</div>
 
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="login.html">Login</a>
-    </nav>
-  </header>
+<!-- =========================
+     NAVBAR
+========================= -->
 
+<header class="navbar">
 
-  <main class="form-page">
+  <a href="index.html" class="logo">
+    Smart Money
+  </a>
 
-    <div class="form-box">
+  <nav>
 
-      <h1>Create Account</h1>
-      <p>Join Smart Money</p>
+    <a href="index.html">
+      Home
+    </a>
 
+    <a href="login.html">
+      Login
+    </a>
 
-      <form id="registerForm">
+  </nav>
 
-        <!-- Full Name -->
-        <label for="name">Full Name</label>
-
-        <input
-          type="text"
-          id="name"
-          placeholder="Enter your full name"
-          required
-        >
+</header>
 
 
-        <!-- Email -->
-        <label for="email">Gmail</label>
 
-        <input
-          type="email"
-          id="email"
-          placeholder="Enter your Gmail"
-          required
-        >
+<!-- =========================
+     REGISTER PAGE
+========================= -->
 
+<main class="form-page">
 
-        <!-- Mobile -->
-        <label for="mobile">Mobile Number</label>
-
-        <input
-          type="tel"
-          id="mobile"
-          placeholder="Enter mobile number"
-          required
-        >
+  <div class="form-box">
 
 
-        <!-- Profile Photo -->
-        <label for="photo">Profile Photo</label>
+    <!-- TITLE -->
 
-        <input
-          type="file"
-          id="photo"
-          accept="image/*"
-          required
-        >
+    <h1>
+      Create Account
+    </h1>
 
-
-        <!-- Password -->
-        <label for="password">Password</label>
-
-        <input
-          type="password"
-          id="password"
-          placeholder="Create password"
-          required
-        >
+    <p>
+      Complete your details to continue with Smart Money.
+    </p>
 
 
-        <!-- Confirm Password -->
-        <label for="confirmPassword">Confirm Password</label>
 
-        <input
-          type="password"
-          id="confirmPassword"
-          placeholder="Confirm password"
-          required
-        >
+    <!-- =========================
+         SELECTED PACKAGE
+    ========================= -->
 
+    <div
+      id="packageInfo"
+      style="
+        display:none;
+        margin:20px 0;
+        padding:18px;
+        border-radius:12px;
+        background:#f8fafc;
+        border:1px solid #e2e8f0;
+      "
+    >
 
-        <!-- Referral -->
-        <label for="referral">Referral ID</label>
+      <div
+        style="
+          font-size:12px;
+          color:#64748b;
+          font-weight:700;
+          margin-bottom:5px;
+        "
+      >
+        SELECTED PACKAGE
+      </div>
 
-        <input
-          type="text"
-          id="referral"
-          placeholder="Enter referral ID (optional)"
-        >
+      <h3
+        id="selectedPackageName"
+        style="
+          margin:0;
+          color:#111827;
+        "
+      >
+      </h3>
 
-
-        <!-- Submit -->
-        <button
-          type="submit"
-          class="btn register-btn"
-          id="registerButton"
-        >
-          Create Account
-        </button>
-
-      </form>
-
-
-      <p class="login-text">
-        Already have an account?
-        <a href="login.html">Login</a>
+      <p
+        id="selectedPackagePrice"
+        style="
+          margin:5px 0 0;
+          color:#64748b;
+        "
+      >
       </p>
 
     </div>
 
-  </main>
 
 
-  <!-- Supabase JavaScript Library -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- =========================
+         REGISTER FORM
+    ========================= -->
+
+    <form id="registerForm">
 
 
-  <script>
+      <!-- FULL NAME -->
 
-    // ================================
-    // SUPABASE CONNECTION
-    // ================================
+      <label for="name">
+        Full Name
+      </label>
 
-    const SUPABASE_URL =
-      "https://rvprrulkjegvicbnjuft.supabase.co";
+      <input
+        type="text"
+        id="name"
+        placeholder="Enter your full name"
+        required
+      >
 
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 
 
-    const supabaseClient = window.supabase.createClient(
+      <!-- EMAIL -->
+
+      <label for="email">
+        Gmail
+      </label>
+
+      <input
+        type="email"
+        id="email"
+        placeholder="Enter your Gmail"
+        required
+      >
+
+
+
+      <!-- MOBILE -->
+
+      <label for="mobile">
+        Mobile Number
+      </label>
+
+      <input
+        type="tel"
+        id="mobile"
+        placeholder="Enter mobile number"
+        required
+      >
+
+
+
+      <!-- PROFILE PHOTO -->
+
+      <label for="photo">
+        Profile Photo
+      </label>
+
+      <input
+        type="file"
+        id="photo"
+        accept="image/*"
+      >
+
+
+
+      <!-- PASSWORD -->
+
+      <label for="password">
+        Password
+      </label>
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Create password"
+        minlength="6"
+        required
+      >
+
+
+
+      <!-- CONFIRM PASSWORD -->
+
+      <label for="confirmPassword">
+        Confirm Password
+      </label>
+
+      <input
+        type="password"
+        id="confirmPassword"
+        placeholder="Confirm password"
+        minlength="6"
+        required
+      >
+
+
+
+      <!-- REFERRAL -->
+
+      <label for="referral">
+        Referral ID
+      </label>
+
+      <input
+        type="text"
+        id="referral"
+        placeholder="Enter valid referral ID"
+        required
+      >
+
+
+      <p
+        style="
+          font-size:11px;
+          color:#64748b;
+          margin-top:5px;
+          margin-bottom:15px;
+        "
+      >
+        A valid Referral ID is required to create an account.
+      </p>
+
+
+
+      <!-- PACKAGE HIDDEN INPUT -->
+
+      <input
+        type="hidden"
+        id="selectedPackage"
+      >
+
+
+
+      <!-- SUBMIT -->
+
+      <button
+        type="submit"
+        class="btn register-btn"
+        id="registerButton"
+      >
+        Create Account & Continue
+      </button>
+
+
+    </form>
+
+
+
+    <p class="login-text">
+
+      Already have an account?
+
+      <a href="login.html">
+        Login
+      </a>
+
+    </p>
+
+
+  </div>
+
+</main>
+
+
+
+<!-- =========================
+     SUPABASE
+========================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+
+<script>
+
+
+  // ================================
+  // SUPABASE CONNECTION
+  // ================================
+
+  const SUPABASE_URL =
+    "https://rvprrulkjegvicbnjuft.supabase.co";
+
+
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+
+
+  const supabaseClient =
+    window.supabase.createClient(
+
       SUPABASE_URL,
+
       SUPABASE_PUBLISHABLE_KEY
+
     );
 
 
-    // ================================
-    // REGISTER FORM
-    // ================================
 
-    document
-      .getElementById("registerForm")
-      .addEventListener("submit", async function(event) {
+  // ================================
+  // PACKAGE DETAILS
+  // ================================
+
+  const packages = {
+
+    Low: {
+
+      name: "Starter / Low Package",
+
+      price: 560,
+
+      commission: "50%"
+
+    },
+
+
+    Medium: {
+
+      name: "Medium Growth Package",
+
+      price: 899,
+
+      commission: "60%"
+
+    },
+
+
+    High: {
+
+      name: "Premium / High Package",
+
+      price: 1499,
+
+      commission: "70%"
+
+    }
+
+  };
+
+
+
+  // ================================
+  // GET PACKAGE FROM URL
+  // ================================
+
+  const urlParams =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  const selectedPackage =
+    urlParams.get("package");
+
+
+
+  const packageInfo =
+    document.getElementById(
+      "packageInfo"
+    );
+
+
+  const selectedPackageName =
+    document.getElementById(
+      "selectedPackageName"
+    );
+
+
+  const selectedPackagePrice =
+    document.getElementById(
+      "selectedPackagePrice"
+    );
+
+
+  const selectedPackageInput =
+    document.getElementById(
+      "selectedPackage"
+    );
+
+
+
+  if (
+    selectedPackage &&
+    packages[selectedPackage]
+  ) {
+
+    const packageData =
+      packages[selectedPackage];
+
+
+    packageInfo.style.display =
+      "block";
+
+
+    selectedPackageName.textContent =
+      packageData.name;
+
+
+    selectedPackagePrice.textContent =
+      "Package Price: ₹" +
+      packageData.price +
+      " | Referral Commission: " +
+      packageData.commission;
+
+
+    selectedPackageInput.value =
+      selectedPackage;
+
+  }
+
+
+
+  // ================================
+  // REGISTER FORM
+  // ================================
+
+  document
+    .getElementById("registerForm")
+    .addEventListener(
+      "submit",
+      async function(event) {
+
 
         event.preventDefault();
 
 
-        // Get form values
+
+        // ================================
+        // GET VALUES
+        // ================================
+
         const name =
-          document.getElementById("name").value.trim();
+          document
+            .getElementById("name")
+            .value
+            .trim();
+
 
         const email =
-          document.getElementById("email").value.trim();
+          document
+            .getElementById("email")
+            .value
+            .trim();
+
 
         const mobile =
-          document.getElementById("mobile").value.trim();
+          document
+            .getElementById("mobile")
+            .value
+            .trim();
+
 
         const password =
-          document.getElementById("password").value;
+          document
+            .getElementById("password")
+            .value;
+
 
         const confirmPassword =
-          document.getElementById("confirmPassword").value;
+          document
+            .getElementById("confirmPassword")
+            .value;
+
 
         const referral =
-          document.getElementById("referral").value.trim();
+          document
+            .getElementById("referral")
+            .value
+            .trim();
 
-        const photo =
-          document.getElementById("photo").files[0];
+
+        const chosenPackage =
+          document
+            .getElementById("selectedPackage")
+            .value;
+
+
+
+        // ================================
+        // REFERRAL CHECK
+        // ================================
+
+        if (!referral) {
+
+          alert(
+            "Referral ID is required. You cannot create an account without a valid Referral ID."
+          );
+
+          return;
+
+        }
+
+
+
+        // ================================
+        // PACKAGE CHECK
+        // ================================
+
+        if (!chosenPackage) {
+
+          alert(
+            "Please select a package first."
+          );
+
+
+          window.location.href =
+            "index.html#packages";
+
+
+          return;
+
+        }
+
 
 
         // ================================
         // PASSWORD CHECK
         // ================================
 
-        if (password !== confirmPassword) {
+        if (
+          password !== confirmPassword
+        ) {
 
-          alert("Passwords do not match.");
+          alert(
+            "Passwords do not match."
+          );
 
           return;
+
         }
+
 
 
         // ================================
@@ -203,22 +555,34 @@
         // ================================
 
         const registerButton =
-          document.getElementById("registerButton");
+          document.getElementById(
+            "registerButton"
+          );
 
-        registerButton.disabled = true;
+
+        registerButton.disabled =
+          true;
+
 
         registerButton.textContent =
           "Creating Account...";
 
 
+
         try {
 
+
           // ================================
-          // CREATE SUPABASE AUTH ACCOUNT
+          // CREATE AUTH ACCOUNT
           // ================================
 
-          const { data, error } =
-            await supabaseClient.auth.signUp({
+          const {
+            data,
+            error
+          } =
+          await supabaseClient
+            .auth
+            .signUp({
 
               email: email,
 
@@ -227,8 +591,16 @@
               options: {
 
                 data: {
+
                   full_name: name,
-                  mobile: mobile
+
+                  mobile: mobile,
+
+                  referral_id: referral,
+
+                  selected_package:
+                    chosenPackage
+
                 }
 
               }
@@ -236,7 +608,7 @@
             });
 
 
-          // Auth error
+
           if (error) {
 
             throw error;
@@ -244,11 +616,10 @@
           }
 
 
-          // ================================
-          // USER CHECK
-          // ================================
 
-          const user = data.user;
+          const user =
+            data.user;
+
 
 
           if (!user) {
@@ -260,29 +631,40 @@
           }
 
 
+
           // ================================
           // SAVE PROFILE
           // ================================
 
-          const { error: profileError } =
-            await supabaseClient
-              .from("profiles")
-              .insert({
+          const {
+            error: profileError
+          } =
+          await supabaseClient
+            .from("profiles")
+            .insert({
 
-                user_id: user.id,
+              user_id:
+                user.id,
 
-                full_name: name,
+              full_name:
+                name,
 
-                email: email,
+              email:
+                email,
 
-                mobile: mobile,
+              mobile:
+                mobile,
 
-                referral_id: referral || null
+              referral_id:
+                referral,
 
-              });
+              selected_package:
+                chosenPackage
+
+            });
 
 
-          // Profile error
+
           if (profileError) {
 
             throw profileError;
@@ -290,42 +672,71 @@
           }
 
 
+
           // ================================
           // SUCCESS
           // ================================
 
           alert(
-            "Account created successfully!"
+            "Account created successfully! Please complete your package payment."
           );
 
 
-          // Go to login page
+
+          // ================================
+          // PAYMENT PAGE
+          // ================================
+
           window.location.href =
-            "login.html";
+            "payment.html?package=" +
+            encodeURIComponent(
+              chosenPackage
+            ) +
+            "&user=" +
+            encodeURIComponent(
+              user.id
+            );
 
-
-        } catch (error) {
-
-          console.error(error);
-
-          alert(
-            "Registration failed: " +
-            error.message
-          );
-
-
-        } finally {
-
-          registerButton.disabled = false;
-
-          registerButton.textContent =
-            "Create Account";
 
         }
 
-      });
+        catch (error) {
 
-  </script>
+
+          console.error(error);
+
+
+          alert(
+
+            "Registration failed: " +
+            error.message
+
+          );
+
+        }
+
+
+        finally {
+
+
+          registerButton.disabled =
+            false;
+
+
+          registerButton.textContent =
+            "Create Account & Continue";
+
+        }
+
+
+      }
+
+    );
+
+
+</script>
+
 
 </body>
+
 </html>
