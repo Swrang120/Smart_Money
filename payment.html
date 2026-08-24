@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Payment - Smart Money</title>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+
+    body {
+      font-family: "Inter", Arial, sans-serif;
+
+      background:
+        radial-gradient(
+          circle at top left,
+          rgba(124, 58, 237, 0.12),
+          transparent 35%
+        ),
+        #f6f7fb;
+
+      color: #1e293b;
+
+      min-height: 100vh;
+    }
+
+
+    a {
+      text-decoration: none;
+    }
+
+
+    /* =========================
+       NAVBAR
+    ========================= */
+
+    .navbar {
+
+      min-height: 72px;
+
+      padding: 0 7%;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      background:
+        linear-gradient(
+          135deg,
+          #111827,
+          #1e293b
+        );
+
+    }
+
+
+    .logo {
+
+      color: white;
+
+      font-size: 22px;
+
+      font-weight: 800;
+
+    }
+
+
+    .logo::before {
+
+      content: "✦";
+
+      margin-right: 8px;
+
+      color: #fbbf24;
+
+    }
+
+
+    .navbar nav {
+
+      display: flex;
+
+      gap: 8px;
+
+    }
+
+
+    .navbar nav a {
+
+      color: #cbd5e1;
+
+      padding: 9px 13px;
+
+      border-radius: 8px;
+
+      font-size: 14px;
+
+    }
+
+
+    .navbar nav a:hover {
+
+      color: white;
+
+      background:
+        rgba(255,255,255,0.10);
+
+    }
+
+
+    /* =========================
+       PAGE
+    ========================= */
+
+    .payment-page {
+
+      padding: 60px 20px;
+
+      min-height:
+        calc(100vh - 72px);
+
+    }
+
+
+    .payment-container {
+
+      max-width: 1050px;
+
+      margin: auto;
+
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 35px;
+
+      align-items: start;
+
+    }
+
+
+    /* =========================
+       INFO SIDE
+    ========================= */
+
+    .payment-info {
+
+      padding: 20px;
+
+    }
+
+
+    .tag {
+
+      display: inline-block;
+
+      margin-bottom: 15px;
+
+      color: #7c3aed;
+
+      font-size: 12px;
+
+      font-weight: 800;
+
+      letter-spacing: 1px;
+
+    }
+
+
+    .payment-info h1 {
+
+      font-size: 42px;
+
+      line-height: 1.2;
+
+      margin-bottom: 18px;
+
+      color: #111827;
+
+    }
+
+
+    .payment-info h1 span {
+
+      background:
+        linear-gradient(
+          135deg,
+          #7c3aed,
+          #ec4899
+        );
+
+      -webkit-background-clip: text;
+
+      -webkit-text-fill-color: transparent;
+
+    }
+
+
+    .payment-info p {
+
+      color: #64748b;
+
+      font-size: 15px;
+
+      line-height: 1.8;
+
+    }
+
+
+    /* =========================
+       PACKAGE SUMMARY
+    ========================= */
+
+    .summary-card {
+
+      margin-top: 28px;
+
+      padding: 25px;
+
+      background: white;
+
+      border-radius: 18px;
+
+      border:
+        1px solid #e5e7eb;
+
+      box-shadow:
+        0 15px 40px
+        rgba(15,23,42,0.08);
+
+    }
+
+
+    .summary-card h2 {
+
+      font-size: 18px;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    .summary-row {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      padding: 14px 0;
+
+      border-bottom:
+        1px solid #f1f5f9;
+
+      gap: 20px;
+
+    }
+
+
+    .summary-row:last-child {
+
+      border-bottom: none;
+
+    }
+
+
+    .summary-row span {
+
+      color: #64748b;
+
+      font-size: 14px;
+
+    }
+
+
+    .summary-row strong {
+
+      color: #111827;
+
+      font-size: 15px;
+
+      text-align: right;
+
+    }
+
+
+    .price-highlight {
+
+      color: #059669 !important;
+
+      font-size: 22px !important;
+
+    }
+
+
+    /* =========================
+       PAYMENT CARD
+    ========================= */
+
+    .payment-card {
+
+      background: white;
+
+      padding: 35px;
+
+      border-radius: 22px;
+
+      box-shadow:
+        0 25px 60px
+        rgba(15,23,42,0.12);
+
+    }
+
+
+    .payment-card h2 {
+
+      font-size: 25px;
+
+      margin-bottom: 8px;
+
+      color: #111827;
+
+    }
+
+
+    .payment-card > p {
+
+      color: #64748b;
+
+      font-size: 14px;
+
+      margin-bottom: 25px;
+
+    }
+
+
+    /* =========================
+       FORM
+    ========================= */
+
+    .form-group {
+
+      margin-bottom: 18px;
+
+    }
+
+
+    label {
+
+      display: block;
+
+      margin-bottom: 7px;
+
+      font-size: 13px;
+
+      font-weight: 700;
+
+      color: #334155;
+
+    }
+
+
+    input {
+
+      width: 100%;
+
+      padding: 14px 15px;
+
+      border:
+        1px solid #dbe1ea;
+
+      border-radius: 10px;
+
+      outline: none;
+
+      font-family: inherit;
+
+      font-size: 14px;
+
+      transition: 0.2s;
+
+    }
+
+
+    input:focus {
+
+      border-color: #7c3aed;
+
+      box-shadow:
+        0 0 0 3px
+        rgba(124,58,237,0.10);
+
+    }
+
+
+    /* =========================
+       UPI BOX
+    ========================= */
+
+    .upi-box {
+
+      margin: 25px 0;
+
+      padding: 20px;
+
+      background: #f8fafc;
+
+      border:
+        1px solid #e2e8f0;
+
+      border-radius: 15px;
+
+    }
+
+
+    .upi-box h3 {
+
+      font-size: 16px;
+
+      margin-bottom: 12px;
+
+    }
+
+
+    .upi-option {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 10px;
+
+      padding: 14px;
+
+      margin-top: 10px;
+
+      background: white;
+
+      border:
+        1px solid #e2e8f0;
+
+      border-radius: 10px;
+
+    }
+
+
+    .upi-option span {
+
+      font-size: 13px;
+
+      color: #64748b;
+
+    }
+
+
+    .upi-option strong {
+
+      font-size: 14px;
+
+      color: #111827;
+
+      word-break: break-all;
+
+    }
+
+
+    .copy-btn {
+
+      padding: 8px 11px;
+
+      border: none;
+
+      border-radius: 8px;
+
+      background: #ede9fe;
+
+      color: #6d28d9;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      font-size: 12px;
+
+    }
+
+
+    .copy-btn:hover {
+
+      background: #ddd6fe;
+
+    }
+
+
+    /* =========================
+       PAYMENT BUTTON
+    ========================= */
+
+    .pay-btn {
+
+      width: 100%;
+
+      padding: 16px;
+
+      border: none;
+
+      border-radius: 12px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #7c3aed,
+          #ec4899
+        );
+
+      color: white;
+
+      font-family: inherit;
+
+      font-size: 15px;
+
+      font-weight: 800;
+
+      cursor: pointer;
+
+      transition: 0.3s;
+
+    }
+
+
+    .pay-btn:hover {
+
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 12px 28px
+        rgba(124,58,237,0.25);
+
+    }
+
+
+    .pay-btn:disabled {
+
+      opacity: 0.6;
+
+      cursor: not-allowed;
+
+      transform: none;
+
+    }
+
+
+    .note {
+
+      margin-top: 18px;
+
+      padding: 13px;
+
+      background: #fff7ed;
+
+      border:
+        1px solid #fed7aa;
+
+      border-radius: 10px;
+
+      color: #9a3412;
+
+      font-size: 11px;
+
+      line-height: 1.6;
+
+    }
+
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+
+      padding: 22px;
+
+      text-align: center;
+
+      background: #111827;
+
+      color: #94a3b8;
+
+      font-size: 13px;
+
+    }
+
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 800px) {
+
+      .navbar {
+
+        padding: 14px 5%;
+
+        flex-direction: column;
+
+        gap: 10px;
+
+      }
+
+
+      .navbar nav {
+
+        flex-wrap: wrap;
+
+        justify-content: center;
+
+      }
+
+
+      .navbar nav a {
+
+        font-size: 11px;
+
+        padding: 6px 8px;
+
+      }
+
+
+      .payment-container {
+
+        grid-template-columns: 1fr;
+
+      }
+
+
+      .payment-info {
+
+        text-align: center;
+
+      }
+
+
+      .payment-info h1 {
+
+        font-size: 34px;
+
+      }
+
+
+      .payment-card {
+
+        padding: 25px 20px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<header class="navbar">
+
+  <a
+    href="index.html"
+    class="logo"
+  >
+    Smart Money
+  </a>
+
+
+  <nav>
+
+    <a href="index.html">
+      Home
+    </a>
+
+    <a href="index.html#packages">
+      Packages
+    </a>
+
+    <a href="login.html">
+      Login
+    </a>
+
+  </nav>
+
+</header>
+
+
+
+<main class="payment-page">
+
+  <div class="payment-container">
+
+
+    <!-- LEFT SIDE -->
+
+    <div class="payment-info">
+
+      <span class="tag">
+        ✦ COMPLETE YOUR REGISTRATION
+      </span>
+
+
+      <h1>
+
+        Complete Your
+        <br>
+
+        <span>
+          Package Payment
+        </span>
+
+      </h1>
+
+
+      <p>
+
+        Complete your package selection and payment request.
+        Your referral ID is required before continuing.
+
+      </p>
+
+
+      <div class="summary-card">
+
+        <h2>
+          Order Summary
+        </h2>
+
+
+        <div class="summary-row">
+
+          <span>
+            Selected Package
+          </span>
+
+          <strong id="selectedPackage">
+            Loading...
+          </strong>
+
+        </div>
+
+
+        <div class="summary-row">
+
+          <span>
+            Package Price
+          </span>
+
+          <strong
+            id="selectedPrice"
+            class="price-highlight"
+          >
+            ₹0
+          </strong>
+
+        </div>
+
+
+        <div class="summary-row">
+
+          <span>
+            Referral ID
+          </span>
+
+          <strong id="summaryReferral">
+            Not entered
+          </strong>
+
+        </div>
+
+
+        <div class="summary-row">
+
+          <span>
+            Status
+          </span>
+
+          <strong>
+            Awaiting Payment
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- PAYMENT SIDE -->
+
+    <div class="payment-card">
+
+      <h2>
+        Payment Details
+      </h2>
+
+
+      <p>
+        Enter your details and payment information.
+      </p>
+
+
+      <form id="paymentForm">
+
+
+        <!-- REFERRAL ID -->
+
+        <div class="form-group">
+
+          <label for="referralId">
+            Referral ID *
+          </label>
+
+          <input
+            type="text"
+            id="referralId"
+            placeholder="Enter valid referral ID"
+            required
+          >
+
+        </div>
+
+
+        <!-- NAME -->
+
+        <div class="form-group">
+
+          <label for="customerName">
+            Full Name *
+          </label>
+
+          <input
+            type="text"
+            id="customerName"
+            placeholder="Enter your full name"
+            required
+          >
+
+        </div>
+
+
+        <!-- EMAIL -->
+
+        <div class="form-group">
+
+          <label for="customerEmail">
+            Gmail *
+          </label>
+
+          <input
+            type="email"
+            id="customerEmail"
+            placeholder="Enter your Gmail"
+            required
+          >
+
+        </div>
+
+
+        <!-- MOBILE -->
+
+        <div class="form-group">
+
+          <label for="customerMobile">
+            Mobile Number *
+          </label>
+
+          <input
+            type="tel"
+            id="customerMobile"
+            placeholder="Enter mobile number"
+            required
+          >
+
+        </div>
+
+
+        <!-- PAYMENT OPTIONS -->
+
+        <div class="upi-box">
+
+          <h3>
+            Pay Using UPI
+          </h3>
+
+
+          <div class="upi-option">
+
+            <div>
+
+              <span>
+                UPI Option 1
+              </span>
+
+              <br>
+
+              <strong id="upi1">
+                smartmoney7@nyes
+              </strong>
+
+            </div>
+
+
+            <button
+              type="button"
+              class="copy-btn"
+              onclick="copyUPI('smartmoney7@nyes')"
+            >
+              Copy
+            </button>
+
+          </div>
+
+
+          <div class="upi-option">
+
+            <div>
+
+              <span>
+                UPI Option 2
+              </span>
+
+              <br>
+
+              <strong id="upi2">
+                BHARATPE2U0V0S7G2D90659@unitype
+              </strong>
+
+            </div>
+
+
+            <button
+              type="button"
+              class="copy-btn"
+              onclick="copyUPI('BHARATPE2U0V0S7G2D90659@unitype')"
+            >
+              Copy
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- UTR -->
+
+        <div class="form-group">
+
+          <label for="transactionId">
+            UPI Transaction / UTR Number *
+          </label>
+
+          <input
+            type="text"
+            id="transactionId"
+            placeholder="Enter transaction reference number"
+            required
+          >
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="pay-btn"
+          id="paymentButton"
+        >
+          Submit Payment Request →
+        </button>
+
+
+      </form>
+
+
+      <div class="note">
+
+        <strong>Important:</strong>
+        Payment submission does not automatically confirm
+        account activation. Payment and registration details
+        should be verified before activation.
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+</main>
+
+
+
+<footer>
+
+  © 2026 Smart Money. All Rights Reserved.
+
+</footer>
+
+
+
+<script>
+
+
+  /* =========================
+     PACKAGE DATA
+  ========================= */
+
+  const packages = {
+
+    Low: {
+      name: "Low Package",
+      price: 560
+    },
+
+    Medium: {
+      name: "Medium Package",
+      price: 899
+    },
+
+    High: {
+      name: "High / Premium Package",
+      price: 1499
+    }
+
+  };
+
+
+  /* =========================
+     GET URL PARAMETERS
+  ========================= */
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  const packageType =
+    params.get("package");
+
+
+  const referralFromURL =
+    params.get("referral");
+
+
+  let selectedPackage =
+    packages[packageType];
+
+
+  /* =========================
+     PACKAGE CHECK
+  ========================= */
+
+  if (!selectedPackage) {
+
+    selectedPackage =
+      packages.Low;
+
+  }
+
+
+  /* =========================
+     DISPLAY PACKAGE
+  ========================= */
+
+  document.getElementById(
+    "selectedPackage"
+  ).textContent =
+    selectedPackage.name;
+
+
+  document.getElementById(
+    "selectedPrice"
+  ).textContent =
+    "₹" +
+    selectedPackage.price;
+
+
+  /* =========================
+     PREFILL REFERRAL
+  ========================= */
+
+  if (referralFromURL) {
+
+    document.getElementById(
+      "referralId"
+    ).value =
+      referralFromURL;
+
+  }
+
+
+  /* =========================
+     UPDATE REFERRAL SUMMARY
+  ========================= */
+
+  document
+    .getElementById("referralId")
+    .addEventListener(
+      "input",
+      function() {
+
+        const referral =
+          this.value.trim();
+
+        document.getElementById(
+          "summaryReferral"
+        ).textContent =
+          referral || "Not entered";
+
+      }
+    );
+
+
+  /* =========================
+     COPY UPI
+  ========================= */
+
+  function copyUPI(upi) {
+
+    navigator.clipboard
+      .writeText(upi)
+      .then(function() {
+
+        alert(
+          "UPI ID copied successfully."
+        );
+
+      })
+      .catch(function() {
+
+        alert(
+          "Please copy the UPI ID manually: " +
+          upi
+        );
+
+      });
+
+  }
+
+
+  /* =========================
+     PAYMENT FORM
+  ========================= */
+
+  document
+    .getElementById("paymentForm")
+    .addEventListener(
+      "submit",
+      function(event) {
+
+        event.preventDefault();
+
+
+        const referral =
+          document
+            .getElementById("referralId")
+            .value
+            .trim();
+
+
+        const name =
+          document
+            .getElementById("customerName")
+            .value
+            .trim();
+
+
+        const email =
+          document
+            .getElementById("customerEmail")
+            .value
+            .trim();
+
+
+        const mobile =
+          document
+            .getElementById("customerMobile")
+            .value
+            .trim();
+
+
+        const transactionId =
+          document
+            .getElementById("transactionId")
+            .value
+            .trim();
+
+
+        /* REFERRAL REQUIRED */
+
+        if (!referral) {
+
+          alert(
+            "Referral ID is required. You cannot continue without a valid referral ID."
+          );
+
+          return;
+
+        }
+
+
+        /* BASIC CHECK */
+
+        if (
+          !name ||
+          !email ||
+          !mobile ||
+          !transactionId
+        ) {
+
+          alert(
+            "Please fill all required details."
+          );
+
+          return;
+
+        }
+
+
+        const button =
+          document.getElementById(
+            "paymentButton"
+          );
+
+
+        button.disabled = true;
+
+
+        button.textContent =
+          "Submitting Request...";
+
+
+        /*
+          NEXT STEP:
+
+          Yahan Supabase database insert
+          connect kiya jayega.
+
+          Payment request ko database mein
+          pending status ke saath save karenge.
+
+          Admin verify karega.
+
+          Verification ke baad hi account
+          activate/create karna chahiye.
+        */
+
+
+        setTimeout(function() {
+
+          alert(
+            "Your payment request has been submitted for verification. Please wait for confirmation."
+          );
+
+
+          button.disabled = false;
+
+
+          button.textContent =
+            "Submit Payment Request →";
+
+
+        }, 1000);
+
+      }
+    );
+
+
+</script>
+
+
+</body>
+
+</html>
