@@ -253,6 +253,88 @@
     alert("Referral Link Copied: " + fullLink);
   }
 </script>
+<!-- WITHDRAWAL MODAL POPUP -->
+<div id="withdrawModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:999; justify-content:center; align-items:center;">
+  <div style="background:#1f2937; padding:25px; border-radius:15px; width:90%; max-width:400px; color:#fff; border:1px solid #374151;">
+    <h3 style="margin-top:0;">💸 Withdraw Earnings</h3>
+    
+    <!-- STEP 1: Add Bank/UPI Details -->
+    <div id="setupBankSection">
+      <p style="font-size:13px; color:#9ca3af;">Withdrawal ke liye pehle apni UPI ID ya Bank details add karein:</p>
+      <input type="text" id="upiInput" placeholder="Enter UPI ID (e.g. 9876543210@paytm)" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #374151; background:#111827; color:#fff; box-sizing:border-box;">
+      <button onclick="saveBankDetails()" style="width:100%; background:#8b5cf6; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer;">Save Account Details</button>
+    </div>
+
+    <!-- STEP 2: Enter Withdrawal Amount -->
+    <div id="payoutSection" style="display:none;">
+      <p style="font-size:13px; color:#10b981;">✅ Connected UPI: <b id="savedUpi"></b></p>
+      <input type="number" id="withdrawAmount" placeholder="Enter Amount (₹)" style="width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #374151; background:#111827; color:#fff; box-sizing:border-box;">
+      <p id="withdrawError" style="color:#ef4444; font-size:12px; display:none; margin-bottom:10px;"></p>
+      <button onclick="processWithdrawal()" style="width:100%; background:#10b981; color:#fff; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer;">Request Payout</button>
+    </div>
+
+    <button onclick="closeModal()" style="width:100%; background:transparent; color:#9ca3af; border:none; padding:8px; margin-top:10px; cursor:pointer;">Close</button>
+  </div>
+</div>
+
+<script>
+  let userBalance = 0; // Current User Balance
+  let userUpi = "";    // Saved User UPI
+
+  // Button click Handler
+  document.querySelector(".btn-action[href='#']").addEventListener("click", function(e) {
+    e.preventDefault();
+    document.getElementById("withdrawModal").style.display = "flex";
+    
+    // Check if UPI exists
+    if(userUpi) {
+      document.getElementById("setupBankSection").style.display = "none";
+      document.getElementById("payoutSection").style.display = "block";
+      document.getElementById("savedUpi").innerText = userUpi;
+    } else {
+      document.getElementById("setupBankSection").style.display = "block";
+      document.getElementById("payoutSection").style.display = "none";
+    }
+  });
+
+  function saveBankDetails() {
+    const upi = document.getElementById("upiInput").value.trim();
+    if(!upi) {
+      alert("Kripya valid UPI ID enter karein!");
+      return;
+    }
+    userUpi = upi;
+    alert("Bank/UPI Details Successfully Saved!");
+    document.getElementById("setupBankSection").style.display = "none";
+    document.getElementById("payoutSection").style.display = "block";
+    document.getElementById("savedUpi").innerText = userUpi;
+  }
+
+  function processWithdrawal() {
+    const amt = parseFloat(document.getElementById("withdrawAmount").value);
+    const errText = document.getElementById("withdrawError");
+
+    if (userBalance <= 0) {
+      errText.innerText = "❌ Aapke paas withdrawal ke liye koi balance nahi hai (₹0 Available).";
+      errText.style.display = "block";
+      return;
+    }
+
+    if (!amt || amt <= 0 || amt > userBalance) {
+      errText.innerText = "❌ Please Enter a Valid Amount (Max: ₹" + userBalance + ")";
+      errText.style.display = "block";
+      return;
+    }
+
+    errText.style.display = "none";
+    alert("Withdrawal request of ₹" + amt + " submitted successfully!");
+    closeModal();
+  }
+
+  function closeModal() {
+    document.getElementById("withdrawModal").style.display = "none";
+  }
+</script>
 
 </body>
 </html>
