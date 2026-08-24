@@ -4,624 +4,526 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Dashboard - Smart Money</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: #0b0f19;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      width: 100%;
+      height: 70px;
+      padding: 0 6%;
+      background: rgba(17, 24, 39, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: #a855f7;
+    }
+
+    .nav-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #a855f7;
+      background: #1e293b;
+    }
+
+    .nav-links a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      margin-left: 15px;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    /* MAIN CONTAINER */
+    .dashboard-container {
+      max-width: 1200px;
+      width: 90%;
+      margin: 30px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      flex: 1;
+    }
+
+    /* WELCOME & REFERRAL BANNER GRID */
+    .top-banner-grid {
+      display: grid;
+      grid-template-columns: 1.8fr 1.2fr;
+      gap: 20px;
+    }
+
+    .welcome-card {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .welcome-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -20%;
+      width: 200px;
+      height: 200px;
+      background: rgba(168, 85, 247, 0.25);
+      filter: blur(80px);
+      border-radius: 50%;
+    }
+
+    /* BIG USER PHOTO CONTAINER */
+    .user-photo-frame {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      flex-shrink: 0;
+    }
+
+    .user-avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #a855f7;
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+      background: #1e293b;
+    }
+
+    .upload-badge {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      background: #7c3aed;
+      color: #fff;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 12px;
+      cursor: pointer;
+      border: 2px solid #0b0f19;
+      transition: 0.2s;
+    }
+
+    .upload-badge:hover {
+      transform: scale(1.1);
+      background: #ec4899;
+    }
+
+    .welcome-text h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .welcome-text p {
+      color: #94a3b8;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .action-btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+      transition: 0.3s;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 13px;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: 0.3s;
+    }
+
+    .btn-primary:hover, .btn-secondary:hover {
+      transform: translateY(-2px);
+    }
+
+    /* REFERRAL CARD */
+    .referral-card {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #fff;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+    }
+
+    .ref-header span {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      opacity: 0.8;
+      text-transform: uppercase;
+    }
+
+    .ref-code-box {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin: 10px 0;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 10px 15px;
+      border-radius: 12px;
+      border: 1px dashed rgba(255, 255, 255, 0.3);
+      display: inline-block;
+      text-align: center;
+    }
+
+    .copy-btn {
+      background: #fff;
+      color: #4f46e5;
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 100%;
+    }
+
+    .copy-btn:hover {
+      background: #f1f5f9;
+    }
+
+    /* EARNINGS GRID */
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .live-badge {
+      font-size: 11px;
+      background: rgba(34, 197, 94, 0.15);
+      color: #4ade80;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: rgba(17, 24, 39, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 18px;
+      position: relative;
+    }
+
+    .stat-icon {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    /* TWO COLUMN LAYOUT */
+    .middle-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .content-box {
+      background: rgba(17, 24, 39, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    .balance-display {
+      font-size: 32px;
+      font-weight: 800;
+      color: #4ade80;
+      margin: 10px 0 15px 0;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: #64748b;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 40px;
+    }
+
+    @media (max-width: 900px) {
+      .top-banner-grid, .middle-grid {
+        grid-template-columns: 1fr;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
 </head>
-
 
 <body>
 
   <!-- NAVBAR -->
   <header class="navbar">
-
-    <div class="logo">
-      Smart Money
+    <a href="index.html" class="logo">✦ Smart<span>Money</span></a>
+    <div class="nav-profile">
+      <img src="https://via.placeholder.com/150" id="navUserImg" class="nav-avatar" alt="Profile">
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="profile.html">Profile</a>
+        <a href="login.html">Logout</a>
+      </div>
     </div>
-
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="profile.html">Profile</a>
-      <a href="login.html">Logout</a>
-    </nav>
-
   </header>
 
+  <!-- MAIN DASHBOARD CONTENT -->
+  <main class="dashboard-container">
 
-  <!-- DASHBOARD -->
-  <main class="dashboard">
-
-
-    <!-- WELCOME SECTION -->
-    <section class="dashboard-hero">
-
-      <div class="hero-content">
-
-        <span class="hero-badge">
-          SMART MONEY ACCOUNT
-        </span>
-
-        <h1>
-          Welcome Back! 👋
-        </h1>
-
-        <p>
-          Manage your earnings, referrals, packages and
-          transactions from one secure dashboard.
-        </p>
-
-        <div class="hero-actions">
-
-          <a href="index.html#packages" class="primary-btn">
-            Explore Packages
-          </a>
-
-          <a href="profile.html" class="secondary-btn">
-            My Profile
-          </a>
-
+    <!-- TOP BANNER WITH USER PHOTO & REFERRAL -->
+    <div class="top-banner-grid">
+      
+      <!-- WELCOME CARD -->
+      <div class="welcome-card">
+        <div class="user-photo-frame">
+          <img src="https://via.placeholder.com/150" id="dashUserImg" class="user-avatar-img" alt="User Image">
+          <label for="imageUpload" class="upload-badge" title="Upload New Photo">📷</label>
+          <input type="file" id="imageUpload" accept="image/*" style="display: none;">
         </div>
-
+        <div class="welcome-text">
+          <h1 id="userNameDisplay">Welcome Back! 👋</h1>
+          <p>Manage your earnings, referrals, packages and transactions.</p>
+          <div class="action-btns">
+            <a href="index.html#packages" class="btn-primary">Explore Packages</a>
+            <a href="profile.html" class="btn-secondary">My Profile</a>
+          </div>
+        </div>
       </div>
-
 
       <!-- REFERRAL CARD -->
-      <div class="hero-referral-card">
-
-        <span class="small-label">
-          YOUR REFERRAL ID
-        </span>
-
-        <strong id="referralId">
-          SM-XXXXXX
-        </strong>
-
-        <p>
-          Share your referral ID and grow your network.
-        </p>
-
-        <button
-          class="copy-btn"
-          id="copyReferralButton"
-        >
-          📋 Copy Referral ID
-        </button>
-
+      <div class="referral-card">
+        <div class="ref-header">
+          <span>YOUR REFERRAL ID</span>
+          <div class="ref-code-box" id="referralId">SM-XXXXXX</div>
+        </div>
+        <button class="copy-btn" id="copyReferralButton">📋 Copy Referral ID</button>
       </div>
 
-    </section>
+    </div>
 
+    <!-- REVENUE STATS -->
+    <div>
+      <div class="section-title">
+        <span>Your Earnings</span>
+        <span class="live-badge">● Live Updates</span>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-label">Today's Revenue</div>
+          <div class="stat-value" id="todayRevenue">₹0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📈</div>
+          <div class="stat-label">7 Days Revenue</div>
+          <div class="stat-value" id="sevenDayRevenue">₹0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-label">30 Days Revenue</div>
+          <div class="stat-value" id="thirtyDayRevenue">₹0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-label">Lifetime Revenue</div>
+          <div class="stat-value" id="lifetimeRevenue">₹0</div>
+        </div>
+      </div>
+    </div>
 
-
-    <!-- OVERVIEW -->
-    <section class="section-heading">
-
-      <div>
-
-        <span>
-          OVERVIEW
-        </span>
-
-        <h2>
-          Your Earnings
-        </h2>
-
+    <!-- WALLET & CURRENT PACKAGE -->
+    <div class="middle-grid">
+      <div class="content-box">
+        <div class="section-title">Available Balance</div>
+        <div class="balance-display" id="walletBalance">₹0</div>
+        <button class="btn-primary" id="withdrawButton" style="border:none; cursor:pointer;">Withdraw Earnings</button>
       </div>
 
-
-      <div class="live-status">
-
-        <span class="live-dot"></span>
-
-        Live Updates
-
+      <div class="content-box">
+        <div class="section-title">My Package</div>
+        <p style="color: #94a3b8; font-size: 14px; margin: 10px 0;">Current Package: <strong id="userPackage" style="color: #a855f7;">No Package</strong></p>
+        <p style="color: #64748b; font-size: 12px; margin-bottom: 15px;">Choose a package to access benefits & commissions.</p>
+        <a href="index.html#packages" class="btn-secondary" style="display:inline-block;">View Packages →</a>
       </div>
-
-    </section>
-
-
-
-    <!-- STATS -->
-    <section class="stats premium-stats">
-
-
-      <div class="stat-card premium-card">
-
-        <div class="stat-icon">
-          📅
-        </div>
-
-        <div>
-
-          <span>
-            Today's Revenue
-          </span>
-
-          <h3 id="todayRevenue">
-            ₹0
-          </h3>
-
-          <small>
-            Today's earnings
-          </small>
-
-        </div>
-
-      </div>
-
-
-
-      <div class="stat-card premium-card">
-
-        <div class="stat-icon">
-          📈
-        </div>
-
-        <div>
-
-          <span>
-            7 Days Revenue
-          </span>
-
-          <h3 id="sevenDayRevenue">
-            ₹0
-          </h3>
-
-          <small>
-            Last 7 days
-          </small>
-
-        </div>
-
-      </div>
-
-
-
-      <div class="stat-card premium-card">
-
-        <div class="stat-icon">
-          📊
-        </div>
-
-        <div>
-
-          <span>
-            30 Days Revenue
-          </span>
-
-          <h3 id="thirtyDayRevenue">
-            ₹0
-          </h3>
-
-          <small>
-            Monthly performance
-          </small>
-
-        </div>
-
-      </div>
-
-
-
-      <div class="stat-card premium-card highlight-card">
-
-        <div class="stat-icon">
-          💰
-        </div>
-
-        <div>
-
-          <span>
-            Lifetime Revenue
-          </span>
-
-          <h3 id="lifetimeRevenue">
-            ₹0
-          </h3>
-
-          <small>
-            All-time earnings
-          </small>
-
-        </div>
-
-      </div>
-
-
-    </section>
-
-
-
-    <!-- MAIN GRID -->
-    <section class="premium-dashboard-grid">
-
-
-      <!-- REFERRALS -->
-      <div class="dashboard-card premium-panel">
-
-        <div class="card-header">
-
-          <div>
-
-            <span class="card-label">
-              NETWORK
-            </span>
-
-            <h2>
-              My Referrals
-            </h2>
-
-          </div>
-
-          <div class="panel-icon">
-            👥
-          </div>
-
-        </div>
-
-
-        <div class="referral-summary premium-referrals">
-
-
-          <div class="referral-stat">
-
-            <span>
-              Total Referrals
-            </span>
-
-            <strong id="totalReferrals">
-              0
-            </strong>
-
-          </div>
-
-
-          <div class="referral-stat active-referral">
-
-            <span>
-              Active Referrals
-            </span>
-
-            <strong id="activeReferrals">
-              0
-            </strong>
-
-          </div>
-
-
-        </div>
-
-
-        <div class="panel-footer">
-
-          Build your network and earn commission on
-          eligible package purchases.
-
-        </div>
-
-      </div>
-
-
-
-      <!-- PACKAGE -->
-      <div class="dashboard-card premium-panel package-panel">
-
-        <div class="card-header">
-
-          <div>
-
-            <span class="card-label">
-              MEMBERSHIP
-            </span>
-
-            <h2>
-              My Package
-            </h2>
-
-          </div>
-
-          <div class="panel-icon">
-            💎
-          </div>
-
-        </div>
-
-
-        <div class="package-display">
-
-          <div class="package-status">
-            CURRENT PACKAGE
-          </div>
-
-
-          <h3
-            class="package-name"
-            id="userPackage"
-          >
-            No Package
-          </h3>
-
-
-          <p>
-            Choose a package to access package benefits
-            and eligible referral commission.
-          </p>
-
-
-          <a
-            href="index.html#packages"
-            class="package-btn"
-          >
-            View Packages →
-          </a>
-
-        </div>
-
-      </div>
-
-
-
-      <!-- WALLET -->
-      <div class="dashboard-card premium-panel wallet-panel">
-
-        <div class="card-header">
-
-          <div>
-
-            <span class="card-label">
-              WALLET
-            </span>
-
-            <h2>
-              Available Balance
-            </h2>
-
-          </div>
-
-          <div class="panel-icon">
-            👛
-          </div>
-
-        </div>
-
-
-        <h3
-          class="wallet-balance"
-          id="walletBalance"
-        >
-          ₹0
-        </h3>
-
-
-        <p>
-          Eligible earnings available for withdrawal
-          will appear here.
-        </p>
-
-
-        <button
-          class="withdraw-btn"
-          id="withdrawButton"
-        >
-          Withdraw Earnings
-        </button>
-
-      </div>
-
-
-    </section>
-
-
-
-    <!-- TRANSACTIONS -->
-    <section class="dashboard-card transactions premium-transactions">
-
-
-      <div class="card-header">
-
-        <div>
-
-          <span class="card-label">
-            ACTIVITY
-          </span>
-
-          <h2>
-            Recent Transactions
-          </h2>
-
-        </div>
-
-
-        <button class="view-all-btn">
-          View All →
-        </button>
-
-      </div>
-
-
-      <div class="empty-state premium-empty">
-
-        <div class="empty-icon">
-          📋
-        </div>
-
-        <h3>
-          No Transactions Yet
-        </h3>
-
-        <p>
-          Your package purchases, referral commissions
-          and withdrawal activity will appear here.
-        </p>
-
-      </div>
-
-
-    </section>
-
+    </div>
 
   </main>
 
-
-
-  <!-- FOOTER -->
   <footer>
-
-    <p>
-      © 2026 Smart Money. All rights reserved.
-    </p>
-
+    © 2026 Smart Money. All rights reserved.
   </footer>
 
-
-
-  <!-- SUPABASE -->
+  <!-- SUPABASE SETUP -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
   <script>
+    const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 
-    // =====================================
-    // SUPABASE CONNECTION
-    // =====================================
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-    const SUPABASE_URL =
-      "https://rvprrulkjegvicbnjuft.supabase.co";
+    document.addEventListener("DOMContentLoaded", async function () {
+      // 1. Supabase Session Check
+      const { data: { session } } = await supabaseClient.auth.getSession();
 
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-
-
-    const supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-      );
-
-
-
-    // =====================================
-    // CHECK LOGIN
-    // =====================================
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      async function () {
-
-
-        const {
-          data: { session }
-        } =
-        await supabaseClient
-          .auth
-          .getSession();
-
-
-        // User logged in nahi hai
-        if (!session) {
-
-          alert(
-            "Please login first."
-          );
-
-
-          window.location.href =
-            "login.html";
-
-
-          return;
-
-        }
-
-
-        console.log(
-          "Logged in user:",
-          session.user.email
-        );
-
-
-
-        // =====================================
-        // COPY REFERRAL ID
-        // =====================================
-
-        const copyButton =
-          document.getElementById(
-            "copyReferralButton"
-          );
-
-
-        const referralId =
-          document.getElementById(
-            "referralId"
-          );
-
-
-        copyButton.addEventListener(
-          "click",
-          async function () {
-
-            try {
-
-              await navigator.clipboard.writeText(
-                referralId.textContent.trim()
-              );
-
-
-              copyButton.textContent =
-                "✓ Copied!";
-
-
-              setTimeout(function () {
-
-                copyButton.textContent =
-                  "📋 Copy Referral ID";
-
-              }, 2000);
-
-
-            } catch (error) {
-
-              alert(
-                "Could not copy referral ID."
-              );
-
-            }
-
-          }
-        );
-
-
-
-        // =====================================
-        // WITHDRAW BUTTON
-        // =====================================
-
-        const withdrawButton =
-          document.getElementById(
-            "withdrawButton"
-          );
-
-
-        withdrawButton.addEventListener(
-          "click",
-          function () {
-
-            alert(
-              "Withdrawal system will be available after wallet and package verification are connected."
-            );
-
-          }
-        );
-
-
+      if (!session) {
+        alert("Please login first.");
+        window.location.href = "login.html";
+        return;
       }
-    );
 
+      console.log("Logged in user:", session.user.email);
+
+      // 2. Load Local Avatar Image if stored
+      const savedImage = localStorage.getItem('smartMoney_userPhoto');
+      if (savedImage) {
+        document.getElementById('dashUserImg').src = savedImage;
+        document.getElementById('navUserImg').src = savedImage;
+      }
+
+      // 3. Copy Referral ID Logic
+      const copyButton = document.getElementById("copyReferralButton");
+      const referralId = document.getElementById("referralId");
+
+      copyButton.addEventListener("click", async function () {
+        try {
+          await navigator.clipboard.writeText(referralId.textContent.trim());
+          copyButton.textContent = "✓ Copied!";
+          setTimeout(function () {
+            copyButton.textContent = "📋 Copy Referral ID";
+          }, 2000);
+        } catch (error) {
+          alert("Could not copy referral ID.");
+        }
+      });
+
+      // 4. Withdraw Button Logic
+      const withdrawButton = document.getElementById("withdrawButton");
+      withdrawButton.addEventListener("click", function () {
+        alert("Withdrawal system will be available after wallet and package verification are connected.");
+      });
+
+      // 5. Image Upload Handler
+      document.getElementById('imageUpload').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            const imgUrl = event.target.result;
+            document.getElementById('dashUserImg').src = imgUrl;
+            document.getElementById('navUserImg').src = imgUrl;
+            localStorage.setItem('smartMoney_userPhoto', imgUrl);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    });
   </script>
-
-
 </body>
-
 </html>
