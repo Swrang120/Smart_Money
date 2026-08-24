@@ -23,7 +23,7 @@
     <a href="#about">About</a>
     <a href="#packages">Packages</a>
     <a href="#contact">Contact</a>
-    <a href="login.html">Login</a>
+    <a href="login.html" id="navLoginBtn">Login</a>
   </nav>
 </header>
 
@@ -489,6 +489,42 @@
       supportForm.reset();
     });
   }
+</script>
+
+<!-- =====================================
+     SUPABASE SESSION CHECK FOR HOME PAGE
+===================================== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  document.addEventListener("DOMContentLoaded", async function () {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    const loginLink = document.getElementById("navLoginBtn");
+    const navContainer = document.querySelector(".navbar nav");
+
+    if (session && loginLink) {
+      // Login ko Dashboard me convert karo
+      loginLink.innerText = "Dashboard";
+      loginLink.href = "dashboard.html";
+
+      // Extra Profile Button add karo
+      const profileLink = document.createElement("a");
+      profileLink.href = "dashboard.html";
+      profileLink.innerText = "My Account";
+      profileLink.style.background = "#7c3aed";
+      profileLink.style.color = "#fff";
+      profileLink.style.padding = "6px 12px";
+      profileLink.style.borderRadius = "8px";
+      profileLink.style.marginLeft = "8px";
+      
+      if (navContainer) {
+        navContainer.appendChild(profileLink);
+      }
+    }
+  });
 </script>
 
 </body>
