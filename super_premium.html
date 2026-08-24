@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Premium Package - Smart Money</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .pkg-detail-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .vip-card {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      border-radius: 24px;
+      padding: 35px;
+      color: #fff;
+      box-shadow: 0 15px 35px rgba(49, 46, 129, 0.4);
+      border: 2px solid #f59e0b;
+      position: relative;
+    }
+    .vip-tag {
+      background: #f59e0b;
+      color: #000;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+    .price-box {
+      font-size: 36px;
+      font-weight: 800;
+      color: #38bdf8;
+      margin: 15px 0 25px 0;
+    }
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 25px 0;
+    }
+    .feature-list li {
+      margin-bottom: 14px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #e0e7ff;
+    }
+    .btn-buy-now {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      color: #fff;
+      padding: 16px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 18px;
+      text-decoration: none;
+      box-shadow: 0 5px 20px rgba(236, 72, 153, 0.4);
+      transition: transform 0.2s;
+    }
+    .btn-buy-now:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <a href="index.html" class="logo">Smart Money</a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="index.html#packages">Packages</a>
+    <a href="login.html" id="navLoginBtn">Login</a>
+  </nav>
+</header>
+
+<!-- PACKAGE DETAILS -->
+<div class="pkg-detail-container">
+  <div class="vip-card">
+    <span class="vip-tag">👑 VIP Exclusive Access</span>
+    <h1 style="margin: 0; font-size: 32px;">Super Premium Package</h1>
+    <p style="color: #c7d2fe; margin-top: 5px;">Maximize your growth with highest commission & zero withdrawal fees.</p>
+
+    <div class="price-box">₹2,499 <span style="font-size: 16px; color: #a5b4fc; font-weight: 400;">/ One Time</span></div>
+
+    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 20px 0;">
+
+    <h3 style="color: #f59e0b; margin-bottom: 15px;">Package Benefits & Highlights:</h3>
+    <ul class="feature-list">
+      <li>🔥 <strong>75% Direct Commission:</strong> Earn ₹1,874.25 on every direct referral.</li>
+      <li>⚡ <strong>Unlimited Daily Withdrawals:</strong> Maximum freedom to withdraw anytime.</li>
+      <li>💰 <strong>Withdrawal Limit:</strong> Minimum ₹100 up to ₹10,000 per request.</li>
+      <li>🎉 <strong>0% Withdrawal Charges:</strong> Zero fees on all payouts.</li>
+      <li>👑 <strong>VIP Badge Profile:</strong> Special highlight status in your account.</li>
+      <li>☎️ <strong>Direct VIP Support:</strong> 24/7 personal support from our core team.</li>
+    </ul>
+
+    <a href="register.html?pkg=super_premium" class="btn-buy-now">Buy Super Premium Now →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="main-footer" style="margin-top: 50px;">
+  <div class="footer-bottom">
+    © 2026 Smart Money. All Rights Reserved.
+  </div>
+</footer>
+
+<!-- SUPABASE AUTH CHECK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  document.addEventListener("DOMContentLoaded", async function () {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    const loginLink = document.getElementById("navLoginBtn");
+
+    if (session && loginLink) {
+      loginLink.innerText = "Dashboard";
+      loginLink.href = "dashboard.html";
+    }
+  });
+</script>
+
+</body>
+</html>
