@@ -46,7 +46,6 @@
     </p>
 
     <div class="buttons">
-      <!-- Direct register bypass karke packages par redirect kiya -->
       <a href="#packages" class="btn">
         Get Started →
       </a>
@@ -57,7 +56,7 @@
 
     <div class="hero-stats">
       <div>
-        <strong>3+</strong>
+        <strong>4+</strong>
         <span>Packages</span>
       </div>
       <div>
@@ -311,6 +310,55 @@
       </div>
     </a>
 
+    <!-- =========================
+         SUPER PREMIUM PACKAGE (NEW)
+    ========================= -->
+    <a href="super_premium.html" class="package high-package" style="border: 2px solid #f59e0b;">
+      <div class="package-banner" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);">
+        <span class="package-badge" style="background: #f59e0b; color: #000; font-weight:800;">
+          VIP EXCLUSIVE
+        </span>
+        <div class="package-banner-content">
+          <span class="package-small-icon">🔥</span>
+          <h3>Super Premium</h3>
+          <p>Unlimited withdrawal & VIP personal support.</p>
+        </div>
+      </div>
+
+      <div class="package-body">
+        <div class="package-title-row">
+          <h3>Super Premium</h3>
+          <span class="popular-dot" style="color: #f59e0b;">●</span>
+        </div>
+
+        <div class="stars" style="color: #f59e0b;">★★★★★</div>
+
+        <div class="package-price-row">
+          <strong>₹2,499</strong>
+          <span style="background: #f59e0b; color: #000; font-weight:700;">VIP PROFIT</span>
+        </div>
+
+        <div class="package-info">
+          <span>Referral Commission (75%)</span>
+          <strong>₹1,874.25</strong>
+        </div>
+
+        <div class="package-info">
+          <span>Daily Withdrawal Limit</span>
+          <strong>₹100 - ₹10,000 (Unlimited)</strong>
+        </div>
+
+        <div class="package-info">
+          <span>Withdrawal Fee</span>
+          <strong>0% (No Fees)</strong>
+        </div>
+
+        <div class="package-button" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);">
+          View VIP Details & Buy →
+        </div>
+      </div>
+    </a>
+
   </div>
 </section>
 
@@ -506,11 +554,9 @@
     const navContainer = document.querySelector(".navbar nav");
 
     if (session && loginLink) {
-      // Login ko Dashboard me convert karo
       loginLink.innerText = "Dashboard";
       loginLink.href = "dashboard.html";
 
-      // Extra Profile Button add karo
       const profileLink = document.createElement("a");
       profileLink.href = "dashboard.html";
       profileLink.innerText = "My Account";
