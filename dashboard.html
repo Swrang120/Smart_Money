@@ -92,6 +92,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
+<!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <a href="dashboard.html" class="brand-logo">
@@ -109,6 +110,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
   </div>
   <ul class="sidebar-menu">
     <li><a href="index.html">🌐 Home / Landing Page</a></li>
+    <li><button onclick="openPackageModal()">👑 My Package & Benefits</button></li>
     <li><button onclick="openUpiModal()">🏦 View & Edit Bank / UPI Details</button></li>
     <li><button onclick="openKycModal()">🆔 KYC & Date of Birth</button></li>
     <li><button onclick="copyAffiliateLink()">🔗 Copy Affiliate Link</button></li>
@@ -117,6 +119,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
   </ul>
 </aside>
 
+<!-- NAVBAR -->
 <header class="navbar">
   <a href="dashboard.html" class="brand-logo">
     <img src="1000819130.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/100?text=SM'">
@@ -177,6 +180,21 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     </div>
   </div>
 </div>
+</div>
+
+<!-- MY PACKAGE MODAL -->
+<div id="packageModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 style="color:#7c3aed;margin-top:0;">👑 My Package Details</h3>
+    <p style="font-size:13px;color:#475569;margin-bottom:15px;">Here are your active package details, commission structures, and withdrawal limits:</p>
+    <div style="background:#f8fafc;padding:15px;border-radius:12px;border:1px solid #e2e8f0;font-size:13px;line-height:1.6;">
+      <p><b>Package Name:</b> <span id="modalPkgName" style="color:#7c3aed;font-weight:750;">MASTER PACKAGE</span></p>
+      <p><b>Commission Rate:</b> Up to 90% Direct & Passive</p>
+      <p><b>Withdrawal Limit:</b> Min ₹200 - Max ₹50,000 per request</p>
+      <p><b>Account Status:</b> <span style="color:#10b981;font-weight:700;">Active & Verified 👑</span></p>
+    </div>
+    <button onclick="closeModal('packageModal')" class="btn-action" style="margin-top:15px;">Close</button>
+  </div>
 </div>
 
 <!-- PAYOUT MODAL -->
@@ -261,6 +279,11 @@ function toggleSidebar(){
 function openModal(id){ document.getElementById(id).style.display = "flex"; }
 function closeModal(id){ document.getElementById(id).style.display = "none"; }
 
+function openPackageModal(){
+  closeSidebar();
+  openModal("packageModal");
+}
+
 function openUpiModal(){
   closeSidebar();
   document.getElementById("editUpiId").value = currentProfile?.upi_id || "";
@@ -293,6 +316,25 @@ function openWithdrawModal(){
   openModal("withdrawModal");
 }
 
+// Function to set profile images with a stylish letter avatar fallback if none exists
+function applyProfileImage(imgUrl, userName){
+  const mainImg = document.getElementById("mainProfileImg");
+  const sidebarImg = document.getElementById("sidebarProfileImage");
+  const navAvatar = document.getElementById("navAvatarImg");
+
+  if(imgUrl && imgUrl.trim() !== ""){
+    mainImg.src = imgUrl;
+    sidebarImg.src = imgUrl;
+    navAvatar.src = imgUrl;
+  } else {
+    const firstLetter = (userName ? userName.charAt(0) : "U").toUpperCase();
+    const fallbackUrl = `https://ui-avatars.com/api/?name=${firstLetter}&background=7c3aed&color=fff&size=128&bold=true`;
+    mainImg.src = fallbackUrl;
+    sidebarImg.src = fallbackUrl;
+    navAvatar.src = fallbackUrl;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", async function(){
   try{
     const { data:{session} } = await supabaseClient.auth.getSession();
@@ -306,7 +348,6 @@ document.addEventListener("DOMContentLoaded", async function(){
     currentUserEmail = user.email || "";
     const authName = user.user_metadata?.full_name || user.user_metadata?.name || "Smart Money User";
 
-    // Upsert or fetch profile from database securely
     let { data:profile, error:profileError } = await supabaseClient
       .from("profiles")
       .select("*")
@@ -314,7 +355,6 @@ document.addEventListener("DOMContentLoaded", async function(){
       .maybeSingle();
 
     if(!profile){
-      // Agar profile pehle se nahi hai toh naya row insert kar do (Admin ya User ke liye)
       const newProf = {
         user_id: currentUserId,
         email: currentUserEmail,
@@ -339,16 +379,13 @@ document.addEventListener("DOMContentLoaded", async function(){
     document.getElementById("myRefCode").innerText = userRefCode;
     document.getElementById("dobDisplayInfo").innerText = dob ? "DOB: " + dob : "DOB: Not Set";
     document.getElementById("activePackageBadge").innerText = packageName.toUpperCase() + " 👑";
+    document.getElementById("modalPkgName").innerText = packageName.toUpperCase();
 
     document.getElementById("sidebarUserName").innerText = finalName;
     document.getElementById("sidebarUserEmail").innerText = finalEmail;
 
-    // Display profile picture from database or fallback
-    if(profile?.profile_pic){
-      document.getElementById("mainProfileImg").src = profile.profile_pic;
-      document.getElementById("sidebarProfileImage").src = profile.profile_pic;
-      document.getElementById("navAvatarImg").src = profile.profile_pic;
-    }
+    // Apply Profile Image / Letter Avatar Fallback
+    applyProfileImage(profile?.profile_pic, finalName);
 
     document.getElementById("walletBalance").innerText = "₹" + userCurrentBalance.toFixed(2);
     document.getElementById("allTimeRevenueText").innerText = "₹" + userCurrentBalance.toFixed(2);
@@ -381,9 +418,7 @@ async function uploadProfilePicture(event){
   const reader = new FileReader();
   reader.onload = async function(e){
     const base64Image = e.target.result;
-    document.getElementById("mainProfileImg").src = base64Image;
-    document.getElementById("sidebarProfileImage").src = base64Image;
-    document.getElementById("navAvatarImg").src = base64Image;
+    applyProfileImage(base64Image, currentProfile?.full_name);
 
     const { error } = await supabaseClient
       .from("profiles")
@@ -488,6 +523,7 @@ async function saveKycDetails(){
   currentProfile = { ...currentProfile, full_name: fullName, date_of_birth: dob };
   document.getElementById("userName").innerHTML = escapeHtml(fullName) + ' <span style="font-size:14px;">👑</span>';
   document.getElementById("dobDisplayInfo").innerText = "DOB: " + dob;
+  applyProfileImage(currentProfile?.profile_pic, fullName);
   alert("KYC saved to database successfully!");
   closeModal("kycModal");
 }
