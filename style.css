@@ -315,7 +315,7 @@ body {
 .experience-badge span { font-size: 11px; color: #94a3b8; }
 
 /* =========================
-   PACKAGES SECTION (FIXED GRID)
+   PACKAGES SECTION
 ========================= */
 .packages {
   padding: 50px 20px;
@@ -480,6 +480,10 @@ body {
   gap: 30px;
 }
 
+.support-info {
+  flex: 1;
+}
+
 .support-info h2 { font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 10px; }
 .support-info h2 span { color: #6366f1; }
 .support-info p { font-size: 13px; color: #64748b; margin-bottom: 20px; }
@@ -511,6 +515,7 @@ body {
 .support-card p { color: #64748b; }
 
 .support-form-box {
+  flex: 1;
   background: #ffffff;
   padding: 25px;
   border-radius: 20px;
@@ -588,10 +593,19 @@ body {
   .hero { flex-direction: row; text-align: left; justify-content: space-around; padding: 60px 40px; }
   .buttons { justify-content: flex-start; }
   .hero-stats { justify-content: space-between; }
-  .about-grid { flex-direction: row; align-items: center; }
+  
+  /* FIXED: About section side-by-side layout on desktop */
+  .about-grid { flex-direction: row; align-items: center; justify-content: space-between; }
+  .about-content { flex: 1; }
+  .about-visual { flex: 1; justify-content: flex-end; }
+
   .package-container { grid-template-columns: repeat(2, 1fr); max-width: 850px; }
   .feature-grid { grid-template-columns: repeat(2, 1fr); max-width: 850px; }
-  .support-container { flex-direction: row; max-width: 900px; }
+  
+  /* FIXED: Support container row layout */
+  .support-container { flex-direction: row; max-width: 900px; align-items: center; gap: 40px; }
+  
+  /* FIXED: Footer content side-by-side layout */
   .footer-content { flex-direction: row; justify-content: space-between; max-width: 900px; text-align: left; }
 }
 
