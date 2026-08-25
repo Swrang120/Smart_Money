@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- EmailJS Library Script -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <style>
     * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     body { background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; display: none; }
@@ -107,6 +109,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+  // EmailJS Initialization with your Public Key
+  emailjs.init("FxcimUvl0-ZxAauRx");
+
   // Password Security Check
   const adminPassword = prompt("🔐 Enter Admin Password to Access Panel:");
   if (adminPassword === "Swrangsa@123") {
@@ -224,7 +229,6 @@
 
     tbody.innerHTML = "";
     for (let item of data) {
-      // User details fetch karne ke liye profiles table check karte hain
       let userName = "User";
       let userEmail = "";
       const { data: uData } = await supabaseClient.from('profiles').select('full_name, email').or(`id.eq.${item.user_id},user_id.eq.${item.user_id}`).single();
@@ -261,7 +265,6 @@
     if (!confirm(confirmMsg)) return;
 
     try {
-      // 1. Update withdrawal status
       const { error: updateErr } = await supabaseClient
         .from('withdrawal_requests')
         .update({ status: actionStatus })
@@ -269,7 +272,6 @@
 
       if (updateErr) throw updateErr;
 
-      // 2. If rejected, refund amount back to user's wallet
       if (actionStatus === 'Rejected') {
         const { data: profileData } = await supabaseClient
           .from('profiles')
@@ -282,11 +284,11 @@
           await supabaseClient.from('profiles').update({ balance: refundedBal }).eq('id', profileData.id);
         }
       } else if (actionStatus === 'Approved') {
-        // Trigger Email Notification simulation / handler
+        // Automatically send email via EmailJS when approved
         sendWithdrawalEmail(userEmail, userName, amount);
       }
 
-      alert(actionStatus === 'Approved' ? "Withdrawal Approved successfully!" : "Withdrawal Rejected and amount refunded successfully!");
+      alert(actionStatus === 'Approved' ? "Withdrawal Approved & Email Sent successfully!" : "Withdrawal Rejected and amount refunded successfully!");
       loadWithdrawals();
       loadUsers();
 
@@ -295,11 +297,22 @@
     }
   }
 
-  // Email Notification Trigger function
+  // EmailJS Automatic Sender Function
   function sendWithdrawalEmail(email, name, amount) {
     if (!email) return;
-    console.log(`Sending Email to ${email}: Hello ${name}, Your payment of ₹${amount} has been sent to you. If you are facing any problem with it, please let us know.`);
-    // Yahan aap EmailJS ya apna custom email API integration laga sakte hain agar zaroorat ho.
+
+    const templateParams = {
+      to_email: email,
+      to_name: name || "User",
+      amount: amount
+    };
+
+    emailjs.send('service_qsy07qr', 'template_mf8enck', templateParams)
+      .then(function(response) {
+         console.log('SUCCESS! Email sent.', response.status, response.text);
+      }, function(error) {
+         console.log('FAILED... Email error:', error);
+      });
   }
 
   // 3. Load Users
