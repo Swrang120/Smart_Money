@@ -375,7 +375,7 @@ document.addEventListener("DOMContentLoaded", async function(){
         email: currentUserEmail,
         full_name: authName,
         balance: 0,
-        package_name: null, // Default to no package
+        package_name: null,
         referral_code: "SM-" + currentUserId.substring(0,6).toUpperCase()
       };
       await supabaseClient.from("profiles").upsert(newProf);
@@ -394,7 +394,6 @@ document.addEventListener("DOMContentLoaded", async function(){
     document.getElementById("myRefCode").innerText = userRefCode;
     document.getElementById("dobDisplayInfo").innerText = dob ? "DOB: " + dob : "DOB: Not Set";
     
-    // Check if package exists
     const badge = document.getElementById("activePackageBadge");
     if(packageName && packageName.trim() !== "" && packageName.toLowerCase() !== "none"){
       badge.innerText = packageName.toUpperCase() + " 👑";
@@ -557,7 +556,7 @@ async function saveKycDetails(){
   if(error){ alert("Error: " + error.message); return; }
 
   currentProfile = { ...currentProfile, full_name: fullName, date_of_birth: dob };
-  document.getElementById("userNameinnerHTML = escapeHtml(fullName)";
+  document.getElementById("userName").innerHTML = escapeHtml(fullName);
   document.getElementById("dobDisplayInfo").innerText = "DOB: " + dob;
   applyProfileImage(currentProfile?.profile_pic, fullName);
   alert("KYC saved successfully!");
