@@ -264,10 +264,10 @@
 
   // 3. Load Users
   async function loadUsers() {
-    const { data, error } = await supabaseClient.from('profiles').select('*');
+    const { data, fileError } = await supabaseClient.from('profiles').select('*');
     const tbody = document.getElementById("usersTableBody");
     
-    if (error || !data || data.length === 0) {
+    if (fileError || !data || data.length === 0) {
       tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8;">Koi user nahi mila.</td></tr>`;
       return;
     }
