@@ -38,18 +38,18 @@
 
     /* Hidden Sidebar Drawer */
     .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); display: none; z-index: 999; }
-    .sidebar { position: fixed; top: 0; right: -360px; width: 360px; height: 100%; background: #13112c; border-left: 1px solid var(--border-color); padding: 30px 25px; transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; overflow-y: auto; box-shadow: -15px 0 40px rgba(0,0,0,0.6); }
+    .sidebar { position: fixed; top: 0; right: -380px; width: 380px; height: 100%; background: #13112c; border-left: 1px solid var(--border-color); padding: 30px 20px; transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; overflow-y: auto; box-shadow: -15px 0 40px rgba(0,0,0,0.6); }
     .sidebar.open { right: 0; }
-    .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 25px; }
+    .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px; }
     .close-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-muted); width: 32px; height: 32px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
     .close-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
 
     .container { max-width: 1150px; margin: 0 auto; padding: 30px 20px; }
 
     /* Stats Box inside Drawer */
-    .stats-box { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 14px; padding: 18px; margin-bottom: 15px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
-    .stats-box h4 { margin: 0 0 6px 0; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-    .stats-box .num { font-size: 24px; font-weight: 800; color: var(--accent); }
+    .stats-box { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; margin-bottom: 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
+    .stats-box h4 { margin: 0 0 4px 0; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+    .stats-box .num { font-size: 22px; font-weight: 800; color: var(--accent); }
 
     /* Cards */
     .card { background: var(--card-bg); border-radius: 20px; padding: 26px; margin-bottom: 30px; border: 1px solid var(--border-color); box-shadow: 0 20px 40px rgba(0,0,0,0.45); backdrop-filter: blur(12px); }
@@ -69,12 +69,11 @@
     th { color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
     td { color: #f1f5f9; }
 
-    /* Enhanced Payout Box Design for Bank/UPI */
     .payout-box { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.2); padding: 12px 14px; border-radius: 12px; margin-top: 10px; font-size: 12px; line-height: 1.6; white-space: normal; }
     .payout-box b { color: var(--accent); }
 
     /* Action Buttons */
-    .btn { padding: 8px 16px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; font-size: 11px; transition: all 0.25s ease; margin-right: 6px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .btn { padding: 8px 14px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; font-size: 11px; transition: all 0.25s ease; margin-right: 4px; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
     .btn:active { transform: scale(0.96); }
     .btn-approve { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
     .btn-approve:hover { background: #10b981; color: #fff; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
@@ -82,11 +81,15 @@
     .btn-reject:hover { background: #f43f5e; color: #fff; box-shadow: 0 0 15px rgba(244, 63, 94, 0.4); }
     .btn-delete { background: rgba(255, 255, 255, 0.06); color: var(--text-muted); border: 1px solid var(--border-color); }
     .btn-delete:hover { background: #f43f5e; color: #fff; border-color: #f43f5e; }
+    .btn-restore { background: rgba(56, 189, 248, 0.15); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.35); }
+    .btn-restore:hover { background: var(--accent); color: #0f172a; }
     
     .badge { padding: 6px 12px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; display: inline-block; }
     .badge-pending { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
     .badge-approved, .badge-success { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
     .badge-rejected { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.35); }
+
+    .trash-section-title { font-size: 14px; font-weight: 700; color: var(--accent); margin: 20px 0 10px 0; border-bottom: 1px dashed var(--border-color); padding-bottom: 6px; }
   </style>
 </head>
 <body>
@@ -101,11 +104,11 @@
     </button>
   </div>
 
-  <!-- Hidden Drawer Sidebar for History & Stats -->
+  <!-- Hidden Drawer Sidebar for Stats & Trash Restore Center -->
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
   <div class="sidebar" id="adminSidebar">
     <div class="sidebar-header">
-      <h3 style="margin:0; font-size:17px; color:#fff;">📊 Control Center</h3>
+      <h3 style="margin:0; font-size:17px; color:#fff;">📊 Control & Trash Center</h3>
       <button class="close-btn" onclick="toggleSidebar()">&times;</button>
     </div>
     
@@ -122,8 +125,15 @@
       <div class="num" style="color: #fb7185;" id="statRejected">0</div>
     </div>
 
-    <hr style="border:0; border-top:1px solid var(--border-color); margin: 25px 0;">
-    <p style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">Yahan se aap saari live activity, total approvals aur status tracking manage karte hain.</p>
+    <!-- Hidden Trash & Restore Panel Inside 3-line Menu -->
+    <div class="trash-section-title">♻️ Deleted Users Trash</div>
+    <div id="deletedUsersList" style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Loading deleted users...</div>
+
+    <div class="trash-section-title">🗑️ Deleted Payments Trash</div>
+    <div id="deletedPaymentsList" style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Loading deleted payments...</div>
+
+    <div class="trash-section-title">🗑️ Deleted Withdrawals Trash</div>
+    <div id="deletedWithdrawalsList" style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">Loading deleted withdrawals...</div>
   </div>
 
   <div class="container">
@@ -232,6 +242,9 @@
     const overlay = document.getElementById('sidebarOverlay');
     sidebar.classList.toggle('open');
     overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+    if(sidebar.classList.contains('open')) {
+      loadTrashData();
+    }
   }
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -252,10 +265,24 @@
     });
   }
 
+  // Custom sort: Pending first, Approved/Others in middle, Rejected strictly at bottom
+  function sortRequests(data) {
+    return data.sort((a, b) => {
+      let statusA = (a.status || '').toLowerCase();
+      let statusB = (b.status || '').toLowerCase();
+      
+      if (statusA === 'pending') return -1;
+      if (statusB === 'pending') return 1;
+      if (statusA === 'rejected' && statusB !== 'rejected') return 1;
+      if (statusB === 'rejected' && statusA !== 'rejected') return -1;
+      return 0;
+    });
+  }
+
   async function loadPaymentRequests() {
     const { data } = await supabaseClient.from('payment_requests').select('*').order('created_at', { ascending: false });
     if (data) {
-      allPaymentsData = data;
+      allPaymentsData = data.filter(i => i.is_deleted !== true);
       updateStatsAndRenderPayments();
     }
   }
@@ -269,10 +296,12 @@
 
   function updateStatsAndRenderPayments() {
     document.getElementById("statTotal").innerText = allPaymentsData.length;
-    document.getElementById("statApproved").innerText = allPaymentsData.filter(i => i.status === 'Approved').length;
-    document.getElementById("statRejected").innerText = allPaymentsData.filter(i => i.status === 'Rejected').length;
+    document.getElementById("statApproved").innerText = allPaymentsData.filter(i => (i.status||'').toLowerCase() === 'approved').length;
+    document.getElementById("statRejected").innerText = allPaymentsData.filter(i => (i.status||'').toLowerCase() === 'rejected').length;
 
-    const filtered = filterByDate(allPaymentsData, currentPaymentFilter);
+    let filtered = filterByDate(allPaymentsData, currentPaymentFilter);
+    filtered = sortRequests(filtered);
+
     const tbody = document.getElementById("paymentTableBody");
     if (filtered.length === 0) {
       tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No payment records found.</td></tr>`;
@@ -281,16 +310,17 @@
 
     tbody.innerHTML = "";
     filtered.forEach(item => {
-      const isPending = item.status === 'Pending';
+      const statusStr = item.status || 'Pending';
+      const isPending = statusStr.toLowerCase() === 'pending';
       tbody.innerHTML += `
         <tr>
           <td><b>${item.full_name || 'N/A'}</b><br><span style="font-size:11px; color:var(--text-muted);">${item.email || ''}</span></td>
           <td><b>${item.package_name || 'Package'}</b><br><span style="color:#34d399; font-weight:700;">₹${item.amount || 0}</span></td>
           <td>UTR: <b style="color:var(--accent);">${item.transaction_id || item.payment_id || 'N/A'}</b></td>
-          <td><span class="badge badge-${item.status.toLowerCase()}">${item.status}</span></td>
+          <td><span class="badge badge-${statusStr.toLowerCase()}">${statusStr}</span></td>
           <td>
             ${isPending ? `<button class="btn btn-approve" onclick="approvePayment('${item.id}', '${item.full_name || ''}', '${item.email || ''}', '${item.package_name || ''}', '${item.referral_id || ''}')">Approve</button>` : ''}
-            <button class="btn btn-delete" onclick="deleteRecord('${item.id}', 'payment_requests')">Delete</button>
+            <button class="btn btn-delete" onclick="softDeleteRecord('${item.id}', 'payment_requests')">Delete</button>
           </td>
         </tr>
       `;
@@ -325,7 +355,7 @@
   async function loadWithdrawals() {
     const { data } = await supabaseClient.from('withdrawal_requests').select('*').order('created_at', { ascending: false });
     if (data) {
-      allWithdrawalsData = data;
+      allWithdrawalsData = data.filter(i => i.is_deleted !== true);
       renderWithdrawals();
     }
   }
@@ -338,7 +368,9 @@
   }
 
   async function renderWithdrawals() {
-    const filtered = filterByDate(allWithdrawalsData, currentWithdrawalFilter);
+    let filtered = filterByDate(allWithdrawalsData, currentWithdrawalFilter);
+    filtered = sortRequests(filtered);
+
     const tbody = document.getElementById("withdrawalTableBody");
     if (filtered.length === 0) {
       tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No withdrawal requests found.</td></tr>`;
@@ -384,7 +416,8 @@
             ${isPending ? `
               <button class="btn btn-approve" onclick="updateWithdrawal('${item.id}', '${item.user_id || ''}', ${item.amount}, 'Approved', '${userEmail}', '${userName}')">Approve</button>
               <button class="btn btn-reject" onclick="updateWithdrawal('${item.id}', '${item.user_id || ''}', ${item.amount}, 'Rejected', '${userEmail}', '${userName}')">Reject</button>
-            ` : `<button class="btn btn-delete" onclick="deleteRecord('${item.id}', 'withdrawal_requests')">Delete</button>`}
+            ` : ''}
+            <button class="btn btn-delete" onclick="softDeleteRecord('${item.id}', 'withdrawal_requests')">Delete</button>
           </td>
         </tr>
       `;
@@ -411,11 +444,11 @@
     } catch (err) { alert("Error: " + err.message); }
   }
 
-  async function deleteRecord(id, table) {
-    if (!confirm("Permanently delete this record?")) return;
-    const { error } = await supabaseClient.from(table).delete().eq('id', id);
+  async function softDeleteRecord(id, table) {
+    if (!confirm("Move this record to trash?")) return;
+    const { error } = await supabaseClient.from(table).update({ is_deleted: true }).eq('id', id);
     if (!error) {
-      alert("Deleted successfully!");
+      alert("Moved to trash successfully!");
       if (table === 'payment_requests') loadPaymentRequests();
       else loadWithdrawals();
     } else { alert("Error: " + error.message); }
@@ -426,8 +459,9 @@
     const tbody = document.getElementById("usersTableBody");
     if (!data || data.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No users found.</td></tr>`; return; }
     
+    const activeUsers = data.filter(u => u.is_deleted !== true);
     tbody.innerHTML = "";
-    data.forEach(user => {
+    activeUsers.forEach(user => {
       const active = user.is_active !== false;
       const recordId = user.id || user.user_id;
       tbody.innerHTML += `
@@ -438,7 +472,7 @@
           <td><span class="badge" style="background:${active ? 'rgba(16,185,129,0.15)' : 'rgba(244,63,94,0.15)'}; color:${active ? '#34d399' : '#fb7185'}; border: 1px solid ${active ? 'rgba(16,185,129,0.35)' : 'rgba(244,63,94,0.35)'};">${active ? 'Active' : 'Blocked'}</span></td>
           <td>
             <button class="btn ${active ? 'btn-reject' : 'btn-approve'}" onclick="toggleUser('${recordId}', ${!active})">${active ? 'Block' : 'Unblock'}</button>
-            <button class="btn btn-delete" onclick="deleteUser('${recordId}')">Delete</button>
+            <button class="btn btn-delete" onclick="softDeleteUser('${recordId}')">Delete</button>
           </td>
         </tr>
       `;
@@ -450,20 +484,86 @@
     loadUsers();
   }
 
-  async function deleteUser(id) {
-    if (!confirm("⚠️ Are you sure you want to permanently delete this user account?")) return;
-    const { error } = await supabaseClient.from('profiles').delete().eq('id', id);
+  async function softDeleteUser(id) {
+    if (!confirm("⚠️ Are you sure you want to delete this user account? (Can be restored from Trash menu)")) return;
+    const { error } = await supabaseClient.from('profiles').update({ is_deleted: true }).eq('id', id);
     if (!error) {
-      alert("User account deleted successfully!");
+      alert("User account moved to trash successfully!");
       loadUsers();
     } else {
-      // Try deleting using user_id column if 'id' fails
-      const { error: err2 } = await supabaseClient.from('profiles').delete().eq('user_id', id);
+      const { error: err2 } = await supabaseClient.from('profiles').update({ is_deleted: true }).eq('user_id', id);
       if (!err2) {
-        alert("User account deleted successfully!");
+        alert("User account moved to trash successfully!");
         loadUsers();
       } else {
-        alert("Error deleting user: " + (error.message || err2.message));
+        alert("Error: " + (error.message || err2.message));
+      }
+    }
+  }
+
+  // Load Trash Data inside the 3-line Hidden Sidebar
+  async function loadTrashData() {
+    // 1. Deleted Users
+    const { data: users } = await supabaseClient.from('profiles').select('*').eq('is_deleted', true);
+    const uContainer = document.getElementById('deletedUsersList');
+    if (!users || users.length === 0) {
+      uContainer.innerHTML = `<span style="color:var(--text-muted);">No deleted users.</span>`;
+    } else {
+      uContainer.innerHTML = users.map(u => `
+        <div style="background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+          <div><b>${u.full_name || 'User'}</b><br><span style="font-size:10px;">${u.email || ''}</span></div>
+          <button class="btn btn-restore" onclick="restoreRecord('${u.id || u.user_id}', 'profiles')">Restore</button>
+        </div>
+      `).join('');
+    }
+
+    // 2. Deleted Payments
+    const { data: payments } = await supabaseClient.from('payment_requests').select('*').eq('is_deleted', true);
+    const pContainer = document.getElementById('deletedPaymentsList');
+    if (!payments || payments.length === 0) {
+      pContainer.innerHTML = `<span style="color:var(--text-muted);">No deleted payments.</span>`;
+    } else {
+      pContainer.innerHTML = payments.map(p => `
+        <div style="background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+          <div><b>${p.full_name || 'Payment'}</b> (₹${p.amount || 0})</div>
+          <button class="btn btn-restore" onclick="restoreRecord('${p.id}', 'payment_requests')">Restore</button>
+        </div>
+      `).join('');
+    }
+
+    // 3. Deleted Withdrawals
+    const { data: withdrawals } = await supabaseClient.from('withdrawal_requests').select('*').eq('is_deleted', true);
+    const wContainer = document.getElementById('deletedWithdrawalsList');
+    if (!withdrawals || withdrawals.length === 0) {
+      wContainer.innerHTML = `<span style="color:var(--text-muted);">No deleted withdrawals.</span>`;
+    } else {
+      wContainer.innerHTML = withdrawals.map(w => `
+        <div style="background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+          <div><b>${w.full_name || 'Withdrawal'}</b> (₹${w.amount || 0})</div>
+          <button class="btn btn-restore" onclick="restoreRecord('${w.id}', 'withdrawal_requests')">Restore</button>
+        </div>
+      `).join('');
+    }
+  }
+
+  async function restoreRecord(id, table) {
+    if (!confirm("Are you sure you want to restore this item?")) return;
+    const { error } = await supabaseClient.from(table).update({ is_deleted: false }).eq(table === 'profiles' ? 'id' : 'id', id);
+    if (!error) {
+      alert("Restored successfully!");
+      loadUsers();
+      loadPaymentRequests();
+      loadWithdrawals();
+      loadTrashData();
+    } else {
+      // Fallback check for user_id if table is profiles
+      if (table === 'profiles') {
+        await supabaseClient.from('profiles').update({ is_deleted: false }).eq('user_id', id);
+        alert("Restored successfully!");
+        loadUsers();
+        loadTrashData();
+      } else {
+        alert("Error restoring: " + error.message);
       }
     }
   }
