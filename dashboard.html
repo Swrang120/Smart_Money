@@ -118,7 +118,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <a href="dashboard.html" class="brand-logo">
-      <img src="1000819130.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/100?text=SM'">
+      <img src="1000819130.jpg" alt="Logo">
       <span>Smart Money</span>
     </a>
     <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
@@ -126,8 +126,8 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
   <div class="sidebar-profile">
     <img src="1000819130.jpg" class="sidebar-profile-img" alt="Profile">
     <div class="sidebar-profile-info">
-      <div id="sidebarUserName" class="sidebar-profile-name">Loading...</div>
-      <div id="sidebarUserEmail" class="sidebar-profile-email">Loading...</div>
+      <div id="sidebarUserName" class="sidebar-profile-name">Santiram Swargiary</div>
+      <div id="sidebarUserEmail" class="sidebar-profile-email">swrang@official.com</div>
     </div>
   </div>
   <ul class="sidebar-menu">
@@ -144,36 +144,36 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 <!-- NAVBAR -->
 <header class="navbar">
   <a href="dashboard.html" class="brand-logo">
-    <img src="1000819130.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/100?text=SM'">
+    <img src="1000819130.jpg" alt="Logo">
     <span>Smart Money</span>
   </a>
   <div class="nav-right">
     <a href="index.html" class="nav-home-btn">🌐 Home</a>
-    <img src="1000819130.jpg" class="nav-avatar" alt="Avatar" onerror="this.src='https://via.placeholder.com/100?text=SM'" id="navAvatarImg">
+    <img src="1000819130.jpg" class="nav-avatar" alt="Avatar" id="navAvatarImg">
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
   </div>
 </header>
 
 <div class="dash-container">
   <div class="profile-card">
-    <div class="package-badge" id="activePackageBadge">NO PACKAGE</div>
+    <div class="package-badge active" id="activePackageBadge">ACTIVE MEMBER</div>
     <div>
       <div class="profile-img-wrap" onclick="document.getElementById('profilePhotoInput').click()" title="Click to change photo">
-        <img src="1000819130.jpg" alt="Profile" class="profile-img" id="mainProfileImg" onerror="this.src='https://via.placeholder.com/100?text=SM'">
+        <img src="1000819130.jpg" alt="Profile" class="profile-img" id="mainProfileImg">
         <div class="upload-hint">Edit Photo</div>
         <input type="file" id="profilePhotoInput" style="display:none;" accept="image/*" onchange="uploadProfilePicture(event)">
       </div>
       <div style="text-align:center;">
-        <button class="remove-photo-btn" onclick="removeProfilePicture()" id="removePhotoBtn" style="display:none;">Remove Photo</button>
+        <button class="remove-photo-btn" onclick="removeProfilePicture()" id="removePhotoBtn" style="display:none;">Reset Photo</button>
       </div>
     </div>
     <div class="user-info">
-      <h2 id="userName">Loading...</h2>
+      <h2 id="userName">Santiram Swargiary</h2>
       <div class="affiliate-id-box">
-        <span>ID: <b id="myRefCode">Loading...</b></span>
+        <span>ID: <b id="myRefCode">SM-3D99B9</b></span>
         <button class="copy-id-btn" onclick="copyAffiliateLink()" title="Copy Code">📋</button>
       </div>
-      <p style="font-size:12px;color:#64748b;margin:0;" id="dobDisplayInfo">DOB: Not Set</p>
+      <p style="font-size:12px;color:#64748b;margin:0;" id="dobDisplayInfo">DOB: 2005-09-13</p>
     </div>
   </div>
 
@@ -238,7 +238,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
   <div class="section-box wallet-box">
     <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#64748b;">Available Wallet Balance</div>
     <div class="wallet-balance" id="walletBalance">₹0.00</div>
-    <p id="payoutDisplayInfo" style="font-size:11px;color:#64748b;">Payout Method: Not Saved Yet</p>
+    <p id="payoutDisplayInfo" style="font-size:11px;color:#64748b;">Payout Method: UPI Configured</p>
     <button class="btn-withdraw" onclick="openWithdrawModal()">💸 Withdraw Money Now</button>
   </div>
 
@@ -252,7 +252,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       <button class="ref-tab" onclick="filterReferrals(30, this)">30 Days</button>
     </div>
     <div id="referralsListContainer">
-      <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">Loading referrals...</div>
+      <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">No referrals found yet.</div>
     </div>
   </div>
 
@@ -269,10 +269,10 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <h3 style="color:#7c3aed;margin-top:0;">👑 My Package & Benefits</h3>
     <p style="font-size:13px;color:#475569;margin-bottom:15px;">Here are your active package details, commission structures, and withdrawal limits:</p>
     <div id="modalPkgDetailsBox" style="background:#f8fafc;padding:15px;border-radius:12px;border:1px solid #e2e8f0;font-size:13px;line-height:1.6;">
-      <p><b>Package Name:</b> <span id="modalPkgName" style="color:#7c3aed;font-weight:750;">No Package Active</span></p>
-      <p><b>Commission Rate:</b> 0% (Upgrade required)</p>
+      <p><b>Package Name:</b> <span id="modalPkgName" style="color:#7c3aed;font-weight:750;">Starter Package</span></p>
+      <p><b>Commission Rate:</b> 80% Direct Commission</p>
       <p><b>Withdrawal Limit:</b> Min ₹200</p>
-      <p><b>Account Status:</b> <span style="color:#ef4444;font-weight:700;">Inactive / Free User</span></p>
+      <p><b>Account Status:</b> <span style="color:#10b981;font-weight:700;">Active Member</span></p>
     </div>
     <button onclick="closeModal('packageModal')" class="btn-action" style="margin-top:15px;">Close</button>
   </div>
@@ -284,7 +284,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <h3 style="color:#0f172a;margin-top:0;">📜 Withdrawal History</h3>
     <p style="font-size:13px;color:#475569;margin-bottom:15px;">All your past withdrawal requests and statuses:</p>
     <div id="withdrawalHistoryList">
-      <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">Loading history...</div>
+      <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">No history available.</div>
     </div>
     <button onclick="closeModal('historyModal')" class="btn-action" style="margin-top:15px;">Close</button>
   </div>
@@ -300,7 +300,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     </div>
     <div id="upiSection">
       <label>UPI ID</label>
-      <input type="text" id="editUpiId" class="input-field" placeholder="yourname@upi">
+      <input type="text" id="editUpiId" class="input-field" value="smartmoney@nyes">
     </div>
     <div id="bankSection" style="display:none;">
       <label>Account Holder Name</label>
@@ -320,9 +320,9 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
   <div class="modal-box">
     <h3>🆔 KYC & Date of Birth</h3>
     <label>Full Name</label>
-    <input type="text" id="kycFullName" class="input-field">
+    <input type="text" id="kycFullName" class="input-field" value="Santiram Swargiary">
     <label>Date of Birth</label>
-    <input type="date" id="kycDob" class="input-field">
+    <input type="date" id="kycDob" class="input-field" value="2005-09-13">
     <button onclick="saveKycDetails()" class="btn-action">Save KYC</button>
     <button onclick="closeModal('kycModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;">Cancel</button>
   </div>
@@ -332,7 +332,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 <div id="withdrawModal" class="modal-overlay">
   <div class="modal-box">
     <h3>💸 Request Withdrawal</h3>
-    <p id="withdrawModalBalanceText" style="font-size:13px;color:#475569;">Available Balance: ₹0</p>
+    <p id="withdrawModalBalanceText" style="font-size:13px;color:#475569;">Available Balance: ₹0.00</p>
     <label>Enter Amount</label>
     <input type="number" id="withdrawAmount" class="input-field" placeholder="Amount">
     <button onclick="submitWithdrawal()" class="btn-action" id="submitWithdrawBtn">Submit Request</button>
@@ -391,7 +391,6 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
   function filterReferrals(days, btn) {
     document.querySelectorAll('.ref-tab').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
-    // Implement filtering logic if required
   }
 
   function uploadProfilePicture(event) {
@@ -400,6 +399,8 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       const reader = new FileReader();
       reader.onload = function(e) {
         document.getElementById('mainProfileImg').src = e.target.result;
+        document.getElementById('navAvatarImg').src = e.target.result;
+        document.querySelector('.sidebar-profile-img').src = e.target.result;
         document.getElementById('removePhotoBtn').style.display = 'inline-block';
       }
       reader.readAsDataURL(file);
@@ -407,7 +408,10 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
   }
 
   function removeProfilePicture() {
-    document.getElementById('mainProfileImg').src = '1000819130.jpg';
+    const defaultImg = '1000819130.jpg';
+    document.getElementById('mainProfileImg').src = defaultImg;
+    document.getElementById('navAvatarImg').src = defaultImg;
+    document.querySelector('.sidebar-profile-img').src = defaultImg;
     document.getElementById('removePhotoBtn').style.display = 'none';
   }
 
