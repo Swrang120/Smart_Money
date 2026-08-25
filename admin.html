@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body { background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; display: none; } /* Initially Hidden for Security */
+    body { background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; display: none; }
     .container { max-width: 1000px; margin: 0 auto; }
     h1 { font-size: 24px; color: #fff; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
     p { color: #94a3b8; font-size: 14px; margin-top: 0; }
@@ -37,9 +37,9 @@
 
 <div class="container">
   <h1>⚡ Smart Money Admin Control</h1>
-  <p>Yahan se aap payment approvals, withdrawal requests aur user accounts ko manage kar sakte hain.</p>
+  <p>Yahan se aap payment approvals, referral commissions aur user accounts ko manage kar sakte hain.</p>
 
-  <!-- 1. PENDING PAYMENT REQUESTS SECTION -->
+  <!-- 1. PENDING PAYMENT REQUESTS -->
   <div class="card">
     <h2>💳 Pending Payment Requests (User Verification)</h2>
     <div style="overflow-x: auto;">
@@ -60,7 +60,7 @@
     </div>
   </div>
 
-  <!-- 2. WITHDRAWAL REQUESTS SECTION -->
+  <!-- 2. WITHDRAWAL REQUESTS -->
   <div class="card">
     <h2>💸 Withdrawal Requests</h2>
     <div style="overflow-x: auto;">
@@ -68,7 +68,7 @@
         <thead>
           <tr>
             <th>User Name</th>
-            <th>UPI ID</th>
+            <th>UPI / Bank Details</th>
             <th>Amount</th>
             <th>Status</th>
             <th>Action</th>
@@ -81,7 +81,7 @@
     </div>
   </div>
 
-  <!-- 3. REGISTERED USERS CONTROL SECTION -->
+  <!-- 3. REGISTERED USERS CONTROL -->
   <div class="card">
     <h2>👥 Registered Users Control</h2>
     <div style="overflow-x: auto;">
@@ -90,7 +90,7 @@
           <tr>
             <th>Name / Email</th>
             <th>Ref ID</th>
-            <th>Package</th>
+            <th>Package / Balance</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -108,7 +108,7 @@
   // Password Security Check
   const adminPassword = prompt("🔐 Enter Admin Password to Access Panel:");
   if (adminPassword === "Swrangsa@123") {
-    document.body.style.display = "block"; // Show panel if password is correct
+    document.body.style.display = "block";
   } else {
     alert("❌ Galat Password! Access Denied.");
     document.body.innerHTML = "<h2 style='color:red; text-align:center; margin-top:50px;'>Access Denied! Wrong Password.</h2>";
@@ -143,7 +143,7 @@
         <tr>
           <td><b>${item.full_name || 'N/A'}</b><br><span style="font-size:11px; color:#94a3b8;">${item.email} | ${item.mobile || ''}</span></td>
           <td><b>${item.package_name || 'Package'}</b><br><span style="color:#10b981; font-weight:700;">₹${item.amount || 0}</span></td>
-          <td>Ref: <span style="color:#c4b5fd;">${item.referral_id}</span><br>UTR: <span style="color:#38bdf8; font-weight:600;">${item.transaction_id}</span></td>
+          <td>Referred By: <span style="color:#c4b5fd;">${item.referral_id || 'None'}</span><br>UTR: <span style="color:#38bdf8; font-weight:600;">${item.transaction_id}</span></td>
           <td><span class="badge badge-${item.status.toLowerCase()}">${item.status}</span></td>
           <td>
             ${isPending ? `<button class="btn btn-approve" onclick="approvePayment('${item.id}', '${item.full_name}', '${item.email}', '${item.package_name}', '${item.referral_id}')">Approve</button>` : 'Approved'}
@@ -153,13 +153,14 @@
     });
   }
 
-  // Approve Payment & Create User Profile Automatically
+  // Approve Payment, Create Profile & Package-Based Commission
   async function approvePayment(id, fullName, email, packageName, refId) {
     if (!confirm(`Kya aap ${fullName} ka payment approve karna chahte hain?`)) return;
 
     try {
       const uniqueRefCode = "SM-" + Math.floor(1000 + Math.random() * 9000);
 
+      // 1. Create User Profile
       const { error: profileError } = await supabaseClient.from('profiles').insert([
         {
           full_name: fullName,
@@ -167,16 +168,55 @@
           package_name: packageName,
           referral_id: uniqueRefCode,
           referred_by: refId,
+          balance: 0,
           is_active: true
         }
       ]);
-
       if (profileError) throw profileError;
 
+      // 2. Check Sponsor & Apply Package Commission Rules
+      if (refId && refId !== 'null' && refId !== 'N/A' && refId !== '') {
+        const { data: sponsorData, error: sponsorErr } = await supabaseClient
+          .from('profiles')
+          .select('id, balance, package_name')
+          .eq('referral_id', refId)
+          .single();
+
+        if (sponsorData) {
+          const sponsorPkg = (sponsorData.package_name || "").toLowerCase();
+          let commission = 0;
+
+          // Rule A: If sponsor has Entry or Starter package, give fixed respective commission
+          if (sponsorPkg.includes("entry")) {
+            commission = 99.70;
+          } else if (sponsorPkg.includes("starter")) {
+            commission = 280.00;
+          } else {
+            // Rule B: For higher packages, give standard commission based on newly purchased package
+            const pkg = (packageName || "").toLowerCase();
+            if (pkg.includes("entry")) commission = 99.70;
+            else if (pkg.includes("starter")) commission = 280.00;
+            else if (pkg.includes("growth")) commission = 539.40;
+            else if (pkg.includes("premium") && !pkg.includes("super")) commission = 1049.30;
+            else if (pkg.includes("super premium")) commission = 1874.25;
+            else if (pkg.includes("max pro")) commission = 2500.15;
+          }
+
+          const currentBalance = Number(sponsorData.balance || 0);
+          const newBalance = currentBalance + commission;
+
+          await supabaseClient
+            .from('profiles')
+            .update({ balance: newBalance })
+            .eq('id', sponsorData.id);
+        }
+      }
+
+      // 3. Update Payment Request Status to Approved
       const { error: updateError } = await supabaseClient.from('payment_requests').update({ status: 'Approved' }).eq('id', id);
       if (updateError) throw updateError;
 
-      alert("🎉 Payment Approved & User Profile Successfully Created!");
+      alert(`🎉 Payment Approved! User Profile Created & Commission Sent successfully.`);
       loadPaymentRequests();
       loadUsers();
 
@@ -200,7 +240,10 @@
       tbody.innerHTML += `
         <tr>
           <td><b>${item.full_name || 'User'}</b></td>
-          <td style="color:#38bdf8;">${item.upi_id || 'N/A'}</td>
+          <td style="color:#38bdf8;">
+            UPI: ${item.upi_id || 'N/A'}<br>
+            <span style="font-size:11px; color:#cbd5e1;">Bank: ${item.bank_name || 'N/A'} | A/C: ${item.account_number || 'N/A'} | IFSC: ${item.ifsc_code || 'N/A'}</span>
+          </td>
           <td style="color:#10b981; font-weight:700;">₹${item.amount}</td>
           <td><span class="badge badge-${item.status.toLowerCase()}">${item.status}</span></td>
           <td>
@@ -238,7 +281,7 @@
         <tr>
           <td><b>${user.full_name || 'Unnamed'}</b><br><span style="font-size:11px; color:#94a3b8;">${user.email || ''}</span></td>
           <td style="color:#c4b5fd; font-weight:600;">${user.referral_id || 'N/A'}</td>
-          <td>${user.package_name || 'No Package'}</td>
+          <td>${user.package_name || 'No Package'}<br><span style="color:#10b981; font-weight:700;">Bal: ₹${user.balance || 0}</span></td>
           <td><span class="badge" style="background:${isActive ? '#10b981' : '#ef4444'}; color:#fff;">${isActive ? 'Active' : 'Blocked'}</span></td>
           <td>
             ${isActive 
