@@ -38,6 +38,20 @@
       background: linear-gradient(135deg, #111827, #1e293b);
     }
 
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #ff8a00;
+    }
+
     .logo {
       color: white;
       font-size: 22px;
@@ -518,7 +532,10 @@
 
 <!-- NAVBAR -->
 <header class="navbar">
-  <a href="index.html" class="logo">Smart Money</a>
+  <div class="logo-container">
+    <img src="1000819130.jpg" alt="Smart Money Logo" class="brand-logo">
+    <a href="index.html" class="logo" style="text-decoration: none;">Smart Money</a>
+  </div>
   <nav>
     <a href="index.html">Home</a>
     <a href="index.html#about">About</a>
