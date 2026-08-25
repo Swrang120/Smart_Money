@@ -3,260 +3,124 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Payment - Smart Money</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+  <title>Smart Money - Complete Payment</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: "Inter", Arial, sans-serif; background: radial-gradient(circle at top left, rgba(124, 58, 237, 0.12), transparent 35%), #f6f7fb; color: #1e293b; min-height: 100vh; }
-    a { text-decoration: none; }
-
-    /* NAVBAR */
-    .navbar { min-height: 72px; padding: 0 7%; display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #111827, #1e293b); }
-    .logo { color: white; font-size: 22px; font-weight: 800; }
-    .logo::before { content: "✦"; margin-right: 8px; color: #fbbf24; }
-    .navbar nav { display: flex; gap: 8px; }
-    .navbar nav a { color: #cbd5e1; padding: 9px 13px; border-radius: 8px; font-size: 14px; }
-    .navbar nav a:hover { color: white; background: rgba(255,255,255,0.10); }
-
-    /* PAGE STYLES */
-    .payment-page { padding: 60px 20px; min-height: calc(100vh - 72px); }
-    .payment-container { max-width: 1050px; margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 35px; align-items: start; }
-    .payment-info { padding: 20px; }
-    .tag { display: inline-block; margin-bottom: 15px; color: #7c3aed; font-size: 12px; font-weight: 800; letter-spacing: 1px; }
-    .payment-info h1 { font-size: 42px; line-height: 1.2; margin-bottom: 18px; color: #111827; }
-    .payment-info h1 span { background: linear-gradient(135deg, #7c3aed, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .payment-info p { color: #64748b; font-size: 15px; line-height: 1.8; }
-
-    .summary-card { margin-top: 28px; padding: 25px; background: white; border-radius: 18px; border: 1px solid #e5e7eb; box-shadow: 0 15px 40px rgba(15,23,42,0.08); }
-    .summary-card h2 { font-size: 18px; margin-bottom: 20px; }
-    .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f1f5f9; gap: 20px; }
-    .summary-row:last-child { border-bottom: none; }
-    .summary-row span { color: #64748b; font-size: 14px; }
-    .summary-row strong { color: #111827; font-size: 15px; text-align: right; }
-    .price-highlight { color: #059669 !important; font-size: 22px !important; }
-
-    .payment-card { background: white; padding: 35px; border-radius: 22px; box-shadow: 0 25px 60px rgba(15,23,42,0.12); }
-    .payment-card h2 { font-size: 25px; margin-bottom: 8px; color: #111827; }
-    .payment-card > p { color: #64748b; font-size: 14px; margin-bottom: 25px; }
-
-    .form-group { margin-bottom: 18px; }
-    label { display: block; margin-bottom: 7px; font-size: 13px; font-weight: 700; color: #334155; }
-    input { width: 100%; padding: 14px 15px; border: 1px solid #dbe1ea; border-radius: 10px; outline: none; font-family: inherit; font-size: 14px; transition: 0.2s; }
-    input:focus { border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,0.10); }
-
-    .upi-box { margin: 25px 0; padding: 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 15px; }
-    .upi-box h3 { font-size: 16px; margin-bottom: 12px; }
-    .upi-option { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px; margin-top: 10px; background: white; border: 1px solid #e2e8f0; border-radius: 10px; }
-    .upi-option span { font-size: 13px; color: #64748b; }
-    .upi-option strong { font-size: 14px; color: #111827; word-break: break-all; }
-
-    .copy-btn { padding: 8px 11px; border: none; border-radius: 8px; background: #ede9fe; color: #6d28d9; font-weight: 700; cursor: pointer; font-size: 12px; }
-    .copy-btn:hover { background: #ddd6fe; }
-
-    .pay-btn { width: 100%; padding: 16px; border: none; border-radius: 12px; background: linear-gradient(135deg, #7c3aed, #ec4899); color: white; font-family: inherit; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; }
-    .pay-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(124,58,237,0.25); }
-    .pay-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-    .note { margin-top: 18px; padding: 13px; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px; color: #9a3412; font-size: 11px; line-height: 1.6; }
-    footer { padding: 22px; text-align: center; background: #111827; color: #94a3b8; font-size: 13px; }
-
-    @media (max-width: 800px) {
-      .navbar { padding: 14px 5%; flex-direction: column; gap: 10px; }
-      .navbar nav { flex-wrap: wrap; justify-content: center; }
-      .navbar nav a { font-size: 11px; padding: 6px 8px; }
-      .payment-container { grid-template-columns: 1fr; }
-      .payment-info { text-align: center; }
-      .payment-info h1 { font-size: 34px; }
-      .payment-card { padding: 25px 20px; }
-    }
+    * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background: #f1f5f9; color: #1e293b; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .pay-card { background: #ffffff; width: 100%; max-width: 420px; padding: 25px; border-radius: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); text-align: center; }
+    .pay-card h2 { margin-bottom: 5px; font-size: 20px; color: #7c3aed; }
+    .price-tag { font-size: 24px; font-weight: 700; color: #10b981; margin: 10px 0; }
+    .qr-img { width: 220px; height: 220px; object-fit: contain; border-radius: 12px; border: 2px dashed #cbd5e1; padding: 5px; margin: 15px auto; background: #f8fafc; }
+    .upi-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 600; word-break: break-all; margin-bottom: 15px; color: #475569; }
+    .form-group { text-align: left; margin-bottom: 15px; }
+    .form-group label { font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 5px; }
+    .input-field { width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 13px; outline: none; }
+    .btn-submit { width: 100%; background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; border: none; padding: 13px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
+    .btn-submit:hover { opacity: 0.9; }
   </style>
 </head>
 <body>
 
-<header class="navbar">
-  <a href="index.html" class="logo">Smart Money</a>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="index.html#packages">Packages</a>
-    <a href="login.html">Login</a>
-  </nav>
-</header>
+<div class="pay-card">
+  <h2>Complete Your Payment</h2>
+  <p style="font-size: 13px; color: #64748b;">Scan QR or use UPI ID to pay</p>
+  
+  <div class="price-tag" id="displayPackagePrice">₹289</div>
 
-<main class="payment-page">
-  <div class="payment-container">
+  <!-- Yahan aapka BharatPe QR Code dikhega -->
+  <img src="qr.jpg" alt="BharatPe QR Code" class="qr-img" id="qrImageElement">
 
-    <!-- LEFT SIDE -->
-    <div class="payment-info">
-      <span class="tag">✦ COMPLETE YOUR REGISTRATION</span>
-      <h1>Complete Your<br><span>Package Payment</span></h1>
-      <p>Complete your package selection and payment request. Your referral ID is required before continuing.</p>
-
-      <div class="summary-card">
-        <h2>Order Summary</h2>
-        <div class="summary-row">
-          <span>Selected Package</span>
-          <strong id="selectedPackage">Loading...</strong>
-        </div>
-        <div class="summary-row">
-          <span>Package Price</span>
-          <strong id="selectedPrice" class="price-highlight">₹0</strong>
-        </div>
-        <div class="summary-row">
-          <span>Referral ID</span>
-          <strong id="summaryReferral">Not entered</strong>
-        </div>
-        <div class="summary-row">
-          <span>Status</span>
-          <strong style="color:#d97706;">Awaiting Verification</strong>
-        </div>
-      </div>
-    </div>
-
-    <!-- PAYMENT FORM SIDE -->
-    <div class="payment-card">
-      <h2>Payment Details</h2>
-      <p>Enter your details and payment information.</p>
-
-      <form id="paymentForm">
-        <div class="form-group">
-          <label for="referralId">Referral ID *</label>
-          <input type="text" id="referralId" placeholder="Enter valid referral ID" required>
-        </div>
-
-        <div class="form-group">
-          <label for="customerName">Full Name *</label>
-          <input type="text" id="customerName" placeholder="Enter your full name" required>
-        </div>
-
-        <div class="form-group">
-          <label for="customerEmail">Gmail *</label>
-          <input type="email" id="customerEmail" placeholder="Enter your Gmail" required>
-        </div>
-
-        <div class="form-group">
-          <label for="customerMobile">Mobile Number *</label>
-          <input type="tel" id="customerMobile" placeholder="Enter mobile number" required>
-        </div>
-
-        <!-- PAYMENT OPTIONS -->
-        <div class="upi-box">
-          <h3>Pay Using UPI</h3>
-          <div class="upi-option">
-            <div>
-              <span>UPI Option 1</span><br>
-              <strong id="upi1">smartmoney7@nyes</strong>
-            </div>
-            <button type="button" class="copy-btn" onclick="copyUPI('smartmoney7@nyes')">Copy</button>
-          </div>
-
-          <div class="upi-option">
-            <div>
-              <span>UPI Option 2</span><br>
-              <strong id="upi2">BHARATPE2U0V0S7G2D90659@unitype</strong>
-            </div>
-            <button type="button" class="copy-btn" onclick="copyUPI('BHARATPE2U0V0S7G2D90659@unitype')">Copy</button>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="transactionId">UPI Transaction / UTR Number *</label>
-          <input type="text" id="transactionId" placeholder="Enter 12-digit UTR reference number" required>
-        </div>
-
-        <button type="submit" class="pay-btn" id="paymentButton">Submit Payment Request →</button>
-      </form>
-
-      <div class="note">
-        <strong>Important:</strong> Payment submission does not automatically confirm account activation. Details will be verified before manual/auto activation.
-      </div>
-    </div>
-
+  <div class="upi-box" id="upiIdText">
+    BHARATPE2U0V0S7G2D90659@unitype
   </div>
-</main>
+  <button onclick="copyUpi()" style="background:none; border:none; color:#7c3aed; font-size:12px; font-weight:600; cursor:pointer; margin-top:-10px; margin-bottom:15px; display:block; margin-left:auto; margin-right:auto;">📋 Copy UPI ID</button>
 
-<footer>© 2026 Smart Money. All Rights Reserved.</footer>
+  <form id="paymentForm" onsubmit="submitPaymentProof(event)">
+    <div class="form-group">
+      <label>Enter UTR / Transaction ID (12 Digits)</label>
+      <input type="text" id="utrNumber" class="input-field" placeholder="e.g. 435261890123" required>
+    </div>
 
-<!-- SUPABASE INTEGRATION -->
+    <div class="form-group">
+      <label>Upload Payment Screenshot</label>
+      <input type="file" id="paymentScreenshot" class="input-field" accept="image/*" required>
+    </div>
+
+    <button type="submit" class="btn-submit" id="submitBtn">Submit Payment Proof</button>
+  </form>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  // URL se dynamic package name aur price uthana
-  const params = new URLSearchParams(window.location.search);
-  const pkgName = params.get("name") || "Starter Package";
-  const pkgPrice = parseFloat(params.get("price")) || 289;
-
-  document.getElementById("selectedPackage").textContent = pkgName;
-  document.getElementById("selectedPrice").textContent = "₹" + pkgPrice;
-
-  // Referral ID input tracking
-  const referralInput = document.getElementById("referralId");
-  referralInput.addEventListener("input", function() {
-    document.getElementById("summaryReferral").textContent = this.value.trim() || "Not entered";
-  });
-
-  function copyUPI(upi) {
-    navigator.clipboard.writeText(upi).then(() => alert("UPI ID copied successfully.")).catch(() => alert("Please copy manually: " + upi));
+  function copyUpi() {
+    navigator.clipboard.writeText("BHARATPE2U0V0S7G2D90659@unitype");
+    alert("🎉 UPI ID Copied!");
   }
 
-  // SUBMIT PAYMENT TO SUPABASE DATABASE
-  document.getElementById("paymentForm").addEventListener("submit", async function(event) {
+  async function submitPaymentProof(event) {
     event.preventDefault();
+    const utr = document.getElementById("utrNumber").value.trim();
+    const fileInput = document.getElementById("paymentScreenshot").files[0];
+    const btn = document.getElementById("submitBtn");
 
-    const referral = referralInput.value.trim();
-    const name = document.getElementById("customerName").value.trim();
-    const email = document.getElementById("customerEmail.value" in document.getElementById("customerEmail") ? "customerEmail" : "customerEmail").value.trim();
-    const emailVal = document.getElementById("customerEmail").value.trim();
-    const mobile = document.getElementById("customerMobile").value.trim();
-    const transactionId = document.getElementById("transactionId").value.trim();
-
-    if (!referral) {
-      alert("Referral ID is required!");
+    if (!utr || !fileInput) {
+      alert("Please enter UTR and upload screenshot.");
       return;
     }
 
-    const button = document.getElementById("paymentButton");
-    button.disabled = true;
-    button.textContent = "Submitting to Database...";
+    btn.innerText = "Submitting...";
+    btn.disabled = true;
 
     try {
-      // Supabase table 'payment_requests' mein data insert karna
-      const { data, error } = await supabaseClient
-        .from('payment_requests')
-        .insert([
-          {
-            full_name: name,
-            email: emailVal,
-            mobile: mobile,
-            referral_id: referral,
-            package_name: pkgName,
-            amount: pkgPrice,
-            transaction_id: transactionId,
-            status: 'Pending'
-          }
-        ]);
-
-      if (error) {
-        alert("Database Error: " + error.message);
-        button.disabled = false;
-        button.textContent = "Submit Payment Request →";
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) {
+        alert("Please login first.");
+        window.location.href = "login.html";
         return;
       }
 
-      alert("🎉 Your payment request has been submitted! Admin will verify your UTR and activate your account soon.");
-      window.location.href = "login.html";
+      const userId = session.user.id;
+      const userEmail = session.user.email;
+
+      // 1. Upload Screenshot to Supabase Storage (agar bucket bani ho, warna direct table mein request save karein)
+      const fileName = `${userId}_${Date.now()}.${fileInput.name.split('.').pop()}`;
+      const { data: uploadData, error: uploadError } = await supabaseClient.storage
+        .from('payment_proofs') // Ensure this bucket exists in Supabase
+        .upload(fileName, fileInput);
+
+      let screenshotUrl = "";
+      if (!uploadError) {
+        const { data: publicURL } = supabaseClient.storage.from('payment_proofs').getPublicUrl(fileName);
+        screenshotUrl = publicURL.publicUrl;
+      }
+
+      // 2. Save entry into payment_requests table
+      const { error: insertError } = await supabaseClient.from('payment_requests').insert([
+        {
+          user_id: userId,
+          email: userEmail,
+          utr_number: utr,
+          screenshot_url: screenshotUrl,
+          status: 'pending'
+        }
+      ]);
+
+      if (insertError) throw insertError;
+
+      alert("🎉 Payment proof submitted successfully! Admin verification ke baad aapka account activate kar diya jayega.");
+      window.location.href = "dashboard.html";
 
     } catch (err) {
-      alert("Something went wrong! " + err.message);
-      button.disabled = false;
-      button.textContent = "Submit Payment Request →";
+      alert("Error: " + err.message);
+      btn.innerText = "Submit Payment Proof";
+      btn.disabled = false;
     }
-  });
+  }
 </script>
 
 </body>
