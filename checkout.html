@@ -125,6 +125,12 @@
       <label>Enter UTR / Transaction ID (12-Digit) *</label>
       <input type="text" id="transactionId" class="form-control" placeholder="Enter 12-digit UTR reference number" required>
     </div>
+
+    <!-- Payment Screenshot Upload Field Added -->
+    <div class="form-group">
+      <label>Upload Payment Screenshot *</label>
+      <input type="file" id="paymentScreenshot" class="form-control" accept="image/*" required style="padding: 9px;">
+    </div>
   </div>
 
   <!-- 3. Summary & Final Submit -->
@@ -164,7 +170,6 @@
   document.getElementById('summaryPrice').innerText = `₹${pkgPrice}`;
   document.getElementById('refCode').value = refCodeFromUrl;
 
-  // Updated with exact file names from your GitHub upload screenshot
   const qrData = {
     super: { img: 'IMG_20260826_034558.png', upi: 'smartmoney7@nyes' },
     bharatpe: { img: 'IMG_20260826_034524.jpg', upi: 'BHARATPE2U0V0S7G2D90659@unitype' }
@@ -180,7 +185,6 @@
     document.getElementById('upiText').innerText = qrData[type].upi;
   }
 
-  // Initial load
   document.getElementById('qrImage').src = qrData.super.img;
 
   function copyUpi() {
@@ -189,7 +193,6 @@
     alert("UPI ID Copied: " + upi);
   }
 
-  // QR Code direct download function
   function downloadCurrentQR() {
     const imgSrc = qrData[currentType].img;
     const link = document.createElement('a');
@@ -208,9 +211,10 @@
     const password = document.getElementById('password').value.trim();
     const utr = document.getElementById('transactionId').value.trim();
     const refId = document.getElementById('refCode').value.trim();
+    const screenshotFile = document.getElementById('paymentScreenshot').files[0];
 
-    if (!fullName || !mobile || !email || !password || !utr) {
-      alert("⚠️ Please fill in all required details and enter the UTR / Transaction ID!");
+    if (!fullName || !mobile || !email || !password || !utr || !screenshotFile) {
+      alert("⚠️ Please fill in all required details, enter UTR, and upload the payment screenshot!");
       return;
     }
 
@@ -220,6 +224,8 @@
     }
 
     try {
+      // Optional: Screenshot file name reference for database
+      // (Aap chaho toh Supabase storage mein bhi upload kar sakte ho, filhal basic entry ke liye file name bhej rahe hain)
       const { error } = await supabaseClient.from('payment_requests').insert([{
         full_name: fullName,
         email: email,
@@ -229,6 +235,7 @@
         amount: Number(pkgPrice),
         transaction_id: utr,
         referral_id: refId,
+        screenshot_name: screenshotFile.name,
         status: 'Pending',
         is_deleted: false
       }]);
