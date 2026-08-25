@@ -18,57 +18,65 @@
     .brand-box { display: flex; align-items: center; gap: 12px; }
     .brand-logo { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; }
     .brand-name { font-size: 22px; font-weight: 800; color: #0f172a; }
-    .navbar nav { display: flex; gap: 20px; align-items: center; }
-    .navbar nav a { color: #475569; font-size: 15px; font-weight: 600; transition: 0.3s; }
-    .navbar nav a:hover { color: #7c3aed; }
-    .nav-btn { background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff !important; padding: 8px 18px; border-radius: 8px; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3); }
+    .navbar nav { display: flex; gap: 15px; align-items: center; }
+    .navbar nav a { color: #475569; font-size: 15px; font-weight: 600; transition: 0.3s; padding: 6px 12px; border-radius: 8px; }
+    .navbar nav a:hover { color: #7c3aed; background: #f1f5f9; }
+    .nav-btn { background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff !important; padding: 8px 18px !important; border-radius: 8px; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3); }
 
     /* HERO SECTION */
-    .hero { padding: 80px 5%; text-align: center; background: linear-gradient(180deg, #ede9fe 0%, #f8fafc 100%); }
-    .hero-tag { display: inline-block; background: #ddd6fe; color: #6d28d9; padding: 6px 16px; border-radius: 30px; font-size: 13px; font-weight: 700; margin-bottom: 20px; }
-    .hero h1 { font-size: 44px; font-weight: 800; color: #0f172a; margin-bottom: 15px; line-height: 1.2; }
+    .hero { padding: 60px 5%; text-align: center; background: linear-gradient(180deg, #ede9fe 0%, #f8fafc 100%); }
+    .hero-tag { display: inline-block; background: #ddd6fe; color: #6d28d9; padding: 6px 16px; border-radius: 30px; font-size: 13px; font-weight: 700; margin-bottom: 15px; }
+    .hero h1 { font-size: 40px; font-weight: 800; color: #0f172a; margin-bottom: 12px; line-height: 1.2; }
     .hero h1 span { color: #7c3aed; }
-    .hero p { font-size: 17px; color: #64748b; max-width: 600px; margin: 0 auto 30px auto; }
+    .hero p { font-size: 16px; color: #64748b; max-width: 600px; margin: 0 auto 25px auto; }
 
     /* PACKAGES SECTION */
-    .packages-section { padding: 60px 5%; max-width: 1200px; margin: 0 auto; }
-    .section-title-box { text-align: center; margin-bottom: 45px; }
+    .packages-section { padding: 50px 5%; max-width: 1250px; margin: 0 auto; }
+    .section-title-box { text-align: center; margin-bottom: 40px; }
     .section-title-box span { color: #7c3aed; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
     .section-title-box h2 { font-size: 32px; font-weight: 800; color: #0f172a; margin-top: 5px; }
 
-    .packages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; }
+    .packages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
     
-    /* PACKAGE CARD DESIGN (RichIND Style) */
+    /* PACKAGE CARD DESIGN */
     .pkg-card { background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; transition: 0.3s; display: flex; flex-direction: column; }
     .pkg-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(124, 58, 237, 0.12); }
     
-    .pkg-banner { padding: 30px; color: #fff; text-align: left; position: relative; min-height: 160px; display: flex; flex-direction: column; justify-content: flex-end; }
-    .starter-bg { background: linear-gradient(135deg, #f97316, #ea580c); }
-    .medium-bg { background: linear-gradient(135deg, #7c3aed, #4f46e5); }
-    .premium-bg { background: linear-gradient(135deg, #db2777, #be185d); }
+    .pkg-banner { padding: 25px; color: #fff; text-align: left; position: relative; min-height: 150px; display: flex; flex-direction: column; justify-content: flex-end; }
     
-    .pkg-badge { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.25); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; backdrop-filter: blur(4px); }
-    .pkg-banner h3 { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+    /* Unique Banner Colors */
+    .bg-entry { background: linear-gradient(135deg, #0891b2, #0e7490); }
+    .bg-starter { background: linear-gradient(135deg, #f97316, #ea580c); }
+    .bg-medium { background: linear-gradient(135deg, #7c3aed, #4f46e5); }
+    .bg-premium { background: linear-gradient(135deg, #db2777, #be185d); }
+    .bg-super { background: linear-gradient(135deg, #1e1b4b, #312e81); }
+    .bg-max { background: linear-gradient(135deg, #881337, #4c0519); }
+    
+    .pkg-badge { position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.25); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; backdrop-filter: blur(4px); }
+    .pkg-banner h3 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
     .pkg-banner p { font-size: 13px; opacity: 0.9; }
 
     .pkg-body { padding: 24px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
-    .pkg-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .pkg-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
     .stars { color: #f59e0b; font-size: 14px; }
     .courses-count { font-size: 13px; color: #64748b; font-weight: 600; background: #f1f5f9; padding: 4px 10px; border-radius: 6px; }
 
-    .pkg-pricing { display: flex; align-items: baseline; gap: 10px; margin-bottom: 20px; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; padding: 16px 0; }
-    .current-price { font-size: 28px; font-weight: 800; color: #0f172a; }
-    .original-price { font-size: 16px; color: #94a3b8; text-decoration: line-through; }
+    .pkg-pricing { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; padding: 14px 0; }
+    .current-price { font-size: 26px; font-weight: 800; color: #0f172a; }
+    .tag-label { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; background: #f1f5f9; color: #475569; }
 
-    .buy-now-btn { display: block; width: 100%; padding: 14px; text-align: center; background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff; font-size: 15px; font-weight: 700; border-radius: 12px; transition: 0.3s; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25); }
+    .pkg-info-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #64748b; }
+    .pkg-info-row strong { color: #1e293b; }
+
+    .buy-now-btn { display: block; width: 100%; padding: 13px; text-align: center; background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff; font-size: 14px; font-weight: 700; border-radius: 12px; transition: 0.3s; margin-top: 16px; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25); }
     .buy-now-btn:hover { opacity: 0.92; }
 
     /* FOOTER */
-    footer { background: #0f172a; color: #94a3b8; text-align: center; padding: 30px; font-size: 14px; margin-top: 60px; }
+    footer { background: #0f172a; color: #94a3b8; text-align: center; padding: 25px; font-size: 14px; margin-top: 50px; }
 
     @media(max-width: 768px) {
-      .hero h1 { font-size: 32px; }
-      .navbar { padding: 0 4px; }
+      .hero h1 { font-size: 28px; }
+      .packages-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -103,63 +111,183 @@
 
     <div class="packages-grid">
 
-      <!-- STARTER PACKAGE -->
+      <!-- 1. ENTRY PACKAGE -->
       <div class="pkg-card">
-        <div class="pkg-banner starter-bg">
-          <span class="pkg-badge">STARTER</span>
-          <h3>Starter Package</h3>
-          <p>Begin your digital learning journey</p>
+        <div class="pkg-banner bg-entry">
+          <span class="pkg-badge">ENTRY LEVEL</span>
+          <h3>Entry Package</h3>
+          <p>Start small with easy entry.</p>
         </div>
         <div class="pkg-body">
-          <div class="pkg-meta">
-            <div class="stars">★★★★★</div>
-            <div class="courses-count">📚 3 Courses</div>
+          <div>
+            <div class="pkg-meta">
+              <div class="stars">★★★★★</div>
+              <div class="courses-count">📦 Basic Tier</div>
+            </div>
+            <div class="pkg-pricing">
+              <span class="current-price">₹299</span>
+              <span class="tag-label" style="background:#ccfbff; color:#0e7490;">START</span>
+            </div>
+            <div class="pkg-info-row">
+              <span>Referral Commission (30%)</span>
+              <strong>₹89.70</strong>
+            </div>
+            <div class="pkg-info-row">
+              <span>Min / Max Withdrawal</span>
+              <strong>₹100 - ₹600</strong>
+            </div>
           </div>
-          <div class="pkg-pricing">
-            <span class="current-price">₹560</span>
-            <span class="original-price">₹999</span>
-          </div>
-          <a href="starter.html" class="buy-now-btn">View Details & Buy →</a>
+          <a href="register.html" class="buy-now-btn" style="background: linear-gradient(135deg, #06b6d4, #0284c7);">View Details & Buy →</a>
         </div>
       </div>
 
-      <!-- MEDIUM PACKAGE -->
+      <!-- 2. STARTER PACKAGE -->
       <div class="pkg-card">
-        <div class="pkg-banner medium-bg">
-          <span class="pkg-badge">POPULAR</span>
-          <h3>Growth Package</h3>
-          <p>Advanced strategies for fast networking</p>
+        <div class="pkg-banner bg-starter">
+          <span class="pkg-badge">START HERE</span>
+          <h3>Starter Package</h3>
+          <p>Begin your Smart Money journey.</p>
         </div>
         <div class="pkg-body">
-          <div class="pkg-meta">
-            <div class="stars">★★★★★</div>
-            <div class="courses-count">📚 5 Courses</div>
+          <div>
+            <div class="pkg-meta">
+              <div class="stars">★★★★★</div>
+              <div class="courses-count">🚀 3 Courses</div>
+            </div>
+            <div class="pkg-pricing">
+              <span class="current-price">₹560</span>
+              <span class="tag-label" style="background:#ffedd5; color:#ea580c;">SMART START</span>
+            </div>
+            <div class="pkg-info-row">
+              <span>Referral Commission (50%)</span>
+              <strong>₹280</strong>
+            </div>
+            <div class="pkg-info-row">
+              <span>Withdrawal Limit</span>
+              <strong>₹100 - ₹1,000</strong>
+            </div>
           </div>
-          <div class="pkg-pricing">
-            <span class="current-price">₹899</span>
-            <span class="original-price">₹1,499</span>
+          <a href="starter.html" class="buy-now-btn" style="background: linear-gradient(135deg, #f97316, #ea580c);">View Details & Buy →</a>
+        </div>
+      </div>
+
+      <!-- 3. GROWTH / MEDIUM PACKAGE -->
+      <div class="pkg-card">
+        <div class="pkg-banner bg-medium">
+          <span class="pkg-badge">POPULAR</span>
+          <h3>Medium Package</h3>
+          <p>Build your network and grow faster.</p>
+        </div>
+        <div class="pkg-body">
+          <div>
+            <div class="pkg-meta">
+              <div class="stars">★★★★★</div>
+              <div class="courses-count">📈 5 Courses</div>
+            </div>
+            <div class="pkg-pricing">
+              <span class="current-price">₹899</span>
+              <span class="tag-label" style="background:#ede9fe; color:#7c3aed;">POPULAR</span>
+            </div>
+            <div class="pkg-info-row">
+              <span>Referral Commission (60%)</span>
+              <strong>₹539.40</strong>
+            </div>
+            <div class="pkg-info-row">
+              <span>Withdrawal Limit</span>
+              <strong>Standard Limits</strong>
+            </div>
           </div>
           <a href="medium.html" class="buy-now-btn">View Details & Buy →</a>
         </div>
       </div>
 
-      <!-- PREMIUM PACKAGE -->
+      <!-- 4. PREMIUM PACKAGE -->
       <div class="pkg-card">
-        <div class="pkg-banner premium-bg">
-          <span class="pkg-badge">VIP ADVANCED</span>
+        <div class="pkg-banner bg-premium">
+          <span class="pkg-badge">PREMIUM</span>
           <h3>Premium Package</h3>
-          <p>Ultimate mastery & higher commission</p>
+          <p>Premium access for bigger opportunities.</p>
         </div>
         <div class="pkg-body">
-          <div class="pkg-meta">
-            <div class="stars">★★★★★</div>
-            <div class="courses-count">📚 8 Courses</div>
+          <div>
+            <div class="pkg-meta">
+              <div class="stars">★★★★★</div>
+              <div class="courses-count">👑 8 Courses</div>
+            </div>
+            <div class="pkg-pricing">
+              <span class="current-price">₹1,499</span>
+              <span class="tag-label" style="background:#fce7f3; color:#db2777;">PREMIUM</span>
+            </div>
+            <div class="pkg-info-row">
+              <span>Referral Commission (70%)</span>
+              <strong>₹1,049.30</strong>
+            </div>
+            <div class="pkg-info-row">
+              <span>Support Access</span>
+              <span>Priority Support</span>
+            </div>
           </div>
-          <div class="pkg-pricing">
-            <span class="current-price">₹1,499</span>
-            <span class="original-price">₹2,999</span>
+          <a href="premium.html" class="buy-now-btn" style="background: linear-gradient(135deg, #db2777, #be185d);">View Details & Buy →</a>
+        </div>
+      </div>
+
+      <!-- 5. SUPER PREMIUM PACKAGE -->
+      <div class="pkg-card" style="border: 2px solid #f59e0b;">
+        <div class="pkg-banner bg-super">
+          <span class="pkg-badge" style="background: #f59e0b; color: #000;">VIP EXCLUSIVE</span>
+          <h3>Super Premium</h3>
+          <p>Unlimited withdrawal & VIP personal support.</p>
+        </div>
+        <div class="pkg-body">
+          <div>
+            <div class="pkg-meta">
+              <div class="stars" style="color: #f59e0b;">★★★★★</div>
+              <div class="courses-count">🔥 VIP Access</div>
+            </div>
+            <div class="pkg-pricing">
+              <span class="current-price">₹2,499</span>
+              <span class="tag-label" style="background:#fef3c7; color:#b45309;">VIP PROFIT</span>
+            </div>
+            <div class="pkg-info-row">
+              <span>Referral Commission (75%)</span>
+              <strong>₹1,874.25</strong>
+            </div>
+            <div class="pkg-info-row">
+              <span>Daily Withdrawal Limit</span>
+              <strong>₹100 - ₹10,000 (Unlimited)</strong>
+            </div>
           </div>
-          <a href="premium.html" class="buy-now-btn">View Details & Buy →</a>
+          <a href="super_premium.html" class="buy-now-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #000;">View VIP Details & Buy →</a>
+        </div>
+      </div>
+
+      <!-- 6. MAX PRO PACKAGE -->
+      <div class="pkg-card" style="border: 2px solid #e11d48;">
+        <div class="pkg-banner bg-max">
+          <span class="pkg-badge" style="background: #fbbf24; color: #0f172a;">MAX EXCLUSIVE</span>
+          <h3>Max Pro Package</h3>
+          <p>Ultimate earning & maximum freedom.</p>
+        </div>
+        <div class="pkg-body">
+          <div>
+            <div class="pkg-meta">
+              <div class="stars" style="color: #fbbf24;">★★★★★</div>
+              <div class="courses-count">👑 Ultimate Tier</div>
+            </div>
+            <div class="pkg-pricing">
+              <span class="current-price">₹4,499</span>
+              <span class="tag-label" style="background:#ffe4e6; color:#e11d48;">MAX PRO</span>
+            </div>
+            <div class="pkg-info-row">
+              <span>Direct Commission (85%)</span>
+              <strong>₹2,500.15</strong>
+            </div>
+            <div class="pkg-info-row">
+              <span>Daily Withdrawals</span>
+              <strong>₹100 - ₹30,000 (0% Fee)</strong>
+            </div>
+          </div>
+          <a href="register.html" class="buy-now-btn" style="background: linear-gradient(135deg, #e11d48, #9f1239);">View Max Pro Details →</a>
         </div>
       </div>
 
@@ -176,7 +304,7 @@
   <script>
     const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISH_KEY);
 
     document.addEventListener("DOMContentLoaded", async function () {
       const { data: { session } } = await supabaseClient.auth.getSession();
