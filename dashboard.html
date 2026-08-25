@@ -39,7 +39,16 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
     .brand-logo-img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; background: #fff; }
-    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    
+    /* DIRECT HOME LINK IN NAVBAR */
+    .nav-home-btn {
+      background: rgba(124, 58, 237, 0.1); color: #7c3aed; border: 1px solid rgba(124, 58, 237, 0.2);
+      padding: 6px 12px; border-radius: 10px; font-size: 12.5px; font-weight: 700; text-decoration: none;
+      display: flex; align-items: center; gap: 5px; transition: 0.2s;
+    }
+    .nav-home-btn:hover { background: rgba(124, 58, 237, 0.2); }
+
     .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; background: #fff; }
     .menu-btn { background: #f8fafc; border: 1px solid #e2e8f0; font-size: 20px; cursor: pointer; color: #475569; padding: 6px 12px; border-radius: 10px; }
 
@@ -190,6 +199,7 @@
       <span>Smart Money</span>
     </a>
     <div class="nav-right">
+      <a href="index.html" class="nav-home-btn">🌐 Home</a>
       <img src="1000819130.jpg?v=99" alt="Avatar" class="nav-avatar">
       <button class="menu-btn" onclick="toggleSidebar()">☰</button>
     </div>
@@ -426,7 +436,6 @@
         document.getElementById("allTimeRevenueText").innerText = "₹" + userCurrentBalance.toFixed(0);
         document.getElementById("withdrawModalBalanceText").innerText = "Available Balance: ₹" + userCurrentBalance.toFixed(2);
 
-        // Exclusive payout indicator
         if(userSavedUpi) {
           document.getElementById("payoutDisplayInfo").innerText = "UPI: " + userSavedUpi;
           document.getElementById("editUpiId").value = userSavedUpi;
@@ -499,7 +508,6 @@
         alert("Please enter a valid UPI ID.");
         return;
       }
-      // Clear bank details if switching/saving UPI exclusively
       updateData = { upi_id: upiId, bank_account_number: null, ifsc_code: null, account_holder_name: null };
       userSavedUpi = upiId;
       userSavedAcc = "";
@@ -511,7 +519,6 @@
         alert("Please fill all Bank Account details completely.");
         return;
       }
-      // Clear UPI if switching/saving Bank exclusively
       updateData = { bank_account_number: accNo, ifsc_code: ifsc, account_holder_name: accName, upi_id: null };
       userSavedAcc = accNo;
       userSavedUpi = "";
