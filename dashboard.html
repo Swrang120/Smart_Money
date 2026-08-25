@@ -13,11 +13,8 @@
 
     /* NAVBAR */
     .navbar {
-      background: #ffffff;
-      padding: 12px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      background: #ffffff; padding: 12px 20px;
+      display: flex; justify-content: space-between; align-items: center;
       box-shadow: 0 4px 20px rgba(0,0,0,0.06);
       position: sticky; top: 0; z-index: 100;
     }
@@ -138,7 +135,7 @@
 
     /* MODAL STYLES */
     .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.6); z-index:999; justify-content:center; align-items:center; backdrop-filter: blur(3px); padding: 15px; }
-    .modal-box { background:#ffffff; padding:25px; border-radius:22px; width:100%; max-width:420px; box-shadow:0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; color: #1e293b; }
+    .modal-box { background:#ffffff; padding:25px; border-radius:22px; width:100%; max-width:420px; box-shadow:0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; color: #1e293b; text-align: left; }
     .input-field { width:100%; padding:11px 14px; margin-bottom:12px; border-radius:12px; border:1px solid #cbd5e1; font-size:13.5px; box-sizing:border-box; outline: none; }
     .btn-action { width:100%; background: linear-gradient(135deg, #7c3aed, #6d28d9); color:#fff; border:none; padding:13px; border-radius:12px; font-weight:700; cursor:pointer; font-size:14px; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
   </style>
@@ -170,7 +167,7 @@
         <li><a href="index.html#packages">Premium Pro (₹10,997)</a></li>
       </ul>
     </li>
-    <li><button onclick="openUpiModal()"><span>👤</span> Update UPI Details for Withdrawal</button></li>
+    <li><button onclick="openUpiModal()"><span>🏦</span> Update Bank & UPI Details</button></li>
     <li><button onclick="copyRefLink()"><span>🔗</span> Copy Affiliate Link</button></li>
     <li><button onclick="openWithdrawModal()"><span>💸</span> Withdraw Funds</button></li>
     <li><button id="sideLogoutBtn" style="color:#f87171;"><span>🚪</span> Logout</button></li>
@@ -190,7 +187,7 @@
 
 <div class="dash-container">
   
-  <!-- PROFILE CARD WITH PERMANENT LOGO -->
+  <!-- PROFILE CARD WITH LOGO -->
   <div class="profile-card">
     <div class="package-badge vip" id="activePackageBadge">MASTER PACKAGE 👑</div>
     <div class="profile-img-wrap">
@@ -232,7 +229,7 @@
   <div class="section-box" style="text-align: center;">
     <span style="font-size: 11px; color:#64748b; font-weight: 700; text-transform: uppercase;">Available Wallet Balance</span>
     <h1 style="margin: 6px 0 0 0; color: #10b981; font-size: 32px;" id="walletBalance">₹0.00</h1>
-    <p id="upiDisplayInfo" style="font-size: 12px; color: #64748b; margin-top: 4px;">UPI ID: Not Saved Yet</p>
+    <p id="upiDisplayInfo" style="font-size: 12px; color: #64748b; margin-top: 4px;">Bank / UPI: Not Saved Yet</p>
     <button class="btn-withdraw" onclick="openWithdrawModal()">💸 Withdraw Money Now</button>
   </div>
 
@@ -266,16 +263,25 @@
 
 </div>
 
-<!-- UPI SETTINGS MODAL -->
+<!-- BANK & UPI SETTINGS MODAL -->
 <div id="profileSettingsModal" class="modal-overlay">
   <div class="modal-box">
-    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">⚙️ Update UPI Details</h3>
-    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Apna UPI ID withdrawal ke liye yahan save karein.</p>
+    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">🏦 Bank & UPI Details</h3>
+    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Apna Bank Account details ya UPI ID withdrawal ke liye yahan save karein.</p>
     
-    <label style="font-size:12px; font-weight:600; color:#475569;">UPI ID / Bank Detail</label>
+    <label style="font-size:12px; font-weight:600; color:#475569;">Account Holder Name</label>
+    <input type="text" id="editAccName" class="input-field" placeholder="e.g. Santiram Swargiary">
+
+    <label style="font-size:12px; font-weight:600; color:#475569;">Bank Account Number</label>
+    <input type="text" id="editAccNo" class="input-field" placeholder="e.g. 123456789012">
+
+    <label style="font-size:12px; font-weight:600; color:#475569;">IFSC Code</label>
+    <input type="text" id="editIfsc" class="input-field" placeholder="e.g. SBIN0001234">
+
+    <label style="font-size:12px; font-weight:600; color:#475569;">OR UPI ID (Optional)</label>
     <input type="text" id="editUpiId" class="input-field" placeholder="e.g. yourname@paytm">
     
-    <button onclick="updateUserUpi()" class="btn-action" id="saveProfileBtn">Save UPI ID</button>
+    <button onclick="updateUserBankDetails()" class="btn-action" id="saveProfileBtn">Save Payout Details</button>
     <button onclick="closeModal('profileSettingsModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer;">Cancel</button>
   </div>
 </div>
@@ -315,6 +321,7 @@
   let currentProfile = null;
   let userCurrentBalance = 0;
   let userSavedUpi = "";
+  let userSavedAcc = "";
   let userRefCode = "";
 
   function toggleSidebar() {
@@ -329,9 +336,6 @@
   document.addEventListener("DOMContentLoaded", async function() {
     try {
       const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
-      if (sessionError) {
-        console.log("Session error:", sessionError.message);
-      }
       if (!session || !session.user) {
         alert("Please login first.");
         window.location.href = "login.html";
@@ -346,14 +350,11 @@
         .eq('user_id', currentUserId)
         .maybeSingle();
 
-      if (profileError) {
-        console.log("Profile Error:", profileError.message);
-      }
-
       if (profile) {
         currentProfile = profile;
         userCurrentBalance = Number(profile.balance || 0);
         userSavedUpi = profile.upi_id || "";
+        userSavedAcc = profile.bank_account_number || "";
         userRefCode = profile.referral_code || profile.referral_id || "";
 
         const userName = profile.full_name || profile.name || session.user.user_metadata?.full_name || "Smart Money User";
@@ -370,26 +371,28 @@
         document.getElementById("withdrawModalBalanceText").innerText = "Available Balance: ₹" + userCurrentBalance.toFixed(2);
 
         if(userSavedUpi) {
-          document.getElementById("upiDisplayInfo").innerText = "UPI ID: " + userSavedUpi;
+          document.getElementById("upiDisplayInfo").innerText = "UPI: " + userSavedUpi;
           document.getElementById("editUpiId").value = userSavedUpi;
+        } else if(userSavedAcc) {
+          document.getElementById("upiDisplayInfo").innerText = "Bank A/C: " + userSavedAcc;
         } else {
-          document.getElementById("upiDisplayInfo").innerText = "UPI ID: Not Saved Yet";
+          document.getElementById("upiDisplayInfo").innerText = "Bank / UPI: Not Saved Yet";
         }
 
+        if(profile.account_holder_name) document.getElementById("editAccName").value = profile.account_holder_name;
+        if(profile.bank_account_number) document.getElementById("editAccNo").value = profile.bank_account_number;
+        if(profile.ifsc_code) document.getElementById("editIfsc").value = profile.ifsc_code;
+
         if (userRefCode) {
-          const { count, error: referralError } = await supabaseClient
+          const { count } = await supabaseClient
             .from('profiles')
             .select('*', { count: 'exact', head: true })
             .eq('referred_by', userRefCode);
 
-          if (!referralError && count !== null) {
+          if (count !== null) {
             document.getElementById("totalSalesCount").innerText = count;
           }
         }
-      } else {
-        const fallbackName = session.user.user_metadata?.full_name || "Smart Money User";
-        document.getElementById("userName").innerHTML = fallbackName + ' <span style="font-size:15px;">👑</span>';
-        document.getElementById("userEmail").innerText = session.user.email || "";
       }
     } catch (err) {
       console.log("Error loading dashboard data:", err);
@@ -414,8 +417,8 @@
       return;
     }
 
-    if (!userSavedUpi) {
-      alert("⚠️ Pehle apna UPI ID update karein!");
+    if (!userSavedUpi && !userSavedAcc) {
+      alert("⚠️ Pehle apna Bank details ya UPI ID update karein!");
       openUpiModal();
       return;
     }
@@ -423,39 +426,53 @@
     document.getElementById("withdrawModal").style.display = "flex";
   }
 
-  async function updateUserUpi() {
-    const newUpi = document.getElementById("editUpiId").value.trim();
+  async function updateUserBankDetails() {
+    const accName = document.getElementById("editAccName").value.trim();
+    const accNo = document.getElementById("editAccNo").value.trim();
+    const ifsc = document.getElementById("editIfsc").value.trim();
+    const upiId = document.getElementById("editUpiId").value.trim();
     let btn = document.getElementById("saveProfileBtn");
     
-    if(!newUpi) {
-      alert("Please enter a valid UPI ID.");
+    if(!upiId && (!accNo || !ifsc)) {
+      alert("Please enter either UPI ID or complete Bank Account & IFSC details.");
       return;
     }
 
-    btn.innerText = "Saving code...";
+    btn.innerText = "Saving details...";
     btn.disabled = true;
 
     try {
       if (!currentUserId) {
         alert("Please login first.");
-        btn.innerText = "Save UPI ID";
+        btn.innerText = "Save Payout Details";
         btn.disabled = false;
         return;
       }
+      
       const { error } = await supabaseClient.from('profiles').update({ 
-        upi_id: newUpi 
+        account_holder_name: accName,
+        bank_account_number: accNo,
+        ifsc_code: ifsc,
+        upi_id: upiId 
       }).eq('user_id', currentUserId);
 
       if(error) throw error;
 
-      userSavedUpi = newUpi;
-      document.getElementById("upiDisplayInfo").innerText = "UPI ID: " + newUpi;
-      alert("🎉 UPI ID successfully saved!");
+      userSavedUpi = upiId;
+      userSavedAcc = accNo;
+      
+      if(upiId) {
+        document.getElementById("upiDisplayInfo").innerText = "UPI: " + upiId;
+      } else {
+        document.getElementById("upiDisplayInfo").innerText = "Bank A/C: " + accNo;
+      }
+
+      alert("🎉 Bank & UPI details successfully saved!");
       closeModal('profileSettingsModal');
     } catch(err) {
       alert("Error saving: " + err.message);
     } finally {
-      btn.innerText = "Save UPI ID";
+      btn.innerText = "Save Payout Details";
       btn.disabled = false;
     }
   }
@@ -473,7 +490,7 @@
       return;
     }
 
-    alert("💸 Withdrawal request of ₹" + amount + " successfully submitted to UPI: " + userSavedUpi + "!");
+    alert("💸 Withdrawal request of ₹" + amount + " successfully submitted!");
     document.getElementById("withdrawAmount").value = "";
     closeModal('withdrawModal');
   }
