@@ -3,47 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Money - Build Your Network, Grow Your Future</title>
+  <title>Smart Money - Online Courses & Skill Development</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
     body { background: #f8fafc; color: #1e293b; line-height: 1.6; }
 
     /* NAVBAR */
     .navbar {
       background: #ffffff; padding: 15px 7%; display: flex; justify-content: space-between; align-items: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 1000;
     }
     .logo { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #2563eb, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
-    .nav-links { display: flex; gap: 20px; align-items: center; }
+    .nav-links { display: flex; gap: 22px; align-items: center; }
     .nav-links a { text-decoration: none; color: #475569; font-weight: 500; font-size: 14px; transition: color 0.2s; }
-    .nav-links a:hover { color: #2563eb; }
-    .auth-btn { background: #2563eb; color: #fff !important; padding: 8px 18px; border-radius: 8px; font-weight: 600 !important; }
-
-    /* HERO SECTION */
-    .hero-section { padding: 50px 7%; background: linear-gradient(135deg, #f1f5f9, #e2e8f0); display: flex; justify-content: space-between; align-items: center; gap: 30px; }
-    .hero-text h1 { font-size: 34px; font-weight: 800; color: #0f172a; margin-bottom: 10px; line-height: 1.2; }
-    .hero-text h1 span { color: #2563eb; }
-    .hero-text p { font-size: 14px; color: #64748b; margin-bottom: 20px; max-width: 500px; }
-    .hero-btns { display: flex; gap: 12px; margin-bottom: 25px; }
-    .btn-primary { background: #2563eb; color: #fff; padding: 10px 22px; border-radius: 8px; font-weight: 600; text-decoration: none; font-size: 14px; }
-    .btn-outline { background: #fff; color: #0f172a; padding: 10px 22px; border-radius: 8px; font-weight: 600; text-decoration: none; font-size: 14px; border: 1px solid #cbd5e1; }
+    .nav-links a:hover, .nav-links a.active { color: #2563eb; }
     
-    .hero-stats { display: flex; gap: 25px; }
-    .stat-box h3 { font-size: 18px; font-weight: 800; color: #0f172a; }
-    .stat-box p { font-size: 12px; color: #64748b; }
+    /* DROPDOWN */
+    .dropdown { position: relative; display: inline-block; }
+    .drop-btn { background: none; border: none; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 500; color: #475569; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .dropdown-content {
+      display: none; position: absolute; background-color: #ffffff; min-width: 180px; box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      border-radius: 8px; z-index: 1; top: 100%; left: 0; padding: 8px 0; border: 1px solid #e2e8f0;
+    }
+    .dropdown-content a { color: #334155; padding: 8px 16px; text-decoration: none; display: block; font-size: 13px; }
+    .dropdown-content a:hover { background-color: #f1f5f9; color: #2563eb; }
+    .dropdown:hover .dropdown-content { display: block; }
 
-    .hero-card { background: #0f172a; color: #fff; padding: 25px; border-radius: 16px; width: 300px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
-    .hero-card h4 { font-size: 16px; margin-bottom: 5px; }
-    .hero-card p { font-size: 12px; color: #94a3b8; margin-bottom: 15px; }
+    .dashboard-btn { background: #2563eb; color: #fff !important; padding: 8px 16px; border-radius: 8px; font-weight: 600 !important; }
+
+    /* HERO BANNER */
+    .hero-banner {
+      width: 100%; height: 380px; background: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+      position: relative; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff;
+    }
+    .hero-banner::after { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(15, 23, 42, 0.7); }
+    .hero-content { position: relative; z-index: 2; padding: 0 20px; max-width: 800px; }
+    .hero-content h1 { font-size: 34px; font-weight: 800; margin-bottom: 10px; color: #fff; }
+    .hero-content p { font-size: 14px; opacity: 0.9; margin-bottom: 20px; }
+
+    /* ABOUT SECTION */
+    .about-section { padding: 60px 7%; background: #ffffff; display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; }
+    .about-text h4 { color: #2563eb; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+    .about-text h2 { font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 15px; }
+    .about-text p { color: #64748b; font-size: 14px; margin-bottom: 20px; }
+    .mission-vision { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+    .mv-box h5 { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 5px; }
+    .mv-box p { font-size: 12px; color: #64748b; margin: 0; }
+    .about-images { display: flex; gap: 15px; justify-content: center; align-items: center; }
+    .about-images img { width: 48%; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); object-fit: cover; }
 
     /* PACKAGES SECTION */
     .packages-section { padding: 60px 7%; background: #f8fafc; text-align: center; }
-    .packages-section h2 { font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 8px; }
+    .packages-section h2 { font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 35px; }
     .packages-section h2 span { color: #2563eb; }
-    .packages-section > p { font-size: 13px; color: #64748b; margin-bottom: 40px; }
 
     .packages-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; text-align: left; }
     .package-card {
@@ -53,46 +68,64 @@
     }
     .package-card:hover { transform: translateY(-5px); }
 
-    .pkg-header { padding: 20px; color: #fff; display: flex; justify-content: space-between; align-items: flex-start; }
-    .bg-entry { background: linear-gradient(135deg, #0d9488, #0f766e); }
-    .bg-starter { background: linear-gradient(135deg, #6366f1, #4f46e5); }
-    .bg-growth { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
-    .bg-premium { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-    .bg-super { background: linear-gradient(135deg, #1e1b4b, #0f172a); }
-    .bg-max { background: linear-gradient(135deg, #991b1b, #7f1d1d); }
+    .pkg-banner { padding: 20px; color: #fff; display: flex; justify-content: space-between; align-items: center; }
+    .bg-1 { background: linear-gradient(135deg, #f97316, #ea580c); }
+    .bg-2 { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+    .bg-3 { background: linear-gradient(135deg, #a855f7, #7e22ce); }
+    .bg-4 { background: linear-gradient(135deg, #0f172a, #334155); }
+    .bg-5 { background: linear-gradient(135deg, #e11d48, #be123c); }
+    .bg-6 { background: linear-gradient(135deg, #0284c7, #0369a1); }
 
     .pkg-title h3 { font-size: 18px; font-weight: 800; margin-bottom: 3px; }
     .pkg-title p { font-size: 11px; opacity: 0.9; }
-    .tag-badge { font-size: 10px; font-weight: 700; background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 4px; text-transform: uppercase; }
+    .pkg-badge { font-size: 24px; }
 
     .pkg-body { padding: 20px; }
-    .pkg-subhead { font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+    .pkg-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; color: #64748b; font-weight: 500; }
     .stars { color: #f59e0b; font-size: 12px; }
     
-    .pkg-price-row { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; padding-bottom: 15px; border-bottom: 1px solid #f1f5f9; }
-    .price-val { font-size: 22px; font-weight: 800; color: #0f172a; }
-    .status-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 6px; background: #e0f2fe; color: #0369a1; }
-
-    .pkg-details p { font-size: 11px; color: #64748b; margin-bottom: 6px; display: flex; justify-content: space-between; }
-    .pkg-details p span:last-child { font-weight: 600; color: #0f172a; }
-
-    .pkg-footer { padding: 15px 20px; background: #f8fafc; border-top: 1px solid #f1f5f9; }
-    .action-btn {
-      display: block; width: 100%; text-align: center; background: #2563eb; color: #fff; padding: 10px; border-radius: 8px;
-      font-size: 13px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    .pkg-footer { padding: 15px 20px; background: #f8fafc; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+    .price-box .current-price { font-size: 18px; font-weight: 800; color: #0f172a; }
+    .price-box .old-price { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-left: 5px; }
+    
+    .buy-btn {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; padding: 8px 16px; border-radius: 8px;
+      font-size: 12px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
     }
-    .action-btn:hover { background: #1d4ed8; }
+    .buy-btn:hover { background: #1d4ed8; }
+
+    /* TESTIMONIALS SECTION */
+    .testimonial-section { padding: 60px 7%; background: #ffffff; text-align: center; }
+    .testimonial-section h2 { font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 40px; }
+    .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: left; }
+    .testimonial-card { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; }
+    .client-info { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .client-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+    .client-info h4 { font-size: 14px; font-weight: 700; color: #0f172a; }
+    .client-info p { font-size: 11px; color: #64748b; }
+    .testimonial-card p.feedback { font-size: 12.5px; color: #475569; font-style: italic; }
+
+    /* FOOTER / CONTACT SECTION */
+    .footer { background: #0f172a; color: #94a3b8; padding: 50px 7% 20px 7%; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-about h3 { color: #fff; font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+    .footer-about p { font-size: 13px; line-height: 1.5; margin-bottom: 15px; }
+    .footer-links h4 { color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 15px; }
+    .footer-links ul { list-style: none; }
+    .footer-links ul li { margin-bottom: 8px; }
+    .footer-links ul li a { color: #94a3b8; text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .footer-links ul li a:hover { color: #fff; }
+    .footer-bottom { border-top: 1px solid #1e293b; padding-top: 20px; text-align: center; font-size: 12px; }
 
     /* RESPONSIVE */
     @media(max-width: 1024px) {
-      .packages-grid { grid-template-columns: repeat(2, 1fr); }
-      .hero-section { flex-direction: column; text-align: center; }
-      .hero-text p { margin: 0 auto 20px auto; }
-      .hero-btns, .hero-stats { justify-content: center; }
-      .hero-card { width: 100%; }
+      .packages-grid, .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr; }
     }
     @media(max-width: 768px) {
-      .packages-grid { grid-template-columns: 1fr; }
+      .about-section { grid-template-columns: 1fr; }
+      .packages-grid, .testimonial-grid { grid-template-columns: 1fr; }
+      .hero-banner { height: 280px; }
       .nav-links { display: none; }
     }
   </style>
@@ -103,232 +136,285 @@
   <header class="navbar">
     <a href="index.html" class="logo">Smart Money</a>
     <nav class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="#packages">Packages</a>
-      <a href="login.html" class="auth-btn">Dashboard</a>
+      <a href="index.html" class="active">Home</a>
+      <a href="#about">About</a>
+      
+      <!-- Dropdown for Plan -->
+      <div class="dropdown">
+        <button class="drop-btn">Plan ▾</button>
+        <div class="dropdown-content">
+          <a href="#packages">Starter Package</a>
+          <a href="#packages">Intermediate</a>
+          <a href="#packages">Expert Package</a>
+          <a href="#packages">Master Package</a>
+          <a href="#packages">Brahmastra</a>
+          <a href="#packages">Premium Pro</a>
+        </div>
+      </div>
+
+      <a href="#packages">Course</a>
+      <a href="#testimonial">Blog</a>
+      <a href="#contact">Jobs</a>
+      <a href="#contact">Contact</a>
+      <a href="login.html" class="dashboard-btn">Dashboard</a>
     </nav>
   </header>
 
-  <!-- HERO SECTION -->
-  <section class="hero-section">
-    <div class="hero-text">
-      <h1>Build Your Network.<br><span>Grow Your Future.</span></h1>
-      <p>Join Smart Money and start your journey towards smarter networking, better opportunities, and growing together.</p>
-      <div class="hero-btns">
-        <a href="login.html" class="btn-primary">Get Started →</a>
-        <a href="#packages" class="btn-outline">Explore Packages</a>
-      </div>
-      <div class="hero-stats">
-        <div class="stat-box">
-          <h3>6+</h3>
-          <p>Packages</p>
-        </div>
-        <div class="stat-box">
-          <h3>24/7</h3>
-          <p>Support</p>
-        </div>
-        <div class="stat-box">
-          <h3>100%</h3>
-          <p>Growth Focus</p>
-        </div>
-      </div>
-    </div>
-    <div class="hero-card">
-      <h4>Smart Networking</h4>
-      <p>Grow Together</p>
-      <div style="background: rgba(255,255,255,0.1); height: 4px; border-radius: 2px;"></div>
+  <!-- HERO BANNER -->
+  <section class="hero-banner">
+    <div class="hero-content">
+      <h1>Empowering Digital Creators & Earners</h1>
+      <p>Join thousands of successful students mastering high-income digital skills and growing their financial future.</p>
     </div>
   </section>
 
-  <!-- PACKAGES SECTION -->
+  <!-- ABOUT SECTION -->
+  <section class="about-section" id="about">
+    <div class="about-text">
+      <h4>About Us</h4>
+      <h2>Discover Our Journey Of Growth</h2>
+      <p>At Smart Money, we are passionate about making digital education accessible and engaging for all. Our platform leverages technology to deliver high-quality learning experiences, empowering students and creators to achieve their goals.</p>
+      
+      <div class="mission-vision">
+        <div class="mv-box">
+          <h5>🚀 Our Mission</h5>
+          <p>To inspire lifelong learning by providing innovative and flexible digital solutions.</p>
+        </div>
+        <div class="mv-box">
+          <h5>💡 Our Vision</h5>
+          <p>To lead digital education, fostering a fostering community of thriving creators.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-images">
+      <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=500&q=80" alt="Student 1">
+      <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=500&q=80" alt="Student 2">
+    </div>
+  </section>
+
+  <!-- COURSE PACKAGES SECTION -->
   <section class="packages-section" id="packages">
-    <h2>Choose The Perfect <span>Growth Package</span></h2>
-    <p>Click any package to view complete details and choose it.</p>
+    <h2>Choose The Perfect <span>Course Package</span> For You</h2>
 
     <div class="packages-grid">
 
-      <!-- 1. Entry Package -->
+      <!-- 1. Starter Package -->
       <div class="package-card">
-        <div>
-          <div class="pkg-header bg-entry">
-            <div class="pkg-title">
-              <h3>Entry Package</h3>
-              <p>Start small with easy entry.</p>
-            </div>
-            <span class="tag-badge">Entry Level</span>
+        <div class="pkg-banner bg-1">
+          <div class="pkg-title">
+            <h3>Starter Package</h3>
+            <p>Beginner Growth</p>
           </div>
-          <div class="pkg-body">
-            <div class="pkg-subhead">
-              <span>Entry Package</span>
-              <span class="stars">★★★★★</span>
-            </div>
-            <div class="pkg-price-row">
-              <span class="price-val">₹299</span>
-              <span class="status-badge">START</span>
-            </div>
-            <div class="pkg-details">
-              <p><span>Referral Commission (50%)</span> <span>₹99.70</span></p>
-              <p><span>Minimum / Max Withdrawal</span> <span>₹100 - ₹600</span></p>
-              <p><span>Daily Frequency & Fee</span> <span>1 Time/Day | 2% Fee</span></p>
-            </div>
+          <div class="pkg-badge">🚀</div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-info">
+            <span class="stars">★★★★★</span>
+            <span>📦 2 Courses</span>
           </div>
         </div>
         <div class="pkg-footer">
-          <a href="checkout.html?name=Entry%20Package&price=299" class="action-btn">View Details & Buy →</a>
+          <div class="price-box">
+            <span class="current-price">₹289</span>
+            <span class="old-price">₹499</span>
+          </div>
+          <a href="checkout.html?name=Starter%20Package&price=289" class="buy-btn">Buy Now</a>
         </div>
       </div>
 
-      <!-- 2. Starter Package -->
+      <!-- 2. Intermediate Package -->
       <div class="package-card">
-        <div>
-          <div class="pkg-header bg-starter">
-            <div class="pkg-title">
-              <h3>Starter Package</h3>
-              <p>Begin your Smart Money journey.</p>
-            </div>
-            <span class="tag-badge">Start New</span>
+        <div class="pkg-banner bg-2">
+          <div class="pkg-title">
+            <h3>Intermediate</h3>
+            <p>Skill Advancement</p>
           </div>
-          <div class="pkg-body">
-            <div class="pkg-subhead">
-              <span>Low Package</span>
-              <span class="stars">★★★★★</span>
-            </div>
-            <div class="pkg-price-row">
-              <span class="price-val">₹560</span>
-              <span class="status-badge" style="background:#e0e7ff; color:#4338ca;">SMART START</span>
-            </div>
-            <div class="pkg-details">
-              <p><span>Referral Commission (55%)</span> <span>₹280</span></p>
-            </div>
+          <div class="pkg-badge">💻</div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-info">
+            <span class="stars">★★★★★</span>
+            <span>📦 5 Courses</span>
           </div>
         </div>
         <div class="pkg-footer">
-          <a href="checkout.html?name=Starter%20Package&price=560" class="action-btn">View Details & Buy →</a>
+          <div class="price-box">
+            <span class="current-price">₹560</span>
+            <span class="old-price">₹999</span>
+          </div>
+          <a href="checkout.html?name=Intermediate%20Package&price=560" class="buy-btn">Buy Now</a>
         </div>
       </div>
 
-      <!-- 3. Growth Package -->
+      <!-- 3. Expert Package -->
       <div class="package-card">
-        <div>
-          <div class="pkg-header bg-growth">
-            <div class="pkg-title">
-              <h3>Growth Package</h3>
-              <p>Build your network and grow faster.</p>
-            </div>
-            <span class="tag-badge">Popular</span>
+        <div class="pkg-banner bg-3">
+          <div class="pkg-title">
+            <h3>Expert Package</h3>
+            <p>Professional Tier</p>
           </div>
-          <div class="pkg-body">
-            <div class="pkg-subhead">
-              <span>Medium Package</span>
-              <span class="stars">★★★★★</span>
-            </div>
-            <div class="pkg-price-row">
-              <span class="price-val">₹899</span>
-              <span class="status-badge" style="background:#dbeafe; color:#1d4ed8;">POPULAR</span>
-            </div>
-            <div class="pkg-details">
-              <p><span>Referral Commission (60%)</span> <span>₹530.40</span></p>
-            </div>
+          <div class="pkg-badge">⚡</div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-info">
+            <span class="stars">★★★★★</span>
+            <span>📦 10 Courses</span>
           </div>
         </div>
         <div class="pkg-footer">
-          <a href="checkout.html?name=Growth%20Package&price=899" class="action-btn">View Details & Buy →</a>
+          <div class="price-box">
+            <span class="current-price">₹1,149</span>
+            <span class="old-price">₹2,999</span>
+          </div>
+          <a href="checkout.html?name=Expert%20Package&price=1149" class="buy-btn">Buy Now</a>
         </div>
       </div>
 
-      <!-- 4. Premium Package -->
+      <!-- 4. Master Package -->
       <div class="package-card">
-        <div>
-          <div class="pkg-header bg-premium">
-            <div class="pkg-title">
-              <h3>Premium Package</h3>
-              <p>Premium access for bigger opportunities.</p>
-            </div>
-            <span class="tag-badge">Premium</span>
+        <div class="pkg-banner bg-4">
+          <div class="pkg-title">
+            <h3>Master Package</h3>
+            <p>Advanced Mastery</p>
           </div>
-          <div class="pkg-body">
-            <div class="pkg-subhead">
-              <span>High Package</span>
-              <span class="stars">★★★★★</span>
-            </div>
-            <div class="pkg-price-row">
-              <span class="price-val">₹1,499</span>
-              <span class="status-badge" style="background:#ede9fe; color:#6d28d9;">PREMIUM</span>
-            </div>
-            <div class="pkg-details">
-              <p><span>Referral Commission (70%)</span> <span>₹1,049.30</span></p>
-            </div>
+          <div class="pkg-badge">👑</div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-info">
+            <span class="stars">★★★★★</span>
+            <span>📦 16 Courses</span>
           </div>
         </div>
         <div class="pkg-footer">
-          <a href="checkout.html?name=Premium%20Package&price=1499" class="action-btn">View Details & Buy →</a>
+          <div class="price-box">
+            <span class="current-price">₹2,499</span>
+            <span class="old-price">₹5,999</span>
+          </div>
+          <a href="checkout.html?name=Master%20Package&price=2499" class="buy-btn">Buy Now</a>
         </div>
       </div>
 
-      <!-- 5. Super Premium -->
+      <!-- 5. Brahmastra Package -->
       <div class="package-card">
-        <div>
-          <div class="pkg-header bg-super">
-            <div class="pkg-title">
-              <h3>Super Premium</h3>
-              <p>Unlimited withdrawal & VIP personal support.</p>
-            </div>
-            <span class="tag-badge" style="background:#f59e0b; color:#000;">VIP Exclusive</span>
+        <div class="pkg-banner bg-5">
+          <div class="pkg-title">
+            <h3>Brahmastra</h3>
+            <p>Ultimate Growth</p>
           </div>
-          <div class="pkg-body">
-            <div class="pkg-subhead">
-              <span>Super Premium</span>
-              <span class="stars">★★★★★</span>
-            </div>
-            <div class="pkg-price-row">
-              <span class="price-val">₹2,499</span>
-              <span class="status-badge" style="background:#fef3c7; color:#b45309;">VIP PROFIT</span>
-            </div>
-            <div class="pkg-details">
-              <p><span>Referral Commission (75%)</span> <span>₹1,874.25</span></p>
-              <p><span>Daily Withdrawal Limit</span> <span>₹100 - ₹10,000 (Unlimited)</span></p>
-              <p><span>Withdrawal Fee</span> <span>0% (No Fees)</span></p>
-            </div>
+          <div class="pkg-badge">🔥</div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-info">
+            <span class="stars">★★★★★</span>
+            <span>📦 20 Courses</span>
           </div>
         </div>
         <div class="pkg-footer">
-          <a href="checkout.html?name=Super%20Premium%20Package&price=2499" class="action-btn">View VIP Details & Buy →</a>
+          <div class="price-box">
+            <span class="current-price">₹5,499</span>
+            <span class="old-price">₹10,999</span>
+          </div>
+          <a href="checkout.html?name=Brahmastra%20Package&price=5499" class="buy-btn">Buy Now</a>
         </div>
       </div>
 
-      <!-- 6. Max Pro Package -->
+      <!-- 6. Premium Pro Package -->
       <div class="package-card">
-        <div>
-          <div class="pkg-header bg-max">
-            <div class="pkg-title">
-              <h3>Max Pro Package</h3>
-              <p>Ultimate earning & maximum freedom.</p>
-            </div>
-            <span class="tag-badge" style="background:#f59e0b; color:#000;">Max Exclusive</span>
+        <div class="pkg-banner bg-6">
+          <div class="pkg-title">
+            <h3>Premium Pro</h3>
+            <p>Top Tier Access</p>
           </div>
-          <div class="pkg-body">
-            <div class="pkg-subhead">
-              <span>Max Pro</span>
-              <span class="stars">★★★★★</span>
-            </div>
-            <div class="pkg-price-row">
-              <span class="price-val">₹4,499</span>
-              <span class="status-badge" style="background:#fee2e2; color:#991b1b;">MAX PRO</span>
-            </div>
-            <div class="pkg-details">
-              <p><span>85% Direct Commission</span> <span>₹2,500.15</span></p>
-              <p><span>Daily Withdrawals</span> <span>₹100 - ₹30,000 (Unlimited)</span></p>
-              <p><span>Withdrawal Charges & Support</span> <span>0% Fee | 24/7 VIP Support</span></p>
-            </div>
+          <div class="pkg-badge">💎</div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-info">
+            <span class="stars">★★★★★</span>
+            <span>📦 23 Courses</span>
           </div>
         </div>
         <div class="pkg-footer">
-          <a href="checkout.html?name=Max%20Pro%20Package&price=4499" class="action-btn" style="background: linear-gradient(135deg, #dc2626, #b91c1c);">View Max Pro Details →</a>
+          <div class="price-box">
+            <span class="current-price">₹10,997</span>
+            <span class="old-price">₹20,998</span>
+          </div>
+          <a href="checkout.html?name=Premium%20Pro%20Package&price=10997" class="buy-btn">Buy Now</a>
         </div>
       </div>
 
     </div>
   </section>
+
+  <!-- TESTIMONIALS SECTION -->
+  <section class="testimonial-section" id="testimonial">
+    <h2>Explore Genuine Feedback from Happy Clients</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <div class="client-info">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Client">
+          <div>
+            <h4>Vikas Yadav</h4>
+            <p>★★★★★</p>
+          </div>
+        </div>
+        <p class="feedback">"This is not just a course, it's a complete earning system. I learned sales and affiliate marketing, and now I'm able to generate a stable side income every month."</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="client-info">
+          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=100&q=80" alt="Client">
+          <div>
+            <h4>Pooja Gupta</h4>
+            <p>★★★★★</p>
+          </div>
+        </div>
+        <p class="feedback">"Smart Money helped me learn high-income skills and also provided an earning opportunity. The support system and guidance are amazing!"</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="client-info">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Client">
+          <div>
+            <h4>Rohit Singh</h4>
+            <p>★★★★★</p>
+          </div>
+        </div>
+        <p class="feedback">"I was struggling to find the right direction, but this platform gave me clarity and a proven system. Today, I have multiple income sources!"</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER / CONTACT SECTION -->
+  <footer class="footer" id="contact">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <h3>Smart Money</h3>
+        <p>Smart Money is an E-learning platform. This platform helps people to make their own personal brand on social media and create passive income.</p>
+        <p><strong>Location:</strong> Assam, India</p>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#packages">Courses</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Useful Links</h4>
+        <ul>
+          <li><a href="#">Privacy & Policy</a></li>
+          <li><a href="#">Terms & Condition</a></li>
+          <li><a href="#">Refund Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Smart Money. All Rights Reserved.</p>
+    </div>
+  </footer>
 
 </body>
 </html>
