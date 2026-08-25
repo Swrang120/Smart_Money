@@ -67,13 +67,13 @@
 
   <!-- 2. WITHDRAWAL REQUESTS -->
   <div class="card">
-    <h2>💸 Withdrawal Requests</h2>
+    <h2>💸 Withdrawal Requests & Payout Details</h2>
     <div style="overflow-x: auto;">
       <table>
         <thead>
           <tr>
             <th>User Details</th>
-            <th>Amount & Details</th>
+            <th>Amount & Payout Details</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -217,7 +217,7 @@
     }
   }
 
-  // 2. Load Withdrawals
+  // 2. Load Withdrawals with Payout Info
   async function loadWithdrawals() {
     const { data, error } = await supabaseClient.from('withdrawal_requests').select('*').order('created_at', { ascending: false });
     const tbody = document.getElementById("withdrawalTableBody");
@@ -237,13 +237,28 @@
         userEmail = uData.email || "";
       }
 
+      // Payout Method aur Details check karna
+      let payoutDetailsHtml = `<span style="color:#f59e0b;">Method: ${item.payment_method || item.method || 'Not Specified'}</span>`;
+      if (item.upi_id) {
+        payoutDetailsHtml += `<br>UPI ID: <b style="color:#38bdf8;">${item.upi_id}</b>`;
+      }
+      if (item.account_number || item.bank_account) {
+        payoutDetailsHtml += `<br>A/C: <b>${item.account_number || item.bank_account}</b> | IFSC: <b>${item.ifsc_code || ''}</b>`;
+      }
+      if (item.details) {
+        payoutDetailsHtml += `<br>Details: <span style="color:#cbd5e1;">${item.details}</span>`;
+      }
+
       const statusVal = (item.status || 'pending').toLowerCase();
       const isPending = statusVal === 'pending';
 
       tbody.innerHTML += `
         <tr>
           <td><b>${userName}</b><br><span style="font-size:11px; color:#94a3b8;">${userEmail}</span></td>
-          <td style="color:#10b981; font-weight:700;">₹${item.amount}<br><span style="font-size:11px; color:#38bdf8;">UPI/Bank Details</span></td>
+          <td>
+            <span style="color:#10b981; font-weight:700; font-size:14px;">₹${item.amount}</span><br>
+            <div style="font-size:12px; margin-top:4px; background:rgba(255,255,255,0.03); padding:6px; border-radius:6px;">${payoutDetailsHtml}</div>
+          </td>
           <td><span class="badge badge-${statusVal}">${item.status || 'Pending'}</span></td>
           <td>
             ${isPending ? `
@@ -284,7 +299,6 @@
           await supabaseClient.from('profiles').update({ balance: refundedBal }).eq('id', profileData.id);
         }
       } else if (actionStatus === 'Approved') {
-        // Automatically send email via EmailJS when approved
         sendWithdrawalEmail(userEmail, userName, amount);
       }
 
