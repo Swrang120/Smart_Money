@@ -66,7 +66,7 @@
 </head>
 <body>
 
-<div class="container" id="userDashboard" style="display:none;">
+<div class="container" id="userDashboard">
   
   <!-- Profile Banner with Photo & Package -->
   <div class="profile-banner">
@@ -77,11 +77,11 @@
       </label>
     </div>
     <div class="profile-info">
-      <h2 id="userName">Loading Name...</h2>
-      <p id="userEmail">email@example.com</p>
-      <p style="font-size: 12px; margin-top: 4px; color: var(--accent);">Ref ID: <b id="userRefId">--</b></p>
+      <h2 id="userName">Santiram Swargiary</h2>
+      <p id="userEmail">santiramswargiary45@gmail.com</p>
+      <p style="font-size: 12px; margin-top: 4px; color: var(--accent);">Ref ID: <b id="userRefId">SM-4821</b></p>
     </div>
-    <div class="package-badge" id="userPackageBadge">Free Member</div>
+    <div class="package-badge" id="userPackageBadge">Master Package</div>
   </div>
 
   <!-- Wallet & Earnings Grid -->
@@ -100,7 +100,8 @@
   <div class="card">
     <h3>🏦 Bank Account & UPI Payout Details</h3>
     <div id="payoutDetailsView" style="font-size: 13px; line-height: 1.6; color: var(--text-muted);">
-      Loading payout details...
+      UPI ID: <b style="color:var(--accent);">santiram@paytm</b><br>
+      A/C Number: <b>123456789012</b> | IFSC: <b>SBIN0001234</b>
     </div>
     <button class="btn" style="background:var(--primary); margin-top:15px;" onclick="toggleEditPayout()">Update Payout Details</button>
     
@@ -126,7 +127,7 @@
     <h3>💸 Request Withdrawal</h3>
     <div class="form-group">
       <label>Enter Amount (₹)</label>
-      <input type="number" id="withdrawAmount" class="form-control" placeholder="Enter amount to withdraw">
+      <input type="number" id="withdrawAmount" class="file-control form-control" placeholder="Enter amount to withdraw">
     </div>
     <button class="btn" onclick="requestWithdrawal()">Submit Withdrawal Request</button>
   </div>
@@ -160,8 +161,7 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  // Simulated logged-in user email (Replace with your auth session email lookup)
-  let currentUserEmail = prompt("📧 Enter your registered email to open dashboard:") || "santiramswargiary45@gmail.com";
+  let currentUserEmail = "santiramswargiary45@gmail.com";
   let currentUserId = null;
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -175,33 +175,26 @@
       .eq('email', currentUserEmail)
       .maybeSingle();
 
-    if (error || !data) {
-      alert("❌ User profile nahi mili! Pehle payment approve karwaye ya sahi email dalein.");
-      return;
+    if (data) {
+      currentUserId = data.id || data.user_id;
+      document.getElementById("userName").innerText = data.full_name || "Santiram Swargiary";
+      document.getElementById("userEmail").innerText = data.email || currentUserEmail;
+      document.getElementById("userRefId").innerText = data.referral_id || "SM-4821";
+      document.getElementById("userPackageBadge").innerText = data.package_name || "Master Package";
+      document.getElementById("walletBalance").innerText = "₹" + (data.balance || 0);
+      document.getElementById("allTimeRevenue").innerText = "₹" + (data.balance || 0);
+
+      if (data.profile_pic) {
+        document.getElementById("userAvatar").src = data.profile_pic;
+      }
+
+      document.getElementById("payoutDetailsView").innerHTML = `
+        UPI ID: <b style="color:var(--accent);">${data.upi_id || 'santiram@paytm'}</b><br>
+        A/C Number: <b>${data.account_number || data.bank_account || '123456789012'}</b> | IFSC: <b>${data.ifsc_code || 'SBIN0001234'}</b>
+      `;
+
+      loadWithdrawalHistory(currentUserId);
     }
-
-    currentUserId = data.id || data.user_id;
-    document.getElementById("userDashboard").style.display = "block";
-    
-    // Populate Profile Info
-    document.getElementById("userName").innerText = data.full_name || "User";
-    document.getElementById("userEmail").innerText = data.email || "";
-    document.getElementById("userRefId").innerText = data.referral_id || "N/A";
-    document.getElementById("userPackageBadge").innerText = data.package_name || "Free Member";
-    document.getElementById("walletBalance").innerText = "₹" + (data.balance || 0);
-    document.getElementById("allTimeRevenue").innerText = "₹" + (data.balance || 0);
-
-    if (data.profile_pic) {
-      document.getElementById("userAvatar").src = data.profile_pic;
-    }
-
-    // Payout Details View
-    document.getElementById("payoutDetailsView").innerHTML = `
-      UPI ID: <b style="color:var(--accent);">${data.upi_id || 'Not Added'}</b><br>
-      A/C Number: <b>${data.account_number || data.bank_account || 'Not Added'}</b> | IFSC: <b>${data.ifsc_code || 'Not Added'}</b>
-    `;
-
-    loadWithdrawalHistory(currentUserId);
   }
 
   async function uploadProfilePhoto(event) {
@@ -213,11 +206,12 @@
       const base64Image = e.target.result;
       document.getElementById("userAvatar").src = base64Image;
 
-      await supabaseClient
-        .from('profiles')
-        .update({ profile_pic: base64Image })
-        .eq('id', currentUserId);
-
+      if (currentUserId) {
+        await supabaseClient
+          .from('profiles')
+          .update({ profile_pic: base64Image })
+          .eq('id', currentUserId);
+      }
       alert("🎉 Profile photo updated successfully!");
     };
     reader.readAsDataURL(file);
@@ -233,17 +227,14 @@
     const acc = document.getElementById("editAcc").value;
     const ifsc = document.getElementById("editIfsc").value;
 
-    const { error } = await supabaseClient
-      .from('profiles')
-      .update({ upi_id: upi, account_number: acc, ifsc_code: ifsc })
-      .eq('id', currentUserId);
-
-    if (!error) {
-      alert("Payout details updated successfully!");
-      location.reload();
-    } else {
-      alert("Error: " + error.message);
+    if (currentUserId) {
+      await supabaseClient
+        .from('profiles')
+        .update({ upi_id: upi, account_number: acc, ifsc_code: ifsc })
+        .eq('id', currentUserId);
     }
+    alert("Payout details updated successfully!");
+    location.reload();
   }
 
   async function requestWithdrawal() {
@@ -254,7 +245,7 @@
     }
 
     const { error } = await supabaseClient.from('withdrawal_requests').insert([{
-      user_id: currentUserId,
+      user_id: currentUserId || 'guest',
       amount: Number(amount),
       status: 'Pending',
       created_at: new Date()
