@@ -23,7 +23,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .nav-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #7c3aed;background:#fff;}
 .menu-btn{border:1px solid #e2e8f0;background:#f8fafc;border-radius:10px;width:45px;height:42px;font-size:21px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 
-/* SIDEBAR FIXES */
+/* SIDEBAR */
 .sidebar-overlay{position:fixed;inset:0;background:rgba(15,23,42,.65);backdrop-filter:blur(3px);display:none;z-index:9998;}
 .sidebar-overlay.active{display:block;}
 .sidebar{position:fixed;top:0;left:-330px;width:320px;max-width:88vw;height:100%;background:#0f172a;z-index:9999;transition:left .3s ease;overflow-y:auto;box-shadow:10px 0 30px rgba(0,0,0,.3);}
@@ -43,7 +43,9 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 /* DASHBOARD */
 .dash-container{padding:25px 18px 40px;}
 .profile-card{position:relative;min-height:185px;border-radius:20px;overflow:hidden;margin-bottom:20px;display:flex;align-items:center;padding:25px;gap:20px;background:linear-gradient(135deg,#ffffff 0%,#ffffff 55%,#f5f3ff 55%,#ede9fe 100%);box-shadow:0 10px 25px rgba(15,23,42,.10);border:1px solid #e2e8f0;}
-.package-badge{position:absolute;top:0;right:0;padding:8px 17px;background:linear-gradient(135deg,#f59e0b,#ec4899);color:#fff;font-size:9px;font-weight:800;letter-spacing:.5px;border-bottom-left-radius:14px;}
+.package-badge{position:absolute;top:0;right:0;padding:8px 17px;background:linear-gradient(135deg,#64748b,#475569);color:#fff;font-size:9px;font-weight:800;letter-spacing:.5px;border-bottom-left-radius:14px;}
+.package-badge.active{background:linear-gradient(135deg,#f59e0b,#ec4899);}
+
 .profile-img-wrap{width:96px;height:96px;min-width:96px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;padding:4px;box-shadow:0 6px 20px rgba(0,0,0,.18);border:3px solid #7c3aed;position:relative;cursor:pointer;}
 .profile-img{width:100%;height:100%;border-radius:50%;object-fit:cover;background:#fff;}
 .upload-hint{position:absolute;bottom:0;left:0;width:100%;background:rgba(0,0,0,0.65);color:#fff;font-size:7px;text-align:center;padding:2px 0;border-bottom-left-radius:50px;border-bottom-right-radius:50px;}
@@ -137,7 +139,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
 <div class="dash-container">
   <div class="profile-card">
-    <div class="package-badge" id="activePackageBadge">MASTER PACKAGE 👑</div>
+    <div class="package-badge" id="activePackageBadge">NO PACKAGE</div>
     <div>
       <div class="profile-img-wrap" onclick="document.getElementById('profilePhotoInput').click()" title="Click to change photo">
         <img src="1000819130.jpg" alt="Profile" class="profile-img" id="mainProfileImg" onerror="this.src='https://via.placeholder.com/100?text=SM'">
@@ -195,10 +197,10 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <h3 style="color:#7c3aed;margin-top:0;">👑 My Package Details</h3>
     <p style="font-size:13px;color:#475569;margin-bottom:15px;">Here are your active package details, commission structures, and withdrawal limits:</p>
     <div style="background:#f8fafc;padding:15px;border-radius:12px;border:1px solid #e2e8f0;font-size:13px;line-height:1.6;">
-      <p><b>Package Name:</b> <span id="modalPkgName" style="color:#7c3aed;font-weight:750;">MASTER PACKAGE</span></p>
-      <p><b>Commission Rate:</b> Up to 90% Direct & Passive</p>
-      <p><b>Withdrawal Limit:</b> Min ₹200 - Max ₹50,000 per request</p>
-      <p><b>Account Status:</b> <span style="color:#10b981;font-weight:700;">Active & Verified 👑</span></p>
+      <p><b>Package Name:</b> <span id="modalPkgName" style="color:#7c3aed;font-weight:750;">No Package Active</span></p>
+      <p><b>Commission Rate:</b> 0% (Upgrade required)</p>
+      <p><b>Withdrawal Limit:</b> Min ₹200</p>
+      <p><b>Account Status:</b> <span style="color:#ef4444;font-weight:700;">Inactive / Free User</span></p>
     </div>
     <button onclick="closeModal('packageModal')" class="btn-action" style="margin-top:15px;">Close</button>
   </div>
@@ -373,6 +375,7 @@ document.addEventListener("DOMContentLoaded", async function(){
         email: currentUserEmail,
         full_name: authName,
         balance: 0,
+        package_name: null, // Default to no package
         referral_code: "SM-" + currentUserId.substring(0,6).toUpperCase()
       };
       await supabaseClient.from("profiles").upsert(newProf);
@@ -385,13 +388,23 @@ document.addEventListener("DOMContentLoaded", async function(){
     userCurrentBalance = Number(profile?.balance || 0);
     userRefCode = profile?.referral_code || "SM-" + currentUserId.substring(0,6).toUpperCase();
     const dob = profile?.date_of_birth || "";
-    const packageName = profile?.package_name || "MASTER PACKAGE";
+    const packageName = profile?.package_name;
 
-    document.getElementById("userName").innerHTML = escapeHtml(finalName) + ' <span style="font-size:16px;">👑</span>';
+    document.getElementById("userName").innerHTML = escapeHtml(finalName);
     document.getElementById("myRefCode").innerText = userRefCode;
     document.getElementById("dobDisplayInfo").innerText = dob ? "DOB: " + dob : "DOB: Not Set";
-    document.getElementById("activePackageBadge").innerText = packageName.toUpperCase() + " 👑";
-    document.getElementById("modalPkgName").innerText = packageName.toUpperCase();
+    
+    // Check if package exists
+    const badge = document.getElementById("activePackageBadge");
+    if(packageName && packageName.trim() !== "" && packageName.toLowerCase() !== "none"){
+      badge.innerText = packageName.toUpperCase() + " 👑";
+      badge.classList.add("active");
+      document.getElementById("modalPkgName").innerText = packageName.toUpperCase();
+    } else {
+      badge.innerText = "NO PACKAGE";
+      badge.classList.remove("active");
+      document.getElementById("modalPkgName").innerText = "No Package Active";
+    }
 
     document.getElementById("sidebarUserName").innerText = finalName;
     document.getElementById("sidebarUserEmail").innerText = finalEmail;
@@ -544,7 +557,7 @@ async function saveKycDetails(){
   if(error){ alert("Error: " + error.message); return; }
 
   currentProfile = { ...currentProfile, full_name: fullName, date_of_birth: dob };
-  document.getElementById("userName").innerHTML = escapeHtml(fullName) + ' <span style="font-size:16px;">👑</span>';
+  document.getElementById("userNameinnerHTML = escapeHtml(fullName)";
   document.getElementById("dobDisplayInfo").innerText = "DOB: " + dob;
   applyProfileImage(currentProfile?.profile_pic, fullName);
   alert("KYC saved successfully!");
