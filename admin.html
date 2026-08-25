@@ -68,7 +68,7 @@
         <thead>
           <tr>
             <th>User Name</th>
-            <th>UPI / Bank Details</th>
+            <th>Bank & UPI Details</th>
             <th>Amount</th>
             <th>Status</th>
             <th>Action</th>
@@ -186,13 +186,11 @@
           const sponsorPkg = (sponsorData.package_name || "").toLowerCase();
           let commission = 0;
 
-          // Rule A: If sponsor has Entry or Starter package, give fixed respective commission
           if (sponsorPkg.includes("entry")) {
             commission = 99.70;
           } else if (sponsorPkg.includes("starter")) {
             commission = 280.00;
           } else {
-            // Rule B: For higher packages, give standard commission based on newly purchased package
             const pkg = (packageName || "").toLowerCase();
             if (pkg.includes("entry")) commission = 99.70;
             else if (pkg.includes("starter")) commission = 280.00;
@@ -242,7 +240,7 @@
           <td><b>${item.full_name || 'User'}</b></td>
           <td style="color:#38bdf8;">
             UPI: ${item.upi_id || 'N/A'}<br>
-            <span style="font-size:11px; color:#cbd5e1;">Bank: ${item.bank_name || 'N/A'} | A/C: ${item.account_number || 'N/A'} | IFSC: ${item.ifsc_code || 'N/A'}</span>
+            <span style="font-size:11px; color:#cbd5e1;">Bank: ${item.bank_name || 'N/A'} | Holder: ${item.holder_name || 'N/A'} | A/C: ${item.bank_account || 'N/A'} | IFSC: ${item.ifsc_code || 'N/A'}</span>
           </td>
           <td style="color:#10b981; font-weight:700;">₹${item.amount}</td>
           <td><span class="badge badge-${item.status.toLowerCase()}">${item.status}</span></td>
