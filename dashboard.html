@@ -11,33 +11,37 @@
     * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     body { background: #f1f5f9; color: #1e293b; margin: 0; display: flex; justify-content: center; padding-bottom: 40px; }
 
-    /* RESPONSIVE APP WRAPPER FOR DESKTOP & MOBILE */
+    /* RESPONSIVE APP WRAPPER - WIDER FOR DESKTOP & PERFECT FOR MOBILE */
     .app-wrapper {
       width: 100%;
-      max-width: 480px;
+      max-width: 650px;
       min-height: 100vh;
       background: #f1f5f9;
       box-shadow: 0 0 40px rgba(0,0,0,0.08);
       position: relative;
     }
 
+    @media (min-width: 768px) {
+      .app-wrapper { max-width: 800px; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; }
+    }
+
     /* NAVBAR */
     .navbar {
-      background: #ffffff; padding: 12px 20px;
+      background: #ffffff; padding: 14px 20px;
       display: flex; justify-content: space-between; align-items: center;
       box-shadow: 0 4px 20px rgba(0,0,0,0.06);
       position: sticky; top: 0; z-index: 100;
     }
-    .brand-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .brand-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
     .brand-logo span {
       font-weight: 800; font-size: 20px;
       background: linear-gradient(135deg, #7c3aed, #db2777);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; background: #fff; }
+    .brand-logo-img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; background: #fff; }
     .nav-right { display: flex; align-items: center; gap: 12px; }
     .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; background: #fff; }
-    .menu-btn { background: #f8fafc; border: 1px solid #e2e8f0; font-size: 20px; cursor: pointer; color: #475569; padding: 6px 10px; border-radius: 10px; }
+    .menu-btn { background: #f8fafc; border: 1px solid #e2e8f0; font-size: 20px; cursor: pointer; color: #475569; padding: 6px 12px; border-radius: 10px; }
 
     /* SIDEBAR DRAWER MENU */
     .sidebar-overlay {
@@ -45,7 +49,7 @@
       background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); z-index: 998; display: none;
     }
     .sidebar {
-      position: fixed; top: 0; left: -300px; width: 300px; height: 100%;
+      position: fixed; top: 0; left: -320px; width: 300px; height: 100%;
       background: #1e293b; z-index: 999; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: 5px 0 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow-y: auto; color: #ffffff;
     }
@@ -69,12 +73,12 @@
     .sidebar-menu a.active { background: linear-gradient(135deg, #7c3aed, #a855f7); box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
 
     /* MAIN CONTAINER */
-    .dash-container { padding: 20px 15px; }
+    .dash-container { padding: 25px 20px; }
 
     /* PROFILE CARD */
     .profile-card {
-      background: linear-gradient(135deg, #7c3aed, #db2777); border-radius: 22px; padding: 22px; display: flex; align-items: center; gap: 16px;
-      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.25); margin-bottom: 20px; position: relative; border: 1px solid rgba(255,255,255,0.1); overflow: hidden;
+      background: linear-gradient(135deg, #7c3aed, #db2777); border-radius: 22px; padding: 24px; display: flex; align-items: center; gap: 18px;
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.25); margin-bottom: 22px; position: relative; border: 1px solid rgba(255,255,255,0.1); overflow: hidden;
     }
     .package-badge {
       position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #f59e0b, #ec4899);
@@ -82,18 +86,22 @@
     }
     
     .profile-img-wrap { position: relative; flex-shrink: 0; }
-    /* Force strict circular avatar styling to avoid any rectangular banner rendering */
-    .profile-img { width: 68px !important; height: 68px !important; min-width: 68px; min-height: 68px; border-radius: 50% !important; object-fit: cover !important; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background: #fff; }
+    .profile-img { width: 75px !important; height: 75px !important; min-width: 75px; min-height: 75px; border-radius: 50% !important; object-fit: cover !important; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background: #fff; }
     
-    .user-info h2 { margin: 0; font-size: 17px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 6px; }
-    .user-info p { margin: 3px 0; font-size: 12px; color: #f1f5f9; word-break: break-all; }
+    .user-info h2 { margin: 0; font-size: 18px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 6px; }
+    .user-info p { margin: 3px 0; font-size: 12.5px; color: #f1f5f9; word-break: break-all; }
     .copy-btn {
-      background: rgba(255, 255, 255, 0.2); color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; transition: 0.2s;
+      background: rgba(255, 255, 255, 0.2); color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); padding: 6px 12px; border-radius: 8px; font-size: 11.5px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; transition: 0.2s;
     }
     .copy-btn:hover { background: rgba(255, 255, 255, 0.3); }
 
-    /* REVENUE STATS STACK */
-    .stats-stack { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+    /* REVENUE STATS GRID/STACK */
+    .stats-stack { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 22px; }
+    @media (min-width: 600px) {
+      .stats-stack { grid-template-columns: repeat(2, 1fr); }
+      .stats-stack .bg-alltime { grid-column: span 2; }
+    }
+
     .v-card { 
       border-radius: 20px; padding: 22px; color: #ffffff; box-shadow: 0 8px 20px rgba(0,0,0,0.08); 
       display: flex; flex-direction: column; justify-content: space-between; position: relative;
@@ -112,7 +120,7 @@
     .bg-passive { background: linear-gradient(135deg, #d97706, #b45309); }
 
     /* EXTRA SECTIONS */
-    .section-box { background: #ffffff; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; text-align: center; }
+    .section-box { background: #ffffff; border-radius: 20px; padding: 22px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; text-align: center; }
     .section-box h3 { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 15px; text-align: left; }
 
     .graph-container { width: 100%; height: 160px; display: flex; align-items: flex-end; justify-content: space-between; padding-top: 20px; position: relative; }
@@ -140,9 +148,14 @@
 
     /* MODAL STYLES */
     .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.6); z-index:999; justify-content:center; align-items:center; backdrop-filter: blur(3px); padding: 15px; }
-    .modal-box { background:#ffffff; padding:25px; border-radius:22px; width:100%; max-width:420px; box-shadow:0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; color: #1e293b; text-align: left; }
+    .modal-box { background:#ffffff; padding:25px; border-radius:22px; width:100%; max-width:440px; box-shadow:0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; color: #1e293b; text-align: left; }
     .input-field { width:100%; padding:11px 14px; margin-bottom:12px; border-radius:12px; border:1px solid #cbd5e1; font-size:13.5px; box-sizing:border-box; outline: none; }
     .btn-action { width:100%; background: linear-gradient(135deg, #7c3aed, #6d28d9); color:#fff; border:none; padding:13px; border-radius:12px; font-weight:700; cursor:pointer; font-size:14px; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
+    
+    /* RADIO SELECTOR FOR PAYOUT */
+    .payout-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
+    .payout-tab { flex: 1; padding: 10px; text-align: center; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; background: #f8fafc; color: #475569; }
+    .payout-tab.active { background: #7c3aed; color: #fff; border-color: #7c3aed; }
   </style>
 </head>
 <body>
@@ -163,7 +176,8 @@
     <ul class="sidebar-menu">
       <li><a href="dashboard.html" class="active"><span>🏠</span> Dashboard Home</a></li>
       <li><a href="index.html"><span>🌐</span> Home / Landing Page</a></li>
-      <li><button onclick="openUpiModal()"><span>🏦</span> Update Bank & UPI Details</button></li>
+      <li><button onclick="openUpiModal()"><span>🏦</span> Add Bank / UPI Details</button></li>
+      <li><button onclick="openKycModal()"><span>🆔</span> KYC & Date of Birth (DOB)</button></li>
       <li><button onclick="copyRefLink()"><span>🔗</span> Copy Affiliate Link</button></li>
       <li><button onclick="openWithdrawModal()"><span>💸</span> Withdraw Funds</button></li>
       <li><button id="sideLogoutBtn" style="color:#f87171;"><span>🚪</span> Logout</button></li>
@@ -187,13 +201,13 @@
     <div class="profile-card">
       <div class="package-badge" id="activePackageBadge">MASTER PACKAGE 👑</div>
       <div class="profile-img-wrap">
-        <!-- Added version parameter ?v=99 to break browser cache completely -->
         <img src="1000819130.jpg?v=99" alt="Profile Avatar" class="profile-img">
       </div>
       <div class="user-info">
         <h2 id="userName">Santiram Swargiary <span style="font-size:15px;">👑</span></h2>
         <p id="userEmail">swrangswargiary48@gmail.com</p>
         <p>ID: <b id="myRefCode" style="color:#fff;">Loading...</b></p>
+        <p id="dobDisplayInfo" style="font-size: 11.5px; opacity: 0.9;">DOB: Not Set</p>
         <button class="copy-btn" onclick="copyRefLink()">📋 Copy Affiliate Link</button>
       </div>
     </div>
@@ -216,7 +230,7 @@
         <div><h2 id="allTimeRevenueText">₹0</h2><p>All Time Revenue</p></div>
         <div class="v-card-footer" onclick="alert('Viewing All Time Revenue Details')"><span>View details</span><span>→</span></div>
       </div>
-      <div class="v-card bg-passive">
+      <div class="v-card bg-passive" style="grid-column: span 1;">
         <div><h2>₹0</h2><p>Passive Income</p></div>
         <div class="v-card-footer" onclick="alert('Viewing Passive Income Details')"><span>View details</span><span>→</span></div>
       </div>
@@ -226,7 +240,7 @@
     <div class="section-box" style="text-align: center;">
       <span style="font-size: 11px; color:#64748b; font-weight: 700; text-transform: uppercase;">Available Wallet Balance</span>
       <h1 style="margin: 6px 0 0 0; color: #10b981; font-size: 32px;" id="walletBalance">₹0.00</h1>
-      <p id="upiDisplayInfo" style="font-size: 12px; color: #64748b; margin-top: 4px;">Bank / UPI: Not Saved Yet</p>
+      <p id="payoutDisplayInfo" style="font-size: 12px; color: #64748b; margin-top: 4px;">Payout Method: Not Saved Yet</p>
       <button class="btn-withdraw" onclick="openWithdrawModal()">💸 Withdraw Money Now</button>
     </div>
 
@@ -262,26 +276,57 @@
 
 </div>
 
-<!-- BANK & UPI SETTINGS MODAL -->
+<!-- PAYOUT METHOD SETTINGS MODAL (EXCLUSIVE: UPI OR BANK) -->
 <div id="profileSettingsModal" class="modal-overlay">
   <div class="modal-box">
-    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">🏦 Bank & UPI Details</h3>
-    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Apna Bank Account details ya UPI ID withdrawal ke liye yahan save karein.</p>
+    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">🏦 Add Payout Details</h3>
+    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Koi ek method select karein: Ya toh UPI ID ya phir Bank Account.</p>
     
-    <label style="font-size:12px; font-weight:600; color:#475569;">Account Holder Name</label>
-    <input type="text" id="editAccName" class="input-field" placeholder="e.g. Santiram Swargiary">
+    <div class="payout-tabs">
+      <div class="payout-tab active" id="tabUpi" onclick="switchPayoutMode('upi')">UPI ID</div>
+      <div class="payout-tab" id="tabBank" onclick="switchPayoutMode('bank')">Bank Account</div>
+    </div>
 
-    <label style="font-size:12px; font-weight:600; color:#475569;">Bank Account Number</label>
-    <input type="text" id="editAccNo" class="input-field" placeholder="e.g. 123456789012">
+    <!-- UPI SECTION -->
+    <div id="upiSection">
+      <label style="font-size:12px; font-weight:600; color:#475569;">Enter UPI ID</label>
+      <input type="text" id="editUpiId" class="input-field" placeholder="e.g. yourname@paytm">
+    </div>
 
-    <label style="font-size:12px; font-weight:600; color:#475569;">IFSC Code</label>
-    <input type="text" id="editIfsc" class="input-field" placeholder="e.g. SBIN0001234">
+    <!-- BANK SECTION -->
+    <div id="bankSection" style="display: none;">
+      <label style="font-size:12px; font-weight:600; color:#475569;">Account Holder Name</label>
+      <input type="text" id="editAccName" class="input-field" placeholder="e.g. Santiram Swargiary">
 
-    <label style="font-size:12px; font-weight:600; color:#475569;">OR UPI ID (Optional)</label>
-    <input type="text" id="editUpiId" class="input-field" placeholder="e.g. yourname@paytm">
+      <label style="font-size:12px; font-weight:600; color:#475569;">Bank Account Number</label>
+      <input type="text" id="editAccNo" class="input-field" placeholder="e.g. 123456789012">
+
+      <label style="font-size:12px; font-weight:600; color:#475569;">IFSC Code</label>
+      <input type="text" id="editIfsc" class="input-field" placeholder="e.g. SBIN0001234">
+    </div>
     
-    <button onclick="updateUserBankDetails()" class="btn-action" id="saveProfileBtn">Save Payout Details</button>
+    <button onclick="updateUserPayoutDetails()" class="btn-action" id="saveProfileBtn">Save Payout Details</button>
     <button onclick="closeModal('profileSettingsModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer;">Cancel</button>
+  </div>
+</div>
+
+<!-- KYC & DOB MODAL -->
+<div id="kycModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">🆔 KYC & Date of Birth</h3>
+    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Apni asli Date of Birth aur KYC details yahan save karein.</p>
+    
+    <label style="font-size:12px; font-weight:600; color:#475569;">Full Name (As per ID)</label>
+    <input type="text" id="kycFullName" class="input-field" placeholder="e.g. Santiram Swargiary">
+
+    <label style="font-size:12px; font-weight:600; color:#475569;">Date of Birth (DOB)</label>
+    <input type="date" id="kycDob" class="input-field">
+
+    <label style="font-size:12px; font-weight:600; color:#475569;">PAN Card / Aadhaar Number</label>
+    <input type="text" id="kycIdNumber" class="input-field" placeholder="Enter ID number">
+    
+    <button onclick="saveKycDetails()" class="btn-action" id="saveKycBtn">Save KYC Details</button>
+    <button onclick="closeModal('kycModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer;">Cancel</button>
   </div>
 </div>
 
@@ -313,10 +358,26 @@
   let userSavedUpi = "";
   let userSavedAcc = "";
   let userRefCode = "";
+  let currentPayoutMode = "upi"; // 'upi' or 'bank'
 
   function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("active");
     document.getElementById("sidebarOverlay").classList.toggle("active");
+  }
+
+  function switchPayoutMode(mode) {
+    currentPayoutMode = mode;
+    if(mode === 'upi') {
+      document.getElementById("tabUpi").classList.add("active");
+      document.getElementById("tabBank").classList.remove("active");
+      document.getElementById("upiSection").style.display = "block";
+      document.getElementById("bankSection").style.display = "none";
+    } else {
+      document.getElementById("tabBank").classList.add("active");
+      document.getElementById("tabUpi").classList.remove("active");
+      document.getElementById("bankSection").style.display = "block";
+      document.getElementById("upiSection").style.display = "none";
+    }
   }
 
   document.addEventListener("DOMContentLoaded", async function() {
@@ -347,28 +408,38 @@
         const userName = profile.full_name || profile.name || session.user.user_metadata?.full_name || "Santiram Swargiary";
         const userEmail = profile.email || fallbackEmail;
         const packageName = profile.package_name || profile.package || "MASTER PACKAGE";
+        const userDob = profile.date_of_birth || profile.dob || "";
 
         document.getElementById("userName").innerHTML = userName + ' <span style="font-size:15px;">👑</span>';
         document.getElementById("userEmail").innerText = userEmail;
         document.getElementById("myRefCode").innerText = userRefCode || "SM-" + currentUserId.substring(0, 6).toUpperCase();
         document.getElementById("activePackageBadge").innerText = packageName.toUpperCase() + " 👑";
         
+        if(userDob) {
+          document.getElementById("dobDisplayInfo").innerText = "DOB: " + userDob;
+          document.getElementById("kycDob").value = userDob;
+        }
+        if(profile.full_name) document.getElementById("kycFullName").value = profile.full_name;
+        if(profile.kyc_id_number) document.getElementById("kycIdNumber").value = profile.kyc_id_number;
+
         document.getElementById("walletBalance").innerText = "₹" + userCurrentBalance.toFixed(2);
         document.getElementById("allTimeRevenueText").innerText = "₹" + userCurrentBalance.toFixed(0);
         document.getElementById("withdrawModalBalanceText").innerText = "Available Balance: ₹" + userCurrentBalance.toFixed(2);
 
+        // Exclusive payout indicator
         if(userSavedUpi) {
-          document.getElementById("upiDisplayInfo").innerText = "UPI: " + userSavedUpi;
+          document.getElementById("payoutDisplayInfo").innerText = "UPI: " + userSavedUpi;
           document.getElementById("editUpiId").value = userSavedUpi;
+          switchPayoutMode('upi');
         } else if(userSavedAcc) {
-          document.getElementById("upiDisplayInfo").innerText = "Bank A/C: " + userSavedAcc;
+          document.getElementById("payoutDisplayInfo").innerText = "Bank A/C: " + userSavedAcc;
+          if(profile.account_holder_name) document.getElementById("editAccName").value = profile.account_holder_name;
+          if(profile.bank_account_number) document.getElementById("editAccNo").value = profile.bank_account_number;
+          if(profile.ifsc_code) document.getElementById("editIfsc").value = profile.ifsc_code;
+          switchPayoutMode('bank');
         } else {
-          document.getElementById("upiDisplayInfo").innerText = "Bank / UPI: Not Saved Yet";
+          document.getElementById("payoutDisplayInfo").innerText = "Payout Method: Not Saved Yet";
         }
-
-        if(profile.account_holder_name) document.getElementById("editAccName").value = profile.account_holder_name;
-        if(profile.bank_account_number) document.getElementById("editAccNo").value = profile.bank_account_number;
-        if(profile.ifsc_code) document.getElementById("editIfsc").value = profile.ifsc_code;
 
         if (userRefCode) {
           const { count } = await supabaseClient
@@ -399,6 +470,11 @@
     document.getElementById("profileSettingsModal").style.display = "flex";
   }
 
+  function openKycModal() {
+    if(document.getElementById("sidebar").classList.contains("active")) toggleSidebar();
+    document.getElementById("kycModal").style.display = "flex";
+  }
+
   function openWithdrawModal() {
     if(document.getElementById("sidebar").classList.contains("active")) toggleSidebar();
     if (userCurrentBalance <= 0) {
@@ -406,53 +482,96 @@
       return;
     }
     if (!userSavedUpi && !userSavedAcc) {
-      alert("⚠️ Pehle apna Bank details ya UPI ID update karein!");
+      alert("⚠️ Pehle apna UPI ID ya Bank Account details add karein!");
       openUpiModal();
       return;
     }
     document.getElementById("withdrawModal").style.display = "flex";
   }
 
-  async function updateUserBankDetails() {
-    const accName = document.getElementById("editAccName").value.trim();
-    const accNo = document.getElementById("editAccNo").value.trim();
-    const ifsc = document.getElementById("editIfsc").value.trim();
-    const upiId = document.getElementById("editUpiId").value.trim();
+  async function updateUserPayoutDetails() {
     let btn = document.getElementById("saveProfileBtn");
-    
-    if(!upiId && (!accNo || !ifsc)) {
-      alert("Please enter either UPI ID or complete Bank Account & IFSC details.");
-      return;
+    let updateData = {};
+
+    if (currentPayoutMode === 'upi') {
+      const upiId = document.getElementById("editUpiId").value.trim();
+      if (!upiId) {
+        alert("Please enter a valid UPI ID.");
+        return;
+      }
+      // Clear bank details if switching/saving UPI exclusively
+      updateData = { upi_id: upiId, bank_account_number: null, ifsc_code: null, account_holder_name: null };
+      userSavedUpi = upiId;
+      userSavedAcc = "";
+    } else {
+      const accName = document.getElementById("editAccName").value.trim();
+      const accNo = document.getElementById("editAccNo").value.trim();
+      const ifsc = document.getElementById("editIfsc").value.trim();
+      if (!accName || !accNo || !ifsc) {
+        alert("Please fill all Bank Account details completely.");
+        return;
+      }
+      // Clear UPI if switching/saving Bank exclusively
+      updateData = { bank_account_number: accNo, ifsc_code: ifsc, account_holder_name: accName, upi_id: null };
+      userSavedAcc = accNo;
+      userSavedUpi = "";
     }
 
     btn.innerText = "Saving details...";
     btn.disabled = true;
 
     try {
-      const { error } = await supabaseClient.from('profiles').update({ 
-        account_holder_name: accName,
-        bank_account_number: accNo,
-        ifsc_code: ifsc,
-        upi_id: upiId 
-      }).eq('user_id', currentUserId);
-
+      const { error } = await supabaseClient.from('profiles').update(updateData).eq('user_id', currentUserId);
       if(error) throw error;
 
-      userSavedUpi = upiId;
-      userSavedAcc = accNo;
-      
-      if(upiId) {
-        document.getElementById("upiDisplayInfo").innerText = "UPI: " + upiId;
+      if(currentPayoutMode === 'upi') {
+        document.getElementById("payoutDisplayInfo").innerText = "UPI: " + userSavedUpi;
       } else {
-        document.getElementById("upiDisplayInfo").innerText = "Bank A/C: " + accNo;
+        document.getElementById("payoutDisplayInfo").innerText = "Bank A/C: " + userSavedAcc;
       }
 
-      alert("🎉 Bank & UPI details successfully saved!");
+      alert("🎉 Payout details successfully saved!");
       closeModal('profileSettingsModal');
     } catch(err) {
       alert("Error saving: " + err.message);
     } finally {
       btn.innerText = "Save Payout Details";
+      btn.disabled = false;
+    }
+  }
+
+  async function saveKycDetails() {
+    const fullName = document.getElementById("kycFullName").value.trim();
+    const dob = document.getElementById("kycDob").value;
+    const idNumber = document.getElementById("kycIdNumber").value.trim();
+    let btn = document.getElementById("saveKycBtn");
+
+    if(!fullName || !dob) {
+      alert("Please provide your Full Name and Date of Birth.");
+      return;
+    }
+
+    btn.innerText = "Saving KYC...";
+    btn.disabled = true;
+
+    try {
+      const { error } = await supabaseClient.from('profiles').update({
+        full_name: fullName,
+        date_of_birth: dob,
+        kyc_id_number: idNumber
+      }).eq('user_id', currentUserId);
+
+      if(error) throw error;
+
+      document.getElementById("userName").innerHTML = fullName + ' <span style="font-size:15px;">👑</span>';
+      document.getElementById("dobDisplayInfo").innerText = "DOB: " + dob;
+      
+      alert("🎉 KYC & Date of Birth successfully saved!");
+      closeModal('kycModal');
+    } catch(err) {
+      alert("Error saving KYC: " + err.message);
+    } finally {
+      btn.innerText = "Save KYC Details";
       btn.disabled = false;
     }
   }
