@@ -357,6 +357,7 @@ let userRefCode = "";
 let payoutMode = "upi";
 let currentUserEmail = "";
 let allReferralsData = [];
+let lastKnownStatuses = {}; // Track old statuses for EmailJS trigger
 
 function escapeHtml(text){
   const div = document.createElement("div");
@@ -570,6 +571,15 @@ function setupRealtimeListener(){
   supabaseClient
     .channel('public:withdrawal_requests')
     .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'withdrawal_requests', filter: `user_id=eq.${currentUserId}` }, payload => {
+      const updatedRow = payload.new;
+      const oldStatus = lastKnownStatuses[updatedRow.id];
+      const newStatus = (updatedRow.status || "").toLowerCase();
+
+      // Agar status pehle pending tha aur ab approved/success ho gaya, toh email bhej do!
+      if(oldStatus && oldStatus !== "approved" && oldStatus !== "success" && (newStatus === "approved" || newStatus === "success")){
+        sendEmailJsNotification(updatedRow.amount);
+      }
+      lastKnownStatuses[updatedRow.id] = newStatus;
       loadWithdrawalHistory();
     })
     .subscribe();
@@ -592,9 +602,11 @@ async function loadWithdrawalHistory(){
 
   let html = "";
   data.forEach(item => {
+    const st = (item.status || "").toLowerCase();
+    lastKnownStatuses[item.id] = st; // Store current status
+
     let statusClass = "status-pending";
     let statusText = "Pending";
-    const st = (item.status || "").toLowerCase();
     if(st === "approved" || st === "success"){
       statusClass = "status-approved";
       statusText = "Successfully";
@@ -617,6 +629,24 @@ async function loadWithdrawalHistory(){
     `;
   });
   historyContainer.innerHTML = html;
+}
+
+// Function to trigger EmailJS Notification
+function sendEmailJsNotification(amount){
+  const templateParams = {
+    to_email: currentUserEmail,
+    to_name: currentProfile?.full_name || "User",
+    amount: amount,
+    message: `Your withdrawal request of ₹${amount} has been successfully approved and processed!`
+  };
+
+  // Note: Yahan aapko apna EmailJS Service ID aur Template ID dalna hoga (agar alag hai toh)
+  emailjs.send('service_default', 'template_default', templateParams)
+    .then(function(response) {
+       console.log('SUCCESS! Email sent successfully.', response.status, response.text);
+    }, function(error) {
+       console.log('FAILED...', error);
+    });
 }
 
 async function loadReferralsData(){
