@@ -1,621 +1,494 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Money - Dashboard</title>
-    <!-- Google Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Money - Affiliate Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background: #f1f5f9; color: #1e293b; margin: 0; padding-bottom: 40px; }
+
+    /* NAVBAR */
+    .navbar {
+      background: #ffffff;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .brand-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .brand-logo span {
+      font-weight: 800; font-size: 20px;
+      background: linear-gradient(135deg, #7c3aed, #db2777);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; }
+    .menu-btn { background: #f8fafc; border: 1px solid #e2e8f0; font-size: 20px; cursor: pointer; color: #475569; padding: 6px 10px; border-radius: 10px; }
+
+    /* SIDEBAR DRAWER MENU */
+    .sidebar-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); z-index: 998; display: none;
+    }
+    .sidebar {
+      position: fixed; top: 0; left: -300px; width: 300px; height: 100%;
+      background: #1e293b; z-index: 999; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 5px 0 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow-y: auto; color: #ffffff;
+    }
+    .sidebar.active { left: 0; }
+    .sidebar-overlay.active { display: block; }
+
+    .sidebar-header { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+    .sidebar-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #94a3b8; }
+
+    .sidebar-menu { list-style: none; padding: 15px 10px; margin: 0; }
+    .sidebar-menu li { margin-bottom: 4px; }
+    .sidebar-menu a, .sidebar-menu button {
+      display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 16px;
+      color: #cbd5e1; text-decoration: none; font-size: 14px; font-weight: 500;
+      border-radius: 12px; border: none; background: transparent; cursor: pointer; text-align: left;
+      transition: all 0.2s;
+    }
+    .sidebar-menu a.active, .sidebar-menu a:hover, .sidebar-menu button:hover {
+      background: rgba(124, 58, 237, 0.2); color: #ffffff; font-weight: 600;
+    }
+    .sidebar-menu a.active { background: linear-gradient(135deg, #7c3aed, #a855f7); box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
+
+    .submenu { list-style: none; padding-left: 20px; margin: 5px 0; display: none; }
+    .submenu.active { display: block; }
+    .submenu li a { font-size: 13px; padding: 8px 12px; color: #94a3b8; }
+    .submenu li a:hover { color: #fff; background: rgba(255,255,255,0.05); }
+
+    /* MAIN CONTAINER */
+    .dash-container { max-width: 480px; margin: 20px auto; padding: 0 15px; width: 100%; }
+
+    /* PROFILE CARD */
+    .profile-card {
+      background: linear-gradient(135deg, #7c3aed, #db2777); border-radius: 22px; padding: 22px; display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.25); margin-bottom: 20px; position: relative; border: 1px solid rgba(255,255,255,0.1); overflow: hidden;
+    }
+    .package-badge {
+      position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: #fff; font-size: 10px; padding: 5px 14px; border-bottom-left-radius: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .package-badge.vip { background: linear-gradient(135deg, #f59e0b, #ec4899); color: #fff; }
     
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-        body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            display: flex;
-            min-height: 100vh;
-        }
-        /* Sidebar Styling */
-        .sidebar {
-            width: 260px;
-            background-color: #1e293b;
-            position: fixed;
-            top: 0;
-            left: -260px;
-            height: 100%;
-            transition: all 0.3s ease;
-            z-index: 1000;
-            box-shadow: 4px 0 10px rgba(0,0,0,0.3);
-            display: flex;
-            flex-direction: column;
-        }
-        .sidebar.active {
-            left: 0;
-        }
-        .sidebar-header {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #334155;
-        }
-        .sidebar-header h2 {
-            font-size: 20px;
-            color: #38bdf8;
-        }
-        .close-btn {
-            background: none;
-            border: none;
-            color: #94a3b8;
-            font-size: 20px;
-            cursor: pointer;
-        }
-        .sidebar-menu {
-            list-style: none;
-            padding: 20px 0;
-            flex-grow: 1;
-        }
-        .sidebar-menu li a {
-            display: flex;
-            align-items: center;
-            padding: 12px 20px;
-            color: #cbd5e1;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-        .sidebar-menu li a i {
-            margin-right: 15px;
-            width: 20px;
-        }
-        .sidebar-menu li a:hover {
-            background-color: #334155;
-            color: #38bdf8;
-        }
-        .submenu {
-            display: none;
-            list-style: none;
-            background-color: #0f172a;
-            padding-left: 20px;
-        }
-        .submenu.active {
-            display: block;
-        }
-        /* Overlay */
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            z-index: 999;
-        }
-        .sidebar-overlay.active {
-            display: block;
-        }
-        /* Main Container */
-        .main-content {
-            flex-grow: 1;
-            width: 100%;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        /* Top Navigation Bar */
-        .top-navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #1e293b;
-            padding: 15px 20px;
-            border-radius: 12px;
-        }
-        .menu-toggle {
-            background: none;
-            border: none;
-            color: #f8fafc;
-            font-size: 22px;
-            cursor: pointer;
-        }
-        .nav-avatar {
-            width: 40px;
-            height: 40px;
-            background-color: #38bdf8;
-            color: #0f172a;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-        /* Profile Card */
-        .profile-card {
-            background: linear-gradient(135deg, #1e293b, #334155);
-            padding: 25px;
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .profile-info h2 {
-            font-size: 22px;
-            color: #f8fafc;
-        }
-        .profile-info p {
-            color: #94a3b8;
-            font-size: 14px;
-        }
-        .package-badge {
-            display: inline-block;
-            background-color: #0ea5e9;
-            color: white;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        .package-badge.vip {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-        }
-        /* Wallet & Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-        }
-        .stat-card {
-            background-color: #1e293b;
-            padding: 20px;
-            border-radius: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            border-left: 4px solid #38bdf8;
-        }
-        .stat-card h3 {
-            font-size: 14px;
-            color: #94a3b8;
-        }
-        .stat-card .amount {
-            font-size: 24px;
-            font-weight: 700;
-            color: #38bdf8;
-        }
-        /* Action Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-        }
-        .btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            text-align: center;
-        }
-        .btn-primary {
-            background-color: #0ea5e9;
-            color: white;
-        }
-        .btn-primary:hover {
-            background-color: #0284c7;
-        }
-        .btn-success {
-            background-color: #22c55e;
-            color: white;
-        }
-        .btn-success:hover {
-            background-color: #16a34a;
-        }
-        /* UPI Info Box */
-        .upi-box {
-            background-color: #1e293b;
-            padding: 15px 20px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .upi-box p {
-            font-size: 14px;
-            color: #cbd5e1;
-        }
-        /* Modals */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-        .modal-content {
-            background-color: #1e293b;
-            padding: 25px;
-            border-radius: 14px;
-            width: 90%;
-            max-width: 400px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .modal-content h3 {
-            color: #f8fafc;
-        }
-        .modal-content input {
-            padding: 10px 14px;
-            border-radius: 8px;
-            border: 1px solid #334155;
-            background-color: #0f172a;
-            color: white;
-            font-size: 14px;
-        }
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-    </style>
+    .profile-img-wrap { position: relative; }
+    .profile-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    
+    .user-info h2 { margin: 0; font-size: 18px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 6px; }
+    .user-info p { margin: 3px 0; font-size: 12.5px; color: #f1f5f9; word-break: break-all; }
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.2); color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; transition: 0.2s;
+    }
+    .copy-btn:hover { background: rgba(255, 255, 255, 0.3); }
+
+    /* REVENUE STATS STACK */
+    .stats-stack { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+    .v-card { 
+      border-radius: 20px; padding: 22px; color: #ffffff; box-shadow: 0 8px 20px rgba(0,0,0,0.08); 
+      display: flex; flex-direction: column; justify-content: space-between; position: relative;
+    }
+    .v-card h2 { margin: 0; font-size: 28px; font-weight: 800; }
+    .v-card p { margin: 2px 0 15px 0; font-size: 13px; opacity: 0.95; }
+    .v-card-footer {
+      display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600;
+      border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px; cursor: pointer;
+    }
+
+    .bg-today { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
+    .bg-7days { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+    .bg-30days { background: linear-gradient(135deg, #db2777, #be185d); }
+    .bg-alltime { background: linear-gradient(135deg, #0284c7, #0369a1); }
+    .bg-passive { background: linear-gradient(135deg, #d97706, #b45309); }
+
+    /* EXTRA SECTIONS */
+    .section-box { background: #ffffff; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; text-align: center; }
+    .section-box h3 { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 15px; text-align: left; }
+
+    .graph-container { width: 100%; height: 160px; display: flex; align-items: flex-end; justify-content: space-between; padding-top: 20px; position: relative; }
+    .graph-curve { width: 100%; height: 100px; background: linear-gradient(to top, rgba(219, 39, 119, 0.05), rgba(219, 39, 119, 0.4)); clip-path: polygon(0% 100%, 10% 95%, 25% 70%, 40% 10%, 55% 50%, 70% 65%, 85% 100%, 100% 100%); }
+
+    .pending-circle {
+      width: 130px; height: 130px; border-radius: 50%; border: 6px solid #e2e8f0; border-top-color: #64748b;
+      margin: 15px auto; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .pending-circle h4 { font-size: 16px; font-weight: 800; color: #0f172a; margin: 0; }
+    .pending-circle p { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; margin: 0; }
+
+    .pie-chart-box {
+      width: 140px; height: 140px; border-radius: 50%; background: conic-gradient(#7c3aed 0deg 200deg, #4f46e5 200deg 360deg);
+      margin: 15px auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .pie-inner { width: 90px; height: 90px; background: #fff; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .pie-inner h4 { font-size: 11px; color: #64748b; font-weight: 600; margin: 0; }
+    .pie-inner p { font-size: 18px; font-weight: 800; color: #0f172a; margin: 0; }
+
+    .btn-withdraw {
+      display: block; width: 100%; margin-top: 15px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; padding: 13px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); transition: 0.2s;
+    }
+    .btn-withdraw:hover { opacity: 0.9; }
+
+    /* MODAL STYLES */
+    .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.6); z-index:999; justify-content:center; align-items:center; backdrop-filter: blur(3px); padding: 15px; }
+    .modal-box { background:#ffffff; padding:25px; border-radius:22px; width:100%; max-width:420px; box-shadow:0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; color: #1e293b; }
+    .input-field { width:100%; padding:11px 14px; margin-bottom:12px; border-radius:12px; border:1px solid #cbd5e1; font-size:13.5px; box-sizing:border-box; outline: none; }
+    .btn-action { width:100%; background: linear-gradient(135deg, #7c3aed, #6d28d9); color:#fff; border:none; padding:13px; border-radius:12px; font-weight:700; cursor:pointer; font-size:14px; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
+  </style>
 </head>
 <body>
 
-    <!-- Sidebar Overlay -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h2>Smart Money</h2>
-            <button class="close-btn" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
-        </div>
-        <ul class="sidebar-menu">
-            <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li>
-                <a href="#" onclick="toggleSubmenu()"><i class="fas fa-box"></i> Packages <i class="fas fa-chevron-down" style="margin-left: auto;"></i></a>
-                <ul class="submenu" id="packageSubmenu">
-                    <li><a href="#">Starter Package</a></li>
-                    <li><a href="#">VIP Package</a></li>
-                </ul>
-            </li>
-            <li><a href="#" onclick="openUpiModal(); return false;"><i class="fas fa-wallet"></i> Update UPI</a></li>
-            <li><a href="#" id="sideLogoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-        </ul>
+<!-- SIDEBAR DRAWER MENU -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <a href="dashboard.html" class="brand-logo" style="color:#fff;">
+      <img src="1000819130.jpg" alt="Logo" class="brand-logo-img">
+      <span>Smart Money</span>
+    </a>
+    <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+  </div>
+  <ul class="sidebar-menu">
+    <li><a href="dashboard.html" class="active"><span>🏠</span> Dashboard Home</a></li>
+    <li><a href="index.html"><span>🌐</span> Home / Landing Page</a></li>
+    <li>
+      <button onclick="toggleSubmenu()"><span>📦</span> Our Packages ▾</button>
+      <ul class="submenu" id="packageSubmenu">
+        <li><a href="index.html#packages">Starter Package (₹289)</a></li>
+        <li><a href="index.html#packages">Intermediate (₹560)</a></li>
+        <li><a href="index.html#packages">Expert Package (₹1,149)</a></li>
+        <li><a href="index.html#packages">Master Package (₹2,499)</a></li>
+        <li><a href="index.html#packages">Brahmastra (₹5,499)</a></li>
+        <li><a href="index.html#packages">Premium Pro (₹10,997)</a></li>
+      </ul>
+    </li>
+    <li><button onclick="openUpiModal()"><span>👤</span> Update UPI Details for Withdrawal</button></li>
+    <li><button onclick="copyRefLink()"><span>🔗</span> Copy Affiliate Link</button></li>
+    <li><button onclick="openWithdrawModal()"><span>💸</span> Withdraw Funds</button></li>
+    <li><button id="sideLogoutBtn" style="color:#f87171;"><span>🚪</span> Logout</button></li>
+  </ul>
+</aside>
+
+<header class="navbar">
+  <a href="dashboard.html" class="brand-logo">
+    <img src="1000819130.jpg" alt="Smart Money Logo" class="brand-logo-img">
+    <span>Smart Money</span>
+  </a>
+  <div class="nav-right">
+    <img src="1000819130.jpg" alt="Avatar" class="nav-avatar" id="navAvatarTop">
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+  </div>
+</header>
+
+<div class="dash-container">
+  
+  <!-- PROFILE CARD -->
+  <div class="profile-card">
+    <div class="package-badge vip" id="activePackageBadge">MASTER PACKAGE 👑</div>
+    <div class="profile-img-wrap">
+      <img src="1000819130.jpg" alt="Profile Logo" class="profile-img">
     </div>
+    <div class="user-info">
+      <h2 id="userName">Loading... <span style="font-size:15px;">👑</span></h2>
+      <p id="userEmail">Loading...</p>
+      <p>ID: <b id="myRefCode" style="color:#fff;">Loading...</b></p>
+      <button class="copy-btn" onclick="copyRefLink()">📋 Copy Affiliate Link</button>
+    </div>
+  </div>
 
-    <!-- Main Content Area -->
-    <div class="main-content">
-        <!-- Top Navigation -->
-        <div class="top-navbar">
-            <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-            <div class="nav-avatar" id="navAvatarTopText">SM</div>
-        </div>
+  <!-- REVENUE STATS STACK -->
+  <div class="stats-stack">
+    <div class="v-card bg-today">
+      <div><h2>₹0</h2><p>Today's Revenue</p></div>
+      <div class="v-card-footer" onclick="alert('Viewing Today Revenue Details')"><span>View details</span><span>→</span></div>
+    </div>
+    <div class="v-card bg-7days">
+      <div><h2>₹0</h2><p>7 Days Revenue</p></div>
+      <div class="v-card-footer" onclick="alert('Viewing 7 Days Revenue Details')"><span>View details</span><span>→</span></div>
+    </div>
+    <div class="v-card bg-30days">
+      <div><h2>₹0</h2><p>30 Days Revenue</p></div>
+      <div class="v-card-footer" onclick="alert('Viewing 30 Days Revenue Details')"><span>View details</span><span>→</span></div>
+    </div>
+    <div class="v-card bg-alltime">
+      <div><h2 id="allTimeRevenueText">₹0</h2><p>All Time Revenue</p></div>
+      <div class="v-card-footer" onclick="alert('Viewing All Time Revenue Details')"><span>View details</span><span>→</span></div>
+    </div>
+    <div class="v-card bg-passive">
+      <div><h2>₹0</h2><p>Passive Income</p></div>
+      <div class="v-card-footer" onclick="alert('Viewing Passive Income Details')"><span>View details</span><span>→</span></div>
+    </div>
+  </div>
 
-        <!-- Profile Card -->
-        <div class="profile-card">
-            <div class="profile-info">
-                <h2 id="userName">Loading...</h2>
-                <p id="userEmail">Loading...</p>
-                <p style="margin-top: 5px;">ID: <b id="myRefCode" style="color:#fff;">Loading...</b></p>
-            </div>
-            <div>
-                <div class="package-badge vip" id="activePackageBadge">Loading...</div>
-            </div>
-        </div>
+  <!-- WALLET BALANCE & WITHDRAWAL -->
+  <div class="section-box" style="text-align: center;">
+    <span style="font-size: 11px; color:#64748b; font-weight: 700; text-transform: uppercase;">Available Wallet Balance</span>
+    <h1 style="margin: 6px 0 0 0; color: #10b981; font-size: 32px;" id="walletBalance">₹0.00</h1>
+    <p id="upiDisplayInfo" style="font-size: 12px; color: #64748b; margin-top: 4px;">UPI ID: Not Saved Yet</p>
+    <button class="btn-withdraw" onclick="openWithdrawModal()">💸 Withdraw Money Now</button>
+  </div>
 
-        <!-- Wallet & Stats Grid -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Wallet Balance</h3>
-                <div class="amount" id="walletBalance">₹0.00</div>
-            </div>
-            <div class="stat-card">
-                <h3>Total Earnings</h3>
-                <div class="amount" id="totalEarn">₹0</div>
-            </div>
-            <div class="stat-card">
-                <h3>Total Sales / Referrals</h3>
-                <div class="amount" id="totalSalesCount">0</div>
-            </div>
-        </div>
+  <!-- SALES LAST 30 DAYS GRAPH -->
+  <div class="section-box">
+    <h3>Sales Last 30 Days</h3>
+    <div class="graph-container">
+      <div class="graph-curve"></div>
+    </div>
+  </div>
 
-        <!-- UPI Display & Action Buttons -->
-        <div class="upi-box">
-            <p id="upiDisplayInfo">UPI ID: Loading...</p>
-            <button class="btn btn-primary" style="flex: 0; padding: 6px 12px; font-size: 12px;" onclick="openUpiModal()">Edit</button>
-        </div>
+  <!-- PENDING AMOUNT SECTION -->
+  <div class="section-box">
+    <h3>Pending Amount</h3>
+    <div class="pending-circle">
+      <p>Pending Amount</p>
+      <h4>Rs. 0</h4>
+    </div>
+  </div>
 
-        <div class="action-buttons">
-            <button class="btn btn-success" onclick="openWithdrawModal()">Withdraw Funds</button>
-            <button class="btn btn-primary" onclick="copyRefLink()">Copy Ref Link</button>
-        </div>
+  <!-- RECENT SALES -->
+  <div class="section-box">
+    <h3>Recent Sales</h3>
+    <div class="pie-chart-box">
+      <div class="pie-inner">
+        <h4>Total Sales</h4>
+        <p id="totalSalesCount">0</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- UPI SETTINGS MODAL -->
+<div id="profileSettingsModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">⚙️ Update UPI Details</h3>
+    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Apna UPI ID withdrawal ke liye yahan save karein.</p>
+    
+    <label style="font-size:12px; font-weight:600; color:#475569;">UPI ID / Bank Detail</label>
+    <input type="text" id="editUpiId" class="input-field" placeholder="e.g. yourname@paytm">
+    
+    <button onclick="updateUserUpi()" class="btn-action" id="saveProfileBtn">Save UPI ID</button>
+    <button onclick="closeModal('profileSettingsModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer;">Cancel</button>
+  </div>
+</div>
+
+<!-- WITHDRAW MODAL -->
+<div id="withdrawModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">💸 Request Withdrawal</h3>
+    <p style="font-size: 12px; color: #64748b;" id="withdrawModalBalanceText">Available Balance: ₹0</p>
+    
+    <label style="font-size:12px; font-weight:600; color:#475569;">Enter Amount (₹)</label>
+    <input type="number" id="withdrawAmount" class="input-field" placeholder="Enter amount to withdraw">
+    
+    <button onclick="submitWithdrawal()" class="btn-action">Submit Withdrawal Request</button>
+    <button onclick="closeModal('withdrawModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer;">Cancel</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+  
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL, 
+    SUPABASE_PUBLISHABLE_KEY, 
+    { 
+      auth: { 
+        persistSession: true, 
+        autoRefreshToken: true, 
+        detectSessionInUrl: true 
+      } 
+    }
+  );
+
+  let currentUserId = null;
+  let currentProfile = null;
+  let userCurrentBalance = 0;
+  let userSavedUpi = "";
+  let userRefCode = "";
+
+  function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("active");
+    document.getElementById("sidebarOverlay").classList.toggle("active");
+  }
+
+  function toggleSubmenu() {
+    document.getElementById("packageSubmenu").classList.toggle("active");
+  }
+
+  document.addEventListener("DOMContentLoaded", async function() {
+    try {
+      const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+      if (sessionError) {
+        console.log("Session error:", sessionError.message);
+      }
+      if (!session || !session.user) {
+        alert("Please login first.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      currentUserId = session.user.id;
+
+      const { data: profile, error: profileError } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('user_id', currentUserId)
+        .maybeSingle();
+
+      if (profileError) {
+        console.log("Profile Error:", profileError.message);
+      }
+
+      if (profile) {
+        currentProfile = profile;
+        userCurrentBalance = Number(profile.balance || 0);
+        userSavedUpi = profile.upi_id || "";
+        userRefCode = profile.referral_code || "";
+
+        const userName = profile.full_name || profile.name || session.user.user_metadata?.full_name || "Smart Money User";
+        const userEmail = profile.email || session.user.email || "";
+        const packageName = profile.package_name || profile.package || "MASTER PACKAGE";
+
+        document.getElementById("userName").innerHTML = userName + ' <span style="font-size:15px;">👑</span>';
+        document.getElementById("userEmail").innerText = userEmail;
+        document.getElementById("myRefCode").innerText = userRefCode || "Not Available";
+        document.getElementById("activePackageBadge").innerText = packageName.toUpperCase() + " 👑";
         
-        <p id="withdrawLimitText" style="font-size: 13px; color: #94a3b8; text-align: center;">Available Balance: ₹0.00</p>
-    </div>
+        document.getElementById("walletBalance").innerText = "₹" + userCurrentBalance.toFixed(2);
+        document.getElementById("allTimeRevenueText").innerText = "₹" + userCurrentBalance.toFixed(0);
+        document.getElementById("withdrawModalBalanceText").innerText = "Available Balance: ₹" + userCurrentBalance.toFixed(2);
 
-    <!-- Update UPI Modal -->
-    <div class="modal" id="profileSettingsModal">
-        <div class="modal-content">
-            <h3>Update UPI ID</h3>
-            <input type="text" id="editUpiId" placeholder="Enter your UPI ID (e.g., paytm@upi)">
-            <div class="modal-actions">
-                <button class="btn" style="background-color: #334155; color: white;" onclick="closeModal('profileSettingsModal')">Cancel</button>
-                <button class="btn btn-primary" id="saveProfileBtn" onclick="updateUserUpi()">Save UPI ID</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Withdraw Modal -->
-    <div class="modal" id="withdrawModal">
-        <div class="modal-content">
-            <h3>Withdraw Amount</h3>
-            <input type="number" id="withdrawAmount" placeholder="Enter amount to withdraw">
-            <div class="modal-actions">
-                <button class="btn" style="background-color: #334155; color: white;" onclick="closeModal('withdrawModal')">Cancel</button>
-                <button class="btn btn-success" onclick="submitWithdrawal()">Submit</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Supabase Client & Dashboard Script -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
-        const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-        
-        const supabaseClient = window.supabase.createClient(
-            SUPABASE_URL, 
-            SUPABASE_PUBLISHABLE_KEY, 
-            { 
-                auth: { 
-                    persistSession: true, 
-                    autoRefreshToken: true, 
-                    detectSessionInUrl: true 
-                } 
-            }
-        );
-
-        let currentUserId = null;
-        let currentProfile = null;
-        let userCurrentBalance = 0;
-        let userSavedUpi = "";
-        let userRefCode = "";
-
-        function toggleSidebar() {
-            document.getElementById("sidebar").classList.toggle("active");
-            document.getElementById("sidebarOverlay").classList.toggle("active");
+        if(userSavedUpi) {
+          document.getElementById("upiDisplayInfo").innerText = "UPI ID: " + userSavedUpi;
+          document.getElementById("editUpiId").value = userSavedUpi;
+        } else {
+          document.getElementById("upiDisplayInfo").innerText = "UPI ID: Not Saved Yet";
         }
 
-        function toggleSubmenu() {
-            document.getElementById("packageSubmenu").classList.toggle("active");
+        if (userRefCode) {
+          const { count, error: referralError } = await supabaseClient
+            .from('profiles')
+            .select('*', { count: 'exact', head: true })
+            .eq('referred_by', userRefCode);
+
+          if (!referralError && count !== null) {
+            document.getElementById("totalSalesCount").innerText = count;
+          }
         }
+      } else {
+        const fallbackName = session.user.user_metadata?.full_name || "Smart Money User";
+        document.getElementById("userName").innerHTML = fallbackName + ' <span style="font-size:15px;">👑</span>';
+        document.getElementById("userEmail").innerText = session.user.email || "";
+      }
+    } catch (err) {
+      console.log("Error loading dashboard data:", err);
+    }
 
-        document.addEventListener("DOMContentLoaded", async function () {
-            try {
-                /* ========================= CHECK LOGGED IN USER ========================= */
-                const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
-                if (sessionError) {
-                    console.log("Session error:", sessionError.message);
-                }
-                if (!session || !session.user) {
-                    alert("Please login first.");
-                    window.location.href = "login.html";
-                    return;
-                }
+    document.getElementById("sideLogoutBtn").addEventListener("click", async function() {
+      await supabaseClient.auth.signOut();
+      window.location.href = "login.html";
+    });
+  });
 
-                currentUserId = session.user.id;
-                console.log("Logged in User ID:", currentUserId);
+  function openUpiModal() {
+    if(document.getElementById("sidebar").classList.contains("active")) toggleSidebar();
+    document.getElementById("profileSettingsModal").style.display = "flex";
+  }
 
-                /* ========================= LOAD PROFILE ========================= */
-                const { data: profile, error: profileError } = await supabaseClient
-                    .from("profiles")
-                    .select("*")
-                    .eq("user_id", currentUserId)
-                    .maybeSingle();
+  function openWithdrawModal() {
+    if(document.getElementById("sidebar").classList.contains("active")) toggleSidebar();
+    
+    if (userCurrentBalance <= 0) {
+      alert("⚠️ Aapke wallet mein balance nahi hai!");
+      return;
+    }
 
-                if (profileError) {
-                    console.log("Profile Error:", profileError.message);
-                }
+    if (!userSavedUpi) {
+      alert("⚠️ Pehle apna UPI ID update karein!");
+      openUpiModal();
+      return;
+    }
 
-                if (profile) {
-                    currentProfile = profile;
-                    userCurrentBalance = Number(profile.balance || 0);
-                    userSavedUpi = profile.upi_id || "";
-                    userRefCode = profile.referral_code || "";
+    document.getElementById("withdrawModal").style.display = "flex";
+  }
 
-                    /* Profile Name */
-                    const userName = profile.full_name || profile.name || session.user.user_metadata?.full_name || "Smart Money User";
-                    const userEmail = profile.email || session.user.email || "";
-                    const packageName = profile.package_name || profile.package || "STARTER PACKAGE";
+  async function updateUserUpi() {
+    const newUpi = document.getElementById("editUpiId").value.trim();
+    let btn = document.getElementById("saveProfileBtn");
+    
+    if(!newUpi) {
+      alert("Please enter a valid UPI ID.");
+      return;
+    }
 
-                    /* Update Profile UI */
-                    const userNameElement = document.getElementById("userName");
-                    const userEmailElement = document.getElementById("userEmail");
-                    const refCodeElement = document.getElementById("myRefCode");
-                    const badgeElement = document.getElementById("activePackageBadge");
-                    const walletElement = document.getElementById("walletBalance");
-                    const totalEarnElement = document.getElementById("totalEarn");
-                    const withdrawLimitElement = document.getElementById("withdrawLimitText");
+    btn.innerText = "Saving...";
+    btn.disabled = true;
 
-                    if (userNameElement) {
-                        userNameElement.innerHTML = userName + ' <span style="font-size:15px;">👑</span>';
-                    }
-                    if (userEmailElement) {
-                        userEmailElement.innerText = userEmail;
-                    }
-                    if (refCodeElement) {
-                        refCodeElement.innerText = userRefCode || "Not Available";
-                    }
-                    if (badgeElement) {
-                        badgeElement.innerText = packageName.toUpperCase() + " 👑";
-                    }
-                    if (walletElement) {
-                        walletElement.innerText = "₹" + userCurrentBalance.toFixed(2);
-                    }
-                    if (totalEarnElement) {
-                        totalEarnElement.innerText = "₹" + userCurrentBalance.toFixed(0);
-                    }
-                    if (withdrawLimitElement) {
-                        withdrawLimitElement.innerText = "Available Balance: ₹" + userCurrentBalance.toFixed(2);
-                    }
+    try {
+      if (!currentUserId) {
+        alert("Please login first.");
+        btn.innerText = "Save UPI ID";
+        btn.disabled = false;
+        return;
+      }
+      const { error } = await supabaseClient.from('profiles').update({ 
+        upi_id: newUpi 
+      }).eq('user_id', currentUserId);
 
-                    /* UPI */
-                    if (userSavedUpi) {
-                        document.getElementById("upiDisplayInfo").innerText = "UPI ID: " + userSavedUpi;
-                        document.getElementById("editUpiId").value = userSavedUpi;
-                    } else {
-                        document.getElementById("upiDisplayInfo").innerText = "UPI ID: Not Saved Yet";
-                    }
+      if(error) throw error;
 
-                    /* ========================= LOAD REFERRAL COUNT ========================= */
-                    if (userRefCode) {
-                        const { count, error: referralError } = await supabaseClient
-                            .from("profiles")
-                            .select("*", { count: "exact", head: true })
-                            .eq("referred_by", userRefCode);
+      userSavedUpi = newUpi;
+      document.getElementById("upiDisplayInfo").innerText = "UPI ID: " + newUpi;
+      alert("🎉 UPI ID successfully saved!");
+      closeModal('profileSettingsModal');
+    } catch(err) {
+      alert("Error saving: " + err.message);
+    } finally {
+      btn.innerText = "Save UPI ID";
+      btn.disabled = false;
+    }
+  }
 
-                        if (!referralError && count !== null) {
-                            document.getElementById("totalSalesCount").innerText = count;
-                        } else {
-                            document.getElementById("totalSalesCount").innerText = "0";
-                        }
-                    }
-                } else {
-                    console.log("Profile not found for user:", currentUserId);
-                    const fallbackName = session.user.user_metadata?.full_name || "Smart Money User";
-                    document.getElementById("userName").innerHTML = fallbackName + ' <span style="font-size:15px;">👤</span>';
-                    document.getElementById("userEmail").innerText = session.user.email || "";
-                }
-            } catch (err) {
-                console.log("Dashboard loading error:", err);
-            }
+  function submitWithdrawal() {
+    const amount = parseFloat(document.getElementById("withdrawAmount").value);
+    
+    if (!amount || amount <= 0) {
+      alert("Please enter a valid withdrawal amount.");
+      return;
+    }
 
-            /* ========================= LOGOUT ========================= */
-            document.getElementById("sideLogoutBtn").addEventListener("click", async function () {
-                const { error } = await supabaseClient.auth.signOut();
-                if (error) {
-                    alert(error.message);
-                    return;
-                }
-                window.location.href = "login.html";
-            });
-        });
+    if (amount > userCurrentBalance) {
+      alert("❌ Error: Aapka withdrawal amount available balance se zyada hai!");
+      return;
+    }
 
-        /* ========================= UPI MODAL ========================= */
-        function openUpiModal() {
-            if (document.getElementById("sidebar").classList.contains("active")) {
-                toggleSidebar();
-            }
-            document.getElementById("profileSettingsModal").style.display = "flex";
-        }
+    alert("💸 Withdrawal request of ₹" + amount + " successfully submitted to UPI: " + userSavedUpi + "!");
+    document.getElementById("withdrawAmount").value = "";
+    closeModal('withdrawModal');
+  }
 
-        /* ========================= WITHDRAW MODAL ========================= */
-        function openWithdrawModal() {
-            if (document.getElementById("sidebar").classList.contains("active")) {
-                toggleSidebar();
-            }
-            if (userCurrentBalance <= 0) {
-                alert("⚠️ Aapke wallet mein balance nahi hai!");
-                return;
-            }
-            if (!userSavedUpi) {
-                alert("⚠️ Pehle apna UPI ID update karein!");
-                openUpiModal();
-                return;
-            }
-            document.getElementById("withdrawModal").style.display = "flex";
-        }
+  function closeModal(id) { document.getElementById(id).style.display = "none"; }
+  
+  function copyRefLink() {
+    if (!userRefCode) {
+      alert("Referral code not available yet.");
+      return;
+    }
+    navigator.clipboard.writeText(`${window.location.origin}/register.html?ref=${encodeURIComponent(userRefCode)}`);
+    alert("🎉 Affiliate Referral Link Copied!");
+  }
+</script>
 
-        /* ========================= UPDATE UPI ========================= */
-        async function updateUserUpi() {
-            const newUpi = document.getElementById("editUpiId").value.trim();
-            const btn = document.getElementById("saveProfileBtn");
-
-            if (!newUpi) {
-                alert("Please enter a valid UPI ID.");
-                return;
-            }
-            if (!currentUserId) {
-                alert("Please login first.");
-                return;
-            }
-
-            btn.innerText = "Saving...";
-            btn.disabled = true;
-
-            try {
-                const { error } = await supabaseClient
-                    .from("profiles")
-                    .update({ upi_id: newUpi })
-                    .eq("user_id", currentUserId);
-
-                if (error) throw error;
-
-                userSavedUpi = newUpi;
-                document.getElementById("upiDisplayInfo").innerText = "UPI ID: " + newUpi;
-                alert("🎉 UPI ID successfully saved!");
-                closeModal("profileSettingsModal");
-            } catch (err) {
-                console.log(err);
-                alert("Error saving UPI: " + err.message);
-            } finally {
-                btn.innerText = "Save UPI ID";
-                btn.disabled = false;
-            }
-        }
-
-        /* ========================= WITHDRAW ========================= */
-        function submitWithdrawal() {
-            const amount = parseFloat(document.getElementById("withdrawAmount").value);
-            if (!amount || amount <= 0) {
-                alert("Please enter a valid withdrawal amount.");
-                return;
-            }
-            if (amount > userCurrentBalance) {
-                alert("❌ Withdrawal amount available balance se zyada hai!");
-                return;
-            }
-            alert("💸 Withdrawal request of ₹" + amount + " submitted successfully to UPI: " + userSavedUpi);
-            document.getElementById("withdrawAmount").value = "";
-            closeModal("withdrawModal");
-        }
-
-        /* ========================= CLOSE MODAL ========================= */
-        function closeModal(id) {
-            document.getElementById(id).style.display = "none";
-        }
-
-        /* ========================= COPY REFERRAL LINK ========================= */
-        async function copyRefLink() {
-            if (!userRefCode) {
-                alert("Referral code not available yet.");
-                return;
-            }
-            const referralLink = window.location.origin + "/register.html?ref=" + encodeURIComponent(userRefCode);
-            try {
-                await navigator.clipboard.writeText(referralLink);
-                alert("🎉 Affiliate Referral Link Copied!");
-            } catch (err) {
-                console.log(err);
-                alert("Copy failed. Referral Link: " + referralLink);
-            }
-        }
-    </script>
 </body>
 </html>
