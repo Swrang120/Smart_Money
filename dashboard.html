@@ -11,7 +11,7 @@
     * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     body { background: #f1f5f9; color: #1e293b; margin: 0; display: flex; justify-content: center; padding-bottom: 40px; }
 
-    /* RESPONSIVE APP WRAPPER - WIDER FOR DESKTOP & PERFECT FOR MOBILE */
+    /* RESPONSIVE APP WRAPPER */
     .app-wrapper {
       width: 100%;
       max-width: 650px;
@@ -41,7 +41,6 @@
     .brand-logo-img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; background: #fff; }
     .nav-right { display: flex; align-items: center; gap: 10px; }
     
-    /* DIRECT HOME LINK IN NAVBAR */
     .nav-home-btn {
       background: rgba(124, 58, 237, 0.1); color: #7c3aed; border: 1px solid rgba(124, 58, 237, 0.2);
       padding: 6px 12px; border-radius: 10px; font-size: 12.5px; font-weight: 700; text-decoration: none;
@@ -95,7 +94,6 @@
     }
     
     .profile-img-wrap { position: relative; flex-shrink: 0; }
-    /* Permanent Logo set as profile picture with custom glowing border style */
     .profile-img { width: 75px !important; height: 75px !important; min-width: 75px; min-height: 75px; border-radius: 50% !important; object-fit: cover !important; border: 3px solid #ffd700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); background: #fff; }
     
     .user-info h2 { margin: 0; font-size: 18px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 6px; }
@@ -105,7 +103,7 @@
     }
     .copy-btn:hover { background: rgba(255, 255, 255, 0.3); }
 
-    /* REVENUE STATS GRID/STACK */
+    /* REVENUE STATS GRID */
     .stats-stack { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 22px; }
     @media (min-width: 600px) {
       .stats-stack { grid-template-columns: repeat(2, 1fr); }
@@ -129,7 +127,7 @@
     .bg-alltime { background: linear-gradient(135deg, #0284c7, #0369a1); }
     .bg-passive { background: linear-gradient(135deg, #d97706, #b45309); }
 
-    /* EXTRA SECTIONS */
+    /* SECTIONS */
     .section-box { background: #ffffff; border-radius: 20px; padding: 22px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; text-align: center; }
     .section-box h3 { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 15px; text-align: left; }
 
@@ -156,13 +154,12 @@
     }
     .btn-withdraw:hover { opacity: 0.9; }
 
-    /* MODAL STYLES */
+    /* MODALS */
     .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.6); z-index:999; justify-content:center; align-items:center; backdrop-filter: blur(3px); padding: 15px; }
     .modal-box { background:#ffffff; padding:25px; border-radius:22px; width:100%; max-width:440px; box-shadow:0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; color: #1e293b; text-align: left; }
     .input-field { width:100%; padding:11px 14px; margin-bottom:12px; border-radius:12px; border:1px solid #cbd5e1; font-size:13.5px; box-sizing:border-box; outline: none; }
     .btn-action { width:100%; background: linear-gradient(135deg, #7c3aed, #6d28d9); color:#fff; border:none; padding:13px; border-radius:12px; font-weight:700; cursor:pointer; font-size:14px; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
     
-    /* RADIO SELECTOR FOR PAYOUT */
     .payout-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
     .payout-tab { flex: 1; padding: 10px; text-align: center; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; background: #f8fafc; color: #475569; }
     .payout-tab.active { background: #7c3aed; color: #fff; border-color: #7c3aed; }
@@ -174,11 +171,11 @@
 
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-  <!-- SIDEBAR DRAWER MENU -->
+  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <a href="dashboard.html" class="brand-logo" style="color:#fff;">
-        <img src="1000819130.jpg?v=99" alt="Logo" class="brand-logo-img">
+        <img src="1000819130.jpg?v=999" alt="Logo" class="brand-logo-img">
         <span>Smart Money</span>
       </a>
       <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
@@ -194,25 +191,26 @@
     </ul>
   </aside>
 
+  <!-- NAVBAR -->
   <header class="navbar">
     <a href="dashboard.html" class="brand-logo">
-      <img src="1000819130.jpg?v=99" alt="Smart Money Logo" class="brand-logo-img">
+      <img src="1000819130.jpg?v=999" alt="Logo" class="brand-logo-img">
       <span>Smart Money</span>
     </a>
     <div class="nav-right">
       <a href="index.html" class="nav-home-btn">🌐 Home</a>
-      <img src="1000819130.jpg?v=99" alt="Avatar" class="nav-avatar">
+      <img src="1000819130.jpg?v=999" alt="Avatar" class="nav-avatar">
       <button class="menu-btn" onclick="toggleSidebar()">☰</button>
     </div>
   </header>
 
   <div class="dash-container">
     
-    <!-- PROFILE CARD WITH PERMANENT LOGO -->
+    <!-- PROFILE CARD -->
     <div class="profile-card">
       <div class="package-badge" id="activePackageBadge">MASTER PACKAGE 👑</div>
       <div class="profile-img-wrap">
-        <img src="1000819130.jpg?v=99" alt="Permanent Profile Logo" class="profile-img">
+        <img src="1000819130.jpg?v=999" alt="Profile Logo" class="profile-img">
       </div>
       <div class="user-info">
         <h2 id="userName">Santiram Swargiary <span style="font-size:15px;">👑</span></h2>
@@ -223,7 +221,7 @@
       </div>
     </div>
 
-    <!-- REVENUE STATS STACK -->
+    <!-- STATS -->
     <div class="stats-stack">
       <div class="v-card bg-today">
         <div><h2>₹0</h2><p>Today's Revenue</p></div>
@@ -247,7 +245,7 @@
       </div>
     </div>
 
-    <!-- WALLET BALANCE & WITHDRAWAL -->
+    <!-- WALLET -->
     <div class="section-box" style="text-align: center;">
       <span style="font-size: 11px; color:#64748b; font-weight: 700; text-transform: uppercase;">Available Wallet Balance</span>
       <h1 style="margin: 6px 0 0 0; color: #10b981; font-size: 32px;" id="walletBalance">₹0.00</h1>
@@ -255,7 +253,7 @@
       <button class="btn-withdraw" onclick="openWithdrawModal()">💸 Withdraw Money Now</button>
     </div>
 
-    <!-- SALES LAST 30 DAYS GRAPH -->
+    <!-- GRAPH -->
     <div class="section-box">
       <h3>Sales Last 30 Days</h3>
       <div class="graph-container">
@@ -263,7 +261,7 @@
       </div>
     </div>
 
-    <!-- PENDING AMOUNT SECTION -->
+    <!-- PENDING -->
     <div class="section-box">
       <h3>Pending Amount</h3>
       <div class="pending-circle">
@@ -272,7 +270,7 @@
       </div>
     </div>
 
-    <!-- RECENT SALES -->
+    <!-- SALES -->
     <div class="section-box">
       <h3>Recent Sales</h3>
       <div class="pie-chart-box">
@@ -287,31 +285,27 @@
 
 </div>
 
-<!-- PAYOUT METHOD SETTINGS MODAL (EXCLUSIVE: UPI OR BANK) -->
+<!-- MODALS -->
 <div id="profileSettingsModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">🏦 Add Payout Details</h3>
-    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Koi ek method select karein: Ya toh UPI ID ya phir Bank Account.</p>
+    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Select UPI or Bank Account:</p>
     
     <div class="payout-tabs">
       <div class="payout-tab active" id="tabUpi" onclick="switchPayoutMode('upi')">UPI ID</div>
       <div class="payout-tab" id="tabBank" onclick="switchPayoutMode('bank')">Bank Account</div>
     </div>
 
-    <!-- UPI SECTION -->
     <div id="upiSection">
       <label style="font-size:12px; font-weight:600; color:#475569;">Enter UPI ID</label>
       <input type="text" id="editUpiId" class="input-field" placeholder="e.g. yourname@paytm">
     </div>
 
-    <!-- BANK SECTION -->
     <div id="bankSection" style="display: none;">
       <label style="font-size:12px; font-weight:600; color:#475569;">Account Holder Name</label>
       <input type="text" id="editAccName" class="input-field" placeholder="e.g. Santiram Swargiary">
-
       <label style="font-size:12px; font-weight:600; color:#475569;">Bank Account Number</label>
       <input type="text" id="editAccNo" class="input-field" placeholder="e.g. 123456789012">
-
       <label style="font-size:12px; font-weight:600; color:#475569;">IFSC Code</label>
       <input type="text" id="editIfsc" class="input-field" placeholder="e.g. SBIN0001234">
     </div>
@@ -321,35 +315,26 @@
   </div>
 </div>
 
-<!-- KYC & DOB MODAL -->
 <div id="kycModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">🆔 KYC & Date of Birth</h3>
-    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Apni asli Date of Birth aur KYC details yahan save karein.</p>
-    
-    <label style="font-size:12px; font-weight:600; color:#475569;">Full Name (As per ID)</label>
-    <input type="text" id="kycFullName" class="input-field" placeholder="e.g. Santiram Swargiary">
-
+    <label style="font-size:12px; font-weight:600; color:#475569;">Full Name</label>
+    <input type="text" id="kycFullName" class="input-field" placeholder="Full Name">
     <label style="font-size:12px; font-weight:600; color:#475569;">Date of Birth (DOB)</label>
     <input type="date" id="kycDob" class="input-field">
-
-    <label style="font-size:12px; font-weight:600; color:#475569;">PAN Card / Aadhaar Number</label>
-    <input type="text" id="kycIdNumber" class="input-field" placeholder="Enter ID number">
-    
+    <label style="font-size:12px; font-weight:600; color:#475569;">PAN / Aadhaar Number</label>
+    <input type="text" id="kycIdNumber" class="input-field" placeholder="ID Number">
     <button onclick="saveKycDetails()" class="btn-action" id="saveKycBtn">Save KYC Details</button>
     <button onclick="closeModal('kycModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer;">Cancel</button>
   </div>
 </div>
 
-<!-- WITHDRAW MODAL -->
 <div id="withdrawModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">💸 Request Withdrawal</h3>
     <p style="font-size: 12px; color: #64748b;" id="withdrawModalBalanceText">Available Balance: ₹0</p>
-    
     <label style="font-size:12px; font-weight:600; color:#475569;">Enter Amount (₹)</label>
-    <input type="number" id="withdrawAmount" class="input-field" placeholder="Enter amount to withdraw">
-    
+    <input type="number" id="withdrawAmount" class="input-field" placeholder="Amount">
     <button onclick="submitWithdrawal()" class="btn-action">Submit Withdrawal Request</button>
     <button onclick="closeModal('withdrawModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer;">Cancel</button>
   </div>
@@ -369,7 +354,7 @@
   let userSavedUpi = "";
   let userSavedAcc = "";
   let userRefCode = "";
-  let currentPayoutMode = "upi"; // 'upi' or 'bank'
+  let currentPayoutMode = "upi";
 
   function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("active");
@@ -395,7 +380,6 @@
     try {
       const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
       if (!session || !session.user) {
-        alert("Please login first.");
         window.location.href = "login.html";
         return;
       }
@@ -416,15 +400,13 @@
         userSavedAcc = profile.bank_account_number || "";
         userRefCode = profile.referral_code || profile.referral_id || "";
 
-        const userName = profile.full_name || profile.name || session.user.user_metadata?.full_name || "Santiram Swargiary";
-        const userEmail = profile.email || fallbackEmail;
-        const packageName = profile.package_name || profile.package || "MASTER PACKAGE";
+        const userName = profile.full_name || profile.name || "Santiram Swargiary";
         const userDob = profile.date_of_birth || profile.dob || "";
 
         document.getElementById("userName").innerHTML = userName + ' <span style="font-size:15px;">👑</span>';
-        document.getElementById("userEmail").innerText = userEmail;
+        document.getElementById("userEmail").innerText = profile.email || fallbackEmail;
         document.getElementById("myRefCode").innerText = userRefCode || "SM-" + currentUserId.substring(0, 6).toUpperCase();
-        document.getElementById("activePackageBadge").innerText = packageName.toUpperCase() + " 👑";
+        document.getElementById("activePackageBadge").innerText = (profile.package_name || "MASTER PACKAGE").toUpperCase() + " 👑";
         
         if(userDob) {
           document.getElementById("dobDisplayInfo").innerText = "DOB: " + userDob;
@@ -447,8 +429,6 @@
           if(profile.bank_account_number) document.getElementById("editAccNo").value = profile.bank_account_number;
           if(profile.ifsc_code) document.getElementById("editIfsc").value = profile.ifsc_code;
           switchPayoutMode('bank');
-        } else {
-          document.getElementById("payoutDisplayInfo").innerText = "Payout Method: Not Saved Yet";
         }
 
         if (userRefCode) {
@@ -466,7 +446,6 @@
       }
     } catch (err) {
       console.log("Error loading dashboard data:", err);
-      document.getElementById("myRefCode").innerText = "SM-123456";
     }
 
     document.getElementById("sideLogoutBtn").addEventListener("click", async function() {
@@ -505,10 +484,7 @@
 
     if (currentPayoutMode === 'upi') {
       const upiId = document.getElementById("editUpiId").value.trim();
-      if (!upiId) {
-        alert("Please enter a valid UPI ID.");
-        return;
-      }
+      if (!upiId) { alert("Please enter a valid UPI ID."); return; }
       updateData = { upi_id: upiId, bank_account_number: null, ifsc_code: null, account_holder_name: null };
       userSavedUpi = upiId;
       userSavedAcc = "";
@@ -516,32 +492,23 @@
       const accName = document.getElementById("editAccName").value.trim();
       const accNo = document.getElementById("editAccNo").value.trim();
       const ifsc = document.getElementById("editIfsc").value.trim();
-      if (!accName || !accNo || !ifsc) {
-        alert("Please fill all Bank Account details completely.");
-        return;
-      }
+      if (!accName || !accNo || !ifsc) { alert("Please fill all Bank Account details."); return; }
       updateData = { bank_account_number: accNo, ifsc_code: ifsc, account_holder_name: accName, upi_id: null };
       userSavedAcc = accNo;
       userSavedUpi = "";
     }
 
-    btn.innerText = "Saving details...";
+    btn.innerText = "Saving...";
     btn.disabled = true;
 
     try {
       const { error } = await supabaseClient.from('profiles').update(updateData).eq('user_id', currentUserId);
       if(error) throw error;
-
-      if(currentPayoutMode === 'upi') {
-        document.getElementById("payoutDisplayInfo").innerText = "UPI: " + userSavedUpi;
-      } else {
-        document.getElementById("payoutDisplayInfo").innerText = "Bank A/C: " + userSavedAcc;
-      }
-
+      document.getElementById("payoutDisplayInfo").innerText = currentPayoutMode === 'upi' ? "UPI: " + userSavedUpi : "Bank A/C: " + userSavedAcc;
       alert("🎉 Payout details successfully saved!");
       closeModal('profileSettingsModal');
     } catch(err) {
-      alert("Error saving: " + err.message);
+      alert("Error: " + err.message);
     } finally {
       btn.innerText = "Save Payout Details";
       btn.disabled = false;
@@ -554,12 +521,9 @@
     const idNumber = document.getElementById("kycIdNumber").value.trim();
     let btn = document.getElementById("saveKycBtn");
 
-    if(!fullName || !dob) {
-      alert("Please provide your Full Name and Date of Birth.");
-      return;
-    }
+    if(!fullName || !dob) { alert("Please provide Full Name and DOB."); return; }
 
-    btn.innerText = "Saving KYC...";
+    btn.innerText = "Saving...";
     btn.disabled = true;
 
     try {
@@ -570,14 +534,12 @@
       }).eq('user_id', currentUserId);
 
       if(error) throw error;
-
       document.getElementById("userName").innerHTML = fullName + ' <span style="font-size:15px;">👑</span>';
       document.getElementById("dobDisplayInfo").innerText = "DOB: " + dob;
-      
-      alert("🎉 KYC & Date of Birth successfully saved!");
+      alert("🎉 KYC successfully saved!");
       closeModal('kycModal');
     } catch(err) {
-      alert("Error saving KYC: " + err.message);
+      alert("Error: " + err.message);
     } finally {
       btn.innerText = "Save KYC Details";
       btn.disabled = false;
@@ -586,15 +548,9 @@
 
   function submitWithdrawal() {
     const amount = parseFloat(document.getElementById("withdrawAmount").value);
-    if (!amount || amount <= 0) {
-      alert("Please enter a valid withdrawal amount.");
-      return;
-    }
-    if (amount > userCurrentBalance) {
-      alert("❌ Error: Aapka withdrawal amount available balance se zyada hai!");
-      return;
-    }
-    alert("💸 Withdrawal request of ₹" + amount + " successfully submitted!");
+    if (!amount || amount <= 0) { alert("Please enter a valid amount."); return; }
+    if (amount > userCurrentBalance) { alert("❌ Balance se zyada amount nahi nikal sakte!"); return; }
+    alert("💸 Withdrawal request of ₹" + amount + " submitted!");
     document.getElementById("withdrawAmount").value = "";
     closeModal('withdrawModal');
   }
@@ -602,9 +558,7 @@
   function closeModal(id) { document.getElementById(id).style.display = "none"; }
   
   function copyRefLink() {
-    if (!userRefCode) {
-      userRefCode = "SM-" + currentUserId.substring(0, 6).toUpperCase();
-    }
+    if (!userRefCode) userRefCode = "SM-" + currentUserId.substring(0, 6).toUpperCase();
     navigator.clipboard.writeText(`${window.location.origin}/register.html?ref=${encodeURIComponent(userRefCode)}`);
     alert("🎉 Affiliate Referral Link Copied!");
   }
