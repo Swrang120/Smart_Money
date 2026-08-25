@@ -42,15 +42,60 @@
     .mv-box p { font-size: 13px; color: #64748b; margin: 0; }
     .know-more-btn { display: inline-block; background: linear-gradient(135deg, #ec4899, #db2777); color: #fff; padding: 10px 24px; border-radius: 30px; font-weight: 600; text-decoration: none; font-size: 14px; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3); }
 
-    .about-images { display: flex; gap: 15px; justify-content: center; align-items: center; position: relative; }
+    .about-images { display: flex; gap: 15px; justify-content: center; align-items: center; }
     .about-images img { width: 48%; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); object-fit: cover; }
 
+    /* PACKAGES SECTION */
+    .packages-section { padding: 60px 7%; background: #f8fafc; text-align: center; }
+    .packages-section h2 { font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 40px; }
+    .packages-section h2 span { color: #2563eb; }
+
+    .packages-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+    .package-card {
+      background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+      border: 1px solid #e2e8f0; text-align: left; display: flex; flex-direction: column; justify-content: space-between;
+      transition: transform 0.3s ease;
+    }
+    .package-card:hover { transform: translateY(-5px); }
+
+    .pkg-banner {
+      padding: 25px 20px; color: #fff; display: flex; justify-content: space-between; align-items: center;
+    }
+    .starter-bg { background: linear-gradient(135deg, #f97316, #ea580c); }
+    .intermediate-bg { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+    .expert-bg { background: linear-gradient(135deg, #a855f7, #7e22ce); }
+    .master-bg { background: linear-gradient(135deg, #0f172a, #334155); }
+    .brahmastra-bg { background: linear-gradient(135deg, #e11d48, #be123c); }
+    .premiumpro-bg { background: linear-gradient(135deg, #0284c7, #0369a1); }
+
+    .pkg-title h3 { font-size: 20px; font-weight: 800; margin-bottom: 5px; }
+    .pkg-title p { font-size: 12px; opacity: 0.9; }
+    .pkg-badge { font-size: 28px; }
+
+    .pkg-body { padding: 20px; }
+    .pkg-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 13px; color: #64748b; font-weight: 500; }
+    .stars { color: #f59e0b; }
+    
+    .pkg-footer { padding: 15px 20px; background: #f8fafc; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+    .price-box .current-price { font-size: 18px; font-weight: 800; color: #0f172a; }
+    .price-box .old-price { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-left: 5px; }
+    
+    .buy-btn {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; padding: 8px 18px; border-radius: 8px;
+      font-size: 13px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+    .buy-btn:hover { background: #1d4ed8; }
+
     /* RESPONSIVE */
-    @media(max-width: 900px) {
+    @media(max-width: 1024px) {
+      .packages-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media(max-width: 768px) {
       .about-section { grid-template-columns: 1fr; }
+      .packages-grid { grid-template-columns: 1fr; }
       .hero-banner { height: 280px; }
       .hero-content h1 { font-size: 26px; }
-      .nav-links { display: none; } /* Mobile Menu handle can be added */
+      .nav-links { display: none; }
     }
   </style>
 </head>
@@ -93,12 +138,165 @@
         </div>
       </div>
 
-      <a href="login.html" class="now-btn know-more-btn">Get Started Now →</a>
+      <a href="login.html" class="know-more-btn">Get Started Now →</a>
     </div>
 
     <div class="about-images">
       <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=500&q=80" alt="Student 1">
       <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=500&q=80" alt="Student 2">
+    </div>
+  </section>
+
+  <!-- COURSE PACKAGES SECTION -->
+  <section class="packages-section" id="packages">
+    <h2>Choose The Perfect <span>Course Package</span> For You</h2>
+
+    <div class="packages-grid">
+
+      <!-- 1. Starter Package -->
+      <div class="package-card">
+        <div class="pkg-banner starter-bg">
+          <div class="pkg-title">
+            <h3>Starter Package</h3>
+            <p>Beginner Growth</p>
+          </div>
+          <div class="pkg-badge">🚀</div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-info">
+            <span class="stars">★★★★★</span>
+            <span>📦 2 Courses</span>
+          </div>
+        </div>
+        <div class="pkg-footer">
+          <div class="price-box">
+            <span class="current-price">₹289</span>
+            <span class="old-price">₹499</span>
+          </div>
+          <a href="entry.html" class="buy-btn">Buy Now</a>
+        </div>
+      </div>
+
+      <!-- 2. Intermediate Package -->
+      <div class="package-card">
+        <div class="pkg-banner intermediate-bg">
+          <div class="pkg-title">
+            <h3>Intermediate</h3>
+            <p>Skill Advancement</p>
+          </div>
+          <div class="pkg-badge">💻</div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-info">
+            <span class="stars">★★★★★</span>
+            <span>📦 5 Courses</span>
+          </div>
+        </div>
+        <div class="pkg-footer">
+          <div class="price-box">
+            <span class="current-price">₹560</span>
+            <span class="old-price">₹999</span>
+          </div>
+          <a href="intermediate.html" class="buy-btn">Buy Now</a>
+        </div>
+      </div>
+
+      <!-- 3. Expert Package -->
+      <div class="package-card">
+        <div class="pkg-banner expert-bg">
+          <div class="pkg-title">
+            <h3>Expert Package</h3>
+            <p>Professional Tier</p>
+          </div>
+          <div class="pkg-badge">⚡</div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-info">
+            <span class="stars">★★★★★</span>
+            <span>📦 10 Courses</span>
+          </div>
+        </div>
+        <div class="pkg-footer">
+          <div class="price-box">
+            <span class="current-price">₹1,149</span>
+            <span class="old-price">₹2,999</span>
+          </div>
+          <a href="expert.html" class="buy-btn">Buy Now</a>
+        </div>
+      </div>
+
+      <!-- 4. Master Package -->
+      <div class="package-card">
+        <div class="pkg-banner master-bg">
+          <div class="pkg-title">
+            <h3>Master Package</h3>
+            <p>Advanced Mastery</p>
+          </div>
+          <div class="pkg-badge">👑</div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-info">
+            <span class="stars">★★★★★</span>
+            <span>📦 16 Courses</span>
+          </div>
+        </div>
+        <div class="pkg-footer">
+          <div class="price-box">
+            <span class="current-price">₹2,499</span>
+            <span class="old-price">₹5,999</span>
+          </div>
+          <a href="master.html" class="buy-btn">Buy Now</a>
+        </div>
+      </div>
+
+      <!-- 5. Brahmastra Package -->
+      <div class="package-card">
+        <div class="pkg-banner brahmastra-bg">
+          <div class="pkg-title">
+            <h3>Brahmastra</h3>
+            <p>Ultimate Growth</p>
+          </div>
+          <div class="pkg-badge">🔥</div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-info">
+            <span class="stars">★★★★★</span>
+            <span>📦 20 Courses</span>
+          </div>
+        </div>
+        <div class="pkg-footer">
+          <div class="price-box">
+            <span class="current-price">₹5,499</span>
+            <span class="old-price">₹10,999</span>
+          </div>
+          <a href="brahmastra.html" class="buy-btn">Buy Now</a>
+        </div>
+      </div>
+
+      <!-- 6. Premium Pro Package -->
+      <div class="package-card">
+        <div class="pkg-banner premiumpro-bg">
+          <div class="pkg-title">
+            <h3>Premium Pro</h3>
+            <p>Top Tier Access</p>
+          </div>
+          <div class="pkg-badge">💎</div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-info">
+            <span class="stars">★★★★★</span>
+            <span>📦 23 Courses</span>
+          </div>
+        </div>
+        <div class="pkg-footer">
+          <div class="price-box">
+            <span class="current-price">₹10,997</span>
+            <span class="old-price">₹20,998</span>
+          </div>
+          <a href="premiumpro.html" class="buy-btn">Buy Now</a>
+        </div>
+      </div>
+
     </div>
   </section>
 
