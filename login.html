@@ -1,197 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Login - Smart Money</title>
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .auth-card {
+      background: #ffffff;
+      padding: 30px 25px;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border: 1px solid #e2e8f0;
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .auth-header h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 5px;
+    }
+    .auth-header p {
+      font-size: 13px;
+      color: #64748b;
+    }
+    .input-group {
+      margin-bottom: 15px;
+    }
+    .input-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+    .input-field {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .input-field:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      margin-top: 10px;
+      transition: opacity 0.2s;
+    }
+    .btn-submit:hover { opacity: 0.9; }
+    .auth-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #64748b;
+    }
+    .auth-footer a {
+      color: #6366f1;
+      font-weight: 600;
+      text-decoration: none;
+    }
+  </style>
 </head>
-
 <body>
 
-  <header class="navbar">
-
-    <div class="logo">Smart Money</div>
-
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="register.html">Register</a>
-    </nav>
-
-  </header>
-
-
-  <main class="form-page">
-
-    <div class="form-box">
-
-      <h1>Welcome Back</h1>
-
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2>Welcome Back</h2>
       <p>Login to your Smart Money account</p>
-
-
-      <form id="loginForm">
-
-        <label for="email">Gmail</label>
-
-        <input
-          type="email"
-          id="email"
-          placeholder="Enter your Gmail"
-          required
-        >
-
-
-        <label for="password">Password</label>
-
-        <input
-          type="password"
-          id="password"
-          placeholder="Enter your password"
-          required
-        >
-
-
-        <button
-          type="submit"
-          class="btn login-btn"
-        >
-          Login
-        </button>
-
-      </form>
-
-
-      <p class="login-text">
-
-        Don't have an account?
-
-        <a href="register.html">
-          Create Account
-        </a>
-
-      </p>
-
     </div>
 
-  </main>
+    <div class="input-group">
+      <label>Email Address</label>
+      <input type="email" id="loginEmail" class="input-field" placeholder="Enter your email">
+    </div>
 
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" id="loginPassword" class="input-field" placeholder="Enter your password">
+    </div>
 
-  <!-- SUPABASE LIBRARY -->
+    <button onclick="handleLogin()" class="btn-submit" id="loginBtn">Login Now</button>
+
+    <div class="auth-footer">
+      Don't have an account? <a href="register.html">Create Account</a>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-  <!-- LOGIN SYSTEM -->
   <script>
+    const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-    const SUPABASE_URL =
-      "https://rvprrulkjegvicbnjuft.supabase.co";
+    async function handleLogin() {
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value.trim();
+      const btn = document.getElementById("loginBtn");
 
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-
-
-    const supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-      );
-
-
-    const loginForm =
-      document.getElementById("loginForm");
-
-
-    const loginButton =
-      document.querySelector(".login-btn");
-
-
-    loginForm.addEventListener(
-      "submit",
-      async function(event) {
-
-        event.preventDefault();
-
-
-        const email =
-          document
-            .getElementById("email")
-            .value
-            .trim();
-
-
-        const password =
-          document
-            .getElementById("password")
-            .value;
-
-
-        loginButton.disabled = true;
-
-        loginButton.textContent =
-          "Logging in...";
-
-
-        try {
-
-          const { data, error } =
-            await supabaseClient
-              .auth
-              .signInWithPassword({
-
-                email: email,
-
-                password: password
-
-              });
-
-
-          if (error) {
-            throw error;
-          }
-
-
-          if (!data.user) {
-            throw new Error(
-              "Login failed."
-            );
-          }
-
-
-          alert(
-            "Login successful!"
-          );
-
-
-          window.location.href =
-            "dashboard.html";
-
-
-        } catch (error) {
-
-          alert(
-            "Login failed: " +
-            error.message
-          );
-
-
-        } finally {
-
-          loginButton.disabled = false;
-
-          loginButton.textContent =
-            "Login";
-
-        }
-
+      if (!email || !password) {
+        alert("Please fill in both email and password.");
+        return;
       }
-    );
 
+      btn.innerText = "Logging in...";
+      btn.disabled = true;
+
+      try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password,
+        });
+
+        if (error) throw error;
+
+        alert("🎉 Login Successful!");
+        window.location.href = "dashboard.html";
+      } catch (err) {
+        alert("Login Failed: " + err.message);
+        btn.innerText = "Login Now";
+        btn.disabled = false;
+      }
+    }
   </script>
-
 </body>
-
 </html>
