@@ -58,7 +58,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .copy-id-btn{width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#9333ea);color:white;display:flex;align-items:center;justify-content:center;}
 .remove-photo-btn{background:none;border:none;color:#ef4444;font-size:11px;font-weight:700;cursor:pointer;padding:0;margin-top:6px;display:inline-block;}
 
-/* STATS CARDS (RichIND Style - Full Width Stack) */
+/* STATS CARDS */
 .stats-stack{display:flex;flex-direction:column;gap:15px;margin-bottom:20px;}
 .v-card{border-radius:20px;padding:22px 24px;color:white;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 8px 25px rgba(0,0,0,.12);position:relative;overflow:hidden;}
 .v-card h2{margin:0 0 4px;font-size:32px;font-weight:800;letter-spacing:-0.5px;}
@@ -86,6 +86,15 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .status-approved{background:#d1fae5;color:#059669;}
 .status-pending{background:#fef3c7;color:#d97706;}
 .status-rejected{background:#fee2e2;color:#dc2626;}
+
+/* REFERRAL LIST STYLES (1 to 30 Days) */
+.referral-tabs{display:flex;gap:6px;margin-bottom:15px;overflow-x:auto;padding-bottom:5px;}
+.ref-tab{padding:8px 14px;border-radius:20px;background:#f1f5f9;color:#475569;font-size:12px;font-weight:700;border:none;cursor:pointer;white-space:nowrap;}
+.ref-tab.active{background:#7c3aed;color:#fff;}
+.referral-card-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:12px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+.ref-user-info h4{margin:0 0 3px;font-size:14px;color:#0f172a;font-weight:700;}
+.ref-user-info span{font-size:11px;color:#7c3aed;font-weight:600;}
+.ref-date{font-size:11px;color:#64748b;font-weight:600;text-align:right;}
 
 .modal-overlay{display:none;position:fixed;inset:0;z-index:10000;background:rgba(15,23,42,.65);backdrop-filter:blur(4px);justify-content:center;align-items:center;padding:15px;}
 .modal-box{width:100%;max-width:440px;background:#fff;border-radius:20px;padding:22px;max-height:90vh;overflow:auto;}
@@ -164,7 +173,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     </div>
   </div>
 
-  <!-- STATS CARDS (RichIND Style Stack) -->
+  <!-- STATS CARDS -->
   <div class="stats-stack">
     <div class="v-card bg-today">
       <div>
@@ -229,10 +238,25 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <button class="btn-withdraw" onclick="openWithdrawModal()">💸 Withdraw Money Now</button>
   </div>
 
+  <!-- WITHDRAWAL HISTORY (Moved Up to 3-Line Cards) -->
   <div class="section-box">
     <h3>📜 Withdrawal History</h3>
     <div id="withdrawalHistoryList">
       <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">Loading history...</div>
+    </div>
+  </div>
+
+  <!-- RECENT REFERRALS (1 Day to 30 Days) -->
+  <div class="section-box">
+    <h3>👥 My Referrals & Joins</h3>
+    <div class="referral-tabs">
+      <button class="ref-tab active" onclick="filterReferrals(1, this)">1 Day (Today)</button>
+      <button class="ref-tab" onclick="filterReferrals(7, this)">7 Days</button>
+      <button class="ref-tab" onclick="filterReferrals(15, this)">15 Days</button>
+      <button class="ref-tab" onclick="filterReferrals(30, this)">30 Days</button>
+    </div>
+    <div id="referralsListContainer">
+      <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">Loading referrals...</div>
     </div>
   </div>
 </div>
@@ -319,6 +343,7 @@ let userCurrentBalance = 0;
 let userRefCode = "";
 let payoutMode = "upi";
 let currentUserEmail = "";
+let allReferralsData = [];
 
 function escapeHtml(text){
   const div = document.createElement("div");
@@ -469,6 +494,7 @@ document.addEventListener("DOMContentLoaded", async function(){
     document.getElementById("payoutDisplayInfo").innerText = payoutText;
 
     await loadWithdrawalHistory();
+    await loadReferralsData();
     setupRealtimeListener();
 
     document.getElementById("sideLogoutBtn").onclick = async function(){
@@ -557,7 +583,6 @@ async function loadWithdrawalHistory(){
     }
     const dateStr = new Date(item.created_at).toLocaleDateString("en-IN", { day: 'numeric', month: 'short', year: 'numeric' });
     
-    // 3-Line Card Structure for History
     html += `
       <div class="history-card-item">
         <div class="history-row-1">
@@ -571,6 +596,65 @@ async function loadWithdrawalHistory(){
     `;
   });
   historyContainer.innerHTML = html;
+}
+
+async function loadReferralsData(){
+  // Fetching profiles registered using user's referral code or referred by this user
+  const { data, error } = await supabaseClient
+    .from("profiles")
+    .select("full_name, referral_code, created_at, referred_by")
+    .or(`referred_by.eq.${userRefCode},referred_by.eq.${currentUserId}`)
+    .order("created_at", { ascending: false });
+
+  if(error || !data){
+    allReferralsData = [];
+  } else {
+    allReferralsData = data;
+  }
+  filterReferrals(1, document.querySelector('.ref-tab'));
+}
+
+function filterReferrals(days, btnElement){
+  // Update active tab styling
+  const tabs = document.querySelectorAll('.ref-tab');
+  tabs.forEach(t => t.classList.remove('active'));
+  if(btnElement) btnElement.classList.add('active');
+
+  const container = document.getElementById("referralsListContainer");
+  const now = new Date();
+
+  const filtered = allReferralsData.filter(item => {
+    const itemDate = new Date(item.created_at);
+    const diffTime = Math.abs(now - itemDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays <= days;
+  });
+
+  if(filtered.length === 0){
+    container.innerHTML = `<div style="text-align:center; color:#64748b; font-size:13px; padding:15px;">No referrals found in the last ${days} day(s).</div>`;
+    return;
+  }
+
+  let html = "";
+  filtered.forEach(ref => {
+    const name = ref.full_name || "User";
+    const refId = ref.referral_code || "N/A";
+    const dateStr = new Date(ref.created_at).toLocaleDateString("en-IN", { day: 'numeric', month: 'short', year: 'numeric' });
+
+    html += `
+      <div class="referral-card-item">
+        <div class="ref-user-info">
+          <h4>${escapeHtml(name)}</h4>
+          <span>ID: ${escapeHtml(refId)}</span>
+        </div>
+        <div class="ref-date">
+          <span>Joined</span><br>
+          <b>${dateStr}</b>
+        </div>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
 }
 
 async function copyAffiliateLink(){
