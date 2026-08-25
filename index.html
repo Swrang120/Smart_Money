@@ -17,22 +17,27 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 1000;
     }
     .logo { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #2563eb, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
-    .nav-links { display: flex; gap: 22px; align-items: center; }
-    .nav-links a { text-decoration: none; color: #475569; font-weight: 500; font-size: 14px; transition: color 0.2s; }
-    .nav-links a:hover, .nav-links a.active { color: #2563eb; }
     
-    /* DROPDOWN */
-    .dropdown { position: relative; display: inline-block; }
-    .drop-btn { background: none; border: none; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 500; color: #475569; cursor: pointer; display: flex; align-items: center; gap: 4px; }
-    .dropdown-content {
-      display: none; position: absolute; background-color: #ffffff; min-width: 180px; box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-      border-radius: 8px; z-index: 1; top: 100%; left: 0; padding: 8px 0; border: 1px solid #e2e8f0;
+    .nav-right-icons { display: flex; align-items: center; gap: 15px; }
+    .profile-icon-btn {
+      width: 38px; height: 38px; border-radius: 50%; background: #f1f5f9; display: flex; justify-content: center; align-items: center;
+      text-decoration: none; border: 1px solid #cbd5e1; color: #0f172a; transition: background 0.2s;
     }
-    .dropdown-content a { color: #334155; padding: 8px 16px; text-decoration: none; display: block; font-size: 13px; }
-    .dropdown-content a:hover { background-color: #f1f5f9; color: #2563eb; }
-    .dropdown:hover .dropdown-content { display: block; }
+    .profile-icon-btn:hover { background: #e2e8f0; }
 
-    .dashboard-btn { background: #2563eb; color: #fff !important; padding: 8px 16px; border-radius: 8px; font-weight: 600 !important; }
+    /* HAMBURGER MENU */
+    .hamburger { cursor: pointer; display: flex; flex-direction: column; gap: 5px; padding: 5px; }
+    .hamburger span { width: 25px; height: 3px; background: #0f172a; border-radius: 2px; }
+
+    .mobile-menu {
+      display: none; position: fixed; top: 0; right: 0; width: 280px; height: 100%; background: #ffffff; z-index: 2000;
+      box-shadow: -5px 0 25px rgba(0,0,0,0.1); padding: 25px; flex-direction: column; gap: 18px; overflow-y: auto;
+    }
+    .mobile-menu-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; }
+    .mobile-menu-header span { font-weight: 700; font-size: 18px; color: #0f172a; }
+    .close-menu { cursor: pointer; font-size: 24px; font-weight: 700; color: #64748b; }
+    .mobile-menu a { text-decoration: none; color: #334155; font-weight: 600; font-size: 15px; transition: color 0.2s; }
+    .mobile-menu a:hover { color: #2563eb; }
 
     /* HERO BANNER */
     .hero-banner {
@@ -44,8 +49,15 @@
     .hero-content h1 { font-size: 34px; font-weight: 800; margin-bottom: 10px; color: #fff; }
     .hero-content p { font-size: 14px; opacity: 0.9; margin-bottom: 20px; }
 
+    /* WORK FROM HOME OPPORTUNITY BANNER SECTION */
+    .wfh-banner-section { padding: 50px 7%; background: #ffffff; text-align: center; }
+    .wfh-banner-section h2 { font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 10px; }
+    .wfh-banner-section p { font-size: 14px; color: #64748b; margin-bottom: 30px; }
+    .wfh-image-container { max-width: 800px; margin: 0 auto; border-radius: 16px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.12); border: 1px solid #e2e8f0; }
+    .wfh-image-container img { width: 100%; height: auto; display: block; }
+
     /* ABOUT SECTION */
-    .about-section { padding: 60px 7%; background: #ffffff; display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; }
+    .about-section { padding: 60px 7%; background: #f8fafc; display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; }
     .about-text h4 { color: #2563eb; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
     .about-text h2 { font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 15px; }
     .about-text p { color: #64748b; font-size: 14px; margin-bottom: 20px; }
@@ -55,8 +67,8 @@
     .about-images { display: flex; gap: 15px; justify-content: center; align-items: center; }
     .about-images img { width: 48%; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); object-fit: cover; }
 
-    /* PACKAGES SECTION */
-    .packages-section { padding: 60px 7%; background: #f8fafc; text-align: center; }
+    /* COURSE PACKAGES SECTION */
+    .packages-section { padding: 60px 7%; background: #ffffff; text-align: center; }
     .packages-section h2 { font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 35px; }
     .packages-section h2 span { color: #2563eb; }
 
@@ -95,17 +107,27 @@
     .buy-btn:hover { background: #1d4ed8; }
 
     /* TESTIMONIALS SECTION */
-    .testimonial-section { padding: 60px 7%; background: #ffffff; text-align: center; }
+    .testimonial-section { padding: 60px 7%; background: #f8fafc; text-align: center; }
     .testimonial-section h2 { font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 40px; }
     .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: left; }
-    .testimonial-card { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; }
+    .testimonial-card { background: #ffffff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; }
     .client-info { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
     .client-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
     .client-info h4 { font-size: 14px; font-weight: 700; color: #0f172a; }
     .client-info p { font-size: 11px; color: #64748b; }
     .testimonial-card p.feedback { font-size: 12.5px; color: #475569; font-style: italic; }
 
-    /* FOOTER / CONTACT SECTION */
+    /* CUSTOMER SUPPORT SECTION */
+    .support-section { padding: 60px 7%; background: #ffffff; border-top: 1px solid #e2e8f0; }
+    .support-container { max-width: 1000px; margin: 0 auto; text-align: center; }
+    .support-container h2 { font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 10px; }
+    .support-container p { font-size: 14px; color: #64748b; margin-bottom: 35px; }
+    .support-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; text-align: left; }
+    .support-card { background: #f8fafc; padding: 25px; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+    .support-card h3 { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+    .support-card p { font-size: 13.5px; color: #475569; margin-bottom: 8px; }
+
+    /* FOOTER */
     .footer { background: #0f172a; color: #94a3b8; padding: 50px 7% 20px 7%; }
     .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
     .footer-about h3 { color: #fff; font-size: 20px; font-weight: 800; margin-bottom: 10px; }
@@ -124,9 +146,8 @@
     }
     @media(max-width: 768px) {
       .about-section { grid-template-columns: 1fr; }
-      .packages-grid, .testimonial-grid { grid-template-columns: 1fr; }
+      .packages-grid, .testimonial-grid, .support-grid { grid-template-columns: 1fr; }
       .hero-banner { height: 280px; }
-      .nav-links { display: none; }
     }
   </style>
 </head>
@@ -135,30 +156,37 @@
   <!-- NAVBAR -->
   <header class="navbar">
     <a href="index.html" class="logo">Smart Money</a>
-    <nav class="nav-links">
-      <a href="index.html" class="active">Home</a>
-      <a href="#about">About</a>
+    
+    <div class="nav-right-icons">
+      <!-- Profile / Dashboard Icon -->
+      <a href="dashboard.html" class="profile-icon-btn" title="Dashboard">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      </a>
       
-      <!-- Dropdown for Plan -->
-      <div class="dropdown">
-        <button class="drop-btn">Plan ▾</button>
-        <div class="dropdown-content">
-          <a href="#packages">Starter Package</a>
-          <a href="#packages">Intermediate</a>
-          <a href="#packages">Expert Package</a>
-          <a href="#packages">Master Package</a>
-          <a href="#packages">Brahmastra</a>
-          <a href="#packages">Premium Pro</a>
-        </div>
+      <!-- 3-Line Hamburger Menu Toggle -->
+      <div class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
-
-      <a href="#packages">Course</a>
-      <a href="#testimonial">Blog</a>
-      <a href="#contact">Jobs</a>
-      <a href="#contact">Contact</a>
-      <a href="login.html" class="dashboard-btn">Dashboard</a>
-    </nav>
+    </div>
   </header>
+
+  <!-- SLIDE-OUT MOBILE MENU (Containing all options) -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-header">
+      <span>Menu</span>
+      <span class="close-menu" onclick="toggleMenu()">&times;</span>
+    </div>
+    <a href="index.html">Home</a>
+    <a href="#about" onclick="toggleMenu()">About Us</a>
+    <a href="#packages" onclick="toggleMenu()">Plans & Packages</a>
+    <a href="#packages" onclick="toggleMenu()">Courses</a>
+    <a href="#testimonial" onclick="toggleMenu()">Blog</a>
+    <a href="#contact" onclick="toggleMenu()">Jobs</a>
+    <a href="#support" onclick="toggleMenu()">Contact Support</a>
+    <a href="dashboard.html" style="color: #2563eb; font-weight: 700;">My Dashboard / Creator: Phwilao Swargiary</a>
+  </div>
 
   <!-- HERO BANNER -->
   <section class="hero-banner">
@@ -168,12 +196,21 @@
     </div>
   </section>
 
+  <!-- WORK FROM HOME OPPORTUNITY BANNER SECTION (Added your photo with happy college students theme) -->
+  <section class="wfh-banner-section">
+    <h2>Work From Home Opportunity</h2>
+    <p>A smart step towards financial freedom, designed specially for smiling college students and youth!</p>
+    <div class="wfh-image-container">
+      <img src="1000820422.png" alt="Work From Home Opportunity - Phwilao Swargiary">
+    </div>
+  </section>
+
   <!-- ABOUT SECTION -->
   <section class="about-section" id="about">
     <div class="about-text">
       <h4>About Us</h4>
       <h2>Discover Our Journey Of Growth</h2>
-      <p>At Smart Money, we are passionate about making digital education accessible and engaging for all. Our platform leverages technology to deliver high-quality learning experiences, empowering students and creators to achieve their goals.</p>
+      <p>At Smart Money, we are passionate about making digital education accessible and engaging for all. Our platform leverages technology to deliver high-quality learning experiences, empowering students and creators to achieve their goals. Managed by digital creator <strong>Phwilao Swargiary</strong>.</p>
       
       <div class="mission-vision">
         <div class="mv-box">
@@ -182,7 +219,7 @@
         </div>
         <div class="mv-box">
           <h5>💡 Our Vision</h5>
-          <p>To lead digital education, fostering a fostering community of thriving creators.</p>
+          <p>To lead digital education, fostering a community of thriving creators.</p>
         </div>
       </div>
     </div>
@@ -385,12 +422,36 @@
     </div>
   </section>
 
-  <!-- FOOTER / CONTACT SECTION -->
+  <!-- DEDICATED CUSTOMER SUPPORT SECTION -->
+  <section class="support-section" id="support">
+    <div class="support-container">
+      <h2>Customer Support & Help Desk</h2>
+      <p>Aapko kisi bhi tarah ki samasya ho, aap apne issue ke hisab se niche diye gaye support channel par contact kar sakte hain.</p>
+      
+      <div class="support-grid">
+        <!-- Support 1: Payment & Login Issues -->
+        <div class="support-card">
+          <h3>💳 Payment & Login Support</h3>
+          <p><strong>Email:</strong> smartmoneysupport1@gmail.com</p>
+          <p><strong>Mobile:</strong> 9954851021</p>
+        </div>
+
+        <!-- Support 2: General Inquiries, Products, Referrals -->
+        <div class="support-card">
+          <h3>❓ General Inquiries & Referrals</h3>
+          <p><strong>Email:</strong> Smsupport7@gmail.com</p>
+          <p><strong>Mobile:</strong> 6900986957</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
   <footer class="footer" id="contact">
     <div class="footer-grid">
       <div class="footer-about">
         <h3>Smart Money</h3>
-        <p>Smart Money is an E-learning platform. This platform helps people to make their own personal brand on social media and create passive income.</p>
+        <p>Smart Money is an E-learning platform founded by <strong>Phwilao Swargiary</strong>. This platform helps people to make their own personal brand on social media and create passive income.</p>
         <p><strong>Location:</strong> Assam, India</p>
       </div>
       <div class="footer-links">
@@ -399,7 +460,7 @@
           <li><a href="index.html">Home</a></li>
           <li><a href="#about">About Us</a></li>
           <li><a href="#packages">Courses</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="#support">Contact Support</a></li>
         </ul>
       </div>
       <div class="footer-links">
@@ -412,9 +473,20 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 Smart Money. All Rights Reserved.</p>
+      <p>&copy; 2026 Smart Money. All Rights Reserved. Creator: Phwilao Swargiary</p>
     </div>
   </footer>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      if (menu.style.display === 'flex') {
+        menu.style.display = 'none';
+      } else {
+        menu.style.display = 'flex';
+      }
+    }
+  </script>
 
 </body>
 </html>
