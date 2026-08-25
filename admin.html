@@ -3,157 +3,291 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Money - Admin Panel</title>
+  <title>Smart Money - Premium Admin Control</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- EmailJS Library Script -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- EmailJS Library -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <style>
-    * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body { background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; display: none; }
-    .container { max-width: 1000px; margin: 0 auto; }
-    h1 { font-size: 24px; color: #fff; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
-    p { color: #94a3b8; font-size: 14px; margin-top: 0; }
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: #131b2e;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --accent: #38bdf8;
+      --success: #10b981;
+      --danger: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
 
-    .card { background: #1e293b; border-radius: 16px; padding: 20px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-    h2 { font-size: 18px; color: #38bdf8; margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+    * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; display: none; }
 
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
-    th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    th { color: #94a3b8; font-weight: 600; }
+    /* Top Navbar */
+    .navbar { background: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
+    .nav-brand { font-size: 18px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; }
+    .nav-brand span { color: var(--accent); }
+    
+    /* 3-Line Menu Button */
+    .menu-toggle { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: #fff; padding: 10px 12px; border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; transition: 0.2s; }
+    .menu-toggle:hover { background: rgba(255, 255, 255, 0.1); }
+    .menu-toggle div { width: 20px; height: 2px; background: #fff; border-radius: 2px; }
+
+    /* Hidden Sidebar Drawer */
+    .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); display: none; z-index: 999; }
+    .sidebar { position: fixed; top: 0; right: -320px; width: 320px; height: 100%; background: #161f36; border-left: 1px solid var(--border-color); padding: 25px; transition: 0.3s ease-in-out; z-index: 1000; overflow-y: auto; }
+    .sidebar.open { right: 0; }
+    .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px; }
+    .close-btn { background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 25px 20px; }
+
+    /* Stats Grid inside Drawer */
+    .stats-box { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+    .stats-box h4 { margin: 0 0 5px 0; font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .stats-box .num { font-size: 20px; font-weight: 700; color: var(--accent); }
+
+    /* Cards */
+    .card { background: var(--card-bg); border-radius: 16px; padding: 22px; margin-bottom: 30px; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+    h2 { font-size: 16px; color: #fff; margin: 0; display: flex; align-items: center; gap: 8px; }
+
+    /* Filter Buttons inside Card Header */
+    .filter-group { display: flex; gap: 6px; }
+    .filter-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); color: var(--text-muted); padding: 5px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+    .filter-btn.active { background: var(--accent); color: #0b0f19; border-color: var(--accent); }
+
+    /* Tables */
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
+    th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
     td { color: #e2e8f0; }
 
-    .btn { padding: 6px 12px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; font-size: 12px; transition: 0.2s; margin-right: 5px; margin-bottom: 4px; }
-    .btn-approve { background: #10b981; color: #fff; }
-    .btn-approve:hover { background: #059669; }
-    .btn-reject { background: #ef4444; color: #fff; }
-    .btn-reject:hover { background: #dc2626; }
-    .btn-block { background: #ef4444; color: #fff; }
-    .btn-unblock { background: #3b82f6; color: #fff; }
+    /* Payout Box Design */
+    .payout-box { background: rgba(56, 189, 248, 0.04); border: 1px dashed rgba(56, 189, 248, 0.2); padding: 10px 12px; border-radius: 10px; margin-top: 6px; font-size: 12px; line-height: 1.5; }
+    .payout-box b { color: var(--accent); }
+
+    /* Action Buttons */
+    .btn { padding: 7px 14px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; font-size: 11px; transition: 0.2s; margin-right: 4px; display: inline-flex; align-items: center; gap: 4px; }
+    .btn-approve { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .btn-approve:hover { background: var(--success); color: #fff; }
+    .btn-reject { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
+    .btn-reject:hover { background: var(--danger); color: #fff; }
+    .btn-delete { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); border: 1px solid var(--border-color); }
+    .btn-delete:hover { background: var(--danger); color: #fff; }
     
-    .badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
-    .badge-pending { background: #f59e0b; color: #000; }
-    .badge-approved, .badge-success { background: #10b981; color: #fff; }
-    .badge-rejected { background: #ef4444; color: #fff; }
+    .badge { padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .badge-pending { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-approved, .badge-success { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-rejected { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>⚡ Smart Money Admin Control</h1>
-  <p>Yahan se aap payment approvals, referral commissions aur user accounts ko manage kar sakte hain.</p>
-
-  <!-- 1. PENDING PAYMENT REQUESTS -->
-  <div class="card">
-    <h2>💳 Pending Payment Requests (User Verification)</h2>
-    <div style="overflow-x: auto;">
-      <table>
-        <thead>
-          <tr>
-            <th>User Details</th>
-            <th>Package / Amount</th>
-            <th>Referral & UTR</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="paymentTableBody">
-          <tr><td colspan="5" style="text-align:center; color:#94a3b8;">Loading payment requests...</td></tr>
-        </tbody>
-      </table>
-    </div>
+  <!-- Top Navigation Bar -->
+  <div class="navbar">
+    <div class="nav-brand">⚡ Smart Money <span>Admin</span></div>
+    <button class="menu-toggle" onclick="toggleSidebar()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </button>
   </div>
 
-  <!-- 2. WITHDRAWAL REQUESTS -->
-  <div class="card">
-    <h2>💸 Withdrawal Requests & Payout Details</h2>
-    <div style="overflow-x: auto;">
-      <table>
-        <thead>
-          <tr>
-            <th>User Details</th>
-            <th>Amount & Payout Details</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="withdrawalTableBody">
-          <tr><td colspan="4" style="text-align:center; color:#94a3b8;">Loading requests...</td></tr>
-        </tbody>
-      </table>
+  <!-- Hidden Drawer Sidebar for History & Stats -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+  <div class="sidebar" id="adminSidebar">
+    <div class="sidebar-header">
+      <h3 style="margin:0; font-size:16px; color:#fff;">📊 Control Center</h3>
+      <button class="close-btn" onclick="toggleSidebar()">&times;</button>
     </div>
+    
+    <div class="stats-box">
+      <h4>Total Requests</h4>
+      <div class="num" id="statTotal">0</div>
+    </div>
+    <div class="stats-box">
+      <h4>Approved</h4>
+      <div class="num" style="color: var(--success);" id="statApproved">0</div>
+    </div>
+    <div class="stats-box">
+      <h4>Rejected</h4>
+      <div class="num" style="color: var(--danger);" id="statRejected">0</div>
+    </div>
+
+    <hr style="border:0; border-top:1px solid var(--border-color); margin: 20px 0;">
+    <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Yahan aapko sabhi purane approvals aur activity ka data live milta hai.</p>
   </div>
 
-  <!-- 3. REGISTERED USERS CONTROL -->
-  <div class="card">
-    <h2>👥 Registered Users Control</h2>
-    <div style="overflow-x: auto;">
-      <table>
-        <thead>
-          <tr>
-            <th>Name / Email</th>
-            <th>Ref ID</th>
-            <th>Package / Balance</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="usersTableBody">
-          <tr><td colspan="5" style="text-align:center; color:#94a3b8;">Loading users...</td></tr>
-        </tbody>
-      </table>
+  <div class="container">
+    <!-- 1. PENDING PAYMENT REQUESTS -->
+    <div class="card">
+      <div class="card-header">
+        <h2>💳 Pending Package Approvals</h2>
+        <div class="filter-group">
+          <button class="filter-btn active" onclick="filterPayments('all', this)">All</button>
+          <button class="filter-btn" onclick="filterPayments('today', this)">Today</button>
+          <button class="filter-btn" onclick="filterPayments('7days', this)">7 Days</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>User Details</th>
+              <th>Package & Amount</th>
+              <th>Payment ID / UTR</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="paymentTableBody">
+            <tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Loading requests...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 2. WITHDRAWAL REQUESTS WITH BANK/UPI DETAILS -->
+    <div class="card">
+      <div class="card-header">
+        <h2>💸 Withdrawal Payout Requests</h2>
+        <div class="filter-group">
+          <button class="filter-btn active" onclick="filterWithdrawals('all', this)">All</button>
+          <button class="filter-btn" onclick="filterWithdrawals('today', this)">Today</button>
+          <button class="filter-btn" onclick="filterWithdrawals('7days', this)">7 Days</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>User Details</th>
+              <th>Amount & Bank/UPI Payout Details</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="withdrawalTableBody">
+            <tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Loading withdrawals...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3. REGISTERED USERS CONTROL -->
+    <div class="card">
+      <h2>👥 Registered Users Control</h2>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Name / Email</th>
+              <th>Ref ID</th>
+              <th>Package & Wallet</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Loading users...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // EmailJS Initialization with your Public Key
   emailjs.init("FxcimUvl0-ZxAauRx");
 
-  // Password Security Check
-  const adminPassword = prompt("🔐 Enter Admin Password to Access Panel:");
+  const adminPassword = prompt("🔐 Enter Admin Password:");
   if (adminPassword === "Swrangsa@123") {
     document.body.style.display = "block";
   } else {
-    alert("❌ Galat Password! Access Denied.");
-    document.body.innerHTML = "<h2 style='color:red; text-align:center; margin-top:50px;'>Access Denied! Wrong Password.</h2>";
+    alert("❌ Access Denied! Wrong Password.");
+    document.body.innerHTML = "<h2 style='color:red; text-align:center; margin-top:100px;'>Unauthorized Access</h2>";
     document.body.style.display = "block";
-    throw new Error("Unauthorized Access");
+    throw new Error("Unauthorized");
   }
 
   const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  document.addEventListener("DOMContentLoaded", function() {
+  let allPaymentsData = [];
+  let allWithdrawalsData = [];
+  let currentPaymentFilter = 'all';
+  let currentWithdrawalFilter = 'all';
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById('adminSidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    sidebar.classList.toggle('open');
+    overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
     loadPaymentRequests();
     loadWithdrawals();
     loadUsers();
   });
 
-  // 1. Load Pending Payments
+  function filterByDate(data, filterType) {
+    if (filterType === 'all') return data;
+    const now = new Date();
+    return data.filter(item => {
+      const itemDate = new Date(item.created_at || Date.now());
+      const diffDays = (now - itemDate) / (1000 * 60 * 60 * 24);
+      if (filterType === 'today') return diffDays <= 1;
+      if (filterType === '7days') return diffDays <= 7;
+      return true;
+    });
+  }
+
   async function loadPaymentRequests() {
-    const { data, error } = await supabaseClient.from('payment_requests').select('*').order('created_at', { ascending: false });
+    const { data } = await supabaseClient.from('payment_requests').select('*').order('created_at', { ascending: false });
+    if (data) {
+      allPaymentsData = data;
+      updateStatsAndRenderPayments();
+    }
+  }
+
+  function filterPayments(type, btn) {
+    currentPaymentFilter = type;
+    btn.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    updateStatsAndRenderPayments();
+  }
+
+  function updateStatsAndRenderPayments() {
+    document.getElementById("statTotal").innerText = allPaymentsData.length;
+    document.getElementById("statApproved").innerText = allPaymentsData.filter(i => i.status === 'Approved').length;
+    document.getElementById("statRejected").innerText = allPaymentsData.filter(i => i.status === 'Rejected').length;
+
+    const filtered = filterByDate(allPaymentsData, currentPaymentFilter);
     const tbody = document.getElementById("paymentTableBody");
-    
-    if (error || !data || data.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8;">Koi payment request nahi mili.</td></tr>`;
+    if (filtered.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No payment records found.</td></tr>`;
       return;
     }
 
     tbody.innerHTML = "";
-    data.forEach(item => {
+    filtered.forEach(item => {
       const isPending = item.status === 'Pending';
       tbody.innerHTML += `
         <tr>
-          <td><b>${item.full_name || 'N/A'}</b><br><span style="font-size:11px; color:#94a3b8;">${item.email} | ${item.mobile || ''}</span></td>
-          <td><b>${item.package_name || 'Package'}</b><br><span style="color:#10b981; font-weight:700;">₹${item.amount || 0}</span></td>
-          <td>Referred By: <span style="color:#c4b5fd;">${item.referral_id || 'None'}</span><br>UTR: <span style="color:#38bdf8; font-weight:600;">${item.transaction_id}</span></td>
+          <td><b>${item.full_name || 'N/A'}</b><br><span style="font-size:11px; color:var(--text-muted);">${item.email}</span></td>
+          <td><b>${item.package_name}</b><br><span style="color:var(--success); font-weight:700;">₹${item.amount}</span></td>
+          <td>UTR: <b style="color:var(--accent);">${item.transaction_id || 'N/A'}</b></td>
           <td><span class="badge badge-${item.status.toLowerCase()}">${item.status}</span></td>
           <td>
-            ${isPending ? `<button class="btn btn-approve" onclick="approvePayment('${item.id}', '${item.full_name}', '${item.email}', '${item.package_name}', '${item.referral_id}')">Approve</button>` : 'Approved'}
+            ${isPending ? `<button class="btn btn-approve" onclick="approvePayment('${item.id}', '${item.full_name}', '${item.email}', '${item.package_name}', '${item.referral_id}')">Approve</button>` : ''}
+            <button class="btn btn-delete" onclick="deleteRecord('${item.id}', 'payment_requests')">Delete</button>
           </td>
         </tr>
       `;
@@ -161,217 +295,139 @@
   }
 
   async function approvePayment(id, fullName, email, packageName, refId) {
-    if (!confirm(`Kya aap ${fullName} ka payment approve karna chahte hain?`)) return;
-
+    if (!confirm(`Approve payment for ${fullName}?`)) return;
     try {
       const uniqueRefCode = "SM-" + Math.floor(1000 + Math.random() * 9000);
-
-      const { error: profileError } = await supabaseClient.from('profiles').insert([
-        {
-          full_name: fullName,
-          email: email,
-          package_name: packageName,
-          referral_id: uniqueRefCode,
-          referred_by: refId,
-          balance: 0,
-          is_active: true
-        }
-      ]);
-      if (profileError) throw profileError;
-
-      if (refId && refId !== 'null' && refId !== 'N/A' && refId !== '') {
-        const { data: sponsorData } = await supabaseClient
-          .from('profiles')
-          .select('id, balance, package_name')
-          .eq('referral_id', refId)
-          .single();
-
-        if (sponsorData) {
-          const sponsorPkg = (sponsorData.package_name || "").toLowerCase();
-          let commission = 0;
-
-          if (sponsorPkg.includes("entry")) commission = 99.70;
-          else if (sponsorPkg.includes("starter")) commission = 280.00;
-          else {
-            const pkg = (packageName || "").toLowerCase();
-            if (pkg.includes("entry")) commission = 99.70;
-            else if (pkg.includes("starter")) commission = 280.00;
-            else if (pkg.includes("growth")) commission = 539.40;
-            else if (pkg.includes("premium") && !pkg.includes("super")) commission = 1049.30;
-            else if (pkg.includes("super premium")) commission = 1874.25;
-            else if (pkg.includes("max pro")) commission = 2500.15;
-          }
-
-          const newBalance = Number(sponsorData.balance || 0) + commission;
-          await supabaseClient.from('profiles').update({ balance: newBalance }).eq('id', sponsorData.id);
+      await supabaseClient.from('profiles').insert([{ full_name: fullName, email: email, package_name: packageName, referral_id: uniqueRefCode, referred_by: refId, balance: 0, is_active: true }]);
+      
+      if (refId && refId !== 'null' && refId !== 'N/A') {
+        const { data: sponsor } = await supabaseClient.from('profiles').select('id, balance, package_name').eq('referral_id', refId).single();
+        if (sponsor) {
+          let comm = 280; // default
+          const pkg = (packageName || "").toLowerCase();
+          if (pkg.includes("entry")) comm = 99.70;
+          else if (pkg.includes("growth")) comm = 539.40;
+          else if (pkg.includes("premium")) comm = 1049.30;
+          await supabaseClient.from('profiles').update({ balance: Number(sponsor.balance || 0) + comm }).eq('id', sponsor.id);
         }
       }
-
       await supabaseClient.from('payment_requests').update({ status: 'Approved' }).eq('id', id);
-
-      alert(`🎉 Payment Approved! User Profile Created & Commission Sent successfully.`);
+      alert("Payment Approved Successfully!");
       loadPaymentRequests();
       loadUsers();
-    } catch (err) {
-      alert("Error: " + err.message);
+    } catch (err) { alert("Error: " + err.message); }
+  }
+
+  async function loadWithdrawals() {
+    const { data } = await supabaseClient.from('withdrawal_requests').select('*').order('created_at', { ascending: false });
+    if (data) {
+      allWithdrawalsData = data;
+      renderWithdrawals();
     }
   }
 
-  // 2. Load Withdrawals with Payout Info
-  async function loadWithdrawals() {
-    const { data, error } = await supabaseClient.from('withdrawal_requests').select('*').order('created_at', { ascending: false });
+  function filterWithdrawals(type, btn) {
+    currentWithdrawalFilter = type;
+    btn.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderWithdrawals();
+  }
+
+  async function renderWithdrawals() {
+    const filtered = filterByDate(allWithdrawalsData, currentWithdrawalFilter);
     const tbody = document.getElementById("withdrawalTableBody");
-    
-    if (error || !data || data.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#94a3b8;">Koi withdrawal request nahi mili.</td></tr>`;
+    if (filtered.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No withdrawal requests found.</td></tr>`;
       return;
     }
 
     tbody.innerHTML = "";
-    for (let item of data) {
+    for (let item of filtered) {
       let userName = "User";
       let userEmail = "";
-      const { data: uData } = await supabaseClient.from('profiles').select('full_name, email').or(`id.eq.${item.user_id},user_id.eq.${item.user_id}`).single();
-      if (uData) {
-        userName = uData.full_name || "User";
-        userEmail = uData.email || "";
-      }
+      const { data: u } = await supabaseClient.from('profiles').select('full_name, email').or(`id.eq.${item.user_id},user_id.eq.${item.user_id}`).single();
+      if (u) { userName = u.full_name; userEmail = u.email; }
 
-      // Payout Method aur Details check karna
-      let payoutDetailsHtml = `<span style="color:#f59e0b;">Method: ${item.payment_method || item.method || 'Not Specified'}</span>`;
-      if (item.upi_id) {
-        payoutDetailsHtml += `<br>UPI ID: <b style="color:#38bdf8;">${item.upi_id}</b>`;
-      }
-      if (item.account_number || item.bank_account) {
-        payoutDetailsHtml += `<br>A/C: <b>${item.account_number || item.bank_account}</b> | IFSC: <b>${item.ifsc_code || ''}</b>`;
-      }
-      if (item.details) {
-        payoutDetailsHtml += `<br>Details: <span style="color:#cbd5e1;">${item.details}</span>`;
-      }
+      // Bank / UPI Payout Formatted Box
+      let payoutHtml = `Method: <b>${item.payment_method || 'UPI / Bank'}</b>`;
+      if (item.upi_id) payoutHtml += `<br>UPI ID: <b>${item.upi_id}</b>`;
+      if (item.account_number || item.bank_account) payoutHtml += `<br>A/C: <b>${item.account_number || item.bank_account}</b> | IFSC: <b>${item.ifsc_code || ''}</b>`;
+      if (item.details) payoutHtml += `<br>Info: ${item.details}`;
 
-      const statusVal = (item.status || 'pending').toLowerCase();
-      const isPending = statusVal === 'pending';
+      const isPending = (item.status || 'pending').toLowerCase() === 'pending';
 
       tbody.innerHTML += `
         <tr>
-          <td><b>${userName}</b><br><span style="font-size:11px; color:#94a3b8;">${userEmail}</span></td>
+          <td><b>${userName}</b><br><span style="font-size:11px; color:var(--text-muted);">${userEmail}</span></td>
           <td>
-            <span style="color:#10b981; font-weight:700; font-size:14px;">₹${item.amount}</span><br>
-            <div style="font-size:12px; margin-top:4px; background:rgba(255,255,255,0.03); padding:6px; border-radius:6px;">${payoutDetailsHtml}</div>
+            <span style="color:var(--success); font-weight:700; font-size:14px;">₹${item.amount}</span>
+            <div class="payout-box">${payoutHtml}</div>
           </td>
-          <td><span class="badge badge-${statusVal}">${item.status || 'Pending'}</span></td>
+          <td><span class="badge badge-${item.status.toLowerCase()}">${item.status}</span></td>
           <td>
             ${isPending ? `
               <button class="btn btn-approve" onclick="updateWithdrawal('${item.id}', '${item.user_id}', ${item.amount}, 'Approved', '${userEmail}', '${userName}')">Approve</button>
-              <button class="btn btn-reject" onclick="updateWithdrawal('${item.id}', '${item.user_id}', ${item.amount}, 'Rejected', '${userEmail}', '${userName}')">Reject & Refund</button>
-            ` : `<span style="color:#94a3b8; font-weight:600; text-transform:uppercase; font-size:11px;">${item.status} (Completed)</span>`}
+              <button class="btn btn-reject" onclick="updateWithdrawal('${item.id}', '${item.user_id}', ${item.amount}, 'Rejected', '${userEmail}', '${userName}')">Reject</button>
+            ` : `<button class="btn btn-delete" onclick="deleteRecord('${item.id}', 'withdrawal_requests')">Delete</button>`}
           </td>
         </tr>
       `;
     }
   }
 
-  // Handle Approve or Reject
-  async function updateWithdrawal(id, userId, amount, actionStatus, userEmail, userName) {
-    const confirmMsg = actionStatus === 'Approved' 
-      ? `Kya aap is withdrawal ko Approve karna chahte hain?` 
-      : `Kya aap is withdrawal ko Reject karna chahte hain? Amount user ke wallet mein refund ho jayega.`;
-    
-    if (!confirm(confirmMsg)) return;
-
+  async function updateWithdrawal(id, userId, amount, status, email, name) {
+    if (!confirm(`Are you sure to ${status} this withdrawal?`)) return;
     try {
-      const { error: updateErr } = await supabaseClient
-        .from('withdrawal_requests')
-        .update({ status: actionStatus })
-        .eq('id', id);
-
-      if (updateErr) throw updateErr;
-
-      if (actionStatus === 'Rejected') {
-        const { data: profileData } = await supabaseClient
-          .from('profiles')
-          .select('id, balance')
-          .or(`id.eq.${userId},user_id.eq.${userId}`)
-          .single();
-
-        if (profileData) {
-          const refundedBal = Number(profileData.balance || 0) + Number(amount);
-          await supabaseClient.from('profiles').update({ balance: refundedBal }).eq('id', profileData.id);
+      await supabaseClient.from('withdrawal_requests').update({ status: status }).eq('id', id);
+      if (status === 'Rejected') {
+        const { data: prof } = await supabaseClient.from('profiles').select('id, balance').or(`id.eq.${userId},user_id.eq.${userId}`).single();
+        if (prof) {
+          await supabaseClient.from('profiles').update({ balance: Number(prof.balance || 0) + Number(amount) }).eq('id', prof.id);
         }
-      } else if (actionStatus === 'Approved') {
-        sendWithdrawalEmail(userEmail, userName, amount);
+      } else if (status === 'Approved' && email) {
+        emailjs.send('service_qsy07qr', 'template_mf8enck', { to_email: email, to_name: name, amount: amount });
       }
-
-      alert(actionStatus === 'Approved' ? "Withdrawal Approved & Email Sent successfully!" : "Withdrawal Rejected and amount refunded successfully!");
+      alert(`Withdrawal ${status} successfully!`);
       loadWithdrawals();
-      loadUsers();
-
-    } catch (err) {
-      alert("Error: " + err.message);
-    }
+    } catch (err) { alert("Error: " + err.message); }
   }
 
-  // EmailJS Automatic Sender Function
-  function sendWithdrawalEmail(email, name, amount) {
-    if (!email) return;
-
-    const templateParams = {
-      to_email: email,
-      to_name: name || "User",
-      amount: amount
-    };
-
-    emailjs.send('service_qsy07qr', 'template_mf8enck', templateParams)
-      .then(function(response) {
-         console.log('SUCCESS! Email sent.', response.status, response.text);
-      }, function(error) {
-         console.log('FAILED... Email error:', error);
-      });
+  async function deleteRecord(id, table) {
+    if (!confirm("Permanently delete this record?")) return;
+    const { error } = await supabaseClient.from(table).delete().eq('id', id);
+    if (!error) {
+      alert("Deleted!");
+      if (table === 'payment_requests') loadPaymentRequests();
+      else loadWithdrawals();
+    } else { alert("Error: " + error.message); }
   }
 
-  // 3. Load Users
   async function loadUsers() {
-    const { data, error } = await supabaseClient.from('profiles').select('*');
+    const { data } = await supabaseClient.from('profiles').select('*');
     const tbody = document.getElementById("usersTableBody");
+    if (!data || data.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No users found.</td></tr>`; return; }
     
-    if (error || !data || data.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8;">Koi user nahi mila.</td></tr>`;
-      return;
-    }
-
     tbody.innerHTML = "";
     data.forEach(user => {
-      const isActive = user.is_active !== false;
+      const active = user.is_active !== false;
       tbody.innerHTML += `
         <tr>
-          <td><b>${user.full_name || 'Unnamed'}</b><br><span style="font-size:11px; color:#94a3b8;">${user.email || ''}</span></td>
-          <td style="color:#c4b5fd; font-weight:600;">${user.referral_id || 'N/A'}</td>
-          <td>${user.package_name || 'No Package'}<br><span style="color:#10b981; font-weight:700;">Bal: ₹${user.balance || 0}</span></td>
-          <td><span class="badge" style="background:${isActive ? '#10b981' : '#ef4444'}; color:#fff;">${isActive ? 'Active' : 'Blocked'}</span></td>
+          <td><b>${user.full_name || 'User'}</b><br><span style="font-size:11px; color:var(--text-muted);">${user.email}</span></td>
+          <td style="color:var(--accent); font-weight:600;">${user.referral_id || 'N/A'}</td>
+          <td>${user.package_name || 'Free'}<br><b style="color:var(--success);">₹${user.balance || 0}</b></td>
+          <td><span class="badge" style="background:${active ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'}; color:${active ? 'var(--success)' : 'var(--danger)'};">${active ? 'Active' : 'Blocked'}</span></td>
           <td>
-            ${isActive 
-              ? `<button class="btn btn-block" onclick="toggleUserStatus('${user.id || user.user_id}', false)">Deactivate</button>` 
-              : `<button class="btn btn-unblock" onclick="toggleUserStatus('${user.id || user.user_id}', true)">Activate</button>`
-            }
+            <button class="btn ${active ? 'btn-reject' : 'btn-approve'}" onclick="toggleUser('${user.id || user.user_id}', ${!active})">${active ? 'Block' : 'Unblock'}</button>
           </td>
         </tr>
       `;
     });
   }
 
-  async function toggleUserStatus(id, status) {
-    const { error } = await supabaseClient.from('profiles').update({ is_active: status }).eq('id', id);
-    if(error) {
-      const { error: err2 } = await supabaseClient.from('profiles').update({ is_active: status }).eq('user_id', id);
-      if(err2) {
-        alert("Error: " + err2.message);
-        return;
-      }
-    }
-    alert(status ? "User Account Activated!" : "User Account Deactivated!");
+  async function toggleUser(id, status) {
+    await supabaseClient.from('profiles').update({ is_active: status }).eq('id', id);
     loadUsers();
   }
 </script>
-
 </body>
 </html>
