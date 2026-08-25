@@ -93,6 +93,20 @@
       transition: opacity 0.2s;
     }
     .btn-submit:hover { opacity: 0.9; }
+    
+    .forgot-link-wrap {
+      text-align: right;
+      margin-top: -10px;
+      margin-bottom: 15px;
+    }
+    .forgot-link-wrap a {
+      font-size: 12px;
+      color: #6366f1;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .forgot-link-wrap a:hover { text-decoration: underline; }
+
     .auth-footer {
       text-align: center;
       margin-top: 20px;
@@ -103,6 +117,15 @@
       color: #6366f1;
       font-weight: 600;
       text-decoration: none;
+    }
+
+    /* MODAL STYLES FOR FORGOT PASSWORD */
+    .modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.6); z-index: 999; justify-content: center; align-items: center; backdrop-filter: blur(3px); padding: 15px;
+    }
+    .modal-box {
+      background: #ffffff; padding: 25px; border-radius: 20px; width: 100%; max-width: 380px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); text-align: left;
     }
   </style>
 </head>
@@ -125,6 +148,10 @@
       <input type="password" id="loginPassword" class="input-field" placeholder="Enter your password">
     </div>
 
+    <div class="forgot-link-wrap">
+      <a href="javascript:void(0)" onclick="openForgotModal()">Forgot Password?</a>
+    </div>
+
     <button onclick="handleLogin()" class="btn-submit" id="loginBtn">Login Now</button>
 
     <div class="auth-footer">
@@ -132,11 +159,40 @@
     </div>
   </div>
 
+  <!-- FORGOT PASSWORD MODAL -->
+  <div id="forgotModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3 style="margin-top:0; font-size:18px; color:#0f172a; margin-bottom: 8px;">🔑 Reset Password</h3>
+      <p style="font-size: 12.5px; color: #64748b; margin-bottom: 15px;">Apni registered Gmail ID enter karein. Hum aapko password reset karne ka direct link bhejenge.</p>
+      
+      <label style="font-size:12px; font-weight:600; color:#475569;">Email Address</label>
+      <input type="email" id="forgotEmail" class="input-field" placeholder="e.g. yourname@gmail.com" style="margin-top: 5px; margin-bottom: 15px;">
+      
+      <button onclick="sendPasswordResetLink()" class="btn-submit" id="resetBtn" style="margin-top: 0;">Send Reset Link</button>
+      <button onclick="closeModal('forgotModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer; font-weight: 600;">Cancel</button>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+      auth: { persistSession: true, autoRefreshToken: true }
+    });
+
+    // Agar user pehle se logged-in hai, toh login page dikhane ki jagah seedha dashboard par bhej do
+    document.addEventListener("DOMContentLoaded", async function() {
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (session && session.user) {
+          window.location.href = "dashboard.html";
+        }
+      } catch (err) {
+        console.log("Session check error:", err);
+      }
+    });
 
     async function handleLogin() {
       const email = document.getElementById("loginEmail").value.trim();
@@ -164,6 +220,43 @@
       } catch (err) {
         alert("Login Failed: " + err.message);
         btn.innerText = "Login Now";
+        btn.disabled = false;
+      }
+    }
+
+    function openForgotModal() {
+      document.getElementById("forgotModal").style.display = "flex";
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = "none";
+    }
+
+    async function sendPasswordResetLink() {
+      const email = document.getElementById("forgotEmail").value.trim();
+      const btn = document.getElementById("resetBtn");
+
+      if (!email) {
+        alert("Please enter your registered email address.");
+        return;
+      }
+
+      btn.innerText = "Sending Link...";
+      btn.disabled = true;
+
+      try {
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin + '/update-password.html',
+        });
+
+        if (error) throw error;
+
+        alert("🎉 Password reset link successfully sent to your Gmail inbox!");
+        closeModal('forgotModal');
+      } catch (err) {
+        alert("Error: " + err.message);
+      } finally {
+        btn.innerText = "Send Reset Link";
         btn.disabled = false;
       }
     }
