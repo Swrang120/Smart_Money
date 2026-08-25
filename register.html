@@ -1,742 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register - Smart Money</title>
-
-  <link rel="stylesheet" href="style.css">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .auth-card {
+      background: #ffffff;
+      padding: 35px 25px;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border: 1px solid #e2e8f0;
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .auth-header h2 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 5px;
+    }
+    .auth-header p {
+      font-size: 13px;
+      color: #64748b;
+    }
+    .input-group {
+      margin-bottom: 16px;
+    }
+    .input-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 5px;
+    }
+    .input-field {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .input-field:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      margin-top: 10px;
+      transition: opacity 0.2s;
+    }
+    .btn-submit:hover { opacity: 0.9; }
+    .auth-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #64748b;
+    }
+    .auth-footer a {
+      color: #6366f1;
+      font-weight: 600;
+      text-decoration: none;
+    }
+  </style>
 </head>
-
-
 <body>
 
-
-<!-- =========================
-     NAVBAR
-========================= -->
-
-<header class="navbar">
-
-  <a href="index.html" class="logo">
-    Smart Money
-  </a>
-
-  <nav>
-
-    <a href="index.html">
-      Home
-    </a>
-
-    <a href="login.html">
-      Login
-    </a>
-
-  </nav>
-
-</header>
-
-
-
-<!-- =========================
-     REGISTER PAGE
-========================= -->
-
-<main class="form-page">
-
-  <div class="form-box">
-
-
-    <!-- TITLE -->
-
-    <h1>
-      Create Account
-    </h1>
-
-    <p>
-      Complete your details to continue with Smart Money.
-    </p>
-
-
-
-    <!-- =========================
-         SELECTED PACKAGE
-    ========================= -->
-
-    <div
-      id="packageInfo"
-      style="
-        display:none;
-        margin:20px 0;
-        padding:18px;
-        border-radius:12px;
-        background:#f8fafc;
-        border:1px solid #e2e8f0;
-      "
-    >
-
-      <div
-        style="
-          font-size:12px;
-          color:#64748b;
-          font-weight:700;
-          margin-bottom:5px;
-        "
-      >
-        SELECTED PACKAGE
-      </div>
-
-      <h3
-        id="selectedPackageName"
-        style="
-          margin:0;
-          color:#111827;
-        "
-      >
-      </h3>
-
-      <p
-        id="selectedPackagePrice"
-        style="
-          margin:5px 0 0;
-          color:#64748b;
-        "
-      >
-      </p>
-
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2>Create Account</h2>
+      <p>Join Smart Money today</p>
     </div>
 
+    <div class="input-group">
+      <label>Full Name</label>
+      <input type="text" id="regName" class="input-field" placeholder="Enter your full name">
+    </div>
 
+    <div class="input-group">
+      <label>Email Address</label>
+      <input type="email" id="regEmail" class="input-field" placeholder="Enter your email">
+    </div>
 
-    <!-- =========================
-         REGISTER FORM
-    ========================= -->
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" id="regPassword" class="input-field" placeholder="Create a password">
+    </div>
 
-    <form id="registerForm">
+    <div class="input-group">
+      <label>Referral ID (Optional)</label>
+      <input type="text" id="regReferral" class="input-field" placeholder="Enter referral ID if any">
+    </div>
 
+    <button onclick="handleRegister()" class="btn-submit" id="regBtn">Register Account</button>
 
-      <!-- FULL NAME -->
-
-      <label for="name">
-        Full Name
-      </label>
-
-      <input
-        type="text"
-        id="name"
-        placeholder="Enter your full name"
-        required
-      >
-
-
-
-      <!-- EMAIL -->
-
-      <label for="email">
-        Gmail
-      </label>
-
-      <input
-        type="email"
-        id="email"
-        placeholder="Enter your Gmail"
-        required
-      >
-
-
-
-      <!-- MOBILE -->
-
-      <label for="mobile">
-        Mobile Number
-      </label>
-
-      <input
-        type="tel"
-        id="mobile"
-        placeholder="Enter mobile number"
-        required
-      >
-
-
-
-      <!-- PROFILE PHOTO -->
-
-      <label for="photo">
-        Profile Photo
-      </label>
-
-      <input
-        type="file"
-        id="photo"
-        accept="image/*"
-      >
-
-
-
-      <!-- PASSWORD -->
-
-      <label for="password">
-        Password
-      </label>
-
-      <input
-        type="password"
-        id="password"
-        placeholder="Create password"
-        minlength="6"
-        required
-      >
-
-
-
-      <!-- CONFIRM PASSWORD -->
-
-      <label for="confirmPassword">
-        Confirm Password
-      </label>
-
-      <input
-        type="password"
-        id="confirmPassword"
-        placeholder="Confirm password"
-        minlength="6"
-        required
-      >
-
-
-
-      <!-- REFERRAL -->
-
-      <label for="referral">
-        Referral ID
-      </label>
-
-      <input
-        type="text"
-        id="referral"
-        placeholder="Enter valid referral ID"
-        required
-      >
-
-
-      <p
-        style="
-          font-size:11px;
-          color:#64748b;
-          margin-top:5px;
-          margin-bottom:15px;
-        "
-      >
-        A valid Referral ID is required to create an account.
-      </p>
-
-
-
-      <!-- PACKAGE HIDDEN INPUT -->
-
-      <input
-        type="hidden"
-        id="selectedPackage"
-      >
-
-
-
-      <!-- SUBMIT -->
-
-      <button
-        type="submit"
-        class="btn register-btn"
-        id="registerButton"
-      >
-        Create Account & Continue
-      </button>
-
-
-    </form>
-
-
-
-    <p class="login-text">
-
-      Already have an account?
-
-      <a href="login.html">
-        Login
-      </a>
-
-    </p>
-
-
+    <div class="auth-footer">
+      Already have an account? <a href="login.html">Login</a>
+    </div>
   </div>
 
-</main>
-
-
-
-<!-- =========================
-     SUPABASE
-========================= -->
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-
-<script>
-
-
-  // ================================
-  // SUPABASE CONNECTION
-  // ================================
-
-  const SUPABASE_URL =
-    "https://rvprrulkjegvicbnjuft.supabase.co";
-
-
-  const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-
-
-  const supabaseClient =
-    window.supabase.createClient(
-
-      SUPABASE_URL,
-
-      SUPABASE_PUBLISHABLE_KEY
-
-    );
-
-
-
-  // ================================
-  // PACKAGE DETAILS
-  // ================================
-
-  const packages = {
-
-    Low: {
-
-      name: "Starter / Low Package",
-
-      price: 560,
-
-      commission: "50%"
-
-    },
-
-
-    Medium: {
-
-      name: "Medium Growth Package",
-
-      price: 899,
-
-      commission: "60%"
-
-    },
-
-
-    High: {
-
-      name: "Premium / High Package",
-
-      price: 1499,
-
-      commission: "70%"
-
-    }
-
-  };
-
-
-
-  // ================================
-  // GET PACKAGE FROM URL
-  // ================================
-
-  const urlParams =
-    new URLSearchParams(
-      window.location.search
-    );
-
-
-  const selectedPackage =
-    urlParams.get("package");
-
-
-
-  const packageInfo =
-    document.getElementById(
-      "packageInfo"
-    );
-
-
-  const selectedPackageName =
-    document.getElementById(
-      "selectedPackageName"
-    );
-
-
-  const selectedPackagePrice =
-    document.getElementById(
-      "selectedPackagePrice"
-    );
-
-
-  const selectedPackageInput =
-    document.getElementById(
-      "selectedPackage"
-    );
-
-
-
-  if (
-    selectedPackage &&
-    packages[selectedPackage]
-  ) {
-
-    const packageData =
-      packages[selectedPackage];
-
-
-    packageInfo.style.display =
-      "block";
-
-
-    selectedPackageName.textContent =
-      packageData.name;
-
-
-    selectedPackagePrice.textContent =
-      "Package Price: ₹" +
-      packageData.price +
-      " | Referral Commission: " +
-      packageData.commission;
-
-
-    selectedPackageInput.value =
-      selectedPackage;
-
-  }
-
-
-
-  // ================================
-  // REGISTER FORM
-  // ================================
-
-  document
-    .getElementById("registerForm")
-    .addEventListener(
-      "submit",
-      async function(event) {
-
-
-        event.preventDefault();
-
-
-
-        // ================================
-        // GET VALUES
-        // ================================
-
-        const name =
-          document
-            .getElementById("name")
-            .value
-            .trim();
-
-
-        const email =
-          document
-            .getElementById("email")
-            .value
-            .trim();
-
-
-        const mobile =
-          document
-            .getElementById("mobile")
-            .value
-            .trim();
-
-
-        const password =
-          document
-            .getElementById("password")
-            .value;
-
-
-        const confirmPassword =
-          document
-            .getElementById("confirmPassword")
-            .value;
-
-
-        const referral =
-          document
-            .getElementById("referral")
-            .value
-            .trim();
-
-
-        const chosenPackage =
-          document
-            .getElementById("selectedPackage")
-            .value;
-
-
-
-        // ================================
-        // REFERRAL CHECK
-        // ================================
-
-        if (!referral) {
-
-          alert(
-            "Referral ID is required. You cannot create an account without a valid Referral ID."
-          );
-
-          return;
-
-        }
-
-
-
-        // ================================
-        // PACKAGE CHECK
-        // ================================
-
-        if (!chosenPackage) {
-
-          alert(
-            "Please select a package first."
-          );
-
-
-          window.location.href =
-            "index.html#packages";
-
-
-          return;
-
-        }
-
-
-
-        // ================================
-        // PASSWORD CHECK
-        // ================================
-
-        if (
-          password !== confirmPassword
-        ) {
-
-          alert(
-            "Passwords do not match."
-          );
-
-          return;
-
-        }
-
-
-
-        // ================================
-        // BUTTON
-        // ================================
-
-        const registerButton =
-          document.getElementById(
-            "registerButton"
-          );
-
-
-        registerButton.disabled =
-          true;
-
-
-        registerButton.textContent =
-          "Creating Account...";
-
-
-
-        try {
-
-
-          // ================================
-          // CREATE AUTH ACCOUNT
-          // ================================
-
-          const {
-            data,
-            error
-          } =
-          await supabaseClient
-            .auth
-            .signUp({
-
-              email: email,
-
-              password: password,
-
-              options: {
-
-                data: {
-
-                  full_name: name,
-
-                  mobile: mobile,
-
-                  referral_id: referral,
-
-                  selected_package:
-                    chosenPackage
-
-                }
-
-              }
-
-            });
-
-
-
-          if (error) {
-
-            throw error;
-
-          }
-
-
-
-          const user =
-            data.user;
-
-
-
-          if (!user) {
-
-            throw new Error(
-              "Account could not be created."
-            );
-
-          }
-
-
-
-          // ================================
-          // SAVE PROFILE
-          // ================================
-
-          const {
-            error: profileError
-          } =
-          await supabaseClient
-            .from("profiles")
-            .insert({
-
-              user_id:
-                user.id,
-
-              full_name:
-                name,
-
-              email:
-                email,
-
-              mobile:
-                mobile,
-
-              referral_id:
-                referral,
-
-              selected_package:
-                chosenPackage
-
-            });
-
-
-
-          if (profileError) {
-
-            throw profileError;
-
-          }
-
-
-
-          // ================================
-          // SUCCESS
-          // ================================
-
-          alert(
-            "Account created successfully! Please complete your package payment."
-          );
-
-
-
-          // ================================
-          // PAYMENT PAGE
-          // ================================
-
-          window.location.href =
-            "payment.html?package=" +
-            encodeURIComponent(
-              chosenPackage
-            ) +
-            "&user=" +
-            encodeURIComponent(
-              user.id
-            );
-
-
-        }
-
-        catch (error) {
-
-
-          console.error(error);
-
-
-          alert(
-
-            "Registration failed: " +
-            error.message
-
-          );
-
-        }
-
-
-        finally {
-
-
-          registerButton.disabled =
-            false;
-
-
-          registerButton.textContent =
-            "Create Account & Continue";
-
-        }
-
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+    async function handleRegister() {
+      const name = document.getElementById("regName").value.trim();
+      const email = document.getElementById("regEmail").value.trim();
+      const password = document.getElementById("regPassword").value.trim();
+      const referral = document.getElementById("regReferral").value.trim();
+      const btn = document.getElementById("regBtn");
+
+      if (!name || !email || !password) {
+        alert("Please fill in all required fields.");
+        return;
       }
 
-    );
+      btn.innerText = "Creating Account...";
+      btn.disabled = true;
 
+      try {
+        const { data, error } = await supabaseClient.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: {
+              full_name: name,
+              referral_id: referral || 'NONE'
+            }
+          }
+        });
 
-</script>
+        if (error) throw error;
 
-
+        alert("🎉 Registration Successful! Please login to continue.");
+        window.location.href = "login.html";
+      } catch (err) {
+        alert("Registration Failed: " + err.message);
+        btn.innerText = "Register Account";
+        btn.disabled = false;
+      }
+    }
+  </script>
 </body>
-
 </html>
