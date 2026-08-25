@@ -6,18 +6,18 @@
 <title>Smart Money - Affiliate Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
 <!-- EmailJS Library -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
 <style>
-*{box-sizing:border-box;font-family:'Poppins',sans-serif;}
+*{box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif;}
 body{margin:0;background:#eef2f7;color:#1e293b;}
 .app-wrapper{width:100%;max-width:850px;min-height:100vh;margin:auto;background:#f1f5f9;box-shadow:0 0 40px rgba(0,0,0,.08);}
 .navbar{height:68px;background:#ffffff;display:flex;align-items:center;justify-content:space-between;padding:0 18px;position:sticky;top:0;z-index:100;box-shadow:0 3px 15px rgba(0,0,0,.06);}
-.brand-logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
-.brand-logo img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #7c3aed;background:#fff;}
-.brand-logo span{font-size:18px;font-weight:800;background:linear-gradient(135deg,#7c3aed,#db2777);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.brand-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.brand-logo img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #7c3aed;background:#fff;}
+.brand-logo span{font-size:20px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,#7c3aed 0%,#db2777 50%,#f59e0b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 2px 10px rgba(124,58,237,0.15);}
 .nav-right{display:flex;align-items:center;gap:10px;}
 .nav-home-btn{padding:8px 13px;border-radius:10px;text-decoration:none;background:#f3e8ff;color:#7c3aed;font-size:12px;font-weight:700;}
 .nav-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #7c3aed;background:#fff;}
@@ -44,14 +44,17 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .dash-container{padding:25px 18px 40px;}
 .profile-card{position:relative;min-height:185px;border-radius:20px;overflow:hidden;margin-bottom:20px;display:flex;align-items:center;padding:25px;gap:20px;background:linear-gradient(135deg,#ffffff 0%,#ffffff 55%,#f5f3ff 55%,#ede9fe 100%);box-shadow:0 10px 25px rgba(15,23,42,.10);border:1px solid #e2e8f0;}
 .package-badge{position:absolute;top:0;right:0;padding:8px 17px;background:linear-gradient(135deg,#f59e0b,#ec4899);color:#fff;font-size:9px;font-weight:800;letter-spacing:.5px;border-bottom-left-radius:14px;}
-.profile-img-wrap{width:96px;height:96px;min-width:96px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;padding:5px;box-shadow:0 6px 20px rgba(0,0,0,.18);border:3px solid #7c3aed;position:relative;cursor:pointer;}
+.profile-img-wrap{width:96px;height:96px;min-width:96px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;padding:4px;box-shadow:0 6px 20px rgba(0,0,0,.18);border:3px solid #7c3aed;position:relative;cursor:pointer;}
 .profile-img{width:100%;height:100%;border-radius:50%;object-fit:cover;background:#fff;}
-.upload-hint{position:absolute;bottom:0;left:0;width:100%;background:rgba(0,0,0,0.6);color:#fff;font-size:8px;text-align:center;padding:2px 0;border-bottom-left-radius:50px;border-bottom-right-radius:50px;}
+.upload-hint{position:absolute;bottom:0;left:0;width:100%;background:rgba(0,0,0,0.65);color:#fff;font-size:7px;text-align:center;padding:2px 0;border-bottom-left-radius:50px;border-bottom-right-radius:50px;}
+
 .user-info{flex:1;min-width:0;}
-.user-info h2{margin:0 0 5px;font-size:22px;color:#1e293b;font-weight:800;}
-.user-email{margin:0 0 12px;font-size:12px;color:#64748b;word-break:break-word;}
-.affiliate-id-box{display:flex;align-items:center;gap:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:9px 12px;width:max-content;margin-bottom:7px;}
-.copy-id-btn{width:36px;height:36px;border:none;border-radius:9px;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#9333ea);color:white;}
+.user-info h2{margin:0 0 8px;font-size:26px;color:#0f172a;font-weight:800;letter-spacing:-0.5px;line-height:1.2;}
+.affiliate-id-box{display:flex;align-items:center;gap:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:10px 14px;width:max-content;margin-bottom:8px;box-shadow:0 2px 6px rgba(0,0,0,0.02);}
+.affiliate-id-box span{font-size:14px;color:#475569;}
+.affiliate-id-box b{font-size:15px;color:#7c3aed;font-weight:800;}
+.copy-id-btn{width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#9333ea);color:white;display:flex;align-items:center;justify-content:center;}
+.remove-photo-btn{background:none;border:none;color:#ef4444;font-size:11px;font-weight:700;cursor:pointer;padding:0;margin-top:6px;display:inline-block;}
 
 /* STATS */
 .stats-stack{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px;}
@@ -135,19 +138,23 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 <div class="dash-container">
   <div class="profile-card">
     <div class="package-badge" id="activePackageBadge">MASTER PACKAGE 👑</div>
-    <div class="profile-img-wrap" onclick="document.getElementById('profilePhotoInput').click()" title="Click to change photo">
-      <img src="1000819130.jpg" alt="Profile" class="profile-img" id="mainProfileImg" onerror="this.src='https://via.placeholder.com/100?text=SM'">
-      <div class="upload-hint">Edit Photo</div>
-      <input type="file" id="profilePhotoInput" style="display:none;" accept="image/*" onchange="uploadProfilePicture(event)">
+    <div>
+      <div class="profile-img-wrap" onclick="document.getElementById('profilePhotoInput').click()" title="Click to change photo">
+        <img src="1000819130.jpg" alt="Profile" class="profile-img" id="mainProfileImg" onerror="this.src='https://via.placeholder.com/100?text=SM'">
+        <div class="upload-hint">Edit Photo</div>
+        <input type="file" id="profilePhotoInput" style="display:none;" accept="image/*" onchange="uploadProfilePicture(event)">
+      </div>
+      <div style="text-align:center;">
+        <button class="remove-photo-btn" onclick="removeProfilePicture()" id="removePhotoBtn" style="display:none;">Remove Photo</button>
+      </div>
     </div>
     <div class="user-info">
-      <h2 id="userName">Loading... 👑</h2>
-      <p class="user-email" id="userEmail">Loading...</p>
+      <h2 id="userName">Loading...</h2>
       <div class="affiliate-id-box">
         <span>ID: <b id="myRefCode">Loading...</b></span>
         <button class="copy-id-btn" onclick="copyAffiliateLink()">📋</button>
       </div>
-      <p style="font-size:11px;color:#64748b;margin:0;" id="dobDisplayInfo">DOB: Not Set</p>
+      <p style="font-size:12px;color:#64748b;margin:0;" id="dobDisplayInfo">DOB: Not Set</p>
     </div>
   </div>
 
@@ -250,7 +257,6 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 emailjs.init("FxcimUvl0-ZxAauRx");
-const LOGO_FILE = "1000819130.jpg";
 const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 
@@ -316,22 +322,25 @@ function openWithdrawModal(){
   openModal("withdrawModal");
 }
 
-// Function to set profile images with a stylish letter avatar fallback if none exists
+// Function to handle profile images with letter avatars and remove button visibility
 function applyProfileImage(imgUrl, userName){
   const mainImg = document.getElementById("mainProfileImg");
   const sidebarImg = document.getElementById("sidebarProfileImage");
   const navAvatar = document.getElementById("navAvatarImg");
+  const removeBtn = document.getElementById("removePhotoBtn");
 
   if(imgUrl && imgUrl.trim() !== ""){
     mainImg.src = imgUrl;
     sidebarImg.src = imgUrl;
     navAvatar.src = imgUrl;
+    if(removeBtn) removeBtn.style.display = "inline-block";
   } else {
     const firstLetter = (userName ? userName.charAt(0) : "U").toUpperCase();
     const fallbackUrl = `https://ui-avatars.com/api/?name=${firstLetter}&background=7c3aed&color=fff&size=128&bold=true`;
     mainImg.src = fallbackUrl;
     sidebarImg.src = fallbackUrl;
     navAvatar.src = fallbackUrl;
+    if(removeBtn) removeBtn.style.display = "none";
   }
 }
 
@@ -374,8 +383,7 @@ document.addEventListener("DOMContentLoaded", async function(){
     const dob = profile?.date_of_birth || "";
     const packageName = profile?.package_name || "MASTER PACKAGE";
 
-    document.getElementById("userName").innerHTML = escapeHtml(finalName) + ' <span style="font-size:14px;">👑</span>';
-    document.getElementById("userEmail").innerText = finalEmail;
+    document.getElementById("userName").innerHTML = escapeHtml(finalName) + ' <span style="font-size:16px;">👑</span>';
     document.getElementById("myRefCode").innerText = userRefCode;
     document.getElementById("dobDisplayInfo").innerText = dob ? "DOB: " + dob : "DOB: Not Set";
     document.getElementById("activePackageBadge").innerText = packageName.toUpperCase() + " 👑";
@@ -426,23 +434,35 @@ async function uploadProfilePicture(event){
       .eq("user_id", currentUserId);
 
     if(error){ alert("Failed to save picture: " + error.message); }
-    else { alert("Profile picture saved to database successfully!"); }
+    else { 
+      currentProfile.profile_pic = base64Image;
+      alert("Profile picture saved successfully!"); 
+    }
   };
   reader.readAsDataURL(file);
+}
+
+async function removeProfilePicture(){
+  if(!confirm("Are you sure you want to remove your profile picture?")) return;
+
+  const { error } = await supabaseClient
+    .from("profiles")
+    .update({ profile_pic: null })
+    .eq("user_id", currentUserId);
+
+  if(error){
+    alert("Failed to remove picture: " + error.message);
+  } else {
+    currentProfile.profile_pic = null;
+    applyProfileImage(null, currentProfile?.full_name);
+    alert("Profile picture removed successfully!");
+  }
 }
 
 function setupRealtimeListener(){
   supabaseClient
     .channel('public:withdrawal_requests')
     .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'withdrawal_requests', filter: `user_id=eq.${currentUserId}` }, payload => {
-      const updatedRow = payload.new;
-      if(updatedRow.status.toLowerCase() === 'success' || updatedRow.status.toLowerCase() === 'approved'){
-        emailjs.send("service_default", "template_default", {
-          to_email: currentUserEmail,
-          to_name: currentProfile.full_name || "User",
-          message: `Your withdrawal request of ₹${updatedRow.amount} has been successfully approved!`
-        }).catch(err => console.log("Email error:", err));
-      }
       loadWithdrawalHistory();
     })
     .subscribe();
@@ -510,7 +530,7 @@ async function updateUserPayoutDetails(){
   if(error){ alert("Error: " + error.message); return; }
   currentProfile = { ...currentProfile, ...updateData };
   document.getElementById("payoutDisplayInfo").innerText = payoutMode === "upi" ? "UPI ID: " + updateData.upi_id : `Bank A/C: ${updateData.bank_account_number}`;
-  alert("Payout details saved to database successfully!");
+  alert("Payout details saved successfully!");
   closeModal("profileSettingsModal");
 }
 
@@ -521,10 +541,10 @@ async function saveKycDetails(){
   if(error){ alert("Error: " + error.message); return; }
 
   currentProfile = { ...currentProfile, full_name: fullName, date_of_birth: dob };
-  document.getElementById("userName").innerHTML = escapeHtml(fullName) + ' <span style="font-size:14px;">👑</span>';
+  document.getElementById("userName").innerHTML = escapeHtml(fullName) + ' <span style="font-size:16px;">👑</span>';
   document.getElementById("dobDisplayInfo").innerText = "DOB: " + dob;
   applyProfileImage(currentProfile?.profile_pic, fullName);
-  alert("KYC saved to database successfully!");
+  alert("KYC saved successfully!");
   closeModal("kycModal");
 }
 
