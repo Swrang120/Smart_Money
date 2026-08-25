@@ -58,11 +58,6 @@
     }
     .sidebar-menu a.active { background: linear-gradient(135deg, #7c3aed, #a855f7); box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
 
-    .submenu { list-style: none; padding-left: 20px; margin: 5px 0; display: none; }
-    .submenu.active { display: block; }
-    .submenu li a { font-size: 13px; padding: 8px 12px; color: #94a3b8; }
-    .submenu li a:hover { color: #fff; background: rgba(255,255,255,0.05); }
-
     /* MAIN CONTAINER */
     .dash-container { max-width: 480px; margin: 20px auto; padding: 0 15px; width: 100%; }
 
@@ -72,10 +67,9 @@
       box-shadow: 0 10px 30px rgba(124, 58, 237, 0.25); margin-bottom: 20px; position: relative; border: 1px solid rgba(255,255,255,0.1); overflow: hidden;
     }
     .package-badge {
-      position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #f59e0b, #ec4899);
       color: #fff; font-size: 10px; padding: 5px 14px; border-bottom-left-radius: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
     }
-    .package-badge.vip { background: linear-gradient(135deg, #f59e0b, #ec4899); color: #fff; }
     
     .profile-img-wrap { position: relative; flex-shrink: 0; }
     .profile-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background: #fff; }
@@ -148,7 +142,7 @@
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <a href="dashboard.html" class="brand-logo" style="color:#fff;">
-      <img src="1000819130.jpg" alt="Logo" class="brand-logo-img" id="sideLogoImg">
+      <img src="1000819130.jpg" alt="Logo" class="brand-logo-img">
       <span>Smart Money</span>
     </a>
     <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
@@ -157,7 +151,6 @@
     <li><a href="dashboard.html" class="active"><span>🏠</span> Dashboard Home</a></li>
     <li><a href="index.html"><span>🌐</span> Home / Landing Page</a></li>
     <li><button onclick="openUpiModal()"><span>🏦</span> Update Bank & UPI Details</button></li>
-    <li><button onclick="openAvatarModal()"><span>🖼️</span> Update Profile Avatar</button></li>
     <li><button onclick="copyRefLink()"><span>🔗</span> Copy Affiliate Link</button></li>
     <li><button onclick="openWithdrawModal()"><span>💸</span> Withdraw Funds</button></li>
     <li><button id="sideLogoutBtn" style="color:#f87171;"><span>🚪</span> Logout</button></li>
@@ -166,22 +159,22 @@
 
 <header class="navbar">
   <a href="dashboard.html" class="brand-logo">
-    <img src="1000819130.jpg" alt="Smart Money Logo" class="brand-logo-img" id="navLogoImg">
+    <img src="1000819130.jpg" alt="Smart Money Logo" class="brand-logo-img">
     <span>Smart Money</span>
   </a>
   <div class="nav-right">
-    <img src="1000819130.jpg" alt="Avatar" class="nav-avatar" id="navAvatarTop">
+    <img src="1000819130.jpg" alt="Avatar" class="nav-avatar">
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
   </div>
 </header>
 
 <div class="dash-container">
   
-  <!-- PROFILE CARD WITH LOGO -->
+  <!-- PROFILE CARD -->
   <div class="profile-card">
-    <div class="package-badge vip" id="activePackageBadge">MASTER PACKAGE 👑</div>
+    <div class="package-badge" id="activePackageBadge">MASTER PACKAGE 👑</div>
     <div class="profile-img-wrap">
-      <img src="1000819130.jpg" alt="Smart Money Logo" class="profile-img" id="profileCardImg">
+      <img src="1000819130.jpg" alt="Smart Money Logo" class="profile-img">
     </div>
     <div class="user-info">
       <h2 id="userName">Loading... <span style="font-size:15px;">👑</span></h2>
@@ -253,20 +246,6 @@
 
 </div>
 
-<!-- AVATAR UPDATE MODAL -->
-<div id="avatarModal" class="modal-overlay">
-  <div class="modal-box">
-    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">🖼️ Update Profile Image</h3>
-    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Apne Supabase storage wali image ka Public URL yahan paste karein.</p>
-    
-    <label style="font-size:12px; font-weight:600; color:#475569;">Avatar Public URL</label>
-    <input type="text" id="editAvatarUrl" class="input-field" placeholder="https://.../avatars/your-image.jpg">
-    
-    <button onclick="updateUserAvatar()" class="btn-action" id="saveAvatarBtn">Save Avatar</button>
-    <button onclick="closeModal('avatarModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer;">Cancel</button>
-  </div>
-</div>
-
 <!-- BANK & UPI SETTINGS MODAL -->
 <div id="profileSettingsModal" class="modal-overlay">
   <div class="modal-box">
@@ -309,20 +288,11 @@
   const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL, 
-    SUPABASE_PUBLISHABLE_KEY, 
-    { 
-      auth: { 
-        persistSession: true, 
-        autoRefreshToken: true, 
-        detectSessionInUrl: true 
-      } 
-    }
-  );
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, { 
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } 
+  });
 
   let currentUserId = null;
-  let currentProfile = null;
   let userCurrentBalance = 0;
   let userSavedUpi = "";
   let userSavedAcc = "";
@@ -334,12 +304,6 @@
   }
 
   document.addEventListener("DOMContentLoaded", async function() {
-    const defaultLogo = "1000819130.jpg";
-    document.getElementById("sideLogoImg").src = defaultLogo;
-    document.getElementById("navLogoImg").src = defaultLogo;
-    document.getElementById("navAvatarTop").src = defaultLogo;
-    document.getElementById("profileCardImg").src = defaultLogo;
-
     try {
       const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
       if (!session || !session.user) {
@@ -357,19 +321,10 @@
         .maybeSingle();
 
       if (profile) {
-        currentProfile = profile;
         userCurrentBalance = Number(profile.balance || 0);
         userSavedUpi = profile.upi_id || "";
         userSavedAcc = profile.bank_account_number || "";
         userRefCode = profile.referral_code || profile.referral_id || "";
-
-        // Check avatar from database
-        const customAvatar = profile.avatar || profile.avatar_url;
-        if (customAvatar && customAvatar.startsWith('http')) {
-          document.getElementById("navAvatarTop").src = customAvatar;
-          document.getElementById("profileCardImg").src = customAvatar;
-          document.getElementById("editAvatarUrl").value = customAvatar;
-        }
 
         const userName = profile.full_name || profile.name || session.user.user_metadata?.full_name || "Smart Money User";
         const userEmail = profile.email || session.user.email || "";
@@ -418,11 +373,6 @@
     });
   });
 
-  function openAvatarModal() {
-    if(document.getElementById("sidebar").classList.contains("active")) toggleSidebar();
-    document.getElementById("avatarModal").style.display = "flex";
-  }
-
   function openUpiModal() {
     if(document.getElementById("sidebar").classList.contains("active")) toggleSidebar();
     document.getElementById("profileSettingsModal").style.display = "flex";
@@ -440,37 +390,6 @@
       return;
     }
     document.getElementById("withdrawModal").style.display = "flex";
-  }
-
-  async function updateUserAvatar() {
-    const avatarUrl = document.getElementById("editAvatarUrl").value.trim();
-    let btn = document.getElementById("saveAvatarBtn");
-
-    if (!avatarUrl || !avatarUrl.startsWith('http')) {
-      alert("Please enter a valid image URL.");
-      return;
-    }
-
-    btn.innerText = "Saving...";
-    btn.disabled = true;
-
-    try {
-      const { error } = await supabaseClient.from('profiles').update({ 
-        avatar: avatarUrl 
-      }).eq('user_id', currentUserId);
-
-      if(error) throw error;
-
-      document.getElementById("navAvatarTop").src = avatarUrl;
-      document.getElementById("profileCardImg").src = avatarUrl;
-      alert("🎉 Profile avatar successfully updated!");
-      closeModal('avatarModal');
-    } catch(err) {
-      alert("Error updating avatar: " + err.message);
-    } finally {
-      btn.innerText = "Save Avatar";
-      btn.disabled = false;
-    }
   }
 
   async function updateUserBankDetails() {
