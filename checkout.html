@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Money - Checkout</title>
+  <title>Smart Money - Checkout & Payment</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -37,7 +37,7 @@
 
     .card-box {
       background: #ffffff; border-radius: 16px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.04);
-      border: 1px solid #e2e8f0;
+      border: 1px solid #e2e8f0; margin-bottom: 25px;
     }
     .card-box h3 { font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
 
@@ -53,10 +53,17 @@
 
     /* SELECTED PACKAGE BOX IN FORM */
     .selected-pkg-preview {
-      margin-top: 15px; background: #f8fafc; border: 1px dashed #cbd5e1; padding: 15px; border-radius: 10px; text-align: center;
+      margin-top: 5px; background: #f8fafc; border: 1px dashed #cbd5e1; padding: 15px; border-radius: 10px; text-align: center;
     }
     .selected-pkg-preview p { font-size: 12px; color: #64748b; margin-bottom: 5px; }
     .selected-pkg-preview h4 { font-size: 16px; font-weight: 700; color: #2563eb; }
+
+    /* PAYMENT SECTION INSIDE CHECKOUT */
+    .payment-qr-container { text-align: center; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
+    .qr-img { width: 200px; height: 200px; object-fit: contain; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff; padding: 8px; margin-bottom: 15px; }
+    .upi-box { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 10px 15px; border-radius: 8px; border: 1px solid #cbd5e1; max-width: 380px; margin: 0 auto 10px auto; }
+    .upi-box span { font-size: 13px; font-weight: 700; color: #0f172a; }
+    .copy-btn { background: #2563eb; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
 
     /* ORDER SUMMARY */
     .order-summary-box .summary-row {
@@ -72,12 +79,12 @@
     .terms-group input { margin-top: 3px; width: 16px; height: 16px; accent-color: #2563eb; }
     .terms-group a { color: #2563eb; text-decoration: none; font-weight: 600; }
 
-    .next-btn {
-      width: 100%; background: linear-gradient(135deg, #a855f7, #ec4899); color: #fff; border: none; padding: 14px;
-      border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(236,72,153,0.3);
+    .submit-btn {
+      width: 100%; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; border: none; padding: 14px;
+      border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(37,99,235,0.3);
       transition: opacity 0.2s;
     }
-    .next-btn:hover { opacity: 0.95; }
+    .submit-btn:hover { opacity: 0.95; }
 
     /* RESPONSIVE */
     @media(max-width: 900px) {
@@ -96,37 +103,38 @@
       <a href="index.html">Home</a>
       <a href="index.html#about">About</a>
       <a href="index.html#packages">Plan</a>
-      <a href="login.html" class="auth-btn">Login / Register</a>
+      <a href="login.html" class="auth-btn">Login</a>
     </nav>
   </header>
 
   <!-- CHECKOUT HEADER -->
   <div class="checkout-header">
-    <h1>Checkout</h1>
+    <h1>Checkout & Payment</h1>
     <p>Home // Checkout</p>
   </div>
 
-  <!-- MAIN CHECKOUT CONTENT -->
+  <!-- MAIN CHECKOUT CONTAINER -->
   <div class="checkout-container">
 
-    <!-- LEFT: BILLING DETAILS FORM -->
-    <div class="card-box">
-      <h3>Billing Details</h3>
-      <form id="checkoutForm" onsubmit="handleProceed(event)">
+    <!-- LEFT: BILLING DETAILS & PAYMENT FORM -->
+    <form id="checkoutForm" onsubmit="handleFinalSubmit(event)">
+      
+      <div class="card-box">
+        <h3>1. Billing & Account Details</h3>
         
         <div class="form-grid">
           <div class="form-group full">
-            <label>Your Affiliate Code *</label>
+            <label>Your Affiliate / Referral Code *</label>
             <input type="text" id="affCode" placeholder="Enter Referral Code (e.g. SW12345)" required>
           </div>
 
           <div class="form-group">
-            <label>Name *</label>
+            <label>Full Name *</label>
             <input type="text" id="fullName" placeholder="Enter Your Full Name" required>
           </div>
 
           <div class="form-group">
-            <label>Enter State *</label>
+            <label>Select State *</label>
             <select id="stateSelect" required>
               <option value="">Select State</option>
               <option value="Assam">Assam</option>
@@ -139,17 +147,17 @@
           </div>
 
           <div class="form-group">
-            <label>Enter Mobile Number *</label>
-            <input type="tel" id="mobileNo" placeholder="+91 | Enter Mobile Number" required>
+            <label>Mobile Number *</label>
+            <input type="tel" id="mobileNo" placeholder="Enter Mobile Number" required>
           </div>
 
           <div class="form-group">
-            <label>Email Id *</label>
+            <label>Email ID (For Account Login) *</label>
             <input type="email" id="emailId" placeholder="xyz@gmail.com" required>
           </div>
 
           <div class="form-group">
-            <label>Password *</label>
+            <label>Create Password *</label>
             <input type="password" id="password" placeholder="Create Password" required>
           </div>
 
@@ -159,43 +167,78 @@
           </div>
 
           <div class="form-group full">
-            <label>Choose Package</label>
+            <label>Selected Package</label>
             <div class="selected-pkg-preview">
-              <p>Selected Package:</p>
+              <p>Package Name:</p>
               <h4 id="displayPkgName">Starter Package</h4>
             </div>
           </div>
         </div>
+      </div>
 
-      </form>
-    </div>
+      <!-- PAYMENT & QR CODE SECTION -->
+      <div class="card-box">
+        <h3>2. Scan QR Code & Complete Payment</h3>
+        
+        <div class="payment-qr-container">
+          <p style="font-size: 13px; color: #475569; margin-bottom: 12px;">Kisi bhi UPI App se niche diye gaye QR code ko scan karein ya UPI ID par payment karein:</p>
+          
+          <!-- QR Code Image -->
+          <img src="1000819906.png" alt="Payment QR Code" class="qr-img" onerror="this.src='https://via.placeholder.com/200?text=QR+Code'">
+          
+          <div style="margin-bottom: 12px; text-align: left; max-width: 380px; margin-left: auto; margin-right: auto;">
+            <span style="font-size: 12px; font-weight: 600; color: #64748b;">Available UPI IDs:</span>
+          </div>
+
+          <!-- UPI ID 1 -->
+          <div class="upi-box">
+            <span id="upiText1">smartmoney7@nyes</span>
+            <button type="button" class="copy-btn" onclick="copyUpi('upiText1')">Copy UPI 1</button>
+          </div>
+
+          <!-- UPI ID 2 (BharatPe wale ko yahan update kar sakte hain) -->
+          <div class="upi-box">
+            <span id="upiText2">BHARATPE_WALI_UPI_YAHAN_LIKHEIN</span>
+            <button type="button" class="copy-btn" onclick="copyUpi('upiText2')">Copy UPI 2</button>
+          </div>
+        </div>
+
+        <div class="form-group full" style="margin-top: 15px;">
+          <label>Enter UTR / Transaction ID (Payment Proof) *</label>
+          <input type="text" id="utrId" placeholder="Enter 12-digit UTR or Reference Number" required>
+        </div>
+      </div>
+
+    </form>
 
     <!-- RIGHT: YOUR ORDER SUMMARY -->
-    <div class="card-box order-summary-box">
-      <h3>Your Order</h3>
-      
-      <div class="summary-row">
-        <span id="summaryProductName">Starter Package</span>
-        <span id="summaryProductPrice">₹289</span>
-      </div>
+    <div>
+      <div class="card-box order-summary-box">
+        <h3>Order Summary</h3>
+        
+        <div class="summary-row">
+          <span id="summaryProductName">Starter Package</span>
+          <span id="summaryProductPrice">₹289</span>
+        </div>
 
-      <div class="summary-row total">
-        <span>Grand Total:</span>
-        <span id="summaryGrandTotal" style="color: #2563eb;">₹289</span>
-      </div>
+        <div class="summary-row total">
+          <span>Grand Total:</span>
+          <span id="summaryGrandTotal" style="color: #2563eb;">₹289</span>
+        </div>
 
-      <div class="terms-group">
-        <input type="checkbox" id="termsCheck" required>
-        <label for="termsCheck">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</label>
-      </div>
+        <div class="terms-group">
+          <input type="checkbox" id="termsCheck" required>
+          <label for="termsCheck">I agree to the <a href="#">Terms of Service</a> & <a href="#">Privacy Policy</a>.</label>
+        </div>
 
-      <button type="button" class="next-btn" onclick="handleProceed()">Next →</button>
+        <button type="button" class="submit-btn" onclick="handleFinalSubmit()">Submit & Register Order →</button>
+      </div>
     </div>
 
   </div>
 
   <script>
-    // URL se package name aur price uthane ke liye logic
+    // URL se package name aur price fetch karne ka code
     const urlParams = new URLSearchParams(window.location.search);
     const pkgName = urlParams.get('name') || 'Starter Package';
     const pkgPrice = urlParams.get('price') || '289';
@@ -205,15 +248,30 @@
     document.getElementById('summaryProductPrice').innerText = '₹' + pkgPrice;
     document.getElementById('summaryGrandTotal').innerText = '₹' + pkgPrice;
 
-    function handleProceed() {
+    // Dynamic UPI Copy Function
+    function copyUpi(elementId) {
+      const upi = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(upi).then(() => {
+        alert('UPI ID Copied Successfully: ' + upi);
+      });
+    }
+
+    // Final Form Submission Logic
+    function handleFinalSubmit(event) {
+      if(event) event.preventDefault();
+
+      const affCode = document.getElementById('affCode').value;
       const name = document.getElementById('fullName').value;
+      const state = document.getElementById('stateSelect').value;
+      const mobile = document.getElementById('mobileNo').value;
       const email = document.getElementById('emailId').value;
       const pass = document.getElementById('password').value;
       const cpass = document.getElementById('confirmPassword').value;
+      const utr = document.getElementById('utrId').value;
       const terms = document.getElementById('termsCheck').checked;
 
-      if(!name || !email || !pass) {
-        alert('Kripya saari required details bhar dein!');
+      if(!affCode || !name || !state || !mobile || !email || !pass || !utr) {
+        alert('Kripya sabhi required fields aur UTR number bharein!');
         return;
       }
       if(pass !== cpass) {
@@ -225,9 +283,8 @@
         return;
       }
 
-      // Details validate hone ke baad payment gateway / UPI QR page par redirect karega
-      alert('Registration details saved! Ab payment page par redirect kiya ja raha hai...');
-      window.location.href = `payment.html?name=${encodeURIComponent(pkgName)}&price=${pkgPrice}`;
+      alert('Order successfully submitted! Admin approval ke baad aapka account active ho jayega.');
+      window.location.href = 'index.html';
     }
   </script>
 
