@@ -28,7 +28,7 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
     .nav-right { display: flex; align-items: center; gap: 12px; }
-    .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #6366f1; background: #e2e8f0; }
+    .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #6366f1; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #6366f1; font-size: 14px; }
     .menu-btn { background: #f8fafc; border: 1px solid #e2e8f0; font-size: 20px; cursor: pointer; color: #475569; padding: 6px 10px; border-radius: 10px; }
 
     /* SIDEBAR DRAWER */
@@ -81,7 +81,7 @@
     .package-badge.vip { background: linear-gradient(135deg, #f59e0b, #ec4899); color: #fff; }
     
     .profile-img-wrap { position: relative; }
-    .profile-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #8b5cf6; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background: #475569; }
+    .profile-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #8b5cf6; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background: #6366f1; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; font-weight: bold; }
     
     .user-info h2 { margin: 0; font-size: 18px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 6px; }
     .user-info p { margin: 3px 0; font-size: 12.5px; color: #cbd5e1; word-break: break-all; }
@@ -124,7 +124,7 @@
 <!-- SIDEBAR DRAWER MENU -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a href="dashboard.html" class="brand-logo" style="color:#fff;"><img src="1000819130.jpg" style="width:30px;height:30px;border-radius:50%;object-fit:cover;"> <span>Smart Money</span></a>
+    <a href="dashboard.html" class="brand-logo" style="color:#fff;"><span>⚡ Smart Money</span></a>
     <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
   </div>
   <ul class="sidebar-menu">
@@ -153,11 +153,11 @@
 
 <header class="navbar">
   <a href="dashboard.html" class="brand-logo">
-    <img src="1000819130.jpg" class="nav-avatar" alt="Logo">
+    <div class="nav-avatar" id="navAvatarText">SM</div>
     <span>Smart Money</span>
   </a>
   <div class="nav-right">
-    <img id="navAvatar" src="1000819130.jpg" class="nav-avatar" alt="Logo">
+    <div class="nav-avatar" id="navAvatarTopText">SM</div>
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
   </div>
 </header>
@@ -168,7 +168,7 @@
   <div class="profile-card">
     <div class="package-badge" id="activePackageBadge">No Package Yet</div>
     <div class="profile-img-wrap">
-      <img id="userAvatar" src="1000819130.jpg" class="profile-img" alt="Official Logo">
+      <div id="userAvatarText" class="profile-img">SM</div>
     </div>
     <div class="user-info">
       <h2 id="userName">Loading... <span id="vipTitleIcon" style="display:none; font-size:15px;">👑</span></h2>
@@ -200,7 +200,7 @@
 <div id="profileSettingsModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">⚙️ Edit Name & UPI Details</h3>
-    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Aapka official profile logo Smart Money brand ka permanent set hai.</p>
+    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Apna naam aur UPI ID yahan update karein.</p>
     
     <label style="font-size:12px; font-weight:600; color:#475569;">Full Name</label>
     <input type="text" id="editFullName" class="input-field" placeholder="Your Name">
@@ -237,7 +237,6 @@
   let userReferralCode = "";
   let userCurrentBalance = 0;
   let userSavedUpi = "";
-  const OFFICIAL_LOGO = "1000819130.jpg";
 
   function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("active");
@@ -264,8 +263,10 @@
       const defaultName = session.user.user_metadata?.full_name || userEmail.split('@')[0];
       const defaultCode = "SM-" + currentUserId.substring(0, 5).toUpperCase();
       
-      document.getElementById("userAvatar").src = OFFICIAL_LOGO;
-      document.getElementById("navAvatar").src = OFFICIAL_LOGO;
+      const initials = defaultName.substring(0, 2).toUpperCase();
+      document.getElementById("userAvatarText").innerText = initials;
+      document.getElementById("navAvatarText").innerText = initials;
+      document.getElementById("navAvatarTopText").innerText = initials;
       
       document.getElementById("userName").innerText = defaultName;
       document.getElementById("myRefCode").innerText = defaultCode;
@@ -282,6 +283,11 @@
         document.getElementById("userName").innerText = finalName;
         document.getElementById("myRefCode").innerText = userReferralCode;
         
+        const newInitials = finalName.substring(0, 2).toUpperCase();
+        document.getElementById("userAvatarText").innerText = newInitials;
+        document.getElementById("navAvatarText").innerText = newInitials;
+        document.getElementById("navAvatarTopText").innerText = newInitials;
+
         userCurrentBalance = profile.balance || 0;
         document.getElementById("walletBalance").innerText = "₹" + userCurrentBalance.toFixed(2);
         document.getElementById("withdrawLimitText").innerText = "Available Balance: ₹" + userCurrentBalance.toFixed(2);
@@ -328,7 +334,6 @@
   function openWithdrawModal() {
     if(document.getElementById("sidebar").classList.contains("active")) toggleSidebar();
     
-    // STRICT CHECK: Agar balance 0 ya negative hai, toh withdrawal nahi karne dega!
     if (userCurrentBalance <= 0) {
       alert("⚠️ Aapke wallet mein balance nahi hai! Zero (₹0) balance par withdrawal request nahi ho sakti.");
       return;
@@ -359,8 +364,7 @@
     try {
       const { error } = await supabaseClient.from('profiles').update({ 
         full_name: newName, 
-        upi_id: newUpi,
-        avatar_url: OFFICIAL_LOGO 
+        upi_id: newUpi 
       }).eq('user_id', currentUserId);
 
       if(error) throw error;
@@ -377,7 +381,6 @@
   function submitWithdrawal() {
     const amount = parseFloat(document.getElementById("withdrawAmount").value);
     
-    // Strict validation inside withdraw modal
     if (!amount || amount <= 0) {
       alert("Please enter a valid withdrawal amount.");
       return;
