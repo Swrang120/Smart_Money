@@ -21,7 +21,14 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.3);
       position: sticky; top: 0; z-index: 100;
     }
-    .brand-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .brand-logo-container { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .brand-logo-img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #f59e0b;
+    }
     .brand-logo span {
       font-weight: 800; font-size: 20px;
       background: linear-gradient(135deg, #f59e0b, #ec4899);
@@ -67,7 +74,8 @@
 
 <!-- NAVBAR -->
 <header class="navbar">
-  <a href="dashboard.html" class="brand-logo">
+  <a href="dashboard.html" class="brand-logo-container">
+    <img src="1000819130.jpg" alt="Smart Money Logo" class="brand-logo-img">
     <span>Smart Money</span>
   </a>
   <a href="dashboard.html" class="back-btn">← Dashboard</a>
