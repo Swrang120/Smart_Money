@@ -174,7 +174,7 @@
   <div class="profile-card">
     <div class="package-badge" id="activePackageBadge">MASTER PACKAGE 👑</div>
     <div class="profile-img-wrap">
-      <img src="1000819130.jpg" alt="Smart Money Logo" class="profile-img">
+      <img src="1000819130.jpg" alt="Profile Logo" class="profile-img">
     </div>
     <div class="user-info">
       <h2 id="userName">Santiram Swargiary <span style="font-size:15px;">👑</span></h2>
@@ -313,8 +313,6 @@
       }
 
       currentUserId = session.user.id;
-      
-      // Fallback pre-fill from session immediately so it doesn't show "Loading..."
       const fallbackEmail = session.user.email || "";
       document.getElementById("userEmail").innerText = fallbackEmail;
 
@@ -367,7 +365,6 @@
           }
         }
       } else {
-        // If profile row doesn't exist yet, show default info
         document.getElementById("myRefCode").innerText = "SM-" + currentUserId.substring(0, 6).toUpperCase();
       }
     } catch (err) {
