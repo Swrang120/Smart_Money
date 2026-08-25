@@ -29,7 +29,7 @@
     }
     .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; }
     .nav-right { display: flex; align-items: center; gap: 12px; }
-    .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #7c3aed; font-size: 14px; }
+    .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; }
     .menu-btn { background: #f8fafc; border: 1px solid #e2e8f0; font-size: 20px; cursor: pointer; color: #475569; padding: 6px 10px; border-radius: 10px; }
 
     /* SIDEBAR DRAWER MENU */
@@ -81,7 +81,7 @@
     .package-badge.vip { background: linear-gradient(135deg, #f59e0b, #ec4899); color: #fff; }
     
     .profile-img-wrap { position: relative; }
-    .profile-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background: #4f46e5; }
+    .profile-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
     
     .user-info h2 { margin: 0; font-size: 18px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 6px; }
     .user-info p { margin: 3px 0; font-size: 12.5px; color: #f1f5f9; word-break: break-all; }
@@ -183,23 +183,23 @@
     <span>Smart Money</span>
   </a>
   <div class="nav-right">
-    <div class="nav-avatar" id="navAvatarTopText">SA</div>
+    <img src="1000819130.jpg" alt="Avatar" class="nav-avatar">
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
   </div>
 </header>
 
 <div class="dash-container">
   
-  <!-- PERMANENT LOCKED PROFILE CARD -->
+  <!-- PERMANENT LOCKED PROFILE CARD (FIXED DETAILS) -->
   <div class="profile-card">
-    <div class="package-badge vip" id="activePackageBadge">MASTER PACKAGE 👑</div>
+    <div class="package-badge vip">MASTER PACKAGE 👑</div>
     <div class="profile-img-wrap">
       <img src="1000819130.jpg" alt="Profile Logo" class="profile-img">
     </div>
     <div class="user-info">
-      <h2 id="userName">Santiram Swargiary <span id="vipTitleIcon" style="font-size:15px;">👑</span></h2>
-      <p id="userEmail">swrangswargiary48@gmail.com</p>
-      <p>ID: <b id="myRefCode" style="color:#fff;">SM-36996</b></p>
+      <h2>Santiram Swargiary <span style="font-size:15px;">👑</span></h2>
+      <p>swrangswargiary48@gmail.com</p>
+      <p>ID: <b style="color:#fff;">SM-36996</b></p>
       <button class="copy-btn" onclick="copyRefLink()">📋 Copy Affiliate Link</button>
     </div>
   </div>
@@ -207,23 +207,23 @@
   <!-- REVENUE STATS STACK -->
   <div class="stats-stack">
     <div class="v-card bg-today">
-      <div><h2 id="todayEarn">₹0</h2><p>Today's Revenue</p></div>
+      <div><h2>₹0</h2><p>Today's Revenue</p></div>
       <div class="v-card-footer" onclick="alert('Viewing Today Revenue Details')"><span>View details</span><span>→</span></div>
     </div>
     <div class="v-card bg-7days">
-      <div><h2 id="weekEarn">₹0</h2><p>7 Days Revenue</p></div>
+      <div><h2>₹0</h2><p>7 Days Revenue</p></div>
       <div class="v-card-footer" onclick="alert('Viewing 7 Days Revenue Details')"><span>View details</span><span>→</span></div>
     </div>
     <div class="v-card bg-30days">
-      <div><h2 id="monthEarn">₹0</h2><p>30 Days Revenue</p></div>
+      <div><h2>₹0</h2><p>30 Days Revenue</p></div>
       <div class="v-card-footer" onclick="alert('Viewing 30 Days Revenue Details')"><span>View details</span><span>→</span></div>
     </div>
     <div class="v-card bg-alltime">
-      <div><h2 id="totalEarn">₹100000</h2><p>All Time Revenue</p></div>
+      <div><h2>₹100000</h2><p>All Time Revenue</p></div>
       <div class="v-card-footer" onclick="alert('Viewing All Time Revenue Details')"><span>View details</span><span>→</span></div>
     </div>
     <div class="v-card bg-passive">
-      <div><h2 id="passiveEarn">₹0</h2><p>Passive Income</p></div>
+      <div><h2>₹0</h2><p>Passive Income</p></div>
       <div class="v-card-footer" onclick="alert('Viewing Passive Income Details')"><span>View details</span><span>→</span></div>
     </div>
   </div>
@@ -249,7 +249,7 @@
     <h3>Pending Amount</h3>
     <div class="pending-circle">
       <p>Pending Amount</p>
-      <h4 id="pendingAmountText">Rs. 0</h4>
+      <h4>Rs. 0</h4>
     </div>
   </div>
 
@@ -284,7 +284,7 @@
 <div id="withdrawModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">💸 Request Withdrawal</h3>
-    <p id="withdrawLimitText" style="font-size: 12px; color: #64748b;">Available Balance: ₹100000</p>
+    <p style="font-size: 12px; color: #64748b;">Available Balance: ₹100000</p>
     
     <label style="font-size:12px; font-weight:600; color:#475569;">Enter Amount (₹)</label>
     <input type="number" id="withdrawAmount" class="input-field" placeholder="Enter amount to withdraw">
@@ -321,6 +321,7 @@
         currentUserId = session.user.id;
       }
 
+      // Fetch saved UPI only, without overriding profile info
       const { data: profile } = await supabaseClient
         .from('profiles')
         .select('*')
@@ -330,8 +331,6 @@
       if (profile) {
         userCurrentBalance = profile.balance || 100000;
         document.getElementById("walletBalance").innerText = "₹" + userCurrentBalance.toFixed(2);
-        document.getElementById("totalEarn").innerText = "₹" + userCurrentBalance.toFixed(0);
-        document.getElementById("withdrawLimitText").innerText = "Available Balance: ₹" + userCurrentBalance.toFixed(2);
         
         userSavedUpi = profile.upi_id || "";
         if(userSavedUpi) {
@@ -347,10 +346,7 @@
 
       if (!error && count !== null) {
         document.getElementById("totalSalesCount").innerText = count;
-      } else {
-        document.getElementById("totalSalesCount").innerText = "0";
       }
-
     } catch (err) {
       console.log("Error loading dashboard data:", err);
     }
