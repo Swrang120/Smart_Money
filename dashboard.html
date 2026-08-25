@@ -96,6 +96,9 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .ref-user-info span{font-size:11px;color:#7c3aed;font-weight:600;}
 .ref-date{font-size:11px;color:#64748b;font-weight:600;text-align:right;}
 
+/* FOOTER CREATOR INFO */
+.app-footer-credit{text-align:center;font-size:11px;color:#94a3b8;margin-top:20px;padding-bottom:10px;font-weight:500;}
+
 .modal-overlay{display:none;position:fixed;inset:0;z-index:10000;background:rgba(15,23,42,.65);backdrop-filter:blur(4px);justify-content:center;align-items:center;padding:15px;}
 .modal-box{width:100%;max-width:440px;background:#fff;border-radius:20px;padding:22px;max-height:90vh;overflow:auto;}
 .input-field{width:100%;padding:12px;border-radius:10px;border:1px solid #cbd5e1;margin:6px 0 12px;outline:none;}
@@ -133,6 +136,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <li><button onclick="openUpiModal()">🏦 View & Edit Bank / UPI Details</button></li>
     <li><button onclick="openKycModal()">🆔 KYC & Date of Birth</button></li>
     <li><button onclick="openWithdrawModal()">💸 Withdraw Funds</button></li>
+    <li><button onclick="openHistoryModal()">📜 View Withdrawal History</button></li>
     <li><button id="sideLogoutBtn" style="color:#f87171;">🚪 Logout</button></li>
   </ul>
 </aside>
@@ -238,15 +242,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <button class="btn-withdraw" onclick="openWithdrawModal()">💸 Withdraw Money Now</button>
   </div>
 
-  <!-- WITHDRAWAL HISTORY (Moved Up to 3-Line Cards) -->
-  <div class="section-box">
-    <h3>📜 Withdrawal History</h3>
-    <div id="withdrawalHistoryList">
-      <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">Loading history...</div>
-    </div>
-  </div>
-
-  <!-- RECENT REFERRALS (1 Day to 30 Days) -->
+  <!-- RECENT REFERRALS -->
   <div class="section-box">
     <h3>👥 My Referrals & Joins</h3>
     <div class="referral-tabs">
@@ -258,6 +254,11 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <div id="referralsListContainer">
       <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">Loading referrals...</div>
     </div>
+  </div>
+
+  <!-- CREATOR & APP DETAILS FOOTER -->
+  <div class="app-footer-credit">
+    Website Created in August 2026 by <b>Swrang Swargiary</b>
   </div>
 </div>
 </div>
@@ -274,6 +275,18 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       <p><b>Account Status:</b> <span style="color:#ef4444;font-weight:700;">Inactive / Free User</span></p>
     </div>
     <button onclick="closeModal('packageModal')" class="btn-action" style="margin-top:15px;">Close</button>
+  </div>
+</div>
+
+<!-- WITHDRAWAL HISTORY MODAL -->
+<div id="historyModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 style="color:#0f172a;margin-top:0;">📜 Withdrawal History</h3>
+    <p style="font-size:13px;color:#475569;margin-bottom:15px;">All your past withdrawal requests and statuses:</p>
+    <div id="withdrawalHistoryList">
+      <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">Loading history...</div>
+    </div>
+    <button onclick="closeModal('historyModal')" class="btn-action" style="margin-top:15px;">Close</button>
   </div>
 </div>
 
@@ -362,6 +375,12 @@ function closeModal(id){ document.getElementById(id).style.display = "none"; }
 function openPackageModal(){
   closeSidebar();
   openModal("packageModal");
+}
+
+function openHistoryModal(){
+  closeSidebar();
+  openModal("historyModal");
+  loadWithdrawalHistory();
 }
 
 function openUpiModal(){
@@ -558,6 +577,8 @@ function setupRealtimeListener(){
 
 async function loadWithdrawalHistory(){
   const historyContainer = document.getElementById("withdrawalHistoryList");
+  if(!historyContainer) return;
+  
   const { data } = await supabaseClient
     .from("withdrawal_requests")
     .select("*")
@@ -599,7 +620,6 @@ async function loadWithdrawalHistory(){
 }
 
 async function loadReferralsData(){
-  // Fetching profiles registered using user's referral code or referred by this user
   const { data, error } = await supabaseClient
     .from("profiles")
     .select("full_name, referral_code, created_at, referred_by")
@@ -615,7 +635,6 @@ async function loadReferralsData(){
 }
 
 function filterReferrals(days, btnElement){
-  // Update active tab styling
   const tabs = document.querySelectorAll('.ref-tab');
   tabs.forEach(t => t.classList.remove('active'));
   if(btnElement) btnElement.classList.add('active');
