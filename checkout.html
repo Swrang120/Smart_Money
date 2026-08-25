@@ -3,239 +3,142 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Money - Secure Checkout & Payment</title>
+  <title>Smart Money - Secure Checkout</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-gradient: linear-gradient(135deg, #0a0f1d 0%, #17153a 50%, #0f172a 100%);
-      --card-bg: rgba(30, 41, 59, 0.75);
-      --border-color: rgba(99, 102, 241, 0.25);
+      --card-bg: rgba(30, 41, 59, 0.85);
+      --border-color: rgba(99, 102, 241, 0.3);
       --primary: #6366f1;
       --primary-hover: #4f46e5;
       --accent: #38bdf8;
       --success: #10b981;
-      --danger: #f43f5e;
       --text-main: #ffffff;
       --text-muted: #94a3b8;
     }
 
     * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background: #0f172a; background-image: var(--bg-gradient); color: var(--text-main); margin: 0; padding: 0; min-height: 100vh; }
+    body { background: #0f172a; background-image: var(--bg-gradient); color: var(--text-main); margin: 0; padding: 16px; min-height: 100vh; }
 
-    /* Navbar */
-    .navbar { background: rgba(15, 23, 42, 0.85); border-bottom: 1px solid var(--border-color); padding: 16px 25px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); }
-    .nav-brand { font-size: 18px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; }
-    .nav-brand span { background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 15px; font-size: 13px; font-weight: 600; transition: 0.2s; }
-    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
-    .login-btn { background: var(--primary); color: #fff; padding: 6px 14px; border-radius: 10px; font-weight: 700; text-decoration: none; box-shadow: 0 0 15px rgba(99,102,241,0.4); }
-
-    .container { max-width: 1100px; margin: 0 auto; padding: 30px 16px; }
-    .page-title { font-size: 24px; font-weight: 800; margin-bottom: 5px; color: #fff; display: flex; align-items: center; gap: 10px; }
-    .page-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 25px; }
-
-    .checkout-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 25px; }
-    @media (max-width: 850px) { .checkout-grid { grid-template-columns: 1fr; } }
-
-    /* Stylish Glass Cards */
-    .card { background: var(--card-bg); border-radius: 24px; padding: 25px; margin-bottom: 25px; border: 1px solid var(--border-color); box-shadow: 0 20px 40px rgba(0,0,0,0.4); backdrop-filter: blur(16px); }
-    .card-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 12px; }
-
-    /* Form Fields */
-    .form-group { margin-bottom: 16px; }
-    .form-label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .form-control { width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); padding: 12px 16px; border-radius: 12px; color: #fff; font-size: 13px; outline: none; transition: all 0.3s ease; }
-    .form-control:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(56, 189, 248, 0.25); }
-    select.form-control { cursor: pointer; }
-
-    /* QR Code & Payment Section */
-    .qr-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
-    .qr-tab { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); color: var(--text-muted); padding: 10px; border-radius: 12px; font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; transition: 0.2s; }
-    .qr-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 15px rgba(99,102,241,0.4); }
-
-    .qr-container { background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); border-radius: 18px; padding: 20px; text-align: center; margin-bottom: 20px; display: none; }
-    .qr-container.active { display: block; }
+    .container { max-width: 600px; margin: 0 auto; padding-bottom: 40px; }
     
-    .qr-box { width: 190px; height: 190px; background: #fff; margin: 0 auto 15px auto; border-radius: 14px; padding: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
-    .qr-box img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
+    .header { text-align: center; margin-bottom: 25px; }
+    .header h1 { font-size: 22px; font-weight: 800; margin: 0 0 6px 0; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header p { font-size: 13px; color: var(--text-muted); margin: 0; }
+
+    .card { background: var(--card-bg); border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); backdrop-filter: blur(16px); box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
+    .card h3 { font-size: 15px; color: #fff; margin: 0 0 15px 0; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
+    .form-control { width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); padding: 12px 14px; border-radius: 12px; color: #fff; font-size: 13px; outline: none; transition: all 0.3s; }
+    .form-control:focus { border-color: var(--accent); box-shadow: 0 0 12px rgba(56, 189, 248, 0.25); }
+
+    /* QR Switcher Tabs */
+    .qr-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
+    .qr-tab-btn { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); color: var(--text-muted); padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .qr-tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 15px rgba(99,102,241,0.4); }
+
+    .qr-box { background: #fff; padding: 15px; border-radius: 16px; text-align: center; width: 180px; margin: 0 auto 12px auto; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+    .qr-box img { width: 150px; height: 150px; object-fit: contain; display: block; margin: 0 auto; }
     
-    .upi-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 10px 14px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px; }
-    .copy-btn { background: rgba(99, 102, 241, 0.2); color: var(--accent); border: 1px solid rgba(99, 102, 241, 0.4); padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-    .copy-btn:hover { background: var(--primary); color: #fff; }
+    .upi-display { background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 15px; }
+    .upi-display b { color: var(--accent); }
+    .copy-btn { background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: var(--accent); padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
 
-    /* File Upload Box */
-    .file-upload-box { border: 2px dashed rgba(99, 102, 241, 0.4); background: rgba(15, 23, 42, 0.4); padding: 20px; border-radius: 16px; text-align: center; cursor: pointer; transition: 0.3s; margin-bottom: 16px; display: block; }
-    .file-upload-box:hover { border-color: var(--accent); background: rgba(56, 189, 248, 0.05); }
-    .file-upload-box input { display: none; }
+    .btn-submit { width: 100%; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: #fff; border: none; padding: 14px; border-radius: 14px; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4); transition: 0.3s; }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(99, 102, 241, 0.6); }
 
-    /* Order Summary Item */
-    .summary-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 12px; color: var(--text-muted); }
-    .summary-total { display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; color: #fff; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; margin-top: 12px; }
-    .summary-total span:last-child { color: var(--accent); }
-
-    .terms-box { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); margin: 15px 0; }
-    .terms-box a { color: var(--accent); text-decoration: none; }
-
-    .submit-btn { width: 100%; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: #fff; border: none; padding: 15px; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 10px 25px rgba(99,102,241,0.4); transition: 0.3s; }
-    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(99,102,241,0.6); }
+    .order-summary { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 8px; }
+    .order-summary b { color: #34d399; }
   </style>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <div class="navbar">
-    <div class="nav-brand">⚡ Smart Money</div>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="plan.html">Plan</a>
-      <a href="login.html" class="login-btn">Login</a>
-    </div>
+<div class="container">
+  <div class="header">
+    <h1>🚀 Secure Checkout & Payment</h1>
+    <p>Complete your payment and get instant activation</p>
   </div>
 
-  <div class="container">
-    <div class="page-title">🚀 Secure Checkout & Payment</div>
-    <div class="page-sub">Home // Checkout & Instant Activation</div>
-
-    <form id="checkoutForm" onsubmit="submitOrder(event)">
-      <div class="checkout-grid">
-        
-        <!-- Left Side: Billing & QR Payment -->
-        <div>
-          <!-- 1. Billing & Account Details -->
-          <div class="card">
-            <div class="card-title">👤 1. Billing & Account Details</div>
-            
-            <div class="form-group">
-              <label class="form-label">Affiliate / Referral Code</label>
-              <input type="text" id="refCode" class="form-control" value="SM-3D99B9" readonly>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-              <div class="form-group">
-                <label class="form-label">Full Name *</label>
-                <input type="text" id="fullName" class="form-control" placeholder="Enter your full name" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Select State *</label>
-                <select id="userState" class="form-control" required>
-                  <option value="">Select State</option>
-                  <option value="Assam" selected>Assam</option>
-                  <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                  <option value="Delhi">Delhi</option>
-                  <option value="West Bengal">West Bengal</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-              <div class="form-group">
-                <label class="form-label">Mobile Number *</label>
-                <input type="tel" id="mobile" class="form-control" placeholder="10-digit mobile number" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Email ID (For Login) *</label>
-                <input type="email" id="email" class="form-control" placeholder="your@email.com" required>
-              </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-              <div class="form-group">
-                <label class="form-label">Create Password *</label>
-                <input type="password" id="password" class="form-control" placeholder="Set secure password" required>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Selected Package</label>
-                <input type="text" id="packageName" class="form-control" value="Starter Package (₹289)" readonly style="color:var(--accent); font-weight:700;">
-              </div>
-            </div>
-          </div>
-
-          <!-- 2. Scan QR & Upload Proof -->
-          <div class="card">
-            <div class="card-title">📷 2. Scan QR Code & Upload Payment Proof</div>
-            
-            <!-- Payment Gateway Selector Tabs -->
-            <div class="qr-tabs">
-              <div class="qr-tab active" onclick="switchQR('supermoney', this)">⚡ Super Money QR</div>
-              <div class="qr-tab" onclick="switchQR('bharatpe', this)">🇮🇳 BharatPe QR</div>
-            </div>
-
-            <!-- Super Money QR Container -->
-            <div id="supermoneyQR" class="qr-container active">
-              <div class="qr-box">
-                <img src="cachesm-qr-1787630348987.png" alt="Super Money QR">
-              </div>
-              <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Scan using any UPI App (Santiram)</div>
-              <div class="upi-box">
-                <span>UPI ID: <b>8099473948@superyes</b></span>
-                <button type="button" class="copy-btn" onclick="copyText('8099473948@superyes')">Copy UPI</button>
-              </div>
-            </div>
-
-            <!-- BharatPe QR Container -->
-            <div id="bharatpeQR" class="qr-container">
-              <div class="qr-box">
-                <img src="Image (1).jpg" alt="BharatPe QR">
-              </div>
-              <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Scan using PhonePe, GPay, Paytm etc.</div>
-              <div class="upi-box">
-                <span>UPI ID: <b>BHARATPE2U0V0S7G2D90659@unitype</b></span>
-                <button type="button" class="copy-btn" onclick="copyText('BHARATPE2U0V0S7G2D90659@unitype')">Copy UPI</button>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Enter UTR / Transaction ID (12-digit) *</label>
-              <input type="text" id="utr" class="form-control" placeholder="Enter 12-digit UTR reference number" required>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Upload Payment Screenshot *</label>
-              <label class="file-upload-box" id="uploadLabel">
-                <div style="font-size: 24px; margin-bottom: 5px;">📤</div>
-                <div style="font-size: 13px; color: #fff; font-weight: 600;" id="uploadText">Click here to upload payment screenshot</div>
-                <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">Supports PNG, JPG, JPEG</div>
-                <input type="file" id="screenshotFile" accept="image/*" onchange="handleFileSelect(this)" required>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Side: Order Summary & Submit -->
-        <div>
-          <div class="card" style="position: sticky; top: 90px;">
-            <div class="card-title">📦 Order Summary</div>
-            
-            <div class="summary-row">
-              <span>Package Selected</span>
-              <b style="color:#fff;">Starter Package</b>
-            </div>
-            <div class="summary-row">
-              <span>GST & Processing</span>
-              <b style="color:#34d399;">FREE</b>
-            </div>
-            
-            <div class="summary-total">
-              <span>Grand Total:</span>
-              <span>₹289</span>
-            </div>
-
-            <div class="terms-box">
-              <input type="checkbox" id="termsCheck" required>
-              <label for="termsCheck">I agree to the <a href="#">Terms of Service</a> & <a href="#">Privacy Policy</a>.</label>
-            </div>
-
-            <button type="submit" class="submit-btn">Submit & Register Order →</button>
-          </div>
-        </div>
-
+  <!-- 1. Billing & Details Form -->
+  <div class="card">
+    <h3>👤 1. Billing & Account Details</h3>
+    <form id="checkoutForm">
+      <div class="form-group">
+        <label>Affiliate / Referral Code</label>
+        <input type="text" id="refCode" class="form-control" value="SM-3D99B9" readonly>
+      </div>
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" id="fullName" class="form-control" placeholder="Enter your full name" required>
+      </div>
+      <div class="form-group">
+        <label>Mobile Number *</label>
+        <input type="tel" id="mobileNumber" class="form-control" placeholder="10-digit mobile number" required>
+      </div>
+      <div class="form-group">
+        <label>Email ID (For Login) *</label>
+        <input type="email" id="emailId" class="form-control" placeholder="your@email.com" required>
+      </div>
+      <div class="form-group">
+        <label>Create Password *</label>
+        <input type="password" id="password" class="form-control" placeholder="Set secure password" required>
+      </div>
+      <div class="form-group">
+        <label>Selected Package</label>
+        <input type="text" id="packageNameDisplay" class="form-control" value="Starter Package (₹289)" readonly style="color: var(--accent); font-weight: 700;">
       </div>
     </form>
   </div>
+
+  <!-- 2. QR Code & Payment -->
+  <div class="card">
+    <h3>💳 2. Scan QR & Pay</h3>
+    <div class="qr-tabs">
+      <button class="qr-tab-btn active" onclick="switchQR('super', this)">⚡ Super Money QR</button>
+      <button class="qr-tab-btn" onclick="switchQR('bharatpe', this)">🇮🇳 BharatPe QR</button>
+    </div>
+
+    <div class="qr-box">
+      <!-- Aap yahan apne QR image ka sahi path ya link daal sakte hain -->
+      <img id="qrImage" src="" alt="Payment QR Code">
+    </div>
+
+    <div class="upi-display">
+      <span>UPI ID: <b id="upiText">8099473948@superyes</b></span>
+      <button class="copy-btn" onclick="copyUpi()">Copy UPI</button>
+    </div>
+
+    <div class="form-group">
+      <label>Enter UTR / Transaction ID (12-Digit) *</label>
+      <input type="text" id="transactionId" class="form-control" placeholder="Enter 12-digit UTR reference number" required>
+    </div>
+  </div>
+
+  <!-- 3. Summary & Final Submit -->
+  <div class="card">
+    <h3>📦 Order Summary</h3>
+    <div class="order-summary">
+      <span>Package Selected:</span>
+      <b id="summaryPkgName">Starter Package</b>
+    </div>
+    <div class="order-summary" style="font-size: 16px; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px;">
+      <span>Grand Total:</span>
+      <b id="summaryPrice" style="font-size: 18px; color: var(--accent);">₹289</b>
+    </div>
+    
+    <div style="margin: 15px 0; font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px;">
+      <input type="checkbox" id="termsCheck" checked>
+      <span>I agree to the Terms & Privacy Policy</span>
+    </div>
+
+    <button class="btn-submit" onclick="submitOrder()">Submit & Register Order 🚀</button>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -243,149 +146,79 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  let checkInterval = null;
-  let currentRequestId = null;
+  // URL se package details uthane ke liye (agar passed ho)
+  const urlParams = new URLSearchParams(window.location.search);
+  const pkgName = urlParams.get('package') || 'Starter Package';
+  const pkgPrice = urlParams.get('price') || '289';
+  const refCodeFromUrl = urlParams.get('ref') || 'SM-3D99B9';
 
-  function switchQR(type, tabEl) {
-    document.querySelectorAll('.qr-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.qr-container').forEach(c => c.classList.remove('active'));
+  document.getElementById('packageNameDisplay').value = `${pkgName} (₹${pkgPrice})`;
+  document.getElementById('summaryPkgName').innerText = pkgName;
+  document.getElementById('summaryPrice').innerText = `₹${pkgPrice}`;
+  document.getElementById('refCode').value = refCodeFromUrl;
 
-    tabEl.classList.add('active');
-    if (type === 'supermoney') {
-      document.getElementById('supermoneyQR').classList.add('active');
-    } else {
-      document.getElementById('bharatpeQR').classList.add('active');
-    }
+  // Default QR Setup
+  const qrData = {
+    super: { img: '1000821335.jpg', upi: '8099473948@superyes' }, // Apni image ka path yahan check kar lena
+    bharatpe: { img: '1000821337.jpg', upi: 'BHARATPE2UVD870209659@paytm' }
+  };
+
+  function switchQR(type, btn) {
+    document.querySelectorAll('.qr-tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('qrImage').src = qrData[type].img;
+    document.getElementById('upiText').innerText = qrData[type].upi;
   }
 
-  function copyText(txt) {
-    navigator.clipboard.writeText(txt);
-    alert("UPI ID Copied to Clipboard!");
+  // Load default Super QR
+  document.getElementById('qrImage').src = qrData.super.img;
+
+  function copyUpi() {
+    const upi = document.getElementById('upiText').innerText;
+    navigator.clipboard.writeText(upi);
+    alert("UPI ID Copied to Clipboard: " + upi);
   }
 
-  function handleFileSelect(input) {
-    if (input.files && input.files[0]) {
-      const fileName = input.files[0].name;
-      document.getElementById('uploadText').innerText = "Selected: " + fileName;
-      document.getElementById('uploadLabel').style.borderColor = "var(--success)";
-    }
-  }
+  async function submitOrder() {
+    const fullName = document.getElementById('fullName').value.trim();
+    const mobile = document.getElementById('mobileNumber').value.trim();
+    const email = document.getElementById('emailId').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const utr = document.getElementById('transactionId').value.trim();
+    const refId = document.getElementById('refCode').value.trim();
 
-  async function submitOrder(e) {
-    e.preventDefault();
-    
-    const fullName = document.getElementById('fullName').value;
-    const email = document.getElementById('email').value;
-    const mobile = document.getElementById('mobile').value;
-    const password = document.getElementById('password').value;
-    const utr = document.getElementById('utr').value;
-    const refCode = document.getElementById('refCode').value;
-    const fileInput = document.getElementById('screenshotFile');
-
-    if (!fileInput.files || fileInput.files.length === 0) {
-      alert("Please upload the payment screenshot!");
+    if (!fullName || !mobile || !email || !password || !utr) {
+      alert("⚠️ Please fill in all required details and enter the UTR / Transaction ID!");
       return;
     }
 
-    alert("Submitting payment request... Please wait.");
+    if (utr.length < 8) {
+      alert("⚠️ Please enter a valid 12-digit UTR transaction ID.");
+      return;
+    }
 
     try {
-      const file = fileInput.files[0];
-      const fileName = Date.now() + "_" + file.name;
-      
-      const { data: uploadData, error: uploadErr } = await supabaseClient.storage
-        .from('payment_proofs')
-        .upload(fileName, file);
-
-      let proofUrl = "";
-      if (!uploadErr && uploadData) {
-        const { data: publicURL } = supabaseClient.storage.from('payment_proofs').getPublicUrl(fileName);
-        proofUrl = publicURL.publicUrl;
-      }
-
-      // Insert data and retrieve the created record's ID
-      const { data: insertedData, error: dbError } = await supabaseClient.from('payment_requests').insert([{
+      // Payment request save karna supabase mein
+      const { error } = await supabaseClient.from('payment_requests').insert([{
         full_name: fullName,
         email: email,
         mobile: mobile,
         password: password,
-        package_name: 'Starter Package',
-        amount: 289,
+        package_name: pkgName,
+        amount: Number(pkgPrice),
         transaction_id: utr,
-        referral_id: refCode,
-        payment_proof: proofUrl,
+        referral_id: refId,
         status: 'Pending',
         is_deleted: false
-      }]).select();
+      }]);
 
-      if (dbError) throw dbError;
+      if (error) throw error;
 
-      if (insertedData && insertedData.length > 0) {
-        currentRequestId = insertedData[0].id;
-      }
-
-      // Show Waiting Screen & Start 15-Minute Timer
-      startWaitingScreen();
-
+      alert("🎉 Order Submitted Successfully! Your package will be approved by the admin shortly.");
+      window.location.href = "index.html"; // ya jo aapka main home page ho
     } catch (err) {
-      alert("Error submitting order: " + (err.message || err));
+      alert("Error submitting order: " + err.message);
     }
-  }
-
-  function startWaitingScreen() {
-    const container = document.querySelector('.container');
-    container.innerHTML = `
-      <div style="max-width: 600px; margin: 50px auto; background: rgba(30, 41, 59, 0.85); border: 1px solid var(--border-color); padding: 40px; border-radius: 24px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
-        <div style="font-size: 50px; margin-bottom: 15px;">⏳</div>
-        <h2 style="color: #fff; font-size: 24px; margin-bottom: 10px;">Payment Verification in Progress</h2>
-        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px;">Aapka UTR aur payment proof admin ke paas bhej diya gaya hai. Kripya 15 minute intezaar karein.</p>
-        
-        <div id="timerDisplay" style="font-size: 36px; font-weight: 800; color: var(--accent); margin-bottom: 25px; background: rgba(15, 23, 42, 0.5); padding: 15px; border-radius: 16px; border: 1px solid var(--border-color);">15:00</div>
-        
-        <p style="font-size: 13px; color: #34d399; font-weight: 600;" id="statusText">Status: Pending Admin Approval...</p>
-      </div>
-    `;
-
-    // 15-Minute Countdown Timer logic
-    let totalSeconds = 15 * 60;
-    const timerInterval = setInterval(() => {
-      let minutes = Math.floor(totalSeconds / 60);
-      let seconds = totalSeconds % 60;
-      
-      document.getElementById('timerDisplay').innerText = 
-        String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
-
-      if (totalSeconds <= 0) {
-        clearInterval(timerInterval);
-        document.getElementById('statusText').innerText = "Time expired! Please contact support if payment was deducted.";
-        document.getElementById('statusText').style.color = "var(--danger)";
-      }
-      totalSeconds--;
-    }, 1000);
-
-    // Poll Supabase every 5 seconds to check if status changes to 'Approved'
-    checkInterval = setInterval(async () => {
-      if (!currentRequestId) return;
-
-      const { data, error } = await supabaseClient
-        .from('payment_requests')
-        .select('status')
-        .eq('id', currentRequestId)
-        .single();
-
-      if (data && data.status === 'Approved') {
-        clearInterval(checkInterval);
-        clearInterval(timerInterval);
-        
-        document.getElementById('statusText').innerText = "🎉 Approved! Redirecting to Dashboard...";
-        document.getElementById('statusText').style.color = "#34d399";
-
-        setTimeout(() => {
-          alert("🎉 Account Activated Successfully! Welcome to Smart Money.");
-          window.location.href = "dashboard.html";
-        }, 2000);
-      }
-    }, 5000);
   }
 </script>
 </body>
