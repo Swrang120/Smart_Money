@@ -131,8 +131,8 @@
     </div>
 
     <div class="input-group">
-      <label>Referral ID (Optional)</label>
-      <input type="text" id="regReferral" class="input-field" placeholder="Enter referral ID if any">
+      <label>Referral ID (Compulsory)</label>
+      <input type="text" id="regReferral" class="input-field" placeholder="Enter valid referral ID (e.g. SM-12345)">
     </div>
 
     <button onclick="handleRegister()" class="btn-submit" id="regBtn">Register Account</button>
@@ -148,6 +148,15 @@
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
+    // Auto-fill referral code from URL if passed (e.g. register.html?ref=SM-XXXXX)
+    window.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const refParam = urlParams.get("ref");
+      if (refParam) {
+        document.getElementById("regReferral").value = refParam;
+      }
+    });
+
     async function handleRegister() {
       const name = document.getElementById("regName").value.trim();
       const email = document.getElementById("regEmail").value.trim();
@@ -155,8 +164,8 @@
       const referral = document.getElementById("regReferral").value.trim();
       const btn = document.getElementById("regBtn");
 
-      if (!name || !email || !password) {
-        alert("Please fill in all required fields.");
+      if (!name || !email || !password || !referral) {
+        alert("⚠️ Sabhi fields bharna zaroori hai, aur Referral ID compulsory hai!");
         return;
       }
 
@@ -164,18 +173,50 @@
       btn.disabled = true;
 
       try {
-        const { data, error } = await supabaseClient.auth.signUp({
+        // 1. Check if referral ID exists in database
+        const { data: refCheck, error: refError } = await supabaseClient
+          .from('profiles')
+          .select('user_id')
+          .eq('referral_code', referral)
+          .maybeSingle();
+
+        if (refError || !refCheck) {
+          throw new Error("Invalid Referral ID! Yeh referral ID database mein exist nahi karti.");
+        }
+
+        // 2. Register user with Supabase Auth
+        const { data: authData, error: authError } = await supabaseClient.auth.signUp({
           email: email,
           password: password,
           options: {
             data: {
               full_name: name,
-              referral_id: referral || 'NONE'
+              referral_id: referral
             }
           }
         });
 
-        if (error) throw error;
+        if (authError) throw authError;
+
+        const userId = authData.user?.id;
+        const generatedRefCode = "SM-" + userId.substring(0, 5).toUpperCase();
+
+        // 3. Insert profile data into 'profiles' table
+        const { error: profileError } = await supabaseClient
+          .from('profiles')
+          .insert([
+            {
+              user_id: userId,
+              full_name: name,
+              referral_code: generatedRefCode,
+              referred_by: referral,
+              balance: 0.00
+            }
+          ]);
+
+        if (profileError) {
+          console.log("Profile insert warning:", profileError.message);
+        }
 
         alert("🎉 Registration Successful! Please login to continue.");
         window.location.href = "login.html";
