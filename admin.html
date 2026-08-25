@@ -11,78 +11,82 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-      --card-bg: rgba(30, 41, 59, 0.7);
-      --border-color: rgba(255, 255, 255, 0.12);
+      --bg-gradient: linear-gradient(135deg, #0a0f1d 0%, #17153a 50%, #0f172a 100%);
+      --card-bg: rgba(30, 41, 59, 0.75);
+      --border-color: rgba(99, 102, 241, 0.2);
       --primary: #6366f1;
+      --primary-hover: #4f46e5;
       --accent: #38bdf8;
       --success: #10b981;
       --danger: #f43f5e;
       --text-main: #ffffff;
-      --text-muted: #cbd5e1;
+      --text-muted: #94a3b8;
     }
 
     * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
     body { background: #0f172a; background-image: var(--bg-gradient); color: var(--text-main); margin: 0; padding: 0; display: none; min-height: 100vh; }
 
     /* Top Navbar */
-    .navbar { background: rgba(15, 23, 42, 0.9); border-bottom: 1px solid var(--border-color); padding: 16px 25px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); }
-    .nav-brand { font-size: 19px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; letter-spacing: 0.5px; }
-    .nav-brand span { color: var(--accent); background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .navbar { background: rgba(15, 23, 42, 0.85); border-bottom: 1px solid var(--border-color); padding: 16px 25px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .nav-brand { font-size: 20px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; letter-spacing: 0.5px; }
+    .nav-brand span { background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     
     /* 3-Line Menu Button */
-    .menu-toggle { background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); color: #fff; padding: 10px 12px; border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; transition: 0.2s; }
-    .menu-toggle:hover { background: rgba(99, 102, 241, 0.3); }
+    .menu-toggle { background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.35); color: #fff; padding: 10px 14px; border-radius: 12px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; transition: all 0.3s ease; }
+    .menu-toggle:hover { background: rgba(99, 102, 241, 0.3); transform: scale(1.05); }
     .menu-toggle div { width: 20px; height: 2px; background: #fff; border-radius: 2px; }
 
     /* Hidden Sidebar Drawer */
-    .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px); display: none; z-index: 999; }
-    .sidebar { position: fixed; top: 0; right: -340px; width: 340px; height: 100%; background: #1e1b4b; border-left: 1px solid var(--border-color); padding: 25px; transition: 0.3s ease-in-out; z-index: 1000; overflow-y: auto; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
+    .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); display: none; z-index: 999; }
+    .sidebar { position: fixed; top: 0; right: -360px; width: 360px; height: 100%; background: #13112c; border-left: 1px solid var(--border-color); padding: 30px 25px; transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; overflow-y: auto; box-shadow: -15px 0 40px rgba(0,0,0,0.6); }
     .sidebar.open { right: 0; }
-    .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px; }
-    .close-btn { background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; }
+    .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 25px; }
+    .close-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-muted); width: 32px; height: 32px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+    .close-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
 
-    .container { max-width: 1100px; margin: 0 auto; padding: 25px 20px; }
+    .container { max-width: 1150px; margin: 0 auto; padding: 30px 20px; }
 
     /* Stats Box inside Drawer */
-    .stats-box { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
-    .stats-box h4 { margin: 0 0 5px 0; font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .stats-box .num { font-size: 22px; font-weight: 800; color: var(--accent); }
+    .stats-box { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 14px; padding: 18px; margin-bottom: 15px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
+    .stats-box h4 { margin: 0 0 6px 0; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+    .stats-box .num { font-size: 24px; font-weight: 800; color: var(--accent); }
 
     /* Cards */
-    .card { background: var(--card-bg); border-radius: 18px; padding: 24px; margin-bottom: 30px; border: 1px solid var(--border-color); box-shadow: 0 20px 40px rgba(0,0,0,0.4); backdrop-filter: blur(10px); }
-    .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
-    h2 { font-size: 17px; color: #fff; margin: 0; display: flex; align-items: center; gap: 8px; font-weight: 700; }
+    .card { background: var(--card-bg); border-radius: 20px; padding: 26px; margin-bottom: 30px; border: 1px solid var(--border-color); box-shadow: 0 20px 40px rgba(0,0,0,0.45); backdrop-filter: blur(12px); }
+    .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 18px; margin-bottom: 22px; flex-wrap: wrap; gap: 12px; }
+    h2 { font-size: 18px; color: #fff; margin: 0; display: flex; align-items: center; gap: 10px; font-weight: 700; }
 
     /* Filter Buttons */
     .filter-group { display: flex; gap: 6px; }
-    .filter-btn { background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 12px; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-    .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); }
+    .filter-btn { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); color: var(--text-muted); padding: 7px 14px; border-radius: 10px; font-size: 11px; cursor: pointer; font-weight: 600; transition: all 0.2s ease; }
+    .filter-btn:hover { background: rgba(99, 102, 241, 0.1); color: #fff; }
+    .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); }
 
     /* Tables */
     .table-responsive { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th, td { padding: 15px 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
-    th { color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 0.8px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; white-space: nowrap; }
+    th, td { padding: 16px 14px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+    th { color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
     td { color: #f1f5f9; }
 
     /* Enhanced Payout Box Design for Bank/UPI */
-    .payout-box { background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); padding: 12px; border-radius: 12px; margin-top: 8px; font-size: 12px; line-height: 1.6; }
+    .payout-box { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.2); padding: 12px 14px; border-radius: 12px; margin-top: 10px; font-size: 12px; line-height: 1.6; white-space: normal; }
     .payout-box b { color: var(--accent); }
 
     /* Action Buttons */
-    .btn { padding: 8px 14px; border-radius: 9px; border: none; font-weight: 700; cursor: pointer; font-size: 11px; transition: 0.2s; margin-right: 4px; display: inline-flex; align-items: center; gap: 5px; }
-    .btn-approve { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
-    .btn-approve:hover { background: #10b981; color: #fff; }
-    .btn-reject { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); }
-    .btn-reject:hover { background: #f43f5e; color: #fff; }
-    .btn-delete { background: rgba(255, 255, 255, 0.08); color: var(--text-muted); border: 1px solid var(--border-color); }
-    .btn-delete:hover { background: #f43f5e; color: #fff; }
+    .btn { padding: 8px 16px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; font-size: 11px; transition: all 0.25s ease; margin-right: 6px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .btn:active { transform: scale(0.96); }
+    .btn-approve { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
+    .btn-approve:hover { background: #10b981; color: #fff; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+    .btn-reject { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.35); }
+    .btn-reject:hover { background: #f43f5e; color: #fff; box-shadow: 0 0 15px rgba(244, 63, 94, 0.4); }
+    .btn-delete { background: rgba(255, 255, 255, 0.06); color: var(--text-muted); border: 1px solid var(--border-color); }
+    .btn-delete:hover { background: #f43f5e; color: #fff; border-color: #f43f5e; }
     
-    .badge { padding: 5px 10px; border-radius: 7px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; }
-    .badge-pending { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
-    .badge-approved, .badge-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
-    .badge-rejected { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); }
+    .badge { padding: 6px 12px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; display: inline-block; }
+    .badge-pending { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
+    .badge-approved, .badge-success { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
+    .badge-rejected { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.35); }
   </style>
 </head>
 <body>
@@ -118,7 +122,7 @@
       <div class="num" style="color: #fb7185;" id="statRejected">0</div>
     </div>
 
-    <hr style="border:0; border-top:1px solid var(--border-color); margin: 20px 0;">
+    <hr style="border:0; border-top:1px solid var(--border-color); margin: 25px 0;">
     <p style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">Yahan se aap saari live activity, total approvals aur status tracking manage karte hain.</p>
   </div>
 
@@ -346,26 +350,26 @@
       let userName = item.full_name || item.name || "User";
       let userEmail = item.email || "";
 
-      // Fixed Profile Data Fetching via Foreign Key or ID Match
-      if (!item.full_name && item.user_id) {
-        const { data: u } = await supabaseClient.from('profiles').select('full_name, email').eq('id', item.user_id).maybeSingle();
-        if (u) { 
-          userName = u.full_name || "User"; 
-          userEmail = u.email || ""; 
-        } else {
-          const { data: u2 } = await supabaseClient.from('profiles').select('full_name, email').eq('user_id', item.user_id).maybeSingle();
-          if (u2) {
-            userName = u2.full_name || "User";
-            userEmail = u2.email || "";
-          }
+      // Profile data sync check to load details if missing from table directly
+      if ((!item.upi_id && !item.account_number && !item.bank_account) && item.user_id) {
+        const { data: u } = await supabaseClient.from('profiles').select('*').eq('id', item.user_id).maybeSingle();
+        const profileData = u || await supabaseClient.from('profiles').select('*').eq('user_id', item.user_id).maybeSingle().then(res => res.data);
+        if (profileData) {
+          userName = profileData.full_name || userName;
+          userEmail = profileData.email || userEmail;
+          // Merge profile bank details if present
+          if(!item.upi_id) item.upi_id = profileData.upi_id;
+          if(!item.account_number) item.account_number = profileData.account_number || profileData.bank_account;
+          if(!item.ifsc_code) item.ifsc_code = profileData.ifsc_code;
+          if(!item.holder_name) item.holder_name = profileData.holder_name || profileData.account_holder;
         }
       }
 
-      // Format Bank / UPI details safely so it never fails to show
+      // Format Bank / UPI details safely so it shows clearly
       let payoutHtml = `Method: <b>${item.payment_method || item.method || 'UPI / Bank'}</b>`;
       if (item.upi_id) payoutHtml += `<br>UPI ID: <b>${item.upi_id}</b>`;
-      if (item.account_number || item.bank_account) payoutHtml += `<br>A/C: <b>${item.account_number || item.bank_account}</b> | IFSC: <b>${item.ifsc_code || ''}</b>`;
-      if (item.holder_name) payoutHtml += `<br>Name: <b>${item.holder_name}</b>`;
+      if (item.account_number || item.bank_account) payoutHtml += `<br>A/C: <b>${item.account_number || item.bank_account}</b> | IFSC: <b>${item.ifsc_code || 'N/A'}</b>`;
+      if (item.holder_name) payoutHtml += `<br>Holder Name: <b>${item.holder_name}</b>`;
       if (item.details) payoutHtml += `<br>Info: ${item.details}`;
 
       const statusVal = (item.status || 'pending').toLowerCase();
@@ -433,7 +437,7 @@
           <td><b>${user.full_name || 'User'}</b><br><span style="font-size:11px; color:var(--text-muted);">${user.email || ''}</span></td>
           <td style="color:var(--accent); font-weight:600;">${user.referral_id || 'N/A'}</td>
           <td>${user.package_name || 'Free'}<br><b style="color:#34d399;">₹${user.balance || 0}</b></td>
-          <td><span class="badge" style="background:${active ? 'rgba(16,185,129,0.2)' : 'rgba(244,63,94,0.2)'}; color:${active ? '#34d399' : '#fb7185'};">${active ? 'Active' : 'Blocked'}</span></td>
+          <td><span class="badge" style="background:${active ? 'rgba(16,185,129,0.15)' : 'rgba(244,63,94,0.15)'}; color:${active ? '#34d399' : '#fb7185'}; border: 1px solid ${active ? 'rgba(16,185,129,0.35)' : 'rgba(244,63,94,0.35)'};">${active ? 'Active' : 'Blocked'}</span></td>
           <td>
             <button class="btn ${active ? 'btn-reject' : 'btn-approve'}" onclick="toggleUser('${user.id || user.user_id}', ${!active})">${active ? 'Block' : 'Unblock'}</button>
           </td>
