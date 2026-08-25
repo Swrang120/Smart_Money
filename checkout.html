@@ -7,6 +7,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Supabase CDN Script -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     body { background: #f8fafc; color: #1e293b; line-height: 1.6; }
@@ -238,6 +242,12 @@
   </div>
 
   <script>
+    // --- SUPABASE CONFIGURATION ---
+    // Apni actual Supabase URL aur Anon Key yahan dalein
+    const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     // URL se package name aur price fetch karne ka code
     const urlParams = new URLSearchParams(window.location.search);
     const pkgName = urlParams.get('name') || 'Starter Package';
@@ -256,18 +266,18 @@
       });
     }
 
-    // Final Form Submission Logic
-    function handleFinalSubmit(event) {
+    // Final Form Submission & Supabase Database Insertion Logic
+    async function handleFinalSubmit(event) {
       if(event) event.preventDefault();
 
-      const affCode = document.getElementById('affCode').value;
-      const name = document.getElementById('fullName').value;
+      const affCode = document.getElementById('affCode').value.trim();
+      const name = document.getElementById('fullName').value.trim();
       const state = document.getElementById('stateSelect').value;
-      const mobile = document.getElementById('mobileNo').value;
-      const email = document.getElementById('emailId').value;
+      const mobile = document.getElementById('mobileNo').value.trim();
+      const email = document.getElementById('emailId').value.trim();
       const pass = document.getElementById('password').value;
       const cpass = document.getElementById('confirmPassword').value;
-      const utr = document.getElementById('utrId').value;
+      const utr = document.getElementById('utrId').value.trim();
       const terms = document.getElementById('termsCheck').checked;
 
       if(!affCode || !name || !state || !mobile || !email || !pass || !utr) {
@@ -283,8 +293,41 @@
         return;
       }
 
-      alert('Order successfully submitted! Admin approval ke baad aapka account active ho jayega.');
-      window.location.href = 'index.html';
+      try {
+        // Supabase ke 'orders' table mein data insert kar rahe hain
+        const { data, error } = await supabaseClient
+          .from('orders')
+          .insert([
+            { 
+              aff_code: affCode, 
+              full_name: name, 
+              state: state, 
+              mobile: mobile, 
+              email: email, 
+              password: pass, 
+              package_name: pkgName, 
+              package_price: parseFloat(pkgPrice), 
+              utr_id: utr,
+              status: 'pending'
+            }
+          ]);
+
+        if (error) {
+          if(error.code === '23505') {
+            alert('Yeh UTR / Transaction ID pehle hi use ho chuki hai! Kripya valid UTR dalein.');
+          } else {
+            alert('Error: ' + error.message);
+          }
+          return;
+        }
+
+        alert('Order successfully submitted! Admin dwara payment verify hone ke baad aapka account active ho jayega.');
+        window.location.href = 'index.html';
+
+      } catch (err) {
+        console.error(err);
+        alert('Kuch technical error aa gayi hai. Phir se koshish karein.');
+      }
     }
   </script>
 
