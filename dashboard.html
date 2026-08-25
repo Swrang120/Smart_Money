@@ -190,7 +190,7 @@
 
 <div class="dash-container">
   
-  <!-- PROFILE CARD -->
+  <!-- PROFILE CARD WITH PERMANENT OFFICIAL LOGO -->
   <div class="profile-card">
     <div class="package-badge vip" id="activePackageBadge">MASTER PACKAGE 👑</div>
     <div class="profile-img-wrap">
@@ -354,7 +354,7 @@
         currentProfile = profile;
         userCurrentBalance = Number(profile.balance || 0);
         userSavedUpi = profile.upi_id || "";
-        userRefCode = profile.referral_code || "";
+        userRefCode = profile.referral_code || profile.referral_id || "";
 
         const userName = profile.full_name || profile.name || session.user.user_metadata?.full_name || "Smart Money User";
         const userEmail = profile.email || session.user.email || "";
