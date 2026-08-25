@@ -9,7 +9,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body { background: #f1f5f9; color: #1e293b; margin: 0; padding-bottom: 40px; }
+    body { background: #f1f5f9; color: #1e293b; margin: 0; display: flex; justify-content: center; padding-bottom: 40px; }
+
+    /* RESPONSIVE APP WRAPPER FOR DESKTOP & MOBILE */
+    .app-wrapper {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      background: #f1f5f9;
+      box-shadow: 0 0 40px rgba(0,0,0,0.08);
+      position: relative;
+    }
 
     /* NAVBAR */
     .navbar {
@@ -59,7 +69,7 @@
     .sidebar-menu a.active { background: linear-gradient(135deg, #7c3aed, #a855f7); box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
 
     /* MAIN CONTAINER */
-    .dash-container { max-width: 480px; margin: 20px auto; padding: 0 15px; width: 100%; }
+    .dash-container { padding: 20px 15px; }
 
     /* PROFILE CARD */
     .profile-card {
@@ -72,10 +82,11 @@
     }
     
     .profile-img-wrap { position: relative; flex-shrink: 0; }
-    .profile-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background: #fff; }
+    /* Force strict circular avatar styling to avoid any rectangular banner rendering */
+    .profile-img { width: 68px !important; height: 68px !important; min-width: 68px; min-height: 68px; border-radius: 50% !important; object-fit: cover !important; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background: #fff; }
     
-    .user-info h2 { margin: 0; font-size: 18px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 6px; }
-    .user-info p { margin: 3px 0; font-size: 12.5px; color: #f1f5f9; word-break: break-all; }
+    .user-info h2 { margin: 0; font-size: 17px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 6px; }
+    .user-info p { margin: 3px 0; font-size: 12px; color: #f1f5f9; word-break: break-all; }
     .copy-btn {
       background: rgba(255, 255, 255, 0.2); color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; transition: 0.2s;
     }
@@ -136,112 +147,117 @@
 </head>
 <body>
 
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+<div class="app-wrapper">
 
-<!-- SIDEBAR DRAWER MENU -->
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <a href="dashboard.html" class="brand-logo" style="color:#fff;">
-      <img src="1000819130.jpg" alt="Logo" class="brand-logo-img">
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+  <!-- SIDEBAR DRAWER MENU -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="dashboard.html" class="brand-logo" style="color:#fff;">
+        <img src="1000819130.jpg?v=99" alt="Logo" class="brand-logo-img">
+        <span>Smart Money</span>
+      </a>
+      <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="dashboard.html" class="active"><span>🏠</span> Dashboard Home</a></li>
+      <li><a href="index.html"><span>🌐</span> Home / Landing Page</a></li>
+      <li><button onclick="openUpiModal()"><span>🏦</span> Update Bank & UPI Details</button></li>
+      <li><button onclick="copyRefLink()"><span>🔗</span> Copy Affiliate Link</button></li>
+      <li><button onclick="openWithdrawModal()"><span>💸</span> Withdraw Funds</button></li>
+      <li><button id="sideLogoutBtn" style="color:#f87171;"><span>🚪</span> Logout</button></li>
+    </ul>
+  </aside>
+
+  <header class="navbar">
+    <a href="dashboard.html" class="brand-logo">
+      <img src="1000819130.jpg?v=99" alt="Smart Money Logo" class="brand-logo-img">
       <span>Smart Money</span>
     </a>
-    <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
-  </div>
-  <ul class="sidebar-menu">
-    <li><a href="dashboard.html" class="active"><span>🏠</span> Dashboard Home</a></li>
-    <li><a href="index.html"><span>🌐</span> Home / Landing Page</a></li>
-    <li><button onclick="openUpiModal()"><span>🏦</span> Update Bank & UPI Details</button></li>
-    <li><button onclick="copyRefLink()"><span>🔗</span> Copy Affiliate Link</button></li>
-    <li><button onclick="openWithdrawModal()"><span>💸</span> Withdraw Funds</button></li>
-    <li><button id="sideLogoutBtn" style="color:#f87171;"><span>🚪</span> Logout</button></li>
-  </ul>
-</aside>
+    <div class="nav-right">
+      <img src="1000819130.jpg?v=99" alt="Avatar" class="nav-avatar">
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    </div>
+  </header>
 
-<header class="navbar">
-  <a href="dashboard.html" class="brand-logo">
-    <img src="1000819130.jpg" alt="Smart Money Logo" class="brand-logo-img">
-    <span>Smart Money</span>
-  </a>
-  <div class="nav-right">
-    <img src="1000819130.jpg" alt="Avatar" class="nav-avatar">
-    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-  </div>
-</header>
-
-<div class="dash-container">
-  
-  <!-- PROFILE CARD -->
-  <div class="profile-card">
-    <div class="package-badge" id="activePackageBadge">MASTER PACKAGE 👑</div>
-    <div class="profile-img-wrap">
-      <img src="1000819130.jpg" alt="Profile Logo" class="profile-img">
-    </div>
-    <div class="user-info">
-      <h2 id="userName">Santiram Swargiary <span style="font-size:15px;">👑</span></h2>
-      <p id="userEmail">swrangswargiary48@gmail.com</p>
-      <p>ID: <b id="myRefCode" style="color:#fff;">Loading...</b></p>
-      <button class="copy-btn" onclick="copyRefLink()">📋 Copy Affiliate Link</button>
-    </div>
-  </div>
-
-  <!-- REVENUE STATS STACK -->
-  <div class="stats-stack">
-    <div class="v-card bg-today">
-      <div><h2>₹0</h2><p>Today's Revenue</p></div>
-      <div class="v-card-footer" onclick="alert('Viewing Today Revenue Details')"><span>View details</span><span>→</span></div>
-    </div>
-    <div class="v-card bg-7days">
-      <div><h2>₹0</h2><p>7 Days Revenue</p></div>
-      <div class="v-card-footer" onclick="alert('Viewing 7 Days Revenue Details')"><span>View details</span><span>→</span></div>
-    </div>
-    <div class="v-card bg-30days">
-      <div><h2>₹0</h2><p>30 Days Revenue</p></div>
-      <div class="v-card-footer" onclick="alert('Viewing 30 Days Revenue Details')"><span>View details</span><span>→</span></div>
-    </div>
-    <div class="v-card bg-alltime">
-      <div><h2 id="allTimeRevenueText">₹0</h2><p>All Time Revenue</p></div>
-      <div class="v-card-footer" onclick="alert('Viewing All Time Revenue Details')"><span>View details</span><span>→</span></div>
-    </div>
-    <div class="v-card bg-passive">
-      <div><h2>₹0</h2><p>Passive Income</p></div>
-      <div class="v-card-footer" onclick="alert('Viewing Passive Income Details')"><span>View details</span><span>→</span></div>
-    </div>
-  </div>
-
-  <!-- WALLET BALANCE & WITHDRAWAL -->
-  <div class="section-box" style="text-align: center;">
-    <span style="font-size: 11px; color:#64748b; font-weight: 700; text-transform: uppercase;">Available Wallet Balance</span>
-    <h1 style="margin: 6px 0 0 0; color: #10b981; font-size: 32px;" id="walletBalance">₹0.00</h1>
-    <p id="upiDisplayInfo" style="font-size: 12px; color: #64748b; margin-top: 4px;">Bank / UPI: Not Saved Yet</p>
-    <button class="btn-withdraw" onclick="openWithdrawModal()">💸 Withdraw Money Now</button>
-  </div>
-
-  <!-- SALES LAST 30 DAYS GRAPH -->
-  <div class="section-box">
-    <h3>Sales Last 30 Days</h3>
-    <div class="graph-container">
-      <div class="graph-curve"></div>
-    </div>
-  </div>
-
-  <!-- PENDING AMOUNT SECTION -->
-  <div class="section-box">
-    <h3>Pending Amount</h3>
-    <div class="pending-circle">
-      <p>Pending Amount</p>
-      <h4>Rs. 0</h4>
-    </div>
-  </div>
-
-  <!-- RECENT SALES -->
-  <div class="section-box">
-    <h3>Recent Sales</h3>
-    <div class="pie-chart-box">
-      <div class="pie-inner">
-        <h4>Total Sales</h4>
-        <p id="totalSalesCount">0</p>
+  <div class="dash-container">
+    
+    <!-- PROFILE CARD -->
+    <div class="profile-card">
+      <div class="package-badge" id="activePackageBadge">MASTER PACKAGE 👑</div>
+      <div class="profile-img-wrap">
+        <!-- Added version parameter ?v=99 to break browser cache completely -->
+        <img src="1000819130.jpg?v=99" alt="Profile Avatar" class="profile-img">
+      </div>
+      <div class="user-info">
+        <h2 id="userName">Santiram Swargiary <span style="font-size:15px;">👑</span></h2>
+        <p id="userEmail">swrangswargiary48@gmail.com</p>
+        <p>ID: <b id="myRefCode" style="color:#fff;">Loading...</b></p>
+        <button class="copy-btn" onclick="copyRefLink()">📋 Copy Affiliate Link</button>
       </div>
     </div>
+
+    <!-- REVENUE STATS STACK -->
+    <div class="stats-stack">
+      <div class="v-card bg-today">
+        <div><h2>₹0</h2><p>Today's Revenue</p></div>
+        <div class="v-card-footer" onclick="alert('Viewing Today Revenue Details')"><span>View details</span><span>→</span></div>
+      </div>
+      <div class="v-card bg-7days">
+        <div><h2>₹0</h2><p>7 Days Revenue</p></div>
+        <div class="v-card-footer" onclick="alert('Viewing 7 Days Revenue Details')"><span>View details</span><span>→</span></div>
+      </div>
+      <div class="v-card bg-30days">
+        <div><h2>₹0</h2><p>30 Days Revenue</p></div>
+        <div class="v-card-footer" onclick="alert('Viewing 30 Days Revenue Details')"><span>View details</span><span>→</span></div>
+      </div>
+      <div class="v-card bg-alltime">
+        <div><h2 id="allTimeRevenueText">₹0</h2><p>All Time Revenue</p></div>
+        <div class="v-card-footer" onclick="alert('Viewing All Time Revenue Details')"><span>View details</span><span>→</span></div>
+      </div>
+      <div class="v-card bg-passive">
+        <div><h2>₹0</h2><p>Passive Income</p></div>
+        <div class="v-card-footer" onclick="alert('Viewing Passive Income Details')"><span>View details</span><span>→</span></div>
+      </div>
+    </div>
+
+    <!-- WALLET BALANCE & WITHDRAWAL -->
+    <div class="section-box" style="text-align: center;">
+      <span style="font-size: 11px; color:#64748b; font-weight: 700; text-transform: uppercase;">Available Wallet Balance</span>
+      <h1 style="margin: 6px 0 0 0; color: #10b981; font-size: 32px;" id="walletBalance">₹0.00</h1>
+      <p id="upiDisplayInfo" style="font-size: 12px; color: #64748b; margin-top: 4px;">Bank / UPI: Not Saved Yet</p>
+      <button class="btn-withdraw" onclick="openWithdrawModal()">💸 Withdraw Money Now</button>
+    </div>
+
+    <!-- SALES LAST 30 DAYS GRAPH -->
+    <div class="section-box">
+      <h3>Sales Last 30 Days</h3>
+      <div class="graph-container">
+        <div class="graph-curve"></div>
+      </div>
+    </div>
+
+    <!-- PENDING AMOUNT SECTION -->
+    <div class="section-box">
+      <h3>Pending Amount</h3>
+      <div class="pending-circle">
+        <p>Pending Amount</p>
+        <h4>Rs. 0</h4>
+      </div>
+    </div>
+
+    <!-- RECENT SALES -->
+    <div class="section-box">
+      <h3>Recent Sales</h3>
+      <div class="pie-chart-box">
+        <div class="pie-inner">
+          <h4>Total Sales</h4>
+          <p id="totalSalesCount">0</p>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </div>
