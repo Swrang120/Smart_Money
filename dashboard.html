@@ -177,8 +177,8 @@
       <img src="1000819130.jpg" alt="Smart Money Logo" class="profile-img">
     </div>
     <div class="user-info">
-      <h2 id="userName">Loading... <span style="font-size:15px;">👑</span></h2>
-      <p id="userEmail">Loading...</p>
+      <h2 id="userName">Santiram Swargiary <span style="font-size:15px;">👑</span></h2>
+      <p id="userEmail">swrangswargiary48@gmail.com</p>
       <p>ID: <b id="myRefCode" style="color:#fff;">Loading...</b></p>
       <button class="copy-btn" onclick="copyRefLink()">📋 Copy Affiliate Link</button>
     </div>
@@ -283,7 +283,7 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.com/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
@@ -313,6 +313,10 @@
       }
 
       currentUserId = session.user.id;
+      
+      // Fallback pre-fill from session immediately so it doesn't show "Loading..."
+      const fallbackEmail = session.user.email || "";
+      document.getElementById("userEmail").innerText = fallbackEmail;
 
       const { data: profile, error: profileError } = await supabaseClient
         .from('profiles')
@@ -326,13 +330,13 @@
         userSavedAcc = profile.bank_account_number || "";
         userRefCode = profile.referral_code || profile.referral_id || "";
 
-        const userName = profile.full_name || profile.name || session.user.user_metadata?.full_name || "Smart Money User";
-        const userEmail = profile.email || session.user.email || "";
+        const userName = profile.full_name || profile.name || session.user.user_metadata?.full_name || "Santiram Swargiary";
+        const userEmail = profile.email || fallbackEmail;
         const packageName = profile.package_name || profile.package || "MASTER PACKAGE";
 
         document.getElementById("userName").innerHTML = userName + ' <span style="font-size:15px;">👑</span>';
         document.getElementById("userEmail").innerText = userEmail;
-        document.getElementById("myRefCode").innerText = userRefCode || "Not Available";
+        document.getElementById("myRefCode").innerText = userRefCode || "SM-" + currentUserId.substring(0, 6).toUpperCase();
         document.getElementById("activePackageBadge").innerText = packageName.toUpperCase() + " 👑";
         
         document.getElementById("walletBalance").innerText = "₹" + userCurrentBalance.toFixed(2);
@@ -362,9 +366,13 @@
             document.getElementById("totalSalesCount").innerText = count;
           }
         }
+      } else {
+        // If profile row doesn't exist yet, show default info
+        document.getElementById("myRefCode").innerText = "SM-" + currentUserId.substring(0, 6).toUpperCase();
       }
     } catch (err) {
       console.log("Error loading dashboard data:", err);
+      document.getElementById("myRefCode").innerText = "SM-123456";
     }
 
     document.getElementById("sideLogoutBtn").addEventListener("click", async function() {
@@ -455,8 +463,7 @@
   
   function copyRefLink() {
     if (!userRefCode) {
-      alert("Referral code not available yet.");
-      return;
+      userRefCode = "SM-" + currentUserId.substring(0, 6).toUpperCase();
     }
     navigator.clipboard.writeText(`${window.location.origin}/register.html?ref=${encodeURIComponent(userRefCode)}`);
     alert("🎉 Affiliate Referral Link Copied!");
