@@ -9,6 +9,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* Extra styling for updated packages alignment if needed */
+    .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #6366f1; margin-right: 8px; vertical-align: middle; }
+  </style>
 </head>
 
 <body>
@@ -17,7 +21,10 @@
      NAVBAR
 ========================= -->
 <header class="navbar">
-  <a href="index.html" class="logo">Smart Money</a>
+  <a href="index.html" class="logo" style="display: flex; align-items: center;">
+    <img src="1000819130.jpg" alt="Smart Money Logo" class="brand-logo-img">
+    Smart Money
+  </a>
   <nav>
     <a href="index.html">Home</a>
     <a href="#about">About</a>
@@ -56,7 +63,7 @@
 
     <div class="hero-stats">
       <div>
-        <strong>4+</strong>
+        <strong>6+</strong>
         <span>Packages</span>
       </div>
       <div>
@@ -194,6 +201,55 @@
   <div class="package-container">
 
     <!-- =========================
+         ENTRY PACKAGE (NEW)
+    ========================= -->
+    <a href="register.html" class="package starter-package" style="border: 2px solid #06b6d4;">
+      <div class="package-banner" style="background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);">
+        <span class="package-badge" style="background: #06b6d4; color: #fff; font-weight:800;">
+          ENTRY LEVEL
+        </span>
+        <div class="package-banner-content">
+          <span class="package-small-icon">📦</span>
+          <h3>Entry Package</h3>
+          <p>Start small with easy entry.</p>
+        </div>
+      </div>
+
+      <div class="package-body">
+        <div class="package-title-row">
+          <h3>Entry Package</h3>
+          <span class="popular-dot" style="color: #06b6d4;">●</span>
+        </div>
+
+        <div class="stars" style="color: #06b6d4;">★★★★★</div>
+
+        <div class="package-price-row">
+          <strong>₹299</strong>
+          <span style="background: #06b6d4; color: #fff; font-weight:700;">START</span>
+        </div>
+
+        <div class="package-info">
+          <span>Referral Commission (30%)</span>
+          <strong>₹89.70</strong>
+        </div>
+
+        <div class="package-info">
+          <span>Minimum / Max Withdrawal</span>
+          <strong>₹100 - ₹600</strong>
+        </div>
+
+        <div class="package-info">
+          <span>Daily Frequency & Fee</span>
+          <strong>1 Time/Day | 2% Fee</strong>
+        </div>
+
+        <div class="package-button" style="background: linear-gradient(135deg, #06b6d4, #0284c7);">
+          View Details & Buy →
+        </div>
+      </div>
+    </a>
+
+    <!-- =========================
          STARTER PACKAGE
     ========================= -->
     <a href="starter.html" class="package starter-package">
@@ -311,7 +367,7 @@
     </a>
 
     <!-- =========================
-         SUPER PREMIUM PACKAGE (NEW)
+         SUPER PREMIUM PACKAGE
     ========================= -->
     <a href="super_premium.html" class="package high-package" style="border: 2px solid #f59e0b;">
       <div class="package-banner" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);">
@@ -355,6 +411,55 @@
 
         <div class="package-button" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);">
           View VIP Details & Buy →
+        </div>
+      </div>
+    </a>
+
+    <!-- =========================
+         MAX PRO PACKAGE (NEW VIP EXCLUSIVE)
+    ========================= -->
+    <a href="register.html" class="package high-package" style="border: 2px solid #e11d48;">
+      <div class="package-banner" style="background: linear-gradient(135deg, #881337 0%, #4c0519 100%);">
+        <span class="package-badge" style="background: #fbbf24; color: #0f172a; font-weight:800;">
+          MAX EXCLUSIVE
+        </span>
+        <div class="package-banner-content">
+          <span class="package-small-icon">👑</span>
+          <h3>Max Pro Package</h3>
+          <p>Ultimate earning & maximum freedom.</p>
+        </div>
+      </div>
+
+      <div class="package-body">
+        <div class="package-title-row">
+          <h3>Max Pro</h3>
+          <span class="popular-dot" style="color: #e11d48;">●</span>
+        </div>
+
+        <div class="stars" style="color: #fbbf24;">★★★★★</div>
+
+        <div class="package-price-row">
+          <strong>₹4,499</strong>
+          <span style="background: #e11d48; color: #fff; font-weight:700;">MAX PRO</span>
+        </div>
+
+        <div class="package-info">
+          <span>85% Direct Commission</span>
+          <strong>₹2,500.15</strong>
+        </div>
+
+        <div class="package-info">
+          <span>Daily Withdrawals</span>
+          <strong>₹100 - ₹30,000 (Unlimited)</strong>
+        </div>
+
+        <div class="package-info">
+          <span>Withdrawal Charges & Support</span>
+          <strong>0% Fee | 24/7 VIP Support</strong>
+        </div>
+
+        <div class="package-button" style="background: linear-gradient(135deg, #e11d48, #9f1239);">
+          View Max Pro Details →
         </div>
       </div>
     </a>
