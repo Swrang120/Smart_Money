@@ -1,79 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Smart Money - Affiliate Dashboard</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>Smart Money - Dashboard</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
 
 <style>
 
+/* =========================================
+   RESET
+========================================= */
+
 *{
+  margin:0;
+  padding:0;
   box-sizing:border-box;
   font-family:'Poppins',sans-serif;
 }
 
-body{
-  margin:0;
-  background:#eef2f7;
-  color:#1e293b;
-  display:flex;
-  justify-content:center;
+html{
+  scroll-behavior:smooth;
 }
 
-/* ===============================
-   APP WRAPPER
-================================ */
+body{
+  background:#eef2f7;
+  color:#1e293b;
+}
+
+button,
+a{
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* =========================================
+   APP
+========================================= */
 
 .app-wrapper{
   width:100%;
   max-width:850px;
   min-height:100vh;
+  margin:auto;
   background:#f1f5f9;
   box-shadow:0 0 40px rgba(0,0,0,.08);
 }
 
-/* ===============================
+/* =========================================
    NAVBAR
-================================ */
+========================================= */
 
 .navbar{
   height:68px;
-  background:#ffffff;
+  width:100%;
+  background:#fff;
+
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   padding:0 18px;
+
   position:sticky;
   top:0;
+
   z-index:100;
-  box-shadow:0 3px 15px rgba(0,0,0,.06);
+
+  box-shadow:
+  0 3px 15px rgba(0,0,0,.06);
 }
 
 .brand-logo{
   display:flex;
   align-items:center;
   gap:9px;
+
   text-decoration:none;
 }
 
 .brand-logo img{
   width:38px;
   height:38px;
+
   border-radius:50%;
+
   object-fit:cover;
+
   border:2px solid #7c3aed;
 }
 
 .brand-logo span{
   font-size:18px;
   font-weight:800;
-  background:linear-gradient(135deg,#7c3aed,#db2777);
+
+  background:
+  linear-gradient(
+    135deg,
+    #7c3aed,
+    #db2777
+  );
+
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
@@ -86,10 +126,14 @@ body{
 
 .nav-home-btn{
   padding:7px 12px;
+
   border-radius:10px;
+
   text-decoration:none;
+
   background:#f3e8ff;
   color:#7c3aed;
+
   font-size:12px;
   font-weight:700;
 }
@@ -97,31 +141,46 @@ body{
 .nav-avatar{
   width:38px;
   height:38px;
+
   border-radius:50%;
+
   object-fit:cover;
+
   border:2px solid #7c3aed;
 }
 
 .menu-btn{
-  border:none;
-  background:#f8fafc;
   border:1px solid #e2e8f0;
+
+  background:#f8fafc;
+
   border-radius:10px;
-  padding:7px 12px;
-  font-size:19px;
+
+  width:42px;
+  height:40px;
+
+  font-size:20px;
+
   cursor:pointer;
 }
 
-/* ===============================
+/* =========================================
    SIDEBAR
-================================ */
+========================================= */
 
 .sidebar-overlay{
+
   position:fixed;
-  inset:0;
+
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+
   background:rgba(15,23,42,.55);
-  backdrop-filter:blur(3px);
+
   display:none;
+
   z-index:998;
 }
 
@@ -130,15 +189,27 @@ body{
 }
 
 .sidebar{
+
   position:fixed;
+
   top:0;
-  left:-320px;
+  left:-310px;
+
   width:300px;
-  height:100%;
+  max-width:85vw;
+
+  height:100vh;
+
   background:#172033;
+
   z-index:999;
-  transition:.3s;
-  overflow:auto;
+
+  transition:left .3s ease;
+
+  overflow-y:auto;
+
+  box-shadow:
+  10px 0 30px rgba(0,0,0,.2);
 }
 
 .sidebar.active{
@@ -146,25 +217,46 @@ body{
 }
 
 .sidebar-header{
-  padding:20px;
+
+  min-height:75px;
+
+  padding:15px;
+
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  border-bottom:1px solid rgba(255,255,255,.1);
+  justify-content:space-between;
+
+  border-bottom:
+  1px solid rgba(255,255,255,.1);
+}
+
+.sidebar-header .brand-logo span{
+  font-size:16px;
 }
 
 .sidebar-close{
-  background:none;
+
+  width:38px;
+  height:38px;
+
   border:none;
-  color:#fff;
-  font-size:24px;
+
+  background:rgba(255,255,255,.08);
+
+  color:white;
+
+  border-radius:10px;
+
+  font-size:20px;
+
   cursor:pointer;
 }
 
 .sidebar-menu{
-  padding:15px 10px;
+
   list-style:none;
-  margin:0;
+
+  padding:14px 10px;
 }
 
 .sidebar-menu li{
@@ -173,50 +265,80 @@ body{
 
 .sidebar-menu a,
 .sidebar-menu button{
+
   width:100%;
+
   border:none;
+
   background:transparent;
+
   color:#cbd5e1;
+
   text-align:left;
-  padding:13px 15px;
-  border-radius:12px;
+
+  padding:12px 14px;
+
+  border-radius:10px;
+
   cursor:pointer;
+
   text-decoration:none;
-  font-size:14px;
+
+  font-size:13px;
+
+  transition:.2s;
 }
 
 .sidebar-menu a:hover,
 .sidebar-menu button:hover{
-  background:rgba(124,58,237,.25);
-  color:#fff;
+
+  background:
+  rgba(124,58,237,.25);
+
+  color:white;
 }
 
 .sidebar-menu a.active{
-  background:linear-gradient(135deg,#7c3aed,#a855f7);
-  color:#fff;
+
+  background:
+  linear-gradient(
+    135deg,
+    #7c3aed,
+    #a855f7
+  );
+
+  color:white;
 }
 
-/* ===============================
+/* =========================================
    DASHBOARD
-================================ */
+========================================= */
 
 .dash-container{
   padding:25px 18px 40px;
 }
 
-/* ===============================
-   NEW PROFILE CARD
-================================ */
+/* =========================================
+   PROFILE CARD
+========================================= */
 
 .profile-card{
+
   position:relative;
-  min-height:155px;
+
+  min-height:160px;
+
   border-radius:20px;
+
   overflow:hidden;
+
   margin-bottom:20px;
+
   display:flex;
   align-items:center;
+
   padding:25px;
+
   gap:20px;
 
   background:
@@ -228,19 +350,22 @@ body{
     #ede9fe 100%
   );
 
+  border:
+  1px solid #e2e8f0;
+
   box-shadow:
   0 10px 25px rgba(15,23,42,.10);
-
-  border:1px solid #e2e8f0;
 }
 
-/* Purple design */
-
 .profile-card::before{
+
   content:"";
+
   position:absolute;
-  left:-80px;
-  bottom:-100px;
+
+  left:-90px;
+  bottom:-120px;
+
   width:250px;
   height:250px;
 
@@ -253,16 +378,21 @@ body{
   );
 
   transform:rotate(35deg);
-  opacity:.95;
+
+  opacity:.9;
 }
 
 .profile-card::after{
+
   content:"";
+
   position:absolute;
-  right:-70px;
-  top:-80px;
-  width:260px;
-  height:260px;
+
+  right:-90px;
+  top:-100px;
+
+  width:270px;
+  height:270px;
 
   background:
   linear-gradient(
@@ -273,7 +403,8 @@ body{
   );
 
   transform:rotate(30deg);
-  opacity:.95;
+
+  opacity:.9;
 }
 
 .profile-card > *{
@@ -281,14 +412,16 @@ body{
   z-index:2;
 }
 
-/* PACKAGE BADGE */
+/* PACKAGE */
 
 .package-badge{
+
   position:absolute;
+
   top:0;
   right:0;
 
-  padding:7px 16px;
+  padding:8px 15px;
 
   background:
   linear-gradient(
@@ -301,45 +434,43 @@ body{
 
   font-size:9px;
   font-weight:800;
-  letter-spacing:.5px;
 
   border-bottom-left-radius:14px;
 }
 
-/* PERMANENT LOGO */
+/* PROFILE IMAGE */
 
 .profile-img-wrap{
+
   width:92px;
   height:92px;
+
   min-width:92px;
 
   border-radius:50%;
 
-  background:#fff;
+  background:white;
+
+  padding:5px;
 
   display:flex;
   align-items:center;
   justify-content:center;
 
-  padding:5px;
+  border:3px solid #7c3aed;
 
   box-shadow:
-  0 6px 20px rgba(0,0,0,.18);
-
-  border:3px solid #7c3aed;
+  0 8px 20px rgba(0,0,0,.2);
 }
 
 .profile-img{
+
   width:100%;
   height:100%;
 
-  border-radius:50%;
-
   object-fit:cover;
 
-  pointer-events:none;
-
-  user-select:none;
+  border-radius:50%;
 }
 
 /* USER INFO */
@@ -350,55 +481,58 @@ body{
 }
 
 .user-info h2{
-  margin:0 0 5px;
 
   font-size:22px;
 
+  font-weight:800;
+
+  margin-bottom:5px;
+
   color:#1e293b;
 
-  font-weight:800;
+  word-break:break-word;
 }
 
 .user-email{
-  margin:0 0 10px;
 
   font-size:12px;
 
   color:#64748b;
 
+  margin-bottom:10px;
+
   word-break:break-all;
 }
 
-/* AFFILIATE ID BOX */
+/* AFFILIATE */
 
 .affiliate-id-box{
 
   display:flex;
-
   align-items:center;
 
-  gap:10px;
+  gap:8px;
 
-  background:#f8fafc;
+  width:max-content;
+  max-width:100%;
 
-  border:1px solid #e2e8f0;
+  background:#fff;
+
+  border:
+  1px solid #e2e8f0;
 
   border-radius:12px;
 
-  padding:9px 12px;
-
-  width:max-content;
-
-  max-width:100%;
+  padding:8px 10px;
 }
 
 .affiliate-id-box span{
 
-  font-size:12px;
-
-  font-weight:700;
+  font-size:11px;
 
   color:#475569;
+
+  font-weight:700;
 
   white-space:nowrap;
 
@@ -410,7 +544,6 @@ body{
 .copy-id-btn{
 
   width:34px;
-
   height:34px;
 
   min-width:34px;
@@ -419,9 +552,8 @@ body{
 
   border-radius:9px;
 
-  cursor:pointer;
-
-  background:linear-gradient(
+  background:
+  linear-gradient(
     135deg,
     #7c3aed,
     #9333ea
@@ -429,18 +561,19 @@ body{
 
   color:white;
 
-  font-size:16px;
+  cursor:pointer;
 }
 
-/* ===============================
+/* =========================================
    STATS
-================================ */
+========================================= */
 
 .stats-stack{
 
   display:grid;
 
-  grid-template-columns:repeat(2,1fr);
+  grid-template-columns:
+  repeat(2,1fr);
 
   gap:14px;
 
@@ -451,9 +584,9 @@ body{
 
   min-height:145px;
 
-  border-radius:18px;
-
   padding:20px;
+
+  border-radius:18px;
 
   color:white;
 
@@ -463,12 +596,11 @@ body{
 
   justify-content:space-between;
 
-  box-shadow:0 8px 20px rgba(0,0,0,.10);
+  box-shadow:
+  0 8px 20px rgba(0,0,0,.1);
 }
 
 .v-card h2{
-
-  margin:0;
 
   font-size:26px;
 
@@ -477,7 +609,7 @@ body{
 
 .v-card p{
 
-  margin:4px 0 14px;
+  margin-top:5px;
 
   font-size:12px;
 }
@@ -488,47 +620,54 @@ body{
 
   justify-content:space-between;
 
-  border-top:1px solid rgba(255,255,255,.25);
-
   padding-top:10px;
 
-  font-size:12px;
+  border-top:
+  1px solid rgba(255,255,255,.25);
+
+  font-size:11px;
 
   font-weight:600;
-
-  cursor:pointer;
 }
 
 .bg-today{
-  background:linear-gradient(135deg,#7c3aed,#5b21b6);
+  background:
+  linear-gradient(135deg,#7c3aed,#5b21b6);
 }
 
 .bg-7days{
-  background:linear-gradient(135deg,#6366f1,#4338ca);
+  background:
+  linear-gradient(135deg,#6366f1,#4338ca);
 }
 
 .bg-30days{
-  background:linear-gradient(135deg,#db2777,#be185d);
+  background:
+  linear-gradient(135deg,#db2777,#be185d);
 }
 
 .bg-alltime{
-  background:linear-gradient(135deg,#0284c7,#075985);
+
   grid-column:span 2;
+
+  background:
+  linear-gradient(135deg,#0284c7,#075985);
 }
 
 .bg-passive{
-  background:linear-gradient(135deg,#d97706,#92400e);
+  background:
+  linear-gradient(135deg,#d97706,#92400e);
 }
 
-/* ===============================
-   BOXES
-================================ */
+/* =========================================
+   SECTION BOX
+========================================= */
 
 .section-box{
 
-  background:#fff;
+  background:white;
 
-  border:1px solid #e2e8f0;
+  border:
+  1px solid #e2e8f0;
 
   border-radius:18px;
 
@@ -536,24 +675,22 @@ body{
 
   margin-bottom:18px;
 
-  box-shadow:0 5px 18px rgba(0,0,0,.04);
+  box-shadow:
+  0 5px 18px rgba(0,0,0,.04);
 }
 
 .section-box h3{
 
-  margin:0 0 15px;
-
   font-size:15px;
 
-  font-weight:700;
+  margin-bottom:15px;
 }
 
-/* ===============================
+/* =========================================
    WALLET
-================================ */
+========================================= */
 
 .wallet-box{
-
   text-align:center;
 }
 
@@ -563,9 +700,9 @@ body{
 
   font-weight:700;
 
-  text-transform:uppercase;
-
   color:#64748b;
+
+  text-transform:uppercase;
 }
 
 .wallet-balance{
@@ -579,23 +716,32 @@ body{
   margin:5px 0;
 }
 
+.payout-info{
+
+  font-size:11px;
+
+  color:#64748b;
+
+  margin-top:5px;
+}
+
 .btn-withdraw{
 
   width:100%;
 
   margin-top:14px;
 
-  border:none;
-
   padding:13px;
+
+  border:none;
 
   border-radius:10px;
 
-  cursor:pointer;
-
-  color:#fff;
+  color:white;
 
   font-weight:700;
+
+  cursor:pointer;
 
   background:
   linear-gradient(
@@ -605,9 +751,9 @@ body{
   );
 }
 
-/* ===============================
+/* =========================================
    GRAPH
-================================ */
+========================================= */
 
 .graph-container{
 
@@ -631,7 +777,8 @@ body{
     rgba(219,39,119,.45)
   );
 
-  clip-path:polygon(
+  clip-path:
+  polygon(
     0% 100%,
     10% 92%,
     25% 75%,
@@ -643,14 +790,13 @@ body{
   );
 }
 
-/* ===============================
+/* =========================================
    PENDING
-================================ */
+========================================= */
 
 .pending-circle{
 
   width:130px;
-
   height:130px;
 
   margin:auto;
@@ -659,7 +805,7 @@ body{
 
   border:6px solid #e2e8f0;
 
-  border-top-color:#64748b;
+  border-top-color:#7c3aed;
 
   display:flex;
 
@@ -672,8 +818,6 @@ body{
 
 .pending-circle p{
 
-  margin:0;
-
   font-size:9px;
 
   font-weight:700;
@@ -683,19 +827,18 @@ body{
 
 .pending-circle h4{
 
-  margin:5px 0 0;
+  margin-top:5px;
 
   font-size:17px;
 }
 
-/* ===============================
-   SALES CIRCLE
-================================ */
+/* =========================================
+   PIE
+========================================= */
 
 .pie-chart-box{
 
   width:140px;
-
   height:140px;
 
   border-radius:50%;
@@ -718,12 +861,11 @@ body{
 .pie-inner{
 
   width:90px;
-
   height:90px;
 
-  border-radius:50%;
+  background:white;
 
-  background:#fff;
+  border-radius:50%;
 
   display:flex;
 
@@ -736,8 +878,6 @@ body{
 
 .pie-inner h4{
 
-  margin:0;
-
   font-size:10px;
 
   color:#64748b;
@@ -745,16 +885,14 @@ body{
 
 .pie-inner p{
 
-  margin:3px 0;
-
   font-size:20px;
 
   font-weight:800;
 }
 
-/* ===============================
+/* =========================================
    MODALS
-================================ */
+========================================= */
 
 .modal-overlay{
 
@@ -764,11 +902,10 @@ body{
 
   inset:0;
 
-  z-index:1000;
+  z-index:2000;
 
-  background:rgba(15,23,42,.65);
-
-  backdrop-filter:blur(4px);
+  background:
+  rgba(15,23,42,.65);
 
   justify-content:center;
 
@@ -783,7 +920,7 @@ body{
 
   max-width:440px;
 
-  background:#fff;
+  background:white;
 
   border-radius:20px;
 
@@ -794,6 +931,10 @@ body{
   overflow:auto;
 }
 
+.modal-box h3{
+  margin-bottom:15px;
+}
+
 .input-field{
 
   width:100%;
@@ -802,11 +943,20 @@ body{
 
   border-radius:10px;
 
-  border:1px solid #cbd5e1;
+  border:
+  1px solid #cbd5e1;
 
   margin:6px 0 12px;
 
   outline:none;
+}
+
+.input-field:focus{
+
+  border-color:#7c3aed;
+
+  box-shadow:
+  0 0 0 3px rgba(124,58,237,.1);
 }
 
 .btn-action{
@@ -819,7 +969,7 @@ body{
 
   border-radius:10px;
 
-  color:#fff;
+  color:white;
 
   font-weight:700;
 
@@ -833,9 +983,24 @@ body{
   );
 }
 
-/* ===============================
+.cancel-btn{
+
+  width:100%;
+
+  border:none;
+
+  background:none;
+
+  padding:12px;
+
+  color:#64748b;
+
+  cursor:pointer;
+}
+
+/* =========================================
    MOBILE
-================================ */
+========================================= */
 
 @media(max-width:600px){
 
@@ -847,68 +1012,88 @@ body{
     font-size:15px;
   }
 
+  .nav-home-btn{
+    display:none;
+  }
+
   .dash-container{
     padding:18px 12px 35px;
   }
 
   .profile-card{
+
     padding:20px 14px;
+
     gap:13px;
+
+    min-height:145px;
   }
 
   .profile-img-wrap{
-    width:78px;
-    height:78px;
-    min-width:78px;
+
+    width:75px;
+    height:75px;
+
+    min-width:75px;
   }
 
   .user-info h2{
     font-size:16px;
   }
 
+  .user-email{
+    font-size:10px;
+  }
+
   .stats-stack{
-    grid-template-columns:1fr 1fr;
+    gap:10px;
   }
 
   .v-card{
-    min-height:125px;
-    padding:15px;
+
+    min-height:120px;
+
+    padding:14px;
   }
 
   .v-card h2{
-    font-size:22px;
+    font-size:20px;
   }
 
-  .nav-home-btn{
-    display:none;
-  }
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="app-wrapper">
 
-<!-- SIDEBAR OVERLAY -->
+
+<!-- =====================================
+     SIDEBAR OVERLAY
+===================================== -->
 
 <div
-class="sidebar-overlay"
 id="sidebarOverlay"
-onclick="toggleSidebar()">
+class="sidebar-overlay">
 </div>
 
 
-<!-- SIDEBAR -->
+<!-- =====================================
+     SIDEBAR
+===================================== -->
 
 <aside
-class="sidebar"
-id="sidebar">
+id="sidebar"
+class="sidebar">
 
 <div class="sidebar-header">
 
-<a href="dashboard.html" class="brand-logo">
+<a
+href="dashboard.html"
+class="brand-logo">
 
 <img
 src="IMG-20260824-WA0019.jpg"
@@ -919,49 +1104,68 @@ alt="Smart Money Logo">
 </a>
 
 <button
-class="sidebar-close"
-onclick="toggleSidebar()">
+id="sidebarClose"
+class="sidebar-close">
 
 ✕
 </button>
 
 </div>
 
+
 <ul class="sidebar-menu">
 
 <li>
-<a href="dashboard.html" class="active">
+<a
+href="dashboard.html"
+class="active">
+
 🏠 Dashboard Home
+
 </a>
 </li>
 
 <li>
 <a href="index.html">
+
 🌐 Home / Landing Page
+
 </a>
 </li>
 
 <li>
-<button onclick="openUpiModal()">
+<button
+onclick="openUpiModal()">
+
 🏦 Add Bank / UPI Details
+
 </button>
 </li>
 
 <li>
-<button onclick="openKycModal()">
+<button
+onclick="openKycModal()">
+
 🆔 KYC & Date of Birth
+
 </button>
 </li>
 
 <li>
-<button onclick="copyAffiliateId()">
+<button
+onclick="copyAffiliateId()">
+
 🔗 Copy Affiliate ID
+
 </button>
 </li>
 
 <li>
-<button onclick="openWithdrawModal()">
+<button
+onclick="openWithdrawModal()">
+
 💸 Withdraw Funds
+
 </button>
 </li>
 
@@ -980,19 +1184,24 @@ style="color:#f87171;">
 </aside>
 
 
-<!-- NAVBAR -->
+<!-- =====================================
+     NAVBAR
+===================================== -->
 
 <header class="navbar">
 
-<a href="dashboard.html" class="brand-logo">
+<a
+href="dashboard.html"
+class="brand-logo">
 
 <img
 src="IMG-20260824-WA0019.jpg"
-alt="Smart Money Logo">
+alt="Smart Money">
 
 <span>Smart Money</span>
 
 </a>
+
 
 <div class="nav-right">
 
@@ -1004,16 +1213,16 @@ class="nav-home-btn">
 
 </a>
 
-<!-- PERMANENT LOGO AVATAR -->
 
 <img
 src="IMG-20260824-WA0019.jpg"
 class="nav-avatar"
-alt="Smart Money">
+alt="Profile">
+
 
 <button
-class="menu-btn"
-onclick="toggleSidebar()">
+id="menuBtn"
+class="menu-btn">
 
 ☰
 
@@ -1024,32 +1233,32 @@ onclick="toggleSidebar()">
 </header>
 
 
-<!-- DASHBOARD -->
+<!-- =====================================
+     DASHBOARD
+===================================== -->
 
-<div class="dash-container">
+<main class="dash-container">
 
 
-<!-- ================= PROFILE ================= -->
+<!-- PROFILE -->
 
 <div class="profile-card">
 
 <div
-class="package-badge"
-id="activePackageBadge">
+id="activePackageBadge"
+class="package-badge">
 
 MASTER PACKAGE 👑
 
 </div>
 
 
-<!-- PERMANENT PROFILE LOGO -->
-
 <div class="profile-img-wrap">
 
 <img
 src="IMG-20260824-WA0019.jpg"
 class="profile-img"
-alt="Smart Money Logo">
+alt="Smart Money Profile">
 
 </div>
 
@@ -1058,22 +1267,19 @@ alt="Smart Money Logo">
 
 <h2 id="userName">
 
-Loading...
-
-<span>👑</span>
+Smart Money User 👑
 
 </h2>
 
-<p
-class="user-email"
-id="userEmail">
 
-Loading...
+<p
+id="userEmail"
+class="user-email">
+
+Loading account...
 
 </p>
 
-
-<!-- AFFILIATE ID -->
 
 <div class="affiliate-id-box">
 
@@ -1088,10 +1294,10 @@ Loading...
 
 </span>
 
+
 <button
 class="copy-id-btn"
-onclick="copyAffiliateId()"
-title="Copy Affiliate ID">
+onclick="copyAffiliateId()">
 
 📋
 
@@ -1104,9 +1310,10 @@ title="Copy Affiliate ID">
 </div>
 
 
-<!-- ================= STATS ================= -->
+<!-- STATS -->
 
 <div class="stats-stack">
+
 
 <div class="v-card bg-today">
 
@@ -1120,7 +1327,7 @@ title="Copy Affiliate ID">
 
 <div class="v-card-footer">
 
-<span>View details</span>
+<span>Today's Earnings</span>
 
 <span>→</span>
 
@@ -1141,7 +1348,7 @@ title="Copy Affiliate ID">
 
 <div class="v-card-footer">
 
-<span>View details</span>
+<span>Last 7 Days</span>
 
 <span>→</span>
 
@@ -1162,7 +1369,7 @@ title="Copy Affiliate ID">
 
 <div class="v-card-footer">
 
-<span>View details</span>
+<span>Monthly Revenue</span>
 
 <span>→</span>
 
@@ -1183,7 +1390,7 @@ title="Copy Affiliate ID">
 
 <div class="v-card-footer">
 
-<span>View details</span>
+<span>Total Earnings</span>
 
 <span>→</span>
 
@@ -1204,7 +1411,7 @@ title="Copy Affiliate ID">
 
 <div class="v-card-footer">
 
-<span>View details</span>
+<span>Referral Income</span>
 
 <span>→</span>
 
@@ -1215,7 +1422,7 @@ title="Copy Affiliate ID">
 </div>
 
 
-<!-- ================= WALLET ================= -->
+<!-- WALLET -->
 
 <div class="section-box wallet-box">
 
@@ -1225,21 +1432,24 @@ Available Wallet Balance
 
 </div>
 
+
 <div
-class="wallet-balance"
-id="walletBalance">
+id="walletBalance"
+class="wallet-balance">
 
 ₹0.00
 
 </div>
 
+
 <p
 id="payoutDisplayInfo"
-style="font-size:11px;color:#64748b;">
+class="payout-info">
 
 Payout Method: Not Saved Yet
 
 </p>
+
 
 <button
 class="btn-withdraw"
@@ -1252,7 +1462,7 @@ onclick="openWithdrawModal()">
 </div>
 
 
-<!-- ================= GRAPH ================= -->
+<!-- GRAPH -->
 
 <div class="section-box">
 
@@ -1267,7 +1477,7 @@ onclick="openWithdrawModal()">
 </div>
 
 
-<!-- ================= PENDING ================= -->
+<!-- PENDING -->
 
 <div class="section-box">
 
@@ -1279,7 +1489,7 @@ onclick="openWithdrawModal()">
 
 <h4 id="pendingAmount">
 
-Rs. 0
+₹0
 
 </h4>
 
@@ -1288,7 +1498,7 @@ Rs. 0
 </div>
 
 
-<!-- ================= SALES ================= -->
+<!-- SALES -->
 
 <div class="section-box">
 
@@ -1313,12 +1523,14 @@ Rs. 0
 </div>
 
 
-</div>
+</main>
 
 </div>
 
 
-<!-- ================= PAYOUT MODAL ================= -->
+<!-- =====================================
+     UPI MODAL
+===================================== -->
 
 <div
 id="profileSettingsModal"
@@ -1334,20 +1546,22 @@ class="modal-overlay">
 type="text"
 id="editUpiId"
 class="input-field"
-placeholder="yourname@upi">
+placeholder="example@upi">
+
 
 <button
-onclick="updateUserPayoutDetails()"
+id="saveProfileBtn"
 class="btn-action"
-id="saveProfileBtn">
+onclick="updateUserPayoutDetails()">
 
 Save Payout Details
 
 </button>
 
+
 <button
-onclick="closeModal('profileSettingsModal')"
-style="width:100%;border:none;background:none;padding:12px;color:#64748b;">
+class="cancel-btn"
+onclick="closeModal('profileSettingsModal')">
 
 Cancel
 
@@ -1358,7 +1572,9 @@ Cancel
 </div>
 
 
-<!-- ================= KYC MODAL ================= -->
+<!-- =====================================
+     KYC MODAL
+===================================== -->
 
 <div
 id="kycModal"
@@ -1367,6 +1583,7 @@ class="modal-overlay">
 <div class="modal-box">
 
 <h3>🆔 KYC Details</h3>
+
 
 <label>Full Name</label>
 
@@ -1386,17 +1603,18 @@ class="input-field">
 
 
 <button
-onclick="saveKycDetails()"
+id="saveKycBtn"
 class="btn-action"
-id="saveKycBtn">
+onclick="saveKycDetails()">
 
 Save Details
 
 </button>
 
+
 <button
-onclick="closeModal('kycModal')"
-style="width:100%;border:none;background:none;padding:12px;color:#64748b;">
+class="cancel-btn"
+onclick="closeModal('kycModal')">
 
 Cancel
 
@@ -1407,7 +1625,9 @@ Cancel
 </div>
 
 
-<!-- ================= WITHDRAW MODAL ================= -->
+<!-- =====================================
+     WITHDRAW MODAL
+===================================== -->
 
 <div
 id="withdrawModal"
@@ -1417,12 +1637,15 @@ class="modal-overlay">
 
 <h3>💸 Request Withdrawal</h3>
 
+
 <p
-id="withdrawModalBalanceText">
+id="withdrawModalBalanceText"
+style="font-size:13px;margin-bottom:15px;">
 
 Available Balance: ₹0
 
 </p>
+
 
 <label>Enter Amount</label>
 
@@ -1430,19 +1653,22 @@ Available Balance: ₹0
 type="number"
 id="withdrawAmount"
 class="input-field"
-placeholder="Amount">
+placeholder="Amount"
+min="1">
+
 
 <button
-onclick="submitWithdrawal()"
-class="btn-action">
+class="btn-action"
+onclick="submitWithdrawal()">
 
 Submit Withdrawal Request
 
 </button>
 
+
 <button
-onclick="closeModal('withdrawModal')"
-style="width:100%;border:none;background:none;padding:12px;color:#64748b;">
+class="cancel-btn"
+onclick="closeModal('withdrawModal')">
 
 Cancel
 
@@ -1453,14 +1679,16 @@ Cancel
 </div>
 
 
+<!-- SUPABASE -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
 <script>
 
-/* ===============================
-   SUPABASE
-================================ */
+/* =========================================
+   SUPABASE CONFIG
+========================================= */
 
 const SUPABASE_URL =
 "https://rvprrulkjegvicbnjuft.supabase.co";
@@ -1472,302 +1700,873 @@ const SUPABASE_PUBLISHABLE_KEY =
 const supabaseClient =
 window.supabase.createClient(
 
-SUPABASE_URL,
+  SUPABASE_URL,
 
-SUPABASE_PUBLISHABLE_KEY,
+  SUPABASE_PUBLISHABLE_KEY,
 
-{
-auth:{
-persistSession:true,
-autoRefreshToken:true,
-detectSessionInUrl:true
-}
-}
+  {
+    auth:{
+      persistSession:true,
+      autoRefreshToken:true,
+      detectSessionInUrl:true
+    }
+  }
 
 );
 
 
-/* ===============================
-   VARIABLES
-================================ */
+/* =========================================
+   GLOBAL VARIABLES
+========================================= */
 
-let currentUserId=null;
+let currentUserId = null;
 
-let userCurrentBalance=0;
+let currentProfile = null;
 
-let userSavedUpi="";
+let userCurrentBalance = 0;
 
-let userRefCode="";
+let userSavedUpi = "";
+
+let userRefCode = "";
 
 
-/* ===============================
+/* =========================================
    SIDEBAR
-================================ */
+========================================= */
+
+const sidebar =
+document.getElementById("sidebar");
+
+const sidebarOverlay =
+document.getElementById("sidebarOverlay");
+
+const menuBtn =
+document.getElementById("menuBtn");
+
+const sidebarClose =
+document.getElementById("sidebarClose");
+
+
+function openSidebar(){
+
+  sidebar.classList.add("active");
+
+  sidebarOverlay.classList.add("active");
+
+  document.body.style.overflow = "hidden";
+
+}
+
+
+function closeSidebar(){
+
+  sidebar.classList.remove("active");
+
+  sidebarOverlay.classList.remove("active");
+
+  document.body.style.overflow = "";
+
+}
+
 
 function toggleSidebar(){
 
-document
-.getElementById("sidebar")
-.classList
-.toggle("active");
+  if(sidebar.classList.contains("active")){
 
-document
-.getElementById("sidebarOverlay")
-.classList
-.toggle("active");
+    closeSidebar();
 
-}
+  }else{
 
+    openSidebar();
 
-/* ===============================
-   LOAD DASHBOARD
-================================ */
-
-document.addEventListener(
-"DOMContentLoaded",
-async function(){
-
-try{
-
-const {
-data:{session}
-}
-=
-await supabaseClient.auth.getSession();
-
-
-if(!session || !session.user){
-
-window.location.href="login.html";
-
-return;
+  }
 
 }
 
 
-currentUserId=session.user.id;
-
-const fallbackEmail=
-session.user.email || "";
-
-
-/* LOAD PROFILE */
-
-const {
-data:profile,
-error:profileError
-}
-=
-await supabaseClient
-.from("profiles")
-.select("*")
-.eq("user_id",currentUserId)
-.maybeSingle();
-
-
-if(profileError){
-
-console.log(profileError);
-
-}
-
-
-/* ===============================
-   PROFILE DATA
-================================ */
-
-if(profile){
-
-userCurrentBalance=
-Number(profile.balance || 0);
-
-
-userSavedUpi=
-profile.upi_id || "";
-
-
-userRefCode=
-profile.referral_code ||
-profile.referral_id ||
-"";
-
-
-const userName=
-profile.full_name ||
-profile.name ||
-"Smart Money User";
-
-
-document
-.getElementById("userName")
-.innerHTML=
-
-userName +
-' <span style="font-size:14px;">👑</span>';
-
-
-document
-.getElementById("userEmail")
-.innerText=
-
-profile.email ||
-fallbackEmail;
-
-
-/* Affiliate ID */
-
-const finalAffiliateId=
-
-userRefCode ||
-
-"SM-" +
-currentUserId
-.substring(0,6)
-.toUpperCase();
-
-
-document
-.getElementById("myRefCode")
-.innerText=
-finalAffiliateId;
-
-
-/* Package */
-
-document
-.getElementById("activePackageBadge")
-.innerText=
-
-(profile.package_name ||
-"MASTER PACKAGE")
-.toUpperCase()
-
-+
-" 👑";
-
-
-/* ===============================
-   WALLET
-================================ */
-
-document
-.getElementById("walletBalance")
-.innerText=
-
-"₹" +
-userCurrentBalance.toFixed(2);
-
-
-document
-.getElementById("allTimeRevenueText")
-.innerText=
-
-"₹" +
-userCurrentBalance.toFixed(0);
-
-
-document
-.getElementById("withdrawModalBalanceText")
-.innerText=
-
-"Available Balance: ₹" +
-userCurrentBalance.toFixed(2);
-
-
-/* ===============================
-   PAYOUT
-================================ */
-
-if(userSavedUpi){
-
-document
-.getElementById("payoutDisplayInfo")
-.innerText=
-
-"UPI: " +
-userSavedUpi;
-
-
-document
-.getElementById("editUpiId")
-.value=
-userSavedUpi;
-
-}
-
-
-/* ===============================
-   SALES COUNT
-================================ */
-
-if(userRefCode){
-
-const {
-count
-}
-=
-await supabaseClient
-.from("profiles")
-.select("*",{
-count:"exact",
-head:true
-})
-.eq(
-"referred_by",
-userRefCode
+menuBtn.addEventListener(
+"click",
+toggleSidebar
 );
 
 
-if(count !== null){
-
-document
-.getElementById("totalSalesCount")
-.innerText=
-count;
-
-}
-
-}
-
-}
-
-
-/* ===============================
-   NO PROFILE FALLBACK
-================================ */
-
-else{
-
-const generatedId=
-
-"SM-" +
-currentUserId
-.substring(0,6)
-.toUpperCase();
-
-
-document
-.getElementById("myRefCode")
-.innerText=
-generatedId;
-
-}
-
-
-}
-catch(error){
-
-console.log(
-"Dashboard Error:",
-error
+sidebarClose.addEventListener(
+"click",
+closeSidebar
 );
 
+
+sidebarOverlay.addEventListener(
+"click",
+closeSidebar
+);
+
+
+/* =========================================
+   HELPER
+========================================= */
+
+function formatMoney(amount){
+
+  return "₹" +
+  Number(amount || 0)
+  .toLocaleString("en-IN",{
+    maximumFractionDigits:2
+  });
+
 }
 
 
-/* ===============================
+function generateAffiliateId(){
+
+  if(!currentUserId)
+  return "SM-USER";
+
+  return "SM-" +
+  currentUserId
+  .replace(/-/g,"")
+  .substring(0,8)
+  .toUpperCase();
+
+}
+
+
+/* =========================================
+   UPDATE UI
+========================================= */
+
+function updateProfileUI(profile, session){
+
+  const fallbackEmail =
+  session?.user?.email || "";
+
+  const fallbackName =
+  fallbackEmail
+  ? fallbackEmail.split("@")[0]
+  : "Smart Money User";
+
+
+  const userName =
+
+  profile?.full_name ||
+
+  profile?.name ||
+
+  fallbackName;
+
+
+  const userEmail =
+
+  profile?.email ||
+
+  fallbackEmail;
+
+
+  userCurrentBalance =
+  Number(profile?.balance || 0);
+
+
+  userSavedUpi =
+  profile?.upi_id || "";
+
+
+  userRefCode =
+
+  profile?.referral_code ||
+
+  profile?.referral_id ||
+
+  generateAffiliateId();
+
+
+  document.getElementById("userName")
+  .innerHTML =
+  userName +
+  ' <span style="font-size:14px;">👑</span>';
+
+
+  document.getElementById("userEmail")
+  .innerText =
+  userEmail || "No email found";
+
+
+  document.getElementById("myRefCode")
+  .innerText =
+  userRefCode;
+
+
+  document.getElementById("activePackageBadge")
+  .innerText =
+
+  (
+    profile?.package_name ||
+    "SMART MEMBER"
+  )
+  .toUpperCase()
+  +
+  " 👑";
+
+
+  document.getElementById("walletBalance")
+  .innerText =
+  formatMoney(userCurrentBalance);
+
+
+  document.getElementById("allTimeRevenueText")
+  .innerText =
+  formatMoney(userCurrentBalance);
+
+
+  document.getElementById("withdrawModalBalanceText")
+  .innerText =
+  "Available Balance: " +
+  formatMoney(userCurrentBalance);
+
+
+  if(userSavedUpi){
+
+    document.getElementById("payoutDisplayInfo")
+    .innerText =
+    "UPI: " +
+    userSavedUpi;
+
+
+    document.getElementById("editUpiId")
+    .value =
+    userSavedUpi;
+
+  }else{
+
+    document.getElementById("payoutDisplayInfo")
+    .innerText =
+    "Payout Method: Not Saved Yet";
+
+  }
+
+
+  if(profile?.date_of_birth){
+
+    document.getElementById("kycDob")
+    .value =
+    profile.date_of_birth;
+
+  }
+
+
+  if(profile?.full_name){
+
+    document.getElementById("kycFullName")
+    .value =
+    profile.full_name;
+
+  }
+
+}
+
+
+/* =========================================
+   LOAD PROFILE
+========================================= */
+
+async function loadDashboard(){
+
+  try{
+
+    const {
+      data:{session},
+      error:sessionError
+    }
+    =
+    await supabaseClient.auth.getSession();
+
+
+    if(sessionError){
+
+      console.error(sessionError);
+
+    }
+
+
+    if(!session || !session.user){
+
+      window.location.href =
+      "login.html";
+
+      return;
+
+    }
+
+
+    currentUserId =
+    session.user.id;
+
+
+    let profile = null;
+
+
+    /* PRIMARY QUERY */
+
+    const {
+      data,
+      error
+    }
+    =
+    await supabaseClient
+    .from("profiles")
+    .select("*")
+    .eq(
+      "user_id",
+      currentUserId
+    )
+    .maybeSingle();
+
+
+    if(!error && data){
+
+      profile = data;
+
+    }
+
+
+    /*
+      FALLBACK:
+      Agar profiles table me id column
+      auth user ID ke equal ho
+    */
+
+    if(!profile){
+
+      const {
+        data:fallbackProfile,
+        error:fallbackError
+      }
+      =
+      await supabaseClient
+      .from("profiles")
+      .select("*")
+      .eq(
+        "id",
+        currentUserId
+      )
+      .maybeSingle();
+
+
+      if(!fallbackError && fallbackProfile){
+
+        profile = fallbackProfile;
+
+      }
+
+    }
+
+
+    currentProfile =
+    profile;
+
+
+    updateProfileUI(
+      profile,
+      session
+    );
+
+
+    /* LOAD REFERRAL COUNT */
+
+    if(userRefCode){
+
+      const {
+        count,
+        error:countError
+      }
+      =
+      await supabaseClient
+      .from("profiles")
+      .select(
+        "*",
+        {
+          count:"exact",
+          head:true
+        }
+      )
+      .eq(
+        "referred_by",
+        userRefCode
+      );
+
+
+      if(!countError &&
+      count !== null){
+
+        document
+        .getElementById("totalSalesCount")
+        .innerText =
+        count;
+
+      }
+
+    }
+
+  }
+  catch(error){
+
+    console.error(
+      "Dashboard Load Error:",
+      error
+    );
+
+    /* IMPORTANT:
+       Even if profile loading fails,
+       dashboard stays visible.
+    */
+
+  }
+
+}
+
+
+/* =========================================
+   COPY AFFILIATE ID
+========================================= */
+
+async function copyAffiliateId(){
+
+  const id =
+  document
+  .getElementById("myRefCode")
+  .innerText
+  .trim();
+
+
+  if(!id || id === "Loading..."){
+
+    alert(
+      "Affiliate ID is loading. Please try again."
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    await navigator.clipboard
+    .writeText(id);
+
+    alert(
+      "🎉 Affiliate ID Copied: " +
+      id
+    );
+
+  }
+  catch(error){
+
+    const textarea =
+    document.createElement("textarea");
+
+    textarea.value = id;
+
+    document.body.appendChild(textarea);
+
+    textarea.select();
+
+    document.execCommand("copy");
+
+    textarea.remove();
+
+    alert(
+      "🎉 Affiliate ID Copied: " +
+      id
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   MODALS
+========================================= */
+
+function openModal(id){
+
+  document
+  .getElementById(id)
+  .style.display =
+  "flex";
+
+}
+
+
+function closeModal(id){
+
+  document
+  .getElementById(id)
+  .style.display =
+  "none";
+
+}
+
+
+function openUpiModal(){
+
+  closeSidebar();
+
+  openModal(
+    "profileSettingsModal"
+  );
+
+}
+
+
+function openKycModal(){
+
+  closeSidebar();
+
+  openModal(
+    "kycModal"
+  );
+
+}
+
+
+/* =========================================
+   SAVE UPI
+========================================= */
+
+async function updateUserPayoutDetails(){
+
+  const upiId =
+  document
+  .getElementById("editUpiId")
+  .value
+  .trim();
+
+
+  if(!upiId){
+
+    alert(
+      "Please enter your UPI ID."
+    );
+
+    return;
+
+  }
+
+
+  const btn =
+  document
+  .getElementById("saveProfileBtn");
+
+
+  btn.disabled = true;
+
+  btn.innerText =
+  "Saving...";
+
+
+  try{
+
+    let result =
+    await supabaseClient
+    .from("profiles")
+    .update({
+
+      upi_id:upiId
+
+    })
+    .eq(
+      "user_id",
+      currentUserId
+    );
+
+
+    /*
+      FALLBACK ID COLUMN
+    */
+
+    if(result.error){
+
+      result =
+      await supabaseClient
+      .from("profiles")
+      .update({
+
+        upi_id:upiId
+
+      })
+      .eq(
+        "id",
+        currentUserId
+      );
+
+    }
+
+
+    if(result.error)
+    throw result.error;
+
+
+    userSavedUpi =
+    upiId;
+
+
+    document
+    .getElementById("payoutDisplayInfo")
+    .innerText =
+    "UPI: " +
+    upiId;
+
+
+    alert(
+      "🎉 Payout details saved successfully!"
+    );
+
+
+    closeModal(
+      "profileSettingsModal"
+    );
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    alert(
+      "Error saving UPI: " +
+      error.message
+    );
+
+  }
+  finally{
+
+    btn.disabled = false;
+
+    btn.innerText =
+    "Save Payout Details";
+
+  }
+
+}
+
+
+/* =========================================
+   SAVE KYC
+========================================= */
+
+async function saveKycDetails(){
+
+  const fullName =
+  document
+  .getElementById("kycFullName")
+  .value
+  .trim();
+
+
+  const dob =
+  document
+  .getElementById("kycDob")
+  .value;
+
+
+  if(!fullName || !dob){
+
+    alert(
+      "Please enter Full Name and Date of Birth."
+    );
+
+    return;
+
+  }
+
+
+  const btn =
+  document
+  .getElementById("saveKycBtn");
+
+
+  btn.disabled = true;
+
+  btn.innerText =
+  "Saving...";
+
+
+  try{
+
+    let result =
+    await supabaseClient
+    .from("profiles")
+    .update({
+
+      full_name:fullName,
+
+      date_of_birth:dob
+
+    })
+    .eq(
+      "user_id",
+      currentUserId
+    );
+
+
+    if(result.error){
+
+      result =
+      await supabaseClient
+      .from("profiles")
+      .update({
+
+        full_name:fullName,
+
+        date_of_birth:dob
+
+      })
+      .eq(
+        "id",
+        currentUserId
+      );
+
+    }
+
+
+    if(result.error)
+    throw result.error;
+
+
+    document
+    .getElementById("userName")
+    .innerHTML =
+    fullName +
+    ' <span style="font-size:14px;">👑</span>';
+
+
+    alert(
+      "🎉 KYC details saved successfully!"
+    );
+
+
+    closeModal("kycModal");
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    alert(
+      "Error: " +
+      error.message
+    );
+
+  }
+  finally{
+
+    btn.disabled = false;
+
+    btn.innerText =
+    "Save Details";
+
+  }
+
+}
+
+
+/* =========================================
+   WITHDRAW
+========================================= */
+
+function openWithdrawModal(){
+
+  closeSidebar();
+
+
+  if(userCurrentBalance <= 0){
+
+    alert(
+      "⚠️ Aapke wallet mein withdrawable balance nahi hai."
+    );
+
+    return;
+
+  }
+
+
+  if(!userSavedUpi){
+
+    alert(
+      "⚠️ Pehle UPI details add karein."
+    );
+
+    openUpiModal();
+
+    return;
+
+  }
+
+
+  document
+  .getElementById("withdrawModalBalanceText")
+  .innerText =
+  "Available Balance: " +
+  formatMoney(userCurrentBalance);
+
+
+  openModal("withdrawModal");
+
+}
+
+
+async function submitWithdrawal(){
+
+  const amount =
+  Number(
+    document
+    .getElementById("withdrawAmount")
+    .value
+  );
+
+
+  if(!amount || amount <= 0){
+
+    alert(
+      "Please enter a valid amount."
+    );
+
+    return;
+
+  }
+
+
+  if(amount > userCurrentBalance){
+
+    alert(
+      "❌ You cannot withdraw more than your balance."
+    );
+
+    return;
+
+  }
+
+
+  alert(
+    "💸 Withdrawal request submitted for " +
+    formatMoney(amount) +
+    "."
+  );
+
+
+  document
+  .getElementById("withdrawAmount")
+  .value = "";
+
+
+  closeModal("withdrawModal");
+
+}
+
+
+/* =========================================
    LOGOUT
-================================ */
+========================================= */
 
 document
 .getElementById("sideLogoutBtn")
@@ -1775,397 +2574,72 @@ document
 "click",
 async function(){
 
-await
-supabaseClient
-.auth
-.signOut();
+  const confirmLogout =
+  confirm(
+    "Are you sure you want to logout?"
+  );
 
 
-window.location.href=
-"login.html";
+  if(!confirmLogout)
+  return;
+
+
+  try{
+
+    await supabaseClient
+    .auth
+    .signOut();
+
+  }
+  catch(error){
+
+    console.error(error);
+
+  }
+
+
+  window.location.href =
+  "login.html";
 
 }
 );
 
-}
-);
 
+/* =========================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+========================================= */
 
-/* ===============================
-   COPY AFFILIATE ID
-================================ */
-
-function copyAffiliateId(){
-
-const id=
 document
-.getElementById("myRefCode")
-.innerText
-.trim();
+.querySelectorAll(".modal-overlay")
+.forEach(function(modal){
 
+  modal.addEventListener(
+  "click",
+  function(event){
 
-navigator.clipboard
-.writeText(id)
-.then(()=>{
+    if(event.target === modal){
 
-alert(
-"🎉 Affiliate ID Copied: " +
-id
-);
+      modal.style.display =
+      "none";
+
+    }
+
+  });
 
 });
 
-}
 
+/* =========================================
+   START
+========================================= */
 
-/* ===============================
-   MODALS
-================================ */
+document.addEventListener(
+"DOMContentLoaded",
+function(){
 
-function openUpiModal(){
+  loadDashboard();
 
-if(
-document
-.getElementById("sidebar")
-.classList
-.contains("active")
-){
-
-toggleSidebar();
-
-}
-
-
-document
-.getElementById("profileSettingsModal")
-.style.display=
-"flex";
-
-}
-
-
-function openKycModal(){
-
-if(
-document
-.getElementById("sidebar")
-.classList
-.contains("active")
-){
-
-toggleSidebar();
-
-}
-
-
-document
-.getElementById("kycModal")
-.style.display=
-"flex";
-
-}
-
-
-function closeModal(id){
-
-document
-.getElementById(id)
-.style.display=
-"none";
-
-}
-
-
-/* ===============================
-   SAVE PAYOUT
-================================ */
-
-async function updateUserPayoutDetails(){
-
-const upiId=
-document
-.getElementById("editUpiId")
-.value
-.trim();
-
-
-if(!upiId){
-
-alert(
-"Please enter a valid UPI ID."
-);
-
-return;
-
-}
-
-
-const btn=
-document
-.getElementById("saveProfileBtn");
-
-
-btn.innerText=
-"Saving...";
-
-btn.disabled=true;
-
-
-try{
-
-const {error}
-=
-await supabaseClient
-.from("profiles")
-.update({
-
-upi_id:upiId
-
-})
-.eq(
-"user_id",
-currentUserId
-);
-
-
-if(error)
-throw error;
-
-
-userSavedUpi=
-upiId;
-
-
-document
-.getElementById("payoutDisplayInfo")
-.innerText=
-
-"UPI: " +
-upiId;
-
-
-alert(
-"🎉 Payout details saved!"
-);
-
-
-closeModal(
-"profileSettingsModal"
-);
-
-}
-catch(error){
-
-alert(
-"Error: " +
-error.message
-);
-
-}
-finally{
-
-btn.innerText=
-"Save Payout Details";
-
-btn.disabled=false;
-
-}
-
-}
-
-
-/* ===============================
-   SAVE KYC
-================================ */
-
-async function saveKycDetails(){
-
-const fullName=
-document
-.getElementById("kycFullName")
-.value
-.trim();
-
-
-const dob=
-document
-.getElementById("kycDob")
-.value;
-
-
-if(!fullName || !dob){
-
-alert(
-"Please enter Full Name and DOB."
-);
-
-return;
-
-}
-
-
-const btn=
-document
-.getElementById("saveKycBtn");
-
-
-btn.innerText=
-"Saving...";
-
-btn.disabled=true;
-
-
-try{
-
-const {error}
-=
-await supabaseClient
-.from("profiles")
-.update({
-
-full_name:fullName,
-
-date_of_birth:dob
-
-})
-.eq(
-"user_id",
-currentUserId
-);
-
-
-if(error)
-throw error;
-
-
-document
-.getElementById("userName")
-.innerHTML=
-
-fullName +
-' <span style="font-size:14px;">👑</span>';
-
-
-alert(
-"🎉 Details saved successfully!"
-);
-
-
-closeModal(
-"kycModal"
-);
-
-}
-catch(error){
-
-alert(
-"Error: " +
-error.message
-);
-
-}
-finally{
-
-btn.innerText=
-"Save Details";
-
-btn.disabled=false;
-
-}
-
-}
-
-
-/* ===============================
-   WITHDRAW
-================================ */
-
-function openWithdrawModal(){
-
-if(userCurrentBalance<=0){
-
-alert(
-"⚠️ Aapke wallet mein balance nahi hai."
-);
-
-return;
-
-}
-
-
-if(!userSavedUpi){
-
-alert(
-"⚠️ Pehle UPI details add karein."
-);
-
-openUpiModal();
-
-return;
-
-}
-
-
-document
-.getElementById("withdrawModal")
-.style.display=
-"flex";
-
-}
-
-
-function submitWithdrawal(){
-
-const amount=
-parseFloat(
-document
-.getElementById("withdrawAmount")
-.value
-);
-
-
-if(!amount || amount<=0){
-
-alert(
-"Please enter valid amount."
-);
-
-return;
-
-}
-
-
-if(amount>userCurrentBalance){
-
-alert(
-"❌ Balance se zyada amount withdraw nahi kar sakte."
-);
-
-return;
-
-}
-
-
-alert(
-
-"💸 Withdrawal request of ₹" +
-amount +
-" submitted!"
-
-);
-
-
-document
-.getElementById("withdrawAmount")
-.value=
-"";
-
-
-closeModal(
-"withdrawModal"
-);
-
-}
+});
 
 </script>
 
