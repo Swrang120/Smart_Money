@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout & Payment - Smart Money</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .checkout-card {
+      background: #ffffff;
+      padding: 30px 25px;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border: 1px solid #e2e8f0;
+    }
+    .checkout-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .checkout-header h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 5px;
+    }
+    .checkout-header p {
+      font-size: 13px;
+      color: #64748b;
+    }
+    .package-summary {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 15px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .package-title h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .package-title span {
+      font-size: 12px;
+      color: #64748b;
+    }
+    .package-price {
+      font-size: 18px;
+      font-weight: 800;
+      color: #6366f1;
+    }
+    .qr-container {
+      text-align: center;
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: 16px;
+      border: 1px dashed #cbd5e1;
+      margin-bottom: 20px;
+    }
+    .qr-container img {
+      width: 160px;
+      height: 160px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    .upi-box {
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      background: #e2e8f0;
+      padding: 8px 12px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+    .input-group {
+      margin-bottom: 15px;
+    }
+    .input-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 5px;
+    }
+    .input-field {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .input-field:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+    .file-input {
+      padding: 8px;
+      background: #f8fafc;
+    }
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      margin-top: 5px;
+      transition: opacity 0.2s;
+    }
+    .btn-submit:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+
+  <div class="checkout-card">
+    <div class="checkout-header">
+      <h2>Complete Your Order</h2>
+      <p>Scan QR or pay via UPI to activate your package</p>
+    </div>
+
+    <!-- Package Info (Dynamic or Default) -->
+    <div class="package-summary">
+      <div class="package-title">
+        <h4 id="pkgName">Smart Money Starter</h4>
+        <span>Instant Package Activation</span>
+      </div>
+      <div class="package-price" id="pkgPrice">₹299</div>
+    </div>
+
+    <!-- QR Code Section -->
+    <div class="qr-container">
+      <img src="1000819909.jpg" alt="Payment QR Code" id="qrImg">
+      <div style="font-size: 12px; color: #64748b; margin-bottom: 5px;">Scan using any UPI App (GPay, PhonePe, Paytm)</div>
+      <div class="upi-box" id="upiIdText">upi@handle</div>
+    </div>
+
+    <!-- Payment Proof Form -->
+    <div class="input-group">
+      <label>Your UPI ID / Transaction ID</label>
+      <input type="text" id="txnId" class="input-field" placeholder="e.g. 4152XXXXXXXX or yourname@okhdfc">
+    </div>
+
+    <div class="input-group">
+      <label>Upload Payment Screenshot</label>
+      <input type="file" id="paymentProof" class="input-field file-input" accept="image/*">
+    </div>
+
+    <button onclick="submitPayment()" class="btn-submit" id="payBtn">Submit Payment Proof</button>
+  </div>
+
+  <script>
+    // URL parameters se package name aur price read karne ka logic
+    const urlParams = new URLSearchParams(window.location.search);
+    const packageName = urlParams.get('package') || 'Starter';
+    const packagePrice = urlParams.get('price') || '299';
+
+    document.getElementById('pkgName').innerText = "Smart Money " + packageName;
+    document.getElementById('pkgPrice').innerText = "₹" + packagePrice;
+
+    function submitPayment() {
+      const txnId = document.getElementById("txnId").value.trim();
+      const fileInput = document.getElementById("paymentProof").files[0];
+      const btn = document.getElementById("payBtn");
+
+      if (!txnId) {
+        alert("Please enter your UPI ID or Transaction/UTR ID.");
+        return;
+      }
+
+      if (!fileInput) {
+        alert("Please upload the payment screenshot.");
+        return;
+      }
+
+      btn.innerText = "Submitting Proof...";
+      btn.disabled = true;
+
+      // Simulate submission success
+      setTimeout(() => {
+        alert("🎉 Payment proof submitted successfully! Your account/package will be verified and activated shortly.");
+        window.location.href = "dashboard.html";
+      }, 1500);
+    }
+  </script>
+</body>
+</html>
