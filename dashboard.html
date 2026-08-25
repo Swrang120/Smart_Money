@@ -347,4 +347,89 @@ const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-  auth: { persistSession: true, au
+  auth: { persistSession: true, autoRefreshToken: true }
+});
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('active');
+  document.getElementById('sidebarOverlay').classList.toggle('active');
+}
+
+function openModal(modalId) {
+  document.getElementById(modalId).style.display = 'flex';
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+}
+
+function openPackageModal() { openModal('packageModal'); }
+function openUpiModal() { openModal('profileSettingsModal'); }
+function openKycModal() { openModal('kycModal'); }
+function openWithdrawModal() { openModal('withdrawModal'); }
+function openHistoryModal() { openModal('historyModal'); }
+
+function switchPayoutMode(mode) {
+  if(mode === 'upi') {
+    document.getElementById('tabUpi').classList.add('active');
+    document.getElementById('tabBank').classList.remove('active');
+    document.getElementById('upiSection').style.display = 'block';
+    document.getElementById('bankSection').style.display = 'none';
+  } else {
+    document.getElementById('tabBank').classList.add('active');
+    document.getElementById('tabUpi').classList.remove('active');
+    document.getElementById('bankSection').style.display = 'block';
+    document.getElementById('upiSection').style.display = 'none';
+  }
+}
+
+function copyAffiliateLink() {
+  const code = document.getElementById('myRefCode').innerText;
+  navigator.clipboard.writeText(code);
+  alert("Affiliate ID copied: " + code);
+}
+
+function filterReferrals(days, btn) {
+  document.querySelectorAll('.ref-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function uploadProfilePicture(event) {
+  const file = event.target.files[0];
+  if(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('mainProfileImg').src = e.target.result;
+      document.getElementById('navAvatarImg').src = e.target.result;
+      document.getElementById('sidebarProfileImage').src = e.target.result;
+      document.getElementById('removePhotoBtn').style.display = 'inline-block';
+    }
+    reader.readAsDataURL(file);
+  }
+}
+
+function removeProfilePicture() {
+  const defaultImg = '1000819130.jpg';
+  document.getElementById('mainProfileImg').src = defaultImg;
+  document.getElementById('navAvatarImg').src = defaultImg;
+  document.getElementById('sidebarProfileImage').src = defaultImg;
+  document.getElementById('removePhotoBtn').style.display = 'none';
+}
+
+function updateUserPayoutDetails() {
+  alert("Payout details updated successfully!");
+  closeModal('profileSettingsModal');
+}
+
+function saveKycDetails() {
+  alert("KYC details saved successfully!");
+  closeModal('kycModal');
+}
+
+function submitWithdrawal() {
+  alert("Withdrawal request submitted successfully!");
+  closeModal('withdrawModal');
+}
+</script>
+</body>
+</html>
