@@ -186,29 +186,17 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  /* PACKAGES CONFIG */
-  const packages = {
-    Low: { name: "Starter Package", price: 560 },
-    Medium: { name: "Growth Package", price: 899 },
-    High: { name: "Premium Package", price: 1499 },
-    Super: { name: "Super Premium Package", price: 2499 }
-  };
-
+  // URL se dynamic package name aur price uthana
   const params = new URLSearchParams(window.location.search);
-  const packageType = params.get("package") || "Low";
-  const referralFromURL = params.get("referral");
+  const pkgName = params.get("name") || "Starter Package";
+  const pkgPrice = parseFloat(params.get("price")) || 289;
 
-  let selectedPackage = packages[packageType] || packages.Low;
+  document.getElementById("selectedPackage").textContent = pkgName;
+  document.getElementById("selectedPrice").textContent = "₹" + pkgPrice;
 
-  document.getElementById("selectedPackage").textContent = selectedPackage.name;
-  document.getElementById("selectedPrice").textContent = "₹" + selectedPackage.price;
-
-  if (referralFromURL) {
-    document.getElementById("referralId").value = referralFromURL;
-    document.getElementById("summaryReferral").textContent = referralFromURL;
-  }
-
-  document.getElementById("referralId").addEventListener("input", function() {
+  // Referral ID input tracking
+  const referralInput = document.getElementById("referralId");
+  referralInput.addEventListener("input", function() {
     document.getElementById("summaryReferral").textContent = this.value.trim() || "Not entered";
   });
 
@@ -216,29 +204,14 @@
     navigator.clipboard.writeText(upi).then(() => alert("UPI ID copied successfully.")).catch(() => alert("Please copy manually: " + upi));
   }
 
-  /* COMMISSION LOGIC FUNCTION (560 LIMIT RULE) */
-  function calculateCommission(referrerPackageName, boughtPrice) {
-    // Agar referrer Starter (₹560) par hai, toh MAX ₹280 hi milega!
-    if (referrerPackageName === "Starter Package" || referrerPackageName === "Starter" || referrerPackageName === "₹560 Package") {
-      return 280;
-    }
-    
-    // Baki badhe packages ke liye Standard Commission Amount
-    if (boughtPrice === 560) return 280;
-    if (boughtPrice === 899) return 500;
-    if (boughtPrice === 1499) return 900;
-    if (boughtPrice === 2499) return 1750;
-
-    return 280;
-  }
-
-  /* SUBMIT PAYMENT TO SUPABASE DATABASE */
+  // SUBMIT PAYMENT TO SUPABASE DATABASE
   document.getElementById("paymentForm").addEventListener("submit", async function(event) {
     event.preventDefault();
 
-    const referral = document.getElementById("referralId").value.trim();
+    const referral = referralInput.value.trim();
     const name = document.getElementById("customerName").value.trim();
-    const email = document.getElementById("customerEmail").value.trim();
+    const email = document.getElementById("customerEmail.value" in document.getElementById("customerEmail") ? "customerEmail" : "customerEmail").value.trim();
+    const emailVal = document.getElementById("customerEmail").value.trim();
     const mobile = document.getElementById("customerMobile").value.trim();
     const transactionId = document.getElementById("transactionId").value.trim();
 
@@ -252,30 +225,18 @@
     button.textContent = "Submitting to Database...";
 
     try {
-      // 1. Check if referral ID exists in Database
-      const { data: referrer, error: refErr } = await supabaseClient
-        .from('profiles')
-        .select('user_id, package_name')
-        .eq('referral_code', referral)
-        .single();
-
-      // Calculate potential commission based on referrer's package
-      let referrerPkg = referrer ? referrer.package_name : "Starter";
-      let expectedCommission = calculateCommission(referrerPkg, selectedPackage.price);
-
-      // 2. Insert Payment Record into Supabase table 'payment_requests'
+      // Supabase table 'payment_requests' mein data insert karna
       const { data, error } = await supabaseClient
         .from('payment_requests')
         .insert([
           {
             full_name: name,
-            email: email,
+            email: emailVal,
             mobile: mobile,
             referral_id: referral,
-            package_name: selectedPackage.name,
-            amount: selectedPackage.price,
+            package_name: pkgName,
+            amount: pkgPrice,
             transaction_id: transactionId,
-            calculated_commission: expectedCommission,
             status: 'Pending'
           }
         ]);
