@@ -190,7 +190,7 @@
 
 <div class="dash-container">
   
-  <!-- PERMANENT LOCKED PROFILE CARD (FIXED DETAILS) -->
+  <!-- PERMANENT LOCKED PROFILE CARD -->
   <div class="profile-card">
     <div class="package-badge vip">MASTER PACKAGE 👑</div>
     <div class="profile-img-wrap">
@@ -253,7 +253,7 @@
     </div>
   </div>
 
-  <!-- RECENT SALES / TOTAL USERS ADDED COUNT -->
+  <!-- RECENT SALES -->
   <div class="section-box">
     <h3>Recent Sales</h3>
     <div class="pie-chart-box">
@@ -316,12 +316,12 @@
 
   document.addEventListener("DOMContentLoaded", async function() {
     try {
+      // Check session properly without forcing redirect
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (session && session.user) {
         currentUserId = session.user.id;
       }
 
-      // Fetch saved UPI only, without overriding profile info
       const { data: profile } = await supabaseClient
         .from('profiles')
         .select('*')
