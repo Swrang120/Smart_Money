@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Money - Elite Admin Panel</title>
+  <title>Smart Money - Master Admin Elite</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -96,7 +96,7 @@
 
   <!-- Top Navigation Bar -->
   <div class="navbar">
-    <div class="nav-brand">⚡ Smart Money <span>Admin Elite</span></div>
+    <div class="nav-brand">⚡ Smart Money <span>Master Admin</span></div>
     <button class="menu-toggle" onclick="toggleSidebar()">
       <div></div>
       <div></div>
@@ -112,6 +112,11 @@
       <button class="close-btn" onclick="toggleSidebar()">&times;</button>
     </div>
     
+    <div class="stats-box">
+      <h4>Master Admin</h4>
+      <div class="num" style="font-size: 14px; color: #34d399;">Santiram Swargiary</div>
+      <div style="font-size: 11px; color: var(--text-muted);">SM-3D99B9</div>
+    </div>
     <div class="stats-box">
       <h4>Total Requests</h4>
       <div class="num" id="statTotal">0</div>
@@ -218,12 +223,13 @@
 <script>
   emailjs.init("FxcimUvl0-ZxAauRx");
 
-  const adminPassword = prompt("🔐 Enter Admin Password:");
+  // Master Admin Verification Lock
+  const adminPassword = prompt("🔐 Enter Master Admin Password:");
   if (adminPassword === "Swrangsa@123") {
     document.body.style.display = "block";
   } else {
-    alert("❌ Access Denied! Wrong Password.");
-    document.body.innerHTML = "<h2 style='color:#f43f5e; text-align:center; margin-top:100px;'>Unauthorized Access</h2>";
+    alert("❌ Access Denied! Wrong Master Password.");
+    document.body.innerHTML = "<h2 style='color:#f43f5e; text-align:center; margin-top:100px;'>Unauthorized Access - Master ID Protected</h2>";
     document.body.style.display = "block";
     throw new Error("Unauthorized");
   }
@@ -331,22 +337,23 @@
     if (!confirm(`Approve payment for ${fullName}?`)) return;
     try {
       const uniqueRefCode = "SM-" + Math.floor(1000 + Math.random() * 9000);
-      const { error: insErr } = await supabaseClient.from('profiles').insert([{ full_name: fullName, email: email, package_name: packageName, referral_id: uniqueRefCode, referred_by: refId, balance: 0, is_active: true }]);
+      const { error: insErr } = await supabaseClient.from('profiles').insert([{ full_name: fullName, email: email, package_name: packageName, referral_id: uniqueRefCode, referred_by: refId || 'SM-3D99B9', balance: 0, is_active: true }]);
       if (insErr) throw insErr;
       
-      if (refId && refId !== 'null' && refId !== 'N/A' && refId !== '') {
-        const { data: sponsor } = await supabaseClient.from('profiles').select('id, balance, package_name').eq('referral_id', refId).single();
-        if (sponsor) {
-          let comm = 280; 
-          const pkg = (packageName || "").toLowerCase();
-          if (pkg.includes("entry")) comm = 99.70;
-          else if (pkg.includes("growth")) comm = 539.40;
-          else if (pkg.includes("premium")) comm = 1049.30;
-          await supabaseClient.from('profiles').update({ balance: Number(sponsor.balance || 0) + comm }).eq('id', sponsor.id);
-        }
+      // Multi-level Sponsor Commission Allocation
+      const sponsorIdToUse = (refId && refId !== 'null' && refId !== 'N/A' && refId !== '') ? refId : 'SM-3D99B9';
+      const { data: sponsor } = await supabaseClient.from('profiles').select('id, balance, package_name').eq('referral_id', sponsorIdToUse).single();
+      if (sponsor) {
+        let comm = 280; 
+        const pkg = (packageName || "").toLowerCase();
+        if (pkg.includes("entry")) comm = 99.70;
+        else if (pkg.includes("growth")) comm = 539.40;
+        else if (pkg.includes("premium")) comm = 1049.30;
+        await supabaseClient.from('profiles').update({ balance: Number(sponsor.balance || 0) + comm }).eq('id', sponsor.id);
       }
+
       await supabaseClient.from('payment_requests').update({ status: 'Approved' }).eq('id', id);
-      alert("Payment Approved Successfully!");
+      alert("Payment Approved & Multi-Level Referral Commission Credited Successfully!");
       loadPaymentRequests();
       loadUsers();
     } catch (err) { alert("Error: " + err.message); }
@@ -464,15 +471,16 @@
     activeUsers.forEach(user => {
       const active = user.is_active !== false;
       const recordId = user.id || user.user_id;
+      const isMaster = user.referral_id === 'SM-3D99B9' || user.email === 'Swrangswargiary48@gmail.com';
       tbody.innerHTML += `
         <tr>
-          <td><b>${user.full_name || 'User'}</b><br><span style="font-size:11px; color:var(--text-muted);">${user.email || ''}</span></td>
+          <td><b>${user.full_name || 'User'}</b> ${isMaster ? '👑' : ''}<br><span style="font-size:11px; color:var(--text-muted);">${user.email || ''}</span></td>
           <td style="color:var(--accent); font-weight:600;">${user.referral_id || 'N/A'}</td>
           <td>${user.package_name || 'Free'}<br><b style="color:#34d399;">₹${user.balance || 0}</b></td>
           <td><span class="badge" style="background:${active ? 'rgba(16,185,129,0.15)' : 'rgba(244,63,94,0.15)'}; color:${active ? '#34d399' : '#fb7185'}; border: 1px solid ${active ? 'rgba(16,185,129,0.35)' : 'rgba(244,63,94,0.35)'};">${active ? 'Active' : 'Blocked'}</span></td>
           <td>
-            <button class="btn ${active ? 'btn-reject' : 'btn-approve'}" onclick="toggleUser('${recordId}', ${!active})">${active ? 'Block' : 'Unblock'}</button>
-            <button class="btn btn-delete" onclick="softDeleteUser('${recordId}')">Delete</button>
+            ${!isMaster ? `<button class="btn ${active ? 'btn-reject' : 'btn-approve'}" onclick="toggleUser('${recordId}', ${!active})">${active ? 'Block' : 'Unblock'}</button>` : '<span style="color:#34d399; font-size:11px; font-weight:700;">Master Admin</span>'}
+            ${!isMaster ? `<button class="btn btn-delete" onclick="softDeleteUser('${recordId}')">Delete</button>` : ''}
           </td>
         </tr>
       `;
@@ -548,7 +556,7 @@
 
   async function restoreRecord(id, table) {
     if (!confirm("Are you sure you want to restore this item?")) return;
-    const { error } = await supabaseClient.from(table).update({ is_deleted: false }).eq(table === 'profiles' ? 'id' : 'id', id);
+    const { error } = await supabaseClient.from(table).update({ is_deleted: false }).eq('id', id);
     if (!error) {
       alert("Restored successfully!");
       loadUsers();
@@ -556,7 +564,6 @@
       loadWithdrawals();
       loadTrashData();
     } else {
-      // Fallback check for user_id if table is profiles
       if (table === 'profiles') {
         await supabaseClient.from('profiles').update({ is_deleted: false }).eq('user_id', id);
         alert("Restored successfully!");
