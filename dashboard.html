@@ -27,6 +27,7 @@
       background: linear-gradient(135deg, #6366f1, #ec4899);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
+    .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #6366f1; }
     .nav-right { display: flex; align-items: center; gap: 12px; }
     .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #6366f1; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #6366f1; font-size: 14px; }
     .menu-btn { background: #f8fafc; border: 1px solid #e2e8f0; font-size: 20px; cursor: pointer; color: #475569; padding: 6px 10px; border-radius: 10px; }
@@ -124,7 +125,10 @@
 <!-- SIDEBAR DRAWER MENU -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a href="dashboard.html" class="brand-logo" style="color:#fff;"><span>⚡ Smart Money</span></a>
+    <a href="dashboard.html" class="brand-logo" style="color:#fff;">
+      <img src="1000819130.jpg" alt="Logo" class="brand-logo-img">
+      <span>Smart Money</span>
+    </a>
     <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
   </div>
   <ul class="sidebar-menu">
@@ -153,7 +157,7 @@
 
 <header class="navbar">
   <a href="dashboard.html" class="brand-logo">
-    <div class="nav-avatar" id="navAvatarText">SM</div>
+    <img src="1000819130.jpg" alt="Smart Money Logo" class="brand-logo-img">
     <span>Smart Money</span>
   </a>
   <div class="nav-right">
@@ -265,7 +269,6 @@
       
       const initials = defaultName.substring(0, 2).toUpperCase();
       document.getElementById("userAvatarText").innerText = initials;
-      document.getElementById("navAvatarText").innerText = initials;
       document.getElementById("navAvatarTopText").innerText = initials;
       
       document.getElementById("userName").innerText = defaultName;
@@ -285,7 +288,6 @@
         
         const newInitials = finalName.substring(0, 2).toUpperCase();
         document.getElementById("userAvatarText").innerText = newInitials;
-        document.getElementById("navAvatarText").innerText = newInitials;
         document.getElementById("navAvatarTopText").innerText = newInitials;
 
         userCurrentBalance = profile.balance || 0;
