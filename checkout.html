@@ -117,7 +117,7 @@
     <button class="btn-download" onclick="downloadCurrentQR()">⬇️ Download QR Code to Gallery</button>
 
     <div class="upi-display">
-      <span>UPI ID: <b id="upiText">smartmoney.merchant@paytm</b></span>
+      <span>UPI ID: <b id="upiText">smartmoney7@nyes</b></span>
       <button class="copy-btn" onclick="copyUpi()">Copy UPI</button>
     </div>
 
@@ -164,10 +164,10 @@
   document.getElementById('summaryPrice').innerText = `₹${pkgPrice}`;
   document.getElementById('refCode').value = refCodeFromUrl;
 
-  // Updated QR Data (Mobile number removed, professional merchant setup)
+  // Updated with exact file names from your GitHub upload screenshot
   const qrData = {
-    super: { img: '1000821335.jpg', upi: 'smartmoney.super@paytm' },
-    bharatpe: { img: '1000821337.jpg', upi: 'smartmoney.merchant@ybl' }
+    super: { img: 'IMG_20260826_034558.png', upi: 'smartmoney7@nyes' },
+    bharatpe: { img: 'IMG_20260826_034524.jpg', upi: 'BHARATPE2U0V0S7G2D90659@unitype' }
   };
 
   let currentType = 'super';
@@ -180,6 +180,7 @@
     document.getElementById('upiText').innerText = qrData[type].upi;
   }
 
+  // Initial load
   document.getElementById('qrImage').src = qrData.super.img;
 
   function copyUpi() {
@@ -193,7 +194,7 @@
     const imgSrc = qrData[currentType].img;
     const link = document.createElement('a');
     link.href = imgSrc;
-    link.download = `SmartMoney_${currentType}_QR.jpg`;
+    link.download = `SmartMoney_${currentType}_QR.${imgSrc.split('.').pop()}`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
