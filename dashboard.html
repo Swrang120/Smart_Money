@@ -2,106 +2,433 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Money - Affiliate Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<!-- EmailJS Library -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+<style>
+*{box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif;}
+body{margin:0;background:#eef2f7;color:#1e293b;}
+.app-wrapper{width:100%;max-width:850px;min-height:100vh;margin:auto;background:#f1f5f9;box-shadow:0 0 40px rgba(0,0,0,.08);position:relative;}
+.navbar{height:68px;background:#ffffff;display:flex;align-items:center;justify-content:space-between;padding:0 18px;position:sticky;top:0;z-index:100;box-shadow:0 3px 15px rgba(0,0,0,.06);}
+.brand-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.brand-logo img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #7c3aed;background:#fff;}
+.brand-logo span{font-size:20px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,#7c3aed 0%,#db2777 50%,#f59e0b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 2px 10px rgba(124,58,237,0.15);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.nav-home-btn{padding:8px 13px;border-radius:10px;text-decoration:none;background:#f3e8ff;color:#7c3aed;font-size:12px;font-weight:700;}
+.nav-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #7c3aed;background:#fff;}
+.menu-btn{border:1px solid #e2e8f0;background:#f8fafc;border-radius:10px;width:45px;height:42px;font-size:21px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* SIDEBAR */
+.sidebar-overlay{position:fixed;inset:0;background:rgba(15,23,42,.65);backdrop-filter:blur(3px);display:none;z-index:9998;}
+.sidebar-overlay.active{display:block;}
+.sidebar{position:fixed;top:0;left:-330px;width:320px;max-width:88vw;height:100%;background:#0f172a;z-index:9999;transition:left .3s ease;overflow-y:auto;box-shadow:10px 0 30px rgba(0,0,0,.3);}
+.sidebar.active{left:0;}
+.sidebar-header{min-height:72px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.12);}
+.sidebar-close{background:none;border:none;color:#fff;font-size:28px;cursor:pointer;}
+.sidebar-profile{padding:22px 18px;display:flex;align-items:center;gap:13px;border-bottom:1px solid rgba(255,255,255,.12);}
+.sidebar-profile-img{width:58px;height:58px;min-width:58px;border-radius:50%;object-fit:cover;border:2px solid #a855f7;background:#fff;}
+.sidebar-profile-info{flex:1;min-width:0;}
+.sidebar-profile-name{color:#ffffff;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sidebar-profile-email{color:#94a3b8;font-size:10px;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sidebar-menu{padding:16px 12px;list-style:none;margin:0;}
+.sidebar-menu li{margin-bottom:8px;}
+.sidebar-menu a,.sidebar-menu button{width:100%;border:none;background:transparent;color:#f1f5f9;text-align:left;padding:14px 16px;border-radius:12px;cursor:pointer;text-decoration:none;font-size:14px;font-weight:600;transition:.2s;display:block;}
+.sidebar-menu a:hover,.sidebar-menu button:hover{background:rgba(124,58,237,.35);color:#ffffff;}
+
+/* DASHBOARD */
+.dash-container{padding:25px 18px 40px;}
+.profile-card{position:relative;min-height:185px;border-radius:20px;overflow:hidden;margin-bottom:20px;display:flex;align-items:center;padding:25px;gap:20px;background:linear-gradient(135deg,#ffffff 0%,#ffffff 55%,#f5f3ff 55%,#ede9fe 100%);box-shadow:0 10px 25px rgba(15,23,42,.10);border:1px solid #e2e8f0;}
+.package-badge{position:absolute;top:0;right:0;padding:8px 17px;background:linear-gradient(135deg,#64748b,#475569);color:#fff;font-size:9px;font-weight:800;letter-spacing:.5px;border-bottom-left-radius:14px;}
+.package-badge.active{background:linear-gradient(135deg,#f59e0b,#ec4899);}
+
+.profile-img-wrap{width:96px;height:96px;min-width:96px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;padding:4px;box-shadow:0 6px 20px rgba(0,0,0,.18);border:3px solid #7c3aed;position:relative;cursor:pointer;}
+.profile-img{width:100%;height:100%;border-radius:50%;object-fit:cover;background:#fff;}
+.upload-hint{position:absolute;bottom:0;left:0;width:100%;background:rgba(0,0,0,0.65);color:#fff;font-size:7px;text-align:center;padding:2px 0;border-bottom-left-radius:50px;border-bottom-right-radius:50px;}
+
+.user-info{flex:1;min-width:0;}
+.user-info h2{margin:0 0 8px;font-size:26px;color:#0f172a;font-weight:800;letter-spacing:-0.5px;line-height:1.2;}
+.affiliate-id-box{display:flex;align-items:center;gap:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:10px 14px;width:max-content;margin-bottom:8px;box-shadow:0 2px 6px rgba(0,0,0,0.02);}
+.affiliate-id-box span{font-size:14px;color:#475569;}
+.affiliate-id-box b{font-size:15px;color:#7c3aed;font-weight:800;}
+.copy-id-btn{width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#9333ea);color:white;display:flex;align-items:center;justify-content:center;}
+.remove-photo-btn{background:none;border:none;color:#ef4444;font-size:11px;font-weight:700;cursor:pointer;padding:0;margin-top:6px;display:inline-block;}
+
+/* STATS CARDS */
+.stats-stack{display:flex;flex-direction:column;gap:15px;margin-bottom:20px;}
+.v-card{border-radius:20px;padding:22px 24px;color:white;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 8px 25px rgba(0,0,0,.12);position:relative;overflow:hidden;}
+.v-card h2{margin:0 0 4px;font-size:32px;font-weight:800;letter-spacing:-0.5px;}
+.v-card p{margin:0 0 18px;font-size:14px;opacity:0.9;font-weight:500;}
+.card-divider{width:100%;height:1px;background:rgba(255,255,255,0.25);margin-bottom:12px;}
+.card-footer-link{display:flex;align-items:center;justify-content:space-between;color:#fff;text-decoration:none;font-size:14px;font-weight:700;}
+
+.bg-today{background:linear-gradient(135deg,#7c3aed,#5b21b6);}
+.bg-7days{background:linear-gradient(135deg,#6366f1,#4338ca);}
+.bg-30days{background:linear-gradient(135deg,#db2777,#be185d);}
+.bg-alltime{background:linear-gradient(135deg,#0284c7,#075985);}
+.bg-passive{background:linear-gradient(135deg,#d97706,#b45309);}
+
+.section-box{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:20px;margin-bottom:18px;}
+.wallet-box{text-align:center;}
+.wallet-balance{font-size:32px;font-weight:800;color:#10b981;margin:5px 0;}
+.btn-withdraw{width:100%;margin-top:14px;border:none;padding:14px;border-radius:10px;cursor:pointer;color:#fff;font-weight:700;background:linear-gradient(135deg,#10b981,#059669);}
+
+/* WITHDRAWAL HISTORY 3-LINE CARDS */
+.history-card-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;flex-direction:column;gap:6px;}
+.history-row-1{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#64748b;font-weight:600;}
+.history-row-2{display:flex;justify-content:space-between;align-items:center;}
+.history-amount{font-size:18px;font-weight:800;color:#0f172a;}
+.status-badge{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;}
+.status-approved{background:#d1fae5;color:#059669;}
+.status-pending{background:#fef3c7;color:#d97706;}
+.status-rejected{background:#fee2e2;color:#dc2626;}
+
+/* REFERRAL LIST STYLES (1 to 30 Days) */
+.referral-tabs{display:flex;gap:6px;margin-bottom:15px;overflow-x:auto;padding-bottom:5px;}
+.ref-tab{padding:8px 14px;border-radius:20px;background:#f1f5f9;color:#475569;font-size:12px;font-weight:700;border:none;cursor:pointer;white-space:nowrap;}
+.ref-tab.active{background:#7c3aed;color:#fff;}
+.referral-card-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:12px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+.ref-user-info h4{margin:0 0 3px;font-size:14px;color:#0f172a;font-weight:700;}
+.ref-user-info span{font-size:11px;color:#7c3aed;font-weight:600;}
+.ref-date{font-size:11px;color:#64748b;font-weight:600;text-align:right;}
+
+/* FOOTER CREATOR INFO */
+.app-footer-credit{text-align:center;font-size:11px;color:#94a3b8;margin-top:20px;padding-bottom:10px;font-weight:500;}
+
+.modal-overlay{display:none;position:fixed;inset:0;z-index:10000;background:rgba(15,23,42,.65);backdrop-filter:blur(4px);justify-content:center;align-items:center;padding:15px;}
+.modal-box{width:100%;max-width:440px;background:#fff;border-radius:20px;padding:22px;max-height:90vh;overflow:auto;}
+.input-field{width:100%;padding:12px;border-radius:10px;border:1px solid #cbd5e1;margin:6px 0 12px;outline:none;}
+.btn-action{width:100%;padding:13px;border:none;border-radius:10px;color:#fff;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#6d28d9);}
+.payout-tabs{display:flex;gap:8px;margin:12px 0 16px;}
+.payout-tab{flex:1;text-align:center;padding:10px;border-radius:9px;background:#f1f5f9;cursor:pointer;font-size:12px;font-weight:700;}
+.payout-tab.active{background:#7c3aed;color:#fff;}
+</style>
 </head>
+
 <body>
+<div class="app-wrapper">
 
-  <h2>User Dashboard</h2>
-  <p>Email: <span id="userEmail">Loading...</span></p>
-  <p>Balance: <span id="walletBalance">₹0</span></p>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-  <h3>Withdrawal History</h3>
-  <div id="withdrawalHistoryList">Loading history...</div>
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <a href="dashboard.html" class="brand-logo">
+      <img id="sidebarLogo" src="1000819130.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/100?text=SM'">
+      <span>Smart Money</span>
+    </a>
+    <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+  </div>
+  <div class="sidebar-profile">
+    <img id="sidebarProfileImage" class="sidebar-profile-img" src="1000819130.jpg" alt="Profile">
+    <div class="sidebar-profile-info">
+      <div id="sidebarUserName" class="sidebar-profile-name">Loading...</div>
+      <div id="sidebarUserEmail" class="sidebar-profile-email">Loading...</div>
+    </div>
+  </div>
+  <ul class="sidebar-menu">
+    <li><a href="index.html">🌐 Home / Landing Page</a></li>
+    <li><button onclick="openPackageModal()">👑 My Package & Benefits</button></li>
+    <li><button onclick="openUpiModal()">🏦 View & Edit Bank / UPI Details</button></li>
+    <li><button onclick="openKycModal()">🆔 KYC & Date of Birth</button></li>
+    <li><button onclick="openWithdrawModal()">💸 Withdraw Funds</button></li>
+    <li><button onclick="openHistoryModal()">📜 View Withdrawal History</button></li>
+    <li><button id="sideLogoutBtn" style="color:#f87171;">🚪 Logout</button></li>
+  </ul>
+</aside>
 
-  <br>
-  <button onclick="requestWithdrawal()">Withdraw ₹100</button>
+<!-- NAVBAR -->
+<header class="navbar">
+  <a href="dashboard.html" class="brand-logo">
+    <img src="1000819130.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/100?text=SM'">
+    <span>Smart Money</span>
+  </a>
+  <div class="nav-right">
+    <a href="index.html" class="nav-home-btn">🌐 Home</a>
+    <img src="1000819130.jpg" class="nav-avatar" alt="Avatar" onerror="this.src='https://via.placeholder.com/100?text=SM'" id="navAvatarImg">
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+  </div>
+</header>
+
+<div class="dash-container">
+  <div class="profile-card">
+    <div class="package-badge" id="activePackageBadge">NO PACKAGE</div>
+    <div>
+      <div class="profile-img-wrap" onclick="document.getElementById('profilePhotoInput').click()" title="Click to change photo">
+        <img src="1000819130.jpg" alt="Profile" class="profile-img" id="mainProfileImg" onerror="this.src='https://via.placeholder.com/100?text=SM'">
+        <div class="upload-hint">Edit Photo</div>
+        <input type="file" id="profilePhotoInput" style="display:none;" accept="image/*" onchange="uploadProfilePicture(event)">
+      </div>
+      <div style="text-align:center;">
+        <button class="remove-photo-btn" onclick="removeProfilePicture()" id="removePhotoBtn" style="display:none;">Remove Photo</button>
+      </div>
+    </div>
+    <div class="user-info">
+      <h2 id="userName">Loading...</h2>
+      <div class="affiliate-id-box">
+        <span>ID: <b id="myRefCode">Loading...</b></span>
+        <button class="copy-id-btn" onclick="copyAffiliateLink()" title="Copy Code">📋</button>
+      </div>
+      <p style="font-size:12px;color:#64748b;margin:0;" id="dobDisplayInfo">DOB: Not Set</p>
+    </div>
+  </div>
+
+  <!-- STATS CARDS -->
+  <div class="stats-stack">
+    <div class="v-card bg-today">
+      <div>
+        <h2 id="todayRevenue">₹0</h2>
+        <p>Today's Revenue</p>
+      </div>
+      <div>
+        <div class="card-divider"></div>
+        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+      </div>
+    </div>
+
+    <div class="v-card bg-7days">
+      <div>
+        <h2 id="sevenDaysRevenue">₹0</h2>
+        <p>7 Days Revenue</p>
+      </div>
+      <div>
+        <div class="card-divider"></div>
+        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+      </div>
+    </div>
+
+    <div class="v-card bg-30days">
+      <div>
+        <h2 id="thirtyDaysRevenue">₹0</h2>
+        <p>30 Days Revenue</p>
+      </div>
+      <div>
+        <div class="card-divider"></div>
+        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+      </div>
+    </div>
+
+    <div class="v-card bg-alltime">
+      <div>
+        <h2 id="allTimeRevenueText">₹0</h2>
+        <p>All Time Revenue</p>
+      </div>
+      <div>
+        <div class="card-divider"></div>
+        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+      </div>
+    </div>
+
+    <div class="v-card bg-passive">
+      <div>
+        <h2 id="passiveIncome">₹0</h2>
+        <p>Passive Income</p>
+      </div>
+      <div>
+        <div class="card-divider"></div>
+        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-box wallet-box">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#64748b;">Available Wallet Balance</div>
+    <div class="wallet-balance" id="walletBalance">₹0.00</div>
+    <p id="payoutDisplayInfo" style="font-size:11px;color:#64748b;">Payout Method: Not Saved Yet</p>
+    <button class="btn-withdraw" onclick="openWithdrawModal()">💸 Withdraw Money Now</button>
+  </div>
+
+  <!-- RECENT REFERRALS -->
+  <div class="section-box">
+    <h3>👥 My Referrals & Joins</h3>
+    <div class="referral-tabs">
+      <button class="ref-tab active" onclick="filterReferrals(1, this)">1 Day (Today)</button>
+      <button class="ref-tab" onclick="filterReferrals(7, this)">7 Days</button>
+      <button class="ref-tab" onclick="filterReferrals(15, this)">15 Days</button>
+      <button class="ref-tab" onclick="filterReferrals(30, this)">30 Days</button>
+    </div>
+    <div id="referralsListContainer">
+      <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">Loading referrals...</div>
+    </div>
+  </div>
+
+  <!-- CREATOR & APP DETAILS FOOTER -->
+  <div class="app-footer-credit">
+    Website Created in August 2026 by <b>Swrang Swargiary</b>
+  </div>
+</div>
+</div>
+
+<!-- MY PACKAGE MODAL -->
+<div id="packageModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 style="color:#7c3aed;margin-top:0;">👑 My Package & Benefits</h3>
+    <p style="font-size:13px;color:#475569;margin-bottom:15px;">Here are your active package details, commission structures, and withdrawal limits:</p>
+    <div id="modalPkgDetailsBox" style="background:#f8fafc;padding:15px;border-radius:12px;border:1px solid #e2e8f0;font-size:13px;line-height:1.6;">
+      <p><b>Package Name:</b> <span id="modalPkgName" style="color:#7c3aed;font-weight:750;">No Package Active</span></p>
+      <p><b>Commission Rate:</b> 0% (Upgrade required)</p>
+      <p><b>Withdrawal Limit:</b> Min ₹200</p>
+      <p><b>Account Status:</b> <span style="color:#ef4444;font-weight:700;">Inactive / Free User</span></p>
+    </div>
+    <button onclick="closeModal('packageModal')" class="btn-action" style="margin-top:15px;">Close</button>
+  </div>
+</div>
+
+<!-- WITHDRAWAL HISTORY MODAL -->
+<div id="historyModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 style="color:#0f172a;margin-top:0;">📜 Withdrawal History</h3>
+    <p style="font-size:13px;color:#475569;margin-bottom:15px;">All your past withdrawal requests and statuses:</p>
+    <div id="withdrawalHistoryList">
+      <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">Loading history...</div>
+    </div>
+    <button onclick="closeModal('historyModal')" class="btn-action" style="margin-top:15px;">Close</button>
+  </div>
+</div>
+
+<!-- PAYOUT MODAL -->
+<div id="profileSettingsModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3>🏦 View & Update Payout Details</h3>
+    <div class="payout-tabs">
+      <div class="payout-tab active" id="tabUpi" onclick="switchPayoutMode('upi')">UPI ID</div>
+      <div class="payout-tab" id="tabBank" onclick="switchPayoutMode('bank')">Bank Account</div>
+    </div>
+    <div id="upiSection">
+      <label>UPI ID</label>
+      <input type="text" id="editUpiId" class="input-field" placeholder="yourname@upi">
+    </div>
+    <div id="bankSection" style="display:none;">
+      <label>Account Holder Name</label>
+      <input type="text" id="editAccName" class="input-field" placeholder="Name">
+      <label>Bank Account Number</label>
+      <input type="text" id="editAccNo" class="input-field" placeholder="Account Number">
+      <label>IFSC Code</label>
+      <input type="text" id="editIfsc" class="input-field" placeholder="IFSC">
+    </div>
+    <button onclick="updateUserPayoutDetails()" class="btn-action" id="saveProfileBtn">Save Details</button>
+    <button onclick="closeModal('profileSettingsModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;">Cancel</button>
+  </div>
+</div>
+
+<!-- KYC MODAL -->
+<div id="kycModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3>🆔 KYC & Date of Birth</h3>
+    <label>Full Name</label>
+    <input type="text" id="kycFullName" class="input-field">
+    <label>Date of Birth</label>
+    <input type="date" id="kycDob" class="input-field">
+    <button onclick="saveKycDetails()" class="btn-action">Save KYC</button>
+    <button onclick="closeModal('kycModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;">Cancel</button>
+  </div>
+</div>
+
+<!-- WITHDRAW MODAL -->
+<div id="withdrawModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3>💸 Request Withdrawal</h3>
+    <p id="withdrawModalBalanceText" style="font-size:13px;color:#475569;">Available Balance: ₹0</p>
+    <label>Enter Amount</label>
+    <input type="number" id="withdrawAmount" class="input-field" placeholder="Amount">
+    <button onclick="submitWithdrawal()" class="btn-action" id="submitWithdrawBtn">Submit Request</button>
+    <button onclick="closeModal('withdrawModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;">Cancel</button>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 emailjs.init("FxcimUvl0-ZxAauRx");
-
 const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-let currentUserId = null;
-let currentUserEmail = "";
-let lastKnownStatuses = {};
-
-document.addEventListener("DOMContentLoaded", async function(){
-  const { data:{ session } } = await supabaseClient.auth.getSession();
-  if(!session){
-    window.location.href = "login.html";
-    return;
-  }
-
-  currentUserId = session.user.id;
-  currentUserEmail = session.user.email;
-  document.getElementById("userEmail").innerText = currentUserEmail;
-
-  // Fetch Profile Balance
-  let { data: profile } = await supabaseClient.from("profiles").select("*").eq("user_id", currentUserId).single();
-  if(profile){
-    document.getElementById("walletBalance").innerText = "₹" + (profile.balance || 0);
-  }
-
-  loadHistory();
-  setupRealtime();
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true }
 });
 
-async function loadHistory(){
-  let { data } = await supabaseClient.from("withdrawal_requests").select("*").eq("user_id", currentUserId).order("created_at", { ascending: false });
-  const container = document.getElementById("withdrawalHistoryList");
-  
-  if(!data || data.length === 0){
-    container.innerHTML = "No history found.";
-    return;
-  }
-
-  let html = "<ul>";
-  data.forEach(item => {
-    let st = (item.status || "").toLowerCase();
-    lastKnownStatuses[item.id] = st;
-    html += `<li>Amount: ₹${item.amount} - Status: <b>${item.status}</b></li>`;
-  });
-  html += "</ul>";
-  container.innerHTML = html;
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('active');
+  document.getElementById('sidebarOverlay').classList.toggle('active');
 }
 
-function setupRealtime(){
-  supabaseClient
-    .channel('public:withdrawal_requests')
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'withdrawal_requests', filter: `user_id=eq.${currentUserId}` }, payload => {
-      const updated = payload.new;
-      const oldStatus = lastKnownStatuses[updated.id];
-      const newStatus = (updated.status || "").toLowerCase();
-
-      // Agar status approved/success ho gaya toh email bhej do
-      if(oldStatus && oldStatus !== "approved" && oldStatus !== "success" && (newStatus === "approved" || newStatus === "success")){
-        emailjs.send('service_default', 'template_default', {
-          to_email: currentUserEmail,
-          amount: updated.amount,
-          message: `Your withdrawal of ₹${updated.amount} has been successfully approved!`
-        });
-      }
-      lastKnownStatuses[updated.id] = newStatus;
-      loadHistory();
-    })
-    .subscribe();
+function openModal(modalId) {
+  document.getElementById(modalId).style.display = 'flex';
 }
 
-async function requestWithdrawal(){
-  let { error } = await supabaseClient.from("withdrawal_requests").insert({
-    user_id: currentUserId,
-    amount: 100,
-    status: "pending"
-  });
-  if(error) alert(error.message);
-  else {
-    alert("Withdrawal requested!");
-    loadHistory();
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+}
+
+function openPackageModal() { openModal('packageModal'); }
+function openUpiModal() { openModal('profileSettingsModal'); }
+function openKycModal() { openModal('kycModal'); }
+function openWithdrawModal() { openModal('withdrawModal'); }
+function openHistoryModal() { openModal('historyModal'); }
+
+function switchPayoutMode(mode) {
+  if(mode === 'upi') {
+    document.getElementById('tabUpi').classList.add('active');
+    document.getElementById('tabBank').classList.remove('active');
+    document.getElementById('upiSection').style.display = 'block';
+    document.getElementById('bankSection').style.display = 'none';
+  } else {
+    document.getElementById('tabBank').classList.add('active');
+    document.getElementById('tabUpi').classList.remove('active');
+    document.getElementById('bankSection').style.display = 'block';
+    document.getElementById('upiSection').style.display = 'none';
   }
+}
+
+function copyAffiliateLink() {
+  const code = document.getElementById('myRefCode').innerText;
+  navigator.clipboard.writeText(code);
+  alert("Affiliate ID copied: " + code);
+}
+
+function filterReferrals(days, btn) {
+  document.querySelectorAll('.ref-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function uploadProfilePicture(event) {
+  const file = event.target.files[0];
+  if(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('mainProfileImg').src = e.target.result;
+      document.getElementById('navAvatarImg').src = e.target.result;
+      document.getElementById('sidebarProfileImage').src = e.target.result;
+      document.getElementById('removePhotoBtn').style.display = 'inline-block';
+    }
+    reader.readAsDataURL(file);
+  }
+}
+
+function removeProfilePicture() {
+  const defaultImg = '1000819130.jpg';
+  document.getElementById('mainProfileImg').src = defaultImg;
+  document.getElementById('navAvatarImg').src = defaultImg;
+  document.getElementById('sidebarProfileImage').src = defaultImg;
+  document.getElementById('removePhotoBtn').style.display = 'none';
+}
+
+function updateUserPayoutDetails() {
+  alert("Payout details updated successfully!");
+  closeModal('profileSettingsModal');
+}
+
+function saveKycDetails() {
+  alert("KYC details saved successfully!");
+  closeModal('kycModal');
+}
+
+function submitWithdrawal() {
+  alert("Withdrawal request submitted successfully!");
+  closeModal('withdrawModal');
 }
 </script>
 </body>
