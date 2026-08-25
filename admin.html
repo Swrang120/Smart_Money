@@ -64,8 +64,8 @@
     .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 16px; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
     h2 { font-size: 17px; color: #fff; margin: 0; display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: 0.3px; }
 
-    /* Filter Buttons */
-    .filter-group { display: flex; gap: 6px; }
+    /* Filter & Tab Buttons */
+    .filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
     .filter-btn { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 12px; border-radius: 10px; font-size: 11px; cursor: pointer; font-weight: 600; transition: all 0.2s ease; }
     .filter-btn:hover { background: rgba(99, 102, 241, 0.15); color: #fff; }
     .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 241, 0.5); }
@@ -165,14 +165,15 @@
       </div>
     </div>
 
-    <!-- 1. PENDING PACKAGE APPROVALS (ONLY PACKAGES) -->
+    <!-- 1. PACKAGE APPROVALS WITH TABS (Pending / Approved / Rejected) -->
     <div class="card">
       <div class="card-header">
-        <h2>💳 Pending Package Approvals</h2>
+        <h2>💳 Package Approvals Management</h2>
         <div class="filter-group">
-          <button class="filter-btn active" onclick="filterPayments('all', this)">All</button>
-          <button class="filter-btn" onclick="filterPayments('today', this)">Today</button>
-          <button class="filter-btn" onclick="filterPayments('7days', this)">7 Days</button>
+          <button class="filter-btn active" onclick="switchPaymentTab('pending', this)">Pending</button>
+          <button class="filter-btn" onclick="switchPaymentTab('approved', this)">Approved</button>
+          <button class="filter-btn" onclick="switchPaymentTab('rejected', this)">Rejected</button>
+          <button class="filter-btn" onclick="switchPaymentTab('all', this)">All</button>
         </div>
       </div>
       <div class="table-responsive">
@@ -193,14 +194,15 @@
       </div>
     </div>
 
-    <!-- 2. WITHDRAWAL PAYOUT REQUESTS (ONLY WITHDRAWALS) -->
+    <!-- 2. WITHDRAWAL PAYOUT REQUESTS WITH TABS (Pending / Approved / Rejected) -->
     <div class="card">
       <div class="card-header">
-        <h2>💸 Withdrawal Payout Requests</h2>
+        <h2>💸 Withdrawal Payout Management</h2>
         <div class="filter-group">
-          <button class="filter-btn active" onclick="filterWithdrawals('all', this)">All</button>
-          <button class="filter-btn" onclick="filterWithdrawals('today', this)">Today</button>
-          <button class="filter-btn" onclick="filterWithdrawals('7days', this)">7 Days</button>
+          <button class="filter-btn active" onclick="switchWithdrawalTab('pending', this)">Pending</button>
+          <button class="filter-btn" onclick="switchWithdrawalTab('approved', this)">Approved</button>
+          <button class="filter-btn" onclick="switchWithdrawalTab('rejected', this)">Rejected</button>
+          <button class="filter-btn" onclick="switchWithdrawalTab('all', this)">All</button>
         </div>
       </div>
       <div class="table-responsive">
@@ -263,8 +265,8 @@
 
   let allPaymentsData = [];
   let allWithdrawalsData = [];
-  let currentPaymentFilter = 'all';
-  let currentWithdrawalFilter = 'all';
+  let currentPaymentTab = 'pending';
+  let currentWithdrawalTab = 'pending';
 
   function toggleSidebar() {
     const sidebar = document.getElementById('adminSidebar');
@@ -282,31 +284,6 @@
     loadUsers();
   });
 
-  function filterByDate(data, filterType) {
-    if (filterType === 'all') return data;
-    const now = new Date();
-    return data.filter(item => {
-      const itemDate = new Date(item.created_at || Date.now());
-      const diffDays = (now - itemDate) / (1000 * 60 * 60 * 24);
-      if (filterType === 'today') return diffDays <= 1;
-      if (filterType === '7days') return diffDays <= 7;
-      return true;
-    });
-  }
-
-  function sortRequests(data) {
-    return data.sort((a, b) => {
-      let statusA = (a.status || '').toLowerCase();
-      let statusB = (b.status || '').toLowerCase();
-      
-      if (statusA === 'pending') return -1;
-      if (statusB === 'pending') return 1;
-      if (statusA === 'rejected' && statusB !== 'rejected') return 1;
-      if (statusB === 'rejected' && statusA !== 'rejected') return -1;
-      return 0;
-    });
-  }
-
   async function loadPaymentRequests() {
     const { data } = await supabaseClient.from('payment_requests').select('*').order('created_at', { ascending: false });
     if (data) {
@@ -315,8 +292,8 @@
     }
   }
 
-  function filterPayments(type, btn) {
-    currentPaymentFilter = type;
+  function switchPaymentTab(tab, btn) {
+    currentPaymentTab = tab;
     btn.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     updateStatsAndRenderPayments();
@@ -327,12 +304,14 @@
     document.getElementById("statApproved").innerText = allPaymentsData.filter(i => (i.status||'').toLowerCase() === 'approved').length;
     document.getElementById("statRejected").innerText = allPaymentsData.filter(i => (i.status||'').toLowerCase() === 'rejected').length;
 
-    let filtered = filterByDate(allPaymentsData, currentPaymentFilter);
-    filtered = sortRequests(filtered);
+    let filtered = allPaymentsData;
+    if (currentPaymentTab !== 'all') {
+      filtered = allPaymentsData.filter(i => (i.status || 'pending').toLowerCase() === currentPaymentTab);
+    }
 
     const tbody = document.getElementById("paymentTableBody");
     if (filtered.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No package records found.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No ${currentPaymentTab} package records found.</td></tr>`;
       return;
     }
 
@@ -347,7 +326,10 @@
           <td>UTR: <b style="color:var(--accent);">${item.transaction_id || item.payment_id || 'N/A'}</b></td>
           <td><span class="badge badge-${statusStr.toLowerCase()}">${statusStr}</span></td>
           <td>
-            ${isPending ? `<button class="btn btn-approve" onclick="approvePayment('${item.id}', '${item.full_name || ''}', '${item.email || ''}', '${item.package_name || ''}', '${item.referral_id || ''}')">Approve</button>` : ''}
+            ${isPending ? `
+              <button class="btn btn-approve" onclick="approvePayment('${item.id}', '${item.full_name || ''}', '${item.email || ''}', '${item.package_name || ''}', '${item.referral_id || ''}')">Approve</button>
+              <button class="btn btn-reject" onclick="rejectPayment('${item.id}')">Reject</button>
+            ` : ''}
             <button class="btn btn-delete" onclick="softDeleteRecord('${item.id}', 'payment_requests')">Delete</button>
           </td>
         </tr>
@@ -380,6 +362,16 @@
     } catch (err) { alert("Error: " + err.message); }
   }
 
+  async function rejectPayment(id) {
+    if (!confirm("Are you sure you want to reject this package request?")) return;
+    try {
+      const { error } = await supabaseClient.from('payment_requests').update({ status: 'Rejected' }).eq('id', id);
+      if (error) throw error;
+      alert("Package request rejected successfully!");
+      loadPaymentRequests();
+    } catch (err) { alert("Error: " + err.message); }
+  }
+
   async function loadWithdrawals() {
     const { data } = await supabaseClient.from('withdrawal_requests').select('*').order('created_at', { ascending: false });
     if (data) {
@@ -388,20 +380,22 @@
     }
   }
 
-  function filterWithdrawals(type, btn) {
-    currentWithdrawalFilter = type;
+  function switchWithdrawalTab(tab, btn) {
+    currentWithdrawalTab = tab;
     btn.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     renderWithdrawals();
   }
 
   async function renderWithdrawals() {
-    let filtered = filterByDate(allWithdrawalsData, currentWithdrawalFilter);
-    filtered = sortRequests(filtered);
+    let filtered = allWithdrawalsData;
+    if (currentWithdrawalTab !== 'all') {
+      filtered = allWithdrawalsData.filter(i => (i.status || 'pending').toLowerCase() === currentWithdrawalTab);
+    }
 
     const tbody = document.getElementById("withdrawalTableBody");
     if (filtered.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No withdrawal requests found.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No ${currentWithdrawalTab} withdrawal requests found.</td></tr>`;
       return;
     }
 
