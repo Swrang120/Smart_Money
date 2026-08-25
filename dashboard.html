@@ -81,7 +81,7 @@
     .package-badge.vip { background: linear-gradient(135deg, #f59e0b, #ec4899); color: #fff; }
     
     .profile-img-wrap { position: relative; }
-    .profile-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background: #4f46e5; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; font-weight: bold; }
+    .profile-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background: #4f46e5; }
     
     .user-info h2 { margin: 0; font-size: 18px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 6px; }
     .user-info p { margin: 3px 0; font-size: 12.5px; color: #f1f5f9; word-break: break-all; }
@@ -194,7 +194,7 @@
   <div class="profile-card">
     <div class="package-badge vip" id="activePackageBadge">MASTER PACKAGE 👑</div>
     <div class="profile-img-wrap">
-      <img src="1000819130.jpg" alt="Profile Logo" class="profile-img" style="background:#4f46e5;">
+      <img src="1000819130.jpg" alt="Profile Logo" class="profile-img">
     </div>
     <div class="user-info">
       <h2 id="userName">Santiram Swargiary <span id="vipTitleIcon" style="font-size:15px;">👑</span></h2>
@@ -395,7 +395,7 @@
     btn.innerText = "Saving...";
     btn.disabled = true;
 
-    flashTry: try {
+    try {
       if (!currentUserId) {
         alert("Please login first.");
         btn.innerText = "Save UPI ID";
