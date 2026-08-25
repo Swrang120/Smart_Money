@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body { background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
+    body { background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; display: none; } /* Initially Hidden for Security */
     .container { max-width: 1000px; margin: 0 auto; }
     h1 { font-size: 24px; color: #fff; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
     p { color: #94a3b8; font-size: 14px; margin-top: 0; }
@@ -105,6 +105,17 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+  // Password Security Check
+  const adminPassword = prompt("🔐 Enter Admin Password to Access Panel:");
+  if (adminPassword === "Swrangsa@123") {
+    document.body.style.display = "block"; // Show panel if password is correct
+  } else {
+    alert("❌ Galat Password! Access Denied.");
+    document.body.innerHTML = "<h2 style='color:red; text-align:center; margin-top:50px;'>Access Denied! Wrong Password.</h2>";
+    document.body.style.display = "block";
+    throw new Error("Unauthorized Access");
+  }
+
   const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
@@ -142,21 +153,19 @@
     });
   }
 
-  // Approve Payment & Create User Profile Automatically with 'referral_id'
+  // Approve Payment & Create User Profile Automatically
   async function approvePayment(id, fullName, email, packageName, refId) {
     if (!confirm(`Kya aap ${fullName} ka payment approve karna chahte hain?`)) return;
 
     try {
-      // 1. Unique Referral ID Generate karna (Jaise SM-7842)
       const uniqueRefCode = "SM-" + Math.floor(1000 + Math.random() * 9000);
 
-      // 2. Profiles table mein 'referral_id' ke sath entry daalna
       const { error: profileError } = await supabaseClient.from('profiles').insert([
         {
           full_name: fullName,
           email: email,
           package_name: packageName,
-          referral_id: uniqueRefCode, // <-- Yahan correct column name 'referral_id' hai
+          referral_id: uniqueRefCode,
           referred_by: refId,
           is_active: true
         }
@@ -164,7 +173,6 @@
 
       if (profileError) throw profileError;
 
-      // 3. Payment Request ka status 'Approved' karna
       const { error: updateError } = await supabaseClient.from('payment_requests').update({ status: 'Approved' }).eq('id', id);
       if (updateError) throw updateError;
 
