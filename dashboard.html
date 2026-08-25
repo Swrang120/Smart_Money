@@ -28,7 +28,7 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
     .nav-right { display: flex; align-items: center; gap: 12px; }
-    .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #6366f1; cursor: pointer; background: #e2e8f0; }
+    .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #6366f1; background: #e2e8f0; }
     .menu-btn { background: #f8fafc; border: 1px solid #e2e8f0; font-size: 20px; cursor: pointer; color: #475569; padding: 6px 10px; border-radius: 10px; }
 
     /* SIDEBAR DRAWER */
@@ -61,7 +61,7 @@
     .sidebar-menu a.active { background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
 
     /* MAIN CONTAINER */
-    .dash-container { max-width: 480px; margin: 20px auto; padding: 0 15px; }
+    .dash-container { max-width: 480px; margin: 20px auto; padding: 0 15px; width: 100%; }
 
     /* PROFILE CARD */
     .profile-card {
@@ -74,11 +74,11 @@
     }
     .package-badge.vip { background: linear-gradient(135deg, #f59e0b, #ec4899); color: #fff; }
     
-    .profile-img-wrap { position: relative; cursor: pointer; }
+    .profile-img-wrap { position: relative; }
     .profile-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #8b5cf6; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background: #475569; }
     
     .user-info h2 { margin: 0; font-size: 18px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 6px; }
-    .user-info p { margin: 3px 0; font-size: 12.5px; color: #cbd5e1; }
+    .user-info p { margin: 3px 0; font-size: 12.5px; color: #cbd5e1; word-break: break-all; }
     .copy-btn {
       background: rgba(139, 92, 246, 0.25); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.4); padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; transition: 0.2s;
     }
@@ -88,6 +88,10 @@
     .balance-card {
       background: #ffffff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 20px; text-align: center; border: 1px solid #e2e8f0;
     }
+    .btn-withdraw {
+      display: block; width: 100%; margin-top: 15px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); transition: 0.2s;
+    }
+    .btn-withdraw:hover { opacity: 0.9; }
 
     /* STATS STACK */
     .stats-stack { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
@@ -101,8 +105,8 @@
     .bg-alltime { background: linear-gradient(135deg, #0284c7, #38bdf8); }
 
     /* MODAL STYLES */
-    .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.6); z-index:999; justify-content:center; align-items:center; backdrop-filter: blur(3px); }
-    .modal-box { background:#ffffff; padding:25px; border-radius:22px; width:90%; max-width:420px; box-shadow:0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; color: #1e293b; }
+    .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.6); z-index:999; justify-content:center; align-items:center; backdrop-filter: blur(3px); padding: 15px; }
+    .modal-box { background:#ffffff; padding:25px; border-radius:22px; width:100%; max-width:420px; box-shadow:0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; color: #1e293b; }
     .input-field { width:100%; padding:11px 14px; margin-bottom:12px; border-radius:12px; border:1px solid #cbd5e1; font-size:13.5px; box-sizing:border-box; outline: none; }
     .btn-action { width:100%; background: linear-gradient(135deg, #6366f1, #4f46e5); color:#fff; border:none; padding:13px; border-radius:12px; font-weight:700; cursor:pointer; font-size:14px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
   </style>
@@ -120,11 +124,11 @@
   <ul class="sidebar-menu">
     <li><a href="dashboard.html" class="active"><span>🏠</span> Dashboard Home</a></li>
     <li><a href="index.html"><span>🌐</span> Home / Landing Page</a></li>
-    <li><a href="index.html"><span>💼</span> Basic Package</a></li>
-    <li><a href="index.html"><span>👑</span> Max Pro Package</a></li>
-    <li><button onclick="openProfileSettingsModal()"><span>👤</span> Edit Profile & Photo</button></li>
+    <li><a href="index.html"><span>📦</span> Entry Package (₹299)</a></li>
+    <li><a href="index.html"><span>👑</span> Max Pro Package (₹4,499)</a></li>
+    <li><button onclick="openProfileSettingsModal()"><span>👤</span> Edit Name & UPI Details</button></li>
     <li><button onclick="copyRefLink()"><span>🔗</span> Copy Affiliate Link</button></li>
-    <li><button onclick="openProfileSettingsModal()"><span>💳</span> Bank / UPI Details</button></li>
+    <li><button onclick="openWithdrawModal()"><span>💸</span> Withdraw Funds</button></li>
     <li><button id="sideLogoutBtn" style="color:#f87171;"><span>🚪</span> Logout</button></li>
   </ul>
 </aside>
@@ -132,7 +136,7 @@
 <header class="navbar">
   <a href="dashboard.html" class="brand-logo"><span>Smart Money</span></a>
   <div class="nav-right">
-    <img id="navAvatar" src="" class="nav-avatar" alt="Profile" onclick="openProfileSettingsModal()" title="Click to edit profile">
+    <img id="navAvatar" src="1000819130.jpg" class="nav-avatar" alt="Logo">
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
   </div>
 </header>
@@ -142,8 +146,8 @@
   <!-- USER PROFILE CARD -->
   <div class="profile-card">
     <div class="package-badge" id="activePackageBadge">Basic Package</div>
-    <div class="profile-img-wrap" onclick="openProfileSettingsModal()" title="Change Profile Photo">
-      <img id="userAvatar" src="" class="profile-img" alt="Profile">
+    <div class="profile-img-wrap">
+      <img id="userAvatar" src="1000819130.jpg" class="profile-img" alt="Official Logo">
     </div>
     <div class="user-info">
       <h2 id="userName">Loading... <span id="vipTitleIcon" style="display:none; font-size:15px;">👑</span></h2>
@@ -157,6 +161,7 @@
   <div class="balance-card">
     <span style="font-size: 11px; color:#64748b; font-weight: 700; text-transform: uppercase;">Available Wallet Balance</span>
     <h1 style="margin: 6px 0 0 0; color: #10b981; font-size: 32px;" id="walletBalance">₹0.00</h1>
+    <button class="btn-withdraw" onclick="openWithdrawModal()">💸 Withdraw Money Now</button>
   </div>
 
   <!-- REVENUE STATS STACK -->
@@ -172,15 +177,25 @@
 <!-- PROFILE SETTINGS MODAL -->
 <div id="profileSettingsModal" class="modal-overlay">
   <div class="modal-box">
-    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">⚙️ Edit Profile & Photo</h3>
+    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">⚙️ Edit Name & UPI Details</h3>
+    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Profile logo is officially locked to Smart Money branding.</p>
     <label style="font-size:12px; font-weight:600; color:#475569;">Full Name</label>
     <input type="text" id="editFullName" class="input-field" placeholder="Your Name">
-    <label style="font-size:12px; font-weight:600; color:#475569;">Upload Profile Photo (From Device)</label>
-    <input type="file" id="editAvatarFile" class="input-field" accept="image/*" style="padding: 8px; background: #f8fafc;">
     <label style="font-size:12px; font-weight:600; color:#475569;">UPI ID / Bank Detail</label>
     <input type="text" id="editUpiId" class="input-field" placeholder="UPI ID or Account Info">
-    <button onclick="updateUserProfile()" class="btn-action" id="saveProfileBtn">Save Profile Changes</button>
+    <button onclick="updateUserProfile()" class="btn-action" id="saveProfileBtn">Save Changes</button>
     <button onclick="closeModal('profileSettingsModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer;">Cancel</button>
+  </div>
+</div>
+
+<!-- WITHDRAW MODAL -->
+<div id="withdrawModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">💸 Request Withdrawal</h3>
+    <label style="font-size:12px; font-weight:600; color:#475569;">Enter Amount (₹)</label>
+    <input type="number" id="withdrawAmount" class="input-field" placeholder="Enter amount to withdraw">
+    <button onclick="submitWithdrawal()" class="btn-action">Submit Withdrawal Request</button>
+    <button onclick="closeModal('withdrawModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer;">Cancel</button>
   </div>
 </div>
 
@@ -192,14 +207,11 @@
 
   let currentUserId = null;
   let userReferralCode = "";
+  const OFFICIAL_LOGO = "1000819130.jpg";
 
   function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("active");
     document.getElementById("sidebarOverlay").classList.toggle("active");
-  }
-
-  function getSmartMoneyAvatar(name) {
-    return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name || 'Smart Money')}&backgroundColor=6366f1,8b5cf6,ec4899&fontFamily=Poppins`;
   }
 
   document.addEventListener("DOMContentLoaded", async function() {
@@ -217,12 +229,12 @@
 
       const defaultName = session.user.user_metadata?.full_name || userEmail.split('@')[0];
       const defaultCode = "SM-" + currentUserId.substring(0, 5).toUpperCase();
-      const defaultAvatar = getSmartMoneyAvatar(defaultName);
+      
+      document.getElementById("userAvatar").src = OFFICIAL_LOGO;
+      document.getElementById("navAvatar").src = OFFICIAL_LOGO;
       
       document.getElementById("userName").innerText = defaultName;
       document.getElementById("myRefCode").innerText = defaultCode;
-      document.getElementById("userAvatar").src = defaultAvatar;
-      document.getElementById("navAvatar").src = defaultAvatar;
 
       const { data: profile } = await supabaseClient
         .from('profiles')
@@ -240,14 +252,10 @@
         const badgeEl = document.getElementById("activePackageBadge");
         badgeEl.innerText = currentPackageName;
 
-        if (currentPackageName === "Max Pro Package" || currentPackageName === "Super Premium") {
+        if (currentPackageName.includes("Max Pro") || currentPackageName.includes("Super Premium") || currentPackageName.includes("VIP")) {
           badgeEl.classList.add("vip");
           document.getElementById("vipTitleIcon").style.display = "inline-block";
         }
-        
-        const finalAvatar = profile.avatar_url || getSmartMoneyAvatar(finalName);
-        document.getElementById("userAvatar").src = finalAvatar;
-        document.getElementById("navAvatar").src = finalAvatar;
 
         document.getElementById("editFullName").value = finalName;
         document.getElementById("editUpiId").value = profile.upi_id || "";
@@ -269,42 +277,43 @@
     document.getElementById("profileSettingsModal").style.display = "flex";
   }
 
+  function openWithdrawModal() {
+    if(document.getElementById("sidebar").classList.contains("active")) toggleSidebar();
+    document.getElementById("withdrawModal").style.display = "flex";
+  }
+
   async function updateUserProfile() {
     const newName = document.getElementById("editFullName").value.trim();
     const newUpi = document.getElementById("editUpiId").value.trim();
-    const fileInput = document.getElementById("editAvatarFile");
     let btn = document.getElementById("saveProfileBtn");
     
     btn.innerText = "Saving...";
     btn.disabled = true;
-    let updates = { full_name: newName, upi_id: newUpi };
 
     try {
-      if (fileInput.files && fileInput.files[0]) {
-        const file = fileInput.files[0];
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${currentUserId}_${Math.random().toString(36).substring(2)}.${fileExt}`;
-        
-        const { error: uploadErr } = await supabaseClient.storage.from('avatars').upload(fileName, file);
-        if (uploadErr) { 
-          alert("Upload Error: " + uploadErr.message); 
-          btn.innerText = "Save Profile Changes"; 
-          btn.disabled = false; 
-          return; 
-        }
+      await supabaseClient.from('profiles').update({ 
+        full_name: newName, 
+        upi_id: newUpi,
+        avatar_url: OFFICIAL_LOGO 
+      }).eq('user_id', currentUserId);
 
-        const { data: publicURLData } = supabaseClient.storage.from('avatars').getPublicUrl(fileName);
-        updates.avatar_url = publicURLData.publicUrl;
-      }
-
-      await supabaseClient.from('profiles').update(updates).eq('user_id', currentUserId);
       alert("🎉 Profile successfully updated!");
       location.reload();
     } catch(err) {
       alert("Error aa gaya: " + err.message);
-      btn.innerText = "Save Profile Changes";
+      btn.innerText = "Save Changes";
       btn.disabled = false;
     }
+  }
+
+  function submitWithdrawal() {
+    const amount = document.getElementById("withdrawAmount").value;
+    if(!amount || amount <= 0) {
+      alert("Please enter a valid withdrawal amount.");
+      return;
+    }
+    alert("💸 Withdrawal request of ₹" + amount + " submitted successfully!");
+    closeModal('withdrawModal');
   }
 
   function closeModal(id) { document.getElementById(id).style.display = "none"; }
