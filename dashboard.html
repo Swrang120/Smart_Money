@@ -26,7 +26,7 @@
     }
     .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; }
     .nav-right { display: flex; align-items: center; gap: 12px; }
-    .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; }
+    .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; background: #fff; }
     .menu-btn { background: #f8fafc; border: 1px solid #e2e8f0; font-size: 20px; cursor: pointer; color: #475569; padding: 6px 10px; border-radius: 10px; }
 
     /* SIDEBAR DRAWER MENU */
@@ -148,7 +148,7 @@
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <a href="dashboard.html" class="brand-logo" style="color:#fff;">
-      <img src="1000819130.jpg" alt="Logo" class="brand-logo-img">
+      <img src="1000819130.jpg" alt="Logo" class="brand-logo-img" id="sideLogoImg">
       <span>Smart Money</span>
     </a>
     <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
@@ -156,18 +156,8 @@
   <ul class="sidebar-menu">
     <li><a href="dashboard.html" class="active"><span>🏠</span> Dashboard Home</a></li>
     <li><a href="index.html"><span>🌐</span> Home / Landing Page</a></li>
-    <li>
-      <button onclick="toggleSubmenu()"><span>📦</span> Our Packages ▾</button>
-      <ul class="submenu" id="packageSubmenu">
-        <li><a href="index.html#packages">Starter Package (₹289)</a></li>
-        <li><a href="index.html#packages">Intermediate (₹560)</a></li>
-        <li><a href="index.html#packages">Expert Package (₹1,149)</a></li>
-        <li><a href="index.html#packages">Master Package (₹2,499)</a></li>
-        <li><a href="index.html#packages">Brahmastra (₹5,499)</a></li>
-        <li><a href="index.html#packages">Premium Pro (₹10,997)</a></li>
-      </ul>
-    </li>
     <li><button onclick="openUpiModal()"><span>🏦</span> Update Bank & UPI Details</button></li>
+    <li><button onclick="openAvatarModal()"><span>🖼️</span> Update Profile Avatar</button></li>
     <li><button onclick="copyRefLink()"><span>🔗</span> Copy Affiliate Link</button></li>
     <li><button onclick="openWithdrawModal()"><span>💸</span> Withdraw Funds</button></li>
     <li><button id="sideLogoutBtn" style="color:#f87171;"><span>🚪</span> Logout</button></li>
@@ -176,7 +166,7 @@
 
 <header class="navbar">
   <a href="dashboard.html" class="brand-logo">
-    <img src="1000819130.jpg" alt="Smart Money Logo" class="brand-logo-img">
+    <img src="1000819130.jpg" alt="Smart Money Logo" class="brand-logo-img" id="navLogoImg">
     <span>Smart Money</span>
   </a>
   <div class="nav-right">
@@ -191,7 +181,7 @@
   <div class="profile-card">
     <div class="package-badge vip" id="activePackageBadge">MASTER PACKAGE 👑</div>
     <div class="profile-img-wrap">
-      <img src="1000819130.jpg" alt="Smart Money Logo" class="profile-img">
+      <img src="1000819130.jpg" alt="Smart Money Logo" class="profile-img" id="profileCardImg">
     </div>
     <div class="user-info">
       <h2 id="userName">Loading... <span style="font-size:15px;">👑</span></h2>
@@ -263,6 +253,20 @@
 
 </div>
 
+<!-- AVATAR UPDATE MODAL -->
+<div id="avatarModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">🖼️ Update Profile Image</h3>
+    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Apne Supabase storage wali image ka Public URL yahan paste karein.</p>
+    
+    <label style="font-size:12px; font-weight:600; color:#475569;">Avatar Public URL</label>
+    <input type="text" id="editAvatarUrl" class="input-field" placeholder="https://.../avatars/your-image.jpg">
+    
+    <button onclick="updateUserAvatar()" class="btn-action" id="saveAvatarBtn">Save Avatar</button>
+    <button onclick="closeModal('avatarModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer;">Cancel</button>
+  </div>
+</div>
+
 <!-- BANK & UPI SETTINGS MODAL -->
 <div id="profileSettingsModal" class="modal-overlay">
   <div class="modal-box">
@@ -329,11 +333,13 @@
     document.getElementById("sidebarOverlay").classList.toggle("active");
   }
 
-  function toggleSubmenu() {
-    document.getElementById("packageSubmenu").classList.toggle("active");
-  }
-
   document.addEventListener("DOMContentLoaded", async function() {
+    const defaultLogo = "1000819130.jpg";
+    document.getElementById("sideLogoImg").src = defaultLogo;
+    document.getElementById("navLogoImg").src = defaultLogo;
+    document.getElementById("navAvatarTop").src = defaultLogo;
+    document.getElementById("profileCardImg").src = defaultLogo;
+
     try {
       const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
       if (!session || !session.user) {
@@ -356,6 +362,14 @@
         userSavedUpi = profile.upi_id || "";
         userSavedAcc = profile.bank_account_number || "";
         userRefCode = profile.referral_code || profile.referral_id || "";
+
+        // Check avatar from database
+        const customAvatar = profile.avatar || profile.avatar_url;
+        if (customAvatar && customAvatar.startsWith('http')) {
+          document.getElementById("navAvatarTop").src = customAvatar;
+          document.getElementById("profileCardImg").src = customAvatar;
+          document.getElementById("editAvatarUrl").value = customAvatar;
+        }
 
         const userName = profile.full_name || profile.name || session.user.user_metadata?.full_name || "Smart Money User";
         const userEmail = profile.email || session.user.email || "";
@@ -404,6 +418,11 @@
     });
   });
 
+  function openAvatarModal() {
+    if(document.getElementById("sidebar").classList.contains("active")) toggleSidebar();
+    document.getElementById("avatarModal").style.display = "flex";
+  }
+
   function openUpiModal() {
     if(document.getElementById("sidebar").classList.contains("active")) toggleSidebar();
     document.getElementById("profileSettingsModal").style.display = "flex";
@@ -411,19 +430,47 @@
 
   function openWithdrawModal() {
     if(document.getElementById("sidebar").classList.contains("active")) toggleSidebar();
-    
     if (userCurrentBalance <= 0) {
       alert("⚠️ Aapke wallet mein balance nahi hai!");
       return;
     }
-
     if (!userSavedUpi && !userSavedAcc) {
       alert("⚠️ Pehle apna Bank details ya UPI ID update karein!");
       openUpiModal();
       return;
     }
-
     document.getElementById("withdrawModal").style.display = "flex";
+  }
+
+  async function updateUserAvatar() {
+    const avatarUrl = document.getElementById("editAvatarUrl").value.trim();
+    let btn = document.getElementById("saveAvatarBtn");
+
+    if (!avatarUrl || !avatarUrl.startsWith('http')) {
+      alert("Please enter a valid image URL.");
+      return;
+    }
+
+    btn.innerText = "Saving...";
+    btn.disabled = true;
+
+    try {
+      const { error } = await supabaseClient.from('profiles').update({ 
+        avatar: avatarUrl 
+      }).eq('user_id', currentUserId);
+
+      if(error) throw error;
+
+      document.getElementById("navAvatarTop").src = avatarUrl;
+      document.getElementById("profileCardImg").src = avatarUrl;
+      alert("🎉 Profile avatar successfully updated!");
+      closeModal('avatarModal');
+    } catch(err) {
+      alert("Error updating avatar: " + err.message);
+    } finally {
+      btn.innerText = "Save Avatar";
+      btn.disabled = false;
+    }
   }
 
   async function updateUserBankDetails() {
@@ -442,13 +489,6 @@
     btn.disabled = true;
 
     try {
-      if (!currentUserId) {
-        alert("Please login first.");
-        btn.innerText = "Save Payout Details";
-        btn.disabled = false;
-        return;
-      }
-      
       const { error } = await supabaseClient.from('profiles').update({ 
         account_holder_name: accName,
         bank_account_number: accNo,
@@ -479,17 +519,14 @@
 
   function submitWithdrawal() {
     const amount = parseFloat(document.getElementById("withdrawAmount").value);
-    
     if (!amount || amount <= 0) {
       alert("Please enter a valid withdrawal amount.");
       return;
     }
-
     if (amount > userCurrentBalance) {
       alert("❌ Error: Aapka withdrawal amount available balance se zyada hai!");
       return;
     }
-
     alert("💸 Withdrawal request of ₹" + amount + " successfully submitted!");
     document.getElementById("withdrawAmount").value = "";
     closeModal('withdrawModal');
