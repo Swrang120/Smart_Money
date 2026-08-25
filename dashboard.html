@@ -24,15 +24,15 @@
     .brand-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
     .brand-logo span {
       font-weight: 800; font-size: 20px;
-      background: linear-gradient(135deg, #6366f1, #ec4899);
+      background: linear-gradient(135deg, #7c3aed, #db2777);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #6366f1; }
+    .brand-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; }
     .nav-right { display: flex; align-items: center; gap: 12px; }
-    .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #6366f1; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #6366f1; font-size: 14px; }
+    .nav-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #7c3aed; font-size: 14px; }
     .menu-btn { background: #f8fafc; border: 1px solid #e2e8f0; font-size: 20px; cursor: pointer; color: #475569; padding: 6px 10px; border-radius: 10px; }
 
-    /* SIDEBAR DRAWER */
+    /* SIDEBAR DRAWER MENU */
     .sidebar-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); z-index: 998; display: none;
@@ -57,11 +57,10 @@
       transition: all 0.2s;
     }
     .sidebar-menu a.active, .sidebar-menu a:hover, .sidebar-menu button:hover {
-      background: rgba(99, 102, 241, 0.2); color: #ffffff; font-weight: 600;
+      background: rgba(124, 58, 237, 0.2); color: #ffffff; font-weight: 600;
     }
-    .sidebar-menu a.active { background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
+    .sidebar-menu a.active { background: linear-gradient(135deg, #7c3aed, #a855f7); box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
 
-    /* SUBMENU FOR PACKAGES */
     .submenu { list-style: none; padding-left: 20px; margin: 5px 0; display: none; }
     .submenu.active { display: block; }
     .submenu li a { font-size: 13px; padding: 8px 12px; color: #94a3b8; }
@@ -72,8 +71,8 @@
 
     /* PROFILE CARD */
     .profile-card {
-      background: linear-gradient(135deg, #1e1b4b, #312e81); border-radius: 22px; padding: 22px; display: flex; align-items: center; gap: 16px;
-      box-shadow: 0 10px 30px rgba(49, 46, 129, 0.25); margin-bottom: 20px; position: relative; border: 1px solid rgba(255,255,255,0.1); overflow: hidden;
+      background: linear-gradient(135deg, #7c3aed, #db2777); border-radius: 22px; padding: 22px; display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.25); margin-bottom: 20px; position: relative; border: 1px solid rgba(255,255,255,0.1); overflow: hidden;
     }
     .package-badge {
       position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #3b82f6, #1d4ed8);
@@ -82,40 +81,68 @@
     .package-badge.vip { background: linear-gradient(135deg, #f59e0b, #ec4899); color: #fff; }
     
     .profile-img-wrap { position: relative; }
-    .profile-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #8b5cf6; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background: #6366f1; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; font-weight: bold; }
+    .profile-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); background: #4f46e5; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; font-weight: bold; }
     
     .user-info h2 { margin: 0; font-size: 18px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 6px; }
-    .user-info p { margin: 3px 0; font-size: 12.5px; color: #cbd5e1; word-break: break-all; }
+    .user-info p { margin: 3px 0; font-size: 12.5px; color: #f1f5f9; word-break: break-all; }
     .copy-btn {
-      background: rgba(139, 92, 246, 0.25); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.4); padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; transition: 0.2s;
+      background: rgba(255, 255, 255, 0.2); color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; transition: 0.2s;
     }
-    .copy-btn:hover { background: rgba(139, 92, 246, 0.4); color: #fff; }
+    .copy-btn:hover { background: rgba(255, 255, 255, 0.3); }
 
-    /* BALANCE CARD */
-    .balance-card {
-      background: #ffffff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); margin-bottom: 20px; text-align: center; border: 1px solid #e2e8f0;
+    /* REVENUE STATS STACK (Exact RichInd Style Gradient Cards) */
+    .stats-stack { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+    .v-card { 
+      border-radius: 20px; padding: 22px; color: #ffffff; box-shadow: 0 8px 20px rgba(0,0,0,0.08); 
+      display: flex; flex-direction: column; justify-content: space-between; position: relative;
     }
+    .v-card h2 { margin: 0; font-size: 28px; font-weight: 800; }
+    .v-card p { margin: 2px 0 15px 0; font-size: 13px; opacity: 0.95; }
+    .v-card-footer {
+      display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600;
+      border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px; cursor: pointer;
+    }
+
+    /* Exact RichInd Colors */
+    .bg-today { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
+    .bg-7days { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+    .bg-30days { background: linear-gradient(135deg, #db2777, #be185d); }
+    .bg-alltime { background: linear-gradient(135deg, #0284c7, #0369a1); }
+    .bg-passive { background: linear-gradient(135deg, #d97706, #b45309); }
+
+    /* EXTRA SECTIONS (Graph, Pending Amount, Recent Sales) */
+    .section-box { background: #ffffff; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; text-align: center; }
+    .section-box h3 { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 15px; text-align: left; }
+
+    .graph-container { width: 100%; height: 160px; display: flex; align-items: flex-end; justify-content: space-between; padding-top: 20px; position: relative; }
+    .graph-curve { width: 100%; height: 100px; background: linear-gradient(to top, rgba(219, 39, 119, 0.05), rgba(219, 39, 119, 0.4)); clip-path: polygon(0% 100%, 10% 95%, 25% 70%, 40% 10%, 55% 50%, 70% 65%, 85% 100%, 100% 100%); }
+
+    .pending-circle {
+      width: 130px; height: 130px; border-radius: 50%; border: 6px solid #e2e8f0; border-top-color: #64748b;
+      margin: 15px auto; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .pending-circle h4 { font-size: 16px; font-weight: 800; color: #0f172a; margin: 0; }
+    .pending-circle p { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; margin: 0; }
+
+    .pie-chart-box {
+      width: 140px; height: 140px; border-radius: 50%; background: conic-gradient(#7c3aed 0deg 200deg, #4f46e5 200deg 360deg);
+      margin: 15px auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .pie-inner { width: 90px; height: 90px; background: #fff; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .pie-inner h4 { font-size: 11px; color: #64748b; font-weight: 600; margin: 0; }
+    .pie-inner p { font-size: 16px; font-weight: 800; color: #0f172a; margin: 0; }
+
+    /* WITHDRAW BUTTON */
     .btn-withdraw {
-      display: block; width: 100%; margin-top: 15px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); transition: 0.2s;
+      display: block; width: 100%; margin-top: 15px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; padding: 13px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); transition: 0.2s;
     }
     .btn-withdraw:hover { opacity: 0.9; }
-
-    /* STATS STACK */
-    .stats-stack { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
-    .v-card { border-radius: 20px; padding: 20px; color: #ffffff; box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
-    .v-card h2 { margin: 0; font-size: 28px; font-weight: 800; }
-    .v-card p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.95; }
-
-    .bg-today { background: linear-gradient(135deg, #7c3aed, #a855f7); }
-    .bg-7days { background: linear-gradient(135deg, #2563eb, #3b82f6); }
-    .bg-30days { background: linear-gradient(135deg, #e11d48, #f43f5e); }
-    .bg-alltime { background: linear-gradient(135deg, #0284c7, #38bdf8); }
 
     /* MODAL STYLES */
     .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.6); z-index:999; justify-content:center; align-items:center; backdrop-filter: blur(3px); padding: 15px; }
     .modal-box { background:#ffffff; padding:25px; border-radius:22px; width:100%; max-width:420px; box-shadow:0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; color: #1e293b; }
     .input-field { width:100%; padding:11px 14px; margin-bottom:12px; border-radius:12px; border:1px solid #cbd5e1; font-size:13.5px; box-sizing:border-box; outline: none; }
-    .btn-action { width:100%; background: linear-gradient(135deg, #6366f1, #4f46e5); color:#fff; border:none; padding:13px; border-radius:12px; font-weight:700; cursor:pointer; font-size:14px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
+    .btn-action { width:100%; background: linear-gradient(135deg, #7c3aed, #6d28d9); color:#fff; border:none; padding:13px; border-radius:12px; font-weight:700; cursor:pointer; font-size:14px; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
   </style>
 </head>
 <body>
@@ -134,20 +161,17 @@
   <ul class="sidebar-menu">
     <li><a href="dashboard.html" class="active"><span>🏠</span> Dashboard Home</a></li>
     <li><a href="index.html"><span>🌐</span> Home / Landing Page</a></li>
-    
-    <!-- PACKAGES DROPDOWN IN MENU -->
     <li>
       <button onclick="toggleSubmenu()"><span>📦</span> Our Packages ▾</button>
       <ul class="submenu" id="packageSubmenu">
-        <li><a href="index.html#packages">Entry Package (₹299)</a></li>
-        <li><a href="starter.html">Starter Package (₹560)</a></li>
-        <li><a href="medium.html">Growth Package (₹899)</a></li>
-        <li><a href="premium.html">Premium Package (₹1,499)</a></li>
-        <li><a href="super_premium.html">Super Premium (₹2,499)</a></li>
-        <li><a href="index.html#packages">Max Pro Package (₹4,499)</a></li>
+        <li><a href="index.html#packages">Starter Package (₹289)</a></li>
+        <li><a href="index.html#packages">Intermediate (₹560)</a></li>
+        <li><a href="index.html#packages">Expert Package (₹1,149)</a></li>
+        <li><a href="index.html#packages">Master Package (₹2,499)</a></li>
+        <li><a href="index.html#packages">Brahmastra (₹5,499)</a></li>
+        <li><a href="index.html#packages">Premium Pro (₹10,997)</a></li>
       </ul>
     </li>
-
     <li><button onclick="openProfileSettingsModal()"><span>👤</span> Edit Name & UPI Details</button></li>
     <li><button onclick="copyRefLink()"><span>🔗</span> Copy Affiliate Link</button></li>
     <li><button onclick="openWithdrawModal()"><span>💸</span> Withdraw Funds</button></li>
@@ -177,25 +201,108 @@
     <div class="user-info">
       <h2 id="userName">Loading... <span id="vipTitleIcon" style="display:none; font-size:15px;">👑</span></h2>
       <p id="userEmail">user@gmail.com</p>
-      <p>ID: <b id="myRefCode" style="color:#c4b5fd;">SM-USER</b></p>
+      <p>ID: <b id="myRefCode" style="color:#fff;">SM-USER</b></p>
       <button class="copy-btn" onclick="copyRefLink()">📋 Copy Affiliate Link</button>
     </div>
   </div>
 
-  <!-- WALLET BALANCE -->
-  <div class="balance-card">
+  <!-- REVENUE STATS STACK (RichInd Style Gradient Cards) -->
+  <div class="stats-stack">
+    <!-- Today's Revenue -->
+    <div class="v-card bg-today">
+      <div>
+        <h2 id="todayEarn">₹0</h2>
+        <p>Today's Revenue</p>
+      </div>
+      <div class="v-card-footer" onclick="alert('Viewing Today Revenue Details')">
+        <span>View details</span>
+        <span>→</span>
+      </div>
+    </div>
+
+    <!-- 7 Days Revenue -->
+    <div class="v-card bg-7days">
+      <div>
+        <h2 id="weekEarn">₹0</h2>
+        <p>7 Days Revenue</p>
+      </div>
+      <div class="v-card-footer" onclick="alert('Viewing 7 Days Revenue Details')">
+        <span>View details</span>
+        <span>→</span>
+      </div>
+    </div>
+
+    <!-- 30 Days Revenue -->
+    <div class="v-card bg-30days">
+      <div>
+        <h2 id="monthEarn">₹0</h2>
+        <p>30 Days Revenue</p>
+      </div>
+      <div class="v-card-footer" onclick="alert('Viewing 30 Days Revenue Details')">
+        <span>View details</span>
+        <span>→</span>
+      </div>
+    </div>
+
+    <!-- All Time Revenue -->
+    <div class="v-card bg-alltime">
+      <div>
+        <h2 id="totalEarn">₹0</h2>
+        <p>All Time Revenue</p>
+      </div>
+      <div class="v-card-footer" onclick="alert('Viewing All Time Revenue Details')">
+        <span>View details</span>
+        <span>→</span>
+      </div>
+    </div>
+
+    <!-- Passive Income -->
+    <div class="v-card bg-passive">
+      <div>
+        <h2 id="passiveEarn">₹0</h2>
+        <p>Passive Income</p>
+      </div>
+      <div class="v-card-footer" onclick="alert('Viewing Passive Income Details')">
+        <span>View details</span>
+        <span>→</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WALLET BALANCE & WITHDRAWAL -->
+  <div class="section-box" style="text-align: center;">
     <span style="font-size: 11px; color:#64748b; font-weight: 700; text-transform: uppercase;">Available Wallet Balance</span>
     <h1 style="margin: 6px 0 0 0; color: #10b981; font-size: 32px;" id="walletBalance">₹0.00</h1>
     <p id="upiDisplayInfo" style="font-size: 12px; color: #64748b; margin-top: 4px;">UPI ID: Not Saved Yet</p>
     <button class="btn-withdraw" onclick="openWithdrawModal()">💸 Withdraw Money Now</button>
   </div>
 
-  <!-- REVENUE STATS STACK -->
-  <div class="stats-stack">
-    <div class="v-card bg-today"><h2 id="todayEarn">₹0</h2><p>Today's Revenue</p></div>
-    <div class="v-card bg-7days"><h2 id="weekEarn">₹0</h2><p>7 Days Revenue</p></div>
-    <div class="v-card bg-30days"><h2 id="monthEarn">₹0</h2><p>30 Days Revenue</p></div>
-    <div class="v-card bg-alltime"><h2 id="totalEarn">₹0</h2><p>All Time Revenue</p></div>
+  <!-- SALES LAST 30 DAYS GRAPH -->
+  <div class="section-box">
+    <h3>Sales Last 30 Days</h3>
+    <div class="graph-container">
+      <div class="graph-curve"></div>
+    </div>
+  </div>
+
+  <!-- PENDING AMOUNT SECTION -->
+  <div class="section-box">
+    <h3>Pending Amount</h3>
+    <div class="pending-circle">
+      <p>Pending Amount</p>
+      <h4 id="pendingAmountText">Rs. 0</h4>
+    </div>
+  </div>
+
+  <!-- RECENT SALES SECTION -->
+  <div class="section-box">
+    <h3>Recent Sales</h3>
+    <div class="pie-chart-box">
+      <div class="pie-inner">
+        <h4>Total Sales</h4>
+        <p id="totalSalesCount">0</p>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -293,6 +400,9 @@
         userCurrentBalance = profile.balance || 0;
         document.getElementById("walletBalance").innerText = "₹" + userCurrentBalance.toFixed(2);
         document.getElementById("withdrawLimitText").innerText = "Available Balance: ₹" + userCurrentBalance.toFixed(2);
+        
+        // Populate stats (can be connected to DB columns if available, defaults to balance or 0)
+        document.getElementById("totalEarn").innerText = "₹" + userCurrentBalance.toFixed(0);
 
         userSavedUpi = profile.upi_id || "";
         if(userSavedUpi) {
@@ -307,7 +417,7 @@
         
         if (currentPackageName) {
           badgeEl.innerText = currentPackageName;
-          if (currentPackageName.includes("Max Pro") || currentPackageName.includes("Super Premium") || currentPackageName.includes("VIP")) {
+          if (currentPackageName.includes("Max Pro") || currentPackageName.includes("Super Premium") || currentPackageName.includes("VIP") || currentPackageName.includes("Master")) {
             badgeEl.classList.add("vip");
             document.getElementById("vipTitleIcon").style.display = "inline-block";
           }
