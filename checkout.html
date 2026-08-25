@@ -42,12 +42,17 @@
     .qr-tab-btn { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); color: var(--text-muted); padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
     .qr-tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 15px rgba(99,102,241,0.4); }
 
-    .qr-box { background: #fff; padding: 15px; border-radius: 16px; text-align: center; width: 180px; margin: 0 auto 12px auto; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
-    .qr-box img { width: 150px; height: 150px; object-fit: contain; display: block; margin: 0 auto; }
+    .qr-box { background: #fff; padding: 15px; border-radius: 16px; text-align: center; width: 190px; margin: 0 auto 12px auto; box-shadow: 0 8px 25px rgba(0,0,0,0.3); cursor: pointer; position: relative; transition: transform 0.2s; }
+    .qr-box:hover { transform: scale(1.03); }
+    .qr-box img { width: 160px; height: 160px; object-fit: contain; display: block; margin: 0 auto; }
+    .qr-hint { font-size: 10px; color: #475569; margin-top: 6px; font-weight: 700; }
     
     .upi-display { background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 15px; }
     .upi-display b { color: var(--accent); }
     .copy-btn { background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: var(--accent); padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
+
+    .btn-download { width: 100%; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: var(--accent); padding: 10px; border-radius: 12px; font-size: 12px; font-weight: 700; cursor: pointer; margin-bottom: 15px; transition: 0.2s; }
+    .btn-download:hover { background: var(--accent); color: #0f172a; }
 
     .btn-submit { width: 100%; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: #fff; border: none; padding: 14px; border-radius: 14px; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4); transition: 0.3s; }
     .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(99, 102, 241, 0.6); }
@@ -97,19 +102,22 @@
 
   <!-- 2. QR Code & Payment -->
   <div class="card">
-    <h3>💳 2. Scan QR & Pay</h3>
+    <h3>💳 2. Scan or Download QR & Pay</h3>
     <div class="qr-tabs">
       <button class="qr-tab-btn active" onclick="switchQR('super', this)">⚡ Super Money QR</button>
-      <button class="qr-tab-btn" onclick="switchQR('bharatpe', this)">🇮🇳 BharatPe QR</button>
+      <button class="qr-tab-btn" onclick="switchQR('bharatpe', this)">🇮🇳 Business QR</button>
     </div>
 
-    <div class="qr-box">
-      <!-- Aap yahan apne QR image ka sahi path ya link daal sakte hain -->
+    <!-- QR Box par click karte hi download ho jayega -->
+    <div class="qr-box" onclick="downloadCurrentQR()" title="Click to download QR code">
       <img id="qrImage" src="" alt="Payment QR Code">
+      <div class="qr-hint">📥 Click to Download QR</div>
     </div>
+
+    <button class="btn-download" onclick="downloadCurrentQR()">⬇️ Download QR Code to Gallery</button>
 
     <div class="upi-display">
-      <span>UPI ID: <b id="upiText">8099473948@superyes</b></span>
+      <span>UPI ID: <b id="upiText">smartmoney.merchant@paytm</b></span>
       <button class="copy-btn" onclick="copyUpi()">Copy UPI</button>
     </div>
 
@@ -146,7 +154,6 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  // URL se package details uthane ke liye (agar passed ho)
   const urlParams = new URLSearchParams(window.location.search);
   const pkgName = urlParams.get('package') || 'Starter Package';
   const pkgPrice = urlParams.get('price') || '289';
@@ -157,26 +164,40 @@
   document.getElementById('summaryPrice').innerText = `₹${pkgPrice}`;
   document.getElementById('refCode').value = refCodeFromUrl;
 
-  // Default QR Setup
+  // Updated QR Data (Mobile number removed, professional merchant setup)
   const qrData = {
-    super: { img: '1000821335.jpg', upi: '8099473948@superyes' }, // Apni image ka path yahan check kar lena
-    bharatpe: { img: '1000821337.jpg', upi: 'BHARATPE2UVD870209659@paytm' }
+    super: { img: '1000821335.jpg', upi: 'smartmoney.super@paytm' },
+    bharatpe: { img: '1000821337.jpg', upi: 'smartmoney.merchant@ybl' }
   };
 
+  let currentType = 'super';
+
   function switchQR(type, btn) {
+    currentType = type;
     document.querySelectorAll('.qr-tab-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('qrImage').src = qrData[type].img;
     document.getElementById('upiText').innerText = qrData[type].upi;
   }
 
-  // Load default Super QR
   document.getElementById('qrImage').src = qrData.super.img;
 
   function copyUpi() {
     const upi = document.getElementById('upiText').innerText;
     navigator.clipboard.writeText(upi);
-    alert("UPI ID Copied to Clipboard: " + upi);
+    alert("UPI ID Copied: " + upi);
+  }
+
+  // QR Code direct download function
+  function downloadCurrentQR() {
+    const imgSrc = qrData[currentType].img;
+    const link = document.createElement('a');
+    link.href = imgSrc;
+    link.download = `SmartMoney_${currentType}_QR.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    alert("📥 QR Code downloaded successfully to your device!");
   }
 
   async function submitOrder() {
@@ -198,7 +219,6 @@
     }
 
     try {
-      // Payment request save karna supabase mein
       const { error } = await supabaseClient.from('payment_requests').insert([{
         full_name: fullName,
         email: email,
@@ -215,7 +235,7 @@
       if (error) throw error;
 
       alert("🎉 Order Submitted Successfully! Your package will be approved by the admin shortly.");
-      window.location.href = "index.html"; // ya jo aapka main home page ho
+      window.location.href = "index.html";
     } catch (err) {
       alert("Error submitting order: " + err.message);
     }
