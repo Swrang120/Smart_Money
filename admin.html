@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Money - Admin Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { font-size: 24px; color: #fff; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
+    p { color: #94a3b8; font-size: 14px; margin-top: 0; }
+
+    .card { background: #1e293b; border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
+    h2 { font-size: 18px; color: #38bdf8; margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    th { color: #94a3b8; font-weight: 600; }
+    td { color: #e2e8f0; }
+
+    .btn { padding: 6px 12px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; font-size: 12px; }
+    .btn-approve { background: #10b981; color: #fff; }
+    .btn-block { background: #ef4444; color: #fff; }
+    .btn-unblock { background: #3b82f6; color: #fff; }
+    
+    .badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .badge-pending { background: #f59e0b; color: #000; }
+    .badge-paid { background: #10b981; color: #fff; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>⚡ Smart Money Admin Control</h1>
+  <p>Yahan se aap saari withdrawal requests aur user accounts (Deactivate/Activate) ko manage kar sakte hain.</p>
+
+  <!-- WITHDRAWAL REQUESTS SECTION -->
+  <div class="card">
+    <h2>💸 Withdrawal Requests</h2>
+    <div style="overflow-x: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>User Name</th>
+            <th>UPI ID</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        Ref</thead>
+        <tbody id="withdrawalTableBody">
+          <tr><td colspan="5" style="text-align:center; color:#94a3b8;">Loading requests...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- USERS MANAGEMENT SECTION -->
+  <div class="card">
+    <h2>👥 Registered Users Control</h2>
+    <div style="overflow-x: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Name / Email</th>
+            <th>Ref Code</th>
+            <th>Package</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="usersTableBody">
+          <tr><td colspan="5" style="text-align:center; color:#94a3b8;">Loading users...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  document.addEventListener("DOMContentLoaded", async function() {
+    loadWithdrawals();
+    loadUsers();
+  });
+
+  async function loadWithdrawals() {
+    const { data, error } = await supabaseClient.from('withdrawals').select('*').order('created_at', { ascending: false });
+    const tbody = document.getElementById("withdrawalTableBody");
+    
+    if (error || !data || data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8;">Koi withdrawal request nahi mili.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = "";
+    data.forEach(item => {
+      tbody.innerHTML += `
+        <tr>
+          <td><b>${item.full_name || 'User'}</b></td>
+          <td style="color:#38bdf8;">${item.upi_id || 'N/A'}</td>
+          <td style="color:#10b981; font-weight:700;">₹${item.amount}</td>
+          <td><span class="badge badge-${item.status.toLowerCase()}">${item.status}</span></td>
+          <td>
+            ${item.status === 'Pending' ? `<button class="btn btn-approve" onclick="markAsPaid('${item.id}')">Mark Paid</button>` : 'Done'}
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  async function markAsPaid(id) {
+    const { error } = await supabaseClient.from('withdrawals').update({ status: 'Paid' }).eq('id', id);
+    if(error) {
+      alert("Error: " + error.message);
+    } else {
+      alert("Withdrawal marked as Paid!");
+      loadWithdrawals();
+    }
+  }
+
+  async function loadUsers() {
+    const { data, error } = await supabaseClient.from('profiles').select('*');
+    const tbody = document.getElementById("usersTableBody");
+    
+    if (error || !data || data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8;">Koi user nahi mila.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = "";
+    data.forEach(user => {
+      const isActive = user.is_active !== false;
+      tbody.innerHTML += `
+        <tr>
+          <td><b>${user.full_name || 'Unnamed'}</b><br><span style="font-size:11px; color:#94a3b8;">ID: ${user.user_id.substring(0,8)}...</span></td>
+          <td style="color:#c4b5fd;">${user.referral_code || 'N/A'}</td>
+          <td>${user.package_name || 'No Package'}</td>
+          <td><span class="badge" style="background:${isActive ? '#10b981' : '#ef4444'}; color:#fff;">${isActive ? 'Active' : 'Blocked'}</span></td>
+          <td>
+            ${isActive 
+              ? `<button class="btn btn-block" onclick="toggleUserStatus('${user.user_id}', false)">Deactivate</button>` 
+              : `<button class="btn btn-unblock" onclick="toggleUserStatus('${user.user_id}', true)">Activate</button>`
+            }
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  async function toggleUserStatus(userId, status) {
+    const { error } = await supabaseClient.from('profiles').update({ is_active: status }).eq('user_id', userId);
+    if(error) {
+      alert("Error: " + error.message);
+    } else {
+      alert(status ? "User Account Activated!" : "User Account Deactivated!");
+      loadUsers();
+    }
+  }
+</script>
+
+</body>
+</html>
