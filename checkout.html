@@ -243,6 +243,9 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
+  let checkInterval = null;
+  let currentRequestId = null;
+
   function switchQR(type, tabEl) {
     document.querySelectorAll('.qr-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.qr-container').forEach(c => c.classList.remove('active'));
@@ -300,7 +303,8 @@
         proofUrl = publicURL.publicUrl;
       }
 
-      const { error: dbError } = await supabaseClient.from('payment_requests').insert([{
+      // Insert data and retrieve the created record's ID
+      const { data: insertedData, error: dbError } = await supabaseClient.from('payment_requests').insert([{
         full_name: fullName,
         email: email,
         mobile: mobile,
@@ -312,33 +316,76 @@
         payment_proof: proofUrl,
         status: 'Pending',
         is_deleted: false
-      }]);
+      }]).select();
 
       if (dbError) throw dbError;
 
-      alert("🎉 Order Submitted Successfully! Your account will be activated by Admin after UTR verification.");
-      window.location.href = "login.html";
+      if (insertedData && insertedData.length > 0) {
+        currentRequestId = insertedData[0].id;
+      }
+
+      // Show Waiting Screen & Start 15-Minute Timer
+      startWaitingScreen();
 
     } catch (err) {
-      try {
-        await supabaseClient.from('payment_requests').insert([{
-          full_name: fullName,
-          email: email,
-          mobile: mobile,
-          password: password,
-          package_name: 'Starter Package',
-          amount: 289,
-          transaction_id: utr,
-          referral_id: refCode,
-          status: 'Pending',
-          is_deleted: false
-        }]);
-        alert("🎉 Order Submitted Successfully! Pending Admin Approval.");
-        window.location.href = "login.html";
-      } catch (err2) {
-        alert("Error submitting order: " + (err2.message || err.message));
-      }
+      alert("Error submitting order: " + (err.message || err));
     }
+  }
+
+  function startWaitingScreen() {
+    const container = document.querySelector('.container');
+    container.innerHTML = `
+      <div style="max-width: 600px; margin: 50px auto; background: rgba(30, 41, 59, 0.85); border: 1px solid var(--border-color); padding: 40px; border-radius: 24px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+        <div style="font-size: 50px; margin-bottom: 15px;">⏳</div>
+        <h2 style="color: #fff; font-size: 24px; margin-bottom: 10px;">Payment Verification in Progress</h2>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px;">Aapka UTR aur payment proof admin ke paas bhej diya gaya hai. Kripya 15 minute intezaar karein.</p>
+        
+        <div id="timerDisplay" style="font-size: 36px; font-weight: 800; color: var(--accent); margin-bottom: 25px; background: rgba(15, 23, 42, 0.5); padding: 15px; border-radius: 16px; border: 1px solid var(--border-color);">15:00</div>
+        
+        <p style="font-size: 13px; color: #34d399; font-weight: 600;" id="statusText">Status: Pending Admin Approval...</p>
+      </div>
+    `;
+
+    // 15-Minute Countdown Timer logic
+    let totalSeconds = 15 * 60;
+    const timerInterval = setInterval(() => {
+      let minutes = Math.floor(totalSeconds / 60);
+      let seconds = totalSeconds % 60;
+      
+      document.getElementById('timerDisplay').innerText = 
+        String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
+
+      if (totalSeconds <= 0) {
+        clearInterval(timerInterval);
+        document.getElementById('statusText').innerText = "Time expired! Please contact support if payment was deducted.";
+        document.getElementById('statusText').style.color = "var(--danger)";
+      }
+      totalSeconds--;
+    }, 1000);
+
+    // Poll Supabase every 5 seconds to check if status changes to 'Approved'
+    checkInterval = setInterval(async () => {
+      if (!currentRequestId) return;
+
+      const { data, error } = await supabaseClient
+        .from('payment_requests')
+        .select('status')
+        .eq('id', currentRequestId)
+        .single();
+
+      if (data && data.status === 'Approved') {
+        clearInterval(checkInterval);
+        clearInterval(timerInterval);
+        
+        document.getElementById('statusText').innerText = "🎉 Approved! Redirecting to Dashboard...";
+        document.getElementById('statusText').style.color = "#34d399";
+
+        setTimeout(() => {
+          alert("🎉 Account Activated Successfully! Welcome to Smart Money.");
+          window.location.href = "dashboard.html";
+        }, 2000);
+      }
+    }, 5000);
   }
 </script>
 </body>
