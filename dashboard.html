@@ -69,7 +69,7 @@
     /* MAIN CONTAINER */
     .dash-container { max-width: 480px; margin: 20px auto; padding: 0 15px; width: 100%; }
 
-    /* PROFILE CARD (Locked & Permanent as requested) */
+    /* PROFILE CARD */
     .profile-card {
       background: linear-gradient(135deg, #7c3aed, #db2777); border-radius: 22px; padding: 22px; display: flex; align-items: center; gap: 16px;
       box-shadow: 0 10px 30px rgba(124, 58, 237, 0.25); margin-bottom: 20px; position: relative; border: 1px solid rgba(255,255,255,0.1); overflow: hidden;
@@ -194,7 +194,7 @@
   <div class="profile-card">
     <div class="package-badge vip" id="activePackageBadge">MASTER PACKAGE 👑</div>
     <div class="profile-img-wrap">
-      <div id="userAvatarText" class="profile-img">SA</div>
+      <img src="1000819130.jpg" alt="Profile Logo" class="profile-img" style="background:#4f46e5;">
     </div>
     <div class="user-info">
       <h2 id="userName">Santiram Swargiary <span id="vipTitleIcon" style="font-size:15px;">👑</span></h2>
@@ -321,7 +321,6 @@
         currentUserId = session.user.id;
       }
 
-      // Fetch dynamic profile & count total users referred by SM-36996
       const { data: profile } = await supabaseClient
         .from('profiles')
         .select('*')
@@ -341,7 +340,6 @@
         }
       }
 
-      // Count how many people registered using this referral code (SM-36996)
       const { count, error } = await supabaseClient
         .from('profiles')
         .select('*', { count: 'exact', head: true })
@@ -397,9 +395,11 @@
     btn.innerText = "Saving...";
     btn.disabled = true;
 
-    try {
+    flashTry: try {
       if (!currentUserId) {
         alert("Please login first.");
+        btn.innerText = "Save UPI ID";
+        btn.disabled = false;
         return;
       }
       const { error } = await supabaseClient.from('profiles').update({ 
