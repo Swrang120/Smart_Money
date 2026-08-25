@@ -350,14 +350,12 @@
       let userName = item.full_name || item.name || "User";
       let userEmail = item.email || "";
 
-      // Profile data sync check to load details if missing from table directly
       if ((!item.upi_id && !item.account_number && !item.bank_account) && item.user_id) {
         const { data: u } = await supabaseClient.from('profiles').select('*').eq('id', item.user_id).maybeSingle();
         const profileData = u || await supabaseClient.from('profiles').select('*').eq('user_id', item.user_id).maybeSingle().then(res => res.data);
         if (profileData) {
           userName = profileData.full_name || userName;
           userEmail = profileData.email || userEmail;
-          // Merge profile bank details if present
           if(!item.upi_id) item.upi_id = profileData.upi_id;
           if(!item.account_number) item.account_number = profileData.account_number || profileData.bank_account;
           if(!item.ifsc_code) item.ifsc_code = profileData.ifsc_code;
@@ -365,7 +363,6 @@
         }
       }
 
-      // Format Bank / UPI details safely so it shows clearly
       let payoutHtml = `Method: <b>${item.payment_method || item.method || 'UPI / Bank'}</b>`;
       if (item.upi_id) payoutHtml += `<br>UPI ID: <b>${item.upi_id}</b>`;
       if (item.account_number || item.bank_account) payoutHtml += `<br>A/C: <b>${item.account_number || item.bank_account}</b> | IFSC: <b>${item.ifsc_code || 'N/A'}</b>`;
@@ -432,6 +429,7 @@
     tbody.innerHTML = "";
     data.forEach(user => {
       const active = user.is_active !== false;
+      const recordId = user.id || user.user_id;
       tbody.innerHTML += `
         <tr>
           <td><b>${user.full_name || 'User'}</b><br><span style="font-size:11px; color:var(--text-muted);">${user.email || ''}</span></td>
@@ -439,7 +437,8 @@
           <td>${user.package_name || 'Free'}<br><b style="color:#34d399;">₹${user.balance || 0}</b></td>
           <td><span class="badge" style="background:${active ? 'rgba(16,185,129,0.15)' : 'rgba(244,63,94,0.15)'}; color:${active ? '#34d399' : '#fb7185'}; border: 1px solid ${active ? 'rgba(16,185,129,0.35)' : 'rgba(244,63,94,0.35)'};">${active ? 'Active' : 'Blocked'}</span></td>
           <td>
-            <button class="btn ${active ? 'btn-reject' : 'btn-approve'}" onclick="toggleUser('${user.id || user.user_id}', ${!active})">${active ? 'Block' : 'Unblock'}</button>
+            <button class="btn ${active ? 'btn-reject' : 'btn-approve'}" onclick="toggleUser('${recordId}', ${!active})">${active ? 'Block' : 'Unblock'}</button>
+            <button class="btn btn-delete" onclick="deleteUser('${recordId}')">Delete</button>
           </td>
         </tr>
       `;
@@ -449,6 +448,24 @@
   async function toggleUser(id, status) {
     await supabaseClient.from('profiles').update({ is_active: status }).eq('id', id);
     loadUsers();
+  }
+
+  async function deleteUser(id) {
+    if (!confirm("⚠️ Are you sure you want to permanently delete this user account?")) return;
+    const { error } = await supabaseClient.from('profiles').delete().eq('id', id);
+    if (!error) {
+      alert("User account deleted successfully!");
+      loadUsers();
+    } else {
+      // Try deleting using user_id column if 'id' fails
+      const { error: err2 } = await supabaseClient.from('profiles').delete().eq('user_id', id);
+      if (!err2) {
+        alert("User account deleted successfully!");
+        loadUsers();
+      } else {
+        alert("Error deleting user: " + (error.message || err2.message));
+      }
+    }
   }
 </script>
 </body>
