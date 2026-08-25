@@ -89,7 +89,7 @@
         <thead>
           <tr>
             <th>Name / Email</th>
-            <th>Ref Code</th>
+            <th>Ref ID</th>
             <th>Package</th>
             <th>Status</th>
             <th>Action</th>
@@ -142,21 +142,21 @@
     });
   }
 
-  // Approve Payment & Create User Profile Automatically
+  // Approve Payment & Create User Profile Automatically with 'referral_id'
   async function approvePayment(id, fullName, email, packageName, refId) {
     if (!confirm(`Kya aap ${fullName} ka payment approve karna chahte hain?`)) return;
 
     try {
-      // 1. Unique Referral Code Generate karna user ke liye (Jaise SM-7842)
+      // 1. Unique Referral ID Generate karna (Jaise SM-7842)
       const uniqueRefCode = "SM-" + Math.floor(1000 + Math.random() * 9000);
 
-      // 2. Profiles table mein user ki entry daalna
+      // 2. Profiles table mein 'referral_id' ke sath entry daalna
       const { error: profileError } = await supabaseClient.from('profiles').insert([
         {
           full_name: fullName,
           email: email,
           package_name: packageName,
-          referral_code: uniqueRefCode,
+          referral_id: uniqueRefCode, // <-- Yahan correct column name 'referral_id' hai
           referred_by: refId,
           is_active: true
         }
@@ -226,11 +226,10 @@
     tbody.innerHTML = "";
     data.forEach(user => {
       const isActive = user.is_active !== false;
-      const userIdDisplay = user.user_id ? user.user_id.substring(0,8) + '...' : (user.id || 'N/A');
       tbody.innerHTML += `
         <tr>
           <td><b>${user.full_name || 'Unnamed'}</b><br><span style="font-size:11px; color:#94a3b8;">${user.email || ''}</span></td>
-          <td style="color:#c4b5fd; font-weight:600;">${user.referral_code || 'N/A'}</td>
+          <td style="color:#c4b5fd; font-weight:600;">${user.referral_id || 'N/A'}</td>
           <td>${user.package_name || 'No Package'}</td>
           <td><span class="badge" style="background:${isActive ? '#10b981' : '#ef4444'}; color:#fff;">${isActive ? 'Active' : 'Blocked'}</span></td>
           <td>
@@ -247,7 +246,6 @@
   async function toggleUserStatus(id, status) {
     const { error } = await supabaseClient.from('profiles').update({ is_active: status }).eq('id', id);
     if(error) {
-      // Fallback agar id column ki jagah user_id ho
       const { error: err2 } = await supabaseClient.from('profiles').update({ is_active: status }).eq('user_id', id);
       if(err2) {
         alert("Error: " + err2.message);
