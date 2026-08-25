@@ -13,7 +13,7 @@
 <style>
 *{box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif;}
 body{margin:0;background:#eef2f7;color:#1e293b;}
-.app-wrapper{width:100%;max-width:850px;min-height:100vh;margin:auto;background:#f1f5f9;box-shadow:0 0 40px rgba(0,0,0,.08);}
+.app-wrapper{width:100%;max-width:850px;min-height:100vh;margin:auto;background:#f1f5f9;box-shadow:0 0 40px rgba(0,0,0,.08);position:relative;}
 .navbar{height:68px;background:#ffffff;display:flex;align-items:center;justify-content:space-between;padding:0 18px;position:sticky;top:0;z-index:100;box-shadow:0 3px 15px rgba(0,0,0,.06);}
 .brand-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
 .brand-logo img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #7c3aed;background:#fff;}
@@ -21,24 +21,24 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .nav-right{display:flex;align-items:center;gap:10px;}
 .nav-home-btn{padding:8px 13px;border-radius:10px;text-decoration:none;background:#f3e8ff;color:#7c3aed;font-size:12px;font-weight:700;}
 .nav-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #7c3aed;background:#fff;}
-.menu-btn{border:1px solid #e2e8f0;background:#f8fafc;border-radius:10px;width:45px;height:42px;font-size:21px;cursor:pointer;}
+.menu-btn{border:1px solid #e2e8f0;background:#f8fafc;border-radius:10px;width:45px;height:42px;font-size:21px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 
-/* SIDEBAR */
-.sidebar-overlay{position:fixed;inset:0;background:rgba(15,23,42,.60);backdrop-filter:blur(3px);display:none;z-index:998;}
+/* SIDEBAR FIXES */
+.sidebar-overlay{position:fixed;inset:0;background:rgba(15,23,42,.65);backdrop-filter:blur(3px);display:none;z-index:9998;}
 .sidebar-overlay.active{display:block;}
-.sidebar{position:fixed;top:0;left:-330px;width:320px;max-width:88vw;height:100%;background:#1e293b;z-index:999;transition:left .3s ease;overflow-y:auto;box-shadow:10px 0 30px rgba(0,0,0,.2);}
+.sidebar{position:fixed;top:0;left:-330px;width:320px;max-width:88vw;height:100%;background:#0f172a;z-index:9999;transition:left .3s ease;overflow-y:auto;box-shadow:10px 0 30px rgba(0,0,0,.3);}
 .sidebar.active{left:0;}
-.sidebar-header{min-height:72px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.10);}
+.sidebar-header{min-height:72px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.12);}
 .sidebar-close{background:none;border:none;color:#fff;font-size:28px;cursor:pointer;}
-.sidebar-profile{padding:22px 18px;display:flex;align-items:center;gap:13px;border-bottom:1px solid rgba(255,255,255,.10);}
+.sidebar-profile{padding:22px 18px;display:flex;align-items:center;gap:13px;border-bottom:1px solid rgba(255,255,255,.12);}
 .sidebar-profile-img{width:58px;height:58px;min-width:58px;border-radius:50%;object-fit:cover;border:2px solid #a855f7;background:#fff;}
 .sidebar-profile-info{flex:1;min-width:0;}
-.sidebar-profile-name{color:#fff;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sidebar-profile-name{color:#ffffff;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .sidebar-profile-email{color:#94a3b8;font-size:10px;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sidebar-menu{padding:16px 10px;list-style:none;margin:0;}
+.sidebar-menu{padding:16px 12px;list-style:none;margin:0;}
 .sidebar-menu li{margin-bottom:8px;}
-.sidebar-menu a,.sidebar-menu button{width:100%;border:none;background:transparent;color:#cbd5e1;text-align:left;padding:13px 15px;border-radius:12px;cursor:pointer;text-decoration:none;font-size:14px;transition:.2s;}
-.sidebar-menu a:hover,.sidebar-menu button:hover{background:rgba(124,58,237,.25);color:#fff;}
+.sidebar-menu a,.sidebar-menu button{width:100%;border:none;background:transparent;color:#f1f5f9;text-align:left;padding:14px 16px;border-radius:12px;cursor:pointer;text-decoration:none;font-size:14px;font-weight:600;transition:.2s;display:block;}
+.sidebar-menu a:hover,.sidebar-menu button:hover{background:rgba(124,58,237,.35);color:#ffffff;}
 
 /* DASHBOARD */
 .dash-container{padding:25px 18px 40px;}
@@ -80,7 +80,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .status-pending{background:#fef3c7;color:#d97706;}
 .status-rejected{background:#fee2e2;color:#dc2626;}
 
-.modal-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(15,23,42,.65);backdrop-filter:blur(4px);justify-content:center;align-items:center;padding:15px;}
+.modal-overlay{display:none;position:fixed;inset:0;z-index:10000;background:rgba(15,23,42,.65);backdrop-filter:blur(4px);justify-content:center;align-items:center;padding:15px;}
 .modal-box{width:100%;max-width:440px;background:#fff;border-radius:20px;padding:22px;max-height:90vh;overflow:auto;}
 .input-field{width:100%;padding:12px;border-radius:10px;border:1px solid #cbd5e1;margin:6px 0 12px;outline:none;}
 .btn-action{width:100%;padding:13px;border:none;border-radius:10px;color:#fff;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#6d28d9);}
@@ -322,7 +322,11 @@ function openWithdrawModal(){
   openModal("withdrawModal");
 }
 
-// Function to handle profile images with letter avatars and remove button visibility
+function closeSidebar(){
+  document.getElementById("sidebar").classList.remove("active");
+  document.getElementById("sidebarOverlay").classList.remove("active");
+}
+
 function applyProfileImage(imgUrl, userName){
   const mainImg = document.getElementById("mainProfileImg");
   const sidebarImg = document.getElementById("sidebarProfileImage");
@@ -392,7 +396,6 @@ document.addEventListener("DOMContentLoaded", async function(){
     document.getElementById("sidebarUserName").innerText = finalName;
     document.getElementById("sidebarUserEmail").innerText = finalEmail;
 
-    // Apply Profile Image / Letter Avatar Fallback
     applyProfileImage(profile?.profile_pic, finalName);
 
     document.getElementById("walletBalance").innerText = "₹" + userCurrentBalance.toFixed(2);
