@@ -58,26 +58,31 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .copy-id-btn{width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#9333ea);color:white;display:flex;align-items:center;justify-content:center;}
 .remove-photo-btn{background:none;border:none;color:#ef4444;font-size:11px;font-weight:700;cursor:pointer;padding:0;margin-top:6px;display:inline-block;}
 
-/* STATS */
-.stats-stack{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px;}
-.v-card{min-height:145px;border-radius:18px;padding:20px;color:white;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 8px 20px rgba(0,0,0,.10);}
-.v-card h2{margin:0;font-size:26px;font-weight:800;}
+/* STATS CARDS (RichIND Style - Full Width Stack) */
+.stats-stack{display:flex;flex-direction:column;gap:15px;margin-bottom:20px;}
+.v-card{border-radius:20px;padding:22px 24px;color:white;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 8px 25px rgba(0,0,0,.12);position:relative;overflow:hidden;}
+.v-card h2{margin:0 0 4px;font-size:32px;font-weight:800;letter-spacing:-0.5px;}
+.v-card p{margin:0 0 18px;font-size:14px;opacity:0.9;font-weight:500;}
+.card-divider{width:100%;height:1px;background:rgba(255,255,255,0.25);margin-bottom:12px;}
+.card-footer-link{display:flex;align-items:center;justify-content:space-between;color:#fff;text-decoration:none;font-size:14px;font-weight:700;}
+
 .bg-today{background:linear-gradient(135deg,#7c3aed,#5b21b6);}
 .bg-7days{background:linear-gradient(135deg,#6366f1,#4338ca);}
 .bg-30days{background:linear-gradient(135deg,#db2777,#be185d);}
-.bg-alltime{background:linear-gradient(135deg,#0284c7,#075985);grid-column:span 2;}
-.bg-passive{background:linear-gradient(135deg,#d97706,#92400e);}
+.bg-alltime{background:linear-gradient(135deg,#0284c7,#075985);}
+.bg-passive{background:linear-gradient(135deg,#d97706,#b45309);}
 
 .section-box{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:20px;margin-bottom:18px;}
 .wallet-box{text-align:center;}
 .wallet-balance{font-size:32px;font-weight:800;color:#10b981;margin:5px 0;}
 .btn-withdraw{width:100%;margin-top:14px;border:none;padding:14px;border-radius:10px;cursor:pointer;color:#fff;font-weight:700;background:linear-gradient(135deg,#10b981,#059669);}
 
-/* TABLE & MODALS */
-.history-table{width:100%;border-collapse:collapse;font-size:12px;text-align:left;}
-.history-table th{background:#f8fafc;color:#475569;padding:10px;border-bottom:1px solid #e2e8f0;}
-.history-table td{padding:10px;border-bottom:1px solid #f1f5f9;}
-.status-badge{padding:4px 9px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;}
+/* WITHDRAWAL HISTORY 3-LINE CARDS */
+.history-card-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;flex-direction:column;gap:6px;}
+.history-row-1{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#64748b;font-weight:600;}
+.history-row-2{display:flex;justify-content:space-between;align-items:center;}
+.history-amount{font-size:18px;font-weight:800;color:#0f172a;}
+.status-badge{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;}
 .status-approved{background:#d1fae5;color:#059669;}
 .status-pending{background:#fef3c7;color:#d97706;}
 .status-rejected{background:#fee2e2;color:#dc2626;}
@@ -159,12 +164,62 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     </div>
   </div>
 
+  <!-- STATS CARDS (RichIND Style Stack) -->
   <div class="stats-stack">
-    <div class="v-card bg-today"><div><h2 id="todayRevenue">₹0</h2><p>Today's Revenue</p></div></div>
-    <div class="v-card bg-7days"><div><h2 id="sevenDaysRevenue">₹0</h2><p>7 Days Revenue</p></div></div>
-    <div class="v-card bg-30days"><div><h2 id="thirtyDaysRevenue">₹0</h2><p>30 Days Revenue</p></div></div>
-    <div class="v-card bg-alltime"><div><h2 id="allTimeRevenueText">₹0</h2><p>All Time Revenue</p></div></div>
-    <div class="v-card bg-passive"><div><h2 id="passiveIncome">₹0</h2><p>Passive Income</p></div></div>
+    <div class="v-card bg-today">
+      <div>
+        <h2 id="todayRevenue">₹0</h2>
+        <p>Today's Revenue</p>
+      </div>
+      <div>
+        <div class="card-divider"></div>
+        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+      </div>
+    </div>
+
+    <div class="v-card bg-7days">
+      <div>
+        <h2 id="sevenDaysRevenue">₹0</h2>
+        <p>7 Days Revenue</p>
+      </div>
+      <div>
+        <div class="card-divider"></div>
+        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+      </div>
+    </div>
+
+    <div class="v-card bg-30days">
+      <div>
+        <h2 id="thirtyDaysRevenue">₹0</h2>
+        <p>30 Days Revenue</p>
+      </div>
+      <div>
+        <div class="card-divider"></div>
+        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+      </div>
+    </div>
+
+    <div class="v-card bg-alltime">
+      <div>
+        <h2 id="allTimeRevenueText">₹0</h2>
+        <p>All Time Revenue</p>
+      </div>
+      <div>
+        <div class="card-divider"></div>
+        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+      </div>
+    </div>
+
+    <div class="v-card bg-passive">
+      <div>
+        <h2 id="passiveIncome">₹0</h2>
+        <p>Passive Income</p>
+      </div>
+      <div>
+        <div class="card-divider"></div>
+        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+      </div>
+    </div>
   </div>
 
   <div class="section-box wallet-box">
@@ -176,15 +231,8 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
   <div class="section-box">
     <h3>📜 Withdrawal History</h3>
-    <div style="overflow-x:auto;">
-      <table class="history-table">
-        <thead>
-          <tr><th>Date</th><th>Amount</th><th>Status</th></tr>
-        </thead>
-        <tbody id="withdrawalHistoryList">
-          <tr><td colspan="3" style="text-align:center; color:#64748b;">Loading history...</td></tr>
-        </tbody>
-      </table>
+    <div id="withdrawalHistoryList">
+      <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">Loading history...</div>
     </div>
   </div>
 </div>
@@ -193,9 +241,9 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 <!-- MY PACKAGE MODAL -->
 <div id="packageModal" class="modal-overlay">
   <div class="modal-box">
-    <h3 style="color:#7c3aed;margin-top:0;">👑 My Package Details</h3>
+    <h3 style="color:#7c3aed;margin-top:0;">👑 My Package & Benefits</h3>
     <p style="font-size:13px;color:#475569;margin-bottom:15px;">Here are your active package details, commission structures, and withdrawal limits:</p>
-    <div style="background:#f8fafc;padding:15px;border-radius:12px;border:1px solid #e2e8f0;font-size:13px;line-height:1.6;">
+    <div id="modalPkgDetailsBox" style="background:#f8fafc;padding:15px;border-radius:12px;border:1px solid #e2e8f0;font-size:13px;line-height:1.6;">
       <p><b>Package Name:</b> <span id="modalPkgName" style="color:#7c3aed;font-weight:750;">No Package Active</span></p>
       <p><b>Commission Rate:</b> 0% (Upgrade required)</p>
       <p><b>Withdrawal Limit:</b> Min ₹200</p>
@@ -491,7 +539,7 @@ async function loadWithdrawalHistory(){
     .order("created_at", { ascending: false });
 
   if(!data || data.length === 0){
-    historyContainer.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#64748b;">No withdrawal history found</td></tr>`;
+    historyContainer.innerHTML = `<div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">No withdrawal history found</div>`;
     return;
   }
 
@@ -508,7 +556,19 @@ async function loadWithdrawalHistory(){
       statusText = "Rejected";
     }
     const dateStr = new Date(item.created_at).toLocaleDateString("en-IN", { day: 'numeric', month: 'short', year: 'numeric' });
-    html += `<tr><td>${dateStr}</td><td><b>₹${item.amount}</b></td><td><span class="status-badge ${statusClass}">${statusText}</span></td></tr>`;
+    
+    // 3-Line Card Structure for History
+    html += `
+      <div class="history-card-item">
+        <div class="history-row-1">
+          <span>Date: ${dateStr}</span>
+        </div>
+        <div class="history-row-2">
+          <span class="history-amount">₹${item.amount}</span>
+          <span class="status-badge ${statusClass}">${statusText}</span>
+        </div>
+      </div>
+    `;
   });
   historyContainer.innerHTML = html;
 }
