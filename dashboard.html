@@ -38,26 +38,28 @@
     }
     .sidebar {
       position: fixed; top: 0; left: -300px; width: 300px; height: 100%;
-      background: #ffffff; z-index: 999; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 5px 0 25px rgba(0,0,0,0.1); display: flex; flex-direction: column; overflow-y: auto;
+      background: #1e293b; z-index: 999; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 5px 0 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow-y: auto; color: #ffffff;
     }
     .sidebar.active { left: 0; }
     .sidebar-overlay.active { display: block; }
 
-    .sidebar-header { padding: 20px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
-    .sidebar-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #64748b; }
+    .sidebar-header { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+    .sidebar-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #94a3b8; }
 
     .sidebar-menu { list-style: none; padding: 15px 10px; margin: 0; }
     .sidebar-menu li { margin-bottom: 4px; }
     .sidebar-menu a, .sidebar-menu button {
-      display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 16px;
-      color: #475569; text-decoration: none; font-size: 14px; font-weight: 500;
+      display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 16px;
+      color: #cbd5e1; text-decoration: none; font-size: 14px; font-weight: 500;
       border-radius: 12px; border: none; background: transparent; cursor: pointer; text-align: left;
       transition: all 0.2s;
     }
-    .sidebar-menu a.active { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #ffffff; font-weight: 600; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
-    .sidebar-menu a:hover, .sidebar-menu button:hover { background: #f8fafc; color: #6366f1; }
-    
+    .sidebar-menu a.active, .sidebar-menu a:hover, .sidebar-menu button:hover {
+      background: rgba(99, 102, 241, 0.2); color: #ffffff; font-weight: 600;
+    }
+    .sidebar-menu a.active { background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
+
     /* MAIN CONTAINER */
     .dash-container { max-width: 480px; margin: 20px auto; padding: 0 15px; }
 
@@ -100,7 +102,7 @@
 
     /* MODAL STYLES */
     .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.6); z-index:999; justify-content:center; align-items:center; backdrop-filter: blur(3px); }
-    .modal-box { background:#ffffff; padding:25px; border-radius:22px; width:90%; max-width:420px; box-shadow:0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+    .modal-box { background:#ffffff; padding:25px; border-radius:22px; width:90%; max-width:420px; box-shadow:0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; color: #1e293b; }
     .input-field { width:100%; padding:11px 14px; margin-bottom:12px; border-radius:12px; border:1px solid #cbd5e1; font-size:13.5px; box-sizing:border-box; outline: none; }
     .btn-action { width:100%; background: linear-gradient(135deg, #6366f1, #4f46e5); color:#fff; border:none; padding:13px; border-radius:12px; font-weight:700; cursor:pointer; font-size:14px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
   </style>
@@ -109,19 +111,21 @@
 
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-<!-- 3-LINE DRAWER MENU -->
+<!-- SIDEBAR DRAWER MENU -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a href="dashboard.html" class="brand-logo"><span>✦ Smart Money</span></a>
+    <a href="dashboard.html" class="brand-logo" style="color:#fff;"><span>✦ Smart Money</span></a>
     <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
   </div>
   <ul class="sidebar-menu">
     <li><a href="dashboard.html" class="active"><span>🏠</span> Dashboard Home</a></li>
     <li><a href="index.html"><span>🌐</span> Home / Landing Page</a></li>
+    <li><a href="index.html"><span>💼</span> Basic Package</a></li>
+    <li><a href="index.html"><span>👑</span> Max Pro Package</a></li>
     <li><button onclick="openProfileSettingsModal()"><span>👤</span> Edit Profile & Photo</button></li>
     <li><button onclick="copyRefLink()"><span>🔗</span> Copy Affiliate Link</button></li>
     <li><button onclick="openProfileSettingsModal()"><span>💳</span> Bank / UPI Details</button></li>
-    <li><button id="sideLogoutBtn" style="color:#ef4444;"><span>🚪</span> Logout</button></li>
+    <li><button id="sideLogoutBtn" style="color:#f87171;"><span>🚪</span> Logout</button></li>
   </ul>
 </aside>
 
@@ -241,7 +245,7 @@
           document.getElementById("vipTitleIcon").style.display = "inline-block";
         }
         
-        const finalAvatar = profile.avatar_url || getSmartNavigatorAvatar(finalName) || getSmartMoneyAvatar(finalName);
+        const finalAvatar = profile.avatar_url || getSmartMoneyAvatar(finalName);
         document.getElementById("userAvatar").src = finalAvatar;
         document.getElementById("navAvatar").src = finalAvatar;
 
@@ -279,7 +283,7 @@
       if (fileInput.files && fileInput.files[0]) {
         const file = fileInput.files[0];
         const fileExt = file.name.split('.').pop();
-        const fileName = `${currentUserId}_${Math.random().toString(36).substring(2)}.${fileEXT || fileExt}`;
+        const fileName = `${currentUserId}_${Math.random().toString(36).substring(2)}.${fileExt}`;
         
         const { error: uploadErr } = await supabaseClient.storage.from('avatars').upload(fileName, file);
         if (uploadErr) { 
