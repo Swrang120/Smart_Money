@@ -70,8 +70,8 @@
       <table>
         <thead>
           <tr>
-            <th>User ID / User Details</th>
-            <th>Amount</th>
+            <th>User Details</th>
+            <th>Amount & Details</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -155,14 +155,12 @@
     });
   }
 
-  // Approve Payment, Create Profile & Package-Based Commission
   async function approvePayment(id, fullName, email, packageName, refId) {
     if (!confirm(`Kya aap ${fullName} ka payment approve karna chahte hain?`)) return;
 
     try {
       const uniqueRefCode = "SM-" + Math.floor(1000 + Math.random() * 9000);
 
-      // 1. Create User Profile
       const { error: profileError } = await supabaseClient.from('profiles').insert([
         {
           full_name: fullName,
@@ -176,9 +174,8 @@
       ]);
       if (profileError) throw profileError;
 
-      // 2. Check Sponsor & Apply Package Commission Rules
       if (refId && refId !== 'null' && refId !== 'N/A' && refId !== '') {
-        const { data: sponsorData, error: sponsorErr } = await supabaseClient
+        const { data: sponsorData } = await supabaseClient
           .from('profiles')
           .select('id, balance, package_name')
           .eq('referral_id', refId)
@@ -188,11 +185,9 @@
           const sponsorPkg = (sponsorData.package_name || "").toLowerCase();
           let commission = 0;
 
-          if (sponsorPkg.includes("entry")) {
-            commission = 99.70;
-          } else if (sponsorPkg.includes("starter")) {
-            commission = 280.00;
-          } else {
+          if (sponsorPkg.includes("entry")) commission = 99.70;
+          else if (sponsorPkg.includes("starter")) commission = 280.00;
+          else {
             const pkg = (packageName || "").toLowerCase();
             if (pkg.includes("entry")) commission = 99.70;
             else if (pkg.includes("starter")) commission = 280.00;
@@ -202,30 +197,22 @@
             else if (pkg.includes("max pro")) commission = 2500.15;
           }
 
-          const currentBalance = Number(sponsorData.balance || 0);
-          const newBalance = currentBalance + commission;
-
-          await supabaseClient
-            .from('profiles')
-            .update({ balance: newBalance })
-            .eq('id', sponsorData.id);
+          const newBalance = Number(sponsorData.balance || 0) + commission;
+          await supabaseClient.from('profiles').update({ balance: newBalance }).eq('id', sponsorData.id);
         }
       }
 
-      // 3. Update Payment Request Status to Approved
-      const { error: updateError } = await supabaseClient.from('payment_requests').update({ status: 'Approved' }).eq('id', id);
-      if (updateError) throw updateError;
+      await supabaseClient.from('payment_requests').update({ status: 'Approved' }).eq('id', id);
 
       alert(`🎉 Payment Approved! User Profile Created & Commission Sent successfully.`);
       loadPaymentRequests();
       loadUsers();
-
     } catch (err) {
       alert("Error: " + err.message);
     }
   }
 
-  // 2. Load Withdrawals from correct table 'withdrawal_requests'
+  // 2. Load Withdrawals
   async function loadWithdrawals() {
     const { data, error } = await supabaseClient.from('withdrawal_requests').select('*').order('created_at', { ascending: false });
     const tbody = document.getElementById("withdrawalTableBody");
@@ -236,27 +223,38 @@
     }
 
     tbody.innerHTML = "";
-    data.forEach(item => {
-      const isPending = (item.status || "").toLowerCase() === 'pending';
+    for (let item of data) {
+      // User details fetch karne ke liye profiles table check karte hain
+      let userName = "User";
+      let userEmail = "";
+      const { data: uData } = await supabaseClient.from('profiles').select('full_name, email').or(`id.eq.${item.user_id},user_id.eq.${item.user_id}`).single();
+      if (uData) {
+        userName = uData.full_name || "User";
+        userEmail = uData.email || "";
+      }
+
+      const statusVal = (item.status || 'pending').toLowerCase();
+      const isPending = statusVal === 'pending';
+
       tbody.innerHTML += `
         <tr>
-          <td>User ID: <span style="color:#38bdf8; font-size:11px;">${item.user_id}</span></td>
-          <td style="color:#10b981; font-weight:700;">₹${item.amount}</td>
-          <td><span class="badge badge-${(item.status || 'pending').toLowerCase()}">${item.status}</span></td>
+          <td><b>${userName}</b><br><span style="font-size:11px; color:#94a3b8;">${userEmail}</span></td>
+          <td style="color:#10b981; font-weight:700;">₹${item.amount}<br><span style="font-size:11px; color:#38bdf8;">UPI/Bank Details</span></td>
+          <td><span class="badge badge-${statusVal}">${item.status || 'Pending'}</span></td>
           <td>
             ${isPending ? `
-              <button class="btn btn-approve" onclick="updateWithdrawal('${item.id}', '${item.user_id}', ${item.amount}, 'approved')">Approve</button>
-              <button class="btn btn-reject" onclick="updateWithdrawal('${item.id}', '${item.user_id}', ${item.amount}, 'rejected')">Reject & Refund</button>
-            ` : item.status}
+              <button class="btn btn-approve" onclick="updateWithdrawal('${item.id}', '${item.user_id}', ${item.amount}, 'Approved', '${userEmail}', '${userName}')">Approve</button>
+              <button class="btn btn-reject" onclick="updateWithdrawal('${item.id}', '${item.user_id}', ${item.amount}, 'Rejected', '${userEmail}', '${userName}')">Reject & Refund</button>
+            ` : `<span style="color:#94a3b8; font-weight:600; text-transform:uppercase; font-size:11px;">${item.status} (Completed)</span>`}
           </td>
         </tr>
       `;
-    });
+    }
   }
 
-  // Handle Approve or Reject (with automatic refund to user's dashboard balance)
-  async function updateWithdrawal(id, userId, amount, actionStatus) {
-    const confirmMsg = actionStatus === 'approved' 
+  // Handle Approve or Reject
+  async function updateWithdrawal(id, userId, amount, actionStatus, userEmail, userName) {
+    const confirmMsg = actionStatus === 'Approved' 
       ? `Kya aap is withdrawal ko Approve karna chahte hain?` 
       : `Kya aap is withdrawal ko Reject karna chahte hain? Amount user ke wallet mein refund ho jayega.`;
     
@@ -271,34 +269,37 @@
 
       if (updateErr) throw updateErr;
 
-      // 2. If rejected, refund the amount back to user's profile balance
-      if (actionStatus === 'rejected') {
-        const { data: profileData, error: profileErr } = await supabaseClient
+      // 2. If rejected, refund amount back to user's wallet
+      if (actionStatus === 'Rejected') {
+        const { data: profileData } = await supabaseClient
           .from('profiles')
-          .select('id, balance, user_id')
+          .select('id, balance')
           .or(`id.eq.${userId},user_id.eq.${userId}`)
           .single();
 
         if (profileData) {
-          const currentBal = Number(profileData.balance || 0);
-          const refundedBal = currentBal + Number(amount);
-
-          const { error: refundErr } = await supabaseClient
-            .from('profiles')
-            .update({ balance: refundedBal })
-            .eq('id', profileData.id);
-
-          if (refundErr) throw refundErr;
+          const refundedBal = Number(profileData.balance || 0) + Number(amount);
+          await supabaseClient.from('profiles').update({ balance: refundedBal }).eq('id', profileData.id);
         }
+      } else if (actionStatus === 'Approved') {
+        // Trigger Email Notification simulation / handler
+        sendWithdrawalEmail(userEmail, userName, amount);
       }
 
-      alert(actionStatus === 'approved' ? "Withdrawal Approved successfully!" : "Withdrawal Rejected and amount refunded successfully to user dashboard!");
+      alert(actionStatus === 'Approved' ? "Withdrawal Approved successfully!" : "Withdrawal Rejected and amount refunded successfully!");
       loadWithdrawals();
       loadUsers();
 
     } catch (err) {
       alert("Error: " + err.message);
     }
+  }
+
+  // Email Notification Trigger function
+  function sendWithdrawalEmail(email, name, amount) {
+    if (!email) return;
+    console.log(`Sending Email to ${email}: Hello ${name}, Your payment of ₹${amount} has been sent to you. If you are facing any problem with it, please let us know.`);
+    // Yahan aap EmailJS ya apna custom email API integration laga sakte hain agar zaroorat ho.
   }
 
   // 3. Load Users
