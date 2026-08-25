@@ -46,7 +46,7 @@
 
     .container { max-width: 1150px; margin: 0 auto; padding: 25px 16px; }
 
-    /* Stylish Master Profile Header Box (Like User Dashboard) */
+    /* Stylish Master Profile Header */
     .profile-card { background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%); border-radius: 24px; padding: 22px; margin-bottom: 25px; border: 1px solid var(--border-color); box-shadow: 0 15px 35px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; backdrop-filter: blur(16px); }
     .profile-left { display: flex; align-items: center; gap: 15px; }
     .avatar-box { width: 55px; height: 55px; background: linear-gradient(135deg, #6366f1 0%, #38bdf8 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; color: #fff; box-shadow: 0 0 20px rgba(99,102,241,0.5); }
@@ -126,15 +126,15 @@
       <div style="font-size: 11px; color: var(--text-muted);">SM-3D99B9</div>
     </div>
     <div class="stats-box">
-      <h4>Total Requests</h4>
+      <h4>Total Package Requests</h4>
       <div class="num" id="statTotal">0</div>
     </div>
     <div class="stats-box">
-      <h4>Approved</h4>
+      <h4>Approved Packages</h4>
       <div class="num" style="color: #34d399;" id="statApproved">0</div>
     </div>
     <div class="stats-box">
-      <h4>Rejected</h4>
+      <h4>Rejected Packages</h4>
       <div class="num" style="color: #fb7185;" id="statRejected">0</div>
     </div>
 
@@ -150,7 +150,7 @@
   </div>
 
   <div class="container">
-    <!-- Stylish Master Profile Header (Similar to User Dashboard style) -->
+    <!-- Stylish Master Profile Header -->
     <div class="profile-card">
       <div class="profile-left">
         <div class="avatar-box">SS</div>
@@ -165,7 +165,7 @@
       </div>
     </div>
 
-    <!-- 1. PENDING PAYMENT REQUESTS -->
+    <!-- 1. PENDING PACKAGE APPROVALS (ONLY PACKAGES) -->
     <div class="card">
       <div class="card-header">
         <h2>💳 Pending Package Approvals</h2>
@@ -193,7 +193,7 @@
       </div>
     </div>
 
-    <!-- 2. WITHDRAWAL REQUESTS WITH BANK/UPI DETAILS -->
+    <!-- 2. WITHDRAWAL PAYOUT REQUESTS (ONLY WITHDRAWALS) -->
     <div class="card">
       <div class="card-header">
         <h2>💸 Withdrawal Payout Requests</h2>
@@ -332,7 +332,7 @@
 
     const tbody = document.getElementById("paymentTableBody");
     if (filtered.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No payment records found.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No package records found.</td></tr>`;
       return;
     }
 
@@ -356,7 +356,7 @@
   }
 
   async function approvePayment(id, fullName, email, packageName, refId) {
-    if (!confirm(`Approve payment for ${fullName}?`)) return;
+    if (!confirm(`Approve package for ${fullName}?`)) return;
     try {
       const uniqueRefCode = "SM-" + Math.floor(1000 + Math.random() * 9000);
       const { error: insErr } = await supabaseClient.from('profiles').insert([{ full_name: fullName, email: email, package_name: packageName, referral_id: uniqueRefCode, referred_by: refId || 'SM-3D99B9', balance: 0, is_active: true }]);
@@ -374,7 +374,7 @@
       }
 
       await supabaseClient.from('payment_requests').update({ status: 'Approved' }).eq('id', id);
-      alert("Payment Approved & Multi-Level Referral Commission Credited Successfully!");
+      alert("Package Approved & Multi-Level Referral Commission Credited Successfully!");
       loadPaymentRequests();
       loadUsers();
     } catch (err) { alert("Error: " + err.message); }
