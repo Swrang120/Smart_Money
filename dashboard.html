@@ -60,6 +60,12 @@
     }
     .sidebar-menu a.active { background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
 
+    /* SUBMENU FOR PACKAGES */
+    .submenu { list-style: none; padding-left: 20px; margin: 5px 0; display: none; }
+    .submenu.active { display: block; }
+    .submenu li a { font-size: 13px; padding: 8px 12px; color: #94a3b8; }
+    .submenu li a:hover { color: #fff; background: rgba(255,255,255,0.05); }
+
     /* MAIN CONTAINER */
     .dash-container { max-width: 480px; margin: 20px auto; padding: 0 15px; width: 100%; }
 
@@ -118,14 +124,26 @@
 <!-- SIDEBAR DRAWER MENU -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a href="dashboard.html" class="brand-logo" style="color:#fff;"><span>✦ Smart Money</span></a>
+    <a href="dashboard.html" class="brand-logo" style="color:#fff;"><img src="1000819130.jpg" style="width:30px;height:30px;border-radius:50%;object-fit:cover;"> <span>Smart Money</span></a>
     <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
   </div>
   <ul class="sidebar-menu">
     <li><a href="dashboard.html" class="active"><span>🏠</span> Dashboard Home</a></li>
     <li><a href="index.html"><span>🌐</span> Home / Landing Page</a></li>
-    <li><a href="index.html"><span>📦</span> Entry Package (₹299)</a></li>
-    <li><a href="index.html"><span>👑</span> Max Pro Package (₹4,499)</a></li>
+    
+    <!-- PACKAGES DROPDOWN IN MENU -->
+    <li>
+      <button onclick="toggleSubmenu()"><span>📦</span> Our Packages ▾</button>
+      <ul class="submenu" id="packageSubmenu">
+        <li><a href="index.html#packages">Entry Package (₹299)</a></li>
+        <li><a href="starter.html">Starter Package (₹560)</a></li>
+        <li><a href="medium.html">Growth Package (₹899)</a></li>
+        <li><a href="premium.html">Premium Package (₹1,499)</a></li>
+        <li><a href="super_premium.html">Super Premium (₹2,499)</a></li>
+        <li><a href="index.html#packages">Max Pro Package (₹4,499)</a></li>
+      </ul>
+    </li>
+
     <li><button onclick="openProfileSettingsModal()"><span>👤</span> Edit Name & UPI Details</button></li>
     <li><button onclick="copyRefLink()"><span>🔗</span> Copy Affiliate Link</button></li>
     <li><button onclick="openWithdrawModal()"><span>💸</span> Withdraw Funds</button></li>
@@ -134,7 +152,10 @@
 </aside>
 
 <header class="navbar">
-  <a href="dashboard.html" class="brand-logo"><span>Smart Money</span></a>
+  <a href="dashboard.html" class="brand-logo">
+    <img src="1000819130.jpg" class="nav-avatar" alt="Logo">
+    <span>Smart Money</span>
+  </a>
   <div class="nav-right">
     <img id="navAvatar" src="1000819130.jpg" class="nav-avatar" alt="Logo">
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
@@ -143,9 +164,9 @@
 
 <div class="dash-container">
   
-  <!-- USER PROFILE CARD -->
+  <!-- USER PROFILE CARD WITH ACTIVE PACKAGE ON TOP -->
   <div class="profile-card">
-    <div class="package-badge" id="activePackageBadge">Basic Package</div>
+    <div class="package-badge" id="activePackageBadge">No Package Yet</div>
     <div class="profile-img-wrap">
       <img id="userAvatar" src="1000819130.jpg" class="profile-img" alt="Official Logo">
     </div>
@@ -161,6 +182,7 @@
   <div class="balance-card">
     <span style="font-size: 11px; color:#64748b; font-weight: 700; text-transform: uppercase;">Available Wallet Balance</span>
     <h1 style="margin: 6px 0 0 0; color: #10b981; font-size: 32px;" id="walletBalance">₹0.00</h1>
+    <p id="upiDisplayInfo" style="font-size: 12px; color: #64748b; margin-top: 4px;">UPI ID: Not Saved Yet</p>
     <button class="btn-withdraw" onclick="openWithdrawModal()">💸 Withdraw Money Now</button>
   </div>
 
@@ -174,26 +196,32 @@
 
 </div>
 
-<!-- PROFILE SETTINGS MODAL -->
+<!-- PROFILE SETTINGS MODAL (UPI & NAME SAVE) -->
 <div id="profileSettingsModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">⚙️ Edit Name & UPI Details</h3>
-    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Profile logo is officially locked to Smart Money branding.</p>
+    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Aapka official profile logo Smart Money brand ka permanent set hai.</p>
+    
     <label style="font-size:12px; font-weight:600; color:#475569;">Full Name</label>
     <input type="text" id="editFullName" class="input-field" placeholder="Your Name">
-    <label style="font-size:12px; font-weight:600; color:#475569;">UPI ID / Bank Detail</label>
-    <input type="text" id="editUpiId" class="input-field" placeholder="UPI ID or Account Info">
-    <button onclick="updateUserProfile()" class="btn-action" id="saveProfileBtn">Save Changes</button>
+    
+    <label style="font-size:12px; font-weight:600; color:#475569;">UPI ID / Bank Detail (For Withdrawal)</label>
+    <input type="text" id="editUpiId" class="input-field" placeholder="e.g. yourname@paytm or UPI ID">
+    
+    <button onclick="updateUserProfile()" class="btn-action" id="saveProfileBtn">Save Profile & UPI</button>
     <button onclick="closeModal('profileSettingsModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer;">Cancel</button>
   </div>
 </div>
 
-<!-- WITHDRAW MODAL -->
+<!-- WITHDRAW MODAL WITH STRICT BALANCE CHECK -->
 <div id="withdrawModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">💸 Request Withdrawal</h3>
+    <p id="withdrawLimitText" style="font-size: 12px; color: #64748b;">Available Balance: ₹0</p>
+    
     <label style="font-size:12px; font-weight:600; color:#475569;">Enter Amount (₹)</label>
     <input type="number" id="withdrawAmount" class="input-field" placeholder="Enter amount to withdraw">
+    
     <button onclick="submitWithdrawal()" class="btn-action">Submit Withdrawal Request</button>
     <button onclick="closeModal('withdrawModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer;">Cancel</button>
   </div>
@@ -207,11 +235,17 @@
 
   let currentUserId = null;
   let userReferralCode = "";
+  let userCurrentBalance = 0;
+  let userSavedUpi = "";
   const OFFICIAL_LOGO = "1000819130.jpg";
 
   function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("active");
     document.getElementById("sidebarOverlay").classList.toggle("active");
+  }
+
+  function toggleSubmenu() {
+    document.getElementById("packageSubmenu").classList.toggle("active");
   }
 
   document.addEventListener("DOMContentLoaded", async function() {
@@ -248,18 +282,32 @@
         document.getElementById("userName").innerText = finalName;
         document.getElementById("myRefCode").innerText = userReferralCode;
         
-        let currentPackageName = profile.package_name || "Basic Package";
-        const badgeEl = document.getElementById("activePackageBadge");
-        badgeEl.innerText = currentPackageName;
+        userCurrentBalance = profile.balance || 0;
+        document.getElementById("walletBalance").innerText = "₹" + userCurrentBalance.toFixed(2);
+        document.getElementById("withdrawLimitText").innerText = "Available Balance: ₹" + userCurrentBalance.toFixed(2);
 
-        if (currentPackageName.includes("Max Pro") || currentPackageName.includes("Super Premium") || currentPackageName.includes("VIP")) {
-          badgeEl.classList.add("vip");
-          document.getElementById("vipTitleIcon").style.display = "inline-block";
+        userSavedUpi = profile.upi_id || "";
+        if(userSavedUpi) {
+          document.getElementById("upiDisplayInfo").innerText = "UPI ID: " + userSavedUpi;
+          document.getElementById("editUpiId").value = userSavedUpi;
+        } else {
+          document.getElementById("upiDisplayInfo").innerText = "UPI ID: Not Saved Yet (Click Edit to Add)";
+        }
+
+        let currentPackageName = profile.package_name || "";
+        const badgeEl = document.getElementById("activePackageBadge");
+        
+        if (currentPackageName) {
+          badgeEl.innerText = currentPackageName;
+          if (currentPackageName.includes("Max Pro") || currentPackageName.includes("Super Premium") || currentPackageName.includes("VIP")) {
+            badgeEl.classList.add("vip");
+            document.getElementById("vipTitleIcon").style.display = "inline-block";
+          }
+        } else {
+          badgeEl.innerText = "No Package Yet";
         }
 
         document.getElementById("editFullName").value = finalName;
-        document.getElementById("editUpiId").value = profile.upi_id || "";
-        document.getElementById("walletBalance").innerText = "₹" + (profile.balance || 0).toFixed(2);
       }
 
     } catch (err) {
@@ -279,6 +327,19 @@
 
   function openWithdrawModal() {
     if(document.getElementById("sidebar").classList.contains("active")) toggleSidebar();
+    
+    // STRICT CHECK: Agar balance 0 ya negative hai, toh withdrawal nahi karne dega!
+    if (userCurrentBalance <= 0) {
+      alert("⚠️ Aapke wallet mein balance nahi hai! Zero (₹0) balance par withdrawal request nahi ho sakti.");
+      return;
+    }
+
+    if (!userSavedUpi) {
+      alert("⚠️ Pehle apna UPI ID save karein 'Edit Name & UPI Details' option se, tabhi withdrawal hoga!");
+      openProfileSettingsModal();
+      return;
+    }
+
     document.getElementById("withdrawModal").style.display = "flex";
   }
 
@@ -287,32 +348,47 @@
     const newUpi = document.getElementById("editUpiId").value.trim();
     let btn = document.getElementById("saveProfileBtn");
     
+    if(!newUpi) {
+      alert("Please enter a valid UPI ID or bank details.");
+      return;
+    }
+
     btn.innerText = "Saving...";
     btn.disabled = true;
 
     try {
-      await supabaseClient.from('profiles').update({ 
+      const { error } = await supabaseClient.from('profiles').update({ 
         full_name: newName, 
         upi_id: newUpi,
         avatar_url: OFFICIAL_LOGO 
       }).eq('user_id', currentUserId);
 
-      alert("🎉 Profile successfully updated!");
+      if(error) throw error;
+
+      alert("🎉 Profile and UPI details successfully saved!");
       location.reload();
     } catch(err) {
-      alert("Error aa gaya: " + err.message);
-      btn.innerText = "Save Changes";
+      alert("Error saving: " + err.message);
+      btn.innerText = "Save Profile & UPI";
       btn.disabled = false;
     }
   }
 
   function submitWithdrawal() {
-    const amount = document.getElementById("withdrawAmount").value;
-    if(!amount || amount <= 0) {
+    const amount = parseFloat(document.getElementById("withdrawAmount").value);
+    
+    // Strict validation inside withdraw modal
+    if (!amount || amount <= 0) {
       alert("Please enter a valid withdrawal amount.");
       return;
     }
-    alert("💸 Withdrawal request of ₹" + amount + " submitted successfully!");
+
+    if (amount > userCurrentBalance) {
+      alert("❌ Error: Aapka withdrawal amount available balance (₹" + userCurrentBalance + ") se zyada hai!");
+      return;
+    }
+
+    alert("💸 Withdrawal request of ₹" + amount + " successfully submitted to UPI: " + userSavedUpi + "!");
     closeModal('withdrawModal');
   }
 
