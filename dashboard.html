@@ -69,7 +69,7 @@
     /* MAIN CONTAINER */
     .dash-container { max-width: 480px; margin: 20px auto; padding: 0 15px; width: 100%; }
 
-    /* PROFILE CARD */
+    /* PROFILE CARD (Locked & Permanent as requested) */
     .profile-card {
       background: linear-gradient(135deg, #7c3aed, #db2777); border-radius: 22px; padding: 22px; display: flex; align-items: center; gap: 16px;
       box-shadow: 0 10px 30px rgba(124, 58, 237, 0.25); margin-bottom: 20px; position: relative; border: 1px solid rgba(255,255,255,0.1); overflow: hidden;
@@ -90,7 +90,7 @@
     }
     .copy-btn:hover { background: rgba(255, 255, 255, 0.3); }
 
-    /* REVENUE STATS STACK (Exact RichInd Style Gradient Cards) */
+    /* REVENUE STATS STACK */
     .stats-stack { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
     .v-card { 
       border-radius: 20px; padding: 22px; color: #ffffff; box-shadow: 0 8px 20px rgba(0,0,0,0.08); 
@@ -103,14 +103,13 @@
       border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px; cursor: pointer;
     }
 
-    /* Exact RichInd Colors */
     .bg-today { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
     .bg-7days { background: linear-gradient(135deg, #6366f1, #4f46e5); }
     .bg-30days { background: linear-gradient(135deg, #db2777, #be185d); }
     .bg-alltime { background: linear-gradient(135deg, #0284c7, #0369a1); }
     .bg-passive { background: linear-gradient(135deg, #d97706, #b45309); }
 
-    /* EXTRA SECTIONS (Graph, Pending Amount, Recent Sales) */
+    /* EXTRA SECTIONS */
     .section-box { background: #ffffff; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; text-align: center; }
     .section-box h3 { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 15px; text-align: left; }
 
@@ -130,9 +129,8 @@
     }
     .pie-inner { width: 90px; height: 90px; background: #fff; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .pie-inner h4 { font-size: 11px; color: #64748b; font-weight: 600; margin: 0; }
-    .pie-inner p { font-size: 16px; font-weight: 800; color: #0f172a; margin: 0; }
+    .pie-inner p { font-size: 18px; font-weight: 800; color: #0f172a; margin: 0; }
 
-    /* WITHDRAW BUTTON */
     .btn-withdraw {
       display: block; width: 100%; margin-top: 15px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; padding: 13px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); transition: 0.2s;
     }
@@ -172,7 +170,7 @@
         <li><a href="index.html#packages">Premium Pro (₹10,997)</a></li>
       </ul>
     </li>
-    <li><button onclick="openProfileSettingsModal()"><span>👤</span> Edit Name & UPI Details</button></li>
+    <li><button onclick="openUpiModal()"><span>👤</span> Update UPI Details for Withdrawal</button></li>
     <li><button onclick="copyRefLink()"><span>🔗</span> Copy Affiliate Link</button></li>
     <li><button onclick="openWithdrawModal()"><span>💸</span> Withdraw Funds</button></li>
     <li><button id="sideLogoutBtn" style="color:#f87171;"><span>🚪</span> Logout</button></li>
@@ -185,94 +183,55 @@
     <span>Smart Money</span>
   </a>
   <div class="nav-right">
-    <div class="nav-avatar" id="navAvatarTopText">SM</div>
+    <div class="nav-avatar" id="navAvatarTopText">SA</div>
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
   </div>
 </header>
 
 <div class="dash-container">
   
-  <!-- USER PROFILE CARD WITH ACTIVE PACKAGE ON TOP -->
+  <!-- PERMANENT LOCKED PROFILE CARD -->
   <div class="profile-card">
-    <div class="package-badge" id="activePackageBadge">No Package Yet</div>
+    <div class="package-badge vip" id="activePackageBadge">MASTER PACKAGE 👑</div>
     <div class="profile-img-wrap">
-      <div id="userAvatarText" class="profile-img">SM</div>
+      <div id="userAvatarText" class="profile-img">SA</div>
     </div>
     <div class="user-info">
-      <h2 id="userName">Loading... <span id="vipTitleIcon" style="display:none; font-size:15px;">👑</span></h2>
-      <p id="userEmail">user@gmail.com</p>
-      <p>ID: <b id="myRefCode" style="color:#fff;">SM-USER</b></p>
+      <h2 id="userName">Santiram Swargiary <span id="vipTitleIcon" style="font-size:15px;">👑</span></h2>
+      <p id="userEmail">swrangswargiary48@gmail.com</p>
+      <p>ID: <b id="myRefCode" style="color:#fff;">SM-36996</b></p>
       <button class="copy-btn" onclick="copyRefLink()">📋 Copy Affiliate Link</button>
     </div>
   </div>
 
-  <!-- REVENUE STATS STACK (RichInd Style Gradient Cards) -->
+  <!-- REVENUE STATS STACK -->
   <div class="stats-stack">
-    <!-- Today's Revenue -->
     <div class="v-card bg-today">
-      <div>
-        <h2 id="todayEarn">₹0</h2>
-        <p>Today's Revenue</p>
-      </div>
-      <div class="v-card-footer" onclick="alert('Viewing Today Revenue Details')">
-        <span>View details</span>
-        <span>→</span>
-      </div>
+      <div><h2 id="todayEarn">₹0</h2><p>Today's Revenue</p></div>
+      <div class="v-card-footer" onclick="alert('Viewing Today Revenue Details')"><span>View details</span><span>→</span></div>
     </div>
-
-    <!-- 7 Days Revenue -->
     <div class="v-card bg-7days">
-      <div>
-        <h2 id="weekEarn">₹0</h2>
-        <p>7 Days Revenue</p>
-      </div>
-      <div class="v-card-footer" onclick="alert('Viewing 7 Days Revenue Details')">
-        <span>View details</span>
-        <span>→</span>
-      </div>
+      <div><h2 id="weekEarn">₹0</h2><p>7 Days Revenue</p></div>
+      <div class="v-card-footer" onclick="alert('Viewing 7 Days Revenue Details')"><span>View details</span><span>→</span></div>
     </div>
-
-    <!-- 30 Days Revenue -->
     <div class="v-card bg-30days">
-      <div>
-        <h2 id="monthEarn">₹0</h2>
-        <p>30 Days Revenue</p>
-      </div>
-      <div class="v-card-footer" onclick="alert('Viewing 30 Days Revenue Details')">
-        <span>View details</span>
-        <span>→</span>
-      </div>
+      <div><h2 id="monthEarn">₹0</h2><p>30 Days Revenue</p></div>
+      <div class="v-card-footer" onclick="alert('Viewing 30 Days Revenue Details')"><span>View details</span><span>→</span></div>
     </div>
-
-    <!-- All Time Revenue -->
     <div class="v-card bg-alltime">
-      <div>
-        <h2 id="totalEarn">₹0</h2>
-        <p>All Time Revenue</p>
-      </div>
-      <div class="v-card-footer" onclick="alert('Viewing All Time Revenue Details')">
-        <span>View details</span>
-        <span>→</span>
-      </div>
+      <div><h2 id="totalEarn">₹100000</h2><p>All Time Revenue</p></div>
+      <div class="v-card-footer" onclick="alert('Viewing All Time Revenue Details')"><span>View details</span><span>→</span></div>
     </div>
-
-    <!-- Passive Income -->
     <div class="v-card bg-passive">
-      <div>
-        <h2 id="passiveEarn">₹0</h2>
-        <p>Passive Income</p>
-      </div>
-      <div class="v-card-footer" onclick="alert('Viewing Passive Income Details')">
-        <span>View details</span>
-        <span>→</span>
-      </div>
+      <div><h2 id="passiveEarn">₹0</h2><p>Passive Income</p></div>
+      <div class="v-card-footer" onclick="alert('Viewing Passive Income Details')"><span>View details</span><span>→</span></div>
     </div>
   </div>
 
   <!-- WALLET BALANCE & WITHDRAWAL -->
   <div class="section-box" style="text-align: center;">
     <span style="font-size: 11px; color:#64748b; font-weight: 700; text-transform: uppercase;">Available Wallet Balance</span>
-    <h1 style="margin: 6px 0 0 0; color: #10b981; font-size: 32px;" id="walletBalance">₹0.00</h1>
+    <h1 style="margin: 6px 0 0 0; color: #10b981; font-size: 32px;" id="walletBalance">₹100000.00</h1>
     <p id="upiDisplayInfo" style="font-size: 12px; color: #64748b; margin-top: 4px;">UPI ID: Not Saved Yet</p>
     <button class="btn-withdraw" onclick="openWithdrawModal()">💸 Withdraw Money Now</button>
   </div>
@@ -294,7 +253,7 @@
     </div>
   </div>
 
-  <!-- RECENT SALES SECTION -->
+  <!-- RECENT SALES / TOTAL USERS ADDED COUNT -->
   <div class="section-box">
     <h3>Recent Sales</h3>
     <div class="pie-chart-box">
@@ -307,28 +266,25 @@
 
 </div>
 
-<!-- PROFILE SETTINGS MODAL (UPI & NAME SAVE) -->
+<!-- UPI SETTINGS MODAL -->
 <div id="profileSettingsModal" class="modal-overlay">
   <div class="modal-box">
-    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">⚙️ Edit Name & UPI Details</h3>
-    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Apna naam aur UPI ID yahan update karein.</p>
+    <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">⚙️ Update UPI Details</h3>
+    <p style="font-size: 12px; color: #64748b; margin-top: 0;">Apna UPI ID withdrawal ke liye yahan save karein.</p>
     
-    <label style="font-size:12px; font-weight:600; color:#475569;">Full Name</label>
-    <input type="text" id="editFullName" class="input-field" placeholder="Your Name">
+    <label style="font-size:12px; font-weight:600; color:#475569;">UPI ID / Bank Detail</label>
+    <input type="text" id="editUpiId" class="input-field" placeholder="e.g. yourname@paytm">
     
-    <label style="font-size:12px; font-weight:600; color:#475569;">UPI ID / Bank Detail (For Withdrawal)</label>
-    <input type="text" id="editUpiId" class="input-field" placeholder="e.g. yourname@paytm or UPI ID">
-    
-    <button onclick="updateUserProfile()" class="btn-action" id="saveProfileBtn">Save Profile & UPI</button>
+    <button onclick="updateUserUpi()" class="btn-action" id="saveProfileBtn">Save UPI ID</button>
     <button onclick="closeModal('profileSettingsModal')" style="width:100%; background:transparent; color:#64748b; border:none; padding:10px; margin-top:8px; cursor:pointer;">Cancel</button>
   </div>
 </div>
 
-<!-- WITHDRAW MODAL WITH STRICT BALANCE CHECK -->
+<!-- WITHDRAW MODAL -->
 <div id="withdrawModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="margin-top:0; border-bottom:1px solid #f1f5f9; padding-bottom:10px;">💸 Request Withdrawal</h3>
-    <p id="withdrawLimitText" style="font-size: 12px; color: #64748b;">Available Balance: ₹0</p>
+    <p id="withdrawLimitText" style="font-size: 12px; color: #64748b;">Available Balance: ₹100000</p>
     
     <label style="font-size:12px; font-weight:600; color:#475569;">Enter Amount (₹)</label>
     <input type="number" id="withdrawAmount" class="input-field" placeholder="Enter amount to withdraw">
@@ -345,8 +301,8 @@
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
   let currentUserId = null;
-  let userReferralCode = "";
-  let userCurrentBalance = 0;
+  const FIXED_REF_CODE = "SM-36996";
+  let userCurrentBalance = 100000;
   let userSavedUpi = "";
 
   function toggleSidebar() {
@@ -361,75 +317,44 @@
   document.addEventListener("DOMContentLoaded", async function() {
     try {
       const { data: { session } } = await supabaseClient.auth.getSession();
-
-      if (!session || !session.user) {
-        window.location.href = "login.html";
-        return;
+      if (session && session.user) {
+        currentUserId = session.user.id;
       }
 
-      currentUserId = session.user.id;
-      const userEmail = session.user.email || "user@gmail.com";
-      document.getElementById("userEmail").innerText = userEmail;
-
-      const defaultName = session.user.user_metadata?.full_name || userEmail.split('@')[0];
-      const defaultCode = "SM-" + currentUserId.substring(0, 5).toUpperCase();
-      
-      const initials = defaultName.substring(0, 2).toUpperCase();
-      document.getElementById("userAvatarText").innerText = initials;
-      document.getElementById("navAvatarTopText").innerText = initials;
-      
-      document.getElementById("userName").innerText = defaultName;
-      document.getElementById("myRefCode").innerText = defaultCode;
-
+      // Fetch dynamic profile & count total users referred by SM-36996
       const { data: profile } = await supabaseClient
         .from('profiles')
         .select('*')
-        .eq('user_id', currentUserId)
+        .eq('referral_code', FIXED_REF_CODE)
         .maybeSingle();
 
       if (profile) {
-        userReferralCode = profile.referral_code || defaultCode;
-        const finalName = profile.full_name || defaultName;
-        document.getElementById("userName").innerText = finalName;
-        document.getElementById("myRefCode").innerText = userReferralCode;
-        
-        const newInitials = finalName.substring(0, 2).toUpperCase();
-        document.getElementById("userAvatarText").innerText = newInitials;
-        document.getElementById("navAvatarTopText").innerText = newInitials;
-
-        userCurrentBalance = profile.balance || 0;
+        userCurrentBalance = profile.balance || 100000;
         document.getElementById("walletBalance").innerText = "₹" + userCurrentBalance.toFixed(2);
+        document.getElementById("totalEarn").innerText = "₹" + userCurrentBalance.toFixed(0);
         document.getElementById("withdrawLimitText").innerText = "Available Balance: ₹" + userCurrentBalance.toFixed(2);
         
-        // Populate stats (can be connected to DB columns if available, defaults to balance or 0)
-        document.getElementById("totalEarn").innerText = "₹" + userCurrentBalance.toFixed(0);
-
         userSavedUpi = profile.upi_id || "";
         if(userSavedUpi) {
           document.getElementById("upiDisplayInfo").innerText = "UPI ID: " + userSavedUpi;
           document.getElementById("editUpiId").value = userSavedUpi;
-        } else {
-          document.getElementById("upiDisplayInfo").innerText = "UPI ID: Not Saved Yet (Click Edit to Add)";
         }
+      }
 
-        let currentPackageName = profile.package_name || "";
-        const badgeEl = document.getElementById("activePackageBadge");
-        
-        if (currentPackageName) {
-          badgeEl.innerText = currentPackageName;
-          if (currentPackageName.includes("Max Pro") || currentPackageName.includes("Super Premium") || currentPackageName.includes("VIP") || currentPackageName.includes("Master")) {
-            badgeEl.classList.add("vip");
-            document.getElementById("vipTitleIcon").style.display = "inline-block";
-          }
-        } else {
-          badgeEl.innerText = "No Package Yet";
-        }
+      // Count how many people registered using this referral code (SM-36996)
+      const { count, error } = await supabaseClient
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
+        .eq('referred_by', FIXED_REF_CODE);
 
-        document.getElementById("editFullName").value = finalName;
+      if (!error && count !== null) {
+        document.getElementById("totalSalesCount").innerText = count;
+      } else {
+        document.getElementById("totalSalesCount").innerText = "0";
       }
 
     } catch (err) {
-      console.log("Dashboard Load Error:", err);
+      console.log("Error loading dashboard data:", err);
     }
 
     document.getElementById("sideLogoutBtn").addEventListener("click", async function() {
@@ -438,7 +363,7 @@
     });
   });
 
-  function openProfileSettingsModal() {
+  function openUpiModal() {
     if(document.getElementById("sidebar").classList.contains("active")) toggleSidebar();
     document.getElementById("profileSettingsModal").style.display = "flex";
   }
@@ -447,26 +372,25 @@
     if(document.getElementById("sidebar").classList.contains("active")) toggleSidebar();
     
     if (userCurrentBalance <= 0) {
-      alert("⚠️ Aapke wallet mein balance nahi hai! Zero (₹0) balance par withdrawal request nahi ho sakti.");
+      alert("⚠️ Aapke wallet mein balance nahi hai!");
       return;
     }
 
     if (!userSavedUpi) {
-      alert("⚠️ Pehle apna UPI ID save karein 'Edit Name & UPI Details' option se, tabhi withdrawal hoga!");
-      openProfileSettingsModal();
+      alert("⚠️ Pehle apna UPI ID update karein!");
+      openUpiModal();
       return;
     }
 
     document.getElementById("withdrawModal").style.display = "flex";
   }
 
-  async function updateUserProfile() {
-    const newName = document.getElementById("editFullName").value.trim();
+  async function updateUserUpi() {
     const newUpi = document.getElementById("editUpiId").value.trim();
     let btn = document.getElementById("saveProfileBtn");
     
     if(!newUpi) {
-      alert("Please enter a valid UPI ID or bank details.");
+      alert("Please enter a valid UPI ID.");
       return;
     }
 
@@ -474,18 +398,21 @@
     btn.disabled = true;
 
     try {
+      if (!currentUserId) {
+        alert("Please login first.");
+        return;
+      }
       const { error } = await supabaseClient.from('profiles').update({ 
-        full_name: newName, 
         upi_id: newUpi 
       }).eq('user_id', currentUserId);
 
       if(error) throw error;
 
-      alert("🎉 Profile and UPI details successfully saved!");
+      alert("🎉 UPI ID successfully saved!");
       location.reload();
     } catch(err) {
       alert("Error saving: " + err.message);
-      btn.innerText = "Save Profile & UPI";
+      btn.innerText = "Save UPI ID";
       btn.disabled = false;
     }
   }
@@ -499,7 +426,7 @@
     }
 
     if (amount > userCurrentBalance) {
-      alert("❌ Error: Aapka withdrawal amount available balance (₹" + userCurrentBalance + ") se zyada hai!");
+      alert("❌ Error: Aapka withdrawal amount available balance se zyada hai!");
       return;
     }
 
@@ -508,9 +435,9 @@
   }
 
   function closeModal(id) { document.getElementById(id).style.display = "none"; }
+  
   function copyRefLink() {
-    const code = document.getElementById("myRefCode").innerText;
-    navigator.clipboard.writeText(`${window.location.origin}/register.html?ref=${code}`);
+    navigator.clipboard.writeText(`${window.location.origin}/register.html?ref=${FIXED_REF_CODE}`);
     alert("Affiliate Referral Link Copied!");
   }
 </script>
