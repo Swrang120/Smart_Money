@@ -1,665 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Money - Grow Your Future</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Smart Money - E-Learning & Referral Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
-    .brand-logo-img { 
-      width: 42px; 
-      height: 42px; 
-      border-radius: 50%; 
-      object-fit: cover; 
-      border: 2px solid #6366f1; 
-      margin-right: 10px; 
-      vertical-align: middle; 
-      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; line-height: 1.6; }
+    a { text-decoration: none; }
+
+    /* NAVBAR */
+    .navbar { width: 100%; height: 75px; padding: 0 5%; background: #ffffff; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+    .brand-box { display: flex; align-items: center; gap: 12px; }
+    .brand-logo { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #7c3aed; }
+    .brand-name { font-size: 22px; font-weight: 800; color: #0f172a; }
+    .navbar nav { display: flex; gap: 20px; align-items: center; }
+    .navbar nav a { color: #475569; font-size: 15px; font-weight: 600; transition: 0.3s; }
+    .navbar nav a:hover { color: #7c3aed; }
+    .nav-btn { background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff !important; padding: 8px 18px; border-radius: 8px; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3); }
+
+    /* HERO SECTION */
+    .hero { padding: 80px 5%; text-align: center; background: linear-gradient(180deg, #ede9fe 0%, #f8fafc 100%); }
+    .hero-tag { display: inline-block; background: #ddd6fe; color: #6d28d9; padding: 6px 16px; border-radius: 30px; font-size: 13px; font-weight: 700; margin-bottom: 20px; }
+    .hero h1 { font-size: 44px; font-weight: 800; color: #0f172a; margin-bottom: 15px; line-height: 1.2; }
+    .hero h1 span { color: #7c3aed; }
+    .hero p { font-size: 17px; color: #64748b; max-width: 600px; margin: 0 auto 30px auto; }
+
+    /* PACKAGES SECTION */
+    .packages-section { padding: 60px 5%; max-width: 1200px; margin: 0 auto; }
+    .section-title-box { text-align: center; margin-bottom: 45px; }
+    .section-title-box span { color: #7c3aed; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+    .section-title-box h2 { font-size: 32px; font-weight: 800; color: #0f172a; margin-top: 5px; }
+
+    .packages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; }
+    
+    /* PACKAGE CARD DESIGN (RichIND Style) */
+    .pkg-card { background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; transition: 0.3s; display: flex; flex-direction: column; }
+    .pkg-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(124, 58, 237, 0.12); }
+    
+    .pkg-banner { padding: 30px; color: #fff; text-align: left; position: relative; min-height: 160px; display: flex; flex-direction: column; justify-content: flex-end; }
+    .starter-bg { background: linear-gradient(135deg, #f97316, #ea580c); }
+    .medium-bg { background: linear-gradient(135deg, #7c3aed, #4f46e5); }
+    .premium-bg { background: linear-gradient(135deg, #db2777, #be185d); }
+    
+    .pkg-badge { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.25); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; backdrop-filter: blur(4px); }
+    .pkg-banner h3 { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+    .pkg-banner p { font-size: 13px; opacity: 0.9; }
+
+    .pkg-body { padding: 24px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; }
+    .pkg-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .stars { color: #f59e0b; font-size: 14px; }
+    .courses-count { font-size: 13px; color: #64748b; font-weight: 600; background: #f1f5f9; padding: 4px 10px; border-radius: 6px; }
+
+    .pkg-pricing { display: flex; align-items: baseline; gap: 10px; margin-bottom: 20px; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; padding: 16px 0; }
+    .current-price { font-size: 28px; font-weight: 800; color: #0f172a; }
+    .original-price { font-size: 16px; color: #94a3b8; text-decoration: line-through; }
+
+    .buy-now-btn { display: block; width: 100%; padding: 14px; text-align: center; background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff; font-size: 15px; font-weight: 700; border-radius: 12px; transition: 0.3s; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25); }
+    .buy-now-btn:hover { opacity: 0.92; }
+
+    /* FOOTER */
+    footer { background: #0f172a; color: #94a3b8; text-align: center; padding: 30px; font-size: 14px; margin-top: 60px; }
+
+    @media(max-width: 768px) {
+      .hero h1 { font-size: 32px; }
+      .navbar { padding: 0 4px; }
     }
   </style>
 </head>
-
 <body>
 
-<!-- =========================
-     NAVBAR
-========================= -->
-<header class="navbar">
-  <a href="index.html" class="logo" style="display: flex; align-items: center;">
-    <img src="1000819130.jpg" alt="Smart Money Logo" class="brand-logo-img">
-    Smart Money
-  </a>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="#about">About</a>
-    <a href="#packages">Packages</a>
-    <a href="#contact">Contact</a>
-    <a href="login.html" id="navLoginBtn">Login</a>
-  </nav>
-</header>
-
-<!-- =========================
-     HERO
-========================= -->
-<section class="hero">
-  <div class="hero-content">
-    <span class="hero-tag">
-      ✦ SMART REFERRAL PLATFORM
-    </span>
-    <h1>
-      Build Your Network.
-      <br>
-      <span>Grow Your Future.</span>
-    </h1>
-    <p>
-      Join Smart Money and start your journey towards smarter
-      networking, better opportunities and growing together.
-    </p>
-
-    <div class="buttons">
-      <a href="#packages" class="btn">
-        Get Started →
-      </a>
-      <a href="#packages" class="btn secondary">
-        Explore Packages
-      </a>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="brand-box">
+      <img src="1000819130.jpg" alt="Smart Money Logo" class="brand-logo">
+      <a href="index.html" class="brand-name">Smart Money</a>
     </div>
-
-    <div class="hero-stats">
-      <div>
-        <strong>6+</strong>
-        <span>Packages</span>
-      </div>
-      <div>
-        <strong>24/7</strong>
-        <span>Support</span>
-      </div>
-      <div>
-        <strong>100%</strong>
-        <span>Growth Focus</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="hero-visual">
-    <div class="hero-glow"></div>
-    <div class="hero-main-card">
-      <div class="card-icon">🚀</div>
-      <p>Smart Networking</p>
-      <h3>Grow Together</h3>
-      <div class="growth-line">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </div>
-
-    <div class="floating-card card-one">
-      💰 Earn Smarter
-    </div>
-
-    <div class="floating-card card-two">
-      📈 Grow Faster
-    </div>
-  </div>
-</section>
-
-<!-- =========================
-     ABOUT
-========================= -->
-<section class="about-section" id="about">
-  <div class="section-container about-grid">
-    <div class="about-content">
-      <span class="section-tag">
-        ✦ ABOUT SMART MONEY
-      </span>
-      <h2>
-        Discover A Better Way To
-        <span>Grow Together</span>
-      </h2>
-      <p>
-        Smart Money is designed for people who want to build
-        a strong network and explore new opportunities.
-        Our platform focuses on simple systems, clear packages
-        and better growth.
-      </p>
-
-      <div class="mission-vision">
-        <div class="info-mini-card">
-          <div class="mini-icon">🎯</div>
-          <div>
-            <h3>Our Mission</h3>
-            <p>
-              To help people build strong networks and
-              discover better opportunities.
-            </p>
-          </div>
-        </div>
-
-        <div class="info-mini-card">
-          <div class="mini-icon">🚀</div>
-          <div>
-            <h3>Our Vision</h3>
-            <p>
-              To create a smart community focused on
-              learning, networking and growth.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <a href="#packages" class="btn about-btn">
-        Explore Packages →
-      </a>
-    </div>
-
-    <div class="about-visual">
-      <div class="visual-card purple-card">
-        <span>NETWORK</span>
-        <strong>
-          Smart
-          <br>
-          Growth
-        </strong>
-      </div>
-
-      <div class="visual-card pink-card">
-        <span>SUCCESS</span>
-        <strong>
-          Build
-          <br>
-          Together
-        </strong>
-      </div>
-
-      <div class="experience-badge">
-        <strong>24/7</strong>
-        <span>
-          Support
-          <br>
-          Available
-        </span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- =========================
-     PACKAGES
-========================= -->
-<section class="packages" id="packages">
-  <div class="section-heading">
-    <span class="section-tag">
-      ✦ OUR PACKAGES
-    </span>
-    <h2>
-      Choose The Perfect
-      <span>Growth Package</span>
-    </h2>
-    <p>
-      Click any package to view complete details and choose it.
-    </p>
-  </div>
-
-  <div class="package-container">
-
-    <!-- ENTRY PACKAGE -->
-    <a href="register.html" class="package starter-package" style="border: 2px solid #06b6d4;">
-      <div class="package-banner" style="background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);">
-        <span class="package-badge" style="background: #06b6d4; color: #fff; font-weight:800;">
-          ENTRY LEVEL
-        </span>
-        <div class="package-banner-content">
-          <span class="package-small-icon">📦</span>
-          <h3>Entry Package</h3>
-          <p>Start small with easy entry.</p>
-        </div>
-      </div>
-
-      <div class="package-body">
-        <div class="package-title-row">
-          <h3>Entry Package</h3>
-          <span class="popular-dot" style="color: #06b6d4;">●</span>
-        </div>
-
-        <div class="stars" style="color: #06b6d4;">★★★★★</div>
-
-        <div class="package-price-row">
-          <strong>₹299</strong>
-          <span style="background: #06b6d4; color: #fff; font-weight:700;">START</span>
-        </div>
-
-        <div class="package-info">
-          <span>Referral Commission (30%)</span>
-          <strong>₹89.70</strong>
-        </div>
-
-        <div class="package-info">
-          <span>Minimum / Max Withdrawal</span>
-          <strong>₹100 - ₹600</strong>
-        </div>
-
-        <div class="package-info">
-          <span>Daily Frequency & Fee</span>
-          <strong>1 Time/Day | 2% Fee</strong>
-        </div>
-
-        <div class="package-button" style="background: linear-gradient(135deg, #06b6d4, #0284c7);">
-          View Details & Buy →
-        </div>
-      </div>
-    </a>
-
-    <!-- STARTER PACKAGE -->
-    <a href="starter.html" class="package starter-package">
-      <div class="package-banner">
-        <span class="package-badge">
-          START HERE
-        </span>
-        <div class="package-banner-content">
-          <span class="package-small-icon">🚀</span>
-          <h3>Starter Package</h3>
-          <p>Begin your Smart Money journey.</p>
-        </div>
-      </div>
-
-      <div class="package-body">
-        <div class="package-title-row">
-          <h3>Low Package</h3>
-          <span class="popular-dot">●</span>
-        </div>
-
-        <div class="stars">★★★★★</div>
-
-        <div class="package-price-row">
-          <strong>₹560</strong>
-          <span>SMART START</span>
-        </div>
-
-        <div class="package-info">
-          <span>Referral Commission (50%)</span>
-          <strong>₹280</strong>
-        </div>
-
-        <div class="package-button">
-          View Details & Buy →
-        </div>
-      </div>
-    </a>
-
-    <!-- MEDIUM PACKAGE -->
-    <a href="medium.html" class="package medium-package">
-      <div class="package-banner">
-        <span class="package-badge">
-          POPULAR
-        </span>
-        <div class="package-banner-content">
-          <span class="package-small-icon">📈</span>
-          <h3>Growth Package</h3>
-          <p>Build your network and grow faster.</p>
-        </div>
-      </div>
-
-      <div class="package-body">
-        <div class="package-title-row">
-          <h3>Medium Package</h3>
-          <span class="popular-dot">●</span>
-        </div>
-
-        <div class="stars">★★★★★</div>
-
-        <div class="package-price-row">
-          <strong>₹899</strong>
-          <span>POPULAR</span>
-        </div>
-
-        <div class="package-info">
-          <span>Referral Commission (60%)</span>
-          <strong>₹539.40</strong>
-        </div>
-
-        <div class="package-button">
-          View Details & Buy →
-        </div>
-      </div>
-    </a>
-
-    <!-- PREMIUM PACKAGE -->
-    <a href="premium.html" class="package high-package">
-      <div class="package-banner">
-        <span class="package-badge">
-          PREMIUM
-        </span>
-        <div class="package-banner-content">
-          <span class="package-small-icon">👑</span>
-          <h3>Premium Package</h3>
-          <p>Premium access for bigger opportunities.</p>
-        </div>
-      </div>
-
-      <div class="package-body">
-        <div class="package-title-row">
-          <h3>High Package</h3>
-          <span class="popular-dot">●</span>
-        </div>
-
-        <div class="stars">★★★★★</div>
-
-        <div class="package-price-row">
-          <strong>₹1,499</strong>
-          <span>PREMIUM</span>
-        </div>
-
-        <div class="package-info">
-          <span>Referral Commission (70%)</span>
-          <strong>₹1,049.30</strong>
-        </div>
-
-        <div class="package-button">
-          View Details & Buy →
-        </div>
-      </div>
-    </a>
-
-    <!-- SUPER PREMIUM PACKAGE -->
-    <a href="super_premium.html" class="package high-package" style="border: 2px solid #f59e0b;">
-      <div class="package-banner" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);">
-        <span class="package-badge" style="background: #f59e0b; color: #000; font-weight:800;">
-          VIP EXCLUSIVE
-        </span>
-        <div class="package-banner-content">
-          <span class="package-small-icon">🔥</span>
-          <h3>Super Premium</h3>
-          <p>Unlimited withdrawal & VIP personal support.</p>
-        </div>
-      </div>
-
-      <div class="package-body">
-        <div class="package-title-row">
-          <h3>Super Premium</h3>
-          <span class="popular-dot" style="color: #f59e0b;">●</span>
-        </div>
-
-        <div class="stars" style="color: #f59e0b;">★★★★★</div>
-
-        <div class="package-price-row">
-          <strong>₹2,499</strong>
-          <span style="background: #f59e0b; color: #000; font-weight:700;">VIP PROFIT</span>
-        </div>
-
-        <div class="package-info">
-          <span>Referral Commission (75%)</span>
-          <strong>₹1,874.25</strong>
-        </div>
-
-        <div class="package-info">
-          <span>Daily Withdrawal Limit</span>
-          <strong>₹100 - ₹10,000 (Unlimited)</strong>
-        </div>
-
-        <div class="package-info">
-          <span>Withdrawal Fee</span>
-          <strong>0% (No Fees)</strong>
-        </div>
-
-        <div class="package-button" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);">
-          View VIP Details & Buy →
-        </div>
-      </div>
-    </a>
-
-    <!-- MAX PRO PACKAGE -->
-    <a href="register.html" class="package high-package" style="border: 2px solid #e11d48;">
-      <div class="package-banner" style="background: linear-gradient(135deg, #881337 0%, #4c0519 100%);">
-        <span class="package-badge" style="background: #fbbf24; color: #0f172a; font-weight:800;">
-          MAX EXCLUSIVE
-        </span>
-        <div class="package-banner-content">
-          <span class="package-small-icon">👑</span>
-          <h3>Max Pro Package</h3>
-          <p>Ultimate earning & maximum freedom.</p>
-        </div>
-      </div>
-
-      <div class="package-body">
-        <div class="package-title-row">
-          <h3>Max Pro</h3>
-          <span class="popular-dot" style="color: #e11d48;">●</span>
-        </div>
-
-        <div class="stars" style="color: #fbbf24;">★★★★★</div>
-
-        <div class="package-price-row">
-          <strong>₹4,499</strong>
-          <span style="background: #e11d48; color: #fff; font-weight:700;">MAX PRO</span>
-        </div>
-
-        <div class="package-info">
-          <span>85% Direct Commission</span>
-          <strong>₹2,500.15</strong>
-        </div>
-
-        <div class="package-info">
-          <span>Daily Withdrawals</span>
-          <strong>₹100 - ₹30,000 (Unlimited)</strong>
-        </div>
-
-        <div class="package-info">
-          <span>Withdrawal Charges & Support</span>
-          <strong>0% Fee | 24/7 VIP Support</strong>
-        </div>
-
-        <div class="package-button" style="background: linear-gradient(135deg, #e11d48, #9f1239);">
-          View Max Pro Details →
-        </div>
-      </div>
-    </a>
-
-  </div>
-</section>
-
-<!-- =========================
-     WHY SMART MONEY
-========================= -->
-<section class="why-section">
-  <div class="section-container">
-    <div class="section-heading">
-      <span class="section-tag">
-        ✦ WHY CHOOSE US
-      </span>
-      <h2>
-        Everything You Need For
-        <span>Better Growth</span>
-      </h2>
-    </div>
-
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="feature-icon">🤝</div>
-        <h3>Smart Networking</h3>
-        <p>Build meaningful connections and grow your network step by step.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">💰</div>
-        <h3>Clear Packages</h3>
-        <p>Simple package options designed to help you choose your preferred journey.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">📊</div>
-        <h3>Track Progress</h3>
-        <p>Keep track of your network and stay updated with your growth journey.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">🛟</div>
-        <h3>Customer Support</h3>
-        <p>Get help whenever you need it from our dedicated support team.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- =========================
-     SUPPORT
-========================= -->
-<section class="support-section" id="contact">
-  <div class="support-container">
-    <div class="support-info">
-      <span class="support-tag">
-        ✦ NEED HELP?
-      </span>
-
-      <h2>
-        We're Here To
-        <span>Help You</span>
-      </h2>
-
-      <p>
-        Agar aapko account, referral, package ya kisi bhi
-        service se related help chahiye, hamari support team
-        se contact karein.
-      </p>
-
-      <div class="support-card">
-        <div class="support-icon">✉</div>
-        <div>
-          <h3>Email Support</h3>
-          <a href="mailto:Swrangartist@proton.me">Swrangartist@proton.me</a>
-        </div>
-      </div>
-
-      <div class="support-card">
-        <div class="support-icon">☎</div>
-        <div>
-          <h3>Customer Care</h3>
-          <a href="tel:8099473948">+91 8099473948</a>
-        </div>
-      </div>
-
-      <div class="support-card">
-        <div class="support-icon">⏰</div>
-        <div>
-          <h3>Support Hours</h3>
-          <p>Monday - Saturday<br>10:00 AM - 6:00 PM</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="support-form-box">
-      <span class="form-small-tag">
-        CONTACT US
-      </span>
-      <h2>Send Us A Message</h2>
-      <p>Hamari team aapse jaldi contact karegi.</p>
-
-      <form id="supportForm">
-        <input type="text" id="supportName" placeholder="Your Name" required>
-        <input type="email" id="supportEmail" placeholder="Your Email" required>
-        <input type="tel" id="supportPhone" placeholder="Mobile Number">
-        <textarea id="supportMessage" placeholder="Write your message..." required></textarea>
-        <button type="submit">Send Message →</button>
-      </form>
-    </div>
-  </div>
-</section>
-
-<!-- =========================
-     FOOTER
-========================= -->
-<footer class="main-footer">
-  <div class="footer-content">
-    <div class="footer-brand">
-      <h2>✦ Smart Money</h2>
-      <p>
-        Smart Money Referral Marketing Platform.
-        Build your network, discover opportunities
-        and grow together.
-      </p>
-    </div>
-
-    <div>
-      <h3>Quick Links</h3>
+    <nav>
       <a href="index.html">Home</a>
-      <a href="#about">About Us</a>
       <a href="#packages">Packages</a>
-      <a href="#contact">Contact</a>
+      <a href="login.html" class="nav-btn" id="navLoginBtn">Login</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="hero-tag">✦ E-LEARNING & REFERRAL PLATFORM</span>
+    <h1>Choose The Perfect <br><span>Course Package</span> For You</h1>
+    <p>Learn high-income digital skills, build your personal network, and grow your passive income step by step.</p>
+  </section>
+
+  <!-- PACKAGES SECTION -->
+  <section class="packages-section" id="packages">
+    <div class="section-title-box">
+      <span>Our Courses Packages</span>
+      <h2>Explore Best Learning Tiers</h2>
     </div>
 
-    <div>
-      <h3>Contact Us</h3>
-      <p>📧 Swrangartist@proton.me</p>
-      <p>📞 +91 8099473948</p>
-      <p>⏰ Mon - Sat<br>10:00 AM - 6:00 PM</p>
+    <div class="packages-grid">
+
+      <!-- STARTER PACKAGE -->
+      <div class="pkg-card">
+        <div class="pkg-banner starter-bg">
+          <span class="pkg-badge">STARTER</span>
+          <h3>Starter Package</h3>
+          <p>Begin your digital learning journey</p>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-meta">
+            <div class="stars">★★★★★</div>
+            <div class="courses-count">📚 3 Courses</div>
+          </div>
+          <div class="pkg-pricing">
+            <span class="current-price">₹560</span>
+            <span class="original-price">₹999</span>
+          </div>
+          <a href="starter.html" class="buy-now-btn">View Details & Buy →</a>
+        </div>
+      </div>
+
+      <!-- MEDIUM PACKAGE -->
+      <div class="pkg-card">
+        <div class="pkg-banner medium-bg">
+          <span class="pkg-badge">POPULAR</span>
+          <h3>Growth Package</h3>
+          <p>Advanced strategies for fast networking</p>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-meta">
+            <div class="stars">★★★★★</div>
+            <div class="courses-count">📚 5 Courses</div>
+          </div>
+          <div class="pkg-pricing">
+            <span class="current-price">₹899</span>
+            <span class="original-price">₹1,499</span>
+          </div>
+          <a href="medium.html" class="buy-now-btn">View Details & Buy →</a>
+        </div>
+      </div>
+
+      <!-- PREMIUM PACKAGE -->
+      <div class="pkg-card">
+        <div class="pkg-banner premium-bg">
+          <span class="pkg-badge">VIP ADVANCED</span>
+          <h3>Premium Package</h3>
+          <p>Ultimate mastery & higher commission</p>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-meta">
+            <div class="stars">★★★★★</div>
+            <div class="courses-count">📚 8 Courses</div>
+          </div>
+          <div class="pkg-pricing">
+            <span class="current-price">₹1,499</span>
+            <span class="original-price">₹2,999</span>
+          </div>
+          <a href="premium.html" class="buy-now-btn">View Details & Buy →</a>
+        </div>
+      </div>
+
     </div>
-  </div>
+  </section>
 
-  <div class="footer-bottom">
-    © 2026 Smart Money. All Rights Reserved.
-  </div>
-</footer>
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Smart Money. All Rights Reserved. E-Learning & Referral Platform.</p>
+  </footer>
 
-<!-- =====================================
-     SUPABASE SESSION CHECK & SMART REDIRECT FOR HOME PAGE
-===================================== -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  <!-- SESSION CHECK SCRIPT -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  document.addEventListener("DOMContentLoaded", async function () {
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    const loginLink = document.getElementById("navLoginBtn");
-    const navContainer = document.querySelector(".navbar nav");
+    document.addEventListener("DOMContentLoaded", async function () {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      const loginLink = document.getElementById("navLoginBtn");
 
-    if (session) {
-      if (loginLink) {
+      if (session && loginLink) {
         loginLink.innerText = "Dashboard";
         loginLink.href = "dashboard.html";
       }
-
-      const profileLink = document.createElement("a");
-      profileLink.href = "dashboard.html";
-      profileLink.innerText = "My Account";
-      profileLink.style.background = "#7c3aed";
-      profileLink.style.color = "#fff";
-      profileLink.style.padding = "6px 12px";
-      profileLink.style.borderRadius = "8px";
-      profileLink.style.marginLeft = "8px";
-      
-      if (navContainer) {
-        navContainer.appendChild(profileLink);
-      }
-
-      const packageLinks = document.querySelectorAll('.package, .buttons .btn');
-      packageLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if (href && (href.includes('register.html') || href.includes('.html') || href.includes('#packages'))) {
-          link.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = "dashboard.html";
-          });
-        }
-      });
-    }
-  });
-
-  const supportForm = document.getElementById("supportForm");
-  if (supportForm) {
-    supportForm.addEventListener("submit", function(event) {
-      event.preventDefault();
-      alert("Thank you! Your message has been received.");
-      supportForm.reset();
     });
-  }
-</script>
+  </script>
 
 </body>
 </html>
