@@ -135,10 +135,14 @@
     .pkg-badge { font-size: 24px; }
 
     .pkg-body { padding: 20px; }
-    .pkg-details-list { list-style: none; padding: 0; margin: 0 0 15px 0; font-size: 12.5px; color: #475569; }
-    .pkg-details-list li { margin-bottom: 6px; display: flex; justify-content: space-between; border-bottom: 1px dashed #f1f5f9; padding-bottom: 4px; }
-    .pkg-details-list li span { font-weight: 600; color: #1e293b; }
+    .pkg-summary-text { font-size: 13px; color: #475569; margin-bottom: 15px; }
     
+    .details-btn {
+      width: 100%; background: #f1f5f9; color: #2563eb; border: 1px solid #cbd5e1; padding: 8px;
+      border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.2s;
+    }
+    .details-btn:hover { background: #e2e8f0; }
+
     .pkg-footer { padding: 15px 20px; background: #f8fafc; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
     .price-box .current-price { font-size: 18px; font-weight: 800; color: #0f172a; }
     .price-box .old-price { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-left: 5px; }
@@ -148,6 +152,24 @@
       font-size: 12px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
     }
     .buy-btn:hover { background: #1d4ed8; }
+
+    /* MODAL POPUP FOR PRODUCT DETAILS */
+    .modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.7); z-index: 3000; justify-content: center; align-items: center; padding: 20px;
+    }
+    .modal-content {
+      background: #ffffff; width: 100%; max-width: 450px; border-radius: 16px; overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2); animation: scaleUp 0.3s ease;
+    }
+    @keyframes scaleUp { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-header { background: #0f172a; color: #fff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h3 { font-size: 16px; font-weight: 700; color: #fbbf24; }
+    .close-modal { font-size: 22px; cursor: pointer; color: #fff; }
+    .modal-body { padding: 20px; font-size: 13.5px; color: #334155; }
+    .modal-body ul { list-style: none; padding: 0; }
+    .modal-body ul li { margin-bottom: 10px; display: flex; justify-content: border-bottom; border-bottom: 1px dashed #e2e8f0; padding-bottom: 6px; }
+    .modal-body ul li span { font-weight: 600; color: #0f172a; margin-left: auto; }
 
     /* TESTIMONIALS SECTION */
     .testimonial-section { padding: 60px 7%; background: #f8fafc; text-align: center; }
@@ -362,17 +384,12 @@
           <div class="pkg-badge">🚀</div>
         </div>
         <div class="pkg-body">
-          <ul class="pkg-details-list">
-            <li>Commission: <span>30% (₹89.70/ref)</span>[span_0](start_span)[span_0](end_span)</li>
-            <li>Min Withdrawal: <span>₹100 - ₹800</span>[span_1](start_span)[span_1](end_span)</li>
-            <li>Daily Freq: <span>1 time/day</span>[span_2](start_span)[span_2](end_span)</li>
-            <li>Processing: <span>7 Days</span>[span_3](start_span)[span_3](end_span)</li>
-            <li>Fee: <span>2%</span>[span_4](start_span)[span_4](end_span)</li>
-          </ul>
+          <p class="pkg-summary-text">Ideal for beginners starting out with 2 fundamental digital skill courses.</p>
+          <button class="details-btn" onclick="openModal('Starter Package', '2 Essential Courses', '30% (₹89.70 per referral)', '₹100 - ₹800', '1 Time / Day', '7 Days', '2%')">🔍 View Product Details</button>
         </div>
         <div class="pkg-footer">
           <div class="price-box">
-            <span class="current-price">₹289</span>[span_5](start_span)[span_5](end_span)
+            <span class="current-price">₹289</span>
             <span class="old-price">₹499</span>
           </div>
           <a href="checkout.html?name=Starter%20Package&price=289" class="buy-btn">Buy Now</a>
@@ -389,17 +406,12 @@
           <div class="pkg-badge">💻</div>
         </div>
         <div class="pkg-body">
-          <ul class="pkg-details-list">
-            <li>Commission: <span>50% (₹280/ref)</span>[span_6](start_span)[span_6](end_span)</li>
-            <li>Min Withdrawal: <span>₹100 - ₹1,500</span>[span_7](start_span)[span_7](end_span)</li>
-            <li>Daily Freq: <span>1 time/day</span>[span_8](start_span)[span_8](end_span)</li>
-            <li>Processing: <span>7 Days</span>[span_9](start_span)[span_9](end_span)</li>
-            <li>Fee: <span>2%</span>[span_10](start_span)[span_10](end_span)</li>
-          </ul>
+          <p class="pkg-summary-text">Includes 5 professional courses for better digital growth and moderate earnings.</p>
+          <button class="details-btn" onclick="openModal('Intermediate Package', '5 Professional Courses', '50% (₹280 per referral)', '₹100 - ₹1,500', '1 Time / Day', '7 Days', '2%')">🔍 View Product Details</button>
         </div>
         <div class="pkg-footer">
           <div class="price-box">
-            <span class="current-price">₹560</span>[span_11](start_span)[span_11](end_span)
+            <span class="current-price">₹560</span>
             <span class="old-price">₹999</span>
           </div>
           <a href="checkout.html?name=Intermediate%20Package&price=560" class="buy-btn">Buy Now</a>
@@ -416,17 +428,12 @@
           <div class="pkg-badge">⚡</div>
         </div>
         <div class="pkg-body">
-          <ul class="pkg-details-list">
-            <li>Commission: <span>70%</span>[span_12](start_span)[span_12](end_span)</li>
-            <li>Min Withdrawal: <span>₹100 - ₹4,500</span>[span_13](start_span)[span_13](end_span)</li>
-            <li>Daily Freq: <span>2 times/day</span>[span_14](start_span)[span_14](end_span)</li>
-            <li>Processing: <span>5 Days</span>[span_15](start_span)[span_15](end_span)</li>
-            <li>Fee: <span>2%</span>[span_16](start_span)[span_16](end_span)</li>
-          </ul>
+          <p class="pkg-summary-text">Comes with 10 advanced courses, high commission rates, and faster payouts.</p>
+          <button class="details-btn" onclick="openModal('Expert Package', '10 Advanced Courses', '70% Commission Rate', '₹100 - ₹4,500', '2 Times / Day', '5 Days', '2%')">🔍 View Product Details</button>
         </div>
         <div class="pkg-footer">
           <div class="price-box">
-            <span class="current-price">₹1,149</span>[span_17](start_span)[span_17](end_span)
+            <span class="current-price">₹1,149</span>
             <span class="old-price">₹2,999</span>
           </div>
           <a href="checkout.html?name=Expert%20Package&price=1149" class="buy-btn">Buy Now</a>
@@ -443,13 +450,8 @@
           <div class="pkg-badge">👑</div>
         </div>
         <div class="pkg-body">
-          <ul class="pkg-details-list">
-            <li>Commission: <span>75% (₹1,874.25)</span></li>
-            <li>Withdrawal Limit: <span>₹100 - ₹10,000</span></li>
-            <li>Daily Freq: <span>Unlimited Daily</span></li>
-            <li>Charges: <span>0% (Zero Fee)</span></li>
-            <li>Support: <span>24/7 VIP Support</span></li>
-          </ul>
+          <p class="pkg-summary-text">Access 16 elite masterclasses with zero withdrawal charges & unlimited daily payouts.</p>
+          <button class="details-btn" onclick="openModal('Master Package', '16 Elite Masterclasses', '75% (₹1,874.25)', '₹100 - ₹10,000', 'Unlimited Daily', 'Instant', '0% (Zero Fee)')">🔍 View Product Details</button>
         </div>
         <div class="pkg-footer">
           <div class="price-box">
@@ -470,13 +472,8 @@
           <div class="pkg-badge">🔥</div>
         </div>
         <div class="pkg-body">
-          <ul class="pkg-details-list">
-            <li>Commission: <span>85% (₹2,500.15)</span></li>
-            <li>Withdrawal Limit: <span>₹100 - ₹30,000</span></li>
-            <li>Daily Freq: <span>Unlimited Daily</span></li>
-            <li>Charges: <span>0% (Zero Fee)</span></li>
-            <li>Support: <span>24/7 VIP Support</span></li>
-          </ul>
+          <p class="pkg-summary-text">Ultimate bundle of 20 courses with massive commission rewards and VIP support.</p>
+          <button class="details-btn" onclick="openModal('Brahmastra Package', '20 Ultimate Courses', '85% (₹2,500.15)', '₹100 - ₹30,000', 'Unlimited Daily', 'Instant', '0% (Zero Fee)')">🔍 View Product Details</button>
         </div>
         <div class="pkg-footer">
           <div class="price-box">
@@ -497,13 +494,8 @@
           <div class="pkg-badge">💎</div>
         </div>
         <div class="pkg-body">
-          <ul class="pkg-details-list">
-            <li>Commission: <span>85% (₹2,500.15)</span></li>
-            <li>Withdrawal Limit: <span>₹100 - ₹50,000</span></li>
-            <li>Daily Freq: <span>Unlimited Daily</span></li>
-            <li>Charges: <span>0% (Zero Fee)</span></li>
-            <li>Support: <span>24/7 VIP Support</span></li>
-          </ul>
+          <p class="pkg-summary-text">The highest tier package featuring 23 premium courses and top-level creator tools.</p>
+          <button class="details-btn" onclick="openModal('Premium Pro Package', '23 Top-Tier Courses', '85% (₹2,500.15)', '₹100 - ₹50,000', 'Unlimited Daily', 'Instant', '0% (Zero Fee)')">🔍 View Product Details</button>
         </div>
         <div class="pkg-footer">
           <div class="price-box">
@@ -516,6 +508,27 @@
 
     </div>
   </section>
+
+  <!-- PRODUCT DETAILS MODAL POPUP -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Package Details</h3>
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <ul>
+          <li><strong>Included Content:</strong> <span id="mCourses"></span></li>
+          <li><strong>Commission Rate:</strong> <span id="mCommission"></span></li>
+          <li><strong>Withdrawal Limit:</strong> <span id="mWithdrawal"></span></li>
+          <li><strong>Daily Frequency:</strong> <span id="mFreq"></span></li>
+          <li><strong>Processing Time:</strong> <span id="mProcessing"></span></li>
+          <li><strong>Transaction Fee:</strong> <span id="mFee"></span></li>
+          <li><strong>Support Level:</strong> <span>24/7 Priority Assistance</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
   <!-- TESTIMONIALS SECTION -->
   <section class="testimonial-section" id="testimonial">
@@ -616,6 +629,29 @@
         menu.style.display = 'none';
       } else {
         menu.style.display = 'flex';
+      }
+    }
+
+    function openModal(title, courses, commission, withdrawal, freq, processing, fee) {
+      document.getElementById('modalTitle').innerText = title + " - Details";
+      document.getElementById('mCourses').innerText = courses;
+      document.getElementById('mCommission').innerText = commission;
+      document.getElementById('mWithdrawal').innerText = withdrawal;
+      document.getElementById('mFreq').innerText = freq;
+      document.getElementById('mProcessing').innerText = processing;
+      document.getElementById('mFee').innerText = fee;
+      document.getElementById('productModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('productModal').style.display = 'none';
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('productModal');
+      if (event.target == modal) {
+        modal.style.display = 'none';
       }
     }
   </script>
