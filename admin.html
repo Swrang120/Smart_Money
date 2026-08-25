@@ -13,7 +13,7 @@
     :root {
       --bg-gradient: linear-gradient(135deg, #0a0f1d 0%, #17153a 50%, #0f172a 100%);
       --card-bg: rgba(30, 41, 59, 0.75);
-      --border-color: rgba(99, 102, 241, 0.2);
+      --border-color: rgba(99, 102, 241, 0.25);
       --primary: #6366f1;
       --primary-hover: #4f46e5;
       --accent: #38bdf8;
@@ -28,7 +28,7 @@
 
     /* Top Navbar */
     .navbar { background: rgba(15, 23, 42, 0.85); border-bottom: 1px solid var(--border-color); padding: 16px 25px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
-    .nav-brand { font-size: 20px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; letter-spacing: 0.5px; }
+    .nav-brand { font-size: 18px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; letter-spacing: 0.5px; }
     .nav-brand span { background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     
     /* 3-Line Menu Button */
@@ -44,59 +44,67 @@
     .close-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-muted); width: 32px; height: 32px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
     .close-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
 
-    .container { max-width: 1150px; margin: 0 auto; padding: 30px 20px; }
+    .container { max-width: 1150px; margin: 0 auto; padding: 25px 16px; }
+
+    /* Stylish Master Profile Header Box (Like User Dashboard) */
+    .profile-card { background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%); border-radius: 24px; padding: 22px; margin-bottom: 25px; border: 1px solid var(--border-color); box-shadow: 0 15px 35px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; backdrop-filter: blur(16px); }
+    .profile-left { display: flex; align-items: center; gap: 15px; }
+    .avatar-box { width: 55px; height: 55px; background: linear-gradient(135deg, #6366f1 0%, #38bdf8 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; color: #fff; box-shadow: 0 0 20px rgba(99,102,241,0.5); }
+    .profile-info h3 { margin: 0 0 4px 0; font-size: 17px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px; }
+    .admin-badge { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); font-size: 10px; padding: 2px 8px; border-radius: 6px; font-weight: 700; }
+    .ref-badge-box { background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); padding: 5px 12px; border-radius: 10px; font-size: 12px; color: var(--accent); font-weight: 700; display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; }
 
     /* Stats Box inside Drawer */
     .stats-box { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; margin-bottom: 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
     .stats-box h4 { margin: 0 0 4px 0; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
     .stats-box .num { font-size: 22px; font-weight: 800; color: var(--accent); }
 
-    /* Cards */
-    .card { background: var(--card-bg); border-radius: 20px; padding: 26px; margin-bottom: 30px; border: 1px solid var(--border-color); box-shadow: 0 20px 40px rgba(0,0,0,0.45); backdrop-filter: blur(12px); }
-    .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 18px; margin-bottom: 22px; flex-wrap: wrap; gap: 12px; }
-    h2 { font-size: 18px; color: #fff; margin: 0; display: flex; align-items: center; gap: 10px; font-weight: 700; }
+    /* Stylish Glass Cards */
+    .card { background: var(--card-bg); border-radius: 24px; padding: 24px; margin-bottom: 25px; border: 1px solid var(--border-color); box-shadow: 0 20px 40px rgba(0,0,0,0.4); backdrop-filter: blur(16px); }
+    .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 16px; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+    h2 { font-size: 17px; color: #fff; margin: 0; display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: 0.3px; }
 
     /* Filter Buttons */
     .filter-group { display: flex; gap: 6px; }
-    .filter-btn { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); color: var(--text-muted); padding: 7px 14px; border-radius: 10px; font-size: 11px; cursor: pointer; font-weight: 600; transition: all 0.2s ease; }
-    .filter-btn:hover { background: rgba(99, 102, 241, 0.1); color: #fff; }
-    .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); }
+    .filter-btn { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 12px; border-radius: 10px; font-size: 11px; cursor: pointer; font-weight: 600; transition: all 0.2s ease; }
+    .filter-btn:hover { background: rgba(99, 102, 241, 0.15); color: #fff; }
+    .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 241, 0.5); }
 
     /* Tables */
     .table-responsive { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; white-space: nowrap; }
-    th, td { padding: 16px 14px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+    th, td { padding: 15px 12px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
     th { color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
     td { color: #f1f5f9; }
 
-    .payout-box { background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.2); padding: 12px 14px; border-radius: 12px; margin-top: 10px; font-size: 12px; line-height: 1.6; white-space: normal; }
+    .payout-box { background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.18); padding: 12px 14px; border-radius: 14px; margin-top: 8px; font-size: 12px; line-height: 1.6; white-space: normal; }
     .payout-box b { color: var(--accent); }
 
     /* Action Buttons */
-    .btn { padding: 8px 14px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; font-size: 11px; transition: all 0.25s ease; margin-right: 4px; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .btn:active { transform: scale(0.96); }
-    .btn-approve { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
+    .btn { padding: 7px 12px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; font-size: 11px; transition: all 0.25s ease; margin-right: 4px; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .btn:active { transform: scale(0.95); }
+    .btn-approve { background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
     .btn-approve:hover { background: #10b981; color: #fff; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
-    .btn-reject { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.35); }
+    .btn-reject { background: rgba(244, 63, 94, 0.18); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.35); }
     .btn-reject:hover { background: #f43f5e; color: #fff; box-shadow: 0 0 15px rgba(244, 63, 94, 0.4); }
     .btn-delete { background: rgba(255, 255, 255, 0.06); color: var(--text-muted); border: 1px solid var(--border-color); }
     .btn-delete:hover { background: #f43f5e; color: #fff; border-color: #f43f5e; }
     .btn-restore { background: rgba(56, 189, 248, 0.15); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.35); }
     .btn-restore:hover { background: var(--accent); color: #0f172a; }
     
-    .badge { padding: 6px 12px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; display: inline-block; }
+    .badge { padding: 5px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; display: inline-block; }
     .badge-pending { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
     .badge-approved, .badge-success { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
     .badge-rejected { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.35); }
 
-    .trash-section-title { font-size: 14px; font-weight: 700; color: var(--accent); margin: 20px 0 10px 0; border-bottom: 1px dashed var(--border-color); padding-bottom: 6px; }
+    .trash-section-title { font-size: 13px; font-weight: 700; color: var(--accent); margin: 20px 0 10px 0; border-bottom: 1px dashed var(--border-color); padding-bottom: 6px; }
   </style>
 </head>
 <body>
 
   <!-- Top Navigation Bar -->
   <div class="navbar">
-    <div class="nav-brand">⚡ Smart Money <span>Master Admin</span></div>
+    <div class="nav-brand">⚡ Smart Money <span>Admin Elite</span></div>
     <button class="menu-toggle" onclick="toggleSidebar()">
       <div></div>
       <div></div>
@@ -142,6 +150,21 @@
   </div>
 
   <div class="container">
+    <!-- Stylish Master Profile Header (Similar to User Dashboard style) -->
+    <div class="profile-card">
+      <div class="profile-left">
+        <div class="avatar-box">SS</div>
+        <div class="profile-info">
+          <h3>Santiram Swargiary <span class="admin-badge">MASTER ADMIN</span></h3>
+          <div class="ref-badge-box">ID: SM-3D99B9</div>
+        </div>
+      </div>
+      <div style="font-size: 12px; color: var(--text-muted); text-align: right;">
+        Status: <b style="color: #34d399;">Secure & Active</b><br>
+        System: <b style="color: var(--accent);">Multi-Level Enabled</b>
+      </div>
+    </div>
+
     <!-- 1. PENDING PAYMENT REQUESTS -->
     <div class="card">
       <div class="card-header">
@@ -271,7 +294,6 @@
     });
   }
 
-  // Custom sort: Pending first, Approved/Others in middle, Rejected strictly at bottom
   function sortRequests(data) {
     return data.sort((a, b) => {
       let statusA = (a.status || '').toLowerCase();
@@ -340,7 +362,6 @@
       const { error: insErr } = await supabaseClient.from('profiles').insert([{ full_name: fullName, email: email, package_name: packageName, referral_id: uniqueRefCode, referred_by: refId || 'SM-3D99B9', balance: 0, is_active: true }]);
       if (insErr) throw insErr;
       
-      // Multi-level Sponsor Commission Allocation
       const sponsorIdToUse = (refId && refId !== 'null' && refId !== 'N/A' && refId !== '') ? refId : 'SM-3D99B9';
       const { data: sponsor } = await supabaseClient.from('profiles').select('id, balance, package_name').eq('referral_id', sponsorIdToUse).single();
       if (sponsor) {
@@ -509,9 +530,7 @@
     }
   }
 
-  // Load Trash Data inside the 3-line Hidden Sidebar
   async function loadTrashData() {
-    // 1. Deleted Users
     const { data: users } = await supabaseClient.from('profiles').select('*').eq('is_deleted', true);
     const uContainer = document.getElementById('deletedUsersList');
     if (!users || users.length === 0) {
@@ -525,7 +544,6 @@
       `).join('');
     }
 
-    // 2. Deleted Payments
     const { data: payments } = await supabaseClient.from('payment_requests').select('*').eq('is_deleted', true);
     const pContainer = document.getElementById('deletedPaymentsList');
     if (!payments || payments.length === 0) {
@@ -539,7 +557,6 @@
       `).join('');
     }
 
-    // 3. Deleted Withdrawals
     const { data: withdrawals } = await supabaseClient.from('withdrawal_requests').select('*').eq('is_deleted', true);
     const wContainer = document.getElementById('deletedWithdrawalsList');
     if (!withdrawals || withdrawals.length === 0) {
