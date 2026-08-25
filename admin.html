@@ -22,15 +22,18 @@
     th { color: #94a3b8; font-weight: 600; }
     td { color: #e2e8f0; }
 
-    .btn { padding: 6px 12px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; font-size: 12px; transition: 0.2s; }
+    .btn { padding: 6px 12px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; font-size: 12px; transition: 0.2s; margin-right: 5px; margin-bottom: 4px; }
     .btn-approve { background: #10b981; color: #fff; }
     .btn-approve:hover { background: #059669; }
+    .btn-reject { background: #ef4444; color: #fff; }
+    .btn-reject:hover { background: #dc2626; }
     .btn-block { background: #ef4444; color: #fff; }
     .btn-unblock { background: #3b82f6; color: #fff; }
     
     .badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
     .badge-pending { background: #f59e0b; color: #000; }
-    .badge-paid, .badge-approved { background: #10b981; color: #fff; }
+    .badge-approved, .badge-success { background: #10b981; color: #fff; }
+    .badge-rejected { background: #ef4444; color: #fff; }
   </style>
 </head>
 <body>
@@ -67,15 +70,14 @@
       <table>
         <thead>
           <tr>
-            <th>User Name</th>
-            <th>Bank & UPI Details</th>
+            <th>User ID / User Details</th>
             <th>Amount</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody id="withdrawalTableBody">
-          <tr><td colspan="5" style="text-align:center; color:#94a3b8;">Loading requests...</td></tr>
+          <tr><td colspan="4" style="text-align:center; color:#94a3b8;">Loading requests...</td></tr>
         </tbody>
       </table>
     </div>
@@ -223,51 +225,88 @@
     }
   }
 
-  // 2. Load Withdrawals
+  // 2. Load Withdrawals from correct table 'withdrawal_requests'
   async function loadWithdrawals() {
-    const { data, error } = await supabaseClient.from('withdrawals').select('*').order('created_at', { ascending: false });
+    const { data, error } = await supabaseClient.from('withdrawal_requests').select('*').order('created_at', { ascending: false });
     const tbody = document.getElementById("withdrawalTableBody");
     
     if (error || !data || data.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8;">Koi withdrawal request nahi mili.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#94a3b8;">Koi withdrawal request nahi mili.</td></tr>`;
       return;
     }
 
     tbody.innerHTML = "";
     data.forEach(item => {
+      const isPending = (item.status || "").toLowerCase() === 'pending';
       tbody.innerHTML += `
         <tr>
-          <td><b>${item.full_name || 'User'}</b></td>
-          <td style="color:#38bdf8;">
-            UPI: ${item.upi_id || 'N/A'}<br>
-            <span style="font-size:11px; color:#cbd5e1;">Bank: ${item.bank_name || 'N/A'} | Holder: ${item.holder_name || 'N/A'} | A/C: ${item.bank_account || 'N/A'} | IFSC: ${item.ifsc_code || 'N/A'}</span>
-          </td>
+          <td>User ID: <span style="color:#38bdf8; font-size:11px;">${item.user_id}</span></td>
           <td style="color:#10b981; font-weight:700;">₹${item.amount}</td>
-          <td><span class="badge badge-${item.status.toLowerCase()}">${item.status}</span></td>
+          <td><span class="badge badge-${(item.status || 'pending').toLowerCase()}">${item.status}</span></td>
           <td>
-            ${item.status === 'Pending' ? `<button class="btn btn-approve" onclick="markAsPaid('${item.id}')">Mark Paid</button>` : 'Done'}
+            ${isPending ? `
+              <button class="btn btn-approve" onclick="updateWithdrawal('${item.id}', '${item.user_id}', ${item.amount}, 'approved')">Approve</button>
+              <button class="btn btn-reject" onclick="updateWithdrawal('${item.id}', '${item.user_id}', ${item.amount}, 'rejected')">Reject & Refund</button>
+            ` : item.status}
           </td>
         </tr>
       `;
     });
   }
 
-  async function markAsPaid(id) {
-    const { error } = await supabaseClient.from('withdrawals').update({ status: 'Paid' }).eq('id', id);
-    if(error) {
-      alert("Error: " + error.message);
-    } else {
-      alert("Withdrawal marked as Paid!");
+  // Handle Approve or Reject (with automatic refund to user's dashboard balance)
+  async function updateWithdrawal(id, userId, amount, actionStatus) {
+    const confirmMsg = actionStatus === 'approved' 
+      ? `Kya aap is withdrawal ko Approve karna chahte hain?` 
+      : `Kya aap is withdrawal ko Reject karna chahte hain? Amount user ke wallet mein refund ho jayega.`;
+    
+    if (!confirm(confirmMsg)) return;
+
+    try {
+      // 1. Update withdrawal status
+      const { error: updateErr } = await supabaseClient
+        .from('withdrawal_requests')
+        .update({ status: actionStatus })
+        .eq('id', id);
+
+      if (updateErr) throw updateErr;
+
+      // 2. If rejected, refund the amount back to user's profile balance
+      if (actionStatus === 'rejected') {
+        const { data: profileData, error: profileErr } = await supabaseClient
+          .from('profiles')
+          .select('id, balance, user_id')
+          .or(`id.eq.${userId},user_id.eq.${userId}`)
+          .single();
+
+        if (profileData) {
+          const currentBal = Number(profileData.balance || 0);
+          const refundedBal = currentBal + Number(amount);
+
+          const { error: refundErr } = await supabaseClient
+            .from('profiles')
+            .update({ balance: refundedBal })
+            .eq('id', profileData.id);
+
+          if (refundErr) throw refundErr;
+        }
+      }
+
+      alert(actionStatus === 'approved' ? "Withdrawal Approved successfully!" : "Withdrawal Rejected and amount refunded successfully to user dashboard!");
       loadWithdrawals();
+      loadUsers();
+
+    } catch (err) {
+      alert("Error: " + err.message);
     }
   }
 
   // 3. Load Users
   async function loadUsers() {
-    const { data, fileError } = await supabaseClient.from('profiles').select('*');
+    const { data, error } = await supabaseClient.from('profiles').select('*');
     const tbody = document.getElementById("usersTableBody");
     
-    if (fileError || !data || data.length === 0) {
+    if (error || !data || data.length === 0) {
       tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8;">Koi user nahi mila.</td></tr>`;
       return;
     }
