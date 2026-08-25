@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Money - Premium Admin Control</title>
+  <title>Smart Money - Elite Admin Panel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -11,86 +11,85 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <style>
     :root {
-      --bg-color: #0b0f19;
-      --card-bg: #131b2e;
-      --border-color: rgba(255, 255, 255, 0.08);
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --border-color: rgba(255, 255, 255, 0.12);
       --primary: #6366f1;
-      --primary-hover: #4f46e5;
       --accent: #38bdf8;
       --success: #10b981;
-      --danger: #ef4444;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --danger: #f43f5e;
+      --text-main: #ffffff;
+      --text-muted: #cbd5e1;
     }
 
     * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; display: none; }
+    body { background: #0f172a; background-image: var(--bg-gradient); color: var(--text-main); margin: 0; padding: 0; display: none; min-height: 100vh; }
 
     /* Top Navbar */
-    .navbar { background: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
-    .nav-brand { font-size: 18px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; }
-    .nav-brand span { color: var(--accent); }
+    .navbar { background: rgba(15, 23, 42, 0.9); border-bottom: 1px solid var(--border-color); padding: 16px 25px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px); }
+    .nav-brand { font-size: 19px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; letter-spacing: 0.5px; }
+    .nav-brand span { color: var(--accent); background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     
     /* 3-Line Menu Button */
-    .menu-toggle { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: #fff; padding: 10px 12px; border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; transition: 0.2s; }
-    .menu-toggle:hover { background: rgba(255, 255, 255, 0.1); }
+    .menu-toggle { background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); color: #fff; padding: 10px 12px; border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; transition: 0.2s; }
+    .menu-toggle:hover { background: rgba(99, 102, 241, 0.3); }
     .menu-toggle div { width: 20px; height: 2px; background: #fff; border-radius: 2px; }
 
     /* Hidden Sidebar Drawer */
-    .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); display: none; z-index: 999; }
-    .sidebar { position: fixed; top: 0; right: -320px; width: 320px; height: 100%; background: #161f36; border-left: 1px solid var(--border-color); padding: 25px; transition: 0.3s ease-in-out; z-index: 1000; overflow-y: auto; }
+    .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(6px); display: none; z-index: 999; }
+    .sidebar { position: fixed; top: 0; right: -340px; width: 340px; height: 100%; background: #1e1b4b; border-left: 1px solid var(--border-color); padding: 25px; transition: 0.3s ease-in-out; z-index: 1000; overflow-y: auto; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
     .sidebar.open { right: 0; }
     .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px; }
-    .close-btn { background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; }
+    .close-btn { background: none; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; }
 
     .container { max-width: 1100px; margin: 0 auto; padding: 25px 20px; }
 
-    /* Stats Grid inside Drawer */
-    .stats-box { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+    /* Stats Box inside Drawer */
+    .stats-box { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
     .stats-box h4 { margin: 0 0 5px 0; font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .stats-box .num { font-size: 20px; font-weight: 700; color: var(--accent); }
+    .stats-box .num { font-size: 22px; font-weight: 800; color: var(--accent); }
 
     /* Cards */
-    .card { background: var(--card-bg); border-radius: 16px; padding: 22px; margin-bottom: 30px; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-    .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
-    h2 { font-size: 16px; color: #fff; margin: 0; display: flex; align-items: center; gap: 8px; }
+    .card { background: var(--card-bg); border-radius: 18px; padding: 24px; margin-bottom: 30px; border: 1px solid var(--border-color); box-shadow: 0 20px 40px rgba(0,0,0,0.4); backdrop-filter: blur(10px); }
+    .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+    h2 { font-size: 17px; color: #fff; margin: 0; display: flex; align-items: center; gap: 8px; font-weight: 700; }
 
-    /* Filter Buttons inside Card Header */
+    /* Filter Buttons */
     .filter-group { display: flex; gap: 6px; }
-    .filter-btn { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); color: var(--text-muted); padding: 5px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-    .filter-btn.active { background: var(--accent); color: #0b0f19; border-color: var(--accent); }
+    .filter-btn { background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 12px; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+    .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); }
 
     /* Tables */
     .table-responsive { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
-    th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
-    td { color: #e2e8f0; }
+    th, td { padding: 15px 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
+    th { color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 0.8px; }
+    td { color: #f1f5f9; }
 
-    /* Payout Box Design */
-    .payout-box { background: rgba(56, 189, 248, 0.04); border: 1px dashed rgba(56, 189, 248, 0.2); padding: 10px 12px; border-radius: 10px; margin-top: 6px; font-size: 12px; line-height: 1.5; }
+    /* Enhanced Payout Box Design for Bank/UPI */
+    .payout-box { background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); padding: 12px; border-radius: 12px; margin-top: 8px; font-size: 12px; line-height: 1.6; }
     .payout-box b { color: var(--accent); }
 
     /* Action Buttons */
-    .btn { padding: 7px 14px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; font-size: 11px; transition: 0.2s; margin-right: 4px; display: inline-flex; align-items: center; gap: 4px; }
-    .btn-approve { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }
-    .btn-approve:hover { background: var(--success); color: #fff; }
-    .btn-reject { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
-    .btn-reject:hover { background: var(--danger); color: #fff; }
-    .btn-delete { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); border: 1px solid var(--border-color); }
-    .btn-delete:hover { background: var(--danger); color: #fff; }
+    .btn { padding: 8px 14px; border-radius: 9px; border: none; font-weight: 700; cursor: pointer; font-size: 11px; transition: 0.2s; margin-right: 4px; display: inline-flex; align-items: center; gap: 5px; }
+    .btn-approve { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .btn-approve:hover { background: #10b981; color: #fff; }
+    .btn-reject { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); }
+    .btn-reject:hover { background: #f43f5e; color: #fff; }
+    .btn-delete { background: rgba(255, 255, 255, 0.08); color: var(--text-muted); border: 1px solid var(--border-color); }
+    .btn-delete:hover { background: #f43f5e; color: #fff; }
     
-    .badge { padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-    .badge-pending { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
-    .badge-approved, .badge-success { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }
-    .badge-rejected { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge { padding: 5px 10px; border-radius: 7px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; }
+    .badge-pending { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .badge-approved, .badge-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .badge-rejected { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); }
   </style>
 </head>
 <body>
 
   <!-- Top Navigation Bar -->
   <div class="navbar">
-    <div class="nav-brand">⚡ Smart Money <span>Admin</span></div>
+    <div class="nav-brand">⚡ Smart Money <span>Admin Elite</span></div>
     <button class="menu-toggle" onclick="toggleSidebar()">
       <div></div>
       <div></div>
@@ -102,7 +101,7 @@
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
   <div class="sidebar" id="adminSidebar">
     <div class="sidebar-header">
-      <h3 style="margin:0; font-size:16px; color:#fff;">📊 Control Center</h3>
+      <h3 style="margin:0; font-size:17px; color:#fff;">📊 Control Center</h3>
       <button class="close-btn" onclick="toggleSidebar()">&times;</button>
     </div>
     
@@ -112,15 +111,15 @@
     </div>
     <div class="stats-box">
       <h4>Approved</h4>
-      <div class="num" style="color: var(--success);" id="statApproved">0</div>
+      <div class="num" style="color: #34d399;" id="statApproved">0</div>
     </div>
     <div class="stats-box">
       <h4>Rejected</h4>
-      <div class="num" style="color: var(--danger);" id="statRejected">0</div>
+      <div class="num" style="color: #fb7185;" id="statRejected">0</div>
     </div>
 
     <hr style="border:0; border-top:1px solid var(--border-color); margin: 20px 0;">
-    <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">Yahan aapko sabhi purane approvals aur activity ka data live milta hai.</p>
+    <p style="font-size: 12px; color: var(--text-muted); line-height: 1.6;">Yahan se aap saari live activity, total approvals aur status tracking manage karte hain.</p>
   </div>
 
   <div class="container">
@@ -210,7 +209,7 @@
     document.body.style.display = "block";
   } else {
     alert("❌ Access Denied! Wrong Password.");
-    document.body.innerHTML = "<h2 style='color:red; text-align:center; margin-top:100px;'>Unauthorized Access</h2>";
+    document.body.innerHTML = "<h2 style='color:#f43f5e; text-align:center; margin-top:100px;'>Unauthorized Access</h2>";
     document.body.style.display = "block";
     throw new Error("Unauthorized");
   }
@@ -281,12 +280,12 @@
       const isPending = item.status === 'Pending';
       tbody.innerHTML += `
         <tr>
-          <td><b>${item.full_name || 'N/A'}</b><br><span style="font-size:11px; color:var(--text-muted);">${item.email}</span></td>
-          <td><b>${item.package_name}</b><br><span style="color:var(--success); font-weight:700;">₹${item.amount}</span></td>
-          <td>UTR: <b style="color:var(--accent);">${item.transaction_id || 'N/A'}</b></td>
+          <td><b>${item.full_name || 'N/A'}</b><br><span style="font-size:11px; color:var(--text-muted);">${item.email || ''}</span></td>
+          <td><b>${item.package_name || 'Package'}</b><br><span style="color:#34d399; font-weight:700;">₹${item.amount || 0}</span></td>
+          <td>UTR: <b style="color:var(--accent);">${item.transaction_id || item.payment_id || 'N/A'}</b></td>
           <td><span class="badge badge-${item.status.toLowerCase()}">${item.status}</span></td>
           <td>
-            ${isPending ? `<button class="btn btn-approve" onclick="approvePayment('${item.id}', '${item.full_name}', '${item.email}', '${item.package_name}', '${item.referral_id}')">Approve</button>` : ''}
+            ${isPending ? `<button class="btn btn-approve" onclick="approvePayment('${item.id}', '${item.full_name || ''}', '${item.email || ''}', '${item.package_name || ''}', '${item.referral_id || ''}')">Approve</button>` : ''}
             <button class="btn btn-delete" onclick="deleteRecord('${item.id}', 'payment_requests')">Delete</button>
           </td>
         </tr>
@@ -298,12 +297,13 @@
     if (!confirm(`Approve payment for ${fullName}?`)) return;
     try {
       const uniqueRefCode = "SM-" + Math.floor(1000 + Math.random() * 9000);
-      await supabaseClient.from('profiles').insert([{ full_name: fullName, email: email, package_name: packageName, referral_id: uniqueRefCode, referred_by: refId, balance: 0, is_active: true }]);
+      const { error: insErr } = await supabaseClient.from('profiles').insert([{ full_name: fullName, email: email, package_name: packageName, referral_id: uniqueRefCode, referred_by: refId, balance: 0, is_active: true }]);
+      if (insErr) throw insErr;
       
-      if (refId && refId !== 'null' && refId !== 'N/A') {
+      if (refId && refId !== 'null' && refId !== 'N/A' && refId !== '') {
         const { data: sponsor } = await supabaseClient.from('profiles').select('id, balance, package_name').eq('referral_id', refId).single();
         if (sponsor) {
-          let comm = 280; // default
+          let comm = 280; 
           const pkg = (packageName || "").toLowerCase();
           if (pkg.includes("entry")) comm = 99.70;
           else if (pkg.includes("growth")) comm = 539.40;
@@ -343,31 +343,46 @@
 
     tbody.innerHTML = "";
     for (let item of filtered) {
-      let userName = "User";
-      let userEmail = "";
-      const { data: u } = await supabaseClient.from('profiles').select('full_name, email').or(`id.eq.${item.user_id},user_id.eq.${item.user_id}`).single();
-      if (u) { userName = u.full_name; userEmail = u.email; }
+      let userName = item.full_name || item.name || "User";
+      let userEmail = item.email || "";
 
-      // Bank / UPI Payout Formatted Box
-      let payoutHtml = `Method: <b>${item.payment_method || 'UPI / Bank'}</b>`;
+      // Fixed Profile Data Fetching via Foreign Key or ID Match
+      if (!item.full_name && item.user_id) {
+        const { data: u } = await supabaseClient.from('profiles').select('full_name, email').eq('id', item.user_id).maybeSingle();
+        if (u) { 
+          userName = u.full_name || "User"; 
+          userEmail = u.email || ""; 
+        } else {
+          const { data: u2 } = await supabaseClient.from('profiles').select('full_name, email').eq('user_id', item.user_id).maybeSingle();
+          if (u2) {
+            userName = u2.full_name || "User";
+            userEmail = u2.email || "";
+          }
+        }
+      }
+
+      // Format Bank / UPI details safely so it never fails to show
+      let payoutHtml = `Method: <b>${item.payment_method || item.method || 'UPI / Bank'}</b>`;
       if (item.upi_id) payoutHtml += `<br>UPI ID: <b>${item.upi_id}</b>`;
       if (item.account_number || item.bank_account) payoutHtml += `<br>A/C: <b>${item.account_number || item.bank_account}</b> | IFSC: <b>${item.ifsc_code || ''}</b>`;
+      if (item.holder_name) payoutHtml += `<br>Name: <b>${item.holder_name}</b>`;
       if (item.details) payoutHtml += `<br>Info: ${item.details}`;
 
-      const isPending = (item.status || 'pending').toLowerCase() === 'pending';
+      const statusVal = (item.status || 'pending').toLowerCase();
+      const isPending = statusVal === 'pending';
 
       tbody.innerHTML += `
         <tr>
           <td><b>${userName}</b><br><span style="font-size:11px; color:var(--text-muted);">${userEmail}</span></td>
           <td>
-            <span style="color:var(--success); font-weight:700; font-size:14px;">₹${item.amount}</span>
+            <span style="color:#34d399; font-weight:700; font-size:14px;">₹${item.amount}</span>
             <div class="payout-box">${payoutHtml}</div>
           </td>
-          <td><span class="badge badge-${item.status.toLowerCase()}">${item.status}</span></td>
+          <td><span class="badge badge-${statusVal}">${item.status || 'Pending'}</span></td>
           <td>
             ${isPending ? `
-              <button class="btn btn-approve" onclick="updateWithdrawal('${item.id}', '${item.user_id}', ${item.amount}, 'Approved', '${userEmail}', '${userName}')">Approve</button>
-              <button class="btn btn-reject" onclick="updateWithdrawal('${item.id}', '${item.user_id}', ${item.amount}, 'Rejected', '${userEmail}', '${userName}')">Reject</button>
+              <button class="btn btn-approve" onclick="updateWithdrawal('${item.id}', '${item.user_id || ''}', ${item.amount}, 'Approved', '${userEmail}', '${userName}')">Approve</button>
+              <button class="btn btn-reject" onclick="updateWithdrawal('${item.id}', '${item.user_id || ''}', ${item.amount}, 'Rejected', '${userEmail}', '${userName}')">Reject</button>
             ` : `<button class="btn btn-delete" onclick="deleteRecord('${item.id}', 'withdrawal_requests')">Delete</button>`}
           </td>
         </tr>
@@ -378,11 +393,14 @@
   async function updateWithdrawal(id, userId, amount, status, email, name) {
     if (!confirm(`Are you sure to ${status} this withdrawal?`)) return;
     try {
-      await supabaseClient.from('withdrawal_requests').update({ status: status }).eq('id', id);
-      if (status === 'Rejected') {
-        const { data: prof } = await supabaseClient.from('profiles').select('id, balance').or(`id.eq.${userId},user_id.eq.${userId}`).single();
-        if (prof) {
-          await supabaseClient.from('profiles').update({ balance: Number(prof.balance || 0) + Number(amount) }).eq('id', prof.id);
+      const { error: updErr } = await supabaseClient.from('withdrawal_requests').update({ status: status }).eq('id', id);
+      if (updErr) throw updErr;
+
+      if (status === 'Rejected' && userId) {
+        const { data: prof } = await supabaseClient.from('profiles').select('id, balance').eq('id', userId).maybeSingle();
+        const targetProf = prof || await supabaseClient.from('profiles').select('id, balance').eq('user_id', userId).maybeSingle().then(res => res.data);
+        if (targetProf) {
+          await supabaseClient.from('profiles').update({ balance: Number(targetProf.balance || 0) + Number(amount) }).eq('id', targetProf.id);
         }
       } else if (status === 'Approved' && email) {
         emailjs.send('service_qsy07qr', 'template_mf8enck', { to_email: email, to_name: name, amount: amount });
@@ -396,7 +414,7 @@
     if (!confirm("Permanently delete this record?")) return;
     const { error } = await supabaseClient.from(table).delete().eq('id', id);
     if (!error) {
-      alert("Deleted!");
+      alert("Deleted successfully!");
       if (table === 'payment_requests') loadPaymentRequests();
       else loadWithdrawals();
     } else { alert("Error: " + error.message); }
@@ -412,10 +430,10 @@
       const active = user.is_active !== false;
       tbody.innerHTML += `
         <tr>
-          <td><b>${user.full_name || 'User'}</b><br><span style="font-size:11px; color:var(--text-muted);">${user.email}</span></td>
+          <td><b>${user.full_name || 'User'}</b><br><span style="font-size:11px; color:var(--text-muted);">${user.email || ''}</span></td>
           <td style="color:var(--accent); font-weight:600;">${user.referral_id || 'N/A'}</td>
-          <td>${user.package_name || 'Free'}<br><b style="color:var(--success);">₹${user.balance || 0}</b></td>
-          <td><span class="badge" style="background:${active ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'}; color:${active ? 'var(--success)' : 'var(--danger)'};">${active ? 'Active' : 'Blocked'}</span></td>
+          <td>${user.package_name || 'Free'}<br><b style="color:#34d399;">₹${user.balance || 0}</b></td>
+          <td><span class="badge" style="background:${active ? 'rgba(16,185,129,0.2)' : 'rgba(244,63,94,0.2)'}; color:${active ? '#34d399' : '#fb7185'};">${active ? 'Active' : 'Blocked'}</span></td>
           <td>
             <button class="btn ${active ? 'btn-reject' : 'btn-approve'}" onclick="toggleUser('${user.id || user.user_id}', ${!active})">${active ? 'Block' : 'Unblock'}</button>
           </td>
