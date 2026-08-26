@@ -124,7 +124,6 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
   </div>
   <div class="sidebar-profile">
-    <!-- Updated with ID for dynamic global logo control -->
     <img id="sidebarProfileImage" class="sidebar-profile-img" src="1000819130.jpg" alt="Profile">
     <div class="sidebar-profile-info">
       <div id="sidebarUserName" class="sidebar-profile-name">Loading...</div>
@@ -145,13 +144,11 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 <!-- NAVBAR -->
 <header class="navbar">
   <a href="dashboard.html" class="brand-logo">
-    <!-- Updated with ID for dynamic global logo control -->
     <img id="navBrandLogoImg" src="1000819130.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/100?text=SM'">
     <span>Smart Money</span>
   </a>
   <div class="nav-right">
     <a href="index.html" class="nav-home-btn">🌐 Home</a>
-    <!-- Updated with ID for dynamic global logo control -->
     <img src="1000819130.jpg" class="nav-avatar" alt="Avatar" onerror="this.src='https://via.placeholder.com/100?text=SM'" id="navAvatarImg">
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
   </div>
@@ -189,7 +186,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openEarningsModal('Today\'s Revenue', document.getElementById('todayRevenue').innerText); return false;">View details <span>›</span></a>
       </div>
     </div>
 
@@ -200,7 +197,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openEarningsModal('7 Days Revenue', document.getElementById('sevenDaysRevenue').innerText); return false;">View details <span>›</span></a>
       </div>
     </div>
 
@@ -211,7 +208,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openEarningsModal('30 Days Revenue', document.getElementById('thirtyDaysRevenue').innerText); return false;">View details <span>›</span></a>
       </div>
     </div>
 
@@ -222,7 +219,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openEarningsModal('All Time Revenue', document.getElementById('allTimeRevenueText').innerText); return false;">View details <span>›</span></a>
       </div>
     </div>
 
@@ -233,7 +230,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openEarningsModal('Passive Income', document.getElementById('passiveIncome').innerText); return false;">View details <span>›</span></a>
       </div>
     </div>
   </div>
@@ -264,6 +261,20 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     Website Created in August 2026 by <b>Swrang Swargiary</b>
   </div>
 </div>
+</div>
+
+<!-- EARNINGS DETAILS MODAL -->
+<div id="earningsModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 id="earningsModalTitle" style="color:#7c3aed;margin-top:0;">📊 Earning Details</h3>
+    <p style="font-size:13px;color:#475569;margin-bottom:15px;">Breakdown of your selected revenue duration:</p>
+    <div style="background:#f8fafc;padding:16px;border-radius:14px;border:1px solid #e2e8f0;text-align:center;margin-bottom:15px;">
+      <span style="font-size:12px;color:#64748b;font-weight:600;display:block;margin-bottom:4px;">Total Collected</span>
+      <h2 id="earningsModalAmount" style="font-size:32px;color:#0f172a;margin:0;font-weight:800;">₹0</h2>
+    </div>
+    <p style="font-size:12px;color:#64748b;line-height:1.5;">Note: Earnings are credited directly based on your active package commission rates and successful affiliate referral joins.</p>
+    <button onclick="closeModal('earningsModal')" class="btn-action" style="margin-top:15px;">Close</button>
+  </div>
 </div>
 
 <!-- MY PACKAGE MODAL -->
@@ -375,6 +386,12 @@ function toggleSidebar(){
 function openModal(id){ document.getElementById(id).style.display = "flex"; }
 function closeModal(id){ document.getElementById(id).style.display = "none"; }
 
+function openEarningsModal(title, amount){
+  document.getElementById("earningsModalTitle").innerText = "📊 " + title;
+  document.getElementById("earningsModalAmount").innerText = amount;
+  openModal("earningsModal");
+}
+
 function openPackageModal(){
   closeSidebar();
   openModal("packageModal");
@@ -444,7 +461,6 @@ function applyProfileImage(imgUrl, userName){
   }
 }
 
-// NEW FUNCTION: Fetch and apply Global Top Logo set by Admin
 async function loadGlobalTopLogo() {
   try {
     const { data } = await supabaseClient
@@ -467,7 +483,6 @@ async function loadGlobalTopLogo() {
 
 document.addEventListener("DOMContentLoaded", async function(){
   try{
-    // Load Global Top Logo right away
     loadGlobalTopLogo();
 
     const { data:{session} } = await supabaseClient.auth.getSession();
