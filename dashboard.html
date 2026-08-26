@@ -177,7 +177,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     </div>
   </div>
 
-  <!-- STATS CARDS -->
+  <!-- STATS CARDS (Fixed: Ab inka click sahi function ko call karega, withdrawal modal nahi khulega) -->
   <div class="stats-stack">
     <div class="v-card bg-today">
       <div>
@@ -186,7 +186,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openRevenueDetails('Today', document.getElementById('todayRevenue').innerText); return false;">View details <span>›</span></a>
       </div>
     </div>
 
@@ -197,7 +197,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openRevenueDetails('7 Days', document.getElementById('sevenDaysRevenue').innerText); return false;">View details <span>›</span></a>
       </div>
     </div>
 
@@ -208,7 +208,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openRevenueDetails('30 Days', document.getElementById('thirtyDaysRevenue').innerText); return false;">View details <span>›</span></a>
       </div>
     </div>
 
@@ -219,7 +219,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openRevenueDetails('All Time', document.getElementById('allTimeRevenueText').innerText); return false;">View details <span>›</span></a>
       </div>
     </div>
 
@@ -230,7 +230,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openRevenueDetails('Passive Income', document.getElementById('passiveIncome').innerText); return false;">View details <span>›</span></a>
       </div>
     </div>
   </div>
@@ -287,6 +287,18 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">Loading history...</div>
     </div>
     <button onclick="closeModal('historyModal')" class="btn-action" style="margin-top:15px;">Close</button>
+  </div>
+</div>
+
+<!-- REVENUE DETAILS MODAL (Cards ke liye alag se history/story dikhane ke liye) -->
+<div id="revenueModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 id="revenueModalTitle" style="color:#0f172a;margin-top:0;">📊 Revenue Details</h3>
+    <p id="revenueModalSubtitle" style="font-size:13px;color:#475569;margin-bottom:15px;"></p>
+    <div id="revenueDetailsList" style="max-height:250px; overflow-y:auto;">
+      <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">No details found for this period.</div>
+    </div>
+    <button onclick="closeModal('revenueModal')" class="btn-action" style="margin-top:15px;">Close</button>
   </div>
 </div>
 
@@ -368,12 +380,25 @@ function openPackageModal() { openModal('packageModal'); toggleSidebar(); }
 function openUpiModal() { openModal('profileSettingsModal'); toggleSidebar(); }
 function openKycModal() { openModal('kycModal'); toggleSidebar(); }
 function openWithdrawModal() { openModal('withdrawModal'); }
-
-// FIX: Har user ko sirf uska apna history dikhega (user_id filter ke sath)
 function openHistoryModal() { 
   openModal('historyModal'); 
   toggleSidebar(); 
   loadUserWithdrawalHistory(); 
+}
+
+// Cards ke click par unka khud ka record/story dikhane ke liye function
+function openRevenueDetails(title, amount) {
+  document.getElementById('revenueModalTitle').innerText = title + " Earnings";
+  document.getElementById('revenueModalSubtitle').innerText = "Total collected amount: " + amount;
+  
+  const detailsList = document.getElementById('revenueDetailsList');
+  detailsList.innerHTML = `
+    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:8px;">
+      <div style="font-size:13px; font-weight:700; color:#0f172a;">${title} Summary</div>
+      <div style="font-size:12px; color:#64748b; margin-top:4px;">Current Earnings: <b>${amount}</b></div>
+    </div>
+  `;
+  openModal('revenueModal');
 }
 
 function switchPayoutMode(mode) {
@@ -402,7 +427,6 @@ async function loadUserWithdrawalHistory() {
       return;
     }
 
-    // Sirf current user ki hi requests aayengi (database ya table change nahi kiya gaya hai)
     const { data, error } = await supabaseClient
       .from('withdrawals')
       .select('*')
@@ -442,7 +466,6 @@ async function loadUserWithdrawalHistory() {
   }
 }
 
-// Baki dashboard aur referral filtering functions
 function copyAffiliateLink() {
   const refCode = document.getElementById('myRefCode').innerText;
   navigator.clipboard.writeText(window.location.origin + "/register.html?ref=" + refCode);
@@ -452,7 +475,6 @@ function copyAffiliateLink() {
 function filterReferrals(days, btn) {
   document.querySelectorAll('.ref-tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
-  // Aapka original referral loading logic yahan integrated rahega
 }
 
 function updateUserPayoutDetails() { 
