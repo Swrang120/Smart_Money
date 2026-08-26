@@ -137,7 +137,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <li><button onclick="openKycModal()">🆔 KYC & Date of Birth</button></li>
     <li><button onclick="openWithdrawModal()">💸 Withdraw Funds</button></li>
     <li><button onclick="openHistoryModal()">📜 View Withdrawal History</button></li>
-    <li><button id="sideLogoutBtn" style="color:#f87171;">🚪 Logout</button></li>
+    <li><button id="sideLogoutBtn" style="color:#f87171;" onclick="logoutUser()">🚪 Logout</button></li>
   </ul>
 </aside>
 
@@ -177,7 +177,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     </div>
   </div>
 
-  <!-- STATS CARDS (Fixed: Ab inka click sahi function ko call karega, withdrawal modal nahi khulega) -->
+  <!-- STATS CARDS -->
   <div class="stats-stack">
     <div class="v-card bg-today">
       <div>
@@ -186,7 +186,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openRevenueDetails('Today', document.getElementById('todayRevenue').innerText); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
       </div>
     </div>
 
@@ -197,7 +197,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openRevenueDetails('7 Days', document.getElementById('sevenDaysRevenue').innerText); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
       </div>
     </div>
 
@@ -208,7 +208,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openRevenueDetails('30 Days', document.getElementById('thirtyDaysRevenue').innerText); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
       </div>
     </div>
 
@@ -219,7 +219,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openRevenueDetails('All Time', document.getElementById('allTimeRevenueText').innerText); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
       </div>
     </div>
 
@@ -230,7 +230,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openRevenueDetails('Passive Income', document.getElementById('passiveIncome').innerText); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
       </div>
     </div>
   </div>
@@ -287,18 +287,6 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">Loading history...</div>
     </div>
     <button onclick="closeModal('historyModal')" class="btn-action" style="margin-top:15px;">Close</button>
-  </div>
-</div>
-
-<!-- REVENUE DETAILS MODAL (Cards ke liye alag se history/story dikhane ke liye) -->
-<div id="revenueModal" class="modal-overlay">
-  <div class="modal-box">
-    <h3 id="revenueModalTitle" style="color:#0f172a;margin-top:0;">📊 Revenue Details</h3>
-    <p id="revenueModalSubtitle" style="font-size:13px;color:#475569;margin-bottom:15px;"></p>
-    <div id="revenueDetailsList" style="max-height:250px; overflow-y:auto;">
-      <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">No details found for this period.</div>
-    </div>
-    <button onclick="closeModal('revenueModal')" class="btn-action" style="margin-top:15px;">Close</button>
   </div>
 </div>
 
@@ -362,6 +350,52 @@ const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLI
   auth: { persistSession: true, autoRefreshToken: true }
 });
 
+// Page load hote hi data fetch karne ke liye
+document.addEventListener("DOMContentLoaded", () => {
+  fetchUserData();
+});
+
+async function fetchUserData() {
+  try {
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+    
+    if (authError || !user) {
+      document.getElementById('userName').innerText = "Not Logged In";
+      document.getElementById('myRefCode').innerText = "N/A";
+      document.getElementById('sidebarUserName').innerText = "Guest User";
+      document.getElementById('sidebarUserEmail').innerText = "Please login";
+      return;
+    }
+
+    // Profile table se user ka naam aur code nikalna
+    const { data: profile, error: profileError } = await supabaseClient
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+    if (profile) {
+      document.getElementById('userName').innerText = profile.full_name || user.email.split('@')[0];
+      document.getElementById('myRefCode').innerText = profile.referral_code || user.id.slice(0, 8);
+      document.getElementById('sidebarUserName').innerText = profile.full_name || "User";
+      document.getElementById('sidebarUserEmail').innerText = user.email;
+      
+      if(profile.dob) {
+        document.getElementById('dobDisplayInfo').innerText = "DOB: " + profile.dob;
+      }
+    } else {
+      document.getElementById('userName').innerText = user.email.split('@')[0];
+      document.getElementById('myRefCode').innerText = user.id.slice(0, 8);
+      document.getElementById('sidebarUserName').innerText = "User";
+      document.getElementById('sidebarUserEmail').innerText = user.email;
+    }
+
+  } catch (err) {
+    console.error("Error fetching user data:", err);
+    document.getElementById('userName').innerText = "User Dashboard";
+  }
+}
+
 // Sidebar & Modal Toggles
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('active');
@@ -380,26 +414,7 @@ function openPackageModal() { openModal('packageModal'); toggleSidebar(); }
 function openUpiModal() { openModal('profileSettingsModal'); toggleSidebar(); }
 function openKycModal() { openModal('kycModal'); toggleSidebar(); }
 function openWithdrawModal() { openModal('withdrawModal'); }
-function openHistoryModal() { 
-  openModal('historyModal'); 
-  toggleSidebar(); 
-  loadUserWithdrawalHistory(); 
-}
-
-// Cards ke click par unka khud ka record/story dikhane ke liye function
-function openRevenueDetails(title, amount) {
-  document.getElementById('revenueModalTitle').innerText = title + " Earnings";
-  document.getElementById('revenueModalSubtitle').innerText = "Total collected amount: " + amount;
-  
-  const detailsList = document.getElementById('revenueDetailsList');
-  detailsList.innerHTML = `
-    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:8px;">
-      <div style="font-size:13px; font-weight:700; color:#0f172a;">${title} Summary</div>
-      <div style="font-size:12px; color:#64748b; margin-top:4px;">Current Earnings: <b>${amount}</b></div>
-    </div>
-  `;
-  openModal('revenueModal');
-}
+function openHistoryModal() { openModal('historyModal'); toggleSidebar(); }
 
 function switchPayoutMode(mode) {
   if(mode === 'upi') {
@@ -412,57 +427,6 @@ function switchPayoutMode(mode) {
     document.getElementById('tabUpi').classList.remove('active');
     document.getElementById('upiSection').style.display = 'none';
     document.getElementById('bankSection').style.display = 'block';
-  }
-}
-
-// Supabase se logged-in user ki withdrawal history fetch karna
-async function loadUserWithdrawalHistory() {
-  const historyContainer = document.getElementById('withdrawalHistoryList');
-  historyContainer.innerHTML = '<div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">Loading history...</div>';
-  
-  try {
-    const { data: { user } } = await supabaseClient.auth.getUser();
-    if(!user) {
-      historyContainer.innerHTML = '<div style="text-align:center; color:#ef4444; font-size:13px; padding:10px;">Please login first!</div>';
-      return;
-    }
-
-    const { data, error } = await supabaseClient
-      .from('withdrawals')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false });
-
-    if(error) throw error;
-
-    if(!data || data.length === 0) {
-      historyContainer.innerHTML = '<div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">No withdrawal history found.</div>';
-      return;
-    }
-
-    let html = '';
-    data.forEach(item => {
-      let statusClass = 'status-pending';
-      if(item.status === 'Approved' || item.status === 'Success') statusClass = 'status-approved';
-      if(item.status === 'Rejected') statusClass = 'status-rejected';
-
-      html += `
-        <div class="history-card-item">
-          <div class="history-row-1">
-            <span>Date: ${new Date(item.created_at).toLocaleDateString()}</span>
-            <span class="status-badge ${statusClass}">${item.status || 'Pending'}</span>
-          </div>
-          <div class="history-row-2">
-            <span class="history-amount">₹${item.amount}</span>
-            <span style="font-size:12px; color:#64748b;">Method: ${item.payout_method || 'UPI'}</span>
-          </div>
-        </div>
-      `;
-    });
-    historyContainer.innerHTML = html;
-  } catch (err) {
-    console.error(err);
-    historyContainer.innerHTML = '<div style="text-align:center; color:#ef4444; font-size:13px; padding:10px;">Error loading history.</div>';
   }
 }
 
@@ -498,6 +462,11 @@ function uploadProfilePicture(event) {
 
 function removeProfilePicture() { 
   alert("Photo removed!"); 
+}
+
+async function logoutUser() {
+  await supabaseClient.auth.signOut();
+  window.location.href = "index.html";
 }
 </script>
 </body>
