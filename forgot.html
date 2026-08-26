@@ -1,92 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forgot Password</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        h2 {
-            margin-bottom: 20px;
-            color: #333333;
-            text-align: center;
-        }
-        p {
-            color: #666666;
-            font-size: 14px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #444444;
-        }
-        input[type="email"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            border: none;
-            border-radius: 4px;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 15px;
-            color: #007bff;
-            text-decoration: none;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Money - Forgot Password</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<!-- EmailJS Library -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<style>
+*{box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif;}
+body{margin:0;background:#eef2f7;color:#1e293b;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+.box{width:100%;max-width:400px;background:#ffffff;padding:30px;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,.08);border:1px solid #e2e8f0;}
+h2{margin-top:0;color:#0f172a;font-weight:800;text-align:center;}
+p{font-size:13px;color:#64748b;margin-bottom:20px;text-align:center;}
+.input-field{width:100%;padding:12px;border-radius:10px;border:1px solid #cbd5e1;margin:6px 0 16px;outline:none;font-size:14px;}
+.btn-action{width:100%;padding:13px;border:none;border-radius:10px;color:#fff;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#6d28d9);font-size:14px;}
+.btn-action:hover{opacity:0.9;}
+.back-link{display:block;text-align:center;margin-top:15px;font-size:13px;color:#7c3aed;text-decoration:none;font-weight:700;}
+.back-link:hover{text-decoration:underline;}
+</style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>Forgot Password</h2>
-        <p>Enter your email address and we'll send you a link to reset your password.</p>
-        <form action="#" method="POST">
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required placeholder="Enter your email">
-            </div>
-            <button type="submit">Reset Password</button>
-        </form>
-        <a href="index.html" class="back-link">Back to Login</a>
-    </div>
+<div class="box">
+  <h2>Forgot Password?</h2>
+  <p>Enter your registered email address to receive the password reset link.</p>
+  
+  <label style="font-size:13px;font-weight:700;color:#475569;">Email Address</label>
+  <input type="email" id="forgotEmail" class="input-field" placeholder="name@example.com">
+  
+  <button onclick="sendForgotEmailJS()" class="btn-action" id="resetBtn">Send Reset Link</button>
+  <a href="login.html" class="back-link">← Back to Login</a>
+</div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// EmailJS Initialization
+emailjs.init("FxcimUvl0-ZxAauRx");
+
+const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+async function sendForgotEmailJS() {
+  const email = document.getElementById("forgotEmail").value.trim();
+  const btn = document.getElementById("resetBtn");
+
+  if(!email){
+    alert("Please enter your email address!");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerText = "Processing...";
+
+  try {
+    // 1. Supabase se secure reset link generate karwayenge jo update-password.html par redirect karega
+    const updatePageUrl = window.location.origin + "/update-password.html";
+    
+    const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+      redirectTo: updatePageUrl,
+    });
+
+    if (error) throw error;
+
+    // 2. EmailJS ke through email trigger karne ka parameter
+    const templateParams = {
+      user_email: email,
+      reset_link: updatePageUrl
+    };
+
+    // Note: Yahan apna EmailJS Service ID aur Template ID dalna na bhulein (agar EmailJS template use kar rahe hain)
+    // await emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", templateParams);
+
+    alert("Password reset instructions have been sent to your email!");
+    window.location.href = "login.html";
+
+  } catch (err) {
+    alert("Error: " + err.message);
+    btn.disabled = false;
+    btn.innerText = "Send Reset Link";
+  }
+}
+</script>
 </body>
 </html>
