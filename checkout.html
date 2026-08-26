@@ -340,9 +340,9 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  // URL se dynamic package name, price aur referral fetch karna
+  // URL se dynamic package name (`name`) aur price fetch karna jo index.html se pass ho raha hai
   const urlParams = new URLSearchParams(window.location.search);
-  const pkgName = urlParams.get('package') || 'Starter Package';
+  const pkgName = urlParams.get('name') || urlParams.get('package') || 'Starter Package';
   const pkgPrice = urlParams.get('price') || '289';
   const refCodeFromUrl = urlParams.get('ref') || 'SM-3D99B9';
 
