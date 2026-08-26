@@ -400,9 +400,9 @@ async function loadUserWithdrawalHistory() {
       return;
     }
 
-    // Fetching only logged-in user's withdrawal requests using user_id or email filter
+    // Fetching only logged-in user's withdrawal requests using user_id filter
     const { data, error } = await supabaseClient
-      .from('withdrawals') // Apne table ka naam yahan check kar lena (jaise withdrawals ya payout_requests)
+      .from('withdrawals')
       .select('*')
       .eq('user_id', user.id) // Sirf current user ki ID match karega taaki sabka mix na ho
       .order('created_at', { ascending: false });
@@ -440,10 +440,8 @@ async function loadUserWithdrawalHistory() {
   }
 }
 
-// Dummy placeholders for other features to maintain your full structure
-function copyAffiliateLink() {
-  alert("Affiliate link copied!");
-}
+// Dummy placeholders to maintain your full structure
+function copyAffiliateLink() { alert("Affiliate link copied!"); }
 function filterReferrals(days, btn) {
   document.querySelectorAll('.ref-tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
