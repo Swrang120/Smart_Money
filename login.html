@@ -37,9 +37,10 @@
       height: 65px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid #6366f1;
+      border: 2px solid #7c3aed;
       margin-bottom: 12px;
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+      background: #fff;
     }
     .auth-header {
       margin-bottom: 25px;
@@ -75,12 +76,12 @@
       transition: all 0.2s;
     }
     .input-field:focus {
-      border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+      border-color: #7c3aed;
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
     }
     .btn-submit {
       width: 100%;
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
       color: #fff;
       border: none;
       padding: 14px;
@@ -88,7 +89,7 @@
       font-weight: 700;
       font-size: 15px;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
       margin-top: 10px;
       transition: opacity 0.2s;
     }
@@ -101,7 +102,7 @@
     }
     .forgot-link-wrap a {
       font-size: 12px;
-      color: #6366f1;
+      color: #7c3aed;
       text-decoration: none;
       font-weight: 600;
     }
@@ -114,7 +115,7 @@
       color: #64748b;
     }
     .auth-footer a {
-      color: #6366f1;
+      color: #7c3aed;
       font-weight: 600;
       text-decoration: none;
     }
@@ -133,7 +134,7 @@
 
   <div class="auth-card">
     <!-- Dynamic Logo Loaded from Admin Panel Database -->
-    <img id="dynamicLogoImg" src="" alt="Smart Money Logo" class="auth-logo">
+    <img id="dynamicLogoImg" src="1000819130.jpg" alt="Smart Money Logo" class="auth-logo" onerror="this.src='https://via.placeholder.com/100?text=SM'">
     
     <div class="auth-header">
       <h2>Welcome Back</h2>
@@ -191,8 +192,6 @@
         const { data: logoData } = await supabaseClient.from('global_settings').select('setting_value').eq('setting_key', 'admin_top_logo').maybeSingle();
         if (logoData && logoData.setting_value) {
           document.getElementById("dynamicLogoImg").src = logoData.setting_value;
-        } else {
-          document.getElementById("dynamicLogoImg").src = "1000819130.jpg"; // Fallback local image
         }
 
         // Check active session
@@ -202,7 +201,6 @@
         }
       } catch (err) {
         console.log("Initialization error:", err);
-        document.getElementById("dynamicLogoImg").src = "1000819130.jpg";
       }
     });
 
