@@ -349,6 +349,256 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth:{ persistSession:true, autoRefreshToken:true }
 });
+
+let currentUserData = null;
+let allReferralsData = [];
+
+async function initDashboard() {
+  const { data: { session }, error } = await supabaseClient.auth.getSession();
+  if (!session) {
+    window.location.href = "login.html";
+    return;
+  }
+  
+  const user = session.user;
+  const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', user.id).single();
+  
+  if (profile) {
+    currentUserData = profile;
+    document.getElementById('userName').innerText = profile.full_name || user.email.split('@')[0];
+    document.getElementById('sidebarUserName').innerText = profile.full_name || user.email.split('@')[0];
+    document.getElementById('sidebarUserEmail').innerText = user.email;
+    document.getElementById('myRefCode').innerText = profile.referral_code || 'N/A';
+    document.getElementById('walletBalance').innerText = '₹' + (profile.wallet_balance || 0).toFixed(2);
+    document.getElementById('withdrawModalBalanceText').innerText = 'Available Balance: ₹' + (profile.wallet_balance || 0).toFixed(2);
+    
+    if (profile.dob) {
+      document.getElementById('dobDisplayInfo').innerText = 'DOB: ' + profile.dob;
+    }
+    
+    if (profile.avatar_url) {
+      document.getElementById('mainProfileImg').src = profile.avatar_url;
+      document.getElementById('sidebarProfileImage').src = profile.avatar_url;
+      document.getElementById('navAvatarImg').src = profile.avatar_url;
+      document.getElementById('removePhotoBtn').style.display = 'inline-block';
+    }
+
+    if (profile.package_name) {
+      const badge = document.getElementById('activePackageBadge');
+      badge.innerText = profile.package_name.toUpperCase();
+      badge.classList.add('active');
+      document.getElementById('modalPkgName').innerText = profile.package_name;
+    }
+    
+    // Fetch Referrals
+    fetchReferrals(profile.referral_code);
+  }
+}
+
+async function fetchReferrals(refCode) {
+  if (!refCode) return;
+  const { data, error } = await supabaseClient
+    .from('profiles')
+    .select('full_name, package_name, created_at')
+    .eq('referred_by', refCode)
+    .order('created_at', { ascending: false });
+
+  if (data) {
+    allReferralsData = data;
+    filterReferrals(1, document.querySelector('.ref-tab'));
+  }
+}
+
+function filterReferrals(days, btnElement) {
+  document.querySelectorAll('.ref-tab').forEach(t => t.classList.remove('active'));
+  if (btnElement) btnElement.classList.add('active');
+
+  const container = document.getElementById('referralsListContainer');
+  const now = new Date();
+  
+  const filtered = allReferralsData.filter(ref => {
+    const refDate = new Date(ref.created_at);
+    const diffTime = Math.abs(now - refDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays <= days;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">No referrals found for this period.</div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(item => `
+    <div class="referral-card-item">
+      <div class="ref-user-info">
+        <h4>${item.full_name || 'User'}</h4>
+        <span>Package: ${item.package_name || 'Free'}</span>
+      </div>
+      <div class="ref-date">${new Date(item.created_at).toLocaleDateString()}</div>
+    </div>
+  `).join('');
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('active');
+  document.getElementById('sidebarOverlay').classList.toggle('active');
+}
+
+function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+function openPackageModal() { openModal('packageModal'); toggleSidebar(); }
+function openUpiModal() { openModal('profileSettingsModal'); toggleSidebar(); }
+function openKycModal() { 
+  if (currentUserData) {
+    document.getElementById('kycFullName').value = currentUserData.full_name || '';
+    document.getElementById('kycDob').value = currentUserData.dob || '';
+  }
+  openModal('kycModal'); 
+  toggleSidebar(); 
+}
+function openWithdrawModal() { openModal('withdrawModal'); }
+function openHistoryModal() { fetchWithdrawalHistory(); openModal('historyModal'); toggleSidebar(); }
+
+async function fetchWithdrawalHistory() {
+  const container = document.getElementById('withdrawalHistoryList');
+  container.innerHTML = `<div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">Loading history...</div>`;
+  
+  const { data, error } = await supabaseClient
+    .from('withdrawals')
+    .select('*')
+    .eq('user_id', (await supabaseClient.auth.getSession()).data.session.user.id)
+    .order('created_at', { ascending: false });
+
+  if (!data || data.length === 0) {
+    container.innerHTML = `<div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">No withdrawal history found.</div>`;
+    return;
+  }
+
+  container.innerHTML = data.map(item => `
+    <div class="history-card-item">
+      <div class="history-row-1">
+        <span>Request ID: #${item.id.slice(0, 6)}</span>
+        <span>${new Date(item.created_at).toLocaleDateString()}</span>
+      </div>
+      <div class="history-row-2">
+        <div class="history-amount">₹${item.amount}</div>
+        <div class="status-badge status-${item.status || 'pending'}">${item.status || 'Pending'}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function submitWithdrawal() {
+  const amount = parseFloat(document.getElementById('withdrawAmount').value);
+  if (!amount || amount <= 0) {
+    alert('Please enter a valid withdrawal amount.');
+    return;
+  }
+  if (currentUserData && amount > (currentUserData.wallet_balance || 0)) {
+    alert('Insufficient wallet balance.');
+    return;
+  }
+
+  const { error } = await supabaseClient.from('withdrawals').insert([
+    { user_id: currentUserData.id, amount: amount, status: 'pending' }
+  ]);
+
+  if (error) {
+    alert('Error submitting request: ' + error.message);
+  } else {
+    alert('Withdrawal request submitted successfully!');
+    closeModal('withdrawModal');
+    location.reload();
+  }
+}
+
+async function saveKycDetails() {
+  const fullName = document.getElementById('kycFullName').value;
+  const dob = document.getElementById('kycDob').value;
+
+  const { error } = await supabaseClient
+    .from('profiles')
+    .update({ full_name: fullName, dob: dob })
+    .eq('id', currentUserData.id);
+
+  if (error) {
+    alert('Failed to update KYC: ' + error.message);
+  } else {
+    alert('KYC updated successfully!');
+    closeModal('kycModal');
+    location.reload();
+  }
+}
+
+function switchPayoutMode(mode) {
+  if (mode === 'upi') {
+    document.getElementById('tabUpi').classList.add('active');
+    document.getElementById('tabBank').classList.remove('active');
+    document.getElementById('upiSection').style.display = 'block';
+    document.getElementById('bankSection').style.display = 'none';
+  } else {
+    document.getElementById('tabBank').classList.add('active');
+    document.getElementById('tabUpi').classList.remove('active');
+    document.getElementById('bankSection').style.display = 'block';
+    document.getElementById('upiSection').style.display = 'none';
+  }
+}
+
+async function updateUserPayoutDetails() {
+  const upiId = document.getElementById('editUpiId').value;
+  const { error } = await supabaseClient
+    .from('profiles')
+    .update({ upi_id: upiId })
+    .eq('id', currentUserData.id);
+
+  if (error) {
+    alert('Error updating details: ' + error.message);
+  } else {
+    alert('Payout details saved successfully!');
+    closeModal('profileSettingsModal');
+  }
+}
+
+function copyAffiliateLink() {
+  const code = document.getElementById('myRefCode').innerText;
+  const link = window.location.origin + '/register.html?ref=' + code;
+  navigator.clipboard.writeText(link);
+  alert('Affiliate link copied to clipboard!');
+}
+
+async function uploadProfilePicture(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const fileExt = file.name.split('.').pop();
+  const fileName = `${currentUserData.id}_${Math.random()}.${fileExt}`;
+  
+  const { data, error } = await supabaseClient.storage.from('avatars').upload(fileName, file);
+  if (error) {
+    alert('Error uploading image: ' + error.message);
+    return;
+  }
+
+  const { data: { publicUrl } } = supabaseClient.storage.from('avatars').getPublicUrl(fileName);
+
+  await supabaseClient.from('profiles').update({ avatar_url: publicUrl }).eq('id', currentUserData.id);
+  alert('Profile photo updated successfully!');
+  location.reload();
+}
+
+async function removeProfilePicture() {
+  await supabaseClient.from('profiles').update({ avatar_url: null }).eq('id', currentUserData.id);
+  alert('Profile photo removed!');
+  location.reload();
+}
+
+document.getElementById('sideLogoutBtn').addEventListener('click', async () => {
+  await supabaseClient.auth.signOut();
+  window.location.href = 'login.html';
+});
+
+window.addEventListener('DOMContentLoaded', initDashboard);
 </script>
 </body>
 </html>
