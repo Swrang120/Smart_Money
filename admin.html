@@ -165,13 +165,13 @@
       </div>
     </div>
 
-    <!-- NEW: GLOBAL TOP HEADER PROFILE PHOTO CONTROL CARD -->
+    <!-- GLOBAL TOP HEADER PROFILE PHOTO CONTROL CARD (DIRECT FILE UPLOAD) -->
     <div class="card">
-      <h2>🖼️ Control Global Top Profile Photo (Dashboard Logo)</h2>
-      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Yahan image ka link daal kar update karein. Yeh photo sabhi users ke dashboard par upar show hogi aur koi user ise change nahi kar payega.</p>
-      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-        <input type="text" id="globalLogoInput" placeholder="Paste image URL here (e.g. Imgbb link)" style="flex:1; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; border-radius: 10px; min-width: 250px;">
-        <button class="btn btn-approve" onclick="updateGlobalLogo()">Update Global Logo</button>
+      <h2>🖼️ Upload Global Top Profile Photo (Dashboard Logo)</h2>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Apne phone ki gallery se photo select karein. Yeh photo automatically upload ho kar sabhi users ke dashboard par show hogi.</p>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+        <input type="file" id="adminLogoFileInput" accept="image/*" style="flex:1; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; border-radius: 10px; min-width: 230px; cursor: pointer;">
+        <button class="btn btn-approve" onclick="uploadAndSaveAdminLogo()" style="padding: 12px 18px;">Upload & Update for All Users</button>
       </div>
     </div>
 
@@ -294,24 +294,46 @@
     loadUsers();
   });
 
-  // Function to Update Global Top Logo
-  async function updateGlobalLogo() {
-    const newUrl = document.getElementById('globalLogoInput').value.trim();
-    if (!newUrl) {
-      alert("Please enter a valid image URL!");
+  // Direct File Upload Function for Global Logo
+  async function uploadAndSaveAdminLogo() {
+    const fileInput = document.getElementById("adminLogoFileInput");
+    const file = fileInput.files[0];
+    
+    if (!file) {
+      alert("Pehle koi photo select karein!");
       return;
     }
-    
-    const { error } = await supabaseClient
+
+    const fileName = "global_logo_" + Date.now() + "_" + file.name;
+
+    // Supabase Storage mein upload karein ('avatars' bucket)
+    const { data: uploadData, error: uploadError } = await supabaseClient.storage
+      .from('avatars')
+      .upload(fileName, file);
+
+    if (uploadError) {
+      alert("Upload Failed: " + uploadError.message + "\n(Dhyan dein: Supabase storage mein 'avatars' naam ka Public Bucket bana hona chahiye)");
+      return;
+    }
+
+    // Public URL nikalein
+    const { data: publicUrlData } = supabaseClient.storage
+      .from('avatars')
+      .getPublicUrl(fileName);
+
+    const imageUrl = publicUrlData.publicUrl;
+
+    // Database ke global_settings table mein save karein
+    const { error: dbError } = await supabaseClient
       .from('global_settings')
-      .update({ setting_value: newUrl })
+      .update({ setting_value: imageUrl })
       .eq('setting_key', 'admin_top_logo');
 
-    if (!error) {
-      alert("Global Top Profile Photo updated successfully for all users!");
-      document.getElementById('globalLogoInput').value = '';
+    if (dbError) {
+      alert("Database Update Error: " + dbError.message);
     } else {
-      alert("Error: " + error.message);
+      alert("Photo successfully uploaded & updated for all users! 🎉");
+      document.getElementById("adminLogoFileInput").value = "";
     }
   }
 
@@ -582,12 +604,18 @@
       `).join('');
     }
 
-    const { data: withdrawals } = await supabaseClient.from('withdrawal_requests').select('*').eq('is_deleted', true);
+    const { data: withdrawals } = await supabaseClient.from('website_requests' || 'withdrawal_requests').select('*').eq('is_deleted', true);
+    // (Rest of code remains fully functional)
+    loadWithdrawalTrash(withdrawals);
+  }
+
+  async function loadWithdrawalTrash(withdrawals) {
+    const { data: wData } = await supabaseClient.from('withdrawal_requests').select('*').eq('is_deleted', true);
     const wContainer = document.getElementById('deletedWithdrawalsList');
-    if (!withdrawals || withdrawals.length === 0) {
+    if (!wData || wData.length === 0) {
       wContainer.innerHTML = `<span style="color:var(--text-muted);">No deleted withdrawals.</span>`;
     } else {
-      wContainer.innerHTML = withdrawals.map(w => `
+      wContainer.innerHTML = wData.map(w => `
         <div style="background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
           <div><b>${w.full_name || 'Withdrawal'}</b> (₹${w.amount || 0})</div>
           <button class="btn btn-restore" onclick="restoreRecord('${w.id}', 'withdrawal_requests')">Restore</button>
