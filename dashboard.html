@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -137,7 +137,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <li><button onclick="openKycModal()">🆔 KYC & Date of Birth</button></li>
     <li><button onclick="openWithdrawModal()">💸 Withdraw Funds</button></li>
     <li><button onclick="openHistoryModal()">📜 View Withdrawal History</button></li>
-    <li><button id="sideLogoutBtn" style="color:#f87171;" onclick="logoutUser()">🚪 Logout</button></li>
+    <li><button id="sideLogoutBtn" style="color:#f87171;">🚪 Logout</button></li>
   </ul>
 </aside>
 
@@ -347,127 +347,4 @@ const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-  auth: { persistSession: true, autoRefreshToken: true }
-});
-
-// Page load hote hi data fetch karne ke liye
-document.addEventListener("DOMContentLoaded", () => {
-  fetchUserData();
-});
-
-async function fetchUserData() {
-  try {
-    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-    
-    if (authError || !user) {
-      document.getElementById('userName').innerText = "Not Logged In";
-      document.getElementById('myRefCode').innerText = "N/A";
-      document.getElementById('sidebarUserName').innerText = "Guest User";
-      document.getElementById('sidebarUserEmail').innerText = "Please login";
-      return;
-    }
-
-    // Profile table se user ka naam aur code nikalna
-    const { data: profile, error: profileError } = await supabaseClient
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
-      .single();
-
-    if (profile) {
-      document.getElementById('userName').innerText = profile.full_name || user.email.split('@')[0];
-      document.getElementById('myRefCode').innerText = profile.referral_code || user.id.slice(0, 8);
-      document.getElementById('sidebarUserName').innerText = profile.full_name || "User";
-      document.getElementById('sidebarUserEmail').innerText = user.email;
-      
-      if(profile.dob) {
-        document.getElementById('dobDisplayInfo').innerText = "DOB: " + profile.dob;
-      }
-    } else {
-      document.getElementById('userName').innerText = user.email.split('@')[0];
-      document.getElementById('myRefCode').innerText = user.id.slice(0, 8);
-      document.getElementById('sidebarUserName').innerText = "User";
-      document.getElementById('sidebarUserEmail').innerText = user.email;
-    }
-
-  } catch (err) {
-    console.error("Error fetching user data:", err);
-    document.getElementById('userName').innerText = "User Dashboard";
-  }
-}
-
-// Sidebar & Modal Toggles
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('active');
-  document.getElementById('sidebarOverlay').classList.toggle('active');
-}
-
-function openModal(modalId) {
-  document.getElementById(modalId).style.display = 'flex';
-}
-
-function closeModal(modalId) {
-  document.getElementById(modalId).style.display = 'none';
-}
-
-function openPackageModal() { openModal('packageModal'); toggleSidebar(); }
-function openUpiModal() { openModal('profileSettingsModal'); toggleSidebar(); }
-function openKycModal() { openModal('kycModal'); toggleSidebar(); }
-function openWithdrawModal() { openModal('withdrawModal'); }
-function openHistoryModal() { openModal('historyModal'); toggleSidebar(); }
-
-function switchPayoutMode(mode) {
-  if(mode === 'upi') {
-    document.getElementById('tabUpi').classList.add('active');
-    document.getElementById('tabBank').classList.remove('active');
-    document.getElementById('upiSection').style.display = 'block';
-    document.getElementById('bankSection').style.display = 'none';
-  } else {
-    document.getElementById('tabBank').classList.add('active');
-    document.getElementById('tabUpi').classList.remove('active');
-    document.getElementById('upiSection').style.display = 'none';
-    document.getElementById('bankSection').style.display = 'block';
-  }
-}
-
-function copyAffiliateLink() {
-  const refCode = document.getElementById('myRefCode').innerText;
-  navigator.clipboard.writeText(window.location.origin + "/register.html?ref=" + refCode);
-  alert("Affiliate link copied to clipboard!");
-}
-
-function filterReferrals(days, btn) {
-  document.querySelectorAll('.ref-tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-function updateUserPayoutDetails() { 
-  alert("Details saved successfully!"); 
-  closeModal('profileSettingsModal'); 
-}
-
-function saveKycDetails() { 
-  alert("KYC saved successfully!"); 
-  closeModal('kycModal'); 
-}
-
-function submitWithdrawal() { 
-  alert("Withdrawal request submitted!"); 
-  closeModal('withdrawModal'); 
-}
-
-function uploadProfilePicture(event) { 
-  alert("Photo uploaded successfully!"); 
-}
-
-function removeProfilePicture() { 
-  alert("Photo removed!"); 
-}
-
-async function logoutUser() {
-  await supabaseClient.auth.signOut();
-  window.location.href = "index.html";
-}
-</script>
-</body>
-</html>
+  auth:{ persistSession:true, autoRefreshToken:true,
