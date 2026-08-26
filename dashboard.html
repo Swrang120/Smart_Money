@@ -129,11 +129,11 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <li><a href="index.html">🌐 Home / Landing Page</a></li>
     <li><button onclick="openPackageModal()">👑 My Package & Benefits</button></li>
     
-    <!-- WALLET & WITHDRAWAL MOVED TO SIDEBAR -->
+    <!-- WALLET & WITHDRAWAL -->
     <li><button onclick="openWithdrawModal()" style="color:#10b981;font-weight:700;">💸 Available Balance: <span id="sidebarWalletBal">₹0.00</span> (Withdraw)</button></li>
     <li><button onclick="openHistoryModal()">📜 View Withdrawal History</button></li>
 
-    <!-- PHOTO CHANGE/REMOVE MOVED TO SIDEBAR -->
+    <!-- PHOTO CHANGE/REMOVE -->
     <li><button onclick="document.getElementById('profilePhotoInputSidebar').click()">📷 Change Profile Picture</button></li>
     <input type="file" id="profilePhotoInputSidebar" style="display:none;" accept="image/*" onchange="uploadProfilePicture(event)">
     <li id="removePhotoLi" style="display:none;"><button onclick="removeProfilePicture()" style="color:#ef4444;">🗑️ Remove Profile Picture</button></li>
@@ -666,7 +666,7 @@ function filterReferrals(days, btnElement){
   const container = document.getElementById("referralsListContainer");
   const now = new Date();
 
-  const filtered = allReferralsData.itemFilter ? [] : allReferralsData.filter(item => {
+  const filtered = allReferralsData.filter(item => {
     const itemDate = new Date(item.created_at);
     const diffTime = Math.abs(now - itemDate);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -751,7 +751,6 @@ async function submitWithdrawal(){
   const amount = Number(document.getElementById("withdrawAmount").value);
   const submitBtn = document.getElementById("submitWithdrawBtn");
   
-  // Package-wise minimum withdrawal limit validation
   const packageName = (currentProfile?.package_name || "").toLowerCase();
   let minWithdrawLimit = 200; 
   if(packageName === "vip" || packageName === "pro" || packageName === "gold") {
