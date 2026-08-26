@@ -256,8 +256,8 @@
     <h3>👤 1. Billing & Account Details</h3>
     <form id="checkoutForm">
       <div class="form-group">
-        <label>Affiliate / Referral Code</label>
-        <input type="text" id="refCode" class="form-control" value="SM-3D99B9" readonly>
+        <label>Affiliate / Referral Code *</label>
+        <input type="text" id="refCode" class="form-control" placeholder="Enter Sponsor Referral ID" required>
       </div>
       <div class="form-group">
         <label>Full Name *</label>
@@ -344,13 +344,13 @@
   const urlParams = new URLSearchParams(window.location.search);
   const pkgName = urlParams.get('name') || urlParams.get('package') || 'Starter Package';
   const pkgPrice = urlParams.get('price') || '289';
-  const refCodeFromUrl = urlParams.get('ref') || 'SM-3D99B9';
+  const refCodeFromUrl = urlParams.get('ref') || ''; // Default blank rakha hai agar koi link me na ho
 
   // UI elements par values dynamically set karna
   document.getElementById('packageNameDisplay').value = `${pkgName} (₹${pkgPrice})`;
   document.getElementById('summaryPkgName').innerText = pkgName;
   document.getElementById('summaryPrice').innerText = `₹${pkgPrice}`;
-  document.getElementById('refCode').value = refCodeFromUrl;
+  document.getElementById('refCode').value = refCodeFromUrl; // Agar URL mein ref code hoga toh auto-fill ho jayega, nahi toh blank rahega
 
   const qrData = {
     super: { img: 'IMG_20260826_034558.png', upi: 'smartmoney7@nyes' },
@@ -394,6 +394,13 @@
     const utr = document.getElementById('transactionId').value.trim();
     const refId = document.getElementById('refCode').value.trim();
     const screenshotFile = document.getElementById('paymentScreenshot').files[0];
+
+    // Referral ID validation check
+    if (!refId) {
+      alert("⚠️ Affiliate / Referral Code is required! Please enter a valid sponsor Referral ID.");
+      document.getElementById('refCode').focus();
+      return;
+    }
 
     if (!fullName || !mobile || !email || !password || !utr || !screenshotFile) {
       alert("⚠️ Please fill in all required details, enter UTR, and upload the payment screenshot!");
