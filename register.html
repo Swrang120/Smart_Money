@@ -7,244 +7,130 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- EmailJS Library -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif;
-    }
-    body {
-      background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-    .auth-card {
-      background: #ffffff;
-      padding: 35px 25px;
-      border-radius: 24px;
-      width: 100%;
-      max-width: 420px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      border: 1px solid #e2e8f0;
-      text-align: center;
-    }
-    .auth-logo {
-      width: 65px;
-      height: 65px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #6366f1;
-      margin-bottom: 12px;
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
-    }
-    .auth-header {
-      margin-bottom: 25px;
-    }
-    .auth-header h2 {
-      font-size: 26px;
-      font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 5px;
-    }
-    .auth-header p {
-      font-size: 13px;
-      color: #64748b;
-    }
-    .input-group {
-      margin-bottom: 16px;
-      text-align: left;
-    }
-    .input-group label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: #475569;
-      margin-bottom: 5px;
-    }
-    .input-field {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid #cbd5e1;
-      font-size: 14px;
-      outline: none;
-      transition: all 0.2s;
-    }
-    .input-field:focus {
-      border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-    }
-    .btn-submit {
-      width: 100%;
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
-      color: #fff;
-      border: none;
-      padding: 14px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 15px;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-      margin-top: 10px;
-      transition: opacity 0.2s;
-    }
-    .btn-submit:hover { opacity: 0.9; }
-    .auth-footer {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 13px;
-      color: #64748b;
-    }
-    .auth-footer a {
-      color: #6366f1;
-      font-weight: 600;
-      text-decoration: none;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+    body { background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+    .auth-card { background: #ffffff; padding: 35px 25px; border-radius: 24px; width: 100%; max-width: 420px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; text-align: center; }
+    .auth-logo { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid #6366f1; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2); }
+    .auth-header h2 { font-size: 26px; font-weight: 800; color: #0f172a; margin-bottom: 5px; }
+    .auth-header p { font-size: 13px; color: #64748b; margin-bottom: 25px; }
+    .input-group { margin-bottom: 16px; text-align: left; }
+    .input-group label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 5px; }
+    .input-field { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid #cbd5e1; font-size: 14px; outline: none; }
+    .btn-submit { width: 100%; background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 10px; }
+    .auth-footer { text-align: center; margin-top: 20px; font-size: 13px; color: #64748b; }
+    .auth-footer a { color: #6366f1; font-weight: 600; text-decoration: none; }
   </style>
 </head>
 <body>
 
-  <div class="auth-card">
-    <!-- Dynamic Logo Loaded from Admin Panel Database -->
-    <img id="dynamicLogoImg" src="" alt="Smart Money Logo" class="auth-logo">
-    
+  <div class="auth-card" id="registerBox">
+    <img id="dynamicLogoImg" src="" alt="Logo" class="auth-logo">
     <div class="auth-header">
       <h2>Create Account</h2>
       <p>Join Smart Money today</p>
     </div>
 
-    <div class="input-group">
-      <label>Full Name</label>
-      <input type="text" id="regName" class="input-field" placeholder="Enter your full name">
-    </div>
+    <div class="input-group"><label>Full Name</label><input type="text" id="regName" class="input-field" placeholder="Full name"></div>
+    <div class="input-group"><label>Email Address</label><input type="email" id="regEmail" class="input-field" placeholder="Email address"></div>
+    <div class="input-group"><label>Password</label><input type="password" id="regPassword" class="input-field" placeholder="Password"></div>
+    <div class="input-group"><label>Referral ID (Compulsory)</label><input type="text" id="regReferral" class="input-field" placeholder="e.g. SM-Smart12345"></div>
 
-    <div class="input-group">
-      <label>Email Address</label>
-      <input type="email" id="regEmail" class="input-field" placeholder="Enter your email">
-    </div>
-
-    <div class="input-group">
-      <label>Password</label>
-      <input type="password" id="regPassword" class="input-field" placeholder="Create a password">
-    </div>
-
-    <div class="input-group">
-      <label>Referral ID (Compulsory)</label>
-      <input type="text" id="regReferral" class="input-field" placeholder="Enter valid referral ID (e.g. SM-Smart12345)">
-    </div>
-
-    <button onclick="handleRegister()" class="btn-submit" id="regBtn">Register Account</button>
-
-    <div class="auth-footer">
-      Already have an account? <a href="login.html">Login</a>
-    </div>
+    <button onclick="handleRegister()" class="btn-submit" id="regBtn">Register & Proceed to Payment</button>
+    <div class="auth-footer">Already have an account? <a href="login.html">Login</a></div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
-    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  emailjs.init("FxcimUvl0-ZxAauRx"); // Aapka EmailJS key
+  const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-    // Page Load hote hi Admin Panel ka Dynamic Logo aur Referral URL parameters check karna
-    document.addEventListener("DOMContentLoaded", async () => {
-      try {
-        // Fetch dynamic logo from database
-        const { data: logoData } = await supabaseClient.from('global_settings').select('setting_value').eq('setting_key', 'admin_top_logo').maybeSingle();
-        if (logoData && logoData.setting_value) {
-          document.getElementById("dynamicLogoImg").src = logoData.setting_value;
-        } else {
-          document.getElementById("dynamicLogoImg").src = "1000819130.jpg"; // Fallback local image
-        }
-      } catch (err) {
-        console.log("Logo load error:", err);
-        document.getElementById("dynamicLogoImg").src = "1000819130.jpg";
-      }
+  document.addEventListener("DOMContentLoaded", async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const refParam = urlParams.get("ref");
+    if (refParam) document.getElementById("regReferral").value = refParam;
+  });
 
-      // Auto-fill referral code from URL if passed (e.g. register.html?ref=SM-XXXXX)
-      const urlParams = new URLSearchParams(window.location.search);
-      const refParam = urlParams.get("ref");
-      if (refParam) {
-        document.getElementById("regReferral").value = refParam;
-      }
-    });
+  async function handleRegister() {
+    const name = document.getElementById("regName").value.trim();
+    const email = document.getElementById("regEmail").value.trim();
+    const password = document.getElementById("regPassword").value.trim();
+    const referral = document.getElementById("regReferral").value.trim();
+    const btn = document.getElementById("regBtn");
 
-    async function handleRegister() {
-      const name = document.getElementById("regName").value.trim();
-      const email = document.getElementById("regEmail").value.trim();
-      const password = document.getElementById("regPassword").value.trim();
-      const referral = document.getElementById("regReferral").value.trim();
-      const btn = document.getElementById("regBtn");
-
-      if (!name || !email || !password || !referral) {
-        alert("⚠️ Sabhi fields bharna zaroori hai, aur Referral ID compulsory hai!");
-        return;
-      }
-
-      btn.innerText = "Creating Account...";
-      btn.disabled = true;
-
-      try {
-        // 1. Check if referral ID exists in database
-        const { data: refCheck, error: refError } = await supabaseClient
-          .from('profiles')
-          .select('user_id')
-          .eq('referral_code', referral)
-          .maybeSingle();
-
-        if (refError || !refCheck) {
-          throw new Error("Invalid Referral ID! Yeh referral ID database mein exist nahi karti.");
-        }
-
-        // 2. Register user with Supabase Auth
-        const { data: authData, error: authError } = await supabaseClient.auth.signUp({
-          email: email,
-          password: password,
-          options: {
-            data: {
-              full_name: name,
-              referral_id: referral
-            }
-          }
-        });
-
-        if (authError) throw authError;
-
-        const userId = authData.user?.id;
-        
-        // 🌟 UPDATED FORMAT: SM-Smart + 5 random digits (e.g. SM-Smart54721)
-        const randomDigits = Math.floor(10000 + Math.random() * 90000);
-        const generatedRefCode = "SM-Smart" + randomDigits;
-
-        // 3. Insert profile data into 'profiles' table
-        const { error: profileError } = await supabaseClient
-          .from('profiles')
-          .insert([
-            {
-              user_id: userId,
-              full_name: name,
-              referral_code: generatedRefCode,
-              referred_by: referral,
-              balance: 0.00
-            }
-          ]);
-
-        if (profileError) {
-          console.log("Profile insert warning:", profileError.message);
-        }
-
-        alert("🎉 Registration Successful! Please login to continue.");
-        window.location.href = "login.html";
-      } catch (err) {
-        alert("Registration Failed: " + err.message);
-        btn.innerText = "Register Account";
-        btn.disabled = false;
-      }
+    if (!name || !email || !password || !referral) {
+      alert("⚠️ Sabhi fields bharna zaroori hai!");
+      return;
     }
-  </script>
+
+    btn.innerText = "Processing...";
+    btn.disabled = true;
+
+    try {
+      // 1. Check Referral
+      const { data: refCheck, error: refError } = await supabaseClient
+        .from('profiles').select('user_id').eq('referral_code', referral).maybeSingle();
+
+      if (refError || !refCheck) throw new Error("Invalid Referral ID!");
+
+      // 2. Signup User
+      const { data: authData, error: authError } = await supabaseClient.auth.signUp({
+        email: email, password: password,
+        options: { data: { full_name: name, referral_id: referral } }
+      });
+
+      if (authError) throw authError;
+
+      const userId = authData.user?.id;
+      const randomDigits = Math.floor(10000 + Math.random() * 90000);
+      const generatedRefCode = "SM-Smart" + randomDigits;
+
+      // 3. Insert Profile with PENDING status
+      const { error: profileError } = await supabaseClient.from('profiles').insert([{
+        user_id: userId,
+        full_name: name,
+        referral_code: generatedRefCode,
+        referred_by: referral,
+        status: 'PENDING', // Admin approval ke liye pending rakhenge
+        balance: 0.00
+      }]);
+
+      if (profileError) throw profileError;
+
+      // 4. Show 15-Minute Timer & Waiting Screen
+      showPendingApprovalScreen(email);
+
+    } catch (err) {
+      alert("Registration Failed: " + err.message);
+      btn.innerText = "Register & Proceed to Payment";
+      btn.disabled = false;
+    }
+  }
+
+  function showPendingApprovalScreen(userEmail) {
+    const card = document.getElementById("registerBox");
+    card.innerHTML = `
+      <h2>⏳ Approval Pending</h2>
+      <p style="font-size:13px;color:#64748b;margin:15px 0;">Aapka account create ho gaya hai aur payment verification ke liye bhej diya gaya hai. Kripya admin dwara approval milne tak intezaar karein.</p>
+      <div style="font-size:24px;font-weight:800;color:#6366f1;margin:20px 0;" id="timerDisplay">15:00</div>
+      <p style="font-size:12px;color:#94a3b8;">Approval ke baad aapke email (${userEmail}) par confirmation bhej diya jayega.</p>
+      <button onclick="window.location.href='login.html'" class="btn-submit" style="margin-top:20px;">Go to Login</button>
+    `;
+
+    // 15 Minute Countdown Timer
+    let timeLeft = 15 * 60;
+    const timerInterval = setInterval(() => {
+      let minutes = Math.floor(timeLeft / 60);
+      let seconds = timeLeft % 60;
+      document.getElementById("timerDisplay").innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+      timeLeft--;
+      if (timeLeft < 0) { clearInterval(timerInterval); document.getElementById("timerDisplay").innerText = "Time Expired! Contact Admin."; }
+    }, 1000);
+  }
+</script>
 </body>
 </html>
