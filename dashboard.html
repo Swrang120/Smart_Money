@@ -42,13 +42,12 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
 /* DASHBOARD */
 .dash-container{padding:25px 18px 40px;}
-.profile-card{position:relative;min-height:185px;border-radius:20px;overflow:hidden;margin-bottom:20px;display:flex;align-items:center;padding:25px;gap:20px;background:linear-gradient(135deg,#ffffff 0%,#ffffff 55%,#f5f3ff 55%,#ede9fe 100%);box-shadow:0 10px 25px rgba(15,23,42,.10);border:1px solid #e2e8f0;}
+.profile-card{position:relative;min-height:170px;border-radius:20px;overflow:hidden;margin-bottom:20px;display:flex;align-items:center;padding:25px;gap:20px;background:linear-gradient(135deg,#ffffff 0%,#ffffff 55%,#f5f3ff 55%,#ede9fe 100%);box-shadow:0 10px 25px rgba(15,23,42,.10);border:1px solid #e2e8f0;}
 .package-badge{position:absolute;top:0;right:0;padding:8px 17px;background:linear-gradient(135deg,#64748b,#475569);color:#fff;font-size:9px;font-weight:800;letter-spacing:.5px;border-bottom-left-radius:14px;}
 .package-badge.active{background:linear-gradient(135deg,#f59e0b,#ec4899);}
 
-.profile-img-wrap{width:96px;height:96px;min-width:96px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;padding:4px;box-shadow:0 6px 20px rgba(0,0,0,.18);border:3px solid #7c3aed;position:relative;cursor:pointer;}
+.profile-img-wrap{width:96px;height:96px;min-width:96px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;padding:4px;box-shadow:0 6px 20px rgba(0,0,0,.18);border:3px solid #7c3aed;position:relative;}
 .profile-img{width:100%;height:100%;border-radius:50%;object-fit:cover;background:#fff;}
-.upload-hint{position:absolute;bottom:0;left:0;width:100%;background:rgba(0,0,0,0.65);color:#fff;font-size:7px;text-align:center;padding:2px 0;border-bottom-left-radius:50px;border-bottom-right-radius:50px;}
 
 .user-info{flex:1;min-width:0;}
 .user-info h2{margin:0 0 8px;font-size:26px;color:#0f172a;font-weight:800;letter-spacing:-0.5px;line-height:1.2;}
@@ -56,7 +55,6 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .affiliate-id-box span{font-size:14px;color:#475569;}
 .affiliate-id-box b{font-size:15px;color:#7c3aed;font-weight:800;}
 .copy-id-btn{width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#9333ea);color:white;display:flex;align-items:center;justify-content:center;}
-.remove-photo-btn{background:none;border:none;color:#ef4444;font-size:11px;font-weight:700;cursor:pointer;padding:0;margin-top:6px;display:inline-block;}
 
 /* STATS CARDS */
 .stats-stack{display:flex;flex-direction:column;gap:15px;margin-bottom:20px;}
@@ -73,21 +71,8 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .bg-passive{background:linear-gradient(135deg,#d97706,#b45309);}
 
 .section-box{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:20px;margin-bottom:18px;}
-.wallet-box{text-align:center;}
-.wallet-balance{font-size:32px;font-weight:800;color:#10b981;margin:5px 0;}
-.btn-withdraw{width:100%;margin-top:14px;border:none;padding:14px;border-radius:10px;cursor:pointer;color:#fff;font-weight:700;background:linear-gradient(135deg,#10b981,#059669);}
 
-/* WITHDRAWAL HISTORY 3-LINE CARDS */
-.history-card-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;flex-direction:column;gap:6px;}
-.history-row-1{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#64748b;font-weight:600;}
-.history-row-2{display:flex;justify-content:space-between;align-items:center;}
-.history-amount{font-size:18px;font-weight:800;color:#0f172a;}
-.status-badge{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;}
-.status-approved{background:#d1fae5;color:#059669;}
-.status-pending{background:#fef3c7;color:#d97706;}
-.status-rejected{background:#fee2e2;color:#dc2626;}
-
-/* REFERRAL LIST STYLES (1 to 30 Days) */
+/* REFERRAL LIST STYLES */
 .referral-tabs{display:flex;gap:6px;margin-bottom:15px;overflow-x:auto;padding-bottom:5px;}
 .ref-tab{padding:8px 14px;border-radius:20px;background:#f1f5f9;color:#475569;font-size:12px;font-weight:700;border:none;cursor:pointer;white-space:nowrap;}
 .ref-tab.active{background:#7c3aed;color:#fff;}
@@ -106,6 +91,16 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .payout-tabs{display:flex;gap:8px;margin:12px 0 16px;}
 .payout-tab{flex:1;text-align:center;padding:10px;border-radius:9px;background:#f1f5f9;cursor:pointer;font-size:12px;font-weight:700;}
 .payout-tab.active{background:#7c3aed;color:#fff;}
+
+/* HISTORY CARDS */
+.history-card-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;flex-direction:column;gap:6px;}
+.history-row-1{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#64748b;font-weight:600;}
+.history-row-2{display:flex;justify-content:space-between;align-items:center;}
+.history-amount{font-size:18px;font-weight:800;color:#0f172a;}
+.status-badge{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;}
+.status-approved{background:#d1fae5;color:#059669;}
+.status-pending{background:#fef3c7;color:#d97706;}
+.status-rejected{background:#fee2e2;color:#dc2626;}
 </style>
 </head>
 
@@ -133,10 +128,18 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
   <ul class="sidebar-menu">
     <li><a href="index.html">🌐 Home / Landing Page</a></li>
     <li><button onclick="openPackageModal()">👑 My Package & Benefits</button></li>
+    
+    <!-- WALLET & WITHDRAWAL MOVED TO SIDEBAR -->
+    <li><button onclick="openWithdrawModal()" style="color:#10b981;font-weight:700;">💸 Available Balance: <span id="sidebarWalletBal">₹0.00</span> (Withdraw)</button></li>
+    <li><button onclick="openHistoryModal()">📜 View Withdrawal History</button></li>
+
+    <!-- PHOTO CHANGE/REMOVE MOVED TO SIDEBAR -->
+    <li><button onclick="document.getElementById('profilePhotoInputSidebar').click()">📷 Change Profile Picture</button></li>
+    <input type="file" id="profilePhotoInputSidebar" style="display:none;" accept="image/*" onchange="uploadProfilePicture(event)">
+    <li id="removePhotoLi" style="display:none;"><button onclick="removeProfilePicture()" style="color:#ef4444;">🗑️ Remove Profile Picture</button></li>
+
     <li><button onclick="openUpiModal()">🏦 View & Edit Bank / UPI Details</button></li>
     <li><button onclick="openKycModal()">🆔 KYC & Date of Birth</button></li>
-    <li><button onclick="openWithdrawModal()">💸 Withdraw Funds</button></li>
-    <li><button onclick="openHistoryModal()">📜 View Withdrawal History</button></li>
     <li><button id="sideLogoutBtn" style="color:#f87171;">🚪 Logout</button></li>
   </ul>
 </aside>
@@ -158,13 +161,8 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
   <div class="profile-card">
     <div class="package-badge" id="activePackageBadge">NO PACKAGE</div>
     <div>
-      <div class="profile-img-wrap" onclick="document.getElementById('profilePhotoInput').click()" title="Click to change photo">
+      <div class="profile-img-wrap">
         <img src="1000819130.jpg" alt="Profile" class="profile-img" id="mainProfileImg" onerror="this.src='https://via.placeholder.com/100?text=SM'">
-        <div class="upload-hint">Edit Photo</div>
-        <input type="file" id="profilePhotoInput" style="display:none;" accept="image/*" onchange="uploadProfilePicture(event)">
-      </div>
-      <div style="text-align:center;">
-        <button class="remove-photo-btn" onclick="removeProfilePicture()" id="removePhotoBtn" style="display:none;">Remove Photo</button>
       </div>
     </div>
     <div class="user-info">
@@ -235,13 +233,6 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     </div>
   </div>
 
-  <div class="section-box wallet-box">
-    <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#64748b;">Available Wallet Balance</div>
-    <div class="wallet-balance" id="walletBalance">₹0.00</div>
-    <p id="payoutDisplayInfo" style="font-size:11px;color:#64748b;">Payout Method: Not Saved Yet</p>
-    <button class="btn-withdraw" onclick="openWithdrawModal()">💸 Withdraw Money Now</button>
-  </div>
-
   <!-- RECENT REFERRALS -->
   <div class="section-box">
     <h3>👥 My Referrals & Joins</h3>
@@ -284,9 +275,8 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <p style="font-size:13px;color:#475569;margin-bottom:15px;">Here are your active package details, commission structures, and withdrawal limits:</p>
     <div id="modalPkgDetailsBox" style="background:#f8fafc;padding:15px;border-radius:12px;border:1px solid #e2e8f0;font-size:13px;line-height:1.6;">
       <p><b>Package Name:</b> <span id="modalPkgName" style="color:#7c3aed;font-weight:750;">No Package Active</span></p>
-      <p><b>Commission Rate:</b> 0% (Upgrade required)</p>
-      <p><b>Withdrawal Limit:</b> Min ₹200</p>
-      <p><b>Account Status:</b> <span style="color:#ef4444;font-weight:700;">Inactive / Free User</span></p>
+      <p><b>Commission Rate:</b> Dynamic based on package</p>
+      <p><b>Account Status:</b> <span style="color:#10b981;font-weight:700;">Active System User</span></p>
     </div>
     <button onclick="closeModal('packageModal')" class="btn-action" style="margin-top:15px;">Close</button>
   </div>
@@ -444,20 +434,20 @@ function applyProfileImage(imgUrl, userName){
   const mainImg = document.getElementById("mainProfileImg");
   const sidebarImg = document.getElementById("sidebarProfileImage");
   const navAvatar = document.getElementById("navAvatarImg");
-  const removeBtn = document.getElementById("removePhotoBtn");
+  const removeLi = document.getElementById("removePhotoLi");
 
   if(imgUrl && imgUrl.trim() !== ""){
     mainImg.src = imgUrl;
     sidebarImg.src = imgUrl;
     navAvatar.src = imgUrl;
-    if(removeBtn) removeBtn.style.display = "inline-block";
+    if(removeLi) removeLi.style.display = "block";
   } else {
     const firstLetter = (userName ? userName.charAt(0) : "U").toUpperCase();
     const fallbackUrl = `https://ui-avatars.com/api/?name=${firstLetter}&background=7c3aed&color=fff&size=128&bold=true`;
     mainImg.src = fallbackUrl;
     sidebarImg.src = fallbackUrl;
     navAvatar.src = fallbackUrl;
-    if(removeBtn) removeBtn.style.display = "none";
+    if(removeLi) removeLi.style.display = "none";
   }
 }
 
@@ -543,16 +533,8 @@ document.addEventListener("DOMContentLoaded", async function(){
 
     applyProfileImage(profile?.profile_pic, finalName);
 
-    document.getElementById("walletBalance").innerText = "₹" + userCurrentBalance.toFixed(2);
+    document.getElementById("sidebarWalletBal").innerText = "₹" + userCurrentBalance.toFixed(2);
     document.getElementById("allTimeRevenueText").innerText = "₹" + userCurrentBalance.toFixed(2);
-
-    let payoutText = "Payout Method: Not Saved Yet";
-    if(profile?.payout_type === "bank" && profile?.bank_account_number){
-      payoutText = `Bank A/C: ${profile.bank_account_number} (${profile.ifsc_code || ''})`;
-    }else if(profile?.upi_id){
-      payoutText = "UPI ID: " + profile.upi_id;
-    }
-    document.getElementById("payoutDisplayInfo").innerText = payoutText;
 
     await loadWithdrawalHistory();
     await loadReferralsData();
@@ -684,7 +666,7 @@ function filterReferrals(days, btnElement){
   const container = document.getElementById("referralsListContainer");
   const now = new Date();
 
-  const filtered = allReferralsData.filter(item => {
+  const filtered = allReferralsData.itemFilter ? [] : allReferralsData.filter(item => {
     const itemDate = new Date(item.created_at);
     const diffTime = Math.abs(now - itemDate);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -747,7 +729,6 @@ async function updateUserPayoutDetails(){
 
   if(error){ alert("Error: " + error.message); return; }
   currentProfile = { ...currentProfile, ...updateData };
-  document.getElementById("payoutDisplayInfo").innerText = payoutMode === "upi" ? "UPI ID: " + updateData.upi_id : `Bank A/C: ${updateData.bank_account_number}`;
   alert("Payout details saved successfully!");
   closeModal("profileSettingsModal");
 }
@@ -769,7 +750,19 @@ async function saveKycDetails(){
 async function submitWithdrawal(){
   const amount = Number(document.getElementById("withdrawAmount").value);
   const submitBtn = document.getElementById("submitWithdrawBtn");
-  if(!amount || amount <= 0 || amount > userCurrentBalance){ alert("Invalid or insufficient balance."); return; }
+  
+  // Package-wise minimum withdrawal limit validation
+  const packageName = (currentProfile?.package_name || "").toLowerCase();
+  let minWithdrawLimit = 200; 
+  if(packageName === "vip" || packageName === "pro" || packageName === "gold") {
+    minWithdrawLimit = 100; 
+  } else if(!packageName || packageName === "none") {
+    minWithdrawLimit = 200; 
+  }
+
+  if(!amount || amount <= 0){ alert("Please enter a valid amount."); return; }
+  if(amount < minWithdrawLimit){ alert(`Minimum withdrawal limit is ₹${minWithdrawLimit} for your package.`); return; }
+  if(amount > userCurrentBalance){ alert("Insufficient balance."); return; }
 
   submitBtn.disabled = true;
   const { error: insertError } = await supabaseClient.from("withdrawal_requests").insert({ user_id: currentUserId, amount: amount, status: "pending" });
@@ -780,7 +773,7 @@ async function submitWithdrawal(){
   submitBtn.disabled = false;
 
   userCurrentBalance = newBalance;
-  document.getElementById("walletBalance").innerText = "₹" + userCurrentBalance.toFixed(2);
+  document.getElementById("sidebarWalletBal").innerText = "₹" + userCurrentBalance.toFixed(2);
   alert("Withdrawal requested successfully!");
   closeModal("withdrawModal");
   await loadWithdrawalHistory();
