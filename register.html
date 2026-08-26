@@ -134,7 +134,7 @@
 
     <div class="input-group">
       <label>Referral ID (Compulsory)</label>
-      <input type="text" id="regReferral" class="input-field" placeholder="Enter valid referral ID (e.g. SM-12345)">
+      <input type="text" id="regReferral" class="input-field" placeholder="Enter valid referral ID (e.g. SM-Smart12345)">
     </div>
 
     <button onclick="handleRegister()" class="btn-submit" id="regBtn">Register Account</button>
@@ -215,7 +215,10 @@
         if (authError) throw authError;
 
         const userId = authData.user?.id;
-        const generatedRefCode = "SM-" + userId.substring(0, 5).toUpperCase();
+        
+        // 🌟 UPDATED FORMAT: SM-Smart + 5 random digits (e.g. SM-Smart54721)
+        const randomDigits = Math.floor(10000 + Math.random() * 90000);
+        const generatedRefCode = "SM-Smart" + randomDigits;
 
         // 3. Insert profile data into 'profiles' table
         const { error: profileError } = await supabaseClient
