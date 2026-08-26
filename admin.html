@@ -387,7 +387,6 @@
     });
   }
 
-  // 👉 Updated Package Approval Function with EmailJS Integration (Ab approve karte hi email jayega)
   async function approvePayment(id, fullName, email, packageName, refId) {
     if (!confirm(`Approve package for ${fullName}?`)) return;
     try {
@@ -408,7 +407,6 @@
 
       await supabaseClient.from('payment_requests').update({ status: 'Approved' }).eq('id', id);
 
-      // EmailJS Notification on Package Approval
       if (email) {
         const currentDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
         emailjs.send('service_qsy07qr', 'template_mf8enck', {
