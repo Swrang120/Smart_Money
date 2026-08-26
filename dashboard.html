@@ -124,6 +124,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
   </div>
   <div class="sidebar-profile">
+    <!-- Updated with ID for dynamic global logo control -->
     <img id="sidebarProfileImage" class="sidebar-profile-img" src="1000819130.jpg" alt="Profile">
     <div class="sidebar-profile-info">
       <div id="sidebarUserName" class="sidebar-profile-name">Loading...</div>
@@ -144,11 +145,13 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 <!-- NAVBAR -->
 <header class="navbar">
   <a href="dashboard.html" class="brand-logo">
-    <img src="1000819130.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/100?text=SM'">
+    <!-- Updated with ID for dynamic global logo control -->
+    <img id="navBrandLogoImg" src="1000819130.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/100?text=SM'">
     <span>Smart Money</span>
   </a>
   <div class="nav-right">
     <a href="index.html" class="nav-home-btn">🌐 Home</a>
+    <!-- Updated with ID for dynamic global logo control -->
     <img src="1000819130.jpg" class="nav-avatar" alt="Avatar" onerror="this.src='https://via.placeholder.com/100?text=SM'" id="navAvatarImg">
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
   </div>
@@ -441,8 +444,32 @@ function applyProfileImage(imgUrl, userName){
   }
 }
 
+// NEW FUNCTION: Fetch and apply Global Top Logo set by Admin
+async function loadGlobalTopLogo() {
+  try {
+    const { data } = await supabaseClient
+      .from('global_settings')
+      .select('setting_value')
+      .eq('setting_key', 'admin_top_logo')
+      .single();
+
+    if (data && data.setting_value) {
+      const logoUrl = data.setting_value;
+      const navBrandImg = document.getElementById("navBrandLogoImg");
+      const sidebarLogoImg = document.getElementById("sidebarLogo");
+      if (navBrandImg) navBrandImg.src = logoUrl;
+      if (sidebarLogoImg) sidebarLogoImg.src = logoUrl;
+    }
+  } catch (err) {
+    console.log("Global logo load info:", err);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", async function(){
   try{
+    // Load Global Top Logo right away
+    loadGlobalTopLogo();
+
     const { data:{session} } = await supabaseClient.auth.getSession();
     if(!session || !session.user){
       window.location.href = "login.html";
