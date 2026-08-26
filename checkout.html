@@ -9,56 +9,238 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #0a0f1d 0%, #17153a 50%, #0f172a 100%);
-      --card-bg: rgba(30, 41, 59, 0.85);
-      --border-color: rgba(99, 102, 241, 0.3);
-      --primary: #6366f1;
-      --primary-hover: #4f46e5;
+      --bg-1: #070b1a;
+      --bg-2: #0d1025;
+      --bg-3: #171238;
+      --card-bg: rgba(23, 31, 55, 0.78);
+      --card-bg-2: rgba(30, 41, 70, 0.72);
+      --border-color: rgba(129, 140, 248, 0.22);
+      --border-bright: rgba(99, 102, 241, 0.55);
+      --primary: #6d5dfc;
+      --primary-hover: #5546e8;
+      --purple: #8b5cf6;
       --accent: #38bdf8;
-      --success: #10b981;
-      --text-main: #ffffff;
+      --cyan: #22d3ee;
+      --success: #34d399;
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
     }
 
     * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background: #0f172a; background-image: var(--bg-gradient); color: var(--text-main); margin: 0; padding: 16px; min-height: 100vh; }
+    html { min-height: 100%; background: #070b1a; }
+    body { 
+      color: var(--text-main); 
+      margin: 0; 
+      padding: 16px; 
+      min-height: 100vh; 
+      overflow-x: hidden; 
+      position: relative; 
+      background: radial-gradient(circle at 15% 20%, rgba(99,102,241,0.18), transparent 28%), 
+                  radial-gradient(circle at 85% 10%, rgba(56,189,248,0.12), transparent 25%), 
+                  radial-gradient(circle at 50% 85%, rgba(139,92,246,0.14), transparent 35%), 
+                  linear-gradient(135deg, #070b1a 0%, #0d1025 45%, #151238 100%); 
+    }
 
-    .container { max-width: 600px; margin: 0 auto; padding-bottom: 40px; }
+    /* Premium animated background glow */
+    body::before {
+      content: "";
+      position: fixed;
+      width: 420px;
+      height: 420px;
+      top: -150px;
+      left: -120px;
+      background: radial-gradient(circle, rgba(99,102,241,0.24) 0%, rgba(99,102,241,0.08) 38%, transparent 70%);
+      filter: blur(25px);
+      pointer-events: none;
+      z-index: -1;
+      animation: floatGlow1 10s ease-in-out infinite alternate;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      right: -180px;
+      bottom: -180px;
+      background: radial-gradient(circle, rgba(56,189,248,0.18) 0%, rgba(139,92,246,0.10) 40%, transparent 72%);
+      filter: blur(30px);
+      pointer-events: none;
+      z-index: -1;
+      animation: floatGlow2 12s ease-in-out infinite alternate;
+    }
+    @keyframes floatGlow1 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(80px, 60px) scale(1.2); }
+    }
+    @keyframes floatGlow2 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-70px, -60px) scale(1.15); }
+    }
+
+    .container { max-width: 600px; margin: 0 auto; padding-bottom: 50px; position: relative; z-index: 1; }
     
-    .header { text-align: center; margin-bottom: 25px; }
-    .header h1 { font-size: 22px; font-weight: 800; margin: 0 0 6px 0; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .header p { font-size: 13px; color: var(--text-muted); margin: 0; }
+    .header { text-align: center; margin-bottom: 28px; padding-top: 8px; }
+    .header h1 { 
+      font-size: 23px; 
+      font-weight: 800; 
+      margin: 0 0 8px; 
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #a78bfa, #38bdf8); 
+      background-size: 250% auto; 
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent; 
+      animation: gradientMove 6s linear infinite; 
+      text-shadow: 0 0 30px rgba(99,102,241,0.25); 
+    }
+    @keyframes gradientMove {
+      0% { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+    .header p { font-size: 12px; color: var(--text-muted); margin: 0; }
 
-    .card { background: var(--card-bg); border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); backdrop-filter: blur(16px); box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
-    .card h3 { font-size: 15px; color: #fff; margin: 0 0 15px 0; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; }
+    /* PREMIUM GLASS CARDS */
+    .card { 
+      position: relative;
+      background: linear-gradient(135deg, rgba(36, 46, 75, 0.82), rgba(17, 24, 45, 0.88)); 
+      border-radius: 20px; 
+      padding: 20px; 
+      margin-bottom: 18px; 
+      border: 1px solid var(--border-color); 
+      backdrop-filter: blur(20px); 
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.04); 
+      overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(129,140,248,0.7), rgba(56,189,248,0.6), transparent);
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(129,140,248,0.42);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.38), 0 0 30px rgba(99,102,241,0.08);
+    }
+    .card h3 { 
+      font-size: 14px; 
+      color: #fff; 
+      margin: 0 0 16px; 
+      display: flex; 
+      align-items: center; 
+      gap: 8px; 
+      border-bottom: 1px solid rgba(255,255,255,0.07); 
+      padding-bottom: 12px; 
+      letter-spacing: 0.1px;
+    }
 
     .form-group { margin-bottom: 14px; }
-    .form-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
-    .form-control { width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); padding: 12px 14px; border-radius: 12px; color: #fff; font-size: 13px; outline: none; transition: all 0.3s; }
-    .form-control:focus { border-color: var(--accent); box-shadow: 0 0 12px rgba(56, 189, 248, 0.25); }
+    .form-group label { display: block; font-size: 10px; font-weight: 700; color: #9ca9c3; text-transform: uppercase; margin-bottom: 7px; letter-spacing: 0.6px; }
+    .form-control { 
+      width: 100%; 
+      background: linear-gradient(135deg, rgba(7,12,28,0.65), rgba(17,24,45,0.72)); 
+      border: 1px solid rgba(129,140,248,0.20); 
+      padding: 12px 14px; 
+      border-radius: 11px; 
+      color: #fff; 
+      font-size: 13px; 
+      outline: none; 
+      transition: all 0.25s ease; 
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.18);
+    }
+    .form-control::placeholder { color: #52617b; }
+    .form-control:hover { border-color: rgba(129,140,248,0.35); }
+    .form-control:focus { border-color: var(--accent); background: rgba(12,20,40,0.85); box-shadow: 0 0 0 3px rgba(56,189,248,0.08), 0 0 18px rgba(56,189,248,0.12); }
 
     /* QR Switcher Tabs */
-    .qr-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
-    .qr-tab-btn { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); color: var(--text-muted); padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-    .qr-tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 15px rgba(99,102,241,0.4); }
+    .qr-tabs { display: flex; gap: 8px; margin-bottom: 17px; }
+    .qr-tab-btn { flex: 1; background: rgba(255,255,255,0.035); border: 1px solid rgba(129,140,248,0.22); color: #94a3b8; padding: 10px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.25s ease; }
+    .qr-tab-btn:hover { background: rgba(99,102,241,0.10); color: #dbeafe; }
+    .qr-tab-btn.active { color: white; background: linear-gradient(135deg, #6d5dfc, #4f46e5); border-color: rgba(139,92,246,0.8); box-shadow: 0 6px 20px rgba(99,102,241,0.35); }
 
-    .qr-box { background: #fff; padding: 15px; border-radius: 16px; text-align: center; width: 190px; margin: 0 auto 12px auto; box-shadow: 0 8px 25px rgba(0,0,0,0.3); cursor: pointer; position: relative; transition: transform 0.2s; }
-    .qr-box:hover { transform: scale(1.03); }
+    .qr-box { 
+      position: relative;
+      background: linear-gradient(145deg, #ffffff, #eef2ff); 
+      padding: 14px; 
+      border-radius: 17px; 
+      text-align: center; 
+      width: 190px; 
+      margin: 5px auto 13px; 
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35), 0 0 30px rgba(99,102,241,0.18); 
+      cursor: pointer; 
+      transition: transform 0.25s ease, box-shadow 0.25s ease; 
+    }
+    .qr-box::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(56,189,248,0.6), rgba(139,92,246,0.6), rgba(56,189,248,0.4));
+      z-index: -1;
+      filter: blur(7px);
+      opacity: 0.7;
+    }
+    .qr-box:hover { transform: scale(1.035); box-shadow: 0 16px 40px rgba(0,0,0,0.42), 0 0 35px rgba(99,102,241,0.35); }
     .qr-box img { width: 160px; height: 160px; object-fit: contain; display: block; margin: 0 auto; }
-    .qr-hint { font-size: 10px; color: #475569; margin-top: 6px; font-weight: 700; }
+    .qr-hint { font-size: 10px; color: #475569; margin-top: 7px; font-weight: 700; }
     
-    .upi-display { background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 15px; }
-    .upi-display b { color: var(--accent); }
-    .copy-btn { background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: var(--accent); padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .upi-display { background: linear-gradient(135deg, rgba(8,14,32,0.72), rgba(21,29,52,0.72)); border: 1px solid rgba(99,102,241,0.22); padding: 11px 13px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 11px; margin-bottom: 15px; }
+    .upi-display span { color: #aab6cc; overflow-wrap: anywhere; }
+    .upi-display b { color: var(--cyan); }
+    .copy-btn { flex-shrink: 0; background: rgba(56,189,248,0.10); border: 1px solid rgba(56,189,248,0.28); color: var(--accent); padding: 6px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .copy-btn:hover { background: rgba(56,189,248,0.22); transform: translateY(-1px); }
 
-    .btn-download { width: 100%; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: var(--accent); padding: 10px; border-radius: 12px; font-size: 12px; font-weight: 700; cursor: pointer; margin-bottom: 15px; transition: 0.2s; }
-    .btn-download:hover { background: var(--accent); color: #0f172a; }
+    .btn-download { width: 100%; background: linear-gradient(135deg, rgba(56,189,248,0.10), rgba(99,102,241,0.10)); border: 1px solid rgba(56,189,248,0.25); color: #7dd3fc; padding: 11px; border-radius: 11px; font-size: 11px; font-weight: 700; cursor: pointer; margin-bottom: 15px; transition: all 0.25s ease; }
+    .btn-download:hover { background: linear-gradient(135deg, rgba(56,189,248,0.22), rgba(99,102,241,0.20)); border-color: rgba(56,189,248,0.5); transform: translateY(-1px); box-shadow: 0 8px 20px rgba(56,189,248,0.10); }
 
-    .btn-submit { width: 100%; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: #fff; border: none; padding: 14px; border-radius: 14px; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4); transition: 0.3s; }
-    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(99, 102, 241, 0.6); }
+    .btn-submit { 
+      width: 100%; 
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #7064ff 0%, #5546e8 45%, #7c3aed 100%); 
+      color: #fff; 
+      border: 1px solid rgba(255,255,255,0.12); 
+      padding: 14px; 
+      border-radius: 13px; 
+      font-size: 13px; 
+      font-weight: 800; 
+      cursor: pointer; 
+      letter-spacing: 0.2px;
+      box-shadow: 0 10px 28px rgba(99,102,241,0.35), inset 0 1px 0 rgba(255,255,255,0.18); 
+      transition: all 0.3s ease; 
+    }
+    .btn-submit::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.6s ease;
+    }
+    .btn-submit:hover::before { left: 140%; }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(99,102,241,0.5), 0 0 20px rgba(139,92,246,0.2); }
 
-    .order-summary { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 8px; }
-    .order-summary b { color: #34d399; }
+    .order-summary { display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 10px; color: #aab6cc; }
+    .order-summary b { color: #5eead4; font-weight: 700; }
+    #termsCheck { accent-color: #6d5dfc; width: 15px; height: 15px; }
+    
+    input[type="file"] { cursor: pointer; }
+    input[type="file"]::file-selector-button { 
+      background: rgba(99,102,241,0.15); 
+      color: #a5b4fc; 
+      border: 1px solid rgba(129,140,248,0.25); 
+      padding: 6px 9px; 
+      border-radius: 7px; 
+      margin-right: 8px; 
+      font-size: 10px; 
+      cursor: pointer; 
+    }
   </style>
 </head>
 <body>
@@ -95,7 +277,7 @@
       </div>
       <div class="form-group">
         <label>Selected Package</label>
-        <input type="text" id="packageNameDisplay" class="form-control" value="Starter Package (₹289)" readonly style="color: var(--accent); font-weight: 700;">
+        <input type="text" id="packageNameDisplay" class="form-control" value="" readonly style="color: var(--accent); font-weight: 700;">
       </div>
     </form>
   </div>
@@ -108,7 +290,6 @@
       <button class="qr-tab-btn" onclick="switchQR('bharatpe', this)">🇮🇳 Business QR</button>
     </div>
 
-    <!-- QR Box par click karte hi download ho jayega -->
     <div class="qr-box" onclick="downloadCurrentQR()" title="Click to download QR code">
       <img id="qrImage" src="" alt="Payment QR Code">
       <div class="qr-hint">📥 Click to Download QR</div>
@@ -126,7 +307,6 @@
       <input type="text" id="transactionId" class="form-control" placeholder="Enter 12-digit UTR reference number" required>
     </div>
 
-    <!-- Payment Screenshot Upload Field Added -->
     <div class="form-group">
       <label>Upload Payment Screenshot *</label>
       <input type="file" id="paymentScreenshot" class="form-control" accept="image/*" required style="padding: 9px;">
@@ -160,11 +340,13 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
+  // URL se dynamic package name, price aur referral fetch karna
   const urlParams = new URLSearchParams(window.location.search);
   const pkgName = urlParams.get('package') || 'Starter Package';
   const pkgPrice = urlParams.get('price') || '289';
   const refCodeFromUrl = urlParams.get('ref') || 'SM-3D99B9';
 
+  // UI elements par values dynamically set karna
   document.getElementById('packageNameDisplay').value = `${pkgName} (₹${pkgPrice})`;
   document.getElementById('summaryPkgName').innerText = pkgName;
   document.getElementById('summaryPrice').innerText = `₹${pkgPrice}`;
@@ -224,8 +406,6 @@
     }
 
     try {
-      // Optional: Screenshot file name reference for database
-      // (Aap chaho toh Supabase storage mein bhi upload kar sakte ho, filhal basic entry ke liye file name bhej rahe hain)
       const { error } = await supabaseClient.from('payment_requests').insert([{
         full_name: fullName,
         email: email,
