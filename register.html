@@ -33,8 +33,8 @@
       text-align: center;
     }
     .auth-logo {
-      width: 60px;
-      height: 60px;
+      width: 65px;
+      height: 65px;
       border-radius: 50%;
       object-fit: cover;
       border: 2px solid #6366f1;
@@ -109,7 +109,9 @@
 <body>
 
   <div class="auth-card">
-    <img src="1000819130.jpg" alt="Smart Money Logo" class="auth-logo">
+    <!-- Dynamic Logo Loaded from Admin Panel Database -->
+    <img id="dynamicLogoImg" src="" alt="Smart Money Logo" class="auth-logo">
+    
     <div class="auth-header">
       <h2>Create Account</h2>
       <p>Join Smart Money today</p>
@@ -148,8 +150,22 @@
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-    // Auto-fill referral code from URL if passed (e.g. register.html?ref=SM-XXXXX)
-    window.addEventListener("DOMContentLoaded", () => {
+    // Page Load hote hi Admin Panel ka Dynamic Logo aur Referral URL parameters check karna
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        // Fetch dynamic logo from database
+        const { data: logoData } = await supabaseClient.from('global_settings').select('setting_value').eq('setting_key', 'admin_top_logo').maybeSingle();
+        if (logoData && logoData.setting_value) {
+          document.getElementById("dynamicLogoImg").src = logoData.setting_value;
+        } else {
+          document.getElementById("dynamicLogoImg").src = "1000819130.jpg"; // Fallback local image
+        }
+      } catch (err) {
+        console.log("Logo load error:", err);
+        document.getElementById("dynamicLogoImg").src = "1000819130.jpg";
+      }
+
+      // Auto-fill referral code from URL if passed (e.g. register.html?ref=SM-XXXXX)
       const urlParams = new URLSearchParams(window.location.search);
       const refParam = urlParams.get("ref");
       if (refParam) {
