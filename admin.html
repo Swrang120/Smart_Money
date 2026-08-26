@@ -165,6 +165,16 @@
       </div>
     </div>
 
+    <!-- NEW: GLOBAL TOP HEADER PROFILE PHOTO CONTROL CARD -->
+    <div class="card">
+      <h2>🖼️ Control Global Top Profile Photo (Dashboard Logo)</h2>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Yahan image ka link daal kar update karein. Yeh photo sabhi users ke dashboard par upar show hogi aur koi user ise change nahi kar payega.</p>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <input type="text" id="globalLogoInput" placeholder="Paste image URL here (e.g. Imgbb link)" style="flex:1; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; border-radius: 10px; min-width: 250px;">
+        <button class="btn btn-approve" onclick="updateGlobalLogo()">Update Global Logo</button>
+      </div>
+    </div>
+
     <!-- 1. PACKAGE APPROVALS WITH TABS (Pending / Approved / Rejected) -->
     <div class="card">
       <div class="card-header">
@@ -283,6 +293,27 @@
     loadWithdrawals();
     loadUsers();
   });
+
+  // Function to Update Global Top Logo
+  async function updateGlobalLogo() {
+    const newUrl = document.getElementById('globalLogoInput').value.trim();
+    if (!newUrl) {
+      alert("Please enter a valid image URL!");
+      return;
+    }
+    
+    const { error } = await supabaseClient
+      .from('global_settings')
+      .update({ setting_value: newUrl })
+      .eq('setting_key', 'admin_top_logo');
+
+    if (!error) {
+      alert("Global Top Profile Photo updated successfully for all users!");
+      document.getElementById('globalLogoInput').value = '';
+    } else {
+      alert("Error: " + error.message);
+    }
+  }
 
   async function loadPaymentRequests() {
     const { data } = await supabaseClient.from('payment_requests').select('*').order('created_at', { ascending: false });
