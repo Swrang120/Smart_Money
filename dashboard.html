@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
 <!-- EmailJS Library -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
 <style>
 *{box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif;}
 body{margin:0;background:#eef2f7;color:#1e293b;}
@@ -21,6 +22,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .nav-home-btn{padding:8px 13px;border-radius:10px;text-decoration:none;background:#f3e8ff;color:#7c3aed;font-size:12px;font-weight:700;}
 .nav-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #7c3aed;background:#fff;}
 .menu-btn{border:1px solid #e2e8f0;background:#f8fafc;border-radius:10px;width:45px;height:42px;font-size:21px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
 /* SIDEBAR */
 .sidebar-overlay{position:fixed;inset:0;background:rgba(15,23,42,.65);backdrop-filter:blur(3px);display:none;z-index:9998;}
 .sidebar-overlay.active{display:block;}
@@ -37,14 +39,17 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .sidebar-menu li{margin-bottom:8px;}
 .sidebar-menu a,.sidebar-menu button{width:100%;border:none;background:transparent;color:#f1f5f9;text-align:left;padding:14px 16px;border-radius:12px;cursor:pointer;text-decoration:none;font-size:14px;font-weight:600;transition:.2s;display:block;}
 .sidebar-menu a:hover,.sidebar-menu button:hover{background:rgba(124,58,237,.35);color:#ffffff;}
+
 /* DASHBOARD */
 .dash-container{padding:25px 18px 40px;}
 .profile-card{position:relative;min-height:185px;border-radius:20px;overflow:hidden;margin-bottom:20px;display:flex;align-items:center;padding:25px;gap:20px;background:linear-gradient(135deg,#ffffff 0%,#ffffff 55%,#f5f3ff 55%,#ede9fe 100%);box-shadow:0 10px 25px rgba(15,23,42,.10);border:1px solid #e2e8f0;}
 .package-badge{position:absolute;top:0;right:0;padding:8px 17px;background:linear-gradient(135deg,#64748b,#475569);color:#fff;font-size:9px;font-weight:800;letter-spacing:.5px;border-bottom-left-radius:14px;}
 .package-badge.active{background:linear-gradient(135deg,#f59e0b,#ec4899);}
+
 .profile-img-wrap{width:96px;height:96px;min-width:96px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;padding:4px;box-shadow:0 6px 20px rgba(0,0,0,.18);border:3px solid #7c3aed;position:relative;cursor:pointer;}
 .profile-img{width:100%;height:100%;border-radius:50%;object-fit:cover;background:#fff;}
 .upload-hint{position:absolute;bottom:0;left:0;width:100%;background:rgba(0,0,0,0.65);color:#fff;font-size:7px;text-align:center;padding:2px 0;border-bottom-left-radius:50px;border-bottom-right-radius:50px;}
+
 .user-info{flex:1;min-width:0;}
 .user-info h2{margin:0 0 8px;font-size:26px;color:#0f172a;font-weight:800;letter-spacing:-0.5px;line-height:1.2;}
 .affiliate-id-box{display:flex;align-items:center;gap:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:10px 14px;width:max-content;margin-bottom:8px;box-shadow:0 2px 6px rgba(0,0,0,0.02);}
@@ -52,6 +57,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .affiliate-id-box b{font-size:15px;color:#7c3aed;font-weight:800;}
 .copy-id-btn{width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#9333ea);color:white;display:flex;align-items:center;justify-content:center;}
 .remove-photo-btn{background:none;border:none;color:#ef4444;font-size:11px;font-weight:700;cursor:pointer;padding:0;margin-top:6px;display:inline-block;}
+
 /* STATS CARDS */
 .stats-stack{display:flex;flex-direction:column;gap:15px;margin-bottom:20px;}
 .v-card{border-radius:20px;padding:22px 24px;color:white;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 8px 25px rgba(0,0,0,.12);position:relative;overflow:hidden;}
@@ -59,15 +65,18 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .v-card p{margin:0 0 18px;font-size:14px;opacity:0.9;font-weight:500;}
 .card-divider{width:100%;height:1px;background:rgba(255,255,255,0.25);margin-bottom:12px;}
 .card-footer-link{display:flex;align-items:center;justify-content:space-between;color:#fff;text-decoration:none;font-size:14px;font-weight:700;}
+
 .bg-today{background:linear-gradient(135deg,#7c3aed,#5b21b6);}
 .bg-7days{background:linear-gradient(135deg,#6366f1,#4338ca);}
 .bg-30days{background:linear-gradient(135deg,#db2777,#be185d);}
 .bg-alltime{background:linear-gradient(135deg,#0284c7,#075985);}
 .bg-passive{background:linear-gradient(135deg,#d97706,#b45309);}
+
 .section-box{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:20px;margin-bottom:18px;}
 .wallet-box{text-align:center;}
 .wallet-balance{font-size:32px;font-weight:800;color:#10b981;margin:5px 0;}
 .btn-withdraw{width:100%;margin-top:14px;border:none;padding:14px;border-radius:10px;cursor:pointer;color:#fff;font-weight:700;background:linear-gradient(135deg,#10b981,#059669);}
+
 /* WITHDRAWAL HISTORY 3-LINE CARDS */
 .history-card-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;flex-direction:column;gap:6px;}
 .history-row-1{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#64748b;font-weight:600;}
@@ -77,6 +86,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .status-approved{background:#d1fae5;color:#059669;}
 .status-pending{background:#fef3c7;color:#d97706;}
 .status-rejected{background:#fee2e2;color:#dc2626;}
+
 /* REFERRAL LIST STYLES (1 to 30 Days) */
 .referral-tabs{display:flex;gap:6px;margin-bottom:15px;overflow-x:auto;padding-bottom:5px;}
 .ref-tab{padding:8px 14px;border-radius:20px;background:#f1f5f9;color:#475569;font-size:12px;font-weight:700;border:none;cursor:pointer;white-space:nowrap;}
@@ -85,8 +95,10 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .ref-user-info h4{margin:0 0 3px;font-size:14px;color:#0f172a;font-weight:700;}
 .ref-user-info span{font-size:11px;color:#7c3aed;font-weight:600;}
 .ref-date{font-size:11px;color:#64748b;font-weight:600;text-align:right;}
+
 /* FOOTER CREATOR INFO */
 .app-footer-credit{text-align:center;font-size:11px;color:#94a3b8;margin-top:20px;padding-bottom:10px;font-weight:500;}
+
 .modal-overlay{display:none;position:fixed;inset:0;z-index:10000;background:rgba(15,23,42,.65);backdrop-filter:blur(4px);justify-content:center;align-items:center;padding:15px;}
 .modal-box{width:100%;max-width:440px;background:#fff;border-radius:20px;padding:22px;max-height:90vh;overflow:auto;}
 .input-field{width:100%;padding:12px;border-radius:10px;border:1px solid #cbd5e1;margin:6px 0 12px;outline:none;}
@@ -96,9 +108,12 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .payout-tab.active{background:#7c3aed;color:#fff;}
 </style>
 </head>
+
 <body>
 <div class="app-wrapper">
+
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
@@ -122,9 +137,10 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <li><button onclick="openKycModal()">🆔 KYC & Date of Birth</button></li>
     <li><button onclick="openWithdrawModal()">💸 Withdraw Funds</button></li>
     <li><button onclick="openHistoryModal()">📜 View Withdrawal History</button></li>
-    <li><button id="sideLogoutBtn" style="color:#f87171;">🚪 Logout</button></li>
+    <li><button id="sideLogoutBtn" style="color:#f87171;" onclick="logoutUser()">🚪 Logout</button></li>
   </ul>
 </aside>
+
 <!-- NAVBAR -->
 <header class="navbar">
   <a href="dashboard.html" class="brand-logo">
@@ -137,6 +153,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
   </div>
 </header>
+
 <div class="dash-container">
   <div class="profile-card">
     <div class="package-badge" id="activePackageBadge">NO PACKAGE</div>
@@ -159,6 +176,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       <p style="font-size:12px;color:#64748b;margin:0;" id="dobDisplayInfo">DOB: Not Set</p>
     </div>
   </div>
+
   <!-- STATS CARDS -->
   <div class="stats-stack">
     <div class="v-card bg-today">
@@ -171,6 +189,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
         <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
       </div>
     </div>
+
     <div class="v-card bg-7days">
       <div>
         <h2 id="sevenDaysRevenue">₹0</h2>
@@ -181,6 +200,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
         <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
       </div>
     </div>
+
     <div class="v-card bg-30days">
       <div>
         <h2 id="thirtyDaysRevenue">₹0</h2>
@@ -191,6 +211,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
         <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
       </div>
     </div>
+
     <div class="v-card bg-alltime">
       <div>
         <h2 id="allTimeRevenueText">₹0</h2>
@@ -201,6 +222,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
         <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">View details <span>›</span></a>
       </div>
     </div>
+
     <div class="v-card bg-passive">
       <div>
         <h2 id="passiveIncome">₹0</h2>
@@ -212,12 +234,14 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       </div>
     </div>
   </div>
+
   <div class="section-box wallet-box">
     <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#64748b;">Available Wallet Balance</div>
     <div class="wallet-balance" id="walletBalance">₹0.00</div>
     <p id="payoutDisplayInfo" style="font-size:11px;color:#64748b;">Payout Method: Not Saved Yet</p>
     <button class="btn-withdraw" onclick="openWithdrawModal()">💸 Withdraw Money Now</button>
   </div>
+
   <!-- RECENT REFERRALS -->
   <div class="section-box">
     <h3>👥 My Referrals & Joins</h3>
@@ -231,12 +255,14 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">Loading referrals...</div>
     </div>
   </div>
+
   <!-- CREATOR & APP DETAILS FOOTER -->
   <div class="app-footer-credit">
     Website Created in August 2026 by <b>Swrang Swargiary</b>
   </div>
 </div>
 </div>
+
 <!-- MY PACKAGE MODAL -->
 <div id="packageModal" class="modal-overlay">
   <div class="modal-box">
@@ -251,6 +277,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <button onclick="closeModal('packageModal')" class="btn-action" style="margin-top:15px;">Close</button>
   </div>
 </div>
+
 <!-- WITHDRAWAL HISTORY MODAL -->
 <div id="historyModal" class="modal-overlay">
   <div class="modal-box">
@@ -262,6 +289,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <button onclick="closeModal('historyModal')" class="btn-action" style="margin-top:15px;">Close</button>
   </div>
 </div>
+
 <!-- PAYOUT MODAL -->
 <div id="profileSettingsModal" class="modal-overlay">
   <div class="modal-box">
@@ -286,6 +314,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <button onclick="closeModal('profileSettingsModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;">Cancel</button>
   </div>
 </div>
+
 <!-- KYC MODAL -->
 <div id="kycModal" class="modal-overlay">
   <div class="modal-box">
@@ -298,6 +327,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <button onclick="closeModal('kycModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;">Cancel</button>
   </div>
 </div>
+
 <!-- WITHDRAW MODAL -->
 <div id="withdrawModal" class="modal-overlay">
   <div class="modal-box">
@@ -309,10 +339,135 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <button onclick="closeModal('withdrawModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;">Cancel</button>
   </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 emailjs.init("FxcimUvl0-ZxAauRx");
 const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-  auth:{ persistSession:true, autoRefreshToken:true,
+  auth: { persistSession: true, autoRefreshToken: true }
+});
+
+// Page load hote hi data fetch karne ke liye
+document.addEventListener("DOMContentLoaded", () => {
+  fetchUserData();
+});
+
+async function fetchUserData() {
+  try {
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+    
+    if (authError || !user) {
+      document.getElementById('userName').innerText = "Not Logged In";
+      document.getElementById('myRefCode').innerText = "N/A";
+      document.getElementById('sidebarUserName').innerText = "Guest User";
+      document.getElementById('sidebarUserEmail').innerText = "Please login";
+      return;
+    }
+
+    // Profile table se user ka naam aur code nikalna
+    const { data: profile, error: profileError } = await supabaseClient
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+    if (profile) {
+      document.getElementById('userName').innerText = profile.full_name || user.email.split('@')[0];
+      document.getElementById('myRefCode').innerText = profile.referral_code || user.id.slice(0, 8);
+      document.getElementById('sidebarUserName').innerText = profile.full_name || "User";
+      document.getElementById('sidebarUserEmail').innerText = user.email;
+      
+      if(profile.dob) {
+        document.getElementById('dobDisplayInfo').innerText = "DOB: " + profile.dob;
+      }
+    } else {
+      document.getElementById('userName').innerText = user.email.split('@')[0];
+      document.getElementById('myRefCode').innerText = user.id.slice(0, 8);
+      document.getElementById('sidebarUserName').innerText = "User";
+      document.getElementById('sidebarUserEmail').innerText = user.email;
+    }
+
+  } catch (err) {
+    console.error("Error fetching user data:", err);
+    document.getElementById('userName').innerText = "User Dashboard";
+  }
+}
+
+// Sidebar & Modal Toggles
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('active');
+  document.getElementById('sidebarOverlay').classList.toggle('active');
+}
+
+function openModal(modalId) {
+  document.getElementById(modalId).style.display = 'flex';
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+}
+
+function openPackageModal() { openModal('packageModal'); toggleSidebar(); }
+function openUpiModal() { openModal('profileSettingsModal'); toggleSidebar(); }
+function openKycModal() { openModal('kycModal'); toggleSidebar(); }
+function openWithdrawModal() { openModal('withdrawModal'); }
+function openHistoryModal() { openModal('historyModal'); toggleSidebar(); }
+
+function switchPayoutMode(mode) {
+  if(mode === 'upi') {
+    document.getElementById('tabUpi').classList.add('active');
+    document.getElementById('tabBank').classList.remove('active');
+    document.getElementById('upiSection').style.display = 'block';
+    document.getElementById('bankSection').style.display = 'none';
+  } else {
+    document.getElementById('tabBank').classList.add('active');
+    document.getElementById('tabUpi').classList.remove('active');
+    document.getElementById('upiSection').style.display = 'none';
+    document.getElementById('bankSection').style.display = 'block';
+  }
+}
+
+function copyAffiliateLink() {
+  const refCode = document.getElementById('myRefCode').innerText;
+  navigator.clipboard.writeText(window.location.origin + "/register.html?ref=" + refCode);
+  alert("Affiliate link copied to clipboard!");
+}
+
+function filterReferrals(days, btn) {
+  document.querySelectorAll('.ref-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function updateUserPayoutDetails() { 
+  alert("Details saved successfully!"); 
+  closeModal('profileSettingsModal'); 
+}
+
+function saveKycDetails() { 
+  alert("KYC saved successfully!"); 
+  closeModal('kycModal'); 
+}
+
+function submitWithdrawal() { 
+  alert("Withdrawal request submitted!"); 
+  closeModal('withdrawModal'); 
+}
+
+function uploadProfilePicture(event) { 
+  alert("Photo uploaded successfully!"); 
+}
+
+function removeProfilePicture() { 
+  alert("Photo removed!"); 
+}
+
+async function logoutUser() {
+  await supabaseClient.auth.signOut();
+  window.location.href = "index.html";
+}
+</script>
+</body>
+</html>
