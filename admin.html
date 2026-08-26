@@ -306,7 +306,6 @@
 
     const fileName = "global_logo_" + Date.now() + "_" + file.name;
 
-    // Supabase Storage mein upload karein ('avatars' bucket)
     const { data: uploadData, error: uploadError } = await supabaseClient.storage
       .from('avatars')
       .upload(fileName, file);
@@ -316,14 +315,12 @@
       return;
     }
 
-    // Public URL nikalein
     const { data: publicUrlData } = supabaseClient.storage
       .from('avatars')
       .getPublicUrl(fileName);
 
     const imageUrl = publicUrlData.publicUrl;
 
-    // Database ke global_settings table mein save karein
     const { error: dbError } = await supabaseClient
       .from('global_settings')
       .update({ setting_value: imageUrl })
@@ -499,6 +496,7 @@
     }
   }
 
+  // 👉 Updated Withdrawal Function with EmailJS Integration & Referral ID Fetching
   async function updateWithdrawal(id, userId, amount, status, email, name) {
     if (!confirm(`Are you sure to ${status} this withdrawal?`)) return;
     try {
@@ -511,9 +509,30 @@
         if (targetProf) {
           await supabaseClient.from('profiles').update({ balance: Number(targetProf.balance || 0) + Number(amount) }).eq('id', targetProf.id);
         }
-      } else if (status === 'Approved' && email) {
-        emailjs.send('service_qsy07qr', 'template_mf8enck', { to_email: email, to_name: name, amount: amount });
+      } else if (status === 'Approved') {
+        let userReferralId = "SM-XXXX";
+        if (userId) {
+          const { data: pData } = await supabaseClient.from('profiles').select('referral_id').eq('id', userId).maybeSingle();
+          if (pData && pData.referral_id) userReferralId = pData.referral_id;
+        }
+
+        const currentDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+        if (email) {
+          emailjs.send('service_qsy07qr', 'template_mf8enck', {
+            to_email: email,
+            to_name: name || "User",
+            amount: amount,
+            referral_id: userReferralId,
+            date: currentDate
+          }).then(() => {
+            console.log("Withdrawal Email Sent Successfully!");
+          }).catch((err) => {
+            console.error("EmailJS Error: ", err);
+          });
+        }
       }
+
       alert(`Withdrawal ${status} successfully!`);
       loadWithdrawals();
     } catch (err) { alert("Error: " + err.message); }
@@ -604,12 +623,10 @@
       `).join('');
     }
 
-    const { data: withdrawals } = await supabaseClient.from('website_requests' || 'withdrawal_requests').select('*').eq('is_deleted', true);
-    // (Rest of code remains fully functional)
-    loadWithdrawalTrash(withdrawals);
+    loadWithdrawalTrash();
   }
 
-  async function loadWithdrawalTrash(withdrawals) {
+  async function loadWithdrawalTrash() {
     const { data: wData } = await supabaseClient.from('withdrawal_requests').select('*').eq('is_deleted', true);
     const wContainer = document.getElementById('deletedWithdrawalsList');
     if (!wData || wData.length === 0) {
