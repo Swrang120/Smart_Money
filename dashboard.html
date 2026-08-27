@@ -51,10 +51,12 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
 .user-info{flex:1;min-width:0;}
 .user-info h2{margin:0 0 8px;font-size:26px;color:#0f172a;font-weight:800;letter-spacing:-0.5px;line-height:1.2;}
-.affiliate-id-box{display:flex;align-items:center;gap:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:10px 14px;width:max-content;margin-bottom:8px;box-shadow:0 2px 6px rgba(0,0,0,0.02);}
+.affiliate-id-box{display:flex;align-items:center;gap:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:10px 14px;width:max-content;margin-bottom:8px;box-shadow:0 2px 6px rgba(0,0,0,0.02);flex-wrap:wrap;}
 .affiliate-id-box span{font-size:14px;color:#475569;}
 .affiliate-id-box b{font-size:15px;color:#7c3aed;font-weight:800;}
-.copy-id-btn{width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#9333ea);color:white;display:flex;align-items:center;justify-content:center;}
+.copy-id-btn, .share-id-btn{width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;color:white;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.copy-id-btn{background:linear-gradient(135deg,#7c3aed,#9333ea);}
+.share-id-btn{background:linear-gradient(135deg,#10b981,#059669);}
 
 /* STATS CARDS */
 .stats-stack{display:flex;flex-direction:column;gap:15px;margin-bottom:20px;}
@@ -92,6 +94,11 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .payout-tab{flex:1;text-align:center;padding:10px;border-radius:9px;background:#f1f5f9;cursor:pointer;font-size:12px;font-weight:700;}
 .payout-tab.active{background:#7c3aed;color:#fff;}
 
+/* QUICK AMOUNT CHIPS */
+.amount-chips{display:flex;gap:6px;margin-bottom:10px;}
+.chip{flex:1;padding:6px;border:1px solid #cbd5e1;background:#f8fafc;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;text-align:center;color:#475569;}
+.chip:hover{background:#ede9fe;border-color:#7c3aed;color:#7c3aed;}
+
 /* HISTORY CARDS */
 .history-card-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;flex-direction:column;gap:6px;}
 .history-row-1{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#64748b;font-weight:600;}
@@ -101,6 +108,10 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .status-approved{background:#d1fae5;color:#059669;}
 .status-pending{background:#fef3c7;color:#d97706;}
 .status-rejected{background:#fee2e2;color:#dc2626;}
+
+/* TOAST NOTIFICATION */
+#toastNotification {position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:#0f172a;color:#fff;padding:12px 24px;border-radius:30px;font-size:13px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,0.3);transition:transform 0.3s ease;z-index:99999;display:flex;align-items:center;gap:10px;}
+#toastNotification.show {transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 
@@ -170,6 +181,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       <div class="affiliate-id-box">
         <span>ID: <b id="myRefCode">Loading...</b></span>
         <button class="copy-id-btn" onclick="copyAffiliateLink()" title="Copy Code">📋</button>
+        <button class="share-id-btn" onclick="shareAffiliateLink()" title="Share Link">🔗</button>
       </div>
       <p style="font-size:12px;color:#64748b;margin:0;" id="dobDisplayInfo">DOB: Not Set</p>
     </div>
@@ -254,6 +266,9 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 </div>
 </div>
 
+<!-- TOAST NOTIFICATION ELEMENT -->
+<div id="toastNotification">⚡ <span id="toastMessage">Success Message</span></div>
+
 <!-- EARNINGS DETAILS MODAL -->
 <div id="earningsModal" class="modal-overlay">
   <div class="modal-box">
@@ -336,7 +351,13 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 <div id="withdrawModal" class="modal-overlay">
   <div class="modal-box">
     <h3>💸 Request Withdrawal</h3>
-    <p id="withdrawModalBalanceText" style="font-size:13px;color:#475569;">Available Balance: ₹0</p>
+    <p id="withdrawModalBalanceText" style="font-size:13px;color:#475569;margin-bottom:8px;">Available Balance: ₹0</p>
+    <div class="amount-chips">
+      <div class="chip" onclick="setWithdrawAmount(100)">₹100</div>
+      <div class="chip" onclick="setWithdrawAmount(500)">₹500</div>
+      <div class="chip" onclick="setWithdrawAmount(1000)">₹1000</div>
+      <div class="chip" onclick="setWithdrawAmount(userCurrentBalance)">MAX</div>
+    </div>
     <label>Enter Amount</label>
     <input type="number" id="withdrawAmount" class="input-field" placeholder="Amount">
     <button onclick="submitWithdrawal()" class="btn-action" id="submitWithdrawBtn">Submit Request</button>
@@ -361,6 +382,13 @@ let userRefCode = "";
 let payoutMode = "upi";
 let currentUserEmail = "";
 let allReferralsData = [];
+
+function showToast(msg){
+  const t = document.getElementById("toastNotification");
+  document.getElementById("toastMessageinnerText" || "toastMessage").innerText = msg;
+  t.classList.add("show");
+  setTimeout(() => { t.classList.remove("show"); }, 3000);
+}
 
 function escapeHtml(text){
   const div = document.createElement("div");
@@ -423,6 +451,10 @@ function openWithdrawModal(){
   document.getElementById("withdrawAmount").value = "";
   document.getElementById("withdrawModalBalanceText").innerText = "Available Balance: ₹" + userCurrentBalance.toFixed(2);
   openModal("withdrawModal");
+}
+
+function setWithdrawAmount(amt){
+  document.getElementById("withdrawAmount").value = Number(amt).toFixed(2);
 }
 
 function closeSidebar(){
@@ -567,7 +599,7 @@ async function uploadProfilePicture(event){
     if(error){ alert("Failed to save picture: " + error.message); }
     else { 
       currentProfile.profile_pic = base64Image;
-      alert("Profile picture saved successfully!"); 
+      showToast("Profile picture saved!"); 
     }
   };
   reader.readAsDataURL(file);
@@ -586,15 +618,24 @@ async function removeProfilePicture(){
   } else {
     currentProfile.profile_pic = null;
     applyProfileImage(null, currentProfile?.full_name);
-    alert("Profile picture removed successfully!");
+    showToast("Profile picture removed!");
   }
 }
 
 function setupRealtimeListener(){
   supabaseClient
-    .channel('public:withdrawal_requests')
+    .channel('public:profiles_and_withdrawals')
+    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `user_id=eq.${currentUserId}` }, payload => {
+      if(payload.new) {
+        userCurrentBalance = Number(payload.new.balance || 0);
+        document.getElementById("sidebarWalletBal").innerText = "₹" + userCurrentBalance.toFixed(2);
+        document.getElementById("allTimeRevenueText").innerText = "₹" + userCurrentBalance.toFixed(2);
+        showToast("Wallet balance updated!");
+      }
+    })
     .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'withdrawal_requests', filter: `user_id=eq.${currentUserId}` }, payload => {
       loadWithdrawalHistory();
+      showToast("Withdrawal status updated!");
     })
     .subscribe();
 }
@@ -703,9 +744,18 @@ function filterReferrals(days, btnElement){
 async function copyAffiliateLink(){
   try{
     await navigator.clipboard.writeText(userRefCode);
-    alert("Referral Code Copied: " + userRefCode);
+    showToast("Referral Code Copied: " + userRefCode);
   }catch(e){
     alert("Copy failed. ID: " + userRefCode);
+  }
+}
+
+function shareAffiliateLink(){
+  const shareText = `Join Smart Money using my Referral ID: ${userRefCode} and start earning today!`;
+  if (navigator.share) {
+    navigator.share({ title: 'Smart Money Affiliate', text: shareText, url: window.location.origin }).catch(err => console.log(err));
+  } else {
+    copyAffiliateLink();
   }
 }
 
@@ -729,7 +779,7 @@ async function updateUserPayoutDetails(){
 
   if(error){ alert("Error: " + error.message); return; }
   currentProfile = { ...currentProfile, ...updateData };
-  alert("Payout details saved successfully!");
+  showToast("Payout details saved successfully!");
   closeModal("profileSettingsModal");
 }
 
@@ -743,7 +793,7 @@ async function saveKycDetails(){
   document.getElementById("userName").innerHTML = escapeHtml(fullName);
   document.getElementById("dobDisplayInfo").innerText = "DOB: " + dob;
   applyProfileImage(currentProfile?.profile_pic, fullName);
-  alert("KYC saved successfully!");
+  showToast("KYC saved successfully!");
   closeModal("kycModal");
 }
 
@@ -773,7 +823,7 @@ async function submitWithdrawal(){
 
   userCurrentBalance = newBalance;
   document.getElementById("sidebarWalletBal").innerText = "₹" + userCurrentBalance.toFixed(2);
-  alert("Withdrawal requested successfully!");
+  showToast("Withdrawal requested successfully!");
   closeModal("withdrawModal");
   await loadWithdrawalHistory();
 }
