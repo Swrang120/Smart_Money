@@ -126,8 +126,8 @@ p {
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // EmailJS Initialization
-  emailjs.init("FxcimUvl0-ZxAauRx");
+  // EmailJS Initialization (Using your official Public Key)
+  emailjs.init("nD7bbMhcvotO19ODK");
 
   // Supabase Setup
   const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
@@ -156,15 +156,15 @@ p {
 
       if (error) throw error;
 
-      // 2. EmailJS ke through custom styled email trigger karna
+      // 2. EmailJS ke through custom styled email trigger karna (Using your Service ID & New Template ID)
       const templateParams = {
         to_name: email.split('@')[0], // Email se naam extract karke daal dega
         to_email: email,
         reset_link: updatePageUrl
       };
 
-      // Yahan aapki service ID aur template ID properly connect kar di gayi hai
-      await emailjs.send("service_gmail", "s9exuls", templateParams);
+      // Service ID: service_a678nhs | Template ID: template_eh1e4fr
+      await emailjs.send("service_a678nhs", "template_eh1e4fr", templateParams);
 
       alert("🎉 Password reset instructions have been sent to your email!");
       window.location.href = "login.html";
