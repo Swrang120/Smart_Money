@@ -259,16 +259,19 @@
       btn.disabled = true;
 
       try {
-        const updatePageUrl = window.location.origin + '/update-password.html';
+        // Yeh line automatically exact folder path detect karegi (chahe Local ho ya GitHub Pages)
+        const currentPath = window.location.pathname;
+        const basePath = currentPath.substring(0, currentPath.lastIndexOf('/'));
+        const updatePageUrl = window.location.origin + basePath + '/update-password.html';
 
         // 1. Supabase Auth se reset link generate karwayenge
-        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+        const { error: supError } = await supabaseClient.auth.resetPasswordForEmail(email, {
           redirectTo: updatePageUrl,
         });
 
-        if (error) throw error;
+        if (supError) throw supError;
 
-        // 2. EmailJS ke zariye aapke Support Gmail aur naye Template se mail trigger karenge
+        // 2. EmailJS ke zariye mail trigger karenge
         const templateParams = {
           to_name: email.split('@')[0],
           to_email: email,
@@ -281,7 +284,8 @@
         closeModal('forgotModal');
         document.getElementById("forgotEmail").value = "";
       } catch (err) {
-        alert("Error: " + err.message);
+        console.error("Reset Error:", err);
+        alert("Error: " + (err.message || JSON.stringify(err)));
       } finally {
         btn.innerText = "Send Reset Link";
         btn.disabled = false;
