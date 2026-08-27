@@ -210,7 +210,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 </header>
 
 <div class="dash-container">
-  <!-- PROFILE CARD WITH NAME, REFERRAL ID, & DOB -->
+  <!-- PROFILE CARD WITH NAME, PERMANENT REFERRAL ID, & DOB -->
   <div class="profile-card">
     <div class="package-badge" id="activePackageBadge">NO PACKAGE</div>
     <div>
@@ -428,7 +428,6 @@ let currentUserId = null;
 let currentProfile = {};
 let userCurrentBalance = 0;
 let userRefCode = "";
-let payoutMode = "upi";
 let currentUserEmail = "";
 let allReferralsData = [];
 
@@ -480,6 +479,7 @@ function openUpiModal(){
   openModal("profileSettingsModal");
 }
 
+let payoutMode = "upi";
 function switchPayoutMode(mode){
   payoutMode = mode;
   document.getElementById("upiSection").style.display = mode === "upi" ? "block" : "none";
@@ -567,36 +567,40 @@ document.addEventListener("DOMContentLoaded", async function(){
     currentUserEmail = user.email || "";
     const authName = user.user_metadata?.full_name || user.user_metadata?.name || "Smart Money User";
 
+    // Fast Load: Fetch existing profile first without recreating if it exists
     let { data:profile, error:profileError } = await supabaseClient
       .from("profiles")
       .select("*")
       .eq("user_id", currentUserId)
       .maybeSingle();
 
-    const randomFiveDigit = Math.floor(10000 + Math.random() * 90000);
-    const generatedCode = "SM-smart" + randomFiveDigit;
+    if(!profile || !profile.referral_code){
+      // Generate permanent referral code ONLY if it doesn't exist yet
+      const randomFiveDigit = Math.floor(10000 + Math.random() * 90000);
+      const generatedCode = "SM-smart" + randomFiveDigit;
 
-    if(!profile){
-      const newProf = {
-        user_id: currentUserId,
-        email: currentUserEmail,
-        full_name: authName,
-        balance: 0,
-        package_name: null,
-        referral_code: generatedCode
-      };
-      await supabaseClient.from("profiles").upsert(newProf, { onConflict: 'user_id' });
-      profile = newProf;
-    } else if (!profile.referral_code) {
-      await supabaseClient.from("profiles").update({ referral_code: generatedCode }).eq("user_id", currentUserId);
-      profile.referral_code = generatedCode;
+      if(!profile){
+        const newProf = {
+          user_id: currentUserId,
+          email: currentUserEmail,
+          full_name: authName,
+          balance: 0,
+          package_name: null,
+          referral_code: generatedCode
+        };
+        await supabaseClient.from("profiles").upsert(newProf, { onConflict: 'user_id' });
+        profile = newProf;
+      } else {
+        await supabaseClient.from("profiles").update({ referral_code: generatedCode }).eq("user_id", currentUserId);
+        profile.referral_code = generatedCode;
+      }
     }
 
     currentProfile = profile;
     const finalName = profile?.full_name || authName;
     const finalEmail = profile?.email || currentUserEmail;
     userCurrentBalance = Number(profile?.balance || 0);
-    userRefCode = profile.referral_code;
+    userRefCode = profile.referral_code; // Permanent Referral Code loaded from DB
     const dob = profile?.date_of_birth || "";
     const packageName = profile?.package_name;
 
@@ -630,8 +634,9 @@ document.addEventListener("DOMContentLoaded", async function(){
     document.getElementById("walletBalanceMain").innerText = "₹" + userCurrentBalance.toFixed(2);
     document.getElementById("allTimeRevenueText").innerText = "₹" + userCurrentBalance.toFixed(2);
 
-    await loadWithdrawalHistory();
-    await loadReferralsData();
+    // Load background tasks smoothly without blocking UI
+    loadWithdrawalHistory();
+    loadReferralsData();
     setupRealtimeListener();
 
     document.getElementById("sideLogoutBtn").onclick = async function(){
@@ -661,7 +666,7 @@ async function uploadProfilePicture(event){
       alert("Failed to save picture: " + error.message); 
     } else { 
       currentProfile.profile_pic = base64Image;
-      showToast("Profile picture saved successfully!"); 
+      showToast("Profile picture saved permanently!"); 
     }
   };
   reader.readAsDataURL(file);
@@ -692,12 +697,10 @@ function setupRealtimeListener(){
         document.getElementById("sidebarWalletBal").innerText = "₹" + userCurrentBalance.toFixed(2);
         document.getElementById("walletBalanceMain").innerText = "₹" + userCurrentBalance.toFixed(2);
         document.getElementById("allTimeRevenueText").innerText = "₹" + userCurrentBalance.toFixed(2);
-        showToast("Wallet balance updated!");
       }
     })
     .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'withdrawal_requests', filter: `user_id=eq.${currentUserId}` }, payload => {
       loadWithdrawalHistory();
-      showToast("Withdrawal status updated!");
     })
     .subscribe();
 }
