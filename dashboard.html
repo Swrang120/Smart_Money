@@ -40,6 +40,15 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .sidebar-menu a,.sidebar-menu button{width:100%;border:none;background:transparent;color:#f1f5f9;text-align:left;padding:14px 16px;border-radius:12px;cursor:pointer;text-decoration:none;font-size:14px;font-weight:600;transition:.2s;display:block;}
 .sidebar-menu a:hover,.sidebar-menu button:hover{background:rgba(124,58,237,.35);color:#ffffff;}
 
+/* SIDEBAR AFFILIATE DROPDOWN BOX */
+.sidebar-affiliate-section{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px;margin:8px 0 14px;}
+.sidebar-affiliate-title{font-size:13px;font-weight:800;color:#c084fc;margin-bottom:10px;}
+.sidebar-aff-row{margin-bottom:10px;}
+.sidebar-aff-row label{display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:3px;}
+.sidebar-aff-input{display:flex;align-items:center;gap:6px;background:#1e293b;border:1px solid #475569;border-radius:8px;padding:6px 10px;}
+.sidebar-aff-input input, .sidebar-aff-input select, .sidebar-aff-input span{background:transparent;border:none;outline:none;font-size:11px;color:#f8fafc;width:100%;font-weight:600;}
+.sidebar-aff-btn{background:linear-gradient(135deg,#db2777,#e11d48);color:white;border:none;padding:6px 10px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;}
+
 /* DASHBOARD */
 .dash-container{padding:25px 18px 40px;}
 .profile-card{position:relative;min-height:170px;border-radius:20px;overflow:hidden;margin-bottom:20px;display:flex;align-items:center;padding:25px;gap:20px;background:linear-gradient(135deg,#ffffff 0%,#ffffff 55%,#f5f3ff 55%,#ede9fe 100%);box-shadow:0 10px 25px rgba(15,23,42,.10);border:1px solid #e2e8f0;}
@@ -51,16 +60,6 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
 .user-info{flex:1;min-width:0;}
 .user-info h2{margin:0 0 8px;font-size:26px;color:#0f172a;font-weight:800;letter-spacing:-0.5px;line-height:1.2;}
-
-/* RICHIND STYLE AFFILIATE BOXES (3 LINES) */
-.richind-affiliate-box{background:#ffffff;border:1px solid #e2e8f0;border-radius:20px;padding:20px;margin-bottom:20px;box-shadow:0 10px 25px rgba(15,23,42,.05);}
-.richind-affiliate-title{font-size:15px;font-weight:800;color:#7c3aed;margin-bottom:15px;}
-.affiliate-row{margin-bottom:14px;}
-.affiliate-row label{display:block;font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px;}
-.affiliate-input-group{display:flex;align-items:center;gap:10px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:12px;padding:8px 12px;}
-.affiliate-input-group input, .affiliate-input-group select, .affiliate-input-group span{background:transparent;border:none;outline:none;font-size:13px;color:#334155;width:100%;font-weight:600;}
-.affiliate-action-btn{background:linear-gradient(135deg,#db2777,#e11d48);color:white;border:none;padding:9px 16px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;box-shadow:0 4px 12px rgba(219,39,119,0.25);transition:transform 0.1s ease;}
-.affiliate-action-btn:active{transform:scale(0.96);}
 
 /* STATS CARDS */
 .stats-stack{display:flex;flex-direction:column;gap:15px;margin-bottom:20px;}
@@ -148,6 +147,45 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <li><button onclick="openWithdrawModal()" style="color:#10b981;font-weight:700;">💸 Available Balance: <span id="sidebarWalletBal">₹0.00</span> (Withdraw)</button></li>
     <li><button onclick="openHistoryModal()">📜 View Withdrawal History</button></li>
 
+    <!-- 3-LINE AFFILIATE SECTION INSIDE SIDEBAR -->
+    <li>
+      <div class="sidebar-affiliate-section">
+        <div class="sidebar-affiliate-title">🔗 Affiliate Links</div>
+        
+        <!-- Line 1 -->
+        <div class="sidebar-aff-row">
+          <label>My Referral Link</label>
+          <div class="sidebar-aff-input">
+            <span id="fullRefLinkText" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Loading...</span>
+            <button class="sidebar-aff-btn" onclick="copyFullReferralLink()">Copy</button>
+          </div>
+        </div>
+
+        <!-- Line 2 -->
+        <div class="sidebar-aff-row">
+          <label>My Referral Code</label>
+          <div class="sidebar-aff-input">
+            <span id="myRefCode" style="color:#c084fc;font-weight:800;">Loading...</span>
+            <button class="sidebar-aff-btn" onclick="copyAffiliateLink()">Copy</button>
+          </div>
+        </div>
+
+        <!-- Line 3 -->
+        <div class="sidebar-aff-row" style="margin-bottom:0;">
+          <label>Generate Link For</label>
+          <div class="sidebar-aff-input">
+            <select id="packageDropdown">
+              <option value="All Packages">All Packages</option>
+              <option value="Basic">Basic Package</option>
+              <option value="Pro">Pro Package</option>
+              <option value="VIP">VIP Package</option>
+            </select>
+            <button class="sidebar-aff-btn" onclick="copyGeneratedCustomLink()">Copy</button>
+          </div>
+        </div>
+      </div>
+    </li>
+
     <!-- PHOTO CHANGE/REMOVE -->
     <li><button onclick="document.getElementById('profilePhotoInputSidebar').click()">📷 Change Profile Picture</button></li>
     <input type="file" id="profilePhotoInputSidebar" style="display:none;" accept="image/*" onchange="uploadProfilePicture(event)">
@@ -183,43 +221,6 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <div class="user-info">
       <h2 id="userName">Loading...</h2>
       <p style="font-size:12px;color:#64748b;margin:0 0 10px;" id="dobDisplayInfo">DOB: Not Set</p>
-    </div>
-  </div>
-
-  <!-- RICHIND STYLE 3-LINE AFFILIATE LINKS SECTION -->
-  <div class="richind-affiliate-box">
-    <div class="richind-affiliate-title">Affiliate Links</div>
-    
-    <!-- Line 1: My Referral Link -->
-    <div class="affiliate-row">
-      <label>My Referral Link</label>
-      <div class="affiliate-input-group">
-        <span id="fullRefLinkText" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Loading link...</span>
-        <button class="affiliate-action-btn" onclick="copyFullReferralLink()">Copy Referral Link</button>
-      </div>
-    </div>
-
-    <!-- Line 2: My Referral Code -->
-    <div class="affiliate-row">
-      <label>My Referral Code</label>
-      <div class="affiliate-input-group">
-        <span id="myRefCode" style="font-weight:800; color:#7c3aed;">Loading...</span>
-        <button class="affiliate-action-btn" onclick="copyAffiliateLink()">Copy Referral Code</button>
-      </div>
-    </div>
-
-    <!-- Line 3: Generate Link For -->
-    <div class="affiliate-row" style="margin-bottom:0;">
-      <label>Generate Link For</label>
-      <div class="affiliate-input-group">
-        <select id="packageDropdown">
-          <option value="All Packages">All Packages</option>
-          <option value="Basic">Basic Package</option>
-          <option value="Pro">Pro Package</option>
-          <option value="VIP">VIP Package</option>
-        </select>
-        <button class="affiliate-action-btn" onclick="copyGeneratedCustomLink()">Copy Link</button>
-      </div>
     </div>
   </div>
 
@@ -560,25 +561,31 @@ document.addEventListener("DOMContentLoaded", async function(){
       .eq("user_id", currentUserId)
       .maybeSingle();
 
+    const randomFiveDigit = Math.floor(10000 + Math.random() * 90000);
+    const generatedCode = "SM-smart" + randomFiveDigit;
+
     if(!profile){
-      const randomFiveDigit = Math.floor(10000 + Math.random() * 90000);
       const newProf = {
         user_id: currentUserId,
         email: currentUserEmail,
         full_name: authName,
         balance: 0,
         package_name: null,
-        referral_code: "SM-smart" + randomFiveDigit
+        referral_code: generatedCode
       };
-      await supabaseClient.from("profiles").upsert(newProf);
+      await supabaseClient.from("profiles").upsert(newProf, { onConflict: 'user_id' });
       profile = newProf;
+    } else if (!profile.referral_code) {
+      // If profile exists but referral code is missing, assign one permanently
+      await supabaseClient.from("profiles").update({ referral_code: generatedCode }).eq("user_id", currentUserId);
+      profile.referral_code = generatedCode;
     }
 
     currentProfile = profile;
     const finalName = profile?.full_name || authName;
     const finalEmail = profile?.email || currentUserEmail;
     userCurrentBalance = Number(profile?.balance || 0);
-    userRefCode = profile?.referral_code || "SM-smart87046";
+    userRefCode = profile.referral_code;
     const dob = profile?.date_of_birth || "";
     const packageName = profile?.package_name;
 
@@ -635,8 +642,7 @@ async function uploadProfilePicture(event){
 
     const { error } = await supabaseClient
       .from("profiles")
-      .update({ profile_pic: base64Image })
-      .eq("user_id", currentUserId);
+      .upsert({ user_id: currentUserId, profile_pic: base64Image }, { onConflict: 'user_id' });
 
     if(error){ 
       alert("Failed to save picture: " + error.message); 
@@ -653,8 +659,7 @@ async function removeProfilePicture(){
 
   const { error } = await supabaseClient
     .from("profiles")
-    .update({ profile_pic: null })
-    .eq("user_id", currentUserId);
+    .upsert({ user_id: currentUserId, profile_pic: null }, { onConflict: 'user_id' });
 
   if(error){
     alert("Failed to remove picture: " + error.message);
@@ -830,7 +835,7 @@ async function updateUserPayoutDetails(){
     updateData.ifsc_code = document.getElementById("editIfsc").value.trim().toUpperCase();
   }
 
-  const { error } = await supabaseClient.from("profiles").update(updateData).eq("user_id", currentUserId);
+  const { error } = await supabaseClient.from("profiles").upsert({ user_id: currentUserId, ...updateData }, { onConflict: 'user_id' });
   saveBtn.disabled = false;
   saveBtn.innerText = "Save Details";
 
@@ -843,7 +848,7 @@ async function updateUserPayoutDetails(){
 async function saveKycDetails(){
   const fullName = document.getElementById("kycFullName").value.trim();
   const dob = document.getElementById("kycDob").value;
-  const { error } = await supabaseClient.from("profiles").update({ full_name: fullName, date_of_birth: dob }).eq("user_id", currentUserId);
+  const { error } = await supabaseClient.from("profiles").upsert({ user_id: currentUserId, full_name: fullName, date_of_birth: dob }, { onConflict: 'user_id' });
   if(error){ alert("Error: " + error.message); return; }
 
   currentProfile = { ...currentProfile, full_name: fullName, date_of_birth: dob };
@@ -875,7 +880,7 @@ async function submitWithdrawal(){
   if(insertError){ submitBtn.disabled = false; alert("Error: " + insertError.message); return; }
 
   const newBalance = userCurrentBalance - amount;
-  await supabaseClient.from("profiles").update({ balance: newBalance }).eq("user_id", currentUserId);
+  await supabaseClient.from("profiles").upsert({ user_id: currentUserId, balance: newBalance }, { onConflict: 'user_id' });
   submitBtn.disabled = false;
 
   userCurrentBalance = newBalance;
