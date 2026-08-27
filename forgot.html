@@ -1,25 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Smart Money - Forgot Password</title>
 
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com"
->
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin
->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link
 href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap"
@@ -38,17 +30,22 @@ body{
   margin:0;
 
   background:
-  radial-gradient(
-    circle at 15% 10%,
-    rgba(124,58,237,.30),
-    transparent 40%
-  ),
-  linear-gradient(
-    135deg,
-    #080a12,
-    #111426,
-    #080a12
-  );
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(124,58,237,.30),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      rgba(59,130,246,.18),
+      transparent 40%
+    ),
+    linear-gradient(
+      135deg,
+      #080a12,
+      #111426,
+      #080a12
+    );
 
   color:#ffffff;
 
@@ -64,7 +61,6 @@ body{
 
 }
 
-
 .box{
 
   width:100%;
@@ -78,15 +74,14 @@ body{
   border-radius:24px;
 
   border:
-  1px solid
-  rgba(255,255,255,.08);
+    1px solid
+    rgba(255,255,255,.08);
 
   box-shadow:
-  0 20px 50px
-  rgba(0,0,0,.6);
+    0 20px 50px
+    rgba(0,0,0,.60);
 
 }
-
 
 .brand-title{
 
@@ -98,18 +93,17 @@ body{
 
   color:#ffffff;
 
-  margin-bottom:5px;
+  margin-bottom:8px;
 
   text-shadow:
-  0 0 15px
-  rgba(168,85,247,.5);
+    0 0 15px
+    rgba(168,85,247,.50);
 
 }
 
-
 h2{
 
-  margin-top:10px;
+  margin:10px 0 10px;
 
   color:#ffffff;
 
@@ -120,7 +114,6 @@ h2{
   font-size:20px;
 
 }
-
 
 p{
 
@@ -136,7 +129,6 @@ p{
 
 }
 
-
 .form-group{
 
   text-align:left;
@@ -144,7 +136,6 @@ p{
   margin-bottom:20px;
 
 }
-
 
 .form-group label{
 
@@ -162,7 +153,6 @@ p{
 
 }
 
-
 .input-field{
 
   width:100%;
@@ -172,11 +162,11 @@ p{
   border-radius:12px;
 
   border:
-  1px solid
-  rgba(255,255,255,.12);
+    1px solid
+    rgba(255,255,255,.12);
 
   background:
-  rgba(255,255,255,.04);
+    rgba(255,255,255,.04);
 
   color:#ffffff;
 
@@ -188,17 +178,21 @@ p{
 
 }
 
+.input-field::placeholder{
+
+  color:#6b7280;
+
+}
 
 .input-field:focus{
 
   border-color:#8b5cf6;
 
   box-shadow:
-  0 0 10px
-  rgba(139,92,246,.3);
+    0 0 10px
+    rgba(139,92,246,.30);
 
 }
-
 
 .btn-action{
 
@@ -217,38 +211,35 @@ p{
   cursor:pointer;
 
   background:
-  linear-gradient(
-    135deg,
-    #7c3aed,
-    #6d28d9
-  );
+    linear-gradient(
+      135deg,
+      #7c3aed,
+      #6d28d9
+    );
 
   font-size:14px;
 
   box-shadow:
-  0 8px 20px
-  rgba(124,58,237,.4);
+    0 8px 20px
+    rgba(124,58,237,.40);
 
   transition:.2s;
 
 }
 
-
 .btn-action:hover{
 
-  opacity:.9;
+  opacity:.90;
 
 }
 
-
 .btn-action:disabled{
 
-  opacity:.6;
+  opacity:.60;
 
   cursor:not-allowed;
 
 }
-
 
 .back-link{
 
@@ -268,13 +259,11 @@ p{
 
 }
 
-
 .back-link:hover{
 
   text-decoration:underline;
 
 }
-
 
 .status{
 
@@ -294,33 +283,31 @@ p{
 
 }
 
-
 .status.success{
 
   display:block;
 
   background:
-  rgba(34,197,94,.10);
+    rgba(34,197,94,.10);
 
   border:
-  1px solid
-  rgba(34,197,94,.25);
+    1px solid
+    rgba(34,197,94,.25);
 
   color:#86efac;
 
 }
-
 
 .status.error{
 
   display:block;
 
   background:
-  rgba(239,68,68,.10);
+    rgba(239,68,68,.10);
 
   border:
-  1px solid
-  rgba(239,68,68,.25);
+    1px solid
+    rgba(239,68,68,.25);
 
   color:#fca5a5;
 
@@ -335,6 +322,7 @@ p{
 
 
 <div class="box">
+
 
   <div class="brand-title">
     💎 SMART MONEY
@@ -359,41 +347,37 @@ p{
     </label>
 
     <input
-    type="email"
-    id="forgotEmail"
-    class="input-field"
-    placeholder="name@example.com"
-    autocomplete="email"
+      type="email"
+      id="forgotEmail"
+      class="input-field"
+      placeholder="name@example.com"
+      autocomplete="email"
+      required
     >
 
   </div>
 
 
   <button
-  onclick="sendResetLink()"
-  class="btn-action"
-  id="resetBtn"
+    onclick="sendResetLink()"
+    class="btn-action"
+    id="resetBtn"
   >
-
     Send Reset Link
-
   </button>
 
 
   <div
-  id="statusBox"
-  class="status"
-  >
-  </div>
+    id="statusBox"
+    class="status"
+  ></div>
 
 
   <a
-  href="login.html"
-  class="back-link"
+    href="login.html"
+    class="back-link"
   >
-
     ← Back to Login
-
   </a>
 
 
@@ -403,41 +387,10 @@ p{
 
 <!-- SUPABASE SDK -->
 
-<script
-src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
->
-</script>
-
-
-<!-- EMAILJS SDK -->
-
-<script
-src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
->
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
 <script>
-
-
-/* =========================================
-   EMAILJS CONFIG
-========================================= */
-
-const EMAILJS_PUBLIC_KEY =
-  "nD7bbMhcvotO19ODK";
-
-const EMAILJS_SERVICE_ID =
-  "service_4q2gu5k";
-
-const EMAILJS_TEMPLATE_ID =
-  "template_eh1e4fr";
-
-
-emailjs.init(
-  EMAILJS_PUBLIC_KEY
-);
-
 
 
 /* =========================================
@@ -455,24 +408,25 @@ const SUPABASE_PUBLISHABLE_KEY =
 const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
+    SUPABASE_PUBLISHABLE_KEY,
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
+      }
+    }
   );
 
 
-
 /* =========================================
-   SHOW STATUS
+   SHOW STATUS MESSAGE
 ========================================= */
 
-function showStatus(
-  message,
-  type
-){
+function showStatus(message,type){
 
   const box =
-    document.getElementById(
-      "statusBox"
-    );
+    document.getElementById("statusBox");
 
 
   box.innerText =
@@ -485,28 +439,25 @@ function showStatus(
 }
 
 
-
 /* =========================================
-   SEND PASSWORD RESET
+   SEND PASSWORD RESET LINK
 ========================================= */
 
 async function sendResetLink(){
 
   const email =
     document
-      .getElementById(
-        "forgotEmail"
-      )
+      .getElementById("forgotEmail")
       .value
       .trim()
       .toLowerCase();
 
 
   const btn =
-    document.getElementById(
-      "resetBtn"
-    );
+    document.getElementById("resetBtn");
 
+
+  /* Check empty */
 
   if(!email){
 
@@ -519,6 +470,8 @@ async function sendResetLink(){
 
   }
 
+
+  /* Validate email */
 
   const emailPattern =
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -536,6 +489,7 @@ async function sendResetLink(){
   }
 
 
+  /* Disable button */
 
   btn.disabled = true;
 
@@ -543,21 +497,27 @@ async function sendResetLink(){
     "Sending Reset Link...";
 
 
+  /* Clear old message */
+
+  document
+    .getElementById("statusBox")
+    .className =
+    "status";
+
 
   try{
 
 
     /* =====================================
-       IMPORTANT REDIRECT URL
+       EXACT PASSWORD RESET PAGE
     ===================================== */
 
     const redirectUrl =
       "https://swrang120.github.io/Smart_Money/update-password.html";
 
 
-
     /* =====================================
-       SUPABASE SECURE PASSWORD RESET
+       REQUEST SUPABASE RESET EMAIL
     ===================================== */
 
     const {
@@ -581,13 +541,12 @@ async function sendResetLink(){
     }
 
 
-
     /* =====================================
-       SUCCESS MESSAGE
+       SUCCESS
     ===================================== */
 
     showStatus(
-      "✓ Password reset link sent successfully! Please check your Gmail inbox and spam folder.",
+      "✓ If this email is registered, a secure password reset link has been sent. Please check your Gmail inbox and spam folder.",
       "success"
     );
 
@@ -596,24 +555,18 @@ async function sendResetLink(){
       "Reset Link Sent ✓";
 
 
-    /*
-      IMPORTANT:
-      Supabase sends the REAL secure link.
-      We do NOT send update-password.html
-      directly through EmailJS because
-      that would not contain the secure
-      recovery token.
-    */
-
+    /* Re-enable after a few seconds */
 
     setTimeout(
       function(){
 
-        window.location.href =
-          "login.html";
+        btn.disabled = false;
+
+        btn.innerText =
+          "Send Reset Link";
 
       },
-      3000
+      5000
     );
 
 
@@ -630,13 +583,15 @@ async function sendResetLink(){
 
     showStatus(
       "Error: " +
-      err.message,
+      (
+        err.message ||
+        "Unable to send reset link. Please try again."
+      ),
       "error"
     );
 
 
-    btn.disabled =
-      false;
+    btn.disabled = false;
 
 
     btn.innerText =
@@ -647,20 +602,19 @@ async function sendResetLink(){
 }
 
 
-
 /* =========================================
    ENTER KEY SUPPORT
 ========================================= */
 
 document
-  .getElementById(
-    "forgotEmail"
-  )
+  .getElementById("forgotEmail")
   .addEventListener(
-    "keypress",
+    "keydown",
     function(event){
 
       if(event.key === "Enter"){
+
+        event.preventDefault();
 
         sendResetLink();
 
@@ -674,4 +628,5 @@ document
 
 
 </body>
+
 </html>
