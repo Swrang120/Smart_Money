@@ -99,16 +99,6 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .chip{flex:1;padding:6px;border:1px solid #cbd5e1;background:#f8fafc;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;text-align:center;color:#475569;}
 .chip:hover{background:#ede9fe;border-color:#7c3aed;color:#7c3aed;}
 
-/* HISTORY CARDS */
-.history-card-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;flex-direction:column;gap:6px;}
-.history-row-1{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#64748b;font-weight:600;}
-.history-row-2{display:flex;justify-content:space-between;align-items:center;}
-.history-amount{font-size:18px;font-weight:800;color:#0f172a;}
-.status-badge{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;}
-.status-approved{background:#d1fae5;color:#059669;}
-.status-pending{background:#fef3c7;color:#d97706;}
-.status-rejected{background:#fee2e2;color:#dc2626;}
-
 /* TOAST NOTIFICATION */
 #toastNotification {position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:#0f172a;color:#fff;padding:12px 24px;border-radius:30px;font-size:13px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,0.3);transition:transform 0.3s ease;z-index:99999;display:flex;align-items:center;gap:10px;}
 #toastNotification.show {transform:translateX(-50%) translateY(0);}
@@ -132,26 +122,19 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
   <div class="sidebar-profile">
     <img id="sidebarProfileImage" class="sidebar-profile-img" src="1000819130.jpg" alt="Profile">
     <div class="sidebar-profile-info">
-      <div id="sidebarUserName" class="sidebar-profile-name">Loading...</div>
-      <div id="sidebarUserEmail" class="sidebar-profile-email">Loading...</div>
+      <div id="sidebarUserName" class="sidebar-profile-name">Santiram Swargiary</div>
+      <div id="sidebarUserEmail" class="sidebar-profile-email">santiram@smartmoney.com</div>
     </div>
   </div>
   <ul class="sidebar-menu">
     <li><a href="index.html">🌐 Home / Landing Page</a></li>
     <li><button onclick="openPackageModal()">👑 My Package & Benefits</button></li>
-    
-    <!-- AFFILIATE LINK & CODE IN SIDEBAR -->
     <li><button onclick="openAffiliateMenuModal()" style="color:#a855f7;font-weight:700;">🔗 My Affiliate Link & ID</button></li>
-
-    <!-- WALLET & WITHDRAWAL -->
-    <li><button onclick="openWithdrawModal()" style="color:#10b981;font-weight:700;">💸 Available Balance: <span id="sidebarWalletBal">₹0.00</span> (Withdraw)</button></li>
+    <li><button onclick="openWithdrawModal()" style="color:#10b981;font-weight:700;">💸 Available Balance: <span id="sidebarWalletBal">₹1,250.00</span> (Withdraw)</button></li>
     <li><button onclick="openHistoryModal()">📜 View Withdrawal History</button></li>
-
-    <!-- PHOTO CHANGE/REMOVE -->
     <li><button onclick="document.getElementById('profilePhotoInputSidebar').click()">📷 Change Profile Picture</button></li>
     <input type="file" id="profilePhotoInputSidebar" style="display:none;" accept="image/*" onchange="uploadProfilePicture(event)">
     <li id="removePhotoLi" style="display:none;"><button onclick="removeProfilePicture()" style="color:#ef4444;">🗑️ Remove Profile Picture</button></li>
-
     <li><button onclick="openUpiModal()">🏦 View & Edit Bank / UPI Details</button></li>
     <li><button onclick="openKycModal()">🆔 KYC & Date of Birth</button></li>
     <li><button id="sideLogoutBtn" style="color:#f87171;">🚪 Logout</button></li>
@@ -173,25 +156,25 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
 <div class="dash-container">
   <div class="profile-card">
-    <div class="package-badge" id="activePackageBadge">NO PACKAGE</div>
+    <div class="package-badge active" id="activePackageBadge">PRO ELITE</div>
     <div>
       <div class="profile-img-wrap">
         <img src="1000819130.jpg" alt="Profile" class="profile-img" id="mainProfileImg" onerror="this.src='https://via.placeholder.com/100?text=SM'">
       </div>
     </div>
     <div class="user-info">
-      <h2 id="userName">Loading...</h2>
+      <h2 id="userName">Santiram Swargiary</h2>
       
       <!-- AFFILIATE ID & LINK BOX -->
       <div class="affiliate-id-box">
-        <span>ID: <b id="myRefCode">Loading...</b></span>
+        <span>ID: <b id="myRefCode">SMART99</b></span>
         <div style="display:flex; gap:5px;">
           <button class="copy-id-btn" onclick="copyAffiliateLink()" title="Copy Code">📋</button>
           <button class="share-id-btn" onclick="shareAffiliateLink()" title="Share Link">🔗</button>
         </div>
       </div>
 
-      <p style="font-size:11px;color:#64748b;margin:4px 0 0;" id="dobDisplayInfo">DOB: Not Set</p>
+      <p style="font-size:11px;color:#64748b;margin:4px 0 0;" id="dobDisplayInfo">DOB: 15-05-2004</p>
     </div>
   </div>
 
@@ -200,7 +183,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <h3 style="margin-top:0; font-size:16px; color:#0f172a; margin-bottom:12px;">🔗 My Affiliate Links</h3>
     <label style="font-size:11px; font-weight:700; color:#64748b; display:block; margin-bottom:4px;">MY REFERRAL LINK</label>
     <div class="affiliate-id-box">
-      <span id="fullRefLinkText" style="word-break:break-all; font-size:11px; color:#334155; max-width:80%;">Loading link...</span>
+      <span id="fullRefLinkText" style="word-break:break-all; font-size:11px; color:#334155; max-width:80%;">https://swrang120.github.io/Smart_Money/register.html?ref=SMART99</span>
       <button class="copy-id-btn" onclick="copyFullReferralLink()" title="Copy Link">📋</button>
     </div>
   </div>
@@ -209,56 +192,56 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
   <div class="stats-stack">
     <div class="v-card bg-today">
       <div>
-        <h2 id="todayRevenue">₹0</h2>
+        <h2 id="todayRevenue">₹450</h2>
         <p>Today's Revenue</p>
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openEarningsModal('Today's Revenue', document.getElementById('todayRevenue').innerText); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openEarningsModal('Today\'s Revenue', '₹450'); return false;">View details <span>›</span></a>
       </div>
     </div>
 
     <div class="v-card bg-7days">
       <div>
-        <h2 id="sevenDaysRevenue">₹0</h2>
+        <h2 id="sevenDaysRevenue">₹3,200</h2>
         <p>7 Days Revenue</p>
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openEarningsModal('7 Days Revenue', document.getElementById('sevenDaysRevenue').innerText); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openEarningsModal('7 Days Revenue', '₹3,200'); return false;">View details <span>›</span></a>
       </div>
     </div>
 
     <div class="v-card bg-30days">
       <div>
-        <h2 id="thirtyDaysRevenue">₹0</h2>
+        <h2 id="thirtyDaysRevenue">₹14,500</h2>
         <p>30 Days Revenue</p>
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openEarningsModal('30 Days Revenue', document.getElementById('thirtyDaysRevenue').innerText); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openEarningsModal('30 Days Revenue', '₹14,500'); return false;">View details <span>›</span></a>
       </div>
     </div>
 
     <div class="v-card bg-alltime">
       <div>
-        <h2 id="allTimeRevenueText">₹0</h2>
+        <h2 id="allTimeRevenueText">₹48,900</h2>
         <p>All Time Revenue</p>
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openEarningsModal('All Time Revenue', document.getElementById('allTimeRevenueText').innerText); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openEarningsModal('All Time Revenue', '₹48,900'); return false;">View details <span>›</span></a>
       </div>
     </div>
 
     <div class="v-card bg-passive">
       <div>
-        <h2 id="passiveIncome">₹0</h2>
+        <h2 id="passiveIncome">₹8,400</h2>
         <p>Passive Income</p>
       </div>
       <div>
         <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openEarningsModal('Passive Income', document.getElementById('passiveIncome').innerText); return false;">View details <span>›</span></a>
+        <a href="#" class="card-footer-link" onclick="openEarningsModal('Passive Income', '₹8,400'); return false;">View details <span>›</span></a>
       </div>
     </div>
   </div>
@@ -273,7 +256,13 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       <button class="ref-tab" onclick="filterReferrals(30, this)">30 Days</button>
     </div>
     <div id="referralsListContainer">
-      <div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">Loading referrals...</div>
+      <div class="referral-card-item">
+        <div class="ref-user-info">
+          <h4>Rahul Sharma</h4>
+          <span>Pro Elite Package</span>
+        </div>
+        <div class="ref-date">27 Aug 2026<br><b style="color:#10b981;">+₹450</b></div>
+      </div>
     </div>
   </div>
 
@@ -291,20 +280,16 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 <div id="affiliateMenuModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="color:#7c3aed;margin-top:0;">🔗 My Affiliate Link & ID</h3>
-    <p style="font-size:13px;color:#475569;margin-bottom:12px;">Share your link or code to invite friends and earn commissions:</p>
-    
     <label style="font-size:11px;font-weight:700;color:#64748b;">MY REFERRAL CODE</label>
     <div class="affiliate-id-box" style="margin-bottom:12px;">
-      <span>ID: <b id="modalRefCode">Loading...</b></span>
+      <span>ID: <b id="modalRefCode">SMART99</b></span>
       <button class="copy-id-btn" onclick="copyAffiliateLink()">📋</button>
     </div>
-
     <label style="font-size:11px;font-weight:700;color:#64748b;">MY REFERRAL LINK</label>
     <div class="affiliate-id-box">
-      <span id="modalFullRefLinkText" style="word-break:break-all;font-size:11px;color:#334155;max-width:80%;">Loading...</span>
+      <span id="modalFullRefLinkText" style="word-break:break-all;font-size:11px;color:#334155;max-width:80%;">https://swrang120.github.io/Smart_Money/register.html?ref=SMART99</span>
       <button class="copy-id-btn" onclick="copyFullReferralLink()">📋</button>
     </div>
-
     <button onclick="shareAffiliateLink()" class="btn-action" style="margin-top:15px;background:linear-gradient(135deg,#10b981,#059669);">Share Referral Link 🔗</button>
     <button onclick="closeModal('affiliateMenuModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;margin-top:5px;">Close</button>
   </div>
@@ -314,7 +299,6 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 <div id="earningsModal" class="modal-overlay">
   <div class="modal-box">
     <h3 id="earningsModalTitle" style="color:#7c3aed;margin-top:0;">📊 Earning Details</h3>
-    <p style="font-size:13px;color:#475569;margin-bottom:15px;">Breakdown of your selected revenue duration:</p>
     <div style="background:#f8fafc;padding:16px;border-radius:14px;border:1px solid #e2e8f0;text-align:center;margin-bottom:15px;">
       <span style="font-size:12px;color:#64748b;font-weight:600;display:block;margin-bottom:4px;">Total Collected</span>
       <h2 id="earningsModalAmount" style="font-size:32px;color:#0f172a;margin:0;font-weight:800;">₹0</h2>
@@ -327,8 +311,8 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 <div id="packageModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="color:#7c3aed;margin-top:0;">👑 My Package & Benefits</h3>
-    <div id="modalPkgDetailsBox" style="background:#f8fafc;padding:15px;border-radius:12px;border:1px solid #e2e8f0;font-size:13px;line-height:1.6;">
-      <p><b>Package Name:</b> <span id="modalPkgName" style="color:#7c3aed;font-weight:750;">No Package Active</span></p>
+    <div style="background:#f8fafc;padding:15px;border-radius:12px;border:1px solid #e2e8f0;font-size:13px;line-height:1.6;">
+      <p><b>Package Name:</b> <span id="modalPkgName" style="color:#7c3aed;font-weight:750;">Pro Elite Affiliate Package</span></p>
       <p><b>Account Status:</b> <span style="color:#10b981;font-weight:700;">Active System User</span></p>
     </div>
     <button onclick="closeModal('packageModal')" class="btn-action" style="margin-top:15px;">Close</button>
@@ -340,7 +324,10 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
   <div class="modal-box">
     <h3 style="color:#7c3aed;margin-top:0;">📜 Withdrawal History</h3>
     <div id="historyListContainer">
-      <p style="font-size:13px;color:#64748b;text-align:center;padding:15px;">No withdrawal requests found.</p>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+        <div><b>₹1,000</b><br><span style="font-size:11px;color:#64748b;">UPI: santiram@upi</span></div>
+        <span style="background:#d1fae5;color:#059669;padding:4px 8px;border-radius:20px;font-size:10px;font-weight:700;">APPROVED</span>
+      </div>
     </div>
     <button onclick="closeModal('historyModal')" class="btn-action" style="margin-top:15px;">Close</button>
   </div>
@@ -350,36 +337,15 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 <div id="withdrawModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="color:#7c3aed;margin-top:0;">💸 Request Payout</h3>
-    <p style="font-size:13px;color:#475569;margin-bottom:10px;">Available Balance: <b id="withdrawAvailBal">₹0.00</b></p>
-    
+    <p style="font-size:13px;color:#475569;margin-bottom:10px;">Available Balance: <b id="withdrawAvailBal">₹1,250.00</b></p>
     <div class="amount-chips">
       <div class="chip" onclick="setWithdrawAmount(500)">₹500</div>
       <div class="chip" onclick="setWithdrawAmount(1000)">₹1000</div>
       <div class="chip" onclick="setWithdrawAmount(5000)">₹5000</div>
       <div class="chip" onclick="setWithdrawAmount('MAX')">Max</div>
     </div>
-
     <label style="font-size:11px;font-weight:700;color:#64748b;">ENTER WITHDRAWAL AMOUNT (₹)</label>
     <input type="number" id="withdrawAmountInput" class="input-field" placeholder="e.g. 1000">
-
-    <label style="font-size:11px;font-weight:700;color:#64748b;">PAYOUT METHOD</label>
-    <div class="payout-tabs">
-      <div class="payout-tab active" id="tabUpi" onclick="selectPayoutMethod('UPI')">UPI ID</div>
-      <div class="payout-tab" id="tabBank" onclick="selectPayoutMethod('Bank')">Bank Transfer</div>
-    </div>
-
-    <div id="upiFields">
-      <label style="font-size:11px;font-weight:700;color:#64748b;">YOUR UPI ID</label>
-      <input type="text" id="withdrawUpiId" class="input-field" placeholder="username@oksbi">
-    </div>
-
-    <div id="bankFields" style="display:none;">
-      <label style="font-size:11px;font-weight:700;color:#64748b;">ACCOUNT NUMBER</label>
-      <input type="text" id="withdrawAccNo" class="input-field" placeholder="Account Number">
-      <label style="font-size:11px;font-weight:700;color:#64748b;">IFSC CODE</label>
-      <input type="text" id="withdrawIfsc" class="input-field" placeholder="IFSC Code">
-    </div>
-
     <button onclick="submitWithdrawalRequest()" class="btn-action">Submit Request 🚀</button>
     <button onclick="closeModal('withdrawModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;margin-top:5px;">Cancel</button>
   </div>
@@ -390,11 +356,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
   <div class="modal-box">
     <h3 style="color:#7c3aed;margin-top:0;">🏦 Bank / UPI Details</h3>
     <label style="font-size:11px;font-weight:700;color:#64748b;">UPI ID</label>
-    <input type="text" id="settingsUpi" class="input-field" placeholder="username@upi">
-    <label style="font-size:11px;font-weight:700;color:#64748b;">BANK ACCOUNT NUMBER</label>
-    <input type="text" id="settingsAcc" class="input-field" placeholder="Account Number">
-    <label style="font-size:11px;font-weight:700;color:#64748b;">IFSC CODE</label>
-    <input type="text" id="settingsIfsc" class="input-field" placeholder="IFSC">
+    <input type="text" id="settingsUpi" class="input-field" value="santiram@upi">
     <button onclick="saveUpiDetails()" class="btn-action">Save Details</button>
     <button onclick="closeModal('upiModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;margin-top:5px;">Close</button>
   </div>
@@ -405,9 +367,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
   <div class="modal-box">
     <h3 style="color:#7c3aed;margin-top:0;">🆔 KYC & Date of Birth</h3>
     <label style="font-size:11px;font-weight:700;color:#64748b;">DATE OF BIRTH</label>
-    <input type="date" id="settingsDob" class="input-field">
-    <label style="font-size:11px;font-weight:700;color:#64748b;">AADHAR / PAN NUMBER</label>
-    <input type="text" id="settingsKycId" class="input-field" placeholder="Enter ID Number">
+    <input type="date" id="settingsDob" class="input-field" value="2004-05-15">
     <button onclick="saveKycDetails()" class="btn-action">Save KYC</button>
     <button onclick="closeModal('kycModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;margin-top:5px;">Close</button>
   </div>
@@ -443,6 +403,7 @@ function openWithdrawModal() { openModal('withdrawModal'); }
 function openHistoryModal() { openModal('historyModal'); }
 function openUpiModal() { openModal('upiModal'); }
 function openKycModal() { openModal('kycModal'); }
+
 function openEarningsModal(title, amt) {
   document.getElementById('earningsModalTitle').innerText = title;
   document.getElementById('earningsModalAmount').innerText = amt;
@@ -479,8 +440,6 @@ function uploadProfilePicture(event) {
       document.getElementById('mainProfileImg').src = url;
       document.getElementById('navAvatarImg').src = url;
       document.getElementById('sidebarProfileImage').src = url;
-      document.getElementById('sidebarLogo').src = url;
-      document.getElementById('navBrandLogoImg').src = url;
       document.getElementById('removePhotoLi').style.display = 'block';
       showToast("Profile picture updated!");
     }
@@ -493,26 +452,8 @@ function removeProfilePicture() {
   document.getElementById('mainProfileImg').src = defaultImg;
   document.getElementById('navAvatarImg').src = defaultImg;
   document.getElementById('sidebarProfileImage').src = defaultImg;
-  document.getElementById('sidebarLogo').src = defaultImg;
-  document.getElementById('navBrandLogoImg').src = defaultImg;
   document.getElementById('removePhotoLi').style.display = 'none';
   showToast("Profile picture removed.");
-}
-
-let payoutMethod = 'UPI';
-function selectPayoutMethod(m) {
-  payoutMethod = m;
-  if(m === 'UPI') {
-    document.getElementById('tabUpi').classList.add('active');
-    document.getElementById('tabBank').classList.remove('active');
-    document.getElementById('upiFields').style.display = 'block';
-    document.getElementById('bankFields').style.display = 'none';
-  } else {
-    document.getElementById('tabBank').classList.add('active');
-    document.getElementById('tabUpi').classList.remove('active');
-    document.getElementById('bankFields').style.display = 'block';
-    document.getElementById('upiFields').style.display = 'none';
-  }
 }
 
 function setWithdrawAmount(val) {
@@ -541,27 +482,14 @@ function saveKycDetails() {
 function filterReferrals(days, btn) {
   document.querySelectorAll('.ref-tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('referralsListContainer').innerHTML = `<div style="text-align:center; color:#64748b; font-size:13px; padding:10px;">No referrals found for last ${days} days.</div>`;
-}
-
-window.onload = function() {
-  document.getElementById('userName').innerText = "Santiram Swargiary";
-  document.getElementById('sidebarUserName').innerText = "Santiram Swargiary";
-  document.getElementById('sidebarUserEmail').innerText = "santiram@smartmoney.com";
-  document.getElementById('myRefCode').innerText = "SMART99";
-  document.getElementById('modalRefCode').innerText = "SMART99";
-  document.getElementById('fullRefLinkText').innerText = window.location.origin + "/register.html?ref=SMART99";
-  document.getElementById('modalFullRefLinkText').innerText = window.location.origin + "/register.html?ref=SMART99";
-  document.getElementById('sidebarWalletBal').innerText = "₹1,250.00";
-  document.getElementById('withdrawAvailBal').innerText = "₹1,250.00";
-  document.getElementById('todayRevenue').innerText = "₹450";
-  document.getElementById('sevenDaysRevenue').innerText = "₹3,200";
-  document.getElementById('thirtyDaysRevenue').innerText = "₹14,500";
-  document.getElementById('allTimeRevenueText').innerText = "₹48,900";
-  document.getElementById('passiveIncome').innerText = "₹8,400";
-  document.getElementById('activePackageBadge').innerText = "PRO ELITE";
-  document.getElementById('activePackageBadge').classList.add('active');
-  document.getElementById('modalPkgName').innerText = "Pro Elite Affiliate Package";
+  document.getElementById('referralsListContainer').innerHTML = `
+    <div class="referral-card-item">
+      <div class="ref-user-info">
+        <h4>Sample User (${days}d filter)</h4>
+        <span>Pro Elite Package</span>
+      </div>
+      <div class="ref-date">Recent<br><b style="color:#10b981;">+₹450</b></div>
+    </div>`;
 }
 </script>
 </body>
