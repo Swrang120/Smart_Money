@@ -567,39 +567,42 @@ document.addEventListener("DOMContentLoaded", async function(){
     currentUserEmail = user.email || "";
     const authName = user.user_metadata?.full_name || user.user_metadata?.name || "Smart Money User";
 
-    // 1. Fetch profile from database first to check if referral code already exists
+    // Fetch profile from database first
     let { data:profile, error:profileError } = await supabaseClient
       .from("profiles")
       .select("*")
       .eq("user_id", currentUserId)
       .maybeSingle();
 
-    // 2. Strict Check: Only generate a new code if profile doesn't exist OR referral_code is completely empty/null
-    if(!profile || !profile.referral_code || profile.referral_code.trim() === ""){
+    // Permanent Referral ID Fix: Generate code ONLY IF profile doesn't exist or referral_code is missing
+    if(!profile){
       const randomFiveDigit = Math.floor(10000 + Math.random() * 90000);
       const generatedCode = "SM-smart" + randomFiveDigit;
-
-      if(!profile){
-        profile = {
-          user_id: currentUserId,
-          email: currentUserEmail,
-          full_name: authName,
-          balance: 0,
-          package_name: null,
-          referral_code: generatedCode
-        };
-        await supabaseClient.from("profiles").insert([profile]);
-      } else {
-        await supabaseClient.from("profiles").update({ referral_code: generatedCode }).eq("user_id", currentUserId);
-        profile.referral_code = generatedCode;
-      }
+      
+      profile = {
+        user_id: currentUserId,
+        email: currentUserEmail,
+        full_name: authName,
+        balance: 0,
+        package_name: null,
+        referral_code: generatedCode
+      };
+      
+      await supabaseClient.from("profiles").insert([profile]);
+    } 
+    else if(!profile.referral_code || profile.referral_code.trim() === ""){
+      const randomFiveDigit = Math.floor(10000 + Math.random() * 90000);
+      const generatedCode = "SM-smart" + randomFiveDigit;
+      
+      await supabaseClient.from("profiles").update({ referral_code: generatedCode }).eq("user_id", currentUserId);
+      profile.referral_code = generatedCode;
     }
 
     currentProfile = profile;
     const finalName = profile?.full_name || authName;
     const finalEmail = profile?.email || currentUserEmail;
     userCurrentBalance = Number(profile?.balance || 0);
-    userRefCode = profile.referral_code; // Permanently locked referral code from DB
+    userRefCode = profile.referral_code; // Safely locked permanent referral code
     const dob = profile?.date_of_birth || "";
     const packageName = profile?.package_name;
 
