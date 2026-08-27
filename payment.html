@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Money - Complete Payment</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- EmailJS SDK CDN -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      // 🔴 Yahan apni EmailJS ki PUBLIC KEY dalein (FxcimUvl0-ZxAauRx)
+      emailjs.init("FxcimUvl0-ZxAauRx");
+    })();
+  </script>
+
   <style>
     * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     body { background: #f1f5f9; color: #1e293b; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
@@ -51,8 +61,10 @@
   </form>
 </div>
 
+<!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+  // Supabase Setup
   const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
@@ -97,6 +109,7 @@
     btn.disabled = true;
 
     try {
+      // --- SUPABASE PART ---
       // 1. Upload Screenshot to Supabase Storage bucket 'payment-proofs'
       const fileName = `${Date.now()}_${fileInput.name}`;
       const { data: uploadData, error: uploadError } = await supabaseClient.storage
@@ -131,8 +144,19 @@
 
       if (insertError) throw insertError;
 
+      // --- EMAILJS PART (Automatic Pending Mail to User) ---
+      const emailParams = {
+        to_name: fullName,
+        to_email: email, // User ka Gmail
+        utr_code: utr,
+        package_name: pkgName
+      };
+
+      // 🔴 Yahan apni EmailJS ki TEMPLATE ID dalein (s9exuls)
+      await emailjs.send("service_gmail", "s9exuls", emailParams);
+
       alert("🎉 Payment proof submitted successfully! Admin verification ke baad aapka account activate kar diya jayega.");
-      window.location.href = "index.html"; // Home page ya login page par redirect
+      window.location.href = "index.html"; // Home page par redirect
 
     } catch (err) {
       alert("Error: " + err.message);
