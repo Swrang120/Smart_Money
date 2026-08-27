@@ -567,17 +567,23 @@ document.addEventListener("DOMContentLoaded", async function(){
     currentUserEmail = user.email || "";
     const authName = user.user_metadata?.full_name || user.user_metadata?.name || "Smart Money User";
 
-    // Fetch profile from database first
+    // Instant UI fallback
+    document.getElementById("userName").innerHTML = escapeHtml(authName);
+    document.getElementById("sidebarUserName").innerText = authName;
+    document.getElementById("sidebarUserEmail").innerText = currentUserEmail;
+
+    // Fetch profile from database
     let { data:profile, error:profileError } = await supabaseClient
       .from("profiles")
       .select("*")
       .eq("user_id", currentUserId)
       .maybeSingle();
 
-    // Permanent Referral ID Fix: Generate code ONLY IF profile doesn't exist or referral_code is missing
+    let finalRefCode = "";
+
     if(!profile){
       const randomFiveDigit = Math.floor(10000 + Math.random() * 90000);
-      const generatedCode = "SM-smart" + randomFiveDigit;
+      finalRefCode = "SM-smart" + randomFiveDigit;
       
       profile = {
         user_id: currentUserId,
@@ -585,27 +591,31 @@ document.addEventListener("DOMContentLoaded", async function(){
         full_name: authName,
         balance: 0,
         package_name: null,
-        referral_code: generatedCode
+        referral_code: finalRefCode
       };
       
-      await supabaseClient.from("profiles").insert([profile]);
-    } 
-    else if(!profile.referral_code || profile.referral_code.trim() === ""){
-      const randomFiveDigit = Math.floor(10000 + Math.random() * 90000);
-      const generatedCode = "SM-smart" + randomFiveDigit;
-      
-      await supabaseClient.from("profiles").update({ referral_code: generatedCode }).eq("user_id", currentUserId);
-      profile.referral_code = generatedCode;
+      const { error: insErr } = await supabaseClient.from("profiles").insert([profile]);
+      if(insErr) console.error("Insert Profile Error:", insErr.message);
+    } else {
+      if(profile.referral_code && profile.referral_code.trim() !== ""){
+        finalRefCode = profile.referral_code;
+      } else {
+        const randomFiveDigit = Math.floor(10000 + Math.random() * 90000);
+        finalRefCode = "SM-smart" + randomFiveDigit;
+        await supabaseClient.from("profiles").update({ referral_code: finalRefCode }).eq("user_id", currentUserId);
+        profile.referral_code = finalRefCode;
+      }
     }
 
     currentProfile = profile;
+    userRefCode = finalRefCode;
+    userCurrentBalance = Number(profile?.balance || 0);
     const finalName = profile?.full_name || authName;
     const finalEmail = profile?.email || currentUserEmail;
-    userCurrentBalance = Number(profile?.balance || 0);
-    userRefCode = profile.referral_code; // Safely locked permanent referral code
     const dob = profile?.date_of_birth || "";
     const packageName = profile?.package_name;
 
+    // Render Data
     document.getElementById("userName").innerHTML = escapeHtml(finalName);
     document.getElementById("myRefCode").innerText = userRefCode;
     document.getElementById("myRefCodeSide").innerText = userRefCode;
@@ -868,6 +878,7 @@ async function updateUserPayoutDetails(){
 async function saveKycDetails(){
   const fullName = document.getElementById("kycFullName").value.trim();
   const dob = document.getElementById("kycDob").value;
+  
   const { error } = await supabaseClient.from("profiles").update({ full_name: fullName, date_of_birth: dob }).eq("user_id", currentUserId);
   if(error){ alert("Error: " + error.message); return; }
 
