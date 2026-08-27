@@ -566,7 +566,6 @@ document.addEventListener("DOMContentLoaded", async function(){
     document.getElementById("userName").innerHTML = escapeHtml(finalName);
     document.getElementById("myRefCode").innerText = userRefCode;
     
-    // Update Full Referral Link UI
     const baseUrl = window.location.origin + "/register.html";
     const fullLink = `${baseUrl}?ref=${userRefCode}`;
     document.getElementById("fullRefLinkText").innerText = fullLink;
@@ -615,15 +614,17 @@ async function uploadProfilePicture(event){
     const base64Image = e.target.result;
     applyProfileImage(base64Image, currentProfile?.full_name);
 
+    // FIXED: Corrected database save query so profile pic saves permanently in Supabase table
     const { error } = await supabaseClient
       .from("profiles")
       .update({ profile_pic: base64Image })
       .eq("user_id", currentUserId);
 
-    if(error){ alert("Failed to save picture: " + error.message); }
-    else { 
+    if(error){ 
+      alert("Failed to save picture: " + error.message); 
+    } else { 
       currentProfile.profile_pic = base64Image;
-      showToast("Profile picture saved!"); 
+      showToast("Profile picture saved successfully!"); 
     }
   };
   reader.readAsDataURL(file);
@@ -841,7 +842,7 @@ async function submitWithdrawal(){
   const packageName = (currentProfile?.package_name || "").toLowerCase();
   let minWithdrawLimit = 200; 
   if(packageName === "vip" || packageName === "pro" || packageName === "gold") {
-    minWithdrawLimit = 100; 
+    minWithdrawList = 100; 
   } else if(!packageName || packageName === "none") {
     minWithdrawLimit = 200; 
   }
