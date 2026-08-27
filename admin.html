@@ -1,691 +1,1947 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Money - Master Admin Elite</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- EmailJS Library -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <style>
-    :root {
-      --bg-gradient: linear-gradient(135deg, #0a0f1d 0%, #17153a 50%, #0f172a 100%);
-      --card-bg: rgba(30, 41, 59, 0.75);
-      --border-color: rgba(99, 102, 241, 0.25);
-      --primary: #6366f1;
-      --primary-hover: #4f46e5;
-      --accent: #38bdf8;
-      --success: #10b981;
-      --danger: #f43f5e;
-      --text-main: #ffffff;
-      --text-muted: #94a3b8;
-    }
-
-    * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background: #0f172a; background-image: var(--bg-gradient); color: var(--text-main); margin: 0; padding: 0; display: none; min-height: 100vh; }
-
-    /* Top Navbar */
-    .navbar { background: rgba(15, 23, 42, 0.85); border-bottom: 1px solid var(--border-color); padding: 16px 25px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
-    .nav-brand { font-size: 18px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 10px; letter-spacing: 0.5px; }
-    .nav-brand span { background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    
-    /* 3-Line Menu Button */
-    .menu-toggle { background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.35); color: #fff; padding: 10px 14px; border-radius: 12px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; transition: all 0.3s ease; }
-    .menu-toggle:hover { background: rgba(99, 102, 241, 0.3); transform: scale(1.05); }
-    .menu-toggle div { width: 20px; height: 2px; background: #fff; border-radius: 2px; }
-
-    /* Hidden Sidebar Drawer */
-    .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); display: none; z-index: 999; }
-    .sidebar { position: fixed; top: 0; right: -380px; width: 380px; height: 100%; background: #13112c; border-left: 1px solid var(--border-color); padding: 30px 20px; transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; overflow-y: auto; box-shadow: -15px 0 40px rgba(0,0,0,0.6); }
-    .sidebar.open { right: 0; }
-    .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px; }
-    .close-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-muted); width: 32px; height: 32px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-    .close-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
-
-    .container { max-width: 1150px; margin: 0 auto; padding: 25px 16px; }
-
-    /* Stylish Master Profile Header */
-    .profile-card { background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%); border-radius: 24px; padding: 22px; margin-bottom: 25px; border: 1px solid var(--border-color); box-shadow: 0 15px 35px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; backdrop-filter: blur(16px); }
-    .profile-left { display: flex; align-items: center; gap: 15px; }
-    .avatar-box { width: 55px; height: 55px; background: linear-gradient(135deg, #6366f1 0%, #38bdf8 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; color: #fff; box-shadow: 0 0 20px rgba(99,102,241,0.5); }
-    .profile-info h3 { margin: 0 0 4px 0; font-size: 17px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px; }
-    .admin-badge { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); font-size: 10px; padding: 2px 8px; border-radius: 6px; font-weight: 700; }
-    .ref-badge-box { background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); padding: 5px 12px; border-radius: 10px; font-size: 12px; color: var(--accent); font-weight: 700; display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; }
-
-    /* Stats Box inside Drawer */
-    .stats-box { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; margin-bottom: 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
-    .stats-box h4 { margin: 0 0 4px 0; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-    .stats-box .num { font-size: 22px; font-weight: 800; color: var(--accent); }
-
-    /* Stylish Glass Cards */
-    .card { background: var(--card-bg); border-radius: 24px; padding: 24px; margin-bottom: 25px; border: 1px solid var(--border-color); box-shadow: 0 20px 40px rgba(0,0,0,0.4); backdrop-filter: blur(16px); }
-    .card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 16px; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
-    h2 { font-size: 17px; color: #fff; margin: 0; display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: 0.3px; }
-
-    /* Filter & Tab Buttons */
-    .filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
-    .filter-btn { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 12px; border-radius: 10px; font-size: 11px; cursor: pointer; font-weight: 600; transition: all 0.2s ease; }
-    .filter-btn:hover { background: rgba(99, 102, 241, 0.15); color: #fff; }
-    .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 15px rgba(99, 102, 241, 0.5); }
-
-    /* Tables */
-    .table-responsive { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; white-space: nowrap; }
-    th, td { padding: 15px 12px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-    th { color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
-    td { color: #f1f5f9; }
-
-    .payout-box { background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.18); padding: 12px 14px; border-radius: 14px; margin-top: 8px; font-size: 12px; line-height: 1.6; white-space: normal; }
-    .payout-box b { color: var(--accent); }
-
-    /* Action Buttons */
-    .btn { padding: 7px 12px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; font-size: 11px; transition: all 0.25s ease; margin-right: 4px; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-    .btn:active { transform: scale(0.95); }
-    .btn-approve { background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
-    .btn-approve:hover { background: #10b981; color: #fff; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
-    .btn-reject { background: rgba(244, 63, 94, 0.18); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.35); }
-    .btn-reject:hover { background: #f43f5e; color: #fff; box-shadow: 0 0 15px rgba(244, 63, 94, 0.4); }
-    .btn-delete { background: rgba(255, 255, 255, 0.06); color: var(--text-muted); border: 1px solid var(--border-color); }
-    .btn-delete:hover { background: #f43f5e; color: #fff; border-color: #f43f5e; }
-    .btn-restore { background: rgba(56, 189, 248, 0.15); color: var(--accent); border: 1px solid rgba(56, 189, 248, 0.35); }
-    .btn-restore:hover { background: var(--accent); color: #0f172a; }
-    
-    .badge { padding: 5px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; display: inline-block; }
-    .badge-pending { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
-    .badge-approved, .badge-success { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
-    .badge-rejected { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.35); }
-
-    .trash-section-title { font-size: 13px; font-weight: 700; color: var(--accent); margin: 20px 0 10px 0; border-bottom: 1px dashed var(--border-color); padding-bottom: 6px; }
-  </style>
-</head>
-<body>
-
-  <!-- Top Navigation Bar -->
-  <div class="navbar">
-    <div class="nav-brand">⚡ Smart Money <span>Admin Elite</span></div>
-    <button class="menu-toggle" onclick="toggleSidebar()">
-      <div></div>
-      <div></div>
-      <div></div>
-    </button>
-  </div>
-
-  <!-- Hidden Drawer Sidebar for Stats & Complete Action History / Trash Center -->
-  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-  <div class="sidebar" id="adminSidebar">
-    <div class="sidebar-header">
-      <h3 style="margin:0; font-size:17px; color:#fff;">📊 History & Trash Center</h3>
-      <button class="close-btn" onclick="toggleSidebar()">&times;</button>
-    </div>
-    
-    <div class="stats-box">
-      <h4>Master Admin</h4>
-      <div class="num" style="font-size: 14px; color: #34d399;">Santiram Swargiary</div>
-      <div style="font-size: 11px; color: var(--text-muted);">SM-smart87046</div>
-    </div>
-    <div class="stats-box">
-      <h4>Total Package Requests</h4>
-      <div class="num" id="statTotal">0</div>
-    </div>
-    <div class="stats-box">
-      <h4>Approved Packages</h4>
-      <div class="num" style="color: #34d399;" id="statApproved">0</div>
-    </div>
-    <div class="stats-box">
-      <h4>Rejected Packages</h4>
-      <div class="num" style="color: #fb7185;" id="statRejected">0</div>
-    </div>
-
-    <!-- Complete Action History & Trash Section Inside 3-line Menu -->
-    <div class="trash-section-title">📜 Approved / Processed Payment History</div>
-    <div id="approvedHistoryList" style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Loading history...</div>
-
-    <div class="trash-section-title">♻️ Deleted Users Trash</div>
-    <div id="deletedUsersList" style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Loading deleted users...</div>
-
-    <div class="trash-section-title">🗑️ Deleted Payments Trash</div>
-    <div id="deletedPaymentsList" style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Loading deleted payments...</div>
-
-    <div class="trash-section-title">🗑️ Deleted Withdrawals Trash</div>
-    <div id="deletedWithdrawalsList" style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">Loading deleted withdrawals...</div>
-  </div>
-
-  <div class="container">
-    <!-- Stylish Master Profile Header -->
-    <div class="profile-card">
-      <div class="profile-left">
-        <div class="avatar-box">SS</div>
-        <div class="profile-info">
-          <h3>Santiram Swargiary <span class="admin-badge">MASTER ADMIN</span></h3>
-          <div class="ref-badge-box">ID: SM-smart87046</div>
-        </div>
-      </div>
-      <div style="font-size: 12px; color: var(--text-muted); text-align: right;">
-        Status: <b style="color: #34d399;">Secure & Active</b><br>
-        System: <b style="color: var(--accent);">Multi-Level Enabled</b>
-      </div>
-    </div>
-
-    <!-- GLOBAL TOP HEADER PROFILE PHOTO CONTROL CARD (DIRECT FILE UPLOAD) -->
-    <div class="card">
-      <h2>🖼️ Upload Global Top Profile Photo (Dashboard Logo)</h2>
-      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Apne phone ki gallery se photo select karein. Yeh photo automatically upload ho kar sabhi users ke dashboard par show hogi.</p>
-      <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-        <input type="file" id="adminLogoFileInput" accept="image/*" style="flex:1; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; border-radius: 10px; min-width: 230px; cursor: pointer;">
-        <button class="btn btn-approve" onclick="uploadAndSaveAdminLogo()" style="padding: 12px 18px;">Upload & Update for All Users</button>
-      </div>
-    </div>
-
-    <!-- 1. PACKAGE APPROVALS WITH TABS (Pending / Approved / Rejected) -->
-    <div class="card">
-      <div class="card-header">
-        <h2>💳 Package Approvals Management</h2>
-        <div class="filter-group">
-          <button class="filter-btn active" onclick="switchPaymentTab('pending', this)">Pending</button>
-          <button class="filter-btn" onclick="switchPaymentTab('approved', this)">Approved</button>
-          <button class="filter-btn" onclick="switchPaymentTab('rejected', this)">Rejected</button>
-          <button class="filter-btn" onclick="switchPaymentTab('all', this)">All</button>
-        </div>
-      </div>
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th>User Details</th>
-              <th>Package & Amount</th>
-              <th>Payment ID / UTR</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="paymentTableBody">
-            <tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Loading requests...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- 2. WITHDRAWAL PAYOUT REQUESTS WITH TABS (Pending / Approved / Rejected) -->
-    <div class="card">
-      <div class="card-header">
-        <h2>💸 Withdrawal Payout Management</h2>
-        <div class="filter-group">
-          <button class="filter-btn active" onclick="switchWithdrawalTab('pending', this)">Pending</button>
-          <button class="filter-btn" onclick="switchWithdrawalTab('approved', this)">Approved</button>
-          <button class="filter-btn" onclick="switchWithdrawalTab('rejected', this)">Rejected</button>
-          <button class="filter-btn" onclick="switchWithdrawalTab('all', this)">All</button>
-        </div>
-      </div>
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th>User Details</th>
-              <th>Amount & Bank/UPI Payout Details</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="withdrawalTableBody">
-            <tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Loading withdrawals...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- 3. REGISTERED USERS CONTROL -->
-    <div class="card">
-      <h2>👥 Registered Users Control</h2>
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th>Name / Email</th>
-              <th>Ref ID</th>
-              <th>Package & Wallet</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="usersTableBody">
-            <tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Loading users...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // EmailJS Initialization with your Public Key
-  emailjs.init("nD7bbMhcvotO19ODK");
+  /* =========================================
+     EMAILJS CONFIGURATION
+  ========================================== */
 
-  // Master Admin Verification Lock
-  const adminPassword = prompt("🔐 Enter Master Admin Password:");
-  if (adminPassword === "Swrangsa@123") {
-    document.body.style.display = "block";
-  } else {
-    alert("❌ Access Denied! Wrong Master Password.");
-    document.body.innerHTML = "<h2 style='color:#f43f5e; text-align:center; margin-top:100px;'>Unauthorized Access - Master ID Protected</h2>";
-    document.body.style.display = "block";
-    throw new Error("Unauthorized");
+  const EMAIL_CONFIG = {
+    registration: {
+      publicKey: "nD7bbMhcvotO19ODK",
+      serviceId: "service_4q2gu5k",
+      templateId: "template_5iadm34"
+    },
+
+    withdrawal: {
+      publicKey: "FxcimUvl0-ZxAauRx",
+      serviceId: "service_qsy07qr",
+      templateId: "template_mf8enck"
+    },
+
+    paymentSubmitted: {
+      publicKey: "FxcimUvl0-ZxAauRx",
+      serviceId: "service_qsy07qr",
+      templateId: "template_s9exuls"
+    }
+  };
+
+
+  /* =========================================
+     EMAIL FUNCTION - NEW USER APPROVAL
+  ========================================== */
+
+  async function sendRegistrationApprovalEmail(
+    email,
+    fullName,
+    referralId,
+    packageName
+  ) {
+    if (!email) return false;
+
+    try {
+      await emailjs.send(
+        EMAIL_CONFIG.registration.serviceId,
+        EMAIL_CONFIG.registration.templateId,
+        {
+          to_email: email,
+          to_name: fullName || "User",
+          user_name: fullName || "User",
+          referral_id: referralId || "",
+          package_name: packageName || "",
+          email: email
+        },
+        EMAIL_CONFIG.registration.publicKey
+      );
+
+      console.log("Registration approval email sent successfully");
+      return true;
+
+    } catch (error) {
+      console.error("Registration Email Error:", error);
+      return false;
+    }
   }
 
+
+  /* =========================================
+     EMAIL FUNCTION - WITHDRAWAL APPROVED
+  ========================================== */
+
+  async function sendWithdrawalApprovedEmail(
+    email,
+    fullName,
+    amount
+  ) {
+    if (!email) return false;
+
+    try {
+      await emailjs.send(
+        EMAIL_CONFIG.withdrawal.serviceId,
+        EMAIL_CONFIG.withdrawal.templateId,
+        {
+          to_email: email,
+          to_name: fullName || "User",
+          user_name: fullName || "User",
+          withdrawal_amount: amount || 0,
+          amount: amount || 0,
+          email: email
+        },
+        EMAIL_CONFIG.withdrawal.publicKey
+      );
+
+      console.log("Withdrawal approved email sent successfully");
+      return true;
+
+    } catch (error) {
+      console.error("Withdrawal Email Error:", error);
+      return false;
+    }
+  }
+
+
+  /* =========================================
+     EMAIL FUNCTION - PAYMENT SUBMITTED
+     USER SIDE PAYMENT SUBMISSION KE LIYE
+  ========================================== */
+
+  async function sendPaymentSubmittedEmail(
+    email,
+    fullName,
+    amount,
+    packageName,
+    transactionId
+  ) {
+    if (!email) return false;
+
+    try {
+      await emailjs.send(
+        EMAIL_CONFIG.paymentSubmitted.serviceId,
+        EMAIL_CONFIG.paymentSubmitted.templateId,
+        {
+          to_email: email,
+          to_name: fullName || "User",
+          user_name: fullName || "User",
+          amount: amount || 0,
+          package_name: packageName || "",
+          transaction_id: transactionId || "",
+          payment_id: transactionId || "",
+          email: email
+        },
+        EMAIL_CONFIG.paymentSubmitted.publicKey
+      );
+
+      console.log("Payment submitted email sent successfully");
+      return true;
+
+    } catch (error) {
+      console.error("Payment Submitted Email Error:", error);
+      return false;
+    }
+  }
+
+
+  /* =========================================
+     SUPABASE CONFIG
+  ========================================== */
+
   const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+  /* =========================================
+     GLOBAL VARIABLES
+  ========================================== */
 
   let allPaymentsData = [];
   let allWithdrawalsData = [];
-  let currentPaymentTab = 'pending';
-  let currentWithdrawalTab = 'pending';
+
+  let currentPaymentTab = "pending";
+  let currentWithdrawalTab = "pending";
+
+
+  /* =========================================
+     SIDEBAR
+  ========================================== */
 
   function toggleSidebar() {
-    const sidebar = document.getElementById('adminSidebar');
-    const overlay = document.getElementById('sidebarOverlay');
-    sidebar.classList.toggle('open');
-    overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
-    if(sidebar.classList.contains('open')) {
+
+    const sidebar =
+      document.getElementById("adminSidebar");
+
+    const overlay =
+      document.getElementById("sidebarOverlay");
+
+    sidebar.classList.toggle("open");
+
+    overlay.style.display =
+      sidebar.classList.contains("open")
+        ? "block"
+        : "none";
+
+    if (sidebar.classList.contains("open")) {
       loadTrashAndHistoryData();
     }
   }
 
+
+  /* =========================================
+     PAGE LOAD
+  ========================================== */
+
   document.addEventListener("DOMContentLoaded", () => {
+
     loadPaymentRequests();
+
     loadWithdrawals();
+
     loadUsers();
+
   });
 
-  // Direct File Upload Function for Global Logo
+
+  /* =========================================
+     GLOBAL ADMIN LOGO UPLOAD
+  ========================================== */
+
   async function uploadAndSaveAdminLogo() {
-    const fileInput = document.getElementById("adminLogoFileInput");
+
+    const fileInput =
+      document.getElementById("adminLogoFileInput");
+
     const file = fileInput.files[0];
-    
+
     if (!file) {
       alert("Pehle koi photo select karein!");
       return;
     }
 
-    const fileName = "global_logo_" + Date.now() + "_" + file.name;
+    try {
 
-    const { data: uploadData, error: uploadError } = await supabaseClient.storage
-      .from('avatars')
-      .upload(fileName, file);
+      const fileName =
+        "global_logo_" +
+        Date.now() +
+        "_" +
+        file.name;
 
-    if (uploadError) {
-      alert("Upload Failed: " + uploadError.message + "\n(Dhyan dein: Supabase storage mein 'avatars' naam ka Public Bucket bana hona chahiye)");
-      return;
-    }
+      const { error: uploadError } =
+        await supabaseClient.storage
+          .from("avatars")
+          .upload(fileName, file);
 
-    const { data: publicUrlData } = supabaseClient.storage
-      .from('avatars')
-      .getPublicUrl(fileName);
+      if (uploadError) {
+        throw uploadError;
+      }
 
-    const imageUrl = publicUrlData.publicUrl;
+      const { data: publicUrlData } =
+        supabaseClient.storage
+          .from("avatars")
+          .getPublicUrl(fileName);
 
-    const { error: dbError } = await supabaseClient
-      .from('global_settings')
-      .update({ setting_value: imageUrl })
-      .eq('setting_key', 'admin_top_logo');
+      const imageUrl =
+        publicUrlData.publicUrl;
 
-    if (dbError) {
-      alert("Database Update Error: " + dbError.message);
-    } else {
-      alert("Photo successfully uploaded & updated for all users! 🎉");
-      document.getElementById("adminLogoFileInput").value = "";
+      const { error: dbError } =
+        await supabaseClient
+          .from("global_settings")
+          .update({
+            setting_value: imageUrl
+          })
+          .eq(
+            "setting_key",
+            "admin_top_logo"
+          );
+
+      if (dbError) {
+        throw dbError;
+      }
+
+      alert(
+        "Photo successfully uploaded & updated for all users! 🎉"
+      );
+
+      fileInput.value = "";
+
+    } catch (error) {
+
+      alert(
+        "Upload Failed: " +
+        error.message
+      );
+
     }
   }
+
+
+  /* =========================================
+     PAYMENT REQUESTS
+  ========================================== */
 
   async function loadPaymentRequests() {
-    const { data } = await supabaseClient.from('payment_requests').select('*').order('created_at', { ascending: false });
-    if (data) {
-      allPaymentsData = data.filter(i => i.is_deleted !== true);
+
+    try {
+
+      const { data, error } =
+        await supabaseClient
+          .from("payment_requests")
+          .select("*")
+          .order(
+            "created_at",
+            { ascending: false }
+          );
+
+      if (error) throw error;
+
+      allPaymentsData =
+        (data || []).filter(
+          item => item.is_deleted !== true
+        );
+
       updateStatsAndRenderPayments();
+
+    } catch (error) {
+
+      console.error(
+        "Payment loading error:",
+        error
+      );
+
     }
   }
 
-  function switchPaymentTab(tab, btn) {
+
+  function switchPaymentTab(
+    tab,
+    btn
+  ) {
+
     currentPaymentTab = tab;
-    btn.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+
+    btn.parentElement
+      .querySelectorAll(".filter-btn")
+      .forEach(button => {
+        button.classList.remove("active");
+      });
+
+    btn.classList.add("active");
+
     updateStatsAndRenderPayments();
+
   }
+
 
   function updateStatsAndRenderPayments() {
-    document.getElementById("statTotal").innerText = allPaymentsData.length;
-    document.getElementById("statApproved").innerText = allPaymentsData.filter(i => (i.status||'').toLowerCase() === 'approved').length;
-    document.getElementById("statRejected").innerText = allPaymentsData.filter(i => (i.status||'').toLowerCase() === 'rejected').length;
 
-    let filtered = allPaymentsData;
-    if (currentPaymentTab !== 'all') {
-      filtered = allPaymentsData.filter(i => (i.status || 'pending').toLowerCase() === currentPaymentTab);
+    document.getElementById(
+      "statTotal"
+    ).innerText =
+      allPaymentsData.length;
+
+    document.getElementById(
+      "statApproved"
+    ).innerText =
+      allPaymentsData.filter(
+        item =>
+          (item.status || "")
+            .toLowerCase() ===
+          "approved"
+      ).length;
+
+    document.getElementById(
+      "statRejected"
+    ).innerText =
+      allPaymentsData.filter(
+        item =>
+          (item.status || "")
+            .toLowerCase() ===
+          "rejected"
+      ).length;
+
+
+    let filtered =
+      allPaymentsData;
+
+
+    if (
+      currentPaymentTab !==
+      "all"
+    ) {
+
+      filtered =
+        allPaymentsData.filter(
+          item =>
+            (
+              item.status ||
+              "pending"
+            ).toLowerCase() ===
+            currentPaymentTab
+        );
+
     }
 
-    const tbody = document.getElementById("paymentTableBody");
+
+    const tbody =
+      document.getElementById(
+        "paymentTableBody"
+      );
+
+
     if (filtered.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No ${currentPaymentTab} package records found.</td></tr>`;
-      return;
-    }
 
-    tbody.innerHTML = "";
-    filtered.forEach(item => {
-      const statusStr = item.status || 'Pending';
-      const isPending = statusStr.toLowerCase() === 'pending';
-      tbody.innerHTML += `
+      tbody.innerHTML = `
         <tr>
-          <td><b>${item.full_name || 'N/A'}</b><br><span style="font-size:11px; color:var(--text-muted);">${item.email || ''}</span></td>
-          <td><b>${item.package_name || 'Package'}</b><br><span style="color:#34d399; font-weight:700;">₹${item.amount || 0}</span></td>
-          <td>UTR: <b style="color:var(--accent);">${item.transaction_id || item.payment_id || 'N/A'}</b></td>
-          <td><span class="badge badge-${statusStr.toLowerCase()}">${statusStr}</span></td>
-          <td>
-            ${isPending ? `
-              <button class="btn btn-approve" onclick="approvePayment('${item.id}', '${item.full_name || ''}', '${item.email || ''}', '${item.package_name || ''}', '${item.referral_id || ''}')">Approve</button>
-              <button class="btn btn-reject" onclick="rejectPayment('${item.id}')">Reject</button>
-            ` : ''}
-            <button class="btn btn-delete" onclick="softDeleteRecord('${item.id}', 'payment_requests')">Delete</button>
+          <td colspan="5"
+          style="
+          text-align:center;
+          color:var(--text-muted);
+          ">
+            No ${currentPaymentTab}
+            package records found.
           </td>
         </tr>
       `;
+
+      return;
+    }
+
+
+    tbody.innerHTML = "";
+
+
+    filtered.forEach(item => {
+
+      const statusStr =
+        item.status ||
+        "Pending";
+
+      const isPending =
+        statusStr
+          .toLowerCase() ===
+        "pending";
+
+
+      tbody.innerHTML += `
+
+        <tr>
+
+          <td>
+            <b>
+              ${item.full_name || "N/A"}
+            </b>
+
+            <br>
+
+            <span
+            style="
+            font-size:11px;
+            color:var(--text-muted);
+            ">
+              ${item.email || ""}
+            </span>
+          </td>
+
+
+          <td>
+
+            <b>
+              ${item.package_name || "Package"}
+            </b>
+
+            <br>
+
+            <span
+            style="
+            color:#34d399;
+            font-weight:700;
+            ">
+              ₹${item.amount || 0}
+            </span>
+
+          </td>
+
+
+          <td>
+
+            UTR:
+
+            <b
+            style="
+            color:var(--accent);
+            ">
+              ${
+                item.transaction_id ||
+                item.payment_id ||
+                "N/A"
+              }
+            </b>
+
+          </td>
+
+
+          <td>
+
+            <span
+            class="
+            badge
+            badge-${statusStr.toLowerCase()}
+            ">
+
+              ${statusStr}
+
+            </span>
+
+          </td>
+
+
+          <td>
+
+            ${
+              isPending
+                ? `
+                <button
+                class="btn btn-approve"
+                onclick="
+                approvePayment(
+                '${item.id}',
+                '${item.full_name || ""}',
+                '${item.email || ""}',
+                '${item.package_name || ""}',
+                '${item.referral_id || ""}'
+                )">
+                  Approve
+                </button>
+
+                <button
+                class="btn btn-reject"
+                onclick="
+                rejectPayment(
+                '${item.id}'
+                )">
+                  Reject
+                </button>
+                `
+                : ""
+            }
+
+
+            <button
+            class="btn btn-delete"
+            onclick="
+            softDeleteRecord(
+            '${item.id}',
+            'payment_requests'
+            )">
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      `;
+
     });
+
   }
 
-  async function approvePayment(id, fullName, email, packageName, refId) {
-    if (!confirm(`Approve package for ${fullName}?`)) return;
+
+  /* =========================================
+     APPROVE PAYMENT
+     NEW USER APPROVAL EMAIL
+  ========================================== */
+
+  async function approvePayment(
+    id,
+    fullName,
+    email,
+    packageName,
+    refId
+  ) {
+
+    if (
+      !confirm(
+        `Approve package for ${fullName}?`
+      )
+    ) {
+      return;
+    }
+
+
     try {
-      // Generates ID in format: SM-smart + 5 Unique Digits (e.g. SM-smart87046)
+
       let randomNumbers = "";
-      for (let i = 0; i < 5; i++) {
-        randomNumbers += Math.floor(Math.random() * 10);
-      }
-      const uniqueRefCode = "SM-smart" + randomNumbers;
 
-      const { error: insErr } = await supabaseClient.from('profiles').insert([{ full_name: fullName, email: email, package_name: packageName, referral_id: uniqueRefCode, referred_by: refId || 'SM-smart87046', balance: 0, is_active: true }]);
-      if (insErr) throw insErr;
-      
-      const sponsorIdToUse = (refId && refId !== 'null' && refId !== 'N/A' && refId !== '') ? refId : 'SM-smart87046';
-      const { data: sponsor } = await supabaseClient.from('profiles').select('id, balance, package_name').eq('referral_id', sponsorIdToUse).single();
+      for (
+        let i = 0;
+        i < 5;
+        i++
+      ) {
+
+        randomNumbers +=
+          Math.floor(
+            Math.random() * 10
+          );
+
+      }
+
+
+      const uniqueRefCode =
+        "SM-smart" +
+        randomNumbers;
+
+
+      const {
+        error: insErr
+      } =
+        await supabaseClient
+          .from("profiles")
+          .insert([
+            {
+              full_name:
+                fullName,
+
+              email:
+                email,
+
+              package_name:
+                packageName,
+
+              referral_id:
+                uniqueRefCode,
+
+              referred_by:
+                refId ||
+                "SM-smart87046",
+
+              balance:
+                0,
+
+              is_active:
+                true
+            }
+          ]);
+
+
+      if (insErr) {
+        throw insErr;
+      }
+
+
+      const sponsorIdToUse =
+        (
+          refId &&
+          refId !== "null" &&
+          refId !== "N/A" &&
+          refId !== ""
+        )
+          ? refId
+          : "SM-smart87046";
+
+
+      const {
+        data: sponsor
+      } =
+        await supabaseClient
+          .from("profiles")
+          .select(
+            "id, balance, package_name"
+          )
+          .eq(
+            "referral_id",
+            sponsorIdToUse
+          )
+          .maybeSingle();
+
+
       if (sponsor) {
-        let comm = 280; 
-        const pkg = (packageName || "").toLowerCase();
-        if (pkg.includes("entry")) comm = 99.70;
-        else if (pkg.includes("growth")) comm = 539.40;
-        else if (pkg.includes("premium")) comm = 1049.30;
-        await supabaseClient.from('profiles').update({ balance: Number(sponsor.balance || 0) + comm }).eq('id', sponsor.id);
+
+        let comm = 280;
+
+        const pkg =
+          (
+            packageName ||
+            ""
+          ).toLowerCase();
+
+
+        if (
+          pkg.includes("entry")
+        ) {
+
+          comm = 99.70;
+
+        }
+
+        else if (
+          pkg.includes("growth")
+        ) {
+
+          comm = 539.40;
+
+        }
+
+        else if (
+          pkg.includes("premium")
+        ) {
+
+          comm = 1049.30;
+
+        }
+
+
+        await supabaseClient
+          .from("profiles")
+          .update({
+            balance:
+              Number(
+                sponsor.balance || 0
+              ) +
+              comm
+          })
+          .eq(
+            "id",
+            sponsor.id
+          );
+
       }
 
-      await supabaseClient.from('payment_requests').update({ status: 'Approved' }).eq('id', id);
 
-      // Trigger EmailJS using Support Gmail Service ID and Template 1
+      const {
+        error: paymentError
+      } =
+        await supabaseClient
+          .from("payment_requests")
+          .update({
+            status:
+              "Approved"
+          })
+          .eq(
+            "id",
+            id
+          );
+
+
+      if (paymentError) {
+        throw paymentError;
+      }
+
+
+      /* SEND NEW USER APPROVAL EMAIL */
+
+      let emailStatus =
+        false;
+
       if (email) {
-        emailjs.send('service_a678nhs', 'template_5iadm34', {
-          to_email: email,
-          to_name: fullName || "User",
-          referral_id: uniqueRefCode
-        }).then(() => {
-          console.log("Approval Welcome Email Sent Successfully from Support Gmail!");
-        }).catch((err) => {
-          console.error("EmailJS Error: ", err);
-        });
+
+        emailStatus =
+          await sendRegistrationApprovalEmail(
+            email,
+            fullName,
+            uniqueRefCode,
+            packageName
+          );
+
       }
 
-      alert("Package Approved, Referral ID (" + uniqueRefCode + ") Generated & Approval Email Sent Successfully! 🎉");
+
+      if (emailStatus) {
+
+        alert(
+          "Package Approved Successfully! 🎉\n\n" +
+          "Referral ID: " +
+          uniqueRefCode +
+          "\n\nApproval Email Sent Successfully!"
+        );
+
+      } else {
+
+        alert(
+          "Package Approved Successfully! 🎉\n\n" +
+          "Referral ID: " +
+          uniqueRefCode +
+          "\n\nEmail could not be sent. Please check EmailJS template variables."
+        );
+
+      }
+
+
       loadPaymentRequests();
+
       loadUsers();
-    } catch (err) { alert("Error: " + err.message); }
+
+
+    } catch (err) {
+
+      console.error(err);
+
+      alert(
+        "Error: " +
+        err.message
+      );
+
+    }
+
   }
+
+
+  /* =========================================
+     REJECT PAYMENT
+  ========================================== */
 
   async function rejectPayment(id) {
-    if (!confirm("Are you sure you want to reject this package request?")) return;
-    try {
-      const { error } = await supabaseClient.from('payment_requests').update({ status: 'Rejected' }).eq('id', id);
-      if (error) throw error;
-      alert("Package request rejected successfully!");
-      loadPaymentRequests();
-    } catch (err) { alert("Error: " + err.message); }
-  }
 
-  async function loadWithdrawals() {
-    const { data } = await supabaseClient.from('withdrawal_requests').select('*').order('created_at', { ascending: false });
-    if (data) {
-      allWithdrawalsData = data.filter(i => i.is_deleted !== true);
-      renderWithdrawals();
-    }
-  }
-
-  function switchWithdrawalTab(tab, btn) {
-    currentWithdrawalTab = tab;
-    btn.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderWithdrawals();
-  }
-
-  async function renderWithdrawals() {
-    let filtered = allWithdrawalsData;
-    if (currentWithdrawalTab !== 'all') {
-      filtered = allWithdrawalsData.filter(i => (i.status || 'pending').toLowerCase() === currentWithdrawalTab);
-    }
-
-    const tbody = document.getElementById("withdrawalTableBody");
-    if (filtered.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No ${currentWithdrawalTab} withdrawal requests found.</td></tr>`;
+    if (
+      !confirm(
+        "Are you sure you want to reject this package request?"
+      )
+    ) {
       return;
     }
 
-    tbody.innerHTML = "";
-    for (let item of filtered) {
-      let userName = item.full_name || item.name || "User";
-      let userEmail = item.email || "";
 
-      if ((!item.upi_id && !item.account_number && !item.bank_account) && item.user_id) {
-        const { data: u } = await supabaseClient.from('profiles').select('*').eq('id', item.user_id).maybeSingle();
-        const profileData = u || await supabaseClient.from('profiles').select('*').eq('user_id', item.user_id).maybeSingle().then(res => res.data);
-        if (profileData) {
-          userName = profileData.full_name || userName;
-          userEmail = profileData.email || userEmail;
-          if(!item.upi_id) item.upi_id = profileData.upi_id;
-          if(!item.account_number) item.account_number = profileData.account_number || profileData.bank_account;
-          if(!item.ifsc_code) item.ifsc_code = profileData.ifsc_code;
-          if(!item.holder_name) item.holder_name = profileData.holder_name || profileData.account_holder;
-        }
+    try {
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("payment_requests")
+          .update({
+            status:
+              "Rejected"
+          })
+          .eq(
+            "id",
+            id
+          );
+
+
+      if (error) {
+        throw error;
       }
 
-      let payoutHtml = `Method: <b>${item.payment_method || item.method || 'UPI / Bank'}</b>`;
-      if (item.upi_id) payoutHtml += `<br>UPI ID: <b>${item.upi_id}</b>`;
-      if (item.account_number || item.bank_account) payoutHtml += `<br>A/C: <b>${item.account_number || item.bank_account}</b> | IFSC: <b>${item.ifsc_code || 'N/A'}</b>`;
-      if (item.holder_name) payoutHtml += `<br>Holder Name: <b>${item.holder_name}</b>`;
-      if (item.details) payoutHtml += `<br>Info: ${item.details}`;
 
-      const statusVal = (item.status || 'pending').toLowerCase();
-      const isPending = statusVal === 'pending';
+      alert(
+        "Package request rejected successfully!"
+      );
 
-      tbody.innerHTML += `
+      loadPaymentRequests();
+
+
+    } catch (err) {
+
+      alert(
+        "Error: " +
+        err.message
+      );
+
+    }
+
+  }
+
+
+  /* =========================================
+     LOAD WITHDRAWALS
+  ========================================== */
+
+  async function loadWithdrawals() {
+
+    try {
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("withdrawal_requests")
+          .select("*")
+          .order(
+            "created_at",
+            {
+              ascending: false
+            }
+          );
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      allWithdrawalsData =
+        (data || [])
+          .filter(
+            item =>
+              item.is_deleted !== true
+          );
+
+
+      renderWithdrawals();
+
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+    }
+
+  }
+
+
+  function switchWithdrawalTab(
+    tab,
+    btn
+  ) {
+
+    currentWithdrawalTab =
+      tab;
+
+
+    btn.parentElement
+      .querySelectorAll(
+        ".filter-btn"
+      )
+      .forEach(button => {
+
+        button.classList.remove(
+          "active"
+        );
+
+      });
+
+
+    btn.classList.add(
+      "active"
+    );
+
+
+    renderWithdrawals();
+
+  }
+
+
+  /* =========================================
+     RENDER WITHDRAWALS
+  ========================================== */
+
+  async function renderWithdrawals() {
+
+    let filtered =
+      allWithdrawalsData;
+
+
+    if (
+      currentWithdrawalTab !==
+      "all"
+    ) {
+
+      filtered =
+        allWithdrawalsData
+          .filter(
+            item =>
+              (
+                item.status ||
+                "pending"
+              ).toLowerCase() ===
+              currentWithdrawalTab
+          );
+
+    }
+
+
+    const tbody =
+      document.getElementById(
+        "withdrawalTableBody"
+      );
+
+
+    if (
+      filtered.length === 0
+    ) {
+
+      tbody.innerHTML = `
         <tr>
-          <td><b>${userName}</b><br><span style="font-size:11px; color:var(--text-muted);">${userEmail}</span></td>
-          <td>
-            <span style="color:#34d399; font-weight:700; font-size:14px;">₹${item.amount}</span>
-            <div class="payout-box">${payoutHtml}</div>
-          </td>
-          <td><span class="badge badge-${statusVal}">${item.status || 'Pending'}</span></td>
-          <td>
-            ${isPending ? `
-              <button class="btn btn-approve" onclick="updateWithdrawal('${item.id}', '${item.user_id || ''}', ${item.amount}, 'Approved', '${userEmail}', '${userName}')">Approve</button>
-              <button class="btn btn-reject" onclick="updateWithdrawal('${item.id}', '${item.user_id || ''}', ${item.amount}, 'Rejected', '${userEmail}', '${userName}')">Reject</button>
-            ` : ''}
-            <button class="btn btn-delete" onclick="softDeleteRecord('${item.id}', 'withdrawal_requests')">Delete</button>
+          <td
+          colspan="4"
+          style="
+          text-align:center;
+          color:var(--text-muted);
+          ">
+            No ${currentWithdrawalTab}
+            withdrawal requests found.
           </td>
         </tr>
       `;
+
+      return;
+
     }
-  }
 
-  async function updateWithdrawal(id, userId, amount, status, email, name) {
-    if (!confirm(`Are you sure to ${status} this withdrawal?`)) return;
-    try {
-      const { error: updErr } = await supabaseClient.from('withdrawal_requests').update({ status: status }).eq('id', id);
-      if (updErr) throw updErr;
 
-      if (status === 'Rejected' && userId) {
-        const { data: prof } = await supabaseClient.from('profiles').select('id, balance').eq('id', userId).maybeSingle();
-        const targetProf = prof || await supabaseClient.from('profiles').select('id, balance').eq('user_id', userId).maybeSingle().then(res => res.data);
-        if (targetProf) {
-          await supabaseClient.from('profiles').update({ balance: Number(targetProf.balance || 0) + Number(amount) }).eq('id', targetProf.id);
+    tbody.innerHTML = "";
+
+
+    for (
+      let item of filtered
+    ) {
+
+      let userName =
+        item.full_name ||
+        item.name ||
+        "User";
+
+      let userEmail =
+        item.email ||
+        "";
+
+
+      let payoutHtml =
+        `
+        Method:
+        <b>
+        ${
+          item.payment_method ||
+          item.method ||
+          "UPI / Bank"
         }
-      } else if (status === 'Approved') {
-        if (email) {
-          emailjs.send('service_a678nhs', 'template_5iadm34', {
-            to_email: email,
-            to_name: name || "User"
-          }).then(() => {
-            console.log("Withdrawal Email Sent Successfully from Support Gmail!");
-          }).catch((err) => {
-            console.error("EmailJS Error: ", err);
-          });
-        }
+        </b>
+        `;
+
+
+      if (item.upi_id) {
+
+        payoutHtml +=
+          `
+          <br>
+          UPI ID:
+          <b>
+          ${item.upi_id}
+          </b>
+          `;
+
       }
 
-      alert(`Withdrawal ${status} successfully!`);
-      loadWithdrawals();
-    } catch (err) { alert("Error: " + err.message); }
+
+      if (
+        item.account_number ||
+        item.bank_account
+      ) {
+
+        payoutHtml +=
+          `
+          <br>
+          A/C:
+          <b>
+          ${
+            item.account_number ||
+            item.bank_account
+          }
+          </b>
+
+          |
+
+          IFSC:
+          <b>
+          ${
+            item.ifsc_code ||
+            "N/A"
+          }
+          </b>
+          `;
+
+      }
+
+
+      if (
+        item.holder_name
+      ) {
+
+        payoutHtml +=
+          `
+          <br>
+          Holder Name:
+          <b>
+          ${item.holder_name}
+          </b>
+          `;
+
+      }
+
+
+      const statusVal =
+        (
+          item.status ||
+          "pending"
+        ).toLowerCase();
+
+
+      const isPending =
+        statusVal ===
+        "pending";
+
+
+      tbody.innerHTML += `
+
+        <tr>
+
+          <td>
+
+            <b>
+            ${userName}
+            </b>
+
+            <br>
+
+            <span
+            style="
+            font-size:11px;
+            color:var(--text-muted);
+            ">
+              ${userEmail}
+            </span>
+
+          </td>
+
+
+          <td>
+
+            <span
+            style="
+            color:#34d399;
+            font-weight:700;
+            font-size:14px;
+            ">
+              ₹${item.amount || 0}
+            </span>
+
+            <div
+            class="payout-box">
+
+              ${payoutHtml}
+
+            </div>
+
+          </td>
+
+
+          <td>
+
+            <span
+            class="
+            badge
+            badge-${statusVal}
+            ">
+
+              ${
+                item.status ||
+                "Pending"
+              }
+
+            </span>
+
+          </td>
+
+
+          <td>
+
+            ${
+              isPending
+                ? `
+                <button
+                class="btn btn-approve"
+                onclick="
+                updateWithdrawal(
+                '${item.id}',
+                '${item.user_id || ""}',
+                ${Number(item.amount || 0)},
+                'Approved',
+                '${userEmail}',
+                '${userName}'
+                )">
+                  Approve
+                </button>
+
+                <button
+                class="btn btn-reject"
+                onclick="
+                updateWithdrawal(
+                '${item.id}',
+                '${item.user_id || ""}',
+                ${Number(item.amount || 0)},
+                'Rejected',
+                '${userEmail}',
+                '${userName}'
+                )">
+                  Reject
+                </button>
+                `
+                : ""
+            }
+
+
+            <button
+            class="btn btn-delete"
+            onclick="
+            softDeleteRecord(
+            '${item.id}',
+            'withdrawal_requests'
+            )">
+
+              Delete
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    }
+
   }
 
-  async function softDeleteRecord(id, table) {
-    if (!confirm("Move this record to trash?")) return;
-    const { error } = await supabaseClient.from(table).update({ is_deleted: true }).eq('id', id);
-    if (!error) {
-      alert("Moved to trash successfully!");
-      if (table === 'payment_requests') loadPaymentRequests();
-      else loadWithdrawals();
-    } else { alert("Error: " + error.message); }
+
+  /* =========================================
+     UPDATE WITHDRAWAL
+     WITHDRAWAL APPROVED EMAIL
+  ========================================== */
+
+  async function updateWithdrawal(
+    id,
+    userId,
+    amount,
+    status,
+    email,
+    name
+  ) {
+
+    if (
+      !confirm(
+        `Are you sure to ${status} this withdrawal?`
+      )
+    ) {
+      return;
+    }
+
+
+    try {
+
+      const {
+        error: updErr
+      } =
+        await supabaseClient
+          .from("withdrawal_requests")
+          .update({
+            status:
+              status
+          })
+          .eq(
+            "id",
+            id
+          );
+
+
+      if (updErr) {
+        throw updErr;
+      }
+
+
+      /* REFUND IF REJECTED */
+
+      if (
+        status === "Rejected" &&
+        userId
+      ) {
+
+        const {
+          data: prof
+        } =
+          await supabaseClient
+            .from("profiles")
+            .select(
+              "id, balance"
+            )
+            .eq(
+              "id",
+              userId
+            )
+            .maybeSingle();
+
+
+        if (prof) {
+
+          await supabaseClient
+            .from("profiles")
+            .update({
+
+              balance:
+                Number(
+                  prof.balance ||
+                  0
+                ) +
+                Number(
+                  amount
+                )
+
+            })
+            .eq(
+              "id",
+              prof.id
+            );
+
+        }
+
+      }
+
+
+      /* SEND WITHDRAWAL EMAIL */
+
+      if (
+        status === "Approved" &&
+        email
+      ) {
+
+        const emailSent =
+          await sendWithdrawalApprovedEmail(
+            email,
+            name,
+            amount
+          );
+
+
+        if (emailSent) {
+
+          alert(
+            "Withdrawal Approved Successfully! 🎉\n\nApproval Email Sent Successfully!"
+          );
+
+        } else {
+
+          alert(
+            "Withdrawal Approved Successfully! 🎉\n\nBut email could not be sent."
+          );
+
+        }
+
+      } else {
+
+        alert(
+          `Withdrawal ${status} successfully!`
+        );
+
+      }
+
+
+      loadWithdrawals();
+
+
+    } catch (err) {
+
+      console.error(err);
+
+      alert(
+        "Error: " +
+        err.message
+      );
+
+    }
+
   }
+
+
+  /* =========================================
+     SOFT DELETE RECORD
+  ========================================== */
+
+  async function softDeleteRecord(
+    id,
+    table
+  ) {
+
+    if (
+      !confirm(
+        "Move this record to trash?"
+      )
+    ) {
+      return;
+    }
+
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(table)
+        .update({
+          is_deleted:
+            true
+        })
+        .eq(
+          "id",
+          id
+        );
+
+
+    if (!error) {
+
+      alert(
+        "Moved to trash successfully!"
+      );
+
+
+      if (
+        table ===
+        "payment_requests"
+      ) {
+
+        loadPaymentRequests();
+
+      } else {
+
+        loadWithdrawals();
+
+      }
+
+    } else {
+
+      alert(
+        "Error: " +
+        error.message
+      );
+
+    }
+
+  }
+
+
+  /* =========================================
+     LOAD USERS
+  ========================================== */
 
   async function loadUsers() {
-    const { data } = await supabaseClient.from('profiles').select('*');
-    const tbody = document.getElementById("usersTableBody");
-    if (!data || data.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No users found.</td></tr>`; return; }
-    
-    const activeUsers = data.filter(u => u.is_deleted !== true);
-    tbody.innerHTML = "";
-    activeUsers.forEach(user => {
-      const active = user.is_active !== false;
-      const recordId = user.id || user.user_id;
-      const isMaster = user.referral_id === 'SM-smart87046' || user.email === 'Swrangswargiary48@gmail.com';
-      tbody.innerHTML += `
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("profiles")
+        .select("*");
+
+
+    const tbody =
+      document.getElementById(
+        "usersTableBody"
+      );
+
+
+    if (
+      error ||
+      !data ||
+      data.length === 0
+    ) {
+
+      tbody.innerHTML = `
         <tr>
-          <td><b>${user.full_name || 'User'}</b> ${isMaster ? '👑' : ''}<br><span style="font-size:11px; color:var(--text-muted);">${user.email || ''}</span></td>
-          <td style="color:var(--accent); font-weight:600;">${user.referral_id || 'N/A'}</td>
-          <td>${user.package_name || 'Free'}<br><b style="color:#34d399;">₹${user.balance || 0}</b></td>
-          <td><span class="badge" style="background:${active ? 'rgba(16,185,129,0.15)' : 'rgba(244,63,94,0.15)'}; color:${active ? '#34d399' : '#fb7185'}; border: 1px solid ${active ? 'rgba(16,185,129,0.35)' : 'rgba(244,63,94,0.35)'};">${active ? 'Active' : 'Blocked'}</span></td>
-          <td>
-            ${!isMaster ? `<button class="btn ${active ? 'btn-reject' : 'btn-approve'}" onclick="toggleUser('${recordId}', ${!active})">${active ? 'Block' : 'Unblock'}</button>` : '<span style="color:#34d399; font-size:11px; font-weight:700;">Master Admin</span>'}
-            ${!isMaster ? `<button class="btn btn-delete" onclick="softDeleteUser('${recordId}')">Delete</button>` : ''}
+          <td
+          colspan="5"
+          style="
+          text-align:center;
+          ">
+            No users found.
           </td>
         </tr>
       `;
-    });
+
+      return;
+    }
+
+
+    const activeUsers =
+      data.filter(
+        user =>
+          user.is_deleted !== true
+      );
+
+
+    tbody.innerHTML = "";
+
+
+    activeUsers.forEach(
+      user => {
+
+        const active =
+          user.is_active !== false;
+
+        const recordId =
+          user.id ||
+          user.user_id;
+
+
+        const isMaster =
+          user.referral_id ===
+          "SM-smart87046";
+
+
+        tbody.innerHTML += `
+
+          <tr>
+
+            <td>
+
+              <b>
+                ${
+                  user.full_name ||
+                  "User"
+                }
+              </b>
+
+              ${
+                isMaster
+                  ? " 👑"
+                  : ""
+              }
+
+              <br>
+
+              <span
+              style="
+              font-size:11px;
+              color:var(--text-muted);
+              ">
+
+                ${
+                  user.email ||
+                  ""
+                }
+
+              </span>
+
+            </td>
+
+
+            <td
+            style="
+            color:var(--accent);
+            font-weight:600;
+            ">
+
+              ${
+                user.referral_id ||
+                "N/A"
+              }
+
+            </td>
+
+
+            <td>
+
+              ${
+                user.package_name ||
+                "Free"
+              }
+
+              <br>
+
+              <b
+              style="
+              color:#34d399;
+              ">
+
+                ₹${
+                  user.balance ||
+                  0
+                }
+
+              </b>
+
+            </td>
+
+
+            <td>
+
+              <span
+              class="badge"
+              style="
+              background:${
+                active
+                  ? "rgba(16,185,129,0.15)"
+                  : "rgba(244,63,94,0.15)"
+              };
+
+              color:${
+                active
+                  ? "#34d399"
+                  : "#fb7185"
+              };
+              ">
+
+                ${
+                  active
+                    ? "Active"
+                    : "Blocked"
+                }
+
+              </span>
+
+            </td>
+
+
+            <td>
+
+              ${
+                !isMaster
+                  ? `
+                  <button
+                  class="
+                  btn
+                  ${
+                    active
+                      ? "btn-reject"
+                      : "btn-approve"
+                  }
+                  "
+                  onclick="
+                  toggleUser(
+                  '${recordId}',
+                  ${!active}
+                  )">
+
+                    ${
+                      active
+                        ? "Block"
+                        : "Unblock"
+                    }
+
+                  </button>
+
+                  <button
+                  class="btn btn-delete"
+                  onclick="
+                  softDeleteUser(
+                  '${recordId}'
+                  )">
+
+                    Delete
+
+                  </button>
+                  `
+                  : `
+                  <span
+                  style="
+                  color:#34d399;
+                  font-size:11px;
+                  font-weight:700;
+                  ">
+                    Master Admin
+                  </span>
+                  `
+              }
+
+            </td>
+
+          </tr>
+
+        `;
+
+      }
+    );
+
   }
 
-  async function toggleUser(id, status) {
-    await supabaseClient.from('profiles').update({ is_active: status }).eq('id', id);
+
+  /* =========================================
+     BLOCK / UNBLOCK USER
+  ========================================== */
+
+  async function toggleUser(
+    id,
+    status
+  ) {
+
+    await supabaseClient
+      .from("profiles")
+      .update({
+        is_active:
+          status
+      })
+      .eq(
+        "id",
+        id
+      );
+
+
     loadUsers();
+
   }
+
+
+  /* =========================================
+     DELETE USER
+  ========================================== */
 
   async function softDeleteUser(id) {
-    if (!confirm("⚠️ Are you sure you want to delete this user account? (Can be restored from Trash menu)")) return;
-    const { error } = await supabaseClient.from('profiles').update({ is_deleted: true }).eq('id', id);
-    if (!error) {
-      alert("User account moved to trash successfully!");
-      loadUsers();
-    } else {
-      const { error: err2 } = await supabaseClient.from('profiles').update({ is_deleted: true }).eq('user_id', id);
-      if (!err2) {
-        alert("User account moved to trash successfully!");
-        loadUsers();
-      } else {
-        alert("Error: " + (error.message || err2.message));
-      }
+
+    if (
+      !confirm(
+        "⚠️ Are you sure you want to delete this user account?"
+      )
+    ) {
+      return;
     }
+
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("profiles")
+        .update({
+          is_deleted:
+            true
+        })
+        .eq(
+          "id",
+          id
+        );
+
+
+    if (!error) {
+
+      alert(
+        "User account moved to trash successfully!"
+      );
+
+      loadUsers();
+
+    } else {
+
+      alert(
+        "Error: " +
+        error.message
+      );
+
+    }
+
   }
+
+
+  /* =========================================
+     TRASH & HISTORY
+  ========================================== */
 
   async function loadTrashAndHistoryData() {
-    // 1. Approved / Processed Payment History
-    const { data: historyPayments } = await supabaseClient.from('payment_requests').select('*').eq('status', 'Approved').order('created_at', { ascending: false });
-    const hContainer = document.getElementById('approvedHistoryList');
-    if (!historyPayments || historyPayments.length === 0) {
-      hContainer.innerHTML = `<span style="color:var(--text-muted);">No approved history yet.</span>`;
+
+    const {
+      data: historyPayments
+    } =
+      await supabaseClient
+        .from("payment_requests")
+        .select("*")
+        .eq(
+          "status",
+          "Approved"
+        )
+        .order(
+          "created_at",
+          {
+            ascending:
+              false
+          }
+        );
+
+
+    const hContainer =
+      document.getElementById(
+        "approvedHistoryList"
+      );
+
+
+    if (
+      !historyPayments ||
+      historyPayments.length === 0
+    ) {
+
+      hContainer.innerHTML =
+        "No approved history yet.";
+
     } else {
-      hContainer.innerHTML = historyPayments.map(p => `
-        <div style="background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px; margin-bottom:6px;">
-          <div><b>${p.full_name || 'User'}</b> - <span style="color:#34d399;">₹${p.amount || 0}</span></div>
-          <div style="font-size:10px; color:var(--text-muted);">Pkg: ${p.package_name} | UTR: ${p.transaction_id || 'N/A'}</div>
-        </div>
-      `).join('');
+
+      hContainer.innerHTML =
+        historyPayments
+          .map(
+            payment => `
+            <div
+            style="
+            background:rgba(255,255,255,0.03);
+            padding:8px 10px;
+            border-radius:8px;
+            margin-bottom:6px;
+            ">
+
+              <b>
+                ${
+                  payment.full_name ||
+                  "User"
+                }
+              </b>
+
+              -
+
+              <span
+              style="
+              color:#34d399;
+              ">
+
+                ₹${
+                  payment.amount ||
+                  0
+                }
+
+              </span>
+
+            </div>
+            `
+          )
+          .join("");
+
     }
 
-    // 2. Deleted Users Trash
-    const { data: users } = await supabaseClient.from('profiles').select('*').eq('is_deleted', true);
-    const uContainer = document.getElementById('deletedUsersList');
-    if (!users || users.length === 0) {
-      uContainer.innerHTML = `<span style="color:var(--text-muted);">No deleted users.</span>`;
+
+    /* DELETED USERS */
+
+    const {
+      data: users
+    } =
+      await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq(
+          "is_deleted",
+          true
+        );
+
+
+    const uContainer =
+      document.getElementById(
+        "deletedUsersList"
+      );
+
+
+    if (
+      !users ||
+      users.length === 0
+    ) {
+
+      uContainer.innerHTML =
+        "No deleted users.";
+
     } else {
-      uContainer.innerHTML = users.map(u => `
-        <div style="background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
-          <div><b>${u.full_name || 'User'}</b><br><span style="font-size:10px;">${u.email || ''}</span></div>
-          <button class="btn btn-restore" onclick="restoreRecord('${u.id || u.user_id}', 'profiles')">Restore</button>
-        </div>
-      `).join('');
+
+      uContainer.innerHTML =
+        users
+          .map(
+            user => `
+            <div
+            style="
+            background:rgba(255,255,255,0.03);
+            padding:8px;
+            border-radius:8px;
+            margin-bottom:6px;
+            ">
+
+              <b>
+                ${
+                  user.full_name ||
+                  "User"
+                }
+              </b>
+
+              <button
+              class="btn btn-restore"
+              onclick="
+              restoreRecord(
+              '${user.id}',
+              'profiles'
+              )">
+
+                Restore
+
+              </button>
+
+            </div>
+            `
+          )
+          .join("");
+
     }
 
-    // 3. Deleted Payments Trash
-    const { data: payments } = await supabaseClient.from('payment_requests').select('*').eq('is_deleted', true);
-    const pContainer = document.getElementById('deletedPaymentsList');
-    if (!payments || payments.length === 0) {
-      pContainer.innerHTML = `<span style="color:var(--text-muted);">No deleted payments.</span>`;
-    } else {
-      pContainer.innerHTML = payments.map(p => `
-        <div style="background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
-          <div><b>${p.full_name || 'Payment'}</b> (₹${p.amount || 0})</div>
-          <button class="btn btn-restore" onclick="restoreRecord('${p.id}', 'payment_requests')">Restore</button>
-        </div>
-      `).join('');
-    }
-
-    // 4. Deleted Withdrawals Trash
-    const { data: wData } = await supabaseClient.from('withdrawal_requests').select('*').eq('is_deleted', true);
-    const wContainer = document.getElementById('deletedWithdrawalsList');
-    if (!wData || wData.length === 0) {
-      wContainer.innerHTML = `<span style="color:var(--text-muted);">No deleted withdrawals.</span>`;
-    } else {
-      wContainer.innerHTML = wData.map(w => `
-        <div style="background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
-          <div><b>${w.full_name || 'Withdrawal'}</b> (₹${w.amount || 0})</div>
-          <button class="btn btn-restore" onclick="restoreRecord('${w.id}', 'withdrawal_requests')">Restore</button>
-        </div>
-      `).join('');
-    }
   }
 
-  async function restoreRecord(id, table) {
-    if (!confirm("Are you sure you want to restore this item?")) return;
-    const { error } = await supabaseClient.from(table).update({ is_deleted: false }).eq('id', id);
+
+  /* =========================================
+     RESTORE RECORD
+  ========================================== */
+
+  async function restoreRecord(
+    id,
+    table
+  ) {
+
+    if (
+      !confirm(
+        "Are you sure you want to restore this item?"
+      )
+    ) {
+      return;
+    }
+
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from(table)
+        .update({
+          is_deleted:
+            false
+        })
+        .eq(
+          "id",
+          id
+        );
+
+
     if (!error) {
-      alert("Restored successfully!");
+
+      alert(
+        "Restored successfully!"
+      );
+
       loadUsers();
+
       loadPaymentRequests();
+
       loadWithdrawals();
+
       loadTrashAndHistoryData();
+
     } else {
-      if (table === 'profiles') {
-        await supabaseClient.from('profiles').update({ is_deleted: false }).eq('user_id', id);
-        alert("Restored successfully!");
-        loadUsers();
-        loadTrashAndHistoryData();
-      } else {
-        alert("Error restoring: " + error.message);
-      }
+
+      alert(
+        "Error restoring: " +
+        error.message
+      );
+
     }
+
   }
+
 </script>
-</body>
-</html>
