@@ -123,7 +123,7 @@
     <div class="stats-box">
       <h4>Master Admin</h4>
       <div class="num" style="font-size: 14px; color: #34d399;">Santiram Swargiary</div>
-      <div style="font-size: 11px; color: var(--text-muted);">SM-3D99B9</div>
+      <div style="font-size: 11px; color: var(--text-muted);">SM-smart87046</div>
     </div>
     <div class="stats-box">
       <h4>Total Package Requests</h4>
@@ -159,7 +159,7 @@
         <div class="avatar-box">SS</div>
         <div class="profile-info">
           <h3>Santiram Swargiary <span class="admin-badge">MASTER ADMIN</span></h3>
-          <div class="ref-badge-box">ID: SM-3D99B9</div>
+          <div class="ref-badge-box">ID: SM-smart87046</div>
         </div>
       </div>
       <div style="font-size: 12px; color: var(--text-muted); text-align: right;">
@@ -393,11 +393,17 @@
   async function approvePayment(id, fullName, email, packageName, refId) {
     if (!confirm(`Approve package for ${fullName}?`)) return;
     try {
-      const uniqueRefCode = "SM-" + Math.floor(1000 + Math.random() * 9000);
-      const { error: insErr } = await supabaseClient.from('profiles').insert([{ full_name: fullName, email: email, package_name: packageName, referral_id: uniqueRefCode, referred_by: refId || 'SM-3D99B9', balance: 0, is_active: true }]);
+      // Generates ID in format: SM-smart + 5 Unique Digits (e.g. SM-smart87046)
+      let randomNumbers = "";
+      for (let i = 0; i < 5; i++) {
+        randomNumbers += Math.floor(Math.random() * 10);
+      }
+      const uniqueRefCode = "SM-smart" + randomNumbers;
+
+      const { error: insErr } = await supabaseClient.from('profiles').insert([{ full_name: fullName, email: email, package_name: packageName, referral_id: uniqueRefCode, referred_by: refId || 'SM-smart87046', balance: 0, is_active: true }]);
       if (insErr) throw insErr;
       
-      const sponsorIdToUse = (refId && refId !== 'null' && refId !== 'N/A' && refId !== '') ? refId : 'SM-3D99B9';
+      const sponsorIdToUse = (refId && refId !== 'null' && refId !== 'N/A' && refId !== '') ? refId : 'SM-smart87046';
       const { data: sponsor } = await supabaseClient.from('profiles').select('id, balance, package_name').eq('referral_id', sponsorIdToUse).single();
       if (sponsor) {
         let comm = 280; 
@@ -425,7 +431,7 @@
         });
       }
 
-      alert("Package Approved, Referral ID Generated & Approval Email Sent Successfully! 🎉");
+      alert("Package Approved, Referral ID (" + uniqueRefCode + ") Generated & Approval Email Sent Successfully! 🎉");
       loadPaymentRequests();
       loadUsers();
     } catch (err) { alert("Error: " + err.message); }
@@ -528,7 +534,7 @@
           await supabaseClient.from('profiles').update({ balance: Number(targetProf.balance || 0) + Number(amount) }).eq('id', targetProf.id);
         }
       } else if (status === 'Approved') {
-        let userReferralId = "SM-XXXX";
+        let userReferralId = "SM-smartXXXXX";
         if (userId) {
           const { data: pData } = await supabaseClient.from('profiles').select('referral_id').eq('id', userId).maybeSingle();
           if (pData && pData.referral_id) userReferralId = pData.referral_id;
@@ -576,7 +582,7 @@
     activeUsers.forEach(user => {
       const active = user.is_active !== false;
       const recordId = user.id || user.user_id;
-      const isMaster = user.referral_id === 'SM-3D99B9' || user.email === 'Swrangswargiary48@gmail.com';
+      const isMaster = user.referral_id === 'SM-smart87046' || user.email === 'Swrangswargiary48@gmail.com';
       tbody.innerHTML += `
         <tr>
           <td><b>${user.full_name || 'User'}</b> ${isMaster ? '👑' : ''}<br><span style="font-size:11px; color:var(--text-muted);">${user.email || ''}</span></td>
