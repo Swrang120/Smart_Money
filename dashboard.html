@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 
 <title>Smart Money - Dashboard</title>
 
@@ -22,15 +20,28 @@
   font-family:'Plus Jakarta Sans',sans-serif;
 }
 
+html{
+  width:100%;
+  min-height:100%;
+}
+
 body{
   margin:0;
+  padding:0;
+  width:100%;
+  min-width:0;
+  min-height:100vh;
+  overflow-x:hidden;
   background:#eef2f7;
   color:#1e293b;
 }
 
-button,
-input{
+button,input{
   font-family:inherit;
+}
+
+button{
+  -webkit-tap-highlight-color:transparent;
 }
 
 button:disabled{
@@ -42,15 +53,16 @@ button:disabled{
   width:100%;
   max-width:850px;
   min-height:100vh;
-  margin:auto;
+  margin:0 auto;
   background:#f1f5f9;
   box-shadow:0 0 40px rgba(0,0,0,.08);
 }
 
-/* ================= NAVBAR ================= */
+/* NAVBAR */
 
 .navbar{
   height:68px;
+  width:100%;
   background:#fff;
   display:flex;
   align-items:center;
@@ -67,6 +79,7 @@ button:disabled{
   align-items:center;
   gap:10px;
   text-decoration:none;
+  min-width:0;
 }
 
 .brand-logo img{
@@ -75,11 +88,13 @@ button:disabled{
   border-radius:50%;
   object-fit:cover;
   border:2px solid #7c3aed;
+  flex-shrink:0;
 }
 
 .brand-logo span{
   font-size:20px;
   font-weight:800;
+  white-space:nowrap;
   background:linear-gradient(135deg,#7c3aed,#db2777,#f59e0b);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
@@ -119,7 +134,7 @@ button:disabled{
   cursor:pointer;
 }
 
-/* ================= SIDEBAR ================= */
+/* SIDEBAR */
 
 .sidebar-overlay{
   position:fixed;
@@ -142,7 +157,7 @@ button:disabled{
   height:100%;
   background:#0f172a;
   z-index:9999;
-  transition:.3s;
+  transition:.3s ease;
   overflow-y:auto;
 }
 
@@ -181,6 +196,7 @@ button:disabled{
   border-radius:50%;
   object-fit:cover;
   border:2px solid #a855f7;
+  flex-shrink:0;
 }
 
 .sidebar-profile-info{
@@ -231,9 +247,10 @@ button:disabled{
   background:rgba(124,58,237,.3);
 }
 
-/* ================= DASHBOARD ================= */
+/* DASHBOARD */
 
 .dash-container{
+  width:100%;
   padding:25px 18px 40px;
 }
 
@@ -308,6 +325,7 @@ button:disabled{
   border-radius:18px;
   padding:20px;
   margin-bottom:18px;
+  overflow:hidden;
 }
 
 .affiliate-id-box{
@@ -321,10 +339,16 @@ button:disabled{
   padding:10px 14px;
 }
 
+.affiliate-id-box span{
+  min-width:0;
+  flex:1;
+}
+
 .copy-id-btn,
 .share-id-btn{
   width:34px;
   height:34px;
+  min-width:34px;
   border:none;
   border-radius:8px;
   color:#fff;
@@ -387,6 +411,7 @@ button:disabled{
   display:flex;
   gap:6px;
   overflow-x:auto;
+  padding-bottom:3px;
   margin-bottom:15px;
 }
 
@@ -417,8 +442,13 @@ button:disabled{
   gap:15px;
 }
 
+.ref-user-info{
+  min-width:0;
+}
+
 .ref-user-info h4{
   margin:0 0 4px;
+  word-break:break-word;
 }
 
 .ref-user-info span{
@@ -430,6 +460,7 @@ button:disabled{
   font-size:11px;
   text-align:right;
   color:#64748b;
+  white-space:nowrap;
 }
 
 .app-footer-credit{
@@ -439,7 +470,7 @@ button:disabled{
   padding-top:10px;
 }
 
-/* ================= MODALS ================= */
+/* MODALS */
 
 .modal-overlay{
   display:none;
@@ -469,6 +500,7 @@ button:disabled{
   border:1px solid #cbd5e1;
   margin:6px 0 12px;
   outline:none;
+  font-size:14px;
 }
 
 .input-field:focus{
@@ -539,6 +571,10 @@ button:disabled{
   gap:10px;
 }
 
+.history-row-1{
+  margin-bottom:8px;
+}
+
 .history-amount{
   font-size:18px;
   font-weight:800;
@@ -587,7 +623,32 @@ button:disabled{
   transform:translateX(-50%) translateY(0);
 }
 
+.error-box{
+  background:#fef2f2;
+  border:1px solid #fecaca;
+  color:#dc2626;
+  padding:14px;
+  border-radius:12px;
+  font-size:13px;
+  line-height:1.5;
+}
+
+@media(max-width:850px){
+
+  .app-wrapper{
+    width:100%;
+    max-width:none;
+    margin:0;
+    box-shadow:none;
+  }
+
+}
+
 @media(max-width:600px){
+
+  .navbar{
+    padding:0 12px;
+  }
 
   .dash-container{
     padding:18px 12px 30px;
@@ -595,6 +656,7 @@ button:disabled{
 
   .profile-card{
     padding:20px;
+    gap:14px;
   }
 
   .user-info h2{
@@ -611,51 +673,41 @@ button:disabled{
     min-width:80px;
   }
 
+  .brand-logo span{
+    font-size:16px;
+  }
+
+  .v-card{
+    padding:18px;
+  }
+
+  .v-card h2{
+    font-size:24px;
+  }
+
 }
 
 </style>
-
 </head>
 
 <body>
 
 <div class="app-wrapper">
 
-<!-- ================= SIDEBAR ================= -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-<div
-class="sidebar-overlay"
-id="sidebarOverlay"
-onclick="toggleSidebar()">
-</div>
-
-<aside
-class="sidebar"
-id="sidebar">
+<aside class="sidebar" id="sidebar">
 
 <div class="sidebar-header">
 
-<a
-href="dashboard.html"
-class="brand-logo">
-
-<img
-id="sidebarLogo"
-src="1000819130.jpg"
-alt="Logo">
-
+<a href="dashboard.html" class="brand-logo">
+<img id="sidebarLogo" src="1000819130.jpg" alt="Logo">
 <span>Smart Money</span>
-
 </a>
 
-<button
-class="sidebar-close"
-onclick="toggleSidebar()">
-✕
-</button>
+<button class="sidebar-close" onclick="toggleSidebar()">✕</button>
 
 </div>
-
 
 <div class="sidebar-profile">
 
@@ -667,29 +719,22 @@ alt="Profile">
 
 <div class="sidebar-profile-info">
 
-<div
-id="sidebarUserName"
-class="sidebar-profile-name">
+<div id="sidebarUserName" class="sidebar-profile-name">
 Loading...
 </div>
 
-<div
-id="sidebarUserEmail"
-class="sidebar-profile-email">
+<div id="sidebarUserEmail" class="sidebar-profile-email">
 Loading...
 </div>
 
 </div>
 
 </div>
-
 
 <ul class="sidebar-menu">
 
 <li>
-<a href="index.html">
-🌐 Home / Landing Page
-</a>
+<a href="index.html">🌐 Home / Landing Page</a>
 </li>
 
 <li>
@@ -699,9 +744,7 @@ Loading...
 </li>
 
 <li>
-<button
-onclick="openWithdrawModal()"
-style="color:#10b981;">
+<button onclick="openWithdrawModal()" style="color:#10b981;">
 💸 Available Balance:
 <span id="sidebarWalletBal">₹0.00</span>
 (Withdraw)
@@ -727,9 +770,7 @@ style="display:none"
 accept="image/*"
 onchange="uploadProfilePicture(event)">
 
-<li
-id="removePhotoLi"
-style="display:none">
+<li id="removePhotoLi" style="display:none">
 
 <button
 onclick="removeProfilePicture()"
@@ -752,9 +793,7 @@ style="color:#ef4444;">
 </li>
 
 <li>
-<button
-id="sideLogoutBtn"
-style="color:#f87171;">
+<button id="sideLogoutBtn" style="color:#f87171;">
 🚪 Logout
 </button>
 </li>
@@ -763,14 +802,9 @@ style="color:#f87171;">
 
 </aside>
 
-
-<!-- ================= NAVBAR ================= -->
-
 <header class="navbar">
 
-<a
-href="dashboard.html"
-class="brand-logo">
+<a href="dashboard.html" class="brand-logo">
 
 <img
 id="navBrandLogoImg"
@@ -781,12 +815,9 @@ alt="Logo">
 
 </a>
 
-
 <div class="nav-right">
 
-<a
-href="index.html"
-class="nav-home-btn">
+<a href="index.html" class="nav-home-btn">
 🌐 Home
 </a>
 
@@ -796,9 +827,7 @@ class="nav-avatar"
 src="1000819130.jpg"
 alt="Avatar">
 
-<button
-class="menu-btn"
-onclick="toggleSidebar()">
+<button class="menu-btn" onclick="toggleSidebar()">
 ☰
 </button>
 
@@ -806,16 +835,11 @@ onclick="toggleSidebar()">
 
 </header>
 
-
-<!-- ================= DASHBOARD ================= -->
-
 <div class="dash-container">
 
 <div class="profile-card">
 
-<div
-class="package-badge"
-id="activePackageBadge">
+<div class="package-badge" id="activePackageBadge">
 NO PACKAGE
 </div>
 
@@ -845,9 +869,6 @@ DOB: Not Set
 
 </div>
 
-
-<!-- PACKAGE -->
-
 <div class="section-box">
 
 <h3 style="margin-top:0;">
@@ -859,9 +880,6 @@ Loading package information...
 </div>
 
 </div>
-
-
-<!-- REFERRAL -->
 
 <div class="section-box">
 
@@ -922,9 +940,6 @@ onclick="shareAffiliateLink()">
 
 </div>
 
-
-<!-- STATS -->
-
 <div class="stats-stack">
 
 <div class="v-card bg-today">
@@ -954,36 +969,25 @@ onclick="shareAffiliateLink()">
 
 </div>
 
-
-<!-- REFERRALS -->
-
 <div class="section-box">
 
 <h3>👥 My Referrals & Joins</h3>
 
 <div class="referral-tabs">
 
-<button
-class="ref-tab active"
-onclick="filterReferrals(1,this)">
+<button class="ref-tab active" onclick="filterReferrals(1,this)">
 1 Day (Today)
 </button>
 
-<button
-class="ref-tab"
-onclick="filterReferrals(7,this)">
+<button class="ref-tab" onclick="filterReferrals(7,this)">
 7 Days
 </button>
 
-<button
-class="ref-tab"
-onclick="filterReferrals(15,this)">
+<button class="ref-tab" onclick="filterReferrals(15,this)">
 15 Days
 </button>
 
-<button
-class="ref-tab"
-onclick="filterReferrals(30,this)">
+<button class="ref-tab" onclick="filterReferrals(30,this)">
 30 Days
 </button>
 
@@ -995,29 +999,21 @@ Loading referrals...
 
 </div>
 
-
 <div class="app-footer-credit">
 Website Created in August 2026 by
 <b>Swrang Swargiary</b>
 </div>
 
 </div>
-
 </div>
-
-
-<!-- TOAST -->
 
 <div id="toastNotification">
 <span id="toastMessage">Success</span>
 </div>
 
+<!-- PACKAGE MODAL -->
 
-<!-- ================= PACKAGE MODAL ================= -->
-
-<div
-id="packageModal"
-class="modal-overlay">
+<div id="packageModal" class="modal-overlay">
 
 <div class="modal-box">
 
@@ -1036,15 +1032,11 @@ Close
 </button>
 
 </div>
-
 </div>
 
+<!-- HISTORY MODAL -->
 
-<!-- ================= HISTORY MODAL ================= -->
-
-<div
-id="historyModal"
-class="modal-overlay">
+<div id="historyModal" class="modal-overlay">
 
 <div class="modal-box">
 
@@ -1061,15 +1053,11 @@ Close
 </button>
 
 </div>
-
 </div>
 
+<!-- PAYOUT MODAL -->
 
-<!-- ================= PAYOUT MODAL ================= -->
-
-<div
-id="profileSettingsModal"
-class="modal-overlay">
+<div id="profileSettingsModal" class="modal-overlay">
 
 <div class="modal-box">
 
@@ -1093,7 +1081,6 @@ Bank Account
 
 </div>
 
-
 <div id="upiSection">
 
 <label>UPI ID</label>
@@ -1106,10 +1093,7 @@ placeholder="yourname@upi">
 
 </div>
 
-
-<div
-id="bankSection"
-style="display:none;">
+<div id="bankSection" style="display:none;">
 
 <label>Account Holder Name</label>
 
@@ -1135,7 +1119,6 @@ class="input-field">
 
 </div>
 
-
 <button
 class="btn-action"
 id="saveProfileBtn"
@@ -1150,15 +1133,11 @@ Cancel
 </button>
 
 </div>
-
 </div>
 
+<!-- KYC MODAL -->
 
-<!-- ================= KYC MODAL ================= -->
-
-<div
-id="kycModal"
-class="modal-overlay">
+<div id="kycModal" class="modal-overlay">
 
 <div class="modal-box">
 
@@ -1191,15 +1170,11 @@ Cancel
 </button>
 
 </div>
-
 </div>
 
+<!-- WITHDRAW MODAL -->
 
-<!-- ================= WITHDRAW MODAL ================= -->
-
-<div
-id="withdrawModal"
-class="modal-overlay">
+<div id="withdrawModal" class="modal-overlay">
 
 <div class="modal-box">
 
@@ -1216,21 +1191,15 @@ style="font-size:12px;color:#64748b;">
 
 <div class="amount-chips">
 
-<button
-class="chip"
-onclick="setWithdrawAmount(100)">
+<button class="chip" onclick="setWithdrawAmount(100)">
 ₹100
 </button>
 
-<button
-class="chip"
-onclick="setWithdrawAmount(500)">
+<button class="chip" onclick="setWithdrawAmount(500)">
 ₹500
 </button>
 
-<button
-class="chip"
-onclick="setWithdrawAmount(1000)">
+<button class="chip" onclick="setWithdrawAmount(1000)">
 ₹1000
 </button>
 
@@ -1268,22 +1237,17 @@ Cancel
 </button>
 
 </div>
-
 </div>
-
 
 <script>
 
-/* =====================================================
-   SUPABASE CONFIG
-===================================================== */
+/* SUPABASE */
 
 const SUPABASE_URL =
 "https://rvprrulkjegvicbnjuft.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
 "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-
 
 const supabaseClient =
 window.supabase.createClient(
@@ -1298,10 +1262,7 @@ window.supabase.createClient(
   }
 );
 
-
-/* =====================================================
-   GLOBAL VARIABLES
-===================================================== */
+/* GLOBALS */
 
 let currentUserId = null;
 let currentProfile = {};
@@ -1314,10 +1275,7 @@ let activePackage = null;
 let realtimeChannel = null;
 let withdrawalSubmitting = false;
 
-
-/* =====================================================
-   PACKAGE RULES
-===================================================== */
+/* PACKAGE RULES */
 
 const PACKAGE_RULES = {
 
@@ -1389,16 +1347,12 @@ const PACKAGE_RULES = {
 
 };
 
-
-/* =====================================================
-   UTILITIES
-===================================================== */
+/* UTILITIES */
 
 function formatMoney(amount){
 
   return "₹" +
-  Number(amount || 0)
-  .toLocaleString(
+  Number(amount || 0).toLocaleString(
     "en-IN",
     {
       minimumFractionDigits:2,
@@ -1408,79 +1362,55 @@ function formatMoney(amount){
 
 }
 
-
 function escapeHtml(text){
 
-  const div =
-  document.createElement("div");
+  const div = document.createElement("div");
 
-  div.textContent =
-  String(text || "");
+  div.textContent = String(text || "");
 
   return div.innerHTML;
 
 }
 
-
 function showToast(message){
 
   const toast =
-  document.getElementById(
-    "toastNotification"
-  );
+  document.getElementById("toastNotification");
 
-  document.getElementById(
-    "toastMessage"
-  ).innerText = message;
+  document.getElementById("toastMessage").innerText =
+  message;
 
   toast.classList.add("show");
 
   setTimeout(function(){
-
     toast.classList.remove("show");
-
   },3000);
 
 }
 
-
-/* =====================================================
-   SIDEBAR
-===================================================== */
+/* SIDEBAR */
 
 function toggleSidebar(){
 
-  document
-  .getElementById("sidebar")
-  .classList
-  .toggle("active");
+  document.getElementById("sidebar")
+  .classList.toggle("active");
 
-  document
-  .getElementById("sidebarOverlay")
-  .classList
-  .toggle("active");
+  document.getElementById("sidebarOverlay")
+  .classList.toggle("active");
 
 }
-
 
 function closeSidebar(){
 
-  document
-  .getElementById("sidebar")
-  .classList
-  .remove("active");
+  document.getElementById("sidebar")
+  .classList.remove("active");
 
-  document
-  .getElementById("sidebarOverlay")
-  .classList
-  .remove("active");
+  document.getElementById("sidebarOverlay")
+  .classList.remove("active");
 
 }
 
-
-/* =====================================================
-   MODALS
-===================================================== */
+/* MODALS */
 
 function openModal(id){
 
@@ -1493,7 +1423,6 @@ function openModal(id){
 
 }
 
-
 function closeModal(id){
 
   const modal =
@@ -1505,7 +1434,6 @@ function closeModal(id){
 
 }
 
-
 document.addEventListener(
   "click",
   function(event){
@@ -1516,30 +1444,23 @@ document.addEventListener(
         "modal-overlay"
       )
     ){
-      event.target.style.display =
-      "none";
+      event.target.style.display = "none";
     }
 
   }
 );
 
-
-/* =====================================================
-   PACKAGE
-===================================================== */
+/* PACKAGE */
 
 function detectPackage(profile){
 
   const packageName =
-  String(
-    profile.package_name || "none"
-  )
+  String(profile.package_name || "none")
   .trim()
   .toLowerCase();
 
   let packageData =
   PACKAGE_RULES[packageName];
-
 
   if(!packageData){
 
@@ -1550,19 +1471,13 @@ function detectPackage(profile){
       "NO PACKAGE",
 
       commissionRate:
-      Number(
-        profile.commission_rate || 0
-      ),
+      Number(profile.commission_rate || 0),
 
       minWithdrawal:
-      Number(
-        profile.min_withdrawal || 200
-      ),
+      Number(profile.min_withdrawal || 200),
 
       dailyWithdrawalLimit:
-      Number(
-        profile.daily_withdrawal_limit || 0
-      ),
+      Number(profile.daily_withdrawal_limit || 0),
 
       benefits:[
         "Package benefits configured by admin"
@@ -1572,42 +1487,31 @@ function detectPackage(profile){
 
   }
 
-
-  activePackage =
-  packageData;
+  activePackage = packageData;
 
   return packageData;
 
 }
 
-
 function renderPackageUI(){
 
   const pkg =
-  detectPackage(
-    currentProfile
-  );
-
+  detectPackage(currentProfile);
 
   const hasPackage =
   currentProfile.package_name &&
-  String(
-    currentProfile.package_name
-  )
+  String(currentProfile.package_name)
   .toLowerCase() !== "none";
-
 
   const badge =
   document.getElementById(
     "activePackageBadge"
   );
 
-
   badge.innerText =
   hasPackage
   ? pkg.displayName + " 👑"
   : "NO PACKAGE";
-
 
   if(hasPackage){
     badge.classList.add("active");
@@ -1615,20 +1519,14 @@ function renderPackageUI(){
     badge.classList.remove("active");
   }
 
-
   const benefitsHTML =
-  pkg.benefits
-  .map(function(item){
+  pkg.benefits.map(function(item){
 
     return `
-    <li>
-      ${escapeHtml(item)}
-    </li>
+    <li>${escapeHtml(item)}</li>
     `;
 
-  })
-  .join("");
-
+  }).join("");
 
   const packageHTML = `
 
@@ -1639,107 +1537,84 @@ function renderPackageUI(){
     border:1px solid #e2e8f0;
   ">
 
-    <div style="
-      display:flex;
-      justify-content:space-between;
-      margin-bottom:10px;
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:10px;
+  ">
+    <b>Package</b>
+    <span style="
+      color:#7c3aed;
+      font-weight:800;
     ">
-
-      <b>Package</b>
-
-      <span style="
-        color:#7c3aed;
-        font-weight:800;
-      ">
-        ${escapeHtml(pkg.displayName)}
-      </span>
-
-    </div>
-
-
-    <div style="
-      display:flex;
-      justify-content:space-between;
-      margin-bottom:10px;
-    ">
-
-      <span>Commission Rate</span>
-
-      <b>
-        ${pkg.commissionRate}%
-      </b>
-
-    </div>
-
-
-    <div style="
-      display:flex;
-      justify-content:space-between;
-      margin-bottom:10px;
-    ">
-
-      <span>Minimum Withdrawal</span>
-
-      <b>
-        ${formatMoney(pkg.minWithdrawal)}
-      </b>
-
-    </div>
-
-
-    <div style="
-      display:flex;
-      justify-content:space-between;
-      margin-bottom:10px;
-    ">
-
-      <span>Daily Withdrawal Limit</span>
-
-      <b>
-        ${
-          Number(pkg.dailyWithdrawalLimit) > 0
-          ? formatMoney(pkg.dailyWithdrawalLimit)
-          : "Not Available"
-        }
-      </b>
-
-    </div>
-
-
-    <hr style="
-      border:none;
-      border-top:1px solid #e2e8f0;
-    ">
-
-
-    <b>Benefits</b>
-
-    <ul style="
-      font-size:13px;
-      color:#475569;
-      line-height:1.8;
-    ">
-      ${benefitsHTML}
-    </ul>
-
+      ${escapeHtml(pkg.displayName)}
+    </span>
   </div>
 
-  `;
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:10px;
+  ">
+    <span>Commission Rate</span>
+    <b>${pkg.commissionRate}%</b>
+  </div>
 
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:10px;
+  ">
+    <span>Minimum Withdrawal</span>
+    <b>${formatMoney(pkg.minWithdrawal)}</b>
+  </div>
+
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:10px;
+  ">
+    <span>Daily Withdrawal Limit</span>
+    <b>
+      ${
+        Number(pkg.dailyWithdrawalLimit) > 0
+        ? formatMoney(pkg.dailyWithdrawalLimit)
+        : "Not Available"
+      }
+    </b>
+  </div>
+
+  <hr style="
+    border:none;
+    border-top:1px solid #e2e8f0;
+  ">
+
+  <b>Benefits</b>
+
+  <ul style="
+    font-size:13px;
+    color:#475569;
+    line-height:1.8;
+  ">
+    ${benefitsHTML}
+  </ul>
+
+  </div>
+  `;
 
   document.getElementById(
     "packageDashboardInfo"
-  ).innerHTML =
-  packageHTML;
-
+  ).innerHTML = packageHTML;
 
   document.getElementById(
     "modalPackageContent"
-  ).innerHTML =
-  packageHTML;
+  ).innerHTML = packageHTML;
 
 }
-
 
 function openPackageModal(){
 
@@ -1747,38 +1622,26 @@ function openPackageModal(){
 
   renderPackageUI();
 
-  openModal(
-    "packageModal"
-  );
+  openModal("packageModal");
 
 }
 
-
-/* =====================================================
-   PROFILE IMAGE
-===================================================== */
+/* PROFILE IMAGE */
 
 function getFallbackAvatar(userName){
 
   return (
     "https://ui-avatars.com/api/?name=" +
-    encodeURIComponent(
-      userName || "User"
-    ) +
+    encodeURIComponent(userName || "User") +
     "&background=7c3aed&color=fff&size=200"
   );
 
 }
 
-
-function applyProfileImage(
-  imageUrl,
-  userName
-){
+function applyProfileImage(imageUrl,userName){
 
   const fallback =
   getFallbackAvatar(userName);
-
 
   const finalImage =
   imageUrl &&
@@ -1786,63 +1649,46 @@ function applyProfileImage(
   ? imageUrl
   : fallback;
 
-
   const imageIds = [
-
     "mainProfileImg",
     "sidebarProfileImage",
     "navAvatarImg"
-
   ];
 
+  imageIds.forEach(function(id){
 
-  imageIds.forEach(
-    function(id){
+    const image =
+    document.getElementById(id);
 
-      const image =
-      document.getElementById(id);
+    if(image){
 
-      if(image){
+      image.src = finalImage;
 
-        image.src =
-        finalImage;
+      image.onerror = function(){
 
-        image.onerror =
-        function(){
+        this.onerror = null;
+        this.src = fallback;
 
-          this.onerror = null;
-
-          this.src =
-          fallback;
-
-        };
-
-      }
+      };
 
     }
-  );
 
+  });
 
   document.getElementById(
     "removePhotoLi"
   ).style.display =
-  imageUrl
-  ? "block"
-  : "none";
+  imageUrl ? "block" : "none";
 
 }
 
-
-/* =====================================================
-   REFERRAL CODE
-===================================================== */
+/* REFERRAL CODE */
 
 function generateReferralCode(){
 
   const random =
   Math.floor(
-    100000 +
-    Math.random() * 900000
+    100000 + Math.random() * 900000
   );
 
   const timestamp =
@@ -1850,204 +1696,178 @@ function generateReferralCode(){
   .toString()
   .slice(-4);
 
-  return (
-    "SM-" +
-    random +
-    timestamp
-  );
+  return "SM-" + random + timestamp;
 
 }
 
-
-/* =====================================================
-   LOAD USER PROFILE
-===================================================== */
+/* LOAD PROFILE */
 
 async function loadUserProfile(){
 
-  const sessionResult =
-  await supabaseClient
-  .auth
-  .getSession();
+  const {
+    data:sessionData,
+    error:sessionError
+  } =
+  await supabaseClient.auth.getSession();
 
+  if(sessionError){
 
-  if(sessionResult.error){
-    throw sessionResult.error;
+    throw new Error(
+      "Session error: " +
+      sessionError.message
+    );
+
   }
 
-
   const session =
-  sessionResult.data.session;
+  sessionData.session;
 
+  if(!session || !session.user){
 
-  if(
-    !session ||
-    !session.user
-  ){
-
-    window.location.href =
-    "login.html";
+    window.location.replace("login.html");
 
     return false;
 
   }
 
+  const user = session.user;
 
-  const user =
-  session.user;
-
-
-  currentUserId =
-  user.id;
-
+  currentUserId = user.id;
 
   currentUserEmail =
   user.email || "";
-
 
   const authName =
   user.user_metadata?.full_name ||
   user.user_metadata?.name ||
   "Smart Money User";
 
-
-  const profileResult =
+  const {
+    data:profileData,
+    error:profileError
+  } =
   await supabaseClient
   .from("profiles")
   .select("*")
-  .eq(
-    "user_id",
-    currentUserId
-  )
+  .eq("user_id",currentUserId)
   .maybeSingle();
 
+  if(profileError){
 
-  if(profileResult.error){
+    console.error(
+      "PROFILE LOAD ERROR:",
+      profileError
+    );
 
     throw new Error(
-      profileResult.error.message
+      "Profile database error: " +
+      profileError.message
     );
 
   }
 
-
-  let profile =
-  profileResult.data;
-
-
-  /* CREATE PROFILE */
+  let profile = profileData;
 
   if(!profile){
 
     const newProfile = {
 
-      user_id:
-      currentUserId,
+      user_id:currentUserId,
 
-      email:
-      currentUserEmail,
+      email:currentUserEmail,
 
-      full_name:
-      authName,
+      full_name:authName,
 
       balance:0,
 
-      package_name:
-      "none",
+      package_name:"none",
 
       referral_code:
       generateReferralCode()
 
     };
 
-
-    const insertResult =
+    const {
+      data:insertData,
+      error:insertError
+    } =
     await supabaseClient
     .from("profiles")
     .insert(newProfile)
     .select()
     .single();
 
+    if(insertError){
 
-    if(insertResult.error){
+      console.error(
+        "PROFILE CREATE ERROR:",
+        insertError
+      );
 
       throw new Error(
-        insertResult.error.message
+        "Profile create error: " +
+        insertError.message
       );
 
     }
 
-
-    profile =
-    insertResult.data;
+    profile = insertData;
 
   }
-
-
-  /* OLD USER WITHOUT REFERRAL CODE */
 
   if(
     !profile.referral_code ||
-    String(
-      profile.referral_code
-    )
+    String(profile.referral_code)
     .trim() === ""
   ){
 
-    const updateResult =
+    const newCode =
+    generateReferralCode();
+
+    const {
+      data:updateData,
+      error:updateError
+    } =
     await supabaseClient
     .from("profiles")
     .update({
-
-      referral_code:
-      generateReferralCode()
-
+      referral_code:newCode
     })
-    .eq(
-      "user_id",
-      currentUserId
-    )
+    .eq("user_id",currentUserId)
     .select()
     .single();
 
-
-    if(updateResult.error){
+    if(updateError){
 
       throw new Error(
-        updateResult.error.message
+        "Referral code error: " +
+        updateError.message
       );
 
     }
 
-
-    profile =
-    updateResult.data;
+    profile = updateData;
 
   }
 
-
-  currentProfile =
-  profile;
-
+  currentProfile = profile;
 
   userCurrentBalance =
-  Number(
-    profile.balance || 0
-  );
-
+  Number(profile.balance || 0);
 
   userRefCode =
   profile.referral_code || "";
 
+  console.log(
+    "PROFILE LOADED:",
+    currentProfile
+  );
 
   return true;
 
 }
 
-
-/* =====================================================
-   RENDER PROFILE
-===================================================== */
+/* RENDER PROFILE */
 
 function renderProfileUI(){
 
@@ -2055,33 +1875,23 @@ function renderProfileUI(){
   currentProfile.full_name ||
   "Smart Money User";
 
-
   const email =
   currentProfile.email ||
   currentUserEmail;
 
-
-  document.getElementById(
-    "userName"
-  ).innerText =
+  document.getElementById("userName").innerText =
   name;
-
 
   document.getElementById(
     "sidebarUserName"
-  ).innerText =
-  name;
-
+  ).innerText = name;
 
   document.getElementById(
     "sidebarUserEmail"
-  ).innerText =
-  email;
-
+  ).innerText = email;
 
   const dob =
   currentProfile.date_of_birth;
-
 
   document.getElementById(
     "dobDisplayInfo"
@@ -2090,13 +1900,11 @@ function renderProfileUI(){
   ? "DOB: " + dob
   : "DOB: Not Set";
 
-
   document.getElementById(
     "myRefCode"
   ).innerText =
   userRefCode ||
   "Not Available";
-
 
   document.getElementById(
     "fullRefLinkText"
@@ -2105,43 +1913,34 @@ function renderProfileUI(){
   ? getReferralLink()
   : "Referral code unavailable";
 
-
   document.getElementById(
     "sidebarWalletBal"
   ).innerText =
-  formatMoney(
-    userCurrentBalance
-  );
-
+  formatMoney(userCurrentBalance);
 
   document.getElementById(
     "allTimeRevenueText"
   ).innerText =
-  formatMoney(
-    userCurrentBalance
-  );
-
+  formatMoney(userCurrentBalance);
 
   applyProfileImage(
     currentProfile.profile_pic,
     name
   );
 
-
   renderPackageUI();
 
 }
 
-
-/* =====================================================
-   REFERRAL LINK
-===================================================== */
+/* REFERRAL LINK */
 
 function getReferralLink(){
 
-  const path =
-  window.location.pathname;
+  const currentUrl =
+  new URL(window.location.href);
 
+  const path =
+  currentUrl.pathname;
 
   const basePath =
   path.substring(
@@ -2149,22 +1948,16 @@ function getReferralLink(){
     path.lastIndexOf("/") + 1
   );
 
-
   return (
-    window.location.origin +
+    currentUrl.origin +
     basePath +
     "register.html?ref=" +
-    encodeURIComponent(
-      userRefCode
-    )
+    encodeURIComponent(userRefCode)
   );
 
 }
 
-
-/* =====================================================
-   COPY / SHARE
-===================================================== */
+/* COPY */
 
 async function copyText(text){
 
@@ -2175,8 +1968,7 @@ async function copyText(text){
       window.isSecureContext
     ){
 
-      await navigator.clipboard
-      .writeText(text);
+      await navigator.clipboard.writeText(text);
 
       return true;
 
@@ -2185,28 +1977,21 @@ async function copyText(text){
     const textarea =
     document.createElement("textarea");
 
-    textarea.value =
-    text;
+    textarea.value = text;
 
-    textarea.style.position =
-    "fixed";
+    textarea.style.position = "fixed";
+    textarea.style.left = "-9999px";
 
-    textarea.style.opacity =
-    "0";
-
-    document.body.appendChild(
-      textarea
-    );
+    document.body.appendChild(textarea);
 
     textarea.select();
 
-    document.execCommand(
-      "copy"
-    );
+    const copied =
+    document.execCommand("copy");
 
     textarea.remove();
 
-    return true;
+    return copied;
 
   }catch(error){
 
@@ -2218,14 +2003,10 @@ async function copyText(text){
 
 }
 
-
 async function copyAffiliateLink(){
 
   const success =
-  await copyText(
-    userRefCode
-  );
-
+  await copyText(userRefCode);
 
   if(success){
 
@@ -2244,18 +2025,13 @@ async function copyAffiliateLink(){
 
 }
 
-
 async function copyFullReferralLink(){
 
   const link =
   getReferralLink();
 
-
   const success =
-  await copyText(
-    link
-  );
-
+  await copyText(link);
 
   if(success){
 
@@ -2274,26 +2050,19 @@ async function copyFullReferralLink(){
 
 }
 
-
 async function shareAffiliateLink(){
 
   const link =
   getReferralLink();
-
 
   try{
 
     if(navigator.share){
 
       await navigator.share({
-
         title:"Smart Money",
-
-        text:
-        "Join Smart Money using my referral link!",
-
+        text:"Join Smart Money using my referral link!",
         url:link
-
       });
 
     }else{
@@ -2304,47 +2073,33 @@ async function shareAffiliateLink(){
 
   }catch(error){
 
-    if(
-      error.name !==
-      "AbortError"
-    ){
-
+    if(error.name !== "AbortError"){
       console.error(error);
-
     }
 
   }
 
 }
 
-
-/* =====================================================
-   KYC
-===================================================== */
+/* KYC */
 
 function openKycModal(){
 
   closeSidebar();
-
 
   document.getElementById(
     "kycFullName"
   ).value =
   currentProfile.full_name || "";
 
-
   document.getElementById(
     "kycDob"
   ).value =
   currentProfile.date_of_birth || "";
 
-
-  openModal(
-    "kycModal"
-  );
+  openModal("kycModal");
 
 }
-
 
 async function saveKycDetails(){
 
@@ -2358,20 +2113,15 @@ async function saveKycDetails(){
 
   }
 
-
   const fullName =
   document.getElementById(
     "kycFullName"
-  )
-  .value
-  .trim();
-
+  ).value.trim();
 
   const dob =
   document.getElementById(
     "kycDob"
   ).value;
-
 
   if(!fullName){
 
@@ -2383,10 +2133,7 @@ async function saveKycDetails(){
 
   }
 
-
-  if(
-    fullName.length < 2
-  ){
+  if(fullName.length < 2){
 
     alert(
       "Please enter a valid name"
@@ -2396,50 +2143,39 @@ async function saveKycDetails(){
 
   }
 
-
-  const result =
+  const {
+    data,
+    error
+  } =
   await supabaseClient
   .from("profiles")
   .update({
 
-    full_name:
-    fullName,
+    full_name:fullName,
 
-    date_of_birth:
-    dob || null
+    date_of_birth:dob || null
 
   })
-  .eq(
-    "user_id",
-    currentUserId
-  )
+  .eq("user_id",currentUserId)
   .select()
   .single();
 
-
-  if(result.error){
+  if(error){
 
     alert(
       "Profile save failed: " +
-      result.error.message
+      error.message
     );
 
     return;
 
   }
 
-
-  currentProfile =
-  result.data;
-
+  currentProfile = data;
 
   renderProfileUI();
 
-
-  closeModal(
-    "kycModal"
-  );
-
+  closeModal("kycModal");
 
   showToast(
     "Profile saved successfully!"
@@ -2447,52 +2183,42 @@ async function saveKycDetails(){
 
 }
 
-
-/* =====================================================
-   PAYOUT
-===================================================== */
+/* PAYOUT */
 
 function openUpiModal(){
 
   closeSidebar();
-
 
   document.getElementById(
     "editUpiId"
   ).value =
   currentProfile.upi_id || "";
 
-
   document.getElementById(
     "editAccName"
   ).value =
   currentProfile.account_holder_name || "";
-
 
   document.getElementById(
     "editAccNo"
   ).value =
   currentProfile.bank_account_number || "";
 
-
   document.getElementById(
     "editIfsc"
   ).value =
   currentProfile.ifsc_code || "";
-
 
   switchPayoutMode(
     currentProfile.payout_type ||
     "upi"
   );
 
-
   openModal(
     "profileSettingsModal"
   );
 
 }
-
 
 function switchPayoutMode(mode){
 
@@ -2501,14 +2227,12 @@ function switchPayoutMode(mode){
   ? "bank"
   : "upi";
 
-
   document.getElementById(
     "upiSection"
   ).style.display =
   payoutMode === "upi"
   ? "block"
   : "none";
-
 
   document.getElementById(
     "bankSection"
@@ -2517,14 +2241,12 @@ function switchPayoutMode(mode){
   ? "block"
   : "none";
 
-
   document.getElementById(
     "tabUpi"
   ).className =
   payoutMode === "upi"
   ? "payout-tab active"
   : "payout-tab";
-
 
   document.getElementById(
     "tabBank"
@@ -2535,7 +2257,6 @@ function switchPayoutMode(mode){
 
 }
 
-
 async function updateUserPayoutDetails(){
 
   const button =
@@ -2543,95 +2264,58 @@ async function updateUserPayoutDetails(){
     "saveProfileBtn"
   );
 
-
   button.disabled = true;
   button.innerText = "Saving...";
-
 
   try{
 
     const updateData = {
-
-      payout_type:
-      payoutMode
-
+      payout_type:payoutMode
     };
 
-
-    if(
-      payoutMode === "upi"
-    ){
+    if(payoutMode === "upi"){
 
       const upi =
       document.getElementById(
         "editUpiId"
-      )
-      .value
-      .trim();
-
+      ).value.trim();
 
       if(!upi){
-
-        throw new Error(
-          "Enter UPI ID"
-        );
-
+        throw new Error("Enter UPI ID");
       }
 
-
       if(!upi.includes("@")){
-
         throw new Error(
           "Enter a valid UPI ID"
         );
-
       }
 
-
-      updateData.upi_id =
-      upi;
-
+      updateData.upi_id = upi;
 
     }else{
-
 
       const holder =
       document.getElementById(
         "editAccName"
-      )
-      .value
-      .trim();
-
+      ).value.trim();
 
       const account =
       document.getElementById(
         "editAccNo"
-      )
-      .value
-      .trim();
-
+      ).value.trim();
 
       const ifsc =
       document.getElementById(
         "editIfsc"
-      )
-      .value
-      .trim()
-      .toUpperCase();
+      ).value.trim().toUpperCase();
 
-
-      if(
-        !holder ||
-        !account ||
-        !ifsc
-      ){
+      if(!holder || !account || !ifsc){
 
         throw new Error(
           "Fill all bank details"
         );
 
       }
-
 
       updateData.account_holder_name =
       holder;
@@ -2644,37 +2328,32 @@ async function updateUserPayoutDetails(){
 
     }
 
-
-    const result =
+    const {
+      data,
+      error
+    } =
     await supabaseClient
     .from("profiles")
     .update(updateData)
-    .eq(
-      "user_id",
-      currentUserId
-    )
+    .eq("user_id",currentUserId)
     .select()
     .single();
 
-
-    if(result.error){
-      throw result.error;
+    if(error){
+      throw error;
     }
 
+    currentProfile = data;
 
-    currentProfile =
-    result.data;
-
+    renderProfileUI();
 
     closeModal(
       "profileSettingsModal"
     );
 
-
     showToast(
       "Payout details saved!"
     );
-
 
   }catch(error){
 
@@ -2686,34 +2365,24 @@ async function updateUserPayoutDetails(){
   }finally{
 
     button.disabled = false;
-    button.innerText =
-    "Save Details";
+    button.innerText = "Save Details";
 
   }
 
 }
 
-
-/* =====================================================
-   PROFILE PHOTO
-===================================================== */
+/* PROFILE PHOTO */
 
 async function uploadProfilePicture(event){
 
   const file =
   event.target.files?.[0];
 
-
   if(!file){
     return;
   }
 
-
-  if(
-    !file.type.startsWith(
-      "image/"
-    )
-  ){
+  if(!file.type.startsWith("image/")){
 
     alert(
       "Please select a valid image"
@@ -2723,11 +2392,7 @@ async function uploadProfilePicture(event){
 
   }
 
-
-  if(
-    file.size >
-    2 * 1024 * 1024
-  ){
+  if(file.size > 2 * 1024 * 1024){
 
     alert(
       "Image must be under 2MB"
@@ -2737,10 +2402,8 @@ async function uploadProfilePicture(event){
 
   }
 
-
   const reader =
   new FileReader();
-
 
   reader.onload =
   async function(e){
@@ -2750,40 +2413,30 @@ async function uploadProfilePicture(event){
       const imageData =
       e.target.result;
 
-
-      const result =
+      const {
+        data,
+        error
+      } =
       await supabaseClient
       .from("profiles")
       .update({
-
-        profile_pic:
-        imageData
-
+        profile_pic:imageData
       })
-      .eq(
-        "user_id",
-        currentUserId
-      )
+      .eq("user_id",currentUserId)
       .select()
       .single();
 
-
-      if(result.error){
-        throw result.error;
+      if(error){
+        throw error;
       }
 
-
-      currentProfile =
-      result.data;
-
+      currentProfile = data;
 
       renderProfileUI();
-
 
       showToast(
         "Profile picture saved!"
       );
-
 
     }catch(error){
 
@@ -2796,9 +2449,7 @@ async function uploadProfilePicture(event){
 
   };
 
-
-  reader.onerror =
-  function(){
+  reader.onerror = function(){
 
     alert(
       "Failed to read image"
@@ -2806,14 +2457,11 @@ async function uploadProfilePicture(event){
 
   };
 
-
   reader.readAsDataURL(file);
-
 
   event.target.value = "";
 
 }
-
 
 async function removeProfilePicture(){
 
@@ -2822,45 +2470,34 @@ async function removeProfilePicture(){
     "Remove your profile picture?"
   );
 
-
   if(!confirmed){
     return;
   }
 
-
-  const result =
+  const {
+    data,
+    error
+  } =
   await supabaseClient
   .from("profiles")
   .update({
-
     profile_pic:null
-
   })
-  .eq(
-    "user_id",
-    currentUserId
-  )
+  .eq("user_id",currentUserId)
   .select()
   .single();
 
+  if(error){
 
-  if(result.error){
-
-    alert(
-      result.error.message
-    );
+    alert(error.message);
 
     return;
 
   }
 
-
-  currentProfile =
-  result.data;
-
+  currentProfile = data;
 
   renderProfileUI();
-
 
   showToast(
     "Profile picture removed"
@@ -2868,36 +2505,25 @@ async function removeProfilePicture(){
 
 }
 
-
-/* =====================================================
-   WITHDRAWAL
-===================================================== */
+/* WITHDRAW */
 
 function openWithdrawModal(){
 
   closeSidebar();
 
-
   const pkg =
   activePackage ||
-  detectPackage(
-    currentProfile
-  );
-
+  detectPackage(currentProfile);
 
   document.getElementById(
     "withdrawAmount"
   ).value = "";
 
-
   document.getElementById(
     "withdrawModalBalanceText"
   ).innerText =
   "Available Balance: " +
-  formatMoney(
-    userCurrentBalance
-  );
-
+  formatMoney(userCurrentBalance);
 
   document.getElementById(
     "withdrawPackageLimitText"
@@ -2905,13 +2531,9 @@ function openWithdrawModal(){
   "Package: " +
   pkg.displayName +
   " | Minimum Withdrawal: " +
-  formatMoney(
-    pkg.minWithdrawal
-  ) +
+  formatMoney(pkg.minWithdrawal) +
   (
-    Number(
-      pkg.dailyWithdrawalLimit
-    ) > 0
+    Number(pkg.dailyWithdrawalLimit) > 0
     ? " | Daily Limit: " +
       formatMoney(
         pkg.dailyWithdrawalLimit
@@ -2919,13 +2541,9 @@ function openWithdrawModal(){
     : ""
   );
 
-
-  openModal(
-    "withdrawModal"
-  );
+  openModal("withdrawModal");
 
 }
-
 
 function setWithdrawAmount(amount){
 
@@ -2938,7 +2556,6 @@ function setWithdrawAmount(amount){
     )
   );
 
-
   document.getElementById(
     "withdrawAmount"
   ).value =
@@ -2946,12 +2563,9 @@ function setWithdrawAmount(amount){
 
 }
 
-
 async function getTodayWithdrawnAmount(){
 
-  const now =
-  new Date();
-
+  const now = new Date();
 
   const todayStart =
   new Date(
@@ -2960,55 +2574,43 @@ async function getTodayWithdrawnAmount(){
     now.getDate()
   );
 
-
-  const result =
+  const {
+    data,
+    error
+  } =
   await supabaseClient
   .from("withdrawal_requests")
-  .select(
-    "amount,status,created_at"
-  )
-  .eq(
-    "user_id",
-    currentUserId
-  )
+  .select("amount,status,created_at")
+  .eq("user_id",currentUserId)
   .gte(
     "created_at",
     todayStart.toISOString()
   );
 
-
-  if(result.error){
+  if(error){
 
     console.error(
       "TODAY WITHDRAW ERROR:",
-      result.error
+      error
     );
 
     return 0;
 
   }
 
-
-  return (
-    result.data || []
-  )
+  return (data || [])
   .filter(function(item){
 
     const status =
     String(
       item.status || ""
-    )
-    .toLowerCase();
-
+    ).toLowerCase();
 
     return [
-
       "pending",
       "approved",
       "success"
-
-    ]
-    .includes(status);
+    ].includes(status);
 
   })
   .reduce(
@@ -3016,9 +2618,7 @@ async function getTodayWithdrawnAmount(){
 
       return (
         total +
-        Number(
-          item.amount || 0
-        )
+        Number(item.amount || 0)
       );
 
     },
@@ -3027,13 +2627,11 @@ async function getTodayWithdrawnAmount(){
 
 }
 
-
 async function submitWithdrawal(){
 
   if(withdrawalSubmitting){
     return;
   }
-
 
   const amount =
   Number(
@@ -3042,13 +2640,9 @@ async function submitWithdrawal(){
     ).value
   );
 
-
   const pkg =
   activePackage ||
-  detectPackage(
-    currentProfile
-  );
-
+  detectPackage(currentProfile);
 
   if(
     !Number.isFinite(amount) ||
@@ -3063,7 +2657,6 @@ async function submitWithdrawal(){
 
   }
 
-
   if(
     amount <
     Number(pkg.minWithdrawal)
@@ -3073,15 +2666,12 @@ async function submitWithdrawal(){
       "Minimum withdrawal for " +
       pkg.displayName +
       " is " +
-      formatMoney(
-        pkg.minWithdrawal
-      )
+      formatMoney(pkg.minWithdrawal)
     );
 
     return;
 
   }
-
 
   if(
     amount >
@@ -3096,65 +2686,44 @@ async function submitWithdrawal(){
 
   }
 
-
-  withdrawalSubmitting =
-  true;
-
+  withdrawalSubmitting = true;
 
   const button =
   document.getElementById(
     "submitWithdrawBtn"
   );
 
-
   button.disabled = true;
-  button.innerText =
-  "Checking...";
-
+  button.innerText = "Checking...";
 
   try{
 
-
-    /* REFRESH PROFILE FIRST */
-
-    const freshProfileResult =
+    const {
+      data:freshProfile,
+      error:freshError
+    } =
     await supabaseClient
     .from("profiles")
     .select("*")
-    .eq(
-      "user_id",
-      currentUserId
-    )
+    .eq("user_id",currentUserId)
     .single();
 
-
-    if(freshProfileResult.error){
-      throw freshProfileResult.error;
+    if(freshError){
+      throw freshError;
     }
-
-
-    const freshProfile =
-    freshProfileResult.data;
-
 
     const freshBalance =
     Number(
       freshProfile.balance || 0
     );
 
-
-    if(
-      amount > freshBalance
-    ){
+    if(amount > freshBalance){
 
       throw new Error(
         "Your balance has changed. Please try again."
       );
 
     }
-
-
-    /* DAILY LIMIT */
 
     if(
       Number(
@@ -3164,7 +2733,6 @@ async function submitWithdrawal(){
 
       const todayAmount =
       await getTodayWithdrawnAmount();
-
 
       if(
         todayAmount + amount >
@@ -3186,58 +2754,35 @@ async function submitWithdrawal(){
 
     }
 
-
     button.innerText =
     "Processing...";
-
 
     const newBalance =
     Number(
       (
-        freshBalance -
-        amount
-      )
-      .toFixed(2)
+        freshBalance - amount
+      ).toFixed(2)
     );
 
-
-    /*
-      IMPORTANT:
-      This conditional update helps prevent
-      accidental overwrite if balance changed.
-    */
-
-    const balanceResult =
+    const {
+      data:balanceData,
+      error:balanceError
+    } =
     await supabaseClient
     .from("profiles")
     .update({
-
-      balance:
-      newBalance
-
+      balance:newBalance
     })
-    .eq(
-      "user_id",
-      currentUserId
-    )
-    .eq(
-      "balance",
-      freshBalance
-    )
+    .eq("user_id",currentUserId)
+    .eq("balance",freshBalance)
     .select()
     .maybeSingle();
 
-
-    if(
-      balanceResult.error
-    ){
-      throw balanceResult.error;
+    if(balanceError){
+      throw balanceError;
     }
 
-
-    if(
-      !balanceResult.data
-    ){
+    if(!balanceData){
 
       throw new Error(
         "Balance changed. Please try again."
@@ -3245,22 +2790,18 @@ async function submitWithdrawal(){
 
     }
 
-
-    /* CREATE WITHDRAWAL REQUEST */
-
-    const withdrawalResult =
+    const {
+      error:withdrawError
+    } =
     await supabaseClient
     .from("withdrawal_requests")
     .insert({
 
-      user_id:
-      currentUserId,
+      user_id:currentUserId,
 
-      amount:
-      amount,
+      amount:amount,
 
-      status:
-      "pending",
+      status:"pending",
 
       package_name:
       currentProfile.package_name ||
@@ -3268,61 +2809,35 @@ async function submitWithdrawal(){
 
     });
 
-
-    if(
-      withdrawalResult.error
-    ){
-
-      /*
-        Rollback balance if request creation fails
-      */
+    if(withdrawError){
 
       await supabaseClient
       .from("profiles")
       .update({
-
-        balance:
-        freshBalance
-
+        balance:freshBalance
       })
-      .eq(
-        "user_id",
-        currentUserId
-      )
-      .eq(
-        "balance",
-        newBalance
-      );
+      .eq("user_id",currentUserId)
+      .eq("balance",newBalance);
 
-
-      throw withdrawalResult.error;
+      throw withdrawError;
 
     }
 
+    currentProfile = balanceData;
 
-    currentProfile =
-    balanceResult.data;
-
-
-    userCurrentBalance =
-    newBalance;
-
+    userCurrentBalance = newBalance;
 
     renderProfileUI();
 
+    renderStats();
 
-    closeModal(
-      "withdrawModal"
-    );
-
+    closeModal("withdrawModal");
 
     showToast(
       "Withdrawal request submitted!"
     );
 
-
     await loadWithdrawalHistory();
-
 
   }catch(error){
 
@@ -3333,11 +2848,9 @@ async function submitWithdrawal(){
 
   }finally{
 
-    withdrawalSubmitting =
-    false;
+    withdrawalSubmitting = false;
 
-    button.disabled =
-    false;
+    button.disabled = false;
 
     button.innerText =
     "Submit Request";
@@ -3346,23 +2859,17 @@ async function submitWithdrawal(){
 
 }
 
-
-/* =====================================================
-   WITHDRAWAL HISTORY
-===================================================== */
+/* HISTORY */
 
 function openHistoryModal(){
 
   closeSidebar();
 
-  openModal(
-    "historyModal"
-  );
+  openModal("historyModal");
 
   loadWithdrawalHistory();
 
 }
-
 
 async function loadWithdrawalHistory(){
 
@@ -3370,49 +2877,45 @@ async function loadWithdrawalHistory(){
     return;
   }
 
-
   const container =
   document.getElementById(
     "withdrawalHistoryList"
   );
 
-
   container.innerHTML =
   "Loading history...";
 
-
-  const result =
+  const {
+    data,
+    error
+  } =
   await supabaseClient
   .from("withdrawal_requests")
   .select("*")
-  .eq(
-    "user_id",
-    currentUserId
-  )
+  .eq("user_id",currentUserId)
   .order(
     "created_at",
-    {
-      ascending:false
-    }
+    {ascending:false}
   );
 
+  if(error){
 
-  if(result.error){
+    console.error(
+      "HISTORY ERROR:",
+      error
+    );
 
     container.innerHTML =
-    `<div style="color:#dc2626;">
-      Failed to load history
+    `<div class="error-box">
+      Failed to load history: 
+      ${escapeHtml(error.message)}
     </div>`;
 
     return;
 
   }
 
-
-  if(
-    !result.data ||
-    result.data.length === 0
-  ){
+  if(!data || data.length === 0){
 
     container.innerHTML =
     `
@@ -3429,49 +2932,35 @@ async function loadWithdrawalHistory(){
 
   }
 
-
   container.innerHTML =
-  result.data
-  .map(function(item){
+  data.map(function(item){
 
     const status =
     String(
       item.status || "pending"
-    )
-    .toLowerCase();
-
+    ).toLowerCase();
 
     let className =
     "status-pending";
-
 
     if(
       status === "approved" ||
       status === "success"
     ){
-
       className =
       "status-approved";
-
     }
 
-
-    if(
-      status === "rejected"
-    ){
-
+    if(status === "rejected"){
       className =
       "status-rejected";
-
     }
-
 
     const date =
     item.created_at
     ? new Date(
         item.created_at
-      )
-      .toLocaleDateString(
+      ).toLocaleDateString(
         "en-IN",
         {
           day:"2-digit",
@@ -3480,7 +2969,6 @@ async function loadWithdrawalHistory(){
         }
       )
     : "";
-
 
     return `
 
@@ -3503,9 +2991,7 @@ async function loadWithdrawalHistory(){
       <div class="history-row-2">
 
         <span class="history-amount">
-          ${formatMoney(
-            item.amount
-          )}
+          ${formatMoney(item.amount)}
         </span>
 
         <span class="
@@ -3521,15 +3007,11 @@ async function loadWithdrawalHistory(){
 
     `;
 
-  })
-  .join("");
+  }).join("");
 
 }
 
-
-/* =====================================================
-   REFERRALS
-===================================================== */
+/* REFERRALS */
 
 async function loadReferralsData(){
 
@@ -3544,8 +3026,10 @@ async function loadReferralsData(){
 
   }
 
-
-  const result =
+  const {
+    data,
+    error
+  } =
   await supabaseClient
   .from("profiles")
   .select(
@@ -3557,71 +3041,58 @@ async function loadReferralsData(){
   )
   .order(
     "created_at",
-    {
-      ascending:false
-    }
+    {ascending:false}
   );
 
-
-  if(result.error){
+  if(error){
 
     console.error(
       "REFERRAL ERROR:",
-      result.error
+      error
     );
-
 
     allReferralsData = [];
 
+    document.getElementById(
+      "referralsListContainer"
+    ).innerHTML =
+    `<div class="error-box">
+      Referral loading error: 
+      ${escapeHtml(error.message)}
+    </div>`;
 
-  }else{
-
-    allReferralsData =
-    result.data || [];
+    return;
 
   }
 
+  allReferralsData =
+  data || [];
 
   filterReferrals(
     1,
-    document.querySelector(
-      ".ref-tab"
-    )
+    document.querySelector(".ref-tab")
   );
 
 }
 
-
-function filterReferrals(
-  days,
-  button
-){
+function filterReferrals(days,button){
 
   document
-  .querySelectorAll(
-    ".ref-tab"
-  )
+  .querySelectorAll(".ref-tab")
   .forEach(function(tab){
 
-    tab.classList.remove(
-      "active"
-    );
+    tab.classList.remove("active");
 
   });
 
-
   if(button){
 
-    button.classList.add(
-      "active"
-    );
+    button.classList.add("active");
 
   }
 
-
   const now =
   new Date();
-
 
   const filtered =
   allReferralsData.filter(
@@ -3631,16 +3102,11 @@ function filterReferrals(
         return false;
       }
 
-
       const date =
-      new Date(
-        item.created_at
-      );
-
+      new Date(item.created_at);
 
       const difference =
       now - date;
-
 
       const differenceDays =
       difference /
@@ -3651,7 +3117,6 @@ function filterReferrals(
         24
       );
 
-
       return (
         differenceDays >= 0 &&
         differenceDays <= days
@@ -3660,16 +3125,12 @@ function filterReferrals(
     }
   );
 
-
   const container =
   document.getElementById(
     "referralsListContainer"
   );
 
-
-  if(
-    filtered.length === 0
-  ){
+  if(filtered.length === 0){
 
     container.innerHTML =
     `
@@ -3686,29 +3147,24 @@ function filterReferrals(
 
   }
 
-
   container.innerHTML =
-  filtered
-  .map(function(ref){
+  filtered.map(function(ref){
 
     const name =
     escapeHtml(
       ref.full_name || "User"
     );
 
-
     const code =
     escapeHtml(
       ref.referral_code || "N/A"
     );
 
-
     const date =
     ref.created_at
     ? new Date(
         ref.created_at
-      )
-      .toLocaleDateString(
+      ).toLocaleDateString(
         "en-IN",
         {
           day:"2-digit",
@@ -3718,16 +3174,13 @@ function filterReferrals(
       )
     : "";
 
-
     return `
 
     <div class="referral-card-item">
 
       <div class="ref-user-info">
 
-        <h4>
-          ${name}
-        </h4>
+        <h4>${name}</h4>
 
         <span>
           ID: ${code}
@@ -3741,9 +3194,7 @@ function filterReferrals(
 
         <br>
 
-        <b>
-          ${date}
-        </b>
+        <b>${date}</b>
 
       </div>
 
@@ -3751,28 +3202,11 @@ function filterReferrals(
 
     `;
 
-  })
-  .join("");
+  }).join("");
 
 }
 
-
-/* =====================================================
-   STATS
-===================================================== */
-
-/*
-  NOTE:
-
-  Tumhare current database code me
-  earnings / revenue table ka naam nahi diya gaya hai.
-
-  Isliye fake revenue calculate nahi kiya gaya.
-
-  Agar tumhare paas earnings table hai,
-  uske according yahan real commission
-  calculation add ki ja sakti hai.
-*/
+/* STATS */
 
 function renderStats(){
 
@@ -3781,26 +3215,20 @@ function renderStats(){
   ).innerText =
   formatMoney(0);
 
-
   document.getElementById(
     "sevenDaysRevenue"
   ).innerText =
   formatMoney(0);
-
 
   document.getElementById(
     "thirtyDaysRevenue"
   ).innerText =
   formatMoney(0);
 
-
   document.getElementById(
     "allTimeRevenueText"
   ).innerText =
-  formatMoney(
-    userCurrentBalance
-  );
-
+  formatMoney(userCurrentBalance);
 
   document.getElementById(
     "passiveIncome"
@@ -3809,17 +3237,13 @@ function renderStats(){
 
 }
 
-
-/* =====================================================
-   REALTIME
-===================================================== */
+/* REALTIME */
 
 function setupRealtimeListener(){
 
   if(!currentUserId){
     return;
   }
-
 
   if(realtimeChannel){
 
@@ -3829,7 +3253,6 @@ function setupRealtimeListener(){
 
   }
 
-
   realtimeChannel =
   supabaseClient
   .channel(
@@ -3837,23 +3260,17 @@ function setupRealtimeListener(){
     currentUserId
   )
 
-
   .on(
 
     "postgres_changes",
 
     {
-
       event:"UPDATE",
-
       schema:"public",
-
       table:"profiles",
-
       filter:
       "user_id=eq." +
       currentUserId
-
     },
 
     function(payload){
@@ -3863,17 +3280,14 @@ function setupRealtimeListener(){
         currentProfile =
         payload.new;
 
-
         userCurrentBalance =
         Number(
           payload.new.balance || 0
         );
 
-
         userRefCode =
         payload.new.referral_code ||
         userRefCode;
-
 
         renderProfileUI();
 
@@ -3885,23 +3299,17 @@ function setupRealtimeListener(){
 
   )
 
-
   .on(
 
     "postgres_changes",
 
     {
-
       event:"*",
-
       schema:"public",
-
       table:"withdrawal_requests",
-
       filter:
       "user_id=eq." +
       currentUserId
-
     },
 
     function(){
@@ -3912,15 +3320,18 @@ function setupRealtimeListener(){
 
   )
 
+  .subscribe(function(status){
 
-  .subscribe();
+    console.log(
+      "Realtime status:",
+      status
+    );
+
+  });
 
 }
 
-
-/* =====================================================
-   LOGOUT
-===================================================== */
+/* LOGOUT */
 
 function setupLogout(){
 
@@ -3929,33 +3340,30 @@ function setupLogout(){
     "sideLogoutBtn"
   );
 
-
   logoutButton.onclick =
   async function(){
 
-    logoutButton.disabled =
-    true;
+    logoutButton.disabled = true;
 
     logoutButton.innerText =
     "Logging out...";
 
-
     try{
 
-      const result =
+      const {
+        error
+      } =
       await supabaseClient
       .auth
       .signOut();
 
-
-      if(result.error){
-        throw result.error;
+      if(error){
+        throw error;
       }
 
-
-      window.location.href =
-      "login.html";
-
+      window.location.replace(
+        "login.html"
+      );
 
     }catch(error){
 
@@ -3964,9 +3372,7 @@ function setupLogout(){
         error.message
       );
 
-
-      logoutButton.disabled =
-      false;
+      logoutButton.disabled = false;
 
       logoutButton.innerText =
       "🚪 Logout";
@@ -3977,38 +3383,23 @@ function setupLogout(){
 
 }
 
-
-/* =====================================================
-   AUTH STATE LISTENER
-===================================================== */
+/* AUTH LISTENER */
 
 supabaseClient.auth.onAuthStateChange(
   function(event,session){
 
-    if(
-      event === "SIGNED_OUT" ||
-      !session
-    ){
+    if(event === "SIGNED_OUT"){
 
-      if(
-        !window.location.pathname
-        .includes("login.html")
-      ){
-
-        window.location.href =
-        "login.html";
-
-      }
+      window.location.replace(
+        "login.html"
+      );
 
     }
 
   }
 );
 
-
-/* =====================================================
-   START DASHBOARD
-===================================================== */
+/* START */
 
 document.addEventListener(
   "DOMContentLoaded",
@@ -4019,17 +3410,13 @@ document.addEventListener(
       const loaded =
       await loadUserProfile();
 
-
       if(!loaded){
         return;
       }
 
-
       renderProfileUI();
 
-
       renderStats();
-
 
       await Promise.all([
 
@@ -4039,17 +3426,13 @@ document.addEventListener(
 
       ]);
 
-
       setupRealtimeListener();
 
-
       setupLogout();
-
 
       console.log(
         "Dashboard loaded successfully"
       );
-
 
     }catch(error){
 
@@ -4058,37 +3441,31 @@ document.addEventListener(
         error
       );
 
-
       document.getElementById(
         "userName"
       ).innerText =
       "Profile Error";
-
 
       document.getElementById(
         "sidebarUserName"
       ).innerText =
       "Profile Error";
 
-
       document.getElementById(
         "sidebarUserEmail"
       ).innerText =
       error.message;
 
-
       document.getElementById(
         "packageDashboardInfo"
       ).innerHTML =
       `
-      <div style="color:#dc2626;">
-        Dashboard Error:
-        ${escapeHtml(
-          error.message
-        )}
+      <div class="error-box">
+        <b>Dashboard Error</b>
+        <br><br>
+        ${escapeHtml(error.message)}
       </div>
       `;
-
 
       document.getElementById(
         "fullRefLinkText"
@@ -4096,12 +3473,16 @@ document.addEventListener(
       "Error: " +
       error.message;
 
-
       document.getElementById(
         "referralsListContainer"
       ).innerHTML =
-      "Dashboard failed to load";
-
+      `
+      <div class="error-box">
+        Dashboard failed to load
+        <br><br>
+        ${escapeHtml(error.message)}
+      </div>
+      `;
 
       showToast(
         "Dashboard loading failed"
