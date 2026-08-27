@@ -259,7 +259,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  emailjs.init("FxcimUvl0-ZxAauRx");
+  // EmailJS Initialization with your Public Key
+  emailjs.init("nD7bbMhcvotO19ODK");
 
   // Master Admin Verification Lock
   const adminPassword = prompt("🔐 Enter Master Admin Password:");
@@ -416,16 +417,14 @@
 
       await supabaseClient.from('payment_requests').update({ status: 'Approved' }).eq('id', id);
 
+      // Trigger EmailJS using Support Gmail Service ID and Template 1
       if (email) {
-        const currentDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-        emailjs.send('service_qsy07qr', 'template_mf8enck', {
+        emailjs.send('service_a678nhs', 'template_5iadm34', {
           to_email: email,
           to_name: fullName || "User",
-          amount: packageName,
-          referral_id: uniqueRefCode,
-          date: currentDate
+          referral_id: uniqueRefCode
         }).then(() => {
-          console.log("Package Approval Email Sent Successfully!");
+          console.log("Approval Welcome Email Sent Successfully from Support Gmail!");
         }).catch((err) => {
           console.error("EmailJS Error: ", err);
         });
@@ -534,23 +533,12 @@
           await supabaseClient.from('profiles').update({ balance: Number(targetProf.balance || 0) + Number(amount) }).eq('id', targetProf.id);
         }
       } else if (status === 'Approved') {
-        let userReferralId = "SM-smartXXXXX";
-        if (userId) {
-          const { data: pData } = await supabaseClient.from('profiles').select('referral_id').eq('id', userId).maybeSingle();
-          if (pData && pData.referral_id) userReferralId = pData.referral_id;
-        }
-
-        const currentDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-
         if (email) {
-          emailjs.send('service_qsy07qr', 'template_mf8enck', {
+          emailjs.send('service_a678nhs', 'template_5iadm34', {
             to_email: email,
-            to_name: name || "User",
-            amount: amount,
-            referral_id: userReferralId,
-            date: currentDate
+            to_name: name || "User"
           }).then(() => {
-            console.log("Withdrawal Email Sent Successfully!");
+            console.log("Withdrawal Email Sent Successfully from Support Gmail!");
           }).catch((err) => {
             console.error("EmailJS Error: ", err);
           });
