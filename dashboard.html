@@ -51,10 +51,10 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
 .user-info{flex:1;min-width:0;}
 .user-info h2{margin:0 0 8px;font-size:26px;color:#0f172a;font-weight:800;letter-spacing:-0.5px;line-height:1.2;}
-.affiliate-id-box{display:flex;align-items:center;gap:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:10px 14px;width:max-content;margin-bottom:8px;box-shadow:0 2px 6px rgba(0,0,0,0.02);flex-wrap:wrap;}
-.affiliate-id-box span{font-size:14px;color:#475569;}
-.affiliate-id-box b{font-size:15px;color:#7c3aed;font-weight:800;}
-.copy-id-btn, .share-id-btn{width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;color:white;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.affiliate-id-box{display:flex;align-items:center;gap:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:10px 14px;width:100%;margin-bottom:8px;box-shadow:0 2px 6px rgba(0,0,0,0.02);justify-content:space-between;}
+.affiliate-id-box span{font-size:13px;color:#475569;}
+.affiliate-id-box b{font-size:14px;color:#7c3aed;font-weight:800;}
+.copy-id-btn, .share-id-btn{width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;color:white;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
 .copy-id-btn{background:linear-gradient(135deg,#7c3aed,#9333ea);}
 .share-id-btn{background:linear-gradient(135deg,#10b981,#059669);}
 
@@ -178,12 +178,29 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     </div>
     <div class="user-info">
       <h2 id="userName">Loading...</h2>
-      <div class="affiliate-id-box">
-        <span>ID: <b id="myRefCode">Loading...</b></span>
+      <p style="font-size:12px;color:#64748b;margin:0 0 10px;" id="dobDisplayInfo">DOB: Not Set</p>
+    </div>
+  </div>
+
+  <!-- RICHIND STYLE AFFILIATE LINKS SECTION -->
+  <div class="section-box" style="background:linear-gradient(135deg,#ffffff 0%,#f8fafc 100%);">
+    <h3 style="margin-top:0; font-size:16px; color:#0f172a; margin-bottom:12px;">🔗 My Affiliate Links</h3>
+    
+    <!-- Referral Link Box -->
+    <label style="font-size:11px; font-weight:700; color:#64748b; display:block; margin-bottom:4px;">MY REFERRAL LINK</label>
+    <div class="affiliate-id-box">
+      <span id="fullRefLinkText" style="word-break:break-all; font-size:12px; color:#334155; max-width:80%;">Loading link...</span>
+      <button class="copy-id-btn" onclick="copyFullReferralLink()" title="Copy Link">📋</button>
+    </div>
+
+    <!-- Referral Code Box -->
+    <label style="font-size:11px; font-weight:700; color:#64748b; display:block; margin-bottom:4px; margin-top:10px;">MY REFERRAL CODE</label>
+    <div class="affiliate-id-box" style="margin-bottom:0;">
+      <span>ID: <b id="myRefCode">Loading...</b></span>
+      <div style="display:flex; gap:6px;">
         <button class="copy-id-btn" onclick="copyAffiliateLink()" title="Copy Code">📋</button>
         <button class="share-id-btn" onclick="shareAffiliateLink()" title="Share Link">🔗</button>
       </div>
-      <p style="font-size:12px;color:#64748b;margin:0;" id="dobDisplayInfo">DOB: Not Set</p>
     </div>
   </div>
 
@@ -385,7 +402,7 @@ let allReferralsData = [];
 
 function showToast(msg){
   const t = document.getElementById("toastNotification");
-  document.getElementById("toastMessageinnerText" || "toastMessage").innerText = msg;
+  document.getElementById("toastMessage").innerText = msg;
   t.classList.add("show");
   setTimeout(() => { t.classList.remove("show"); }, 3000);
 }
@@ -525,13 +542,14 @@ document.addEventListener("DOMContentLoaded", async function(){
       .maybeSingle();
 
     if(!profile){
+      const randomFiveDigit = Math.floor(10000 + Math.random() * 90000);
       const newProf = {
         user_id: currentUserId,
         email: currentUserEmail,
         full_name: authName,
         balance: 0,
         package_name: null,
-        referral_code: "SM-" + currentUserId.substring(0,6).toUpperCase()
+        referral_code: "SM-smart" + randomFiveDigit
       };
       await supabaseClient.from("profiles").upsert(newProf);
       profile = newProf;
@@ -541,12 +559,18 @@ document.addEventListener("DOMContentLoaded", async function(){
     const finalName = profile?.full_name || authName;
     const finalEmail = profile?.email || currentUserEmail;
     userCurrentBalance = Number(profile?.balance || 0);
-    userRefCode = profile?.referral_code || "SM-" + currentUserId.substring(0,6).toUpperCase();
+    userRefCode = profile?.referral_code || "SM-smart87046";
     const dob = profile?.date_of_birth || "";
     const packageName = profile?.package_name;
 
     document.getElementById("userName").innerHTML = escapeHtml(finalName);
     document.getElementById("myRefCode").innerText = userRefCode;
+    
+    // Update Full Referral Link UI
+    const baseUrl = window.location.origin + "/register.html";
+    const fullLink = `${baseUrl}?ref=${userRefCode}`;
+    document.getElementById("fullRefLinkText").innerText = fullLink;
+
     document.getElementById("dobDisplayInfo").innerText = dob ? "DOB: " + dob : "DOB: Not Set";
     
     const badge = document.getElementById("activePackageBadge");
@@ -750,12 +774,25 @@ async function copyAffiliateLink(){
   }
 }
 
+async function copyFullReferralLink(){
+  const baseUrl = window.location.origin + "/register.html";
+  const fullLink = `${baseUrl}?ref=${userRefCode}`;
+  try {
+    await navigator.clipboard.writeText(fullLink);
+    showToast("Referral Link Copied Successfully!");
+  } catch(e) {
+    alert("Copy failed: " + fullLink);
+  }
+}
+
 function shareAffiliateLink(){
-  const shareText = `Join Smart Money using my Referral ID: ${userRefCode} and start earning today!`;
+  const baseUrl = window.location.origin + "/register.html";
+  const fullLink = `${baseUrl}?ref=${userRefCode}`;
+  const shareText = `Join Smart Money using my Referral Link: ${fullLink} and start earning today!`;
   if (navigator.share) {
-    navigator.share({ title: 'Smart Money Affiliate', text: shareText, url: window.location.origin }).catch(err => console.log(err));
+    navigator.share({ title: 'Smart Money Affiliate', text: shareText, url: fullLink }).catch(err => console.log(err));
   } else {
-    copyAffiliateLink();
+    copyFullReferralLink();
   }
 }
 
