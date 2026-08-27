@@ -410,8 +410,10 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
+/* =========================================
+   SMART MONEY DASHBOARD - STABLE VERSION
+========================================= */
 
 emailjs.init("FxcimUvl0-ZxAauRx");
 
@@ -422,14 +424,17 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY,
   {
-    auth:{
-      persistSession:true,
-      autoRefreshToken:true,
-      detectSessionInUrl:true
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
     }
   }
 );
 
+/* =========================================
+   GLOBAL VARIABLES
+========================================= */
 let currentUserId = null;
 let currentProfile = {};
 let userCurrentBalance = 0;
@@ -437,1701 +442,834 @@ let userRefCode = "";
 let payoutMode = "upi";
 let currentUserEmail = "";
 let allReferralsData = [];
+let realtimeChannel = null;
+let dashboardInitialized = false;
 
-
-/* =========================
+/* =========================================
    BASIC FUNCTIONS
-========================= */
-
-function showToast(msg){
-  const t = document.getElementById("toastNotification");
-  document.getElementById("toastMessage").innerText = msg;
-  t.classList.add("show");
-
-  setTimeout(() => {
-    t.classList.remove("show");
+========================================= */
+function showToast(msg) {
+  const toast = document.getElementById("toastNotification");
+  const message = document.getElementById("toastMessage");
+  if (!toast || !message) return;
+  message.innerText = msg;
+  toast.classList.add("show");
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
   }, 3000);
 }
 
-function escapeHtml(text){
+function escapeHtml(text) {
   const div = document.createElement("div");
   div.textContent = text || "";
   return div.innerHTML;
 }
 
-function toggleSidebar(){
-  document.getElementById("sidebar").classList.toggle("active");
-  document.getElementById("sidebarOverlay").classList.toggle("active");
+function toggleSidebar() {
+  document.getElementById("sidebar")?.classList.toggle("active");
+  document.getElementById("sidebarOverlay")?.classList.toggle("active");
 }
 
-function closeSidebar(){
-  document.getElementById("sidebar").classList.remove("active");
-  document.getElementById("sidebarOverlay").classList.remove("active");
+function closeSidebar() {
+  document.getElementById("sidebar")?.classList.remove("active");
+  document.getElementById("sidebarOverlay")?.classList.remove("active");
 }
 
-function openModal(id){
-  document.getElementById(id).style.display = "flex";
+function openModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) modal.style.display = "flex";
 }
 
-function closeModal(id){
-  document.getElementById(id).style.display = "none";
+function closeModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) modal.style.display = "none";
 }
 
-function openEarningsModal(title,amount){
+/* =========================================
+   MODALS
+========================================= */
+function openEarningsModal(title, amount) {
   document.getElementById("earningsModalTitle").innerText = "📊 " + title;
   document.getElementById("earningsModalAmount").innerText = amount;
   openModal("earningsModal");
 }
 
-function openPackageModal(){
+function openPackageModal() {
   closeSidebar();
   openModal("packageModal");
 }
 
-function openHistoryModal(){
+function openHistoryModal() {
   closeSidebar();
   openModal("historyModal");
   loadWithdrawalHistory();
 }
 
-function openUpiModal(){
+function openUpiModal() {
   closeSidebar();
-
-  document.getElementById("editUpiId").value =
-    currentProfile?.upi_id || "";
-
-  document.getElementById("editAccName").value =
-    currentProfile?.account_holder_name || "";
-
-  document.getElementById("editAccNo").value =
-    currentProfile?.bank_account_number || "";
-
-  document.getElementById("editIfsc").value =
-    currentProfile?.ifsc_code || "";
-
+  document.getElementById("editUpiId").value = currentProfile?.upi_id || "";
+  document.getElementById("editAccName").value = currentProfile?.account_holder_name || "";
+  document.getElementById("editAccNo").value = currentProfile?.bank_account_number || "";
+  document.getElementById("editIfsc").value = currentProfile?.ifsc_code || "";
   switchPayoutMode(currentProfile?.payout_type || "upi");
-
   openModal("profileSettingsModal");
 }
 
-function switchPayoutMode(mode){
-
-  payoutMode = mode;
-
-  document.getElementById("upiSection").style.display =
-    mode === "upi" ? "block" : "none";
-
-  document.getElementById("bankSection").style.display =
-    mode === "bank" ? "block" : "none";
-
-  document.getElementById("tabUpi").className =
-    mode === "upi"
-      ? "payout-tab active"
-      : "payout-tab";
-
-  document.getElementById("tabBank").className =
-    mode === "bank"
-      ? "payout-tab active"
-      : "payout-tab";
-}
-
-function openKycModal(){
-
+function openKycModal() {
   closeSidebar();
-
-  document.getElementById("kycFullName").value =
-    currentProfile?.full_name || "";
-
-  document.getElementById("kycDob").value =
-    currentProfile?.date_of_birth || "";
-
+  document.getElementById("kycFullName").value = currentProfile?.full_name || "";
+  document.getElementById("kycDob").value = currentProfile?.date_of_birth || "";
   openModal("kycModal");
 }
 
-function openWithdrawModal(){
-
+function openWithdrawModal() {
   closeSidebar();
-
   document.getElementById("withdrawAmount").value = "";
-
-  document.getElementById("withdrawModalBalanceText").innerText =
-    "Available Balance: ₹" + userCurrentBalance.toFixed(2);
-
+  document.getElementById("withdrawModalBalanceText").innerText = "Available Balance: ₹" + userCurrentBalance.toFixed(2);
   openModal("withdrawModal");
 }
 
-function setWithdrawAmount(amt){
-  document.getElementById("withdrawAmount").value =
-    Number(amt).toFixed(2);
+/* =========================================
+   PAYOUT MODE
+========================================= */
+function switchPayoutMode(mode) {
+  payoutMode = mode;
+  document.getElementById("upiSection").style.display = mode === "upi" ? "block" : "none";
+  document.getElementById("bankSection").style.display = mode === "bank" ? "block" : "none";
+  document.getElementById("tabUpi").className = mode === "upi" ? "payout-tab active" : "payout-tab";
+  document.getElementById("tabBank").className = mode === "bank" ? "payout-tab active" : "payout-tab";
 }
 
+/* =========================================
+   WITHDRAW AMOUNT
+========================================= */
+function setWithdrawAmount(amount) {
+  const finalAmount = Number(amount || 0);
+  document.getElementById("withdrawAmount").value = finalAmount.toFixed(2);
+}
 
-/* =========================
-   PROFILE IMAGE DISPLAY
-========================= */
+/* =========================================
+   PROFILE IMAGE
+========================================= */
+function applyProfileImage(imgUrl, userName) {
+  const mainImg = document.getElementById("mainProfileImg");
+  const sidebarImg = document.getElementById("sidebarProfileImage");
+  const navAvatar = document.getElementById("navAvatarImg");
+  const removeLi = document.getElementById("removePhotoLi");
 
-function applyProfileImage(imgUrl,userName){
-
-  const mainImg =
-    document.getElementById("mainProfileImg");
-
-  const sidebarImg =
-    document.getElementById("sidebarProfileImage");
-
-  const navAvatar =
-    document.getElementById("navAvatarImg");
-
-  const removeLi =
-    document.getElementById("removePhotoLi");
-
-  if(imgUrl && String(imgUrl).trim() !== ""){
-
-    mainImg.src = imgUrl;
-    sidebarImg.src = imgUrl;
-    navAvatar.src = imgUrl;
-
-    if(removeLi){
+  if (imgUrl && String(imgUrl).trim() !== "") {
+    if (mainImg) mainImg.src = imgUrl;
+    if (sidebarImg) sidebarImg.src = imgUrl;
+    if (navAvatar) navAvatar.src = imgUrl;
+    if (removeLi) {
       removeLi.style.display = "block";
     }
-
-  }else{
-
-    const firstLetter =
-      (userName ? userName.charAt(0) : "U").toUpperCase();
-
-    const fallbackUrl =
-      `https://ui-avatars.com/api/?name=${encodeURIComponent(firstLetter)}&background=7c3aed&color=fff&size=128&bold=true`;
-
-    mainImg.src = fallbackUrl;
-    sidebarImg.src = fallbackUrl;
-    navAvatar.src = fallbackUrl;
-
-    if(removeLi){
+  } else {
+    const firstLetter = (userName || "U").charAt(0).toUpperCase();
+    const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(firstLetter)}&background=7c3aed&color=fff&size=128&bold=true`;
+    if (mainImg) mainImg.src = fallbackUrl;
+    if (sidebarImg) sidebarImg.src = fallbackUrl;
+    if (navAvatar) navAvatar.src = fallbackUrl;
+    if (removeLi) {
       removeLi.style.display = "none";
     }
   }
 }
 
-
-/* =====================================================
-   FIX 1: IMAGE COMPRESS BEFORE DATABASE SAVE
-   Refresh ke baad profile photo database se load hogi
-===================================================== */
-
-function compressProfileImage(file){
-
-  return new Promise((resolve,reject) => {
-
+/* =========================================
+   IMAGE COMPRESSION
+========================================= */
+function compressProfileImage(file) {
+  return new Promise((resolve, reject) => {
+    if (!file.type.startsWith("image/")) {
+      reject(new Error("Please select a valid image"));
+      return;
+    }
     const reader = new FileReader();
-
-    reader.onerror = () => {
-      reject(new Error("Unable to read image"));
-    };
-
-    reader.onload = function(event){
-
+    reader.onerror = () => reject(new Error("Unable to read image"));
+    reader.onload = function(event) {
       const image = new Image();
-
-      image.onerror = () => {
-        reject(new Error("Invalid image"));
-      };
-
-      image.onload = function(){
-
+      image.onerror = () => reject(new Error("Invalid image"));
+      image.onload = function() {
         const MAX_SIZE = 500;
-
         let width = image.width;
         let height = image.height;
-
-        if(width > height){
-
-          if(width > MAX_SIZE){
-            height = Math.round(height * MAX_SIZE / width);
-            width = MAX_SIZE;
-          }
-
-        }else{
-
-          if(height > MAX_SIZE){
-            width = Math.round(width * MAX_SIZE / height);
-            height = MAX_SIZE;
-          }
+        if (width > height && width > MAX_SIZE) {
+          height = Math.round(height * MAX_SIZE / width);
+          width = MAX_SIZE;
+        } else if (height >= width && height > MAX_SIZE) {
+          width = Math.round(width * MAX_SIZE / height);
+          height = MAX_SIZE;
         }
-
         const canvas = document.createElement("canvas");
-
         canvas.width = width;
         canvas.height = height;
-
         const ctx = canvas.getContext("2d");
-
-        ctx.drawImage(
-          image,
-          0,
-          0,
-          width,
-          height
-        );
-
-        const compressedBase64 =
-          canvas.toDataURL("image/jpeg",0.80);
-
-        resolve(compressedBase64);
+        ctx.drawImage(image, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", 0.80));
       };
-
       image.src = event.target.result;
     };
-
     reader.readAsDataURL(file);
   });
 }
 
-
-/* =========================
+/* =========================================
    GLOBAL LOGO
-========================= */
+========================================= */
+async function loadGlobalTopLogo() {
+  try {
+    const { data, error } = await supabaseClient
+      .from("global_settings")
+      .select("setting_value")
+      .eq("setting_key", "admin_top_logo")
+      .maybeSingle();
 
-async function loadGlobalTopLogo(){
-
-  try{
-
-    const { data } =
-      await supabaseClient
-        .from("global_settings")
-        .select("setting_value")
-        .eq("setting_key","admin_top_logo")
-        .single();
-
-    if(data && data.setting_value){
-
-      const logoUrl = data.setting_value;
-
-      const navBrandImg =
-        document.getElementById("navBrandLogoImg");
-
-      const sidebarLogoImg =
-        document.getElementById("sidebarLogo");
-
-      if(navBrandImg){
-        navBrandImg.src = logoUrl;
-      }
-
-      if(sidebarLogoImg){
-        sidebarLogoImg.src = logoUrl;
-      }
+    if (error || !data?.setting_value) {
+      return;
     }
+    const logoUrl = data.setting_value;
+    const navBrand = document.getElementById("navBrandLogoImg");
+    const sidebarLogo = document.getElementById("sidebarLogo");
 
-  }catch(err){
-
-    console.log(
-      "Global logo load info:",
-      err
-    );
+    if (navBrand) {
+      navBrand.src = logoUrl;
+    }
+    if (sidebarLogo) {
+      sidebarLogo.src = logoUrl;
+    }
+  } catch (error) {
+    console.log("Logo load skipped:", error.message);
   }
 }
 
-
-/* =====================================================
-   FIX 2: PERMANENT REFERRAL CODE
-   Existing code kabhi change nahi hoga
-   Missing hone par sirf ek baar generate/save hoga
-===================================================== */
-
-function generateReferralCode(){
-
-  const randomPart =
-    Math.floor(
-      100000 + Math.random() * 900000
-    );
-
-  const timePart =
-    Date.now().toString().slice(-5);
-
-  return "SM-smart" + timePart + randomPart;
+/* =========================================
+   REFERRAL CODE
+========================================= */
+function generateReferralCode() {
+  const randomPart = Math.floor(100000 + Math.random() * 900000);
+  const timePart = Date.now().toString().slice(-6);
+  return ("SM" + timePart + randomPart);
 }
 
-async function ensurePermanentReferralCode(profile){
-
-  const existingCode =
-    profile?.referral_code;
-
-  /* Agar pehle se code hai,
-     wahi hamesha use hoga */
-
-  if(
-    existingCode &&
-    String(existingCode).trim() !== ""
-  ){
+async function ensurePermanentReferralCode(profile) {
+  const existingCode = profile?.referral_code;
+  if (existingCode && String(existingCode).trim() !== "") {
     return String(existingCode).trim();
   }
-
-  /* Sirf missing referral code ke liye
-     naya code generate hoga */
-
-  const newReferralCode =
-    generateReferralCode();
-
-  const { data, error } =
-    await supabaseClient
+  const newCode = generateReferralCode();
+  try {
+    const { data, error } = await supabaseClient
       .from("profiles")
-      .update({
-        referral_code:newReferralCode
-      })
-      .eq("user_id",currentUserId)
+      .update({ referral_code: newCode })
+      .eq("user_id", currentUserId)
       .select()
       .single();
 
-  if(error){
-    console.error(
-      "Referral code save error:",
-      error
-    );
-
-    return newReferralCode;
+    if (error) {
+      console.error("Referral code error:", error);
+      return newCode;
+    }
+    if (data) {
+      currentProfile = { ...currentProfile, ...data };
+    }
+    return newCode;
+  } catch (error) {
+    console.error(error);
+    return newCode;
   }
-
-  if(data){
-    currentProfile = data;
-  }
-
-  return newReferralCode;
 }
 
-
-/* =========================
-   PAGE LOAD
-========================= */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  async function(){
-
-    try{
-
-      loadGlobalTopLogo();
-
-      const {
-        data:{session}
-      } =
-        await supabaseClient.auth.getSession();
-
-      if(
-        !session ||
-        !session.user
-      ){
-        window.location.href =
-          "login.html";
-        return;
-      }
-
-      const user =
-        session.user;
-
-      currentUserId =
-        user.id;
-
-      currentUserEmail =
-        user.email || "";
-
-      const authName =
-        user.user_metadata?.full_name ||
-        user.user_metadata?.name ||
-        "Smart Money User";
-
-
-      /* LOAD PROFILE */
-
-      let {
-        data:profile,
-        error:profileError
-      } =
-        await supabaseClient
-          .from("profiles")
-          .select("*")
-          .eq("user_id",currentUserId)
-          .maybeSingle();
-
-
-      /* NEW USER PROFILE */
-
-      if(!profile){
-
-        const permanentReferralCode =
-          generateReferralCode();
-
-        const newProf = {
-          user_id:currentUserId,
-          email:currentUserEmail,
-          full_name:authName,
-          balance:0,
-          package_name:null,
-          referral_code:
-            permanentReferralCode
-        };
-
-        const {
-          data:savedProfile,
-          error:createError
-        } =
-          await supabaseClient
-            .from("profiles")
-            .upsert(
-              newProf,
-              {
-                onConflict:"user_id"
-              }
-            )
-            .select()
-            .single();
-
-        if(createError){
-          console.error(
-            "Profile create error:",
-            createError
-          );
-        }
-
-        profile =
-          savedProfile || newProf;
-      }
-
-
-      currentProfile =
-        profile;
-
-
-      /* IMPORTANT:
-         Existing referral code kabhi change nahi hoga.
-         Sirf missing ho to save hoga */
-
-      const permanentRefCode =
-        await ensurePermanentReferralCode(
-          profile
-        );
-
-      profile.referral_code =
-        permanentRefCode;
-
-      currentProfile.referral_code =
-        permanentRefCode;
-
-
-      const finalName =
-        profile?.full_name ||
-        authName;
-
-      const finalEmail =
-        profile?.email ||
-        currentUserEmail;
-
-      userCurrentBalance =
-        Number(
-          profile?.balance || 0
-        );
-
-      userRefCode =
-        permanentRefCode;
-
-      const dob =
-        profile?.date_of_birth || "";
-
-      const packageName =
-        profile?.package_name;
-
-
-      document.getElementById(
-        "userName"
-      ).innerHTML =
-        escapeHtml(finalName);
-
-      document.getElementById(
-        "myRefCode"
-      ).innerText =
-        userRefCode;
-
-
-      /* FULL REFERRAL LINK */
-
-      const baseUrl =
-        window.location.origin +
-        "/register.html";
-
-      const fullLink =
-        `${baseUrl}?ref=${encodeURIComponent(userRefCode)}`;
-
-      document.getElementById(
-        "fullRefLinkText"
-      ).innerText =
-        fullLink;
-
-
-      document.getElementById(
-        "dobDisplayInfo"
-      ).innerText =
-        dob
-          ? "DOB: " + dob
-          : "DOB: Not Set";
-
-
-      /* PACKAGE */
-
-      const badge =
-        document.getElementById(
-          "activePackageBadge"
-        );
-
-      if(
-        packageName &&
-        packageName.trim() !== "" &&
-        packageName.toLowerCase() !== "none"
-      ){
-
-        badge.innerText =
-          packageName.toUpperCase() +
-          " 👑";
-
-        badge.classList.add("active");
-
-        document.getElementById(
-          "modalPkgName"
-        ).innerText =
-          packageName.toUpperCase();
-
-      }else{
-
-        badge.innerText =
-          "NO PACKAGE";
-
-        badge.classList.remove(
-          "active"
-        );
-
-        document.getElementById(
-          "modalPkgName"
-        ).innerText =
-          "No Package Active";
-      }
-
-
-      /* SIDEBAR USER */
-
-      document.getElementById(
-        "sidebarUserName"
-      ).innerText =
-        finalName;
-
-      document.getElementById(
-        "sidebarUserEmail"
-      ).innerText =
-        finalEmail;
-
-
-      /* LOAD SAVED PROFILE IMAGE */
-
-      applyProfileImage(
-        profile?.profile_pic,
-        finalName
-      );
-
-
-      document.getElementById(
-        "sidebarWalletBal"
-      ).innerText =
-        "₹" +
-        userCurrentBalance.toFixed(2);
-
-      document.getElementById(
-        "allTimeRevenueText"
-      ).innerText =
-        "₹" +
-        userCurrentBalance.toFixed(2);
-
-
-      await loadWithdrawalHistory();
-
-      await loadReferralsData();
-
-      setupRealtimeListener();
-
-
-      document.getElementById(
-        "sideLogoutBtn"
-      ).onclick =
-        async function(){
-
-          await supabaseClient
-            .auth
-            .signOut();
-
-          window.location.href =
-            "login.html";
-        };
-
-
-    }catch(err){
-
-      console.error(
-        "Init Error:",
-        err
-      );
+/* =========================================
+   LOAD DASHBOARD PROFILE
+========================================= */
+async function loadDashboardProfile() {
+  const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+  if (sessionError || !session?.user) {
+    window.location.href = "login.html";
+    return false;
+  }
+  const user = session.user;
+  currentUserId = user.id;
+  currentUserEmail = user.email || "";
+  const authName = user.user_metadata?.full_name || user.user_metadata?.name || "Smart Money User";
+
+  const { data: profile, error: profileError } = await supabaseClient
+    .from("profiles")
+    .select("*")
+    .eq("user_id", currentUserId)
+    .maybeSingle();
+
+  if (profileError) {
+    console.error("Profile load error:", profileError);
+    showToast("Profile loading problem. Please refresh.");
+    return false;
+  }
+
+  let finalProfile = profile;
+  if (!finalProfile) {
+    const newProfile = {
+      user_id: currentUserId,
+      email: currentUserEmail,
+      full_name: authName,
+      balance: 0,
+      package_name: null,
+      referral_code: generateReferralCode()
+    };
+    const { data: createdProfile, error: createError } = await supabaseClient
+      .from("profiles")
+      .upsert(newProfile, { onConflict: "user_id" })
+      .select()
+      .single();
+
+    if (createError) {
+      console.error("Profile create error:", createError);
+      return false;
     }
+    finalProfile = createdProfile;
   }
-);
 
+  currentProfile = finalProfile;
+  const permanentCode = await ensurePermanentReferralCode(finalProfile);
+  currentProfile.referral_code = permanentCode;
+  userRefCode = permanentCode;
+  renderProfile(currentProfile, authName);
+  return true;
+}
 
-/* =====================================================
-   PROFILE IMAGE UPLOAD
-   FIXED: pehle compress, phir database mein permanent save
-===================================================== */
+/* =========================================
+   RENDER PROFILE
+========================================= */
+function renderProfile(profile, fallbackName) {
+  const finalName = profile?.full_name || fallbackName || "Smart Money User";
+  const finalEmail = profile?.email || currentUserEmail;
+  userCurrentBalance = Number(profile?.balance || 0);
+  const packageName = profile?.package_name || "";
+  const dob = profile?.date_of_birth || "";
 
-async function uploadProfilePicture(event){
+  document.getElementById("userName").innerHTML = escapeHtml(finalName);
+  document.getElementById("sidebarUserName").innerText = finalName;
+  document.getElementById("sidebarUserEmail").innerText = finalEmail;
+  document.getElementById("myRefCode").innerText = userRefCode;
+  document.getElementById("sidebarWalletBal").innerText = "₹" + userCurrentBalance.toFixed(2);
+  document.getElementById("allTimeRevenueText").innerText = "₹" + userCurrentBalance.toFixed(2);
+  document.getElementById("dobDisplayInfo").innerText = dob ? "DOB: " + dob : "DOB: Not Set";
 
-  const file =
-    event.target.files[0];
+  const baseUrl = window.location.origin + "/register.html";
+  document.getElementById("fullRefLinkText").innerText = `${baseUrl}?ref=${encodeURIComponent(userRefCode)}`;
 
-  if(!file){
+  const badge = document.getElementById("activePackageBadge");
+  const modalPkgName = document.getElementById("modalPkgName");
+
+  if (packageName && packageName.trim() !== "" && packageName.toLowerCase() !== "none") {
+    badge.innerText = packageName.toUpperCase() + " 👑";
+    badge.classList.add("active");
+    modalPkgName.innerText = packageName.toUpperCase();
+  } else {
+    badge.innerText = "NO PACKAGE";
+    badge.classList.remove("active");
+    modalPkgName.innerText = "No Package Active";
+  }
+
+  applyProfileImage(profile?.profile_pic, finalName);
+}
+
+/* =========================================
+   LOAD WITHDRAWAL HISTORY
+========================================= */
+async function loadWithdrawalHistory() {
+  if (!currentUserId) return;
+  const container = document.getElementById("withdrawalHistoryList");
+  if (!container) return;
+
+  const { data, error } = await supabaseClient
+    .from("withdrawal_requests")
+    .select("id,amount,status,created_at")
+    .eq("user_id", currentUserId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("History error:", error);
+    container.innerHTML = `<div style="text-align:center;color:#ef4444;font-size:13px;padding:15px;">Unable to load withdrawal history</div>`;
     return;
   }
 
-  if(!currentUserId){
-    showToast(
-      "User session not ready. Please try again."
-    );
+  if (!data?.length) {
+    container.innerHTML = `<div style="text-align:center;color:#64748b;font-size:13px;padding:15px;">No withdrawal history found</div>`;
     return;
   }
 
-  try{
+  container.innerHTML = data.map(item => {
+    const status = String(item.status || "pending").toLowerCase();
+    let statusClass = "status-pending";
+    let statusText = "Pending";
 
-    showToast(
-      "Saving profile picture..."
-    );
+    if (status === "approved" || status === "success") {
+      statusClass = "status-approved";
+      statusText = "Successful";
+    } else if (status === "rejected") {
+      statusClass = "status-rejected";
+      statusText = "Rejected";
+    }
 
+    const date = item.created_at ? new Date(item.created_at).toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    }) : "-";
 
-    /* IMAGE COMPRESS */
+    return `
+      <div class="history-card-item">
+        <div class="history-row-1">
+          <span>Date: ${date}</span>
+        </div>
+        <div class="history-row-2">
+          <span class="history-amount">₹${Number(item.amount || 0).toFixed(2)}</span>
+          <span class="status-badge ${statusClass}">${statusText}</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
 
-    const compressedImage =
-      await compressProfileImage(
-        file
-      );
+/* =========================================
+   LOAD REFERRALS - FAST VERSION
+========================================= */
+async function loadReferralsData() {
+  if (!currentUserId || !userRefCode) {
+    return;
+  }
+  const container = document.getElementById("referralsListContainer");
+  if (container) {
+    container.innerHTML = `<div style="text-align:center;color:#64748b;font-size:13px;padding:10px;">Loading referrals...</div>`;
+  }
 
+  try {
+    const { data, error } = await supabaseClient
+      .from("profiles")
+      .select("full_name,referral_code,created_at,referred_by")
+      .eq("referred_by", userRefCode)
+      .order("created_at", { ascending: false });
 
-    /* DATABASE UPDATE
-       select() use kiya gaya hai taaki confirm ho
-       photo actual database mein save hui */
+    if (error) {
+      console.error("Referral error:", error);
+      allReferralsData = [];
+    } else {
+      allReferralsData = data || [];
+    }
 
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from("profiles")
-        .update({
-          profile_pic:
-            compressedImage
-        })
-        .eq(
-          "user_id",
-          currentUserId
-        )
-        .select()
-        .single();
+    const firstTab = document.querySelector(".ref-tab");
+    filterReferrals(1, firstTab);
+  } catch (error) {
+    console.error("Referral load error:", error);
+    allReferralsData = [];
+    filterReferrals(1);
+  }
+}
 
+/* =========================================
+   FILTER REFERRALS
+========================================= */
+function filterReferrals(days, btnElement) {
+  document.querySelectorAll(".ref-tab").forEach(tab => {
+    tab.classList.remove("active");
+  });
 
-    if(error){
+  if (btnElement) {
+    btnElement.classList.add("active");
+  }
 
-      console.error(
-        "Profile picture save error:",
-        error
-      );
+  const container = document.getElementById("referralsListContainer");
+  if (!container) return;
 
-      alert(
-        "Failed to save picture: " +
-        error.message
-      );
+  const now = new Date();
+  const filtered = allReferralsData.filter(item => {
+    if (!item.created_at) {
+      return false;
+    }
+    const date = new Date(item.created_at);
+    const difference = now.getTime() - date.getTime();
+    const daysDifference = difference / (1000 * 60 * 60 * 24);
+    return (daysDifference >= 0 && daysDifference <= days);
+  });
 
+  if (!filtered.length) {
+    container.innerHTML = `<div style="text-align:center;color:#64748b;font-size:13px;padding:15px;">No referrals found in the last ${days} day(s).</div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(ref => {
+    const name = escapeHtml(ref.full_name || "User");
+    const refCode = escapeHtml(ref.referral_code || "N/A");
+    const date = ref.created_at ? new Date(ref.created_at).toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    }) : "-";
+
+    return `
+      <div class="referral-card-item">
+        <div class="ref-user-info">
+          <h4>${name}</h4>
+          <span>ID: ${refCode}</span>
+        </div>
+        <div class="ref-date">
+          <span>Joined</span>
+          <br>
+          <b>${date}</b>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+/* =========================================
+   COPY REFERRAL CODE
+========================================= */
+async function copyAffiliateLink() {
+  try {
+    await navigator.clipboard.writeText(userRefCode);
+    showToast("Referral Code Copied!");
+  } catch {
+    prompt("Copy your referral code:", userRefCode);
+  }
+}
+
+/* =========================================
+   COPY FULL LINK
+========================================= */
+async function copyFullReferralLink() {
+  const fullLink = `${window.location.origin}/register.html?ref=${encodeURIComponent(userRefCode)}`;
+  try {
+    await navigator.clipboard.writeText(fullLink);
+    showToast("Referral Link Copied!");
+  } catch {
+    prompt("Copy your referral link:", fullLink);
+  }
+}
+
+/* =========================================
+   SHARE REFERRAL
+========================================= */
+async function shareAffiliateLink() {
+  const fullLink = `${window.location.origin}/register.html?ref=${encodeURIComponent(userRefCode)}`;
+  try {
+    if (navigator.share) {
+      await navigator.share({
+        title: "Smart Money Affiliate",
+        text: "Join Smart Money using my referral link!",
+        url: fullLink
+      });
+    } else {
+      await copyFullReferralLink();
+    }
+  } catch (error) {
+    console.log("Share cancelled:", error.message);
+  }
+}
+
+/* =========================================
+   UPDATE PAYOUT
+========================================= */
+async function updateUserPayoutDetails() {
+  const saveBtn = document.getElementById("saveProfileBtn");
+  saveBtn.disabled = true;
+  saveBtn.innerText = "Saving...";
+
+  const updateData = { payout_type: payoutMode };
+
+  if (payoutMode === "upi") {
+    updateData.upi_id = document.getElementById("editUpiId").value.trim();
+  } else {
+    updateData.account_holder_name = document.getElementById("editAccName").value.trim();
+    updateData.bank_account_number = document.getElementById("editAccNo").value.trim();
+    updateData.ifsc_code = document.getElementById("editIfsc").value.trim().toUpperCase();
+  }
+
+  const { data, error } = await supabaseClient
+    .from("profiles")
+    .update(updateData)
+    .eq("user_id", currentUserId)
+    .select()
+    .single();
+
+  saveBtn.disabled = false;
+  saveBtn.innerText = "Save Details";
+
+  if (error) {
+    alert("Error: " + error.message);
+    return;
+  }
+
+  currentProfile = { ...currentProfile, ...data };
+  showToast("Payout details saved successfully!");
+  closeModal("profileSettingsModal");
+}
+
+/* =========================================
+   SAVE KYC
+========================================= */
+async function saveKycDetails() {
+  const fullName = document.getElementById("kycFullName").value.trim();
+  const dob = document.getElementById("kycDob").value;
+
+  if (!fullName) {
+    alert("Please enter your full name.");
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+    .from("profiles")
+    .update({
+      full_name: fullName,
+      date_of_birth: dob || null
+    })
+    .eq("user_id", currentUserId)
+    .select()
+    .single();
+
+  if (error) {
+    alert("Error: " + error.message);
+    return;
+  }
+
+  currentProfile = { ...currentProfile, ...data };
+  renderProfile(currentProfile, fullName);
+  showToast("KYC saved successfully!");
+  closeModal("kycModal");
+}
+
+/* =========================================
+   UPLOAD PROFILE PICTURE
+========================================= */
+async function uploadProfilePicture(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  if (!currentUserId) {
+    showToast("Please wait, profile is loading.");
+    return;
+  }
+
+  try {
+    showToast("Saving profile picture...");
+    const compressedImage = await compressProfileImage(file);
+
+    const { data, error } = await supabaseClient
+      .from("profiles")
+      .update({ profile_pic: compressedImage })
+      .eq("user_id", currentUserId)
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    currentProfile = { ...currentProfile, ...data };
+    applyProfileImage(data.profile_pic, currentProfile.full_name);
+    showToast("Profile picture saved!");
+  } catch (error) {
+    console.error(error);
+    alert("Failed to save picture: " + error.message);
+  } finally {
+    event.target.value = "";
+  }
+}
+
+/* =========================================
+   REMOVE PROFILE PICTURE
+========================================= */
+async function removeProfilePicture() {
+  const confirmed = confirm("Are you sure you want to remove your profile picture?");
+  if (!confirmed) return;
+
+  const { data, error } = await supabaseClient
+    .from("profiles")
+    .update({ profile_pic: null })
+    .eq("user_id", currentUserId)
+    .select()
+    .single();
+
+  if (error) {
+    alert("Failed to remove picture: " + error.message);
+    return;
+  }
+
+  currentProfile = { ...currentProfile, ...data };
+  applyProfileImage(null, currentProfile.full_name);
+  showToast("Profile picture removed!");
+}
+
+/* =========================================
+   SUBMIT WITHDRAWAL
+========================================= */
+async function submitWithdrawal() {
+  const amount = Number(document.getElementById("withdrawAmount").value);
+  const submitBtn = document.getElementById("submitWithdrawBtn");
+  const packageName = String(currentProfile?.package_name || "").toLowerCase();
+
+  let minWithdrawLimit = 200;
+  if (["vip", "pro", "gold"].includes(packageName)) {
+    minWithdrawLimit = 100;
+  }
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    alert("Please enter a valid amount.");
+    return;
+  }
+
+  if (amount < minWithdrawLimit) {
+    alert(`Minimum withdrawal limit is ₹${minWithdrawLimit}.`);
+    return;
+  }
+
+  if (amount > userCurrentBalance) {
+    alert("Insufficient balance.");
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.innerText = "Processing...";
+
+  try {
+    const { error: insertError } = await supabaseClient
+      .from("withdrawal_requests")
+      .insert({
+        user_id: currentUserId,
+        amount: amount,
+        status: "pending"
+      });
+
+    if (insertError) {
+      throw insertError;
+    }
+
+    const newBalance = userCurrentBalance - amount;
+    const { data: updatedProfile, error: balanceError } = await supabaseClient
+      .from("profiles")
+      .update({ balance: newBalance })
+      .eq("user_id", currentUserId)
+      .select()
+      .single();
+
+    if (balanceError) {
+      throw balanceError;
+    }
+
+    currentProfile = { ...currentProfile, ...updatedProfile };
+    userCurrentBalance = Number(updatedProfile.balance || 0);
+
+    document.getElementById("sidebarWalletBal").innerText = "₹" + userCurrentBalance.toFixed(2);
+    document.getElementById("allTimeRevenueText").innerText = "₹" + userCurrentBalance.toFixed(2);
+
+    showToast("Withdrawal requested successfully!");
+    closeModal("withdrawModal");
+    await loadWithdrawalHistory();
+  } catch (error) {
+    console.error("Withdrawal error:", error);
+    alert("Withdrawal failed: " + error.message);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerText = "Submit Request";
+  }
+}
+
+/* =========================================
+   REALTIME
+========================================= */
+function setupRealtimeListener() {
+  if (!currentUserId || realtimeChannel) {
+    return;
+  }
+
+  realtimeChannel = supabaseClient
+    .channel(`dashboard-${currentUserId}`)
+    .on(
+      "postgres_changes",
+      {
+        event: "UPDATE",
+        schema: "public",
+        table: "profiles",
+        filter: `user_id=eq.${currentUserId}`
+      },
+      payload => {
+        if (!payload.new) return;
+        currentProfile = { ...currentProfile, ...payload.new };
+        userCurrentBalance = Number(currentProfile.balance || 0);
+        renderProfile(currentProfile, currentProfile.full_name);
+      }
+    )
+    .on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "withdrawal_requests",
+        filter: `user_id=eq.${currentUserId}`
+      },
+      async () => {
+        await loadWithdrawalHistory();
+        showToast("Withdrawal status updated!");
+      }
+    )
+    .subscribe(status => {
+      console.log("Realtime:", status);
+    });
+}
+
+/* =========================================
+   LOGOUT
+========================================= */
+function setupLogout() {
+  const logoutBtn = document.getElementById("sideLogoutBtn");
+  if (!logoutBtn) return;
+
+  logoutBtn.onclick = async function() {
+    try {
+      if (realtimeChannel) {
+        await supabaseClient.removeChannel(realtimeChannel);
+        realtimeChannel = null;
+      }
+      await supabaseClient.auth.signOut();
+      window.location.href = "login.html";
+    } catch (error) {
+      console.error("Logout error:", error);
+      window.location.href = "login.html";
+    }
+  };
+}
+
+/* =========================================
+   PAGE INITIALIZATION
+========================================= */
+document.addEventListener("DOMContentLoaded", async function() {
+  if (dashboardInitialized) {
+    return;
+  }
+  dashboardInitialized = true;
+
+  try {
+    loadGlobalTopLogo();
+
+    const profileLoaded = await loadDashboardProfile();
+    if (!profileLoaded) {
       return;
     }
 
+    await Promise.all([
+      loadWithdrawalHistory(),
+      loadReferralsData()
+    ]);
 
-    /* CONFIRMED SAVED DATA */
-
-    if(data){
-
-      currentProfile =
-        {
-          ...currentProfile,
-          ...data
-        };
-
-      applyProfileImage(
-        data.profile_pic,
-        currentProfile?.full_name
-      );
-
-      showToast(
-        "Profile picture saved permanently!"
-      );
-    }
-
-  }catch(err){
-
-    console.error(
-      "Image upload error:",
-      err
-    );
-
-    alert(
-      "Failed to save profile picture."
-    );
+    setupRealtimeListener();
+    setupLogout();
+  } catch (error) {
+    console.error("Dashboard initialization error:", error);
+    showToast("Dashboard loading error. Please refresh.");
   }
-
-  /* Same photo dubara select karne ke liye */
-
-  event.target.value = "";
-}
-
-
-/* =========================
-   REMOVE PROFILE IMAGE
-========================= */
-
-async function removeProfilePicture(){
-
-  if(
-    !confirm(
-      "Are you sure you want to remove your profile picture?"
-    )
-  ){
-    return;
-  }
-
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("profiles")
-      .update({
-        profile_pic:null
-      })
-      .eq(
-        "user_id",
-        currentUserId
-      )
-      .select()
-      .single();
-
-
-  if(error){
-
-    alert(
-      "Failed to remove picture: " +
-      error.message
-    );
-
-  }else{
-
-    currentProfile =
-      {
-        ...currentProfile,
-        ...data
-      };
-
-    applyProfileImage(
-      null,
-      currentProfile?.full_name
-    );
-
-    showToast(
-      "Profile picture removed!"
-    );
-  }
-}
-
-
-/* =========================
-   REALTIME
-========================= */
-
-function setupRealtimeListener(){
-
-  supabaseClient
-    .channel(
-      "public:profiles_and_withdrawals"
-    )
-
-    .on(
-      "postgres_changes",
-      {
-        event:"UPDATE",
-        schema:"public",
-        table:"profiles",
-        filter:`user_id=eq.${currentUserId}`
-      },
-      payload => {
-
-        if(payload.new){
-
-          /* Full profile update */
-
-          currentProfile =
-            {
-              ...currentProfile,
-              ...payload.new
-            };
-
-
-          userCurrentBalance =
-            Number(
-              payload.new.balance || 0
-            );
-
-
-          document.getElementById(
-            "sidebarWalletBal"
-          ).innerText =
-            "₹" +
-            userCurrentBalance.toFixed(2);
-
-
-          document.getElementById(
-            "allTimeRevenueText"
-          ).innerText =
-            "₹" +
-            userCurrentBalance.toFixed(2);
-
-
-          /* IMPORTANT:
-             Realtime update se bhi
-             referral code overwrite/change nahi hoga */
-
-          if(
-            payload.new.referral_code &&
-            String(
-              payload.new.referral_code
-            ).trim() !== ""
-          ){
-
-            userRefCode =
-              String(
-                payload.new.referral_code
-              ).trim();
-
-            document.getElementById(
-              "myRefCode"
-            ).innerText =
-              userRefCode;
-
-            const baseUrl =
-              window.location.origin +
-              "/register.html";
-
-            document.getElementById(
-              "fullRefLinkText"
-            ).innerText =
-              `${baseUrl}?ref=${encodeURIComponent(userRefCode)}`;
-          }
-
-
-          /* Realtime profile image */
-
-          if(
-            payload.new.profile_pic !==
-            undefined
-          ){
-
-            applyProfileImage(
-              payload.new.profile_pic,
-              currentProfile?.full_name
-            );
-          }
-        }
-      }
-    )
-
-    .on(
-      "postgres_changes",
-      {
-        event:"UPDATE",
-        schema:"public",
-        table:"withdrawal_requests",
-        filter:`user_id=eq.${currentUserId}`
-      },
-      payload => {
-
-        loadWithdrawalHistory();
-
-        showToast(
-          "Withdrawal status updated!"
-        );
-      }
-    )
-
-    .subscribe();
-}
-
-
-/* =========================
-   WITHDRAWAL HISTORY
-========================= */
-
-async function loadWithdrawalHistory(){
-
-  const historyContainer =
-    document.getElementById(
-      "withdrawalHistoryList"
-    );
-
-  if(!historyContainer){
-    return;
-  }
-
-
-  const { data } =
-    await supabaseClient
-      .from("withdrawal_requests")
-      .select("*")
-      .eq(
-        "user_id",
-        currentUserId
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      );
-
-
-  if(
-    !data ||
-    data.length === 0
-  ){
-
-    historyContainer.innerHTML =
-      `<div style="text-align:center;color:#64748b;font-size:13px;padding:10px;">No withdrawal history found</div>`;
-
-    return;
-  }
-
-
-  let html = "";
-
-  data.forEach(item => {
-
-    let statusClass =
-      "status-pending";
-
-    let statusText =
-      "Pending";
-
-    const st =
-      (
-        item.status ||
-        ""
-      ).toLowerCase();
-
-
-    if(
-      st === "approved" ||
-      st === "success"
-    ){
-
-      statusClass =
-        "status-approved";
-
-      statusText =
-        "Successfully";
-
-    }else if(
-      st === "rejected"
-    ){
-
-      statusClass =
-        "status-rejected";
-
-      statusText =
-        "Rejected";
-    }
-
-
-    const dateStr =
-      new Date(
-        item.created_at
-      ).toLocaleDateString(
-        "en-IN",
-        {
-          day:"numeric",
-          month:"short",
-          year:"numeric"
-        }
-      );
-
-
-    html += `
-      <div class="history-card-item">
-
-        <div class="history-row-1">
-          <span>Date: ${dateStr}</span>
-        </div>
-
-        <div class="history-row-2">
-          <span class="history-amount">
-            ₹${item.amount}
-          </span>
-
-          <span class="status-badge ${statusClass}">
-            ${statusText}
-          </span>
-        </div>
-
-      </div>
-    `;
-  });
-
-
-  historyContainer.innerHTML =
-    html;
-}
-
-
-/* =========================
-   REFERRALS
-========================= */
-
-async function loadReferralsData(){
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("profiles")
-      .select(
-        "full_name,referral_code,created_at,referred_by"
-      )
-      .or(
-        `referred_by.eq.${userRefCode},referred_by.eq.${currentUserId}`
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      );
-
-
-  if(
-    error ||
-    !data
-  ){
-
-    allReferralsData = [];
-
-  }else{
-
-    allReferralsData =
-      data;
-  }
-
-
-  filterReferrals(
-    1,
-    document.querySelector(
-      ".ref-tab"
-    )
-  );
-}
-
-
-function filterReferrals(
-  days,
-  btnElement
-){
-
-  const tabs =
-    document.querySelectorAll(
-      ".ref-tab"
-    );
-
-  tabs.forEach(
-    t => t.classList.remove(
-      "active"
-    )
-  );
-
-
-  if(btnElement){
-
-    btnElement.classList.add(
-      "active"
-    );
-  }
-
-
-  const container =
-    document.getElementById(
-      "referralsListContainer"
-    );
-
-  const now =
-    new Date();
-
-
-  const filtered =
-    allReferralsData.filter(
-      item => {
-
-        const itemDate =
-          new Date(
-            item.created_at
-          );
-
-        const diffTime =
-          Math.abs(
-            now - itemDate
-          );
-
-        const diffDays =
-          Math.ceil(
-            diffTime /
-            (
-              1000 *
-              60 *
-              60 *
-              24
-            )
-          );
-
-        return diffDays <= days;
-      }
-    );
-
-
-  if(
-    filtered.length === 0
-  ){
-
-    container.innerHTML =
-      `<div style="text-align:center;color:#64748b;font-size:13px;padding:15px;">No referrals found in the last ${days} day(s).</div>`;
-
-    return;
-  }
-
-
-  let html = "";
-
-  filtered.forEach(
-    ref => {
-
-      const name =
-        ref.full_name ||
-        "User";
-
-      const refId =
-        ref.referral_code ||
-        "N/A";
-
-      const dateStr =
-        new Date(
-          ref.created_at
-        ).toLocaleDateString(
-          "en-IN",
-          {
-            day:"numeric",
-            month:"short",
-            year:"numeric"
-          }
-        );
-
-
-      html += `
-        <div class="referral-card-item">
-
-          <div class="ref-user-info">
-            <h4>
-              ${escapeHtml(name)}
-            </h4>
-
-            <span>
-              ID: ${escapeHtml(refId)}
-            </span>
-          </div>
-
-          <div class="ref-date">
-            <span>Joined</span>
-            <br>
-            <b>${dateStr}</b>
-          </div>
-
-        </div>
-      `;
-    }
-  );
-
-
-  container.innerHTML =
-    html;
-}
-
-
-/* =========================
-   COPY REFERRAL CODE
-========================= */
-
-async function copyAffiliateLink(){
-
-  try{
-
-    await navigator.clipboard.writeText(
-      userRefCode
-    );
-
-    showToast(
-      "Referral Code Copied: " +
-      userRefCode
-    );
-
-  }catch(e){
-
-    alert(
-      "Copy failed. ID: " +
-      userRefCode
-    );
-  }
-}
-
-
-/* =========================
-   COPY FULL REFERRAL LINK
-========================= */
-
-async function copyFullReferralLink(){
-
-  const baseUrl =
-    window.location.origin +
-    "/register.html";
-
-  const fullLink =
-    `${baseUrl}?ref=${encodeURIComponent(userRefCode)}`;
-
-
-  try{
-
-    await navigator.clipboard.writeText(
-      fullLink
-    );
-
-    showToast(
-      "Referral Link Copied Successfully!"
-    );
-
-  }catch(e){
-
-    alert(
-      "Copy failed: " +
-      fullLink
-    );
-  }
-}
-
-
-/* =========================
-   SHARE REFERRAL
-========================= */
-
-function shareAffiliateLink(){
-
-  const baseUrl =
-    window.location.origin +
-    "/register.html";
-
-  const fullLink =
-    `${baseUrl}?ref=${encodeURIComponent(userRefCode)}`;
-
-  const shareText =
-    `Join Smart Money using my Referral Link: ${fullLink} and start earning today!`;
-
-
-  if(
-    navigator.share
-  ){
-
-    navigator.share({
-      title:"Smart Money Affiliate",
-      text:shareText,
-      url:fullLink
-    }).catch(
-      err => console.log(err)
-    );
-
-  }else{
-
-    copyFullReferralLink();
-  }
-}
-
-
-/* =========================
-   UPDATE PAYOUT
-========================= */
-
-async function updateUserPayoutDetails(){
-
-  const saveBtn =
-    document.getElementById(
-      "saveProfileBtn"
-    );
-
-  saveBtn.disabled =
-    true;
-
-  saveBtn.innerText =
-    "Saving...";
-
-
-  let updateData = {
-    payout_type:
-      payoutMode
-  };
-
-
-  if(
-    payoutMode === "upi"
-  ){
-
-    updateData.upi_id =
-      document
-        .getElementById(
-          "editUpiId"
-        )
-        .value
-        .trim();
-
-  }else{
-
-    updateData.account_holder_name =
-      document
-        .getElementById(
-          "editAccName"
-        )
-        .value
-        .trim();
-
-    updateData.bank_account_number =
-      document
-        .getElementById(
-          "editAccNo"
-        )
-        .value
-        .trim();
-
-    updateData.ifsc_code =
-      document
-        .getElementById(
-          "editIfsc"
-        )
-        .value
-        .trim()
-        .toUpperCase();
-  }
-
-
-  const { error } =
-    await supabaseClient
-      .from("profiles")
-      .update(updateData)
-      .eq(
-        "user_id",
-        currentUserId
-      );
-
-
-  saveBtn.disabled =
-    false;
-
-  saveBtn.innerText =
-    "Save Details";
-
-
-  if(error){
-
-    alert(
-      "Error: " +
-      error.message
-    );
-
-    return;
-  }
-
-
-  currentProfile =
-    {
-      ...currentProfile,
-      ...updateData
-    };
-
-
-  showToast(
-    "Payout details saved successfully!"
-  );
-
-  closeModal(
-    "profileSettingsModal"
-  );
-}
-
-
-/* =========================
-   SAVE KYC
-========================= */
-
-async function saveKycDetails(){
-
-  const fullName =
-    document
-      .getElementById(
-        "kycFullName"
-      )
-      .value
-      .trim();
-
-  const dob =
-    document
-      .getElementById(
-        "kycDob"
-      )
-      .value;
-
-
-  const { error } =
-    await supabaseClient
-      .from("profiles")
-      .update({
-        full_name:fullName,
-        date_of_birth:dob
-      })
-      .eq(
-        "user_id",
-        currentUserId
-      );
-
-
-  if(error){
-
-    alert(
-      "Error: " +
-      error.message
-    );
-
-    return;
-  }
-
-
-  currentProfile =
-    {
-      ...currentProfile,
-      full_name:fullName,
-      date_of_birth:dob
-    };
-
-
-  document.getElementById(
-    "userName"
-  ).innerHTML =
-    escapeHtml(fullName);
-
-
-  document.getElementById(
-    "dobDisplayInfo"
-  ).innerText =
-    "DOB: " + dob;
-
-
-  applyProfileImage(
-    currentProfile?.profile_pic,
-    fullName
-  );
-
-
-  showToast(
-    "KYC saved successfully!"
-  );
-
-  closeModal(
-    "kycModal"
-  );
-}
-
-
-/* =========================
-   SUBMIT WITHDRAWAL
-========================= */
-
-async function submitWithdrawal(){
-
-  const amount =
-    Number(
-      document
-        .getElementById(
-          "withdrawAmount"
-        )
-        .value
-    );
-
-  const submitBtn =
-    document.getElementById(
-      "submitWithdrawBtn"
-    );
-
-
-  const packageName =
-    (
-      currentProfile?.package_name ||
-      ""
-    ).toLowerCase();
-
-
-  let minWithdrawLimit =
-    200;
-
-
-  if(
-    packageName === "vip" ||
-    packageName === "pro" ||
-    packageName === "gold"
-  ){
-
-    minWithdrawLimit =
-      100;
-
-  }else if(
-    !packageName ||
-    packageName === "none"
-  ){
-
-    minWithdrawLimit =
-      200;
-  }
-
-
-  if(
-    !amount ||
-    amount <= 0
-  ){
-
-    alert(
-      "Please enter a valid amount."
-    );
-
-    return;
-  }
-
-
-  if(
-    amount < minWithdrawLimit
-  ){
-
-    alert(
-      `Minimum withdrawal limit is ₹${minWithdrawLimit} for your package.`
-    );
-
-    return;
-  }
-
-
-  if(
-    amount >
-    userCurrentBalance
-  ){
-
-    alert(
-      "Insufficient balance."
-    );
-
-    return;
-  }
-
-
-  submitBtn.disabled =
-    true;
-
-
-  const {
-    error:insertError
-  } =
-    await supabaseClient
-      .from("withdrawal_requests")
-      .insert({
-        user_id:
-          currentUserId,
-        amount:
-          amount,
-        status:
-          "pending"
-      });
-
-
-  if(insertError){
-
-    submitBtn.disabled =
-      false;
-
-    alert(
-      "Error: " +
-      insertError.message
-    );
-
-    return;
-  }
-
-
-  const newBalance =
-    userCurrentBalance -
-    amount;
-
-
-  await supabaseClient
-    .from("profiles")
-    .update({
-      balance:
-        newBalance
-    })
-    .eq(
-      "user_id",
-      currentUserId
-    );
-
-
-  submitBtn.disabled =
-    false;
-
-
-  userCurrentBalance =
-    newBalance;
-
-
-  document.getElementById(
-    "sidebarWalletBal"
-  ).innerText =
-    "₹" +
-    userCurrentBalance.toFixed(2);
-
-
-  showToast(
-    "Withdrawal requested successfully!"
-  );
-
-
-  closeModal(
-    "withdrawModal"
-  );
-
-
-  await loadWithdrawalHistory();
-}
-
+});
 </script>
 
 </body>
