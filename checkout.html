@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Money - Secure Checkout</title>
+  <title>Smart Money - Checkout Details</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,15 +13,11 @@
       --bg-2: #0d1025;
       --bg-3: #171238;
       --card-bg: rgba(23, 31, 55, 0.78);
-      --card-bg-2: rgba(30, 41, 70, 0.72);
       --border-color: rgba(129, 140, 248, 0.22);
-      --border-bright: rgba(99, 102, 241, 0.55);
       --primary: #6d5dfc;
       --primary-hover: #5546e8;
-      --purple: #8b5cf6;
       --accent: #38bdf8;
       --cyan: #22d3ee;
-      --success: #34d399;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
     }
@@ -107,7 +103,6 @@
       -webkit-backdrop-filter: blur(20px);
       box-shadow: 0 12px 30px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.04); 
       overflow: hidden;
-      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
     .card::before {
       content: "";
@@ -127,7 +122,6 @@
       gap: 8px; 
       border-bottom: 1px solid rgba(255,255,255,0.07); 
       padding-bottom: 12px; 
-      letter-spacing: 0.1px;
     }
 
     .form-group { margin-bottom: 14px; }
@@ -147,32 +141,7 @@
     .form-control::placeholder { color: #52617b; }
     .form-control:focus { border-color: var(--accent); background: rgba(12,20,40,0.85); box-shadow: 0 0 0 3px rgba(56,189,248,0.08), 0 0 18px rgba(56,189,248,0.12); }
 
-    .qr-tabs { display: flex; gap: 8px; margin-bottom: 17px; }
-    .qr-tab-btn { flex: 1; background: rgba(255,255,255,0.035); border: 1px solid rgba(129,140,248,0.22); color: #94a3b8; padding: 10px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.25s ease; }
-    .qr-tab-btn.active { color: white; background: linear-gradient(135deg, #6d5dfc, #4f46e5); border-color: rgba(139,92,246,0.8); box-shadow: 0 6px 20px rgba(99,102,241,0.35); }
-
-    .qr-box { 
-      position: relative;
-      background: linear-gradient(145deg, #ffffff, #eef2ff); 
-      padding: 14px; 
-      border-radius: 17px; 
-      text-align: center; 
-      width: 190px; 
-      margin: 5px auto 13px; 
-      box-shadow: 0 12px 30px rgba(0,0,0,0.35), 0 0 30px rgba(99,102,241,0.18); 
-      cursor: pointer; 
-    }
-    .qr-box img { width: 160px; height: 160px; object-fit: contain; display: block; margin: 0 auto; }
-    .qr-hint { font-size: 10px; color: #475569; margin-top: 7px; font-weight: 700; }
-    
-    .upi-display { background: linear-gradient(135deg, rgba(8,14,32,0.72), rgba(21,29,52,0.72)); border: 1px solid rgba(99,102,241,0.22); padding: 11px 13px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 11px; margin-bottom: 15px; }
-    .upi-display span { color: #aab6cc; overflow-wrap: anywhere; }
-    .upi-display b { color: var(--cyan); }
-    .copy-btn { flex-shrink: 0; background: rgba(56,189,248,0.10); border: 1px solid rgba(56,189,248,0.28); color: var(--accent); padding: 6px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; cursor: pointer; }
-
-    .btn-download { width: 100%; background: linear-gradient(135deg, rgba(56,189,248,0.10), rgba(99,102,241,0.10)); border: 1px solid rgba(56,189,248,0.25); color: #7dd3fc; padding: 11px; border-radius: 11px; font-size: 11px; font-weight: 700; cursor: pointer; margin-bottom: 15px; }
-
-    .btn-submit { 
+    .btn-next { 
       width: 100%; 
       background: linear-gradient(135deg, #7064ff 0%, #5546e8 45%, #7c3aed 100%); 
       color: #fff; 
@@ -183,37 +152,26 @@
       font-weight: 800; 
       cursor: pointer; 
       box-shadow: 0 10px 28px rgba(99,102,241,0.35); 
+      margin-top: 10px;
     }
 
     .order-summary { display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 10px; color: #aab6cc; }
     .order-summary b { color: #5eead4; font-weight: 700; }
     #termsCheck { accent-color: #6d5dfc; width: 15px; height: 15px; }
-    
-    input[type="file"] { cursor: pointer; }
-    input[type="file"]::file-selector-button { 
-      background: rgba(99,102,241,0.15); 
-      color: #a5b4fc; 
-      border: 1px solid rgba(129,140,248,0.25); 
-      padding: 6px 9px; 
-      border-radius: 7px; 
-      margin-right: 8px; 
-      font-size: 10px; 
-      cursor: pointer; 
-    }
   </style>
 </head>
 <body>
 
 <div class="container">
   <div class="header">
-    <h1>🚀 Secure Checkout & Payment</h1>
-    <p>Complete your payment and get instant activation</p>
+    <h1>🚀 Enter Your Details</h1>
+    <p>Fill in your account registration details to proceed</p>
   </div>
 
-  <!-- 1. Billing & Details Form -->
+  <!-- Billing & Details Form -->
   <div class="card">
     <h3>👤 1. Billing & Account Details</h3>
-    <form id="checkoutForm">
+    <form id="checkoutForm" onsubmit="goToPayment(event)">
       <div class="form-group">
         <label>Affiliate / Referral Code *</label>
         <input type="text" id="refCode" class="form-control" placeholder="Enter Sponsor Referral ID" required>
@@ -234,45 +192,10 @@
         <label>Create Password *</label>
         <input type="password" id="password" class="form-control" placeholder="Set secure password" required>
       </div>
-      <div class="form-group">
-        <label>Selected Package</label>
-        <input type="text" id="packageNameDisplay" class="form-control" value="" readonly style="color: var(--accent); font-weight: 700;">
-      </div>
     </form>
   </div>
 
-  <!-- 2. QR Code & Payment -->
-  <div class="card">
-    <h3>💳 2. Scan or Download QR & Pay</h3>
-    <div class="qr-tabs">
-      <button class="qr-tab-btn active" onclick="switchQR('super', this)">⚡ Super Money QR</button>
-      <button class="qr-tab-btn" onclick="switchQR('bharatpe', this)">🇮🇳 Business QR</button>
-    </div>
-
-    <div class="qr-box" onclick="downloadCurrentQR()" title="Click to download QR code">
-      <img id="qrImage" src="" alt="Payment QR Code">
-      <div class="qr-hint">📥 Click to Download QR</div>
-    </div>
-
-    <button class="btn-download" onclick="downloadCurrentQR()">⬇️ Download QR Code to Gallery</button>
-
-    <div class="upi-display">
-      <span>UPI ID: <b id="upiText">smartmoney7@nyes</b></span>
-      <button class="copy-btn" onclick="copyUpi()">Copy UPI</button>
-    </div>
-
-    <div class="form-group">
-      <label>Enter UTR / Transaction ID (12-Digit) *</label>
-      <input type="text" id="transactionId" class="form-control" placeholder="Enter 12-digit UTR reference number" required>
-    </div>
-
-    <div class="form-group">
-      <label>Upload Payment Screenshot *</label>
-      <input type="file" id="paymentScreenshot" class="form-control" accept="image/*" required style="padding: 9px;">
-    </div>
-  </div>
-
-  <!-- 3. Summary & Final Submit -->
+  <!-- Order Summary & Next Button -->
   <div class="card">
     <h3>📦 Order Summary</h3>
     <div class="order-summary">
@@ -289,129 +212,57 @@
       <span>I agree to the Terms & Privacy Policy</span>
     </div>
 
-    <button class="btn-submit" id="submitBtn" onclick="submitOrder()">Submit & Register Order 🚀</button>
+    <button type="button" class="btn-next" onclick="goToPayment()">Next ➔ Proceed to Payment</button>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-
   const urlParams = new URLSearchParams(window.location.search);
   const pkgName = urlParams.get('name') || urlParams.get('package') || 'Starter Package';
   const pkgPrice = urlParams.get('price') || '289';
   const refCodeFromUrl = urlParams.get('ref') || '';
 
-  document.getElementById('packageNameDisplay').value = `${pkgName} (₹${pkgPrice})`;
   document.getElementById('summaryPkgName').innerText = pkgName;
   document.getElementById('summaryPrice').innerText = `₹${pkgPrice}`;
   document.getElementById('refCode').value = refCodeFromUrl;
 
-  const qrData = {
-    super: { img: 'IMG_20260826_034558.png', upi: 'smartmoney7@nyes' },
-    bharatpe: { img: 'IMG_20260826_034524.jpg', upi: 'BHARATPE2U0V0S7G2D90659@unitype' }
-  };
+  function goToPayment(e) {
+    if(e) e.preventDefault();
 
-  let currentType = 'super';
-
-  function switchQR(type, btn) {
-    currentType = type;
-    document.querySelectorAll('.qr-tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('qrImage').src = qrData[type].img;
-    document.getElementById('upiText').innerText = qrData[type].upi;
-  }
-
-  document.getElementById('qrImage').src = qrData.super.img;
-
-  function copyUpi() {
-    const upi = document.getElementById('upiText').innerText;
-    navigator.clipboard.writeText(upi);
-    alert("UPI ID Copied: " + upi);
-  }
-
-  function downloadCurrentQR() {
-    const imgSrc = qrData[currentType].img;
-    const link = document.createElement('a');
-    link.href = imgSrc;
-    link.download = `SmartMoney_${currentType}_QR.${imgSrc.split('.').pop()}`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    alert("📥 QR Code downloaded successfully!");
-  }
-
-  async function submitOrder() {
+    const refId = document.getElementById('refCode').value.trim();
     const fullName = document.getElementById('fullName').value.trim();
     const mobile = document.getElementById('mobileNumber').value.trim();
     const email = document.getElementById('emailId').value.trim();
     const password = document.getElementById('password').value.trim();
-    const utr = document.getElementById('transactionId').value.trim();
-    const refId = document.getElementById('refCode').value.trim();
-    const screenshotFile = document.getElementById('paymentScreenshot').files[0];
-    const btn = document.getElementById('submitBtn');
+    const terms = document.getElementById('termsCheck').checked;
 
     if (!refId) {
-      alert("⚠️ Affiliate / Referral Code is required! Please enter a valid sponsor Referral ID.");
+      alert("⚠️ Affiliate / Referral Code is required!");
       document.getElementById('refCode').focus();
       return;
     }
-
-    if (!fullName || !mobile || !email || !password || !utr || !screenshotFile) {
-      alert("⚠️ Please fill in all required details, enter UTR, and upload the payment screenshot!");
+    if (!fullName || !mobile || !email || !password) {
+      alert("⚠️ Please fill in all required details!");
+      return;
+    }
+    if (!terms) {
+      alert("⚠️ Please agree to the Terms & Privacy Policy.");
       return;
     }
 
-    if (utr.length < 8) {
-      alert("⚠️ Please enter a valid 12-digit UTR transaction ID.");
-      return;
-    }
+    // Encrypt or pass details via URL parameters to payment.html
+    const params = new URLSearchParams({
+      name: pkgName,
+      price: pkgPrice,
+      ref: refId,
+      fullname: fullName,
+      mobile: mobile,
+      email: email,
+      password: password
+    });
 
-    btn.innerText = "Submitting Order...";
-    btn.disabled = true;
-
-    try {
-      // 1. Upload screenshot file to Supabase Storage bucket 'payment-proofs'
-      const fileName = `${Date.now()}_${screenshotFile.name}`;
-      const { data: uploadData, error: uploadErr } = await supabaseClient.storage
-        .from('payment-proofs')
-        .upload(fileName, screenshotFile);
-
-      if (uploadErr) throw new Error("Screenshot upload failed: " + uploadErr.message);
-
-      // Get public URL of the uploaded image
-      const { data: publicUrlData } = supabaseClient.storage
-        .from('payment-proofs')
-        .getPublicUrl(fileName);
-
-      const screenshotUrl = publicUrlData.publicUrl;
-
-      // 2. Insert record into 'payment_requests' table
-      const { error } = await supabaseClient.from('payment_requests').insert([{
-        full_name: fullName,
-        email: email,
-        mobile: mobile,
-        password: password,
-        package_name: pkgName,
-        amount: Number(pkgPrice),
-        transaction_id: utr,
-        referral_id: refId,
-        screenshot_name: screenshotUrl, // Storage public URL
-        status: 'Pending',
-        is_deleted: false
-      }]);
-
-      if (error) throw error;
-
-      alert("🎉 Order Submitted Successfully! Your package will be approved by the admin shortly.");
-      window.location.href = "index.html";
-    } catch (err) {
-      alert("Error submitting order: " + err.message);
-      btn.innerText = "Submit & Register Order 🚀";
-      btn.disabled = false;
-    }
+    // Redirect to payment page
+    window.location.href = `payment.html?${params.toString()}`;
   }
 </script>
 </body>
