@@ -7,6 +7,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- EmailJS Library -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -178,6 +182,9 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    // EmailJS Initialization with your Public Key
+    emailjs.init("nD7bbMhcvotO19ODK");
+
     const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
     
@@ -252,14 +259,27 @@
       btn.disabled = true;
 
       try {
+        const updatePageUrl = window.location.origin + '/update-password.html';
+
+        // 1. Supabase Auth se reset link generate karwayenge
         const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-          redirectTo: window.location.origin + '/update-password.html',
+          redirectTo: updatePageUrl,
         });
 
         if (error) throw error;
 
+        // 2. EmailJS ke zariye aapke Support Gmail aur naye Template se mail trigger karenge
+        const templateParams = {
+          to_name: email.split('@')[0],
+          to_email: email,
+          reset_link: updatePageUrl
+        };
+
+        await emailjs.send("service_a678nhs", "template_eh1e4fr", templateParams);
+
         alert("🎉 Password reset link successfully sent to your Gmail inbox!");
         closeModal('forgotModal');
+        document.getElementById("forgotEmail").value = "";
       } catch (err) {
         alert("Error: " + err.message);
       } finally {
