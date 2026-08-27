@@ -1,42 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 
 <title>Smart Money - Dashboard</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link
+href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+rel="stylesheet">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <style>
+
+/* =========================================
+   GLOBAL
+========================================= */
 
 *{
   box-sizing:border-box;
   font-family:'Plus Jakarta Sans',sans-serif;
 }
 
-html{
+html,
+body{
+  margin:0;
+  padding:0;
   width:100%;
   min-height:100%;
 }
 
 body{
-  margin:0;
-  padding:0;
-  width:100%;
-  min-width:0;
   min-height:100vh;
   overflow-x:hidden;
   background:#eef2f7;
   color:#1e293b;
 }
 
-button,input{
+button,
+input{
   font-family:inherit;
 }
 
@@ -49,6 +61,10 @@ button:disabled{
   cursor:not-allowed;
 }
 
+/* =========================================
+   APP
+========================================= */
+
 .app-wrapper{
   width:100%;
   max-width:850px;
@@ -58,7 +74,9 @@ button:disabled{
   box-shadow:0 0 40px rgba(0,0,0,.08);
 }
 
-/* NAVBAR */
+/* =========================================
+   NAVBAR
+========================================= */
 
 .navbar{
   height:68px;
@@ -95,7 +113,12 @@ button:disabled{
   font-size:20px;
   font-weight:800;
   white-space:nowrap;
-  background:linear-gradient(135deg,#7c3aed,#db2777,#f59e0b);
+  background:linear-gradient(
+    135deg,
+    #7c3aed,
+    #db2777,
+    #f59e0b
+  );
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
@@ -134,7 +157,9 @@ button:disabled{
   cursor:pointer;
 }
 
-/* SIDEBAR */
+/* =========================================
+   SIDEBAR
+========================================= */
 
 .sidebar-overlay{
   position:fixed;
@@ -247,7 +272,9 @@ button:disabled{
   background:rgba(124,58,237,.3);
 }
 
-/* DASHBOARD */
+/* =========================================
+   DASHBOARD
+========================================= */
 
 .dash-container{
   width:100%;
@@ -264,6 +291,7 @@ button:disabled{
   padding:25px;
   gap:20px;
   position:relative;
+
   background:linear-gradient(
     135deg,
     #fff 0%,
@@ -271,6 +299,7 @@ button:disabled{
     #f5f3ff 55%,
     #ede9fe 100%
   );
+
   box-shadow:0 10px 25px rgba(15,23,42,.1);
 }
 
@@ -287,7 +316,11 @@ button:disabled{
 }
 
 .package-badge.active{
-  background:linear-gradient(135deg,#f59e0b,#ec4899);
+  background:linear-gradient(
+    135deg,
+    #f59e0b,
+    #ec4899
+  );
 }
 
 .profile-img-wrap{
@@ -363,6 +396,10 @@ button:disabled{
   background:#10b981;
 }
 
+/* =========================================
+   STATS
+========================================= */
+
 .stats-stack{
   display:flex;
   flex-direction:column;
@@ -388,24 +425,48 @@ button:disabled{
 }
 
 .bg-today{
-  background:linear-gradient(135deg,#7c3aed,#5b21b6);
+  background:linear-gradient(
+    135deg,
+    #7c3aed,
+    #5b21b6
+  );
 }
 
 .bg-7days{
-  background:linear-gradient(135deg,#6366f1,#4338ca);
+  background:linear-gradient(
+    135deg,
+    #6366f1,
+    #4338ca
+  );
 }
 
 .bg-30days{
-  background:linear-gradient(135deg,#db2777,#be185d);
+  background:linear-gradient(
+    135deg,
+    #db2777,
+    #be185d
+  );
 }
 
 .bg-alltime{
-  background:linear-gradient(135deg,#0284c7,#075985);
+  background:linear-gradient(
+    135deg,
+    #0284c7,
+    #075985
+  );
 }
 
 .bg-passive{
-  background:linear-gradient(135deg,#d97706,#b45309);
+  background:linear-gradient(
+    135deg,
+    #d97706,
+    #b45309
+  );
 }
+
+/* =========================================
+   REFERRALS
+========================================= */
 
 .referral-tabs{
   display:flex;
@@ -470,7 +531,9 @@ button:disabled{
   padding-top:10px;
 }
 
-/* MODALS */
+/* =========================================
+   MODALS
+========================================= */
 
 .modal-overlay{
   display:none;
@@ -603,6 +666,10 @@ button:disabled{
   color:#dc2626;
 }
 
+/* =========================================
+   TOAST
+========================================= */
+
 #toastNotification{
   position:fixed;
   bottom:20px;
@@ -623,6 +690,10 @@ button:disabled{
   transform:translateX(-50%) translateY(0);
 }
 
+/* =========================================
+   ERROR
+========================================= */
+
 .error-box{
   background:#fef2f2;
   border:1px solid #fecaca;
@@ -632,6 +703,10 @@ button:disabled{
   font-size:13px;
   line-height:1.5;
 }
+
+/* =========================================
+   MOBILE
+========================================= */
 
 @media(max-width:850px){
 
@@ -688,24 +763,51 @@ button:disabled{
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="app-wrapper">
 
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+<!-- =====================================
+SIDEBAR OVERLAY
+===================================== -->
 
-<aside class="sidebar" id="sidebar">
+<div
+class="sidebar-overlay"
+id="sidebarOverlay"
+onclick="toggleSidebar()">
+</div>
+
+<!-- =====================================
+SIDEBAR
+===================================== -->
+
+<aside
+class="sidebar"
+id="sidebar">
 
 <div class="sidebar-header">
 
-<a href="dashboard.html" class="brand-logo">
-<img id="sidebarLogo" src="1000819130.jpg" alt="Logo">
+<a
+href="dashboard.html"
+class="brand-logo">
+
+<img
+id="sidebarLogo"
+src="1000819130.jpg"
+alt="Logo">
+
 <span>Smart Money</span>
+
 </a>
 
-<button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+<button
+class="sidebar-close"
+onclick="toggleSidebar()">
+✕
+</button>
 
 </div>
 
@@ -719,11 +821,15 @@ alt="Profile">
 
 <div class="sidebar-profile-info">
 
-<div id="sidebarUserName" class="sidebar-profile-name">
+<div
+id="sidebarUserName"
+class="sidebar-profile-name">
 Loading...
 </div>
 
-<div id="sidebarUserEmail" class="sidebar-profile-email">
+<div
+id="sidebarUserEmail"
+class="sidebar-profile-email">
 Loading...
 </div>
 
@@ -734,7 +840,9 @@ Loading...
 <ul class="sidebar-menu">
 
 <li>
-<a href="index.html">🌐 Home / Landing Page</a>
+<a href="index.html">
+🌐 Home / Landing Page
+</a>
 </li>
 
 <li>
@@ -744,10 +852,17 @@ Loading...
 </li>
 
 <li>
-<button onclick="openWithdrawModal()" style="color:#10b981;">
+<button
+onclick="openWithdrawModal()"
+style="color:#10b981;">
+
 💸 Available Balance:
-<span id="sidebarWalletBal">₹0.00</span>
+<span id="sidebarWalletBal">
+₹0.00
+</span>
+
 (Withdraw)
+
 </button>
 </li>
 
@@ -758,8 +873,11 @@ Loading...
 </li>
 
 <li>
-<button onclick="document.getElementById('profilePhotoInputSidebar').click()">
+<button
+onclick="document.getElementById('profilePhotoInputSidebar').click()">
+
 📷 Change Profile Picture
+
 </button>
 </li>
 
@@ -770,12 +888,16 @@ style="display:none"
 accept="image/*"
 onchange="uploadProfilePicture(event)">
 
-<li id="removePhotoLi" style="display:none">
+<li
+id="removePhotoLi"
+style="display:none">
 
 <button
 onclick="removeProfilePicture()"
 style="color:#ef4444;">
+
 🗑️ Remove Profile Picture
+
 </button>
 
 </li>
@@ -793,8 +915,12 @@ style="color:#ef4444;">
 </li>
 
 <li>
-<button id="sideLogoutBtn" style="color:#f87171;">
+<button
+id="sideLogoutBtn"
+style="color:#f87171;">
+
 🚪 Logout
+
 </button>
 </li>
 
@@ -802,9 +928,15 @@ style="color:#ef4444;">
 
 </aside>
 
+<!-- =====================================
+NAVBAR
+===================================== -->
+
 <header class="navbar">
 
-<a href="dashboard.html" class="brand-logo">
+<a
+href="dashboard.html"
+class="brand-logo">
 
 <img
 id="navBrandLogoImg"
@@ -817,8 +949,12 @@ alt="Logo">
 
 <div class="nav-right">
 
-<a href="index.html" class="nav-home-btn">
+<a
+href="index.html"
+class="nav-home-btn">
+
 🌐 Home
+
 </a>
 
 <img
@@ -827,20 +963,32 @@ class="nav-avatar"
 src="1000819130.jpg"
 alt="Avatar">
 
-<button class="menu-btn" onclick="toggleSidebar()">
+<button
+class="menu-btn"
+onclick="toggleSidebar()">
+
 ☰
+
 </button>
 
 </div>
 
 </header>
 
+<!-- =====================================
+DASHBOARD
+===================================== -->
+
 <div class="dash-container">
 
 <div class="profile-card">
 
-<div class="package-badge" id="activePackageBadge">
+<div
+class="package-badge"
+id="activePackageBadge">
+
 NO PACKAGE
+
 </div>
 
 <div class="profile-img-wrap">
@@ -862,12 +1010,16 @@ Loading...
 <p
 id="dobDisplayInfo"
 style="font-size:12px;color:#64748b;margin:0;">
+
 DOB: Not Set
+
 </p>
 
 </div>
 
 </div>
+
+<!-- PACKAGE -->
 
 <div class="section-box">
 
@@ -881,14 +1033,19 @@ Loading package information...
 
 </div>
 
+<!-- AFFILIATE -->
+
 <div class="section-box">
 
 <h3 style="margin-top:0;">
 🔗 My Affiliate Links
 </h3>
 
-<label style="font-size:11px;font-weight:700;color:#64748b;">
+<label
+style="font-size:11px;font-weight:700;color:#64748b;">
+
 MY REFERRAL LINK
+
 </label>
 
 <div class="affiliate-id-box">
@@ -896,28 +1053,39 @@ MY REFERRAL LINK
 <span
 id="fullRefLinkText"
 style="word-break:break-all;font-size:12px;">
+
 Loading link...
+
 </span>
 
 <button
 class="copy-id-btn"
 onclick="copyFullReferralLink()">
+
 📋
+
 </button>
 
 </div>
 
 <br>
 
-<label style="font-size:11px;font-weight:700;color:#64748b;">
+<label
+style="font-size:11px;font-weight:700;color:#64748b;">
+
 MY REFERRAL CODE
+
 </label>
 
 <div class="affiliate-id-box">
 
 <span>
+
 ID:
-<b id="myRefCode">Loading...</b>
+<b id="myRefCode">
+Loading...
+</b>
+
 </span>
 
 <div style="display:flex;gap:6px;">
@@ -925,13 +1093,17 @@ ID:
 <button
 class="copy-id-btn"
 onclick="copyAffiliateLink()">
+
 📋
+
 </button>
 
 <button
 class="share-id-btn"
 onclick="shareAffiliateLink()">
+
 🔗
+
 </button>
 
 </div>
@@ -939,56 +1111,113 @@ onclick="shareAffiliateLink()">
 </div>
 
 </div>
+
+<!-- STATS -->
 
 <div class="stats-stack">
 
 <div class="v-card bg-today">
-<h2 id="todayRevenue">₹0.00</h2>
-<p>Today's Revenue</p>
+
+<h2 id="todayRevenue">
+₹0.00
+</h2>
+
+<p>
+Today's Revenue
+</p>
+
 </div>
 
 <div class="v-card bg-7days">
-<h2 id="sevenDaysRevenue">₹0.00</h2>
-<p>7 Days Revenue</p>
+
+<h2 id="sevenDaysRevenue">
+₹0.00
+</h2>
+
+<p>
+7 Days Revenue
+</p>
+
 </div>
 
 <div class="v-card bg-30days">
-<h2 id="thirtyDaysRevenue">₹0.00</h2>
-<p>30 Days Revenue</p>
+
+<h2 id="thirtyDaysRevenue">
+₹0.00
+</h2>
+
+<p>
+30 Days Revenue
+</p>
+
 </div>
 
 <div class="v-card bg-alltime">
-<h2 id="allTimeRevenueText">₹0.00</h2>
-<p>Available Balance</p>
+
+<h2 id="allTimeRevenueText">
+₹0.00
+</h2>
+
+<p>
+Available Balance
+</p>
+
 </div>
 
 <div class="v-card bg-passive">
-<h2 id="passiveIncome">₹0.00</h2>
-<p>Passive Income</p>
+
+<h2 id="passiveIncome">
+₹0.00
+</h2>
+
+<p>
+Passive Income
+</p>
+
 </div>
 
 </div>
+
+<!-- REFERRALS -->
 
 <div class="section-box">
 
-<h3>👥 My Referrals & Joins</h3>
+<h3>
+👥 My Referrals & Joins
+</h3>
 
 <div class="referral-tabs">
 
-<button class="ref-tab active" onclick="filterReferrals(1,this)">
+<button
+class="ref-tab active"
+onclick="filterReferrals(1,this)">
+
 1 Day (Today)
+
 </button>
 
-<button class="ref-tab" onclick="filterReferrals(7,this)">
+<button
+class="ref-tab"
+onclick="filterReferrals(7,this)">
+
 7 Days
+
 </button>
 
-<button class="ref-tab" onclick="filterReferrals(15,this)">
+<button
+class="ref-tab"
+onclick="filterReferrals(15,this)">
+
 15 Days
+
 </button>
 
-<button class="ref-tab" onclick="filterReferrals(30,this)">
+<button
+class="ref-tab"
+onclick="filterReferrals(30,this)">
+
 30 Days
+
 </button>
 
 </div>
@@ -1000,24 +1229,44 @@ Loading referrals...
 </div>
 
 <div class="app-footer-credit">
+
 Website Created in August 2026 by
-<b>Swrang Swargiary</b>
+
+<b>
+Swrang Swargiary
+</b>
+
 </div>
 
 </div>
+
 </div>
+
+<!-- =====================================
+TOAST
+===================================== -->
 
 <div id="toastNotification">
-<span id="toastMessage">Success</span>
+
+<span id="toastMessage">
+Success
+</span>
+
 </div>
 
-<!-- PACKAGE MODAL -->
+<!-- =====================================
+PACKAGE MODAL
+===================================== -->
 
-<div id="packageModal" class="modal-overlay">
+<div
+id="packageModal"
+class="modal-overlay">
 
 <div class="modal-box">
 
-<h3>👑 My Package & Benefits</h3>
+<h3>
+👑 My Package & Benefits
+</h3>
 
 <div id="modalPackageContent">
 Loading...
@@ -1028,19 +1277,28 @@ Loading...
 <button
 class="btn-action"
 onclick="closeModal('packageModal')">
+
 Close
+
 </button>
 
 </div>
+
 </div>
 
-<!-- HISTORY MODAL -->
+<!-- =====================================
+HISTORY MODAL
+===================================== -->
 
-<div id="historyModal" class="modal-overlay">
+<div
+id="historyModal"
+class="modal-overlay">
 
 <div class="modal-box">
 
-<h3>📜 Withdrawal History</h3>
+<h3>
+📜 Withdrawal History
+</h3>
 
 <div id="withdrawalHistoryList">
 Loading history...
@@ -1049,19 +1307,28 @@ Loading history...
 <button
 class="btn-action"
 onclick="closeModal('historyModal')">
+
 Close
+
 </button>
 
 </div>
+
 </div>
 
-<!-- PAYOUT MODAL -->
+<!-- =====================================
+PAYOUT MODAL
+===================================== -->
 
-<div id="profileSettingsModal" class="modal-overlay">
+<div
+id="profileSettingsModal"
+class="modal-overlay">
 
 <div class="modal-box">
 
-<h3>🏦 Payout Details</h3>
+<h3>
+🏦 Payout Details
+</h3>
 
 <div class="payout-tabs">
 
@@ -1069,21 +1336,27 @@ Close
 id="tabUpi"
 class="payout-tab active"
 onclick="switchPayoutMode('upi')">
+
 UPI ID
+
 </div>
 
 <div
 id="tabBank"
 class="payout-tab"
 onclick="switchPayoutMode('bank')">
+
 Bank Account
+
 </div>
 
 </div>
 
 <div id="upiSection">
 
-<label>UPI ID</label>
+<label>
+UPI ID
+</label>
 
 <input
 type="text"
@@ -1093,16 +1366,22 @@ placeholder="yourname@upi">
 
 </div>
 
-<div id="bankSection" style="display:none;">
+<div
+id="bankSection"
+style="display:none;">
 
-<label>Account Holder Name</label>
+<label>
+Account Holder Name
+</label>
 
 <input
 type="text"
 id="editAccName"
 class="input-field">
 
-<label>Bank Account Number</label>
+<label>
+Bank Account Number
+</label>
 
 <input
 type="text"
@@ -1110,7 +1389,9 @@ id="editAccNo"
 class="input-field"
 inputmode="numeric">
 
-<label>IFSC Code</label>
+<label>
+IFSC Code
+</label>
 
 <input
 type="text"
@@ -1123,34 +1404,49 @@ class="input-field">
 class="btn-action"
 id="saveProfileBtn"
 onclick="updateUserPayoutDetails()">
+
 Save Details
+
 </button>
 
 <button
 onclick="closeModal('profileSettingsModal')"
 style="width:100%;border:none;background:none;padding:12px;">
+
 Cancel
+
 </button>
 
 </div>
+
 </div>
 
-<!-- KYC MODAL -->
+<!-- =====================================
+KYC MODAL
+===================================== -->
 
-<div id="kycModal" class="modal-overlay">
+<div
+id="kycModal"
+class="modal-overlay">
 
 <div class="modal-box">
 
-<h3>🆔 KYC & Date of Birth</h3>
+<h3>
+🆔 KYC & Date of Birth
+</h3>
 
-<label>Full Name</label>
+<label>
+Full Name
+</label>
 
 <input
 type="text"
 id="kycFullName"
 class="input-field">
 
-<label>Date of Birth</label>
+<label>
+Date of Birth
+</label>
 
 <input
 type="date"
@@ -1160,25 +1456,36 @@ class="input-field">
 <button
 class="btn-action"
 onclick="saveKycDetails()">
+
 Save KYC
+
 </button>
 
 <button
 onclick="closeModal('kycModal')"
 style="width:100%;border:none;background:none;padding:12px;">
+
 Cancel
+
 </button>
 
 </div>
+
 </div>
 
-<!-- WITHDRAW MODAL -->
+<!-- =====================================
+WITHDRAW MODAL
+===================================== -->
 
-<div id="withdrawModal" class="modal-overlay">
+<div
+id="withdrawModal"
+class="modal-overlay">
 
 <div class="modal-box">
 
-<h3>💸 Request Withdrawal</h3>
+<h3>
+💸 Request Withdrawal
+</h3>
 
 <p id="withdrawModalBalanceText">
 Available Balance: ₹0.00
@@ -1191,29 +1498,45 @@ style="font-size:12px;color:#64748b;">
 
 <div class="amount-chips">
 
-<button class="chip" onclick="setWithdrawAmount(100)">
+<button
+class="chip"
+onclick="setWithdrawAmount(100)">
+
 ₹100
+
 </button>
 
-<button class="chip" onclick="setWithdrawAmount(500)">
+<button
+class="chip"
+onclick="setWithdrawAmount(500)">
+
 ₹500
+
 </button>
 
-<button class="chip" onclick="setWithdrawAmount(1000)">
+<button
+class="chip"
+onclick="setWithdrawAmount(1000)">
+
 ₹1000
+
 </button>
 
 <button
 class="chip"
 onclick="setWithdrawAmount(userCurrentBalance)">
+
 MAX
+
 </button>
 
 </div>
 
 <br>
 
-<label>Enter Amount</label>
+<label>
+Enter Amount
+</label>
 
 <input
 type="number"
@@ -1227,21 +1550,28 @@ step="0.01">
 id="submitWithdrawBtn"
 class="btn-action"
 onclick="submitWithdrawal()">
+
 Submit Request
+
 </button>
 
 <button
 onclick="closeModal('withdrawModal')"
 style="width:100%;border:none;background:none;padding:12px;">
+
 Cancel
+
 </button>
 
 </div>
+
 </div>
 
 <script>
 
-/* SUPABASE */
+/* =========================================
+   SUPABASE CONFIG
+========================================= */
 
 const SUPABASE_URL =
 "https://rvprrulkjegvicbnjuft.supabase.co";
@@ -1249,33 +1579,77 @@ const SUPABASE_URL =
 const SUPABASE_PUBLISHABLE_KEY =
 "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 
-const supabaseClient =
-window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY,
-  {
-    auth:{
-      persistSession:true,
-      autoRefreshToken:true,
-      detectSessionInUrl:true
-    }
-  }
-);
 
-/* GLOBALS */
+let supabaseClient = null;
+
+try{
+
+  if(
+    !window.supabase ||
+    !window.supabase.createClient
+  ){
+
+    throw new Error(
+      "Supabase library could not be loaded"
+    );
+
+  }
+
+  supabaseClient =
+  window.supabase.createClient(
+
+    SUPABASE_URL,
+
+    SUPABASE_PUBLISHABLE_KEY,
+
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
+      }
+    }
+
+  );
+
+}catch(error){
+
+  console.error(
+    "SUPABASE INIT ERROR:",
+    error
+  );
+
+}
+
+
+/* =========================================
+   GLOBAL VARIABLES
+========================================= */
 
 let currentUserId = null;
+
 let currentProfile = {};
+
 let currentUserEmail = "";
+
 let userCurrentBalance = 0;
+
 let userRefCode = "";
+
 let payoutMode = "upi";
+
 let allReferralsData = [];
+
 let activePackage = null;
+
 let realtimeChannel = null;
+
 let withdrawalSubmitting = false;
 
-/* PACKAGE RULES */
+
+/* =========================================
+   PACKAGE RULES
+========================================= */
 
 const PACKAGE_RULES = {
 
@@ -1347,7 +1721,10 @@ const PACKAGE_RULES = {
 
 };
 
-/* UTILITIES */
+
+/* =========================================
+   UTILITIES
+========================================= */
 
 function formatMoney(amount){
 
@@ -1362,55 +1739,97 @@ function formatMoney(amount){
 
 }
 
+
 function escapeHtml(text){
 
-  const div = document.createElement("div");
+  const div =
+  document.createElement("div");
 
-  div.textContent = String(text || "");
+  div.textContent =
+  String(text || "");
 
   return div.innerHTML;
 
 }
 
+
 function showToast(message){
 
   const toast =
-  document.getElementById("toastNotification");
+  document.getElementById(
+    "toastNotification"
+  );
 
-  document.getElementById("toastMessage").innerText =
-  message;
+  const text =
+  document.getElementById(
+    "toastMessage"
+  );
+
+  if(!toast || !text){
+    return;
+  }
+
+  text.innerText = message;
 
   toast.classList.add("show");
 
   setTimeout(function(){
+
     toast.classList.remove("show");
+
   },3000);
 
 }
 
-/* SIDEBAR */
+
+function sleep(ms){
+
+  return new Promise(function(resolve){
+
+    setTimeout(resolve,ms);
+
+  });
+
+}
+
+
+/* =========================================
+   SIDEBAR
+========================================= */
 
 function toggleSidebar(){
 
-  document.getElementById("sidebar")
-  .classList.toggle("active");
+  document
+  .getElementById("sidebar")
+  .classList
+  .toggle("active");
 
-  document.getElementById("sidebarOverlay")
-  .classList.toggle("active");
+  document
+  .getElementById("sidebarOverlay")
+  .classList
+  .toggle("active");
 
 }
+
 
 function closeSidebar(){
 
-  document.getElementById("sidebar")
-  .classList.remove("active");
+  document
+  .getElementById("sidebar")
+  .classList
+  .remove("active");
 
-  document.getElementById("sidebarOverlay")
-  .classList.remove("active");
+  document
+  .getElementById("sidebarOverlay")
+  .classList
+  .remove("active");
 
 }
 
-/* MODALS */
+
+/* =========================================
+   MODALS
+========================================= */
 
 function openModal(id){
 
@@ -1418,10 +1837,14 @@ function openModal(id){
   document.getElementById(id);
 
   if(modal){
-    modal.style.display = "flex";
+
+    modal.style.display =
+    "flex";
+
   }
 
 }
+
 
 function closeModal(id){
 
@@ -1429,33 +1852,46 @@ function closeModal(id){
   document.getElementById(id);
 
   if(modal){
-    modal.style.display = "none";
+
+    modal.style.display =
+    "none";
+
   }
 
 }
+
 
 document.addEventListener(
   "click",
   function(event){
 
     if(
+      event.target &&
       event.target.classList &&
       event.target.classList.contains(
         "modal-overlay"
       )
     ){
-      event.target.style.display = "none";
+
+      event.target.style.display =
+      "none";
+
     }
 
   }
 );
 
-/* PACKAGE */
+
+/* =========================================
+   PACKAGE
+========================================= */
 
 function detectPackage(profile){
 
   const packageName =
-  String(profile.package_name || "none")
+  String(
+    profile.package_name || "none"
+  )
   .trim()
   .toLowerCase();
 
@@ -1471,13 +1907,19 @@ function detectPackage(profile){
       "NO PACKAGE",
 
       commissionRate:
-      Number(profile.commission_rate || 0),
+      Number(
+        profile.commission_rate || 0
+      ),
 
       minWithdrawal:
-      Number(profile.min_withdrawal || 200),
+      Number(
+        profile.min_withdrawal || 200
+      ),
 
       dailyWithdrawalLimit:
-      Number(profile.daily_withdrawal_limit || 0),
+      Number(
+        profile.daily_withdrawal_limit || 0
+      ),
 
       benefits:[
         "Package benefits configured by admin"
@@ -1487,20 +1929,26 @@ function detectPackage(profile){
 
   }
 
-  activePackage = packageData;
+  activePackage =
+  packageData;
 
   return packageData;
 
 }
 
+
 function renderPackageUI(){
 
   const pkg =
-  detectPackage(currentProfile);
+  detectPackage(
+    currentProfile
+  );
 
   const hasPackage =
   currentProfile.package_name &&
-  String(currentProfile.package_name)
+  String(
+    currentProfile.package_name
+  )
   .toLowerCase() !== "none";
 
   const badge =
@@ -1508,25 +1956,38 @@ function renderPackageUI(){
     "activePackageBadge"
   );
 
-  badge.innerText =
-  hasPackage
-  ? pkg.displayName + " 👑"
-  : "NO PACKAGE";
+  if(badge){
 
-  if(hasPackage){
-    badge.classList.add("active");
-  }else{
-    badge.classList.remove("active");
+    badge.innerText =
+    hasPackage
+    ? pkg.displayName + " 👑"
+    : "NO PACKAGE";
+
+    if(hasPackage){
+
+      badge.classList.add("active");
+
+    }else{
+
+      badge.classList.remove("active");
+
+    }
+
   }
 
   const benefitsHTML =
-  pkg.benefits.map(function(item){
+  pkg.benefits
+  .map(function(item){
 
     return `
-    <li>${escapeHtml(item)}</li>
+    <li>
+      ${escapeHtml(item)}
+    </li>
     `;
 
-  }).join("");
+  })
+  .join("");
+
 
   const packageHTML = `
 
@@ -1543,14 +2004,18 @@ function renderPackageUI(){
     gap:10px;
     margin-bottom:10px;
   ">
+
     <b>Package</b>
+
     <span style="
       color:#7c3aed;
       font-weight:800;
     ">
       ${escapeHtml(pkg.displayName)}
     </span>
+
   </div>
+
 
   <div style="
     display:flex;
@@ -1558,63 +2023,114 @@ function renderPackageUI(){
     gap:10px;
     margin-bottom:10px;
   ">
-    <span>Commission Rate</span>
-    <b>${pkg.commissionRate}%</b>
-  </div>
 
-  <div style="
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    margin-bottom:10px;
-  ">
-    <span>Minimum Withdrawal</span>
-    <b>${formatMoney(pkg.minWithdrawal)}</b>
-  </div>
+    <span>
+      Commission Rate
+    </span>
 
-  <div style="
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    margin-bottom:10px;
-  ">
-    <span>Daily Withdrawal Limit</span>
     <b>
+      ${pkg.commissionRate}%
+    </b>
+
+  </div>
+
+
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:10px;
+  ">
+
+    <span>
+      Minimum Withdrawal
+    </span>
+
+    <b>
+      ${formatMoney(pkg.minWithdrawal)}
+    </b>
+
+  </div>
+
+
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:10px;
+  ">
+
+    <span>
+      Daily Withdrawal Limit
+    </span>
+
+    <b>
+
       ${
         Number(pkg.dailyWithdrawalLimit) > 0
-        ? formatMoney(pkg.dailyWithdrawalLimit)
+        ? formatMoney(
+            pkg.dailyWithdrawalLimit
+          )
         : "Not Available"
       }
+
     </b>
+
   </div>
+
 
   <hr style="
     border:none;
     border-top:1px solid #e2e8f0;
   ">
 
-  <b>Benefits</b>
+
+  <b>
+    Benefits
+  </b>
+
 
   <ul style="
     font-size:13px;
     color:#475569;
     line-height:1.8;
   ">
+
     ${benefitsHTML}
+
   </ul>
 
   </div>
+
   `;
 
+
+  const dashboard =
   document.getElementById(
     "packageDashboardInfo"
-  ).innerHTML = packageHTML;
+  );
 
+  const modal =
   document.getElementById(
     "modalPackageContent"
-  ).innerHTML = packageHTML;
+  );
+
+  if(dashboard){
+
+    dashboard.innerHTML =
+    packageHTML;
+
+  }
+
+  if(modal){
+
+    modal.innerHTML =
+    packageHTML;
+
+  }
 
 }
+
 
 function openPackageModal(){
 
@@ -1622,23 +2138,34 @@ function openPackageModal(){
 
   renderPackageUI();
 
-  openModal("packageModal");
+  openModal(
+    "packageModal"
+  );
 
 }
 
-/* PROFILE IMAGE */
+
+/* =========================================
+   PROFILE IMAGE
+========================================= */
 
 function getFallbackAvatar(userName){
 
   return (
     "https://ui-avatars.com/api/?name=" +
-    encodeURIComponent(userName || "User") +
+    encodeURIComponent(
+      userName || "User"
+    ) +
     "&background=7c3aed&color=fff&size=200"
   );
 
 }
 
-function applyProfileImage(imageUrl,userName){
+
+function applyProfileImage(
+  imageUrl,
+  userName
+){
 
   const fallback =
   getFallbackAvatar(userName);
@@ -1649,46 +2176,72 @@ function applyProfileImage(imageUrl,userName){
   ? imageUrl
   : fallback;
 
+
   const imageIds = [
+
     "mainProfileImg",
+
     "sidebarProfileImage",
+
     "navAvatarImg"
+
   ];
 
-  imageIds.forEach(function(id){
 
-    const image =
-    document.getElementById(id);
+  imageIds.forEach(
+    function(id){
 
-    if(image){
+      const image =
+      document.getElementById(id);
 
-      image.src = finalImage;
+      if(image){
 
-      image.onerror = function(){
+        image.src =
+        finalImage;
 
-        this.onerror = null;
-        this.src = fallback;
+        image.onerror =
+        function(){
 
-      };
+          this.onerror = null;
+
+          this.src =
+          fallback;
+
+        };
+
+      }
 
     }
+  );
 
-  });
 
+  const removePhoto =
   document.getElementById(
     "removePhotoLi"
-  ).style.display =
-  imageUrl ? "block" : "none";
+  );
+
+  if(removePhoto){
+
+    removePhoto.style.display =
+    imageUrl
+    ? "block"
+    : "none";
+
+  }
 
 }
 
-/* REFERRAL CODE */
+
+/* =========================================
+   REFERRAL CODE
+========================================= */
 
 function generateReferralCode(){
 
   const random =
   Math.floor(
-    100000 + Math.random() * 900000
+    100000 +
+    Math.random() * 900000
   );
 
   const timestamp =
@@ -1696,178 +2249,252 @@ function generateReferralCode(){
   .toString()
   .slice(-4);
 
-  return "SM-" + random + timestamp;
+  return (
+    "SM-" +
+    random +
+    timestamp
+  );
 
 }
 
-/* LOAD PROFILE */
+
+/* =========================================
+   LOAD USER PROFILE
+========================================= */
 
 async function loadUserProfile(){
 
-  const {
-    data:sessionData,
-    error:sessionError
-  } =
-  await supabaseClient.auth.getSession();
-
-  if(sessionError){
+  if(!supabaseClient){
 
     throw new Error(
-      "Session error: " +
-      sessionError.message
+      "Supabase is not initialized"
     );
 
   }
 
+
+  const sessionResult =
+  await supabaseClient.auth.getSession();
+
+
+  if(sessionResult.error){
+
+    throw new Error(
+      "Session error: " +
+      sessionResult.error.message
+    );
+
+  }
+
+
   const session =
-  sessionData.session;
+  sessionResult.data.session;
 
-  if(!session || !session.user){
 
-    window.location.replace("login.html");
+  if(
+    !session ||
+    !session.user
+  ){
+
+    window.location.replace(
+      "login.html"
+    );
 
     return false;
 
   }
 
-  const user = session.user;
 
-  currentUserId = user.id;
+  const user =
+  session.user;
+
+
+  currentUserId =
+  user.id;
+
 
   currentUserEmail =
   user.email || "";
+
 
   const authName =
   user.user_metadata?.full_name ||
   user.user_metadata?.name ||
   "Smart Money User";
 
-  const {
-    data:profileData,
-    error:profileError
-  } =
+
+  console.log(
+    "Current User ID:",
+    currentUserId
+  );
+
+
+  const profileResult =
   await supabaseClient
   .from("profiles")
   .select("*")
-  .eq("user_id",currentUserId)
+  .eq(
+    "user_id",
+    currentUserId
+  )
   .maybeSingle();
 
-  if(profileError){
+
+  if(profileResult.error){
 
     console.error(
       "PROFILE LOAD ERROR:",
-      profileError
+      profileResult.error
     );
 
     throw new Error(
       "Profile database error: " +
-      profileError.message
+      profileResult.error.message
     );
 
   }
 
-  let profile = profileData;
+
+  let profile =
+  profileResult.data;
+
+
+  /* CREATE PROFILE IF NOT EXISTS */
 
   if(!profile){
 
+    console.log(
+      "Profile not found. Creating..."
+    );
+
+
     const newProfile = {
 
-      user_id:currentUserId,
+      user_id:
+      currentUserId,
 
-      email:currentUserEmail,
+      email:
+      currentUserEmail,
 
-      full_name:authName,
+      full_name:
+      authName,
 
-      balance:0,
+      balance:
+      0,
 
-      package_name:"none",
+      package_name:
+      "none",
 
       referral_code:
       generateReferralCode()
 
     };
 
-    const {
-      data:insertData,
-      error:insertError
-    } =
+
+    const insertResult =
     await supabaseClient
     .from("profiles")
     .insert(newProfile)
     .select()
     .single();
 
-    if(insertError){
+
+    if(insertResult.error){
 
       console.error(
         "PROFILE CREATE ERROR:",
-        insertError
+        insertResult.error
       );
 
       throw new Error(
         "Profile create error: " +
-        insertError.message
+        insertResult.error.message
       );
 
     }
 
-    profile = insertData;
+
+    profile =
+    insertResult.data;
 
   }
 
+
+  /* CREATE REFERRAL CODE IF MISSING */
+
   if(
     !profile.referral_code ||
-    String(profile.referral_code)
+    String(
+      profile.referral_code
+    )
     .trim() === ""
   ){
 
     const newCode =
     generateReferralCode();
 
-    const {
-      data:updateData,
-      error:updateError
-    } =
+
+    const updateResult =
     await supabaseClient
     .from("profiles")
     .update({
-      referral_code:newCode
+
+      referral_code:
+      newCode
+
     })
-    .eq("user_id",currentUserId)
+    .eq(
+      "user_id",
+      currentUserId
+    )
     .select()
     .single();
 
-    if(updateError){
+
+    if(updateResult.error){
 
       throw new Error(
         "Referral code error: " +
-        updateError.message
+        updateResult.error.message
       );
 
     }
 
-    profile = updateData;
+
+    profile =
+    updateResult.data;
 
   }
 
-  currentProfile = profile;
+
+  currentProfile =
+  profile;
+
 
   userCurrentBalance =
-  Number(profile.balance || 0);
+  Number(
+    profile.balance || 0
+  );
+
 
   userRefCode =
   profile.referral_code || "";
 
+
   console.log(
-    "PROFILE LOADED:",
+    "PROFILE LOADED SUCCESSFULLY:",
     currentProfile
   );
+
 
   return true;
 
 }
 
-/* RENDER PROFILE */
+
+/* =========================================
+   RENDER PROFILE
+========================================= */
 
 function renderProfileUI(){
 
@@ -1875,23 +2502,33 @@ function renderProfileUI(){
   currentProfile.full_name ||
   "Smart Money User";
 
+
   const email =
   currentProfile.email ||
   currentUserEmail;
 
-  document.getElementById("userName").innerText =
+
+  document.getElementById(
+    "userName"
+  ).innerText =
   name;
+
 
   document.getElementById(
     "sidebarUserName"
-  ).innerText = name;
+  ).innerText =
+  name;
+
 
   document.getElementById(
     "sidebarUserEmail"
-  ).innerText = email;
+  ).innerText =
+  email;
+
 
   const dob =
   currentProfile.date_of_birth;
+
 
   document.getElementById(
     "dobDisplayInfo"
@@ -1900,11 +2537,13 @@ function renderProfileUI(){
   ? "DOB: " + dob
   : "DOB: Not Set";
 
+
   document.getElementById(
     "myRefCode"
   ).innerText =
   userRefCode ||
   "Not Available";
+
 
   document.getElementById(
     "fullRefLinkText"
@@ -1913,51 +2552,95 @@ function renderProfileUI(){
   ? getReferralLink()
   : "Referral code unavailable";
 
+
   document.getElementById(
     "sidebarWalletBal"
   ).innerText =
-  formatMoney(userCurrentBalance);
+  formatMoney(
+    userCurrentBalance
+  );
+
 
   document.getElementById(
     "allTimeRevenueText"
   ).innerText =
-  formatMoney(userCurrentBalance);
+  formatMoney(
+    userCurrentBalance
+  );
+
 
   applyProfileImage(
+
     currentProfile.profile_pic,
+
     name
+
   );
+
 
   renderPackageUI();
 
 }
 
-/* REFERRAL LINK */
+
+/* =========================================
+   REFERRAL LINK
+========================================= */
 
 function getReferralLink(){
 
-  const currentUrl =
-  new URL(window.location.href);
+  try{
 
-  const path =
-  currentUrl.pathname;
+    const currentUrl =
+    new URL(
+      window.location.href
+    );
 
-  const basePath =
-  path.substring(
-    0,
-    path.lastIndexOf("/") + 1
-  );
 
-  return (
-    currentUrl.origin +
-    basePath +
-    "register.html?ref=" +
-    encodeURIComponent(userRefCode)
-  );
+    const path =
+    currentUrl.pathname;
+
+
+    const basePath =
+    path.substring(
+      0,
+      path.lastIndexOf("/") + 1
+    );
+
+
+    return (
+
+      currentUrl.origin +
+
+      basePath +
+
+      "register.html?ref=" +
+
+      encodeURIComponent(
+        userRefCode
+      )
+
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    return (
+      "register.html?ref=" +
+      encodeURIComponent(
+        userRefCode
+      )
+    );
+
+  }
 
 }
 
-/* COPY */
+
+/* =========================================
+   COPY
+========================================= */
 
 async function copyText(text){
 
@@ -1968,28 +2651,49 @@ async function copyText(text){
       window.isSecureContext
     ){
 
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(
+        text
+      );
 
       return true;
 
     }
 
+
     const textarea =
-    document.createElement("textarea");
+    document.createElement(
+      "textarea"
+    );
 
-    textarea.value = text;
 
-    textarea.style.position = "fixed";
-    textarea.style.left = "-9999px";
+    textarea.value =
+    text;
 
-    document.body.appendChild(textarea);
+
+    textarea.style.position =
+    "fixed";
+
+
+    textarea.style.left =
+    "-9999px";
+
+
+    document.body.appendChild(
+      textarea
+    );
+
 
     textarea.select();
 
+
     const copied =
-    document.execCommand("copy");
+    document.execCommand(
+      "copy"
+    );
+
 
     textarea.remove();
+
 
     return copied;
 
@@ -2003,10 +2707,14 @@ async function copyText(text){
 
 }
 
+
 async function copyAffiliateLink(){
 
   const success =
-  await copyText(userRefCode);
+  await copyText(
+    userRefCode
+  );
+
 
   if(success){
 
@@ -2025,13 +2733,18 @@ async function copyAffiliateLink(){
 
 }
 
+
 async function copyFullReferralLink(){
 
   const link =
   getReferralLink();
 
+
   const success =
-  await copyText(link);
+  await copyText(
+    link
+  );
+
 
   if(success){
 
@@ -2050,19 +2763,28 @@ async function copyFullReferralLink(){
 
 }
 
+
 async function shareAffiliateLink(){
 
   const link =
   getReferralLink();
+
 
   try{
 
     if(navigator.share){
 
       await navigator.share({
-        title:"Smart Money",
-        text:"Join Smart Money using my referral link!",
-        url:link
+
+        title:
+        "Smart Money",
+
+        text:
+        "Join Smart Money using my referral link!",
+
+        url:
+        link
+
       });
 
     }else{
@@ -2073,33 +2795,47 @@ async function shareAffiliateLink(){
 
   }catch(error){
 
-    if(error.name !== "AbortError"){
+    if(
+      error.name !==
+      "AbortError"
+    ){
+
       console.error(error);
+
     }
 
   }
 
 }
 
-/* KYC */
+
+/* =========================================
+   KYC
+========================================= */
 
 function openKycModal(){
 
   closeSidebar();
+
 
   document.getElementById(
     "kycFullName"
   ).value =
   currentProfile.full_name || "";
 
+
   document.getElementById(
     "kycDob"
   ).value =
   currentProfile.date_of_birth || "";
 
-  openModal("kycModal");
+
+  openModal(
+    "kycModal"
+  );
 
 }
+
 
 async function saveKycDetails(){
 
@@ -2113,15 +2849,23 @@ async function saveKycDetails(){
 
   }
 
+
   const fullName =
-  document.getElementById(
+  document
+  .getElementById(
     "kycFullName"
-  ).value.trim();
+  )
+  .value
+  .trim();
+
 
   const dob =
-  document.getElementById(
+  document
+  .getElementById(
     "kycDob"
-  ).value;
+  )
+  .value;
+
 
   if(!fullName){
 
@@ -2133,6 +2877,7 @@ async function saveKycDetails(){
 
   }
 
+
   if(fullName.length < 2){
 
     alert(
@@ -2143,82 +2888,112 @@ async function saveKycDetails(){
 
   }
 
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
-  .from("profiles")
-  .update({
 
-    full_name:fullName,
+  try{
 
-    date_of_birth:dob || null
+    const result =
+    await supabaseClient
+    .from("profiles")
+    .update({
 
-  })
-  .eq("user_id",currentUserId)
-  .select()
-  .single();
+      full_name:
+      fullName,
 
-  if(error){
+      date_of_birth:
+      dob || null
+
+    })
+    .eq(
+      "user_id",
+      currentUserId
+    )
+    .select()
+    .single();
+
+
+    if(result.error){
+
+      throw result.error;
+
+    }
+
+
+    currentProfile =
+    result.data;
+
+
+    renderProfileUI();
+
+
+    closeModal(
+      "kycModal"
+    );
+
+
+    showToast(
+      "Profile saved successfully!"
+    );
+
+  }catch(error){
 
     alert(
       "Profile save failed: " +
       error.message
     );
 
-    return;
-
   }
-
-  currentProfile = data;
-
-  renderProfileUI();
-
-  closeModal("kycModal");
-
-  showToast(
-    "Profile saved successfully!"
-  );
 
 }
 
-/* PAYOUT */
+
+/* =========================================
+   PAYOUT
+========================================= */
 
 function openUpiModal(){
 
   closeSidebar();
+
 
   document.getElementById(
     "editUpiId"
   ).value =
   currentProfile.upi_id || "";
 
+
   document.getElementById(
     "editAccName"
   ).value =
   currentProfile.account_holder_name || "";
+
 
   document.getElementById(
     "editAccNo"
   ).value =
   currentProfile.bank_account_number || "";
 
+
   document.getElementById(
     "editIfsc"
   ).value =
   currentProfile.ifsc_code || "";
 
+
   switchPayoutMode(
+
     currentProfile.payout_type ||
+
     "upi"
+
   );
+
 
   openModal(
     "profileSettingsModal"
   );
 
 }
+
 
 function switchPayoutMode(mode){
 
@@ -2227,12 +3002,14 @@ function switchPayoutMode(mode){
   ? "bank"
   : "upi";
 
+
   document.getElementById(
     "upiSection"
   ).style.display =
   payoutMode === "upi"
   ? "block"
   : "none";
+
 
   document.getElementById(
     "bankSection"
@@ -2241,12 +3018,14 @@ function switchPayoutMode(mode){
   ? "block"
   : "none";
 
+
   document.getElementById(
     "tabUpi"
   ).className =
   payoutMode === "upi"
   ? "payout-tab active"
   : "payout-tab";
+
 
   document.getElementById(
     "tabBank"
@@ -2257,6 +3036,7 @@ function switchPayoutMode(mode){
 
 }
 
+
 async function updateUserPayoutDetails(){
 
   const button =
@@ -2264,52 +3044,95 @@ async function updateUserPayoutDetails(){
     "saveProfileBtn"
   );
 
-  button.disabled = true;
-  button.innerText = "Saving...";
+
+  button.disabled =
+  true;
+
+
+  button.innerText =
+  "Saving...";
+
 
   try{
 
     const updateData = {
-      payout_type:payoutMode
+
+      payout_type:
+      payoutMode
+
     };
 
-    if(payoutMode === "upi"){
+
+    if(
+      payoutMode === "upi"
+    ){
 
       const upi =
-      document.getElementById(
+      document
+      .getElementById(
         "editUpiId"
-      ).value.trim();
+      )
+      .value
+      .trim();
+
 
       if(!upi){
-        throw new Error("Enter UPI ID");
+
+        throw new Error(
+          "Enter UPI ID"
+        );
+
       }
 
+
       if(!upi.includes("@")){
+
         throw new Error(
           "Enter a valid UPI ID"
         );
+
       }
 
-      updateData.upi_id = upi;
+
+      updateData.upi_id =
+      upi;
+
 
     }else{
 
       const holder =
-      document.getElementById(
+      document
+      .getElementById(
         "editAccName"
-      ).value.trim();
+      )
+      .value
+      .trim();
+
 
       const account =
-      document.getElementById(
+      document
+      .getElementById(
         "editAccNo"
-      ).value.trim();
+      )
+      .value
+      .trim();
+
 
       const ifsc =
-      document.getElementById(
+      document
+      .getElementById(
         "editIfsc"
-      ).value.trim().toUpperCase();
+      )
+      .value
+      .trim()
+      .toUpperCase();
 
-      if(!holder || !account || !ifsc){
+
+      if(
+        !holder ||
+        !account ||
+        !ifsc
+      ){
 
         throw new Error(
           "Fill all bank details"
@@ -2317,39 +3140,51 @@ async function updateUserPayoutDetails(){
 
       }
 
+
       updateData.account_holder_name =
       holder;
 
+
       updateData.bank_account_number =
       account;
+
 
       updateData.ifsc_code =
       ifsc;
 
     }
 
-    const {
-      data,
-      error
-    } =
+
+    const result =
     await supabaseClient
     .from("profiles")
     .update(updateData)
-    .eq("user_id",currentUserId)
+    .eq(
+      "user_id",
+      currentUserId
+    )
     .select()
     .single();
 
-    if(error){
-      throw error;
+
+    if(result.error){
+
+      throw result.error;
+
     }
 
-    currentProfile = data;
+
+    currentProfile =
+    result.data;
+
 
     renderProfileUI();
+
 
     closeModal(
       "profileSettingsModal"
     );
+
 
     showToast(
       "Payout details saved!"
@@ -2364,25 +3199,38 @@ async function updateUserPayoutDetails(){
 
   }finally{
 
-    button.disabled = false;
-    button.innerText = "Save Details";
+    button.disabled =
+    false;
+
+
+    button.innerText =
+    "Save Details";
 
   }
 
 }
 
-/* PROFILE PHOTO */
+
+/* =========================================
+   PROFILE PHOTO
+========================================= */
 
 async function uploadProfilePicture(event){
 
   const file =
   event.target.files?.[0];
 
+
   if(!file){
     return;
   }
 
-  if(!file.type.startsWith("image/")){
+
+  if(
+    !file.type.startsWith(
+      "image/"
+    )
+  ){
 
     alert(
       "Please select a valid image"
@@ -2392,7 +3240,11 @@ async function uploadProfilePicture(event){
 
   }
 
-  if(file.size > 2 * 1024 * 1024){
+
+  if(
+    file.size >
+    2 * 1024 * 1024
+  ){
 
     alert(
       "Image must be under 2MB"
@@ -2402,8 +3254,10 @@ async function uploadProfilePicture(event){
 
   }
 
+
   const reader =
   new FileReader();
+
 
   reader.onload =
   async function(e){
@@ -2413,26 +3267,37 @@ async function uploadProfilePicture(event){
       const imageData =
       e.target.result;
 
-      const {
-        data,
-        error
-      } =
+
+      const result =
       await supabaseClient
       .from("profiles")
       .update({
-        profile_pic:imageData
+
+        profile_pic:
+        imageData
+
       })
-      .eq("user_id",currentUserId)
+      .eq(
+        "user_id",
+        currentUserId
+      )
       .select()
       .single();
 
-      if(error){
-        throw error;
+
+      if(result.error){
+
+        throw result.error;
+
       }
 
-      currentProfile = data;
+
+      currentProfile =
+      result.data;
+
 
       renderProfileUI();
+
 
       showToast(
         "Profile picture saved!"
@@ -2449,7 +3314,9 @@ async function uploadProfilePicture(event){
 
   };
 
-  reader.onerror = function(){
+
+  reader.onerror =
+  function(){
 
     alert(
       "Failed to read image"
@@ -2457,11 +3324,17 @@ async function uploadProfilePicture(event){
 
   };
 
-  reader.readAsDataURL(file);
 
-  event.target.value = "";
+  reader.readAsDataURL(
+    file
+  );
+
+
+  event.target.value =
+  "";
 
 }
+
 
 async function removeProfilePicture(){
 
@@ -2470,91 +3343,152 @@ async function removeProfilePicture(){
     "Remove your profile picture?"
   );
 
+
   if(!confirmed){
     return;
   }
 
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
-  .from("profiles")
-  .update({
-    profile_pic:null
-  })
-  .eq("user_id",currentUserId)
-  .select()
-  .single();
 
-  if(error){
+  try{
 
-    alert(error.message);
+    const result =
+    await supabaseClient
+    .from("profiles")
+    .update({
 
-    return;
+      profile_pic:
+      null
+
+    })
+    .eq(
+      "user_id",
+      currentUserId
+    )
+    .select()
+    .single();
+
+
+    if(result.error){
+
+      throw result.error;
+
+    }
+
+
+    currentProfile =
+    result.data;
+
+
+    renderProfileUI();
+
+
+    showToast(
+      "Profile picture removed"
+    );
+
+  }catch(error){
+
+    alert(
+      error.message
+    );
 
   }
 
-  currentProfile = data;
-
-  renderProfileUI();
-
-  showToast(
-    "Profile picture removed"
-  );
-
 }
 
-/* WITHDRAW */
+
+/* =========================================
+   WITHDRAW
+========================================= */
 
 function openWithdrawModal(){
 
   closeSidebar();
 
+
   const pkg =
   activePackage ||
-  detectPackage(currentProfile);
+  detectPackage(
+    currentProfile
+  );
+
 
   document.getElementById(
     "withdrawAmount"
-  ).value = "";
+  ).value =
+  "";
+
 
   document.getElementById(
     "withdrawModalBalanceText"
   ).innerText =
   "Available Balance: " +
-  formatMoney(userCurrentBalance);
+  formatMoney(
+    userCurrentBalance
+  );
+
 
   document.getElementById(
     "withdrawPackageLimitText"
   ).innerText =
+
   "Package: " +
+
   pkg.displayName +
+
   " | Minimum Withdrawal: " +
-  formatMoney(pkg.minWithdrawal) +
+
+  formatMoney(
+    pkg.minWithdrawal
+  )
+
+  +
+
   (
-    Number(pkg.dailyWithdrawalLimit) > 0
-    ? " | Daily Limit: " +
-      formatMoney(
-        pkg.dailyWithdrawalLimit
-      )
-    : ""
+    Number(
+      pkg.dailyWithdrawalLimit
+    ) > 0
+
+    ?
+
+    " | Daily Limit: " +
+
+    formatMoney(
+      pkg.dailyWithdrawalLimit
+    )
+
+    :
+
+    ""
   );
 
-  openModal("withdrawModal");
+
+  openModal(
+    "withdrawModal"
+  );
 
 }
+
 
 function setWithdrawAmount(amount){
 
   const safeAmount =
   Math.max(
+
     0,
+
     Math.min(
+
       Number(amount || 0),
-      Number(userCurrentBalance || 0)
+
+      Number(
+        userCurrentBalance || 0
+      )
+
     )
+
   );
+
 
   document.getElementById(
     "withdrawAmount"
@@ -2563,69 +3497,104 @@ function setWithdrawAmount(amount){
 
 }
 
+
 async function getTodayWithdrawnAmount(){
 
-  const now = new Date();
+  if(!currentUserId){
+    return 0;
+  }
+
+
+  const now =
+  new Date();
+
 
   const todayStart =
   new Date(
+
     now.getFullYear(),
+
     now.getMonth(),
+
     now.getDate()
+
   );
 
-  const {
-    data,
-    error
-  } =
+
+  const result =
   await supabaseClient
   .from("withdrawal_requests")
-  .select("amount,status,created_at")
-  .eq("user_id",currentUserId)
+  .select(
+    "amount,status,created_at"
+  )
+  .eq(
+    "user_id",
+    currentUserId
+  )
   .gte(
     "created_at",
     todayStart.toISOString()
   );
 
-  if(error){
+
+  if(result.error){
 
     console.error(
       "TODAY WITHDRAW ERROR:",
-      error
+      result.error
     );
 
     return 0;
 
   }
 
-  return (data || [])
+
+  return (
+    result.data || []
+  )
+
   .filter(function(item){
 
     const status =
     String(
       item.status || ""
-    ).toLowerCase();
+    )
+    .toLowerCase();
+
 
     return [
+
       "pending",
+
       "approved",
+
       "success"
-    ].includes(status);
+
+    ]
+    .includes(status);
 
   })
+
   .reduce(
     function(total,item){
 
       return (
+
         total +
-        Number(item.amount || 0)
+
+        Number(
+          item.amount || 0
+        )
+
       );
 
     },
+
     0
   );
 
 }
+
 
 async function submitWithdrawal(){
 
@@ -2633,20 +3602,32 @@ async function submitWithdrawal(){
     return;
   }
 
+
   const amount =
   Number(
-    document.getElementById(
+
+    document
+    .getElementById(
       "withdrawAmount"
-    ).value
+    )
+    .value
+
   );
+
 
   const pkg =
   activePackage ||
-  detectPackage(currentProfile);
+  detectPackage(
+    currentProfile
+  );
+
 
   if(
+
     !Number.isFinite(amount) ||
+
     amount <= 0
+
   ){
 
     alert(
@@ -2657,25 +3638,44 @@ async function submitWithdrawal(){
 
   }
 
+
   if(
+
     amount <
-    Number(pkg.minWithdrawal)
+
+    Number(
+      pkg.minWithdrawal
+    )
+
   ){
 
     alert(
+
       "Minimum withdrawal for " +
+
       pkg.displayName +
+
       " is " +
-      formatMoney(pkg.minWithdrawal)
+
+      formatMoney(
+        pkg.minWithdrawal
+      )
+
     );
 
     return;
 
   }
 
+
   if(
+
     amount >
-    Number(userCurrentBalance)
+
+    Number(
+      userCurrentBalance
+    )
+
   ){
 
     alert(
@@ -2686,38 +3686,58 @@ async function submitWithdrawal(){
 
   }
 
-  withdrawalSubmitting = true;
+
+  withdrawalSubmitting =
+  true;
+
 
   const button =
   document.getElementById(
     "submitWithdrawBtn"
   );
 
-  button.disabled = true;
-  button.innerText = "Checking...";
+
+  button.disabled =
+  true;
+
+
+  button.innerText =
+  "Checking...";
+
 
   try{
 
-    const {
-      data:freshProfile,
-      error:freshError
-    } =
+    const freshResult =
     await supabaseClient
     .from("profiles")
     .select("*")
-    .eq("user_id",currentUserId)
+    .eq(
+      "user_id",
+      currentUserId
+    )
     .single();
 
-    if(freshError){
-      throw freshError;
+
+    if(freshResult.error){
+
+      throw freshResult.error;
+
     }
+
+
+    const freshProfile =
+    freshResult.data;
+
 
     const freshBalance =
     Number(
       freshProfile.balance || 0
     );
 
-    if(amount > freshBalance){
+
+    if(
+      amount > freshBalance
+    ){
 
       throw new Error(
         "Your balance has changed. Please try again."
@@ -2725,64 +3745,93 @@ async function submitWithdrawal(){
 
     }
 
+
     if(
+
       Number(
         pkg.dailyWithdrawalLimit
       ) > 0
+
     ){
 
       const todayAmount =
       await getTodayWithdrawnAmount();
 
+
       if(
+
         todayAmount + amount >
+
         Number(
           pkg.dailyWithdrawalLimit
         )
+
       ){
 
         throw new Error(
+
           "Daily withdrawal limit for " +
+
           pkg.displayName +
+
           " is " +
+
           formatMoney(
             pkg.dailyWithdrawalLimit
           )
+
         );
 
       }
 
     }
 
+
     button.innerText =
     "Processing...";
 
+
     const newBalance =
     Number(
+
       (
-        freshBalance - amount
-      ).toFixed(2)
+        freshBalance -
+        amount
+      )
+      .toFixed(2)
+
     );
 
-    const {
-      data:balanceData,
-      error:balanceError
-    } =
+
+    const balanceResult =
     await supabaseClient
     .from("profiles")
     .update({
-      balance:newBalance
+
+      balance:
+      newBalance
+
     })
-    .eq("user_id",currentUserId)
-    .eq("balance",freshBalance)
+    .eq(
+      "user_id",
+      currentUserId
+    )
+    .eq(
+      "balance",
+      freshBalance
+    )
     .select()
     .maybeSingle();
 
-    if(balanceError){
-      throw balanceError;
+
+    if(balanceResult.error){
+
+      throw balanceResult.error;
+
     }
 
-    if(!balanceData){
+
+    if(!balanceResult.data){
 
       throw new Error(
         "Balance changed. Please try again."
@@ -2790,18 +3839,20 @@ async function submitWithdrawal(){
 
     }
 
-    const {
-      error:withdrawError
-    } =
+
+    const withdrawResult =
     await supabaseClient
     .from("withdrawal_requests")
     .insert({
 
-      user_id:currentUserId,
+      user_id:
+      currentUserId,
 
-      amount:amount,
+      amount:
+      amount,
 
-      status:"pending",
+      status:
+      "pending",
 
       package_name:
       currentProfile.package_name ||
@@ -2809,48 +3860,82 @@ async function submitWithdrawal(){
 
     });
 
-    if(withdrawError){
+
+    if(withdrawResult.error){
+
+      /* Try rollback */
 
       await supabaseClient
       .from("profiles")
       .update({
-        balance:freshBalance
-      })
-      .eq("user_id",currentUserId)
-      .eq("balance",newBalance);
 
-      throw withdrawError;
+        balance:
+        freshBalance
+
+      })
+      .eq(
+        "user_id",
+        currentUserId
+      );
+
+
+      throw withdrawResult.error;
 
     }
 
-    currentProfile = balanceData;
 
-    userCurrentBalance = newBalance;
+    currentProfile =
+    balanceResult.data;
+
+
+    userCurrentBalance =
+    newBalance;
+
 
     renderProfileUI();
 
+
     renderStats();
 
-    closeModal("withdrawModal");
+
+    closeModal(
+      "withdrawModal"
+    );
+
 
     showToast(
       "Withdrawal request submitted!"
     );
 
-    await loadWithdrawalHistory();
+
+    loadWithdrawalHistory();
+
 
   }catch(error){
 
+    console.error(
+      "WITHDRAW ERROR:",
+      error
+    );
+
+
     alert(
+
       "Withdrawal failed: " +
+
       error.message
+
     );
 
   }finally{
 
-    withdrawalSubmitting = false;
+    withdrawalSubmitting =
+    false;
 
-    button.disabled = false;
+
+    button.disabled =
+    false;
+
 
     button.innerText =
     "Submit Request";
@@ -2859,17 +3944,23 @@ async function submitWithdrawal(){
 
 }
 
-/* HISTORY */
+
+/* =========================================
+   WITHDRAW HISTORY
+========================================= */
 
 function openHistoryModal(){
 
   closeSidebar();
 
-  openModal("historyModal");
+  openModal(
+    "historyModal"
+  );
 
   loadWithdrawalHistory();
 
 }
+
 
 async function loadWithdrawalHistory(){
 
@@ -2877,222 +3968,359 @@ async function loadWithdrawalHistory(){
     return;
   }
 
+
   const container =
   document.getElementById(
     "withdrawalHistoryList"
   );
 
+
+  if(!container){
+    return;
+  }
+
+
   container.innerHTML =
   "Loading history...";
 
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
-  .from("withdrawal_requests")
-  .select("*")
-  .eq("user_id",currentUserId)
-  .order(
-    "created_at",
-    {ascending:false}
-  );
 
-  if(error){
+  try{
 
-    console.error(
-      "HISTORY ERROR:",
-      error
+    const result =
+    await supabaseClient
+    .from("withdrawal_requests")
+    .select("*")
+    .eq(
+      "user_id",
+      currentUserId
+    )
+    .order(
+      "created_at",
+      {
+        ascending:false
+      }
     );
 
-    container.innerHTML =
-    `<div class="error-box">
-      Failed to load history: 
-      ${escapeHtml(error.message)}
-    </div>`;
 
-    return;
+    if(result.error){
 
-  }
+      throw result.error;
 
-  if(!data || data.length === 0){
+    }
 
-    container.innerHTML =
-    `
-    <div style="
-      text-align:center;
-      color:#64748b;
-      padding:15px;
-    ">
-      No withdrawal history found
-    </div>
-    `;
 
-    return;
+    const data =
+    result.data;
 
-  }
-
-  container.innerHTML =
-  data.map(function(item){
-
-    const status =
-    String(
-      item.status || "pending"
-    ).toLowerCase();
-
-    let className =
-    "status-pending";
 
     if(
-      status === "approved" ||
-      status === "success"
+      !data ||
+      data.length === 0
     ){
-      className =
-      "status-approved";
-    }
 
-    if(status === "rejected"){
-      className =
-      "status-rejected";
-    }
+      container.innerHTML =
+      `
+      <div style="
+        text-align:center;
+        color:#64748b;
+        padding:15px;
+      ">
 
-    const date =
-    item.created_at
-    ? new Date(
-        item.created_at
-      ).toLocaleDateString(
-        "en-IN",
-        {
-          day:"2-digit",
-          month:"short",
-          year:"numeric"
-        }
-      )
-    : "";
-
-    return `
-
-    <div class="history-card-item">
-
-      <div class="history-row-1">
-
-        <span>
-          ${escapeHtml(date)}
-        </span>
-
-        <span>
-          ${escapeHtml(
-            item.package_name || ""
-          )}
-        </span>
+        No withdrawal history found
 
       </div>
+      `;
 
-      <div class="history-row-2">
+      return;
+
+    }
+
+
+    container.innerHTML =
+    data.map(
+      function(item){
+
+        const status =
+        String(
+          item.status || "pending"
+        )
+        .toLowerCase();
+
+
+        let className =
+        "status-pending";
+
+
+        if(
+
+          status === "approved" ||
+
+          status === "success"
+
+        ){
+
+          className =
+          "status-approved";
+
+        }
+
+
+        if(
+          status === "rejected"
+        ){
+
+          className =
+          "status-rejected";
+
+        }
+
+
+        const date =
+        item.created_at
+
+        ?
+
+        new Date(
+          item.created_at
+        )
+        .toLocaleDateString(
+
+          "en-IN",
+
+          {
+
+            day:"2-digit",
+
+            month:"short",
+
+            year:"numeric"
+
+          }
+
+        )
+
+        :
+
+        "";
+
+
+        return `
+
+        <div class="history-card-item">
+
+        <div class="history-row-1">
+
+        <span>
+        ${escapeHtml(date)}
+        </span>
+
+        <span>
+        ${escapeHtml(
+          item.package_name || ""
+        )}
+        </span>
+
+        </div>
+
+        <div class="history-row-2">
 
         <span class="history-amount">
-          ${formatMoney(item.amount)}
+        ${formatMoney(item.amount)}
         </span>
 
         <span class="
           status-badge
           ${className}
         ">
-          ${escapeHtml(status)}
+
+        ${escapeHtml(status)}
+
         </span>
 
-      </div>
+        </div>
+
+        </div>
+
+        `;
+
+      }
+    )
+    .join("");
+
+
+  }catch(error){
+
+    console.error(
+      "HISTORY ERROR:",
+      error
+    );
+
+
+    container.innerHTML =
+    `
+    <div class="error-box">
+
+    Failed to load history.
+
+    <br><br>
+
+    ${escapeHtml(
+      error.message
+    )}
 
     </div>
-
     `;
 
-  }).join("");
+  }
 
 }
 
-/* REFERRALS */
+
+/* =========================================
+   REFERRALS
+========================================= */
 
 async function loadReferralsData(){
 
+  const container =
+  document.getElementById(
+    "referralsListContainer"
+  );
+
+
   if(!userRefCode){
 
-    document.getElementById(
-      "referralsListContainer"
-    ).innerHTML =
-    "No referral code found";
+    if(container){
+
+      container.innerHTML =
+      "No referral code found";
+
+    }
 
     return;
 
   }
 
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
-  .from("profiles")
-  .select(
-    "full_name,referral_code,created_at,referred_by"
-  )
-  .eq(
-    "referred_by",
-    userRefCode
-  )
-  .order(
-    "created_at",
-    {ascending:false}
-  );
 
-  if(error){
+  try{
+
+    const result =
+    await supabaseClient
+    .from("profiles")
+    .select(
+
+      "full_name,referral_code,created_at,referred_by"
+
+    )
+    .eq(
+
+      "referred_by",
+
+      userRefCode
+
+    )
+    .order(
+
+      "created_at",
+
+      {
+        ascending:false
+      }
+
+    );
+
+
+    if(result.error){
+
+      throw result.error;
+
+    }
+
+
+    allReferralsData =
+    result.data || [];
+
+
+    const firstTab =
+    document.querySelector(
+      ".ref-tab"
+    );
+
+
+    filterReferrals(
+      1,
+      firstTab
+    );
+
+
+  }catch(error){
 
     console.error(
       "REFERRAL ERROR:",
       error
     );
 
-    allReferralsData = [];
 
-    document.getElementById(
-      "referralsListContainer"
-    ).innerHTML =
-    `<div class="error-box">
-      Referral loading error: 
-      ${escapeHtml(error.message)}
-    </div>`;
+    allReferralsData =
+    [];
 
-    return;
+
+    if(container){
+
+      container.innerHTML =
+      `
+      <div class="error-box">
+
+      Referral loading error:
+
+      <br><br>
+
+      ${escapeHtml(
+        error.message
+      )}
+
+      </div>
+      `;
+
+    }
 
   }
-
-  allReferralsData =
-  data || [];
-
-  filterReferrals(
-    1,
-    document.querySelector(".ref-tab")
-  );
 
 }
 
-function filterReferrals(days,button){
+
+function filterReferrals(
+  days,
+  button
+){
 
   document
-  .querySelectorAll(".ref-tab")
-  .forEach(function(tab){
+  .querySelectorAll(
+    ".ref-tab"
+  )
+  .forEach(
+    function(tab){
 
-    tab.classList.remove("active");
+      tab.classList.remove(
+        "active"
+      );
 
-  });
+    }
+  );
+
 
   if(button){
 
-    button.classList.add("active");
+    button.classList.add(
+      "active"
+    );
 
   }
 
+
   const now =
   new Date();
+
 
   const filtered =
   allReferralsData.filter(
@@ -3102,14 +4330,20 @@ function filterReferrals(days,button){
         return false;
       }
 
+
       const date =
-      new Date(item.created_at);
+      new Date(
+        item.created_at
+      );
+
 
       const difference =
       now - date;
 
+
       const differenceDays =
       difference /
+
       (
         1000 *
         60 *
@@ -3117,20 +4351,33 @@ function filterReferrals(days,button){
         24
       );
 
+
       return (
+
         differenceDays >= 0 &&
+
         differenceDays <= days
+
       );
 
     }
   );
+
 
   const container =
   document.getElementById(
     "referralsListContainer"
   );
 
-  if(filtered.length === 0){
+
+  if(!container){
+    return;
+  }
+
+
+  if(
+    filtered.length === 0
+  ){
 
     container.innerHTML =
     `
@@ -3139,7 +4386,9 @@ function filterReferrals(days,button){
       color:#64748b;
       padding:15px;
     ">
+
       No referrals found
+
     </div>
     `;
 
@@ -3147,66 +4396,97 @@ function filterReferrals(days,button){
 
   }
 
+
   container.innerHTML =
-  filtered.map(function(ref){
+  filtered.map(
+    function(ref){
 
-    const name =
-    escapeHtml(
-      ref.full_name || "User"
-    );
+      const name =
+      escapeHtml(
+        ref.full_name || "User"
+      );
 
-    const code =
-    escapeHtml(
-      ref.referral_code || "N/A"
-    );
 
-    const date =
-    ref.created_at
-    ? new Date(
+      const code =
+      escapeHtml(
+        ref.referral_code || "N/A"
+      );
+
+
+      const date =
+      ref.created_at
+
+      ?
+
+      new Date(
         ref.created_at
-      ).toLocaleDateString(
-        "en-IN",
-        {
-          day:"2-digit",
-          month:"short",
-          year:"numeric"
-        }
       )
-    : "";
+      .toLocaleDateString(
 
-    return `
+        "en-IN",
 
-    <div class="referral-card-item">
+        {
+
+          day:"2-digit",
+
+          month:"short",
+
+          year:"numeric"
+
+        }
+
+      )
+
+      :
+
+      "";
+
+
+      return `
+
+      <div class="referral-card-item">
 
       <div class="ref-user-info">
 
-        <h4>${name}</h4>
+      <h4>
+      ${name}
+      </h4>
 
-        <span>
-          ID: ${code}
-        </span>
+      <span>
+
+      ID:
+      ${code}
+
+      </span>
 
       </div>
 
       <div class="ref-date">
 
-        Joined
+      Joined
 
-        <br>
+      <br>
 
-        <b>${date}</b>
+      <b>
+      ${date}
+      </b>
 
       </div>
 
-    </div>
+      </div>
 
-    `;
+      `;
 
-  }).join("");
+    }
+  )
+  .join("");
 
 }
 
-/* STATS */
+
+/* =========================================
+   STATS
+========================================= */
 
 function renderStats(){
 
@@ -3215,20 +4495,32 @@ function renderStats(){
   ).innerText =
   formatMoney(0);
 
+
   document.getElementById(
     "sevenDaysRevenue"
   ).innerText =
   formatMoney(0);
+
 
   document.getElementById(
     "thirtyDaysRevenue"
   ).innerText =
   formatMoney(0);
 
+
+  document.getElementById(
+    "thirtyDaysRevenue"
+  ).innerText =
+  formatMoney(0);
+
+
   document.getElementById(
     "allTimeRevenueText"
   ).innerText =
-  formatMoney(userCurrentBalance);
+  formatMoney(
+    userCurrentBalance
+  );
+
 
   document.getElementById(
     "passiveIncome"
@@ -3237,101 +4529,145 @@ function renderStats(){
 
 }
 
-/* REALTIME */
+
+/* =========================================
+   REALTIME
+========================================= */
 
 function setupRealtimeListener(){
 
-  if(!currentUserId){
+  if(
+    !currentUserId ||
+    !supabaseClient
+  ){
     return;
   }
 
-  if(realtimeChannel){
 
-    supabaseClient.removeChannel(
-      realtimeChannel
+  try{
+
+    if(realtimeChannel){
+
+      supabaseClient.removeChannel(
+        realtimeChannel
+      );
+
+    }
+
+
+    realtimeChannel =
+    supabaseClient
+    .channel(
+
+      "dashboard-" +
+      currentUserId
+
+    )
+
+
+    .on(
+
+      "postgres_changes",
+
+      {
+
+        event:"UPDATE",
+
+        schema:"public",
+
+        table:"profiles",
+
+        filter:
+        "user_id=eq." +
+        currentUserId
+
+      },
+
+      function(payload){
+
+        if(payload.new){
+
+          currentProfile =
+          payload.new;
+
+
+          userCurrentBalance =
+          Number(
+            payload.new.balance || 0
+          );
+
+
+          userRefCode =
+          payload.new.referral_code ||
+          userRefCode;
+
+
+          renderProfileUI();
+
+
+          renderStats();
+
+        }
+
+      }
+
+    )
+
+
+    .on(
+
+      "postgres_changes",
+
+      {
+
+        event:"*",
+
+        schema:"public",
+
+        table:"withdrawal_requests",
+
+        filter:
+        "user_id=eq." +
+        currentUserId
+
+      },
+
+      function(){
+
+        loadWithdrawalHistory();
+
+      }
+
+    )
+
+
+    .subscribe(
+      function(status){
+
+        console.log(
+          "Realtime status:",
+          status
+        );
+
+      }
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "REALTIME ERROR:",
+      error
     );
 
   }
 
-  realtimeChannel =
-  supabaseClient
-  .channel(
-    "dashboard-" +
-    currentUserId
-  )
-
-  .on(
-
-    "postgres_changes",
-
-    {
-      event:"UPDATE",
-      schema:"public",
-      table:"profiles",
-      filter:
-      "user_id=eq." +
-      currentUserId
-    },
-
-    function(payload){
-
-      if(payload.new){
-
-        currentProfile =
-        payload.new;
-
-        userCurrentBalance =
-        Number(
-          payload.new.balance || 0
-        );
-
-        userRefCode =
-        payload.new.referral_code ||
-        userRefCode;
-
-        renderProfileUI();
-
-        renderStats();
-
-      }
-
-    }
-
-  )
-
-  .on(
-
-    "postgres_changes",
-
-    {
-      event:"*",
-      schema:"public",
-      table:"withdrawal_requests",
-      filter:
-      "user_id=eq." +
-      currentUserId
-    },
-
-    function(){
-
-      loadWithdrawalHistory();
-
-    }
-
-  )
-
-  .subscribe(function(status){
-
-    console.log(
-      "Realtime status:",
-      status
-    );
-
-  });
-
 }
 
-/* LOGOUT */
+
+/* =========================================
+   LOGOUT
+========================================= */
 
 function setupLogout(){
 
@@ -3340,39 +4676,57 @@ function setupLogout(){
     "sideLogoutBtn"
   );
 
+
+  if(!logoutButton){
+    return;
+  }
+
+
   logoutButton.onclick =
   async function(){
 
-    logoutButton.disabled = true;
+    logoutButton.disabled =
+    true;
+
 
     logoutButton.innerText =
     "Logging out...";
 
+
     try{
 
-      const {
-        error
-      } =
+      const result =
       await supabaseClient
       .auth
       .signOut();
 
-      if(error){
-        throw error;
+
+      if(result.error){
+
+        throw result.error;
+
       }
+
 
       window.location.replace(
         "login.html"
       );
 
+
     }catch(error){
 
       alert(
+
         "Logout failed: " +
+
         error.message
+
       );
 
-      logoutButton.disabled = false;
+
+      logoutButton.disabled =
+      false;
+
 
       logoutButton.innerText =
       "🚪 Logout";
@@ -3383,117 +4737,294 @@ function setupLogout(){
 
 }
 
-/* AUTH LISTENER */
 
-supabaseClient.auth.onAuthStateChange(
-  function(event,session){
+/* =========================================
+   AUTH LISTENER
+========================================= */
 
-    if(event === "SIGNED_OUT"){
+if(supabaseClient){
 
-      window.location.replace(
-        "login.html"
-      );
+  supabaseClient.auth.onAuthStateChange(
+    function(event){
 
-    }
+      if(
+        event === "SIGNED_OUT"
+      ){
 
-  }
-);
+        window.location.replace(
+          "login.html"
+        );
 
-/* START */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  async function(){
-
-    try{
-
-      const loaded =
-      await loadUserProfile();
-
-      if(!loaded){
-        return;
       }
 
-      renderProfileUI();
+    }
+  );
 
-      renderStats();
+}
 
-      await Promise.all([
 
-        loadWithdrawalHistory(),
+/* =========================================
+   SHOW DASHBOARD ERROR
+========================================= */
 
-        loadReferralsData()
+function showDashboardError(error){
 
-      ]);
+  const message =
+  error?.message ||
+  "Unknown dashboard error";
 
-      setupRealtimeListener();
 
-      setupLogout();
+  console.error(
+    "FINAL DASHBOARD ERROR:",
+    error
+  );
 
-      console.log(
-        "Dashboard loaded successfully"
-      );
 
-    }catch(error){
+  document.getElementById(
+    "userName"
+  ).innerText =
+  "Profile Error";
 
-      console.error(
-        "DASHBOARD ERROR:",
-        error
-      );
 
-      document.getElementById(
-        "userName"
-      ).innerText =
-      "Profile Error";
+  document.getElementById(
+    "sidebarUserName"
+  ).innerText =
+  "Profile Error";
 
-      document.getElementById(
-        "sidebarUserName"
-      ).innerText =
-      "Profile Error";
 
-      document.getElementById(
-        "sidebarUserEmail"
-      ).innerText =
-      error.message;
+  document.getElementById(
+    "sidebarUserEmail"
+  ).innerText =
+  message;
 
-      document.getElementById(
-        "packageDashboardInfo"
-      ).innerHTML =
-      `
-      <div class="error-box">
-        <b>Dashboard Error</b>
-        <br><br>
-        ${escapeHtml(error.message)}
-      </div>
-      `;
 
-      document.getElementById(
-        "fullRefLinkText"
-      ).innerText =
-      "Error: " +
-      error.message;
+  document.getElementById(
+    "packageDashboardInfo"
+  ).innerHTML =
+  `
+  <div class="error-box">
 
-      document.getElementById(
-        "referralsListContainer"
-      ).innerHTML =
-      `
-      <div class="error-box">
-        Dashboard failed to load
-        <br><br>
-        ${escapeHtml(error.message)}
-      </div>
-      `;
+  <b>
+  Dashboard Error
+  </b>
 
-      showToast(
-        "Dashboard loading failed"
+  <br><br>
+
+  ${escapeHtml(message)}
+
+  <br><br>
+
+  Please refresh the page.
+
+  </div>
+  `;
+
+
+  document.getElementById(
+    "fullRefLinkText"
+  ).innerText =
+  "Unable to load referral link";
+
+
+  document.getElementById(
+    "myRefCode"
+  ).innerText =
+  "Unavailable";
+
+
+  document.getElementById(
+    "referralsListContainer"
+  ).innerHTML =
+  `
+  <div class="error-box">
+
+  Dashboard failed to load.
+
+  <br><br>
+
+  ${escapeHtml(message)}
+
+  </div>
+  `;
+
+
+  showToast(
+    "Dashboard loading failed"
+  );
+
+}
+
+
+/* =========================================
+   MAIN DASHBOARD START
+========================================= */
+
+async function initializeDashboard(){
+
+  console.log(
+    "================================="
+  );
+
+  console.log(
+    "SMART MONEY DASHBOARD STARTING"
+  );
+
+  console.log(
+    "================================="
+  );
+
+
+  try{
+
+    if(!supabaseClient){
+
+      throw new Error(
+        "Supabase failed to initialize. Please check internet connection."
       );
 
     }
 
+
+    /*
+      IMPORTANT:
+      15 second timeout.
+      Page will never stay Loading forever.
+    */
+
+    const loaded =
+    await Promise.race([
+
+      loadUserProfile(),
+
+      new Promise(
+        function(
+          resolve,
+          reject
+        ){
+
+          setTimeout(
+            function(){
+
+              reject(
+                new Error(
+                  "Server connection timeout. Please check your internet connection and refresh."
+                )
+              );
+
+            },
+            15000
+          );
+
+        }
+      )
+
+    ]);
+
+
+    if(!loaded){
+      return;
+    }
+
+
+    /*
+      PROFILE FIRST
+    */
+
+    renderProfileUI();
+
+
+    renderStats();
+
+
+    /*
+      LOGOUT
+    */
+
+    setupLogout();
+
+
+    /*
+      LOAD HISTORY + REFERRALS
+      SEPARATELY
+      ONE ERROR WILL NOT BREAK
+      WHOLE DASHBOARD
+    */
+
+    Promise.allSettled([
+
+      loadWithdrawalHistory(),
+
+      loadReferralsData()
+
+    ])
+    .then(
+      function(results){
+
+        console.log(
+          "SECONDARY LOAD RESULTS:",
+          results
+        );
+
+      }
+    );
+
+
+    /*
+      REALTIME
+    */
+
+    setupRealtimeListener();
+
+
+    console.log(
+      "================================="
+    );
+
+    console.log(
+      "DASHBOARD LOADED SUCCESSFULLY"
+    );
+
+    console.log(
+      "================================="
+    );
+
+
+  }catch(error){
+
+    showDashboardError(
+      error
+    );
+
   }
-);
+
+}
+
+
+/* =========================================
+   SAFE START
+========================================= */
+
+if(
+  document.readyState ===
+  "loading"
+){
+
+  document.addEventListener(
+
+    "DOMContentLoaded",
+
+    initializeDashboard
+
+  );
+
+}else{
+
+  initializeDashboard();
+
+}
 
 </script>
 
 </body>
+
 </html>
