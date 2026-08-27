@@ -567,20 +567,20 @@ document.addEventListener("DOMContentLoaded", async function(){
     currentUserEmail = user.email || "";
     const authName = user.user_metadata?.full_name || user.user_metadata?.name || "Smart Money User";
 
-    // Fast Load: Fetch existing profile first without recreating if it exists
+    // 1. Fetch profile from database first to check if referral code already exists
     let { data:profile, error:profileError } = await supabaseClient
       .from("profiles")
       .select("*")
       .eq("user_id", currentUserId)
       .maybeSingle();
 
-    if(!profile || !profile.referral_code){
-      // Generate permanent referral code ONLY if it doesn't exist yet
+    // 2. Strict Check: Only generate a new code if profile doesn't exist OR referral_code is completely empty/null
+    if(!profile || !profile.referral_code || profile.referral_code.trim() === ""){
       const randomFiveDigit = Math.floor(10000 + Math.random() * 90000);
       const generatedCode = "SM-smart" + randomFiveDigit;
 
       if(!profile){
-        const newProf = {
+        profile = {
           user_id: currentUserId,
           email: currentUserEmail,
           full_name: authName,
@@ -588,8 +588,7 @@ document.addEventListener("DOMContentLoaded", async function(){
           package_name: null,
           referral_code: generatedCode
         };
-        await supabaseClient.from("profiles").upsert(newProf, { onConflict: 'user_id' });
-        profile = newProf;
+        await supabaseClient.from("profiles").insert([profile]);
       } else {
         await supabaseClient.from("profiles").update({ referral_code: generatedCode }).eq("user_id", currentUserId);
         profile.referral_code = generatedCode;
@@ -600,7 +599,7 @@ document.addEventListener("DOMContentLoaded", async function(){
     const finalName = profile?.full_name || authName;
     const finalEmail = profile?.email || currentUserEmail;
     userCurrentBalance = Number(profile?.balance || 0);
-    userRefCode = profile.referral_code; // Permanent Referral Code loaded from DB
+    userRefCode = profile.referral_code; // Permanently locked referral code from DB
     const dob = profile?.date_of_birth || "";
     const packageName = profile?.package_name;
 
@@ -634,7 +633,6 @@ document.addEventListener("DOMContentLoaded", async function(){
     document.getElementById("walletBalanceMain").innerText = "₹" + userCurrentBalance.toFixed(2);
     document.getElementById("allTimeRevenueText").innerText = "₹" + userCurrentBalance.toFixed(2);
 
-    // Load background tasks smoothly without blocking UI
     loadWithdrawalHistory();
     loadReferralsData();
     setupRealtimeListener();
@@ -660,7 +658,8 @@ async function uploadProfilePicture(event){
 
     const { error } = await supabaseClient
       .from("profiles")
-      .upsert({ user_id: currentUserId, profile_pic: base64Image }, { onConflict: 'user_id' });
+      .update({ profile_pic: base64Image })
+      .eq("user_id", currentUserId);
 
     if(error){ 
       alert("Failed to save picture: " + error.message); 
@@ -677,7 +676,8 @@ async function removeProfilePicture(){
 
   const { error } = await supabaseClient
     .from("profiles")
-    .upsert({ user_id: currentUserId, profile_pic: null }, { onConflict: 'user_id' });
+    .update({ profile_pic: null })
+    .eq("user_id", currentUserId);
 
   if(error){
     alert("Failed to remove picture: " + error.message);
@@ -852,7 +852,7 @@ async function updateUserPayoutDetails(){
     updateData.ifsc_code = document.getElementById("editIfsc").value.trim().toUpperCase();
   }
 
-  const { error } = await supabaseClient.from("profiles").upsert({ user_id: currentUserId, ...updateData }, { onConflict: 'user_id' });
+  const { error } = await supabaseClient.from("profiles").update(updateData).eq("user_id", currentUserId);
   saveBtn.disabled = false;
   saveBtn.innerText = "Save Details";
 
@@ -865,7 +865,7 @@ async function updateUserPayoutDetails(){
 async function saveKycDetails(){
   const fullName = document.getElementById("kycFullName").value.trim();
   const dob = document.getElementById("kycDob").value;
-  const { error } = await supabaseClient.from("profiles").upsert({ user_id: currentUserId, full_name: fullName, date_of_birth: dob }, { onConflict: 'user_id' });
+  const { error } = await supabaseClient.from("profiles").update({ full_name: fullName, date_of_birth: dob }).eq("user_id", currentUserId);
   if(error){ alert("Error: " + error.message); return; }
 
   currentProfile = { ...currentProfile, full_name: fullName, date_of_birth: dob };
@@ -897,7 +897,7 @@ async function submitWithdrawal(){
   if(insertError){ submitBtn.disabled = false; alert("Error: " + insertError.message); return; }
 
   const newBalance = userCurrentBalance - amount;
-  await supabaseClient.from("profiles").upsert({ user_id: currentUserId, balance: newBalance }, { onConflict: 'user_id' });
+  await supabaseClient.from("profiles").update({ balance: newBalance }).eq("user_id", currentUserId);
   submitBtn.disabled = false;
 
   userCurrentBalance = newBalance;
