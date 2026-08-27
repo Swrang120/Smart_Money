@@ -51,16 +51,12 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
 .user-info{flex:1;min-width:0;}
 .user-info h2{margin:0 0 8px;font-size:26px;color:#0f172a;font-weight:800;letter-spacing:-0.5px;line-height:1.2;}
-
-/* RICHIND STYLE AFFILIATE BOXES (3 LINES) */
-.richind-affiliate-box{background:#ffffff;border:1px solid #e2e8f0;border-radius:20px;padding:20px;margin-bottom:20px;box-shadow:0 10px 25px rgba(15,23,42,.05);}
-.richind-affiliate-title{font-size:15px;font-weight:800;color:#7c3aed;margin-bottom:15px;}
-.affiliate-row{margin-bottom:14px;}
-.affiliate-row label{display:block;font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px;}
-.affiliate-input-group{display:flex;align-items:center;gap:10px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:12px;padding:8px 12px;}
-.affiliate-input-group input, .affiliate-input-group select, .affiliate-input-group span{background:transparent;border:none;outline:none;font-size:13px;color:#334155;width:100%;font-weight:600;}
-.affiliate-action-btn{background:linear-gradient(135deg,#db2777,#e11d48);color:white;border:none;padding:9px 16px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;box-shadow:0 4px 12px rgba(219,39,119,0.25);transition:transform 0.1s ease;}
-.affiliate-action-btn:active{transform:scale(0.96);}
+.affiliate-id-box{display:flex;align-items:center;gap:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:10px 14px;width:100%;margin-bottom:8px;box-shadow:0 2px 6px rgba(0,0,0,0.02);justify-content:space-between;}
+.affiliate-id-box span{font-size:13px;color:#475569;}
+.affiliate-id-box b{font-size:14px;color:#7c3aed;font-weight:800;}
+.copy-id-btn, .share-id-btn{width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;color:white;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.copy-id-btn{background:linear-gradient(135deg,#7c3aed,#9333ea);}
+.share-id-btn{background:linear-gradient(135deg,#10b981,#059669);}
 
 /* STATS CARDS */
 .stats-stack{display:flex;flex-direction:column;gap:15px;margin-bottom:20px;}
@@ -186,39 +182,24 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     </div>
   </div>
 
-  <!-- RICHIND STYLE 3-LINE AFFILIATE LINKS SECTION -->
-  <div class="richind-affiliate-box">
-    <div class="richind-affiliate-title">Affiliate Links</div>
+  <!-- AFFILIATE LINKS SECTION -->
+  <div class="section-box" style="background:linear-gradient(135deg,#ffffff 0%,#f8fafc 100%);">
+    <h3 style="margin-top:0; font-size:16px; color:#0f172a; margin-bottom:12px;">🔗 My Affiliate Links</h3>
     
-    <!-- Line 1: My Referral Link -->
-    <div class="affiliate-row">
-      <label>My Referral Link</label>
-      <div class="affiliate-input-group">
-        <span id="fullRefLinkText" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Loading link...</span>
-        <button class="affiliate-action-btn" onclick="copyFullReferralLink()">Copy Referral Link</button>
-      </div>
+    <!-- Referral Link Box -->
+    <label style="font-size:11px; font-weight:700; color:#64748b; display:block; margin-bottom:4px;">MY REFERRAL LINK</label>
+    <div class="affiliate-id-box">
+      <span id="fullRefLinkText" style="word-break:break-all; font-size:12px; color:#334155; max-width:80%;">Loading link...</span>
+      <button class="copy-id-btn" onclick="copyFullReferralLink()" title="Copy Link">📋</button>
     </div>
 
-    <!-- Line 2: My Referral Code -->
-    <div class="affiliate-row">
-      <label>My Referral Code</label>
-      <div class="affiliate-input-group">
-        <span id="myRefCode" style="font-weight:800; color:#7c3aed;">Loading...</span>
-        <button class="affiliate-action-btn" onclick="copyAffiliateLink()">Copy Referral Code</button>
-      </div>
-    </div>
-
-    <!-- Line 3: Generate Link For -->
-    <div class="affiliate-row" style="margin-bottom:0;">
-      <label>Generate Link For</label>
-      <div class="affiliate-input-group">
-        <select id="packageDropdown">
-          <option value="All Packages">All Packages</option>
-          <option value="Basic">Basic Package</option>
-          <option value="Pro">Pro Package</option>
-          <option value="VIP">VIP Package</option>
-        </select>
-        <button class="affiliate-action-btn" onclick="copyGeneratedCustomLink()">Copy Link</button>
+    <!-- Referral Code Box -->
+    <label style="font-size:11px; font-weight:700; color:#64748b; display:block; margin-bottom:4px; margin-top:10px;">MY REFERRAL CODE</label>
+    <div class="affiliate-id-box" style="margin-bottom:0;">
+      <span>ID: <b id="myRefCode">Loading...</b></span>
+      <div style="display:flex; gap:6px;">
+        <button class="copy-id-btn" onclick="copyAffiliateLink()" title="Copy Code">📋</button>
+        <button class="share-id-btn" onclick="shareAffiliateLink()" title="Share Link">🔗</button>
       </div>
     </div>
   </div>
@@ -585,6 +566,7 @@ document.addEventListener("DOMContentLoaded", async function(){
     document.getElementById("userName").innerHTML = escapeHtml(finalName);
     document.getElementById("myRefCode").innerText = userRefCode;
     
+    // Update Full Referral Link UI
     const baseUrl = window.location.origin + "/register.html";
     const fullLink = `${baseUrl}?ref=${userRefCode}`;
     document.getElementById("fullRefLinkText").innerText = fullLink;
@@ -638,11 +620,10 @@ async function uploadProfilePicture(event){
       .update({ profile_pic: base64Image })
       .eq("user_id", currentUserId);
 
-    if(error){ 
-      alert("Failed to save picture: " + error.message); 
-    } else { 
+    if(error){ alert("Failed to save picture: " + error.message); }
+    else { 
       currentProfile.profile_pic = base64Image;
-      showToast("Profile picture saved successfully!"); 
+      showToast("Profile picture saved!"); 
     }
   };
   reader.readAsDataURL(file);
@@ -804,15 +785,14 @@ async function copyFullReferralLink(){
   }
 }
 
-async function copyGeneratedCustomLink(){
-  const selectedPkg = document.getElementById("packageDropdown").value;
+function shareAffiliateLink(){
   const baseUrl = window.location.origin + "/register.html";
-  const customLink = `${baseUrl}?ref=${userRefCode}&package=${encodeURIComponent(selectedPkg)}`;
-  try {
-    await navigator.clipboard.writeText(customLink);
-    showToast(`Copied Link for: ${selectedPkg}`);
-  } catch(e) {
-    alert("Copy failed: " + customLink);
+  const fullLink = `${baseUrl}?ref=${userRefCode}`;
+  const shareText = `Join Smart Money using my Referral Link: ${fullLink} and start earning today!`;
+  if (navigator.share) {
+    navigator.share({ title: 'Smart Money Affiliate', text: shareText, url: fullLink }).catch(err => console.log(err));
+  } else {
+    copyFullReferralLink();
   }
 }
 
