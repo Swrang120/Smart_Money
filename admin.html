@@ -1,3 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+
+  <!-- REQUIRED LIBRARIES (White Screen Fix) -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
 <script>
   /* =========================================
      EMAILJS CONFIGURATION
@@ -99,7 +112,6 @@
 
   /* =========================================
      EMAIL FUNCTION - PAYMENT SUBMITTED
-     USER SIDE PAYMENT SUBMISSION KE LIYE
   ========================================== */
 
   async function sendPaymentSubmittedEmail(
@@ -176,12 +188,16 @@
     const overlay =
       document.getElementById("sidebarOverlay");
 
+    if (!sidebar) return;
+
     sidebar.classList.toggle("open");
 
-    overlay.style.display =
-      sidebar.classList.contains("open")
-        ? "block"
-        : "none";
+    if (overlay) {
+      overlay.style.display =
+        sidebar.classList.contains("open")
+          ? "block"
+          : "none";
+    }
 
     if (sidebar.classList.contains("open")) {
       loadTrashAndHistoryData();
@@ -213,12 +229,12 @@
     const fileInput =
       document.getElementById("adminLogoFileInput");
 
-    const file = fileInput.files[0];
-
-    if (!file) {
+    if (!fileInput || !fileInput.files[0]) {
       alert("Pehle koi photo select karein!");
       return;
     }
+
+    const file = fileInput.files[0];
 
     try {
 
@@ -336,30 +352,29 @@
 
   function updateStatsAndRenderPayments() {
 
-    document.getElementById(
-      "statTotal"
-    ).innerText =
-      allPaymentsData.length;
+    const statTotal = document.getElementById("statTotal");
+    const statApproved = document.getElementById("statApproved");
+    const statRejected = document.getElementById("statRejected");
 
-    document.getElementById(
-      "statApproved"
-    ).innerText =
-      allPaymentsData.filter(
-        item =>
-          (item.status || "")
-            .toLowerCase() ===
-          "approved"
-      ).length;
-
-    document.getElementById(
-      "statRejected"
-    ).innerText =
-      allPaymentsData.filter(
-        item =>
-          (item.status || "")
-            .toLowerCase() ===
-          "rejected"
-      ).length;
+    if (statTotal) statTotal.innerText = allPaymentsData.length;
+    if (statApproved) {
+      statApproved.innerText =
+        allPaymentsData.filter(
+          item =>
+            (item.status || "")
+              .toLowerCase() ===
+            "approved"
+        ).length;
+    }
+    if (statRejected) {
+      statRejected.innerText =
+        allPaymentsData.filter(
+          item =>
+            (item.status || "")
+              .toLowerCase() ===
+            "rejected"
+        ).length;
+    }
 
 
     let filtered =
@@ -388,6 +403,8 @@
       document.getElementById(
         "paymentTableBody"
       );
+
+    if (!tbody) return;
 
 
     if (filtered.length === 0) {
@@ -551,7 +568,6 @@
 
   /* =========================================
      APPROVE PAYMENT
-     NEW USER APPROVAL EMAIL
   ========================================== */
 
   async function approvePayment(
@@ -730,8 +746,6 @@
       }
 
 
-      /* SEND NEW USER APPROVAL EMAIL */
-
       let emailStatus =
         false;
 
@@ -763,7 +777,7 @@
           "Package Approved Successfully! 🎉\n\n" +
           "Referral ID: " +
           uniqueRefCode +
-          "\n\nEmail could not be sent. Please check EmailJS template variables."
+          "\n\nEmail could not be sent."
         );
 
       }
@@ -959,6 +973,8 @@
       document.getElementById(
         "withdrawalTableBody"
       );
+
+    if (!tbody) return;
 
 
     if (
@@ -1210,7 +1226,6 @@
 
   /* =========================================
      UPDATE WITHDRAWAL
-     WITHDRAWAL APPROVED EMAIL
   ========================================== */
 
   async function updateWithdrawal(
@@ -1252,8 +1267,6 @@
         throw updErr;
       }
 
-
-      /* REFUND IF REJECTED */
 
       if (
         status === "Rejected" &&
@@ -1300,8 +1313,6 @@
 
       }
 
-
-      /* SEND WITHDRAWAL EMAIL */
 
       if (
         status === "Approved" &&
@@ -1440,6 +1451,8 @@
       document.getElementById(
         "usersTableBody"
       );
+
+    if (!tbody) return;
 
 
     if (
@@ -1641,7 +1654,6 @@
                   font-weight:700;
                   ">
                     Master Admin
-                  </span>
                   `
               }
 
@@ -1763,59 +1775,58 @@
         "approvedHistoryList"
       );
 
+    if (hContainer) {
+      if (
+        !historyPayments ||
+        historyPayments.length === 0
+      ) {
 
-    if (
-      !historyPayments ||
-      historyPayments.length === 0
-    ) {
+        hContainer.innerHTML =
+          "No approved history yet.";
 
-      hContainer.innerHTML =
-        "No approved history yet.";
+      } else {
 
-    } else {
-
-      hContainer.innerHTML =
-        historyPayments
-          .map(
-            payment => `
-            <div
-            style="
-            background:rgba(255,255,255,0.03);
-            padding:8px 10px;
-            border-radius:8px;
-            margin-bottom:6px;
-            ">
-
-              <b>
-                ${
-                  payment.full_name ||
-                  "User"
-                }
-              </b>
-
-              -
-
-              <span
+        hContainer.innerHTML =
+          historyPayments
+            .map(
+              payment => `
+              <div
               style="
-              color:#34d399;
+              background:rgba(255,255,255,0.03);
+              padding:8px 10px;
+              border-radius:8px;
+              margin-bottom:6px;
               ">
 
-                ₹${
-                  payment.amount ||
-                  0
-                }
+                <b>
+                  ${
+                    payment.full_name ||
+                    "User"
+                  }
+                </b>
 
-              </span>
+                -
 
-            </div>
-            `
-          )
-          .join("");
+                <span
+                style="
+                color:#34d399;
+                ">
 
+                  ₹${
+                    payment.amount ||
+                    0
+                  }
+
+                </span>
+
+              </div>
+              `
+            )
+            .join("");
+
+      }
     }
 
-
-    /* DELETED USERS */
 
     const {
       data: users
@@ -1834,53 +1845,54 @@
         "deletedUsersList"
       );
 
+    if (uContainer) {
+      if (
+        !users ||
+        users.length === 0
+      ) {
 
-    if (
-      !users ||
-      users.length === 0
-    ) {
+        uContainer.innerHTML =
+          "No deleted users.";
 
-      uContainer.innerHTML =
-        "No deleted users.";
+      } else {
 
-    } else {
+        uContainer.innerHTML =
+          users
+            .map(
+              user => `
+              <div
+              style="
+              background:rgba(255,255,255,0.03);
+              padding:8px;
+              border-radius:8px;
+              margin-bottom:6px;
+              ">
 
-      uContainer.innerHTML =
-        users
-          .map(
-            user => `
-            <div
-            style="
-            background:rgba(255,255,255,0.03);
-            padding:8px;
-            border-radius:8px;
-            margin-bottom:6px;
-            ">
+                <b>
+                  ${
+                    user.full_name ||
+                    "User"
+                  }
+                </b>
 
-              <b>
-                ${
-                  user.full_name ||
-                  "User"
-                }
-              </b>
+                <button
+                class="btn btn-restore"
+                onclick="
+                restoreRecord(
+                '${user.id}',
+                'profiles'
+                )">
 
-              <button
-              class="btn btn-restore"
-              onclick="
-              restoreRecord(
-              '${user.id}',
-              'profiles'
-              )">
+                  Restore
 
-                Restore
+                </button>
 
-              </button>
+              </div>
+              `
+            )
+            .join("");
 
-            </div>
-            `
-          )
-          .join("");
-
+      }
     }
 
   }
@@ -1945,3 +1957,6 @@
   }
 
 </script>
+
+</body>
+</html>
