@@ -112,11 +112,11 @@
     </button>
   </div>
 
-  <!-- Hidden Drawer Sidebar for Stats & Trash Restore Center -->
+  <!-- Hidden Drawer Sidebar for Stats & Complete Action History / Trash Center -->
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
   <div class="sidebar" id="adminSidebar">
     <div class="sidebar-header">
-      <h3 style="margin:0; font-size:17px; color:#fff;">📊 Control & Trash Center</h3>
+      <h3 style="margin:0; font-size:17px; color:#fff;">📊 History & Trash Center</h3>
       <button class="close-btn" onclick="toggleSidebar()">&times;</button>
     </div>
     
@@ -138,7 +138,10 @@
       <div class="num" style="color: #fb7185;" id="statRejected">0</div>
     </div>
 
-    <!-- Hidden Trash & Restore Panel Inside 3-line Menu -->
+    <!-- Complete Action History & Trash Section Inside 3-line Menu -->
+    <div class="trash-section-title">📜 Approved / Processed Payment History</div>
+    <div id="approvedHistoryList" style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Loading history...</div>
+
     <div class="trash-section-title">♻️ Deleted Users Trash</div>
     <div id="deletedUsersList" style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Loading deleted users...</div>
 
@@ -284,7 +287,7 @@
     sidebar.classList.toggle('open');
     overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
     if(sidebar.classList.contains('open')) {
-      loadTrashData();
+      loadTrashAndHistoryData();
     }
   }
 
@@ -611,7 +614,22 @@
     }
   }
 
-  async function loadTrashData() {
+  async function loadTrashAndHistoryData() {
+    // 1. Approved / Processed Payment History
+    const { data: historyPayments } = await supabaseClient.from('payment_requests').select('*').eq('status', 'Approved').order('created_at', { ascending: false });
+    const hContainer = document.getElementById('approvedHistoryList');
+    if (!historyPayments || historyPayments.length === 0) {
+      hContainer.innerHTML = `<span style="color:var(--text-muted);">No approved history yet.</span>`;
+    } else {
+      hContainer.innerHTML = historyPayments.map(p => `
+        <div style="background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px; margin-bottom:6px;">
+          <div><b>${p.full_name || 'User'}</b> - <span style="color:#34d399;">₹${p.amount || 0}</span></div>
+          <div style="font-size:10px; color:var(--text-muted);">Pkg: ${p.package_name} | UTR: ${p.transaction_id || 'N/A'}</div>
+        </div>
+      `).join('');
+    }
+
+    // 2. Deleted Users Trash
     const { data: users } = await supabaseClient.from('profiles').select('*').eq('is_deleted', true);
     const uContainer = document.getElementById('deletedUsersList');
     if (!users || users.length === 0) {
@@ -625,6 +643,7 @@
       `).join('');
     }
 
+    // 3. Deleted Payments Trash
     const { data: payments } = await supabaseClient.from('payment_requests').select('*').eq('is_deleted', true);
     const pContainer = document.getElementById('deletedPaymentsList');
     if (!payments || payments.length === 0) {
@@ -638,10 +657,7 @@
       `).join('');
     }
 
-    loadWithdrawalTrash();
-  }
-
-  async function loadWithdrawalTrash() {
+    // 4. Deleted Withdrawals Trash
     const { data: wData } = await supabaseClient.from('withdrawal_requests').select('*').eq('is_deleted', true);
     const wContainer = document.getElementById('deletedWithdrawalsList');
     if (!wData || wData.length === 0) {
@@ -664,13 +680,13 @@
       loadUsers();
       loadPaymentRequests();
       loadWithdrawals();
-      loadTrashData();
+      loadTrashAndHistoryData();
     } else {
       if (table === 'profiles') {
         await supabaseClient.from('profiles').update({ is_deleted: false }).eq('user_id', id);
         alert("Restored successfully!");
         loadUsers();
-        loadTrashData();
+        loadTrashAndHistoryData();
       } else {
         alert("Error restoring: " + error.message);
       }
