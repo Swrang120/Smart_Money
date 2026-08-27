@@ -24,12 +24,12 @@
 
 <div class="pay-card">
   <h2>Complete Your Payment</h2>
-  <p style="font-size: 13px; color: #64748b;">Scan QR or use UPI ID to pay</p>
+  <p id="pkgSubTitle" style="font-size: 13px; color: #64748b;">Scan QR or use UPI ID to pay</p>
   
   <div class="price-tag" id="displayPackagePrice">₹289</div>
 
-  <!-- Yahan aapka BharatPe QR Code dikhega -->
-  <img src="qr.jpg" alt="BharatPe QR Code" class="qr-img" id="qrImageElement">
+  <!-- BharatPe QR Code -->
+  <img src="IMG_20260826_034524.jpg" alt="BharatPe QR Code" class="qr-img" id="qrImageElement">
 
   <div class="upi-box" id="upiIdText">
     BHARATPE2U0V0S7G2D90659@unitype
@@ -57,6 +57,20 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
+  // URL se pichle page ka data capture karna
+  const urlParams = new URLSearchParams(window.location.search);
+  const pkgName = urlParams.get('name') || 'Starter Package';
+  const pkgPrice = urlParams.get('price') || '289';
+  const refCode = urlParams.get('ref') || '';
+  const fullName = urlParams.get('fullname') || '';
+  const mobile = urlParams.get('mobile') || '';
+  const email = urlParams.get('email') || '';
+  const password = urlParams.get('password') || '';
+
+  // UI par price aur package name dikhana
+  document.getElementById('displayPackagePrice').innerText = `₹${pkgPrice}`;
+  document.getElementById('pkgSubTitle').innerText = `${pkgName} ke liye payment karein`;
+
   function copyUpi() {
     navigator.clipboard.writeText("BHARATPE2U0V0S7G2D90659@unitype");
     alert("🎉 UPI ID Copied!");
@@ -73,47 +87,52 @@
       return;
     }
 
-    btn.innerText = "Submitting...";
+    if (!email || !fullName) {
+      alert("⚠️ User details missing! Please go back and fill details again.");
+      window.location.href = "checkout.html";
+      return;
+    }
+
+    btn.innerText = "Submitting Order...";
     btn.disabled = true;
 
     try {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (!session) {
-        alert("Please login first.");
-        window.location.href = "login.html";
-        return;
-      }
-
-      const userId = session.user.id;
-      const userEmail = session.user.email;
-
-      // 1. Upload Screenshot to Supabase Storage (agar bucket bani ho, warna direct table mein request save karein)
-      const fileName = `${userId}_${Date.now()}.${fileInput.name.split('.').pop()}`;
+      // 1. Upload Screenshot to Supabase Storage bucket 'payment-proofs'
+      const fileName = `${Date.now()}_${fileInput.name}`;
       const { data: uploadData, error: uploadError } = await supabaseClient.storage
-        .from('payment_proofs') // Ensure this bucket exists in Supabase
+        .from('payment-proofs')
         .upload(fileName, fileInput);
 
-      let screenshotUrl = "";
-      if (!uploadError) {
-        const { data: publicURL } = supabaseClient.storage.from('payment_proofs').getPublicUrl(fileName);
-        screenshotUrl = publicURL.publicUrl;
-      }
+      if (uploadError) throw new Error("Screenshot upload failed: " + uploadError.message);
 
-      // 2. Save entry into payment_requests table
+      // Get public URL of the uploaded image
+      const { data: publicURL } = supabaseClient.storage
+        .from('payment-proofs')
+        .getPublicUrl(fileName);
+
+      const screenshotUrl = publicURL.publicUrl;
+
+      // 2. Save entry into payment_requests table with all collected details
       const { error: insertError } = await supabaseClient.from('payment_requests').insert([
         {
-          user_id: userId,
-          email: userEmail,
-          utr_number: utr,
-          screenshot_url: screenshotUrl,
-          status: 'pending'
+          full_name: fullName,
+          email: email,
+          mobile: mobile,
+          password: password,
+          package_name: pkgName,
+          amount: Number(pkgPrice),
+          transaction_id: utr,
+          referral_id: refCode,
+          screenshot_name: screenshotUrl,
+          status: 'Pending',
+          is_deleted: false
         }
       ]);
 
       if (insertError) throw insertError;
 
       alert("🎉 Payment proof submitted successfully! Admin verification ke baad aapka account activate kar diya jayega.");
-      window.location.href = "dashboard.html";
+      window.location.href = "index.html"; // Home page ya login page par redirect
 
     } catch (err) {
       alert("Error: " + err.message);
