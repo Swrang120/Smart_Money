@@ -10,7 +10,6 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script type="text/javascript">
     (function() {
-      // 🔴 Yahan apni EmailJS ki PUBLIC KEY dalein (FxcimUvl0-ZxAauRx)
       emailjs.init("FxcimUvl0-ZxAauRx");
     })();
   </script>
@@ -109,7 +108,6 @@
     btn.disabled = true;
 
     try {
-      // --- SUPABASE PART ---
       // 1. Upload Screenshot to Supabase Storage bucket 'payment-proofs'
       const fileName = `${Date.now()}_${fileInput.name}`;
       const { data: uploadData, error: uploadError } = await supabaseClient.storage
@@ -144,19 +142,19 @@
 
       if (insertError) throw insertError;
 
-      // --- EMAILJS PART (Automatic Pending Mail to User) ---
+      // 3. Send EmailJS Pending Verification Mail to User
       const emailParams = {
         to_name: fullName,
-        to_email: email, // User ka Gmail
+        to_email: email,
         utr_code: utr,
         package_name: pkgName
       };
 
-      // 🔴 Yahan apni EmailJS ki TEMPLATE ID dalein (s9exuls)
+      // EmailJS service_gmail aur template s9exuls ka use
       await emailjs.send("service_gmail", "s9exuls", emailParams);
 
       alert("🎉 Payment proof submitted successfully! Admin verification ke baad aapka account activate kar diya jayega.");
-      window.location.href = "index.html"; // Home page par redirect
+      window.location.href = "index.html";
 
     } catch (err) {
       alert("Error: " + err.message);
