@@ -17,7 +17,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .navbar{height:68px;background:#ffffff;display:flex;align-items:center;justify-content:space-between;padding:0 18px;position:sticky;top:0;z-index:100;box-shadow:0 3px 15px rgba(0,0,0,.06);}
 .brand-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
 .brand-logo img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #7c3aed;background:#fff;}
-.brand-logo span{font-size:20px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,#7c3aed 0%,#db2777 50%,#f59e0b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.brand-logo span{font-size:20px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,#7c3aed 0%,#db2777 50%,#f59e0b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 2px 10px rgba(124,58,237,0.15);}
 .nav-right{display:flex;align-items:center;gap:10px;}
 .nav-home-btn{padding:8px 13px;border-radius:10px;text-decoration:none;background:#f3e8ff;color:#7c3aed;font-size:12px;font-weight:700;}
 .nav-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #7c3aed;background:#fff;}
@@ -40,15 +40,6 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .sidebar-menu a,.sidebar-menu button{width:100%;border:none;background:transparent;color:#f1f5f9;text-align:left;padding:14px 16px;border-radius:12px;cursor:pointer;text-decoration:none;font-size:14px;font-weight:600;transition:.2s;display:block;}
 .sidebar-menu a:hover,.sidebar-menu button:hover{background:rgba(124,58,237,.35);color:#ffffff;}
 
-/* SIDEBAR AFFILIATE DROPDOWN BOX */
-.sidebar-affiliate-section{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px;margin:8px 0 14px;}
-.sidebar-affiliate-title{font-size:13px;font-weight:800;color:#c084fc;margin-bottom:10px;}
-.sidebar-aff-row{margin-bottom:10px;}
-.sidebar-aff-row label{display:block;font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:3px;}
-.sidebar-aff-input{display:flex;align-items:center;gap:6px;background:#1e293b;border:1px solid #475569;border-radius:8px;padding:6px 10px;}
-.sidebar-aff-input input, .sidebar-aff-input select, .sidebar-aff-input span{background:transparent;border:none;outline:none;font-size:11px;color:#f8fafc;width:100%;font-weight:600;}
-.sidebar-aff-btn{background:linear-gradient(135deg,#db2777,#e11d48);color:white;border:none;padding:6px 10px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;}
-
 /* DASHBOARD */
 .dash-container{padding:25px 18px 40px;}
 .profile-card{position:relative;min-height:170px;border-radius:20px;overflow:hidden;margin-bottom:20px;display:flex;align-items:center;padding:25px;gap:20px;background:linear-gradient(135deg,#ffffff 0%,#ffffff 55%,#f5f3ff 55%,#ede9fe 100%);box-shadow:0 10px 25px rgba(15,23,42,.10);border:1px solid #e2e8f0;}
@@ -59,9 +50,13 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .profile-img{width:100%;height:100%;border-radius:50%;object-fit:cover;background:#fff;}
 
 .user-info{flex:1;min-width:0;}
-.user-info h2{margin:0 0 4px;font-size:22px;color:#0f172a;font-weight:800;letter-spacing:-0.5px;line-height:1.2;}
-.user-info .ref-id-tag{font-size:12px;color:#7c3aed;font-weight:700;margin-bottom:4px;}
-.user-info .dob-tag{font-size:11px;color:#64748b;font-weight:600;}
+.user-info h2{margin:0 0 8px;font-size:26px;color:#0f172a;font-weight:800;letter-spacing:-0.5px;line-height:1.2;}
+.affiliate-id-box{display:flex;align-items:center;gap:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:10px 14px;width:100%;margin-bottom:8px;box-shadow:0 2px 6px rgba(0,0,0,0.02);justify-content:space-between;}
+.affiliate-id-box span{font-size:13px;color:#475569;}
+.affiliate-id-box b{font-size:14px;color:#7c3aed;font-weight:800;}
+.copy-id-btn, .share-id-btn{width:32px;height:32px;border:none;border-radius:8px;cursor:pointer;color:white;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.copy-id-btn{background:linear-gradient(135deg,#7c3aed,#9333ea);}
+.share-id-btn{background:linear-gradient(135deg,#10b981,#059669);}
 
 /* STATS CARDS */
 .stats-stack{display:flex;flex-direction:column;gap:15px;margin-bottom:20px;}
@@ -76,7 +71,6 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 .bg-30days{background:linear-gradient(135deg,#db2777,#be185d);}
 .bg-alltime{background:linear-gradient(135deg,#0284c7,#075985);}
 .bg-passive{background:linear-gradient(135deg,#d97706,#b45309);}
-.bg-wallet{background:linear-gradient(135deg,#059669,#047857);}
 
 .section-box{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:20px;margin-bottom:18px;}
 
@@ -150,42 +144,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     <li><button onclick="openWithdrawModal()" style="color:#10b981;font-weight:700;">💸 Available Balance: <span id="sidebarWalletBal">₹0.00</span> (Withdraw)</button></li>
     <li><button onclick="openHistoryModal()">📜 View Withdrawal History</button></li>
 
-    <!-- 3-LINE AFFILIATE SECTION INSIDE SIDEBAR -->
-    <li>
-      <div class="sidebar-affiliate-section">
-        <div class="sidebar-affiliate-title">🔗 Affiliate Links</div>
-        
-        <div class="sidebar-aff-row">
-          <label>My Referral Link</label>
-          <div class="sidebar-aff-input">
-            <span id="fullRefLinkText" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Loading...</span>
-            <button class="sidebar-aff-btn" onclick="copyFullReferralLink()">Copy</button>
-          </div>
-        </div>
-
-        <div class="sidebar-aff-row">
-          <label>My Referral Code</label>
-          <div class="sidebar-aff-input">
-            <span id="myRefCodeSide" style="color:#c084fc;font-weight:800;">Loading...</span>
-            <button class="sidebar-aff-btn" onclick="copyAffiliateLink()">Copy</button>
-          </div>
-        </div>
-
-        <div class="sidebar-aff-row" style="margin-bottom:0;">
-          <label>Generate Link For</label>
-          <div class="sidebar-aff-input">
-            <select id="packageDropdown">
-              <option value="All Packages">All Packages</option>
-              <option value="Basic">Basic Package</option>
-              <option value="Pro">Pro Package</option>
-              <option value="VIP">VIP Package</option>
-            </select>
-            <button class="sidebar-aff-btn" onclick="copyGeneratedCustomLink()">Copy</button>
-          </div>
-        </div>
-      </div>
-    </li>
-
+    <!-- PHOTO CHANGE/REMOVE -->
     <li><button onclick="document.getElementById('profilePhotoInputSidebar').click()">📷 Change Profile Picture</button></li>
     <input type="file" id="profilePhotoInputSidebar" style="display:none;" accept="image/*" onchange="uploadProfilePicture(event)">
     <li id="removePhotoLi" style="display:none;"><button onclick="removeProfilePicture()" style="color:#ef4444;">🗑️ Remove Profile Picture</button></li>
@@ -210,7 +169,6 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 </header>
 
 <div class="dash-container">
-  <!-- PROFILE CARD WITH NAME, PERMANENT REFERRAL ID, & DOB -->
   <div class="profile-card">
     <div class="package-badge" id="activePackageBadge">NO PACKAGE</div>
     <div>
@@ -220,28 +178,37 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
     </div>
     <div class="user-info">
       <h2 id="userName">Loading...</h2>
-      <div class="ref-id-tag">ID: <span id="myRefCode">Loading...</span></div>
-      <div class="dob-tag" id="dobDisplayInfo">DOB: Not Set</div>
+      <p style="font-size:12px;color:#64748b;margin:0 0 10px;" id="dobDisplayInfo">DOB: Not Set</p>
+    </div>
+  </div>
+
+  <!-- AFFILIATE LINKS SECTION -->
+  <div class="section-box" style="background:linear-gradient(135deg,#ffffff 0%,#f8fafc 100%);">
+    <h3 style="margin-top:0; font-size:16px; color:#0f172a; margin-bottom:12px;">🔗 My Affiliate Links</h3>
+    
+    <!-- Referral Link Box -->
+    <label style="font-size:11px; font-weight:700; color:#64748b; display:block; margin-bottom:4px;">MY REFERRAL LINK</label>
+    <div class="affiliate-id-box">
+      <span id="fullRefLinkText" style="word-break:break-all; font-size:12px; color:#334155; max-width:80%;">Loading link...</span>
+      <button class="copy-id-btn" onclick="copyFullReferralLink()" title="Copy Link">📋</button>
+    </div>
+
+    <!-- Referral Code Box -->
+    <label style="font-size:11px; font-weight:700; color:#64748b; display:block; margin-bottom:4px; margin-top:10px;">MY REFERRAL CODE</label>
+    <div class="affiliate-id-box" style="margin-bottom:0;">
+      <span>ID: <b id="myRefCode">Loading...</b></span>
+      <div style="display:flex; gap:6px;">
+        <button class="copy-id-btn" onclick="copyAffiliateLink()" title="Copy Code">📋</button>
+        <button class="share-id-btn" onclick="shareAffiliateLink()" title="Share Link">🔗</button>
+      </div>
     </div>
   </div>
 
   <!-- STATS CARDS -->
   <div class="stats-stack">
-    <!-- DIRECT WITHDRAWAL ACTION CARD -->
-    <div class="v-card bg-wallet">
-      <div>
-        <h2 id="walletBalanceMain">₹0.00</h2>
-        <p>Available Balance for Withdrawal</p>
-      </div>
-      <div>
-        <div class="card-divider"></div>
-        <a href="#" class="card-footer-link" onclick="openWithdrawModal(); return false;">Withdraw Now <span>›</span></a>
-      </div>
-    </div>
-
     <div class="v-card bg-today">
       <div>
-        <h2 id="todayRevenue">₹0.00</h2>
+        <h2 id="todayRevenue">₹0</h2>
         <p>Today's Revenue</p>
       </div>
       <div>
@@ -252,7 +219,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
     <div class="v-card bg-7days">
       <div>
-        <h2 id="sevenDaysRevenue">₹0.00</h2>
+        <h2 id="sevenDaysRevenue">₹0</h2>
         <p>7 Days Revenue</p>
       </div>
       <div>
@@ -263,7 +230,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
     <div class="v-card bg-30days">
       <div>
-        <h2 id="thirtyDaysRevenue">₹0.00</h2>
+        <h2 id="thirtyDaysRevenue">₹0</h2>
         <p>30 Days Revenue</p>
       </div>
       <div>
@@ -274,7 +241,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
     <div class="v-card bg-alltime">
       <div>
-        <h2 id="allTimeRevenueText">₹0.00</h2>
+        <h2 id="allTimeRevenueText">₹0</h2>
         <p>All Time Revenue</p>
       </div>
       <div>
@@ -285,7 +252,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
     <div class="v-card bg-passive">
       <div>
-        <h2 id="passiveIncome">₹0.00</h2>
+        <h2 id="passiveIncome">₹0</h2>
         <p>Passive Income</p>
       </div>
       <div>
@@ -328,6 +295,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
       <span style="font-size:12px;color:#64748b;font-weight:600;display:block;margin-bottom:4px;">Total Collected</span>
       <h2 id="earningsModalAmount" style="font-size:32px;color:#0f172a;margin:0;font-weight:800;">₹0</h2>
     </div>
+    <p style="font-size:12px;color:#64748b;line-height:1.5;">Note: Earnings are credited directly based on your active package commission rates and successful affiliate referral joins.</p>
     <button onclick="closeModal('earningsModal')" class="btn-action" style="margin-top:15px;">Close</button>
   </div>
 </div>
@@ -336,7 +304,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 <div id="packageModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="color:#7c3aed;margin-top:0;">👑 My Package & Benefits</h3>
-    <p style="font-size:13px;color:#475569;margin-bottom:15px;">Here are your active package details and commission structures:</p>
+    <p style="font-size:13px;color:#475569;margin-bottom:15px;">Here are your active package details, commission structures, and withdrawal limits:</p>
     <div id="modalPkgDetailsBox" style="background:#f8fafc;padding:15px;border-radius:12px;border:1px solid #e2e8f0;font-size:13px;line-height:1.6;">
       <p><b>Package Name:</b> <span id="modalPkgName" style="color:#7c3aed;font-weight:750;">No Package Active</span></p>
       <p><b>Commission Rate:</b> Dynamic based on package</p>
@@ -400,7 +368,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 <div id="withdrawModal" class="modal-overlay">
   <div class="modal-box">
     <h3>💸 Request Withdrawal</h3>
-    <p id="withdrawModalBalanceText" style="font-size:13px;color:#475569;margin-bottom:8px;">Available Balance: ₹0.00</p>
+    <p id="withdrawModalBalanceText" style="font-size:13px;color:#475569;margin-bottom:8px;">Available Balance: ₹0</p>
     <div class="amount-chips">
       <div class="chip" onclick="setWithdrawAmount(100)">₹100</div>
       <div class="chip" onclick="setWithdrawAmount(500)">₹500</div>
@@ -416,10 +384,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-if (typeof emailjs !== 'undefined') {
-  emailjs.init("FxcimUvl0-ZxAauRx");
-}
-
+emailjs.init("FxcimUvl0-ZxAauRx");
 const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 
@@ -431,12 +396,12 @@ let currentUserId = null;
 let currentProfile = {};
 let userCurrentBalance = 0;
 let userRefCode = "";
+let payoutMode = "upi";
 let currentUserEmail = "";
 let allReferralsData = [];
 
 function showToast(msg){
   const t = document.getElementById("toastNotification");
-  if(!t) return;
   document.getElementById("toastMessage").innerText = msg;
   t.classList.add("show");
   setTimeout(() => { t.classList.remove("show"); }, 3000);
@@ -449,28 +414,12 @@ function escapeHtml(text){
 }
 
 function toggleSidebar(){
-  const s = document.getElementById("sidebar");
-  const o = document.getElementById("sidebarOverlay");
-  if(s) s.classList.toggle("active");
-  if(o) o.classList.toggle("active");
+  document.getElementById("sidebar").classList.toggle("active");
+  document.getElementById("sidebarOverlay").classList.toggle("active");
 }
 
-function closeSidebar(){
-  const s = document.getElementById("sidebar");
-  const o = document.getElementById("sidebarOverlay");
-  if(s) s.classList.remove("active");
-  if(o) o.classList.remove("active");
-}
-
-function openModal(id){ 
-  const el = document.getElementById(id);
-  if(el) el.style.display = "flex"; 
-}
-
-function closeModal(id){ 
-  const el = document.getElementById(id);
-  if(el) el.style.display = "none"; 
-}
+function openModal(id){ document.getElementById(id).style.display = "flex"; }
+function closeModal(id){ document.getElementById(id).style.display = "none"; }
 
 function openEarningsModal(title, amount){
   document.getElementById("earningsModalTitle").innerText = "📊 " + title;
@@ -499,7 +448,6 @@ function openUpiModal(){
   openModal("profileSettingsModal");
 }
 
-let payoutMode = "upi";
 function switchPayoutMode(mode){
   payoutMode = mode;
   document.getElementById("upiSection").style.display = mode === "upi" ? "block" : "none";
@@ -526,6 +474,11 @@ function setWithdrawAmount(amt){
   document.getElementById("withdrawAmount").value = Number(amt).toFixed(2);
 }
 
+function closeSidebar(){
+  document.getElementById("sidebar").classList.remove("active");
+  document.getElementById("sidebarOverlay").classList.remove("active");
+}
+
 function applyProfileImage(imgUrl, userName){
   const mainImg = document.getElementById("mainProfileImg");
   const sidebarImg = document.getElementById("sidebarProfileImage");
@@ -533,16 +486,16 @@ function applyProfileImage(imgUrl, userName){
   const removeLi = document.getElementById("removePhotoLi");
 
   if(imgUrl && imgUrl.trim() !== ""){
-    if(mainImg) mainImg.src = imgUrl;
-    if(sidebarImg) sidebarImg.src = imgUrl;
-    if(navAvatar) navAvatar.src = imgUrl;
+    mainImg.src = imgUrl;
+    sidebarImg.src = imgUrl;
+    navAvatar.src = imgUrl;
     if(removeLi) removeLi.style.display = "block";
   } else {
     const firstLetter = (userName ? userName.charAt(0) : "U").toUpperCase();
     const fallbackUrl = `https://ui-avatars.com/api/?name=${firstLetter}&background=7c3aed&color=fff&size=128&bold=true`;
-    if(mainImg) mainImg.src = fallbackUrl;
-    if(sidebarImg) sidebarImg.src = fallbackUrl;
-    if(navAvatar) navAvatar.src = fallbackUrl;
+    mainImg.src = fallbackUrl;
+    sidebarImg.src = fallbackUrl;
+    navAvatar.src = fallbackUrl;
     if(removeLi) removeLi.style.display = "none";
   }
 }
@@ -553,7 +506,7 @@ async function loadGlobalTopLogo() {
       .from('global_settings')
       .select('setting_value')
       .eq('setting_key', 'admin_top_logo')
-      .maybeSingle();
+      .single();
 
     if (data && data.setting_value) {
       const logoUrl = data.setting_value;
@@ -582,59 +535,38 @@ document.addEventListener("DOMContentLoaded", async function(){
     currentUserEmail = user.email || "";
     const authName = user.user_metadata?.full_name || user.user_metadata?.name || "Smart Money User";
 
-    // Instant UI fallback
-    document.getElementById("userName").innerHTML = escapeHtml(authName);
-    document.getElementById("sidebarUserName").innerText = authName;
-    document.getElementById("sidebarUserEmail").innerText = currentUserEmail;
-
-    // Fetch profile from database
     let { data:profile, error:profileError } = await supabaseClient
       .from("profiles")
       .select("*")
       .eq("user_id", currentUserId)
       .maybeSingle();
 
-    let finalRefCode = "";
-
     if(!profile){
       const randomFiveDigit = Math.floor(10000 + Math.random() * 90000);
-      finalRefCode = "SM-smart" + randomFiveDigit;
-      
-      profile = {
+      const newProf = {
         user_id: currentUserId,
         email: currentUserEmail,
         full_name: authName,
         balance: 0,
         package_name: null,
-        referral_code: finalRefCode
+        referral_code: "SM-smart" + randomFiveDigit
       };
-      
-      const { error: insErr } = await supabaseClient.from("profiles").insert([profile]);
-      if(insErr) console.error("Insert Profile Error:", insErr.message);
-    } else {
-      if(profile.referral_code && profile.referral_code.trim() !== ""){
-        finalRefCode = profile.referral_code;
-      } else {
-        const randomFiveDigit = Math.floor(10000 + Math.random() * 90000);
-        finalRefCode = "SM-smart" + randomFiveDigit;
-        await supabaseClient.from("profiles").update({ referral_code: finalRefCode }).eq("user_id", currentUserId);
-        profile.referral_code = finalRefCode;
-      }
+      await supabaseClient.from("profiles").upsert(newProf);
+      profile = newProf;
     }
 
     currentProfile = profile;
-    userRefCode = finalRefCode;
-    userCurrentBalance = Number(profile?.balance || 0);
     const finalName = profile?.full_name || authName;
     const finalEmail = profile?.email || currentUserEmail;
+    userCurrentBalance = Number(profile?.balance || 0);
+    userRefCode = profile?.referral_code || "SM-smart87046";
     const dob = profile?.date_of_birth || "";
     const packageName = profile?.package_name;
 
-    // Render Data
     document.getElementById("userName").innerHTML = escapeHtml(finalName);
     document.getElementById("myRefCode").innerText = userRefCode;
-    document.getElementById("myRefCodeSide").innerText = userRefCode;
     
+    // Update Full Referral Link UI
     const baseUrl = window.location.origin + "/register.html";
     const fullLink = `${baseUrl}?ref=${userRefCode}`;
     document.getElementById("fullRefLinkText").innerText = fullLink;
@@ -658,11 +590,10 @@ document.addEventListener("DOMContentLoaded", async function(){
     applyProfileImage(profile?.profile_pic, finalName);
 
     document.getElementById("sidebarWalletBal").innerText = "₹" + userCurrentBalance.toFixed(2);
-    document.getElementById("walletBalanceMain").innerText = "₹" + userCurrentBalance.toFixed(2);
     document.getElementById("allTimeRevenueText").innerText = "₹" + userCurrentBalance.toFixed(2);
 
-    loadWithdrawalHistory();
-    loadReferralsData();
+    await loadWithdrawalHistory();
+    await loadReferralsData();
     setupRealtimeListener();
 
     document.getElementById("sideLogoutBtn").onclick = async function(){
@@ -689,11 +620,10 @@ async function uploadProfilePicture(event){
       .update({ profile_pic: base64Image })
       .eq("user_id", currentUserId);
 
-    if(error){ 
-      alert("Failed to save picture: " + error.message); 
-    } else { 
+    if(error){ alert("Failed to save picture: " + error.message); }
+    else { 
       currentProfile.profile_pic = base64Image;
-      showToast("Profile picture saved permanently!"); 
+      showToast("Profile picture saved!"); 
     }
   };
   reader.readAsDataURL(file);
@@ -723,12 +653,13 @@ function setupRealtimeListener(){
       if(payload.new) {
         userCurrentBalance = Number(payload.new.balance || 0);
         document.getElementById("sidebarWalletBal").innerText = "₹" + userCurrentBalance.toFixed(2);
-        document.getElementById("walletBalanceMain").innerText = "₹" + userCurrentBalance.toFixed(2);
         document.getElementById("allTimeRevenueText").innerText = "₹" + userCurrentBalance.toFixed(2);
+        showToast("Wallet balance updated!");
       }
     })
     .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'withdrawal_requests', filter: `user_id=eq.${currentUserId}` }, payload => {
       loadWithdrawalHistory();
+      showToast("Withdrawal status updated!");
     })
     .subscribe();
 }
@@ -854,15 +785,14 @@ async function copyFullReferralLink(){
   }
 }
 
-async function copyGeneratedCustomLink(){
-  const selectedPkg = document.getElementById("packageDropdown").value;
+function shareAffiliateLink(){
   const baseUrl = window.location.origin + "/register.html";
-  const customLink = `${baseUrl}?ref=${userRefCode}&package=${encodeURIComponent(selectedPkg)}`;
-  try {
-    await navigator.clipboard.writeText(customLink);
-    showToast(`Copied Link for: ${selectedPkg}`);
-  } catch(e) {
-    alert("Copy failed: " + customLink);
+  const fullLink = `${baseUrl}?ref=${userRefCode}`;
+  const shareText = `Join Smart Money using my Referral Link: ${fullLink} and start earning today!`;
+  if (navigator.share) {
+    navigator.share({ title: 'Smart Money Affiliate', text: shareText, url: fullLink }).catch(err => console.log(err));
+  } else {
+    copyFullReferralLink();
   }
 }
 
@@ -893,13 +823,12 @@ async function updateUserPayoutDetails(){
 async function saveKycDetails(){
   const fullName = document.getElementById("kycFullName").value.trim();
   const dob = document.getElementById("kycDob").value;
-  
   const { error } = await supabaseClient.from("profiles").update({ full_name: fullName, date_of_birth: dob }).eq("user_id", currentUserId);
   if(error){ alert("Error: " + error.message); return; }
 
   currentProfile = { ...currentProfile, full_name: fullName, date_of_birth: dob };
   document.getElementById("userName").innerHTML = escapeHtml(fullName);
-  document.getElementById("dobDisplayInfo").innerText = dob ? "DOB: " + dob : "DOB: Not Set";
+  document.getElementById("dobDisplayInfo").innerText = "DOB: " + dob;
   applyProfileImage(currentProfile?.profile_pic, fullName);
   showToast("KYC saved successfully!");
   closeModal("kycModal");
@@ -931,7 +860,6 @@ async function submitWithdrawal(){
 
   userCurrentBalance = newBalance;
   document.getElementById("sidebarWalletBal").innerText = "₹" + userCurrentBalance.toFixed(2);
-  document.getElementById("walletBalanceMain").innerText = "₹" + userCurrentBalance.toFixed(2);
   showToast("Withdrawal requested successfully!");
   closeModal("withdrawModal");
   await loadWithdrawalHistory();
