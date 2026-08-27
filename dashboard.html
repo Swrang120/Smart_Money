@@ -1394,3 +1394,2725 @@ const PACKAGE_RULES = {
    UTILITIES
 ===================================================== */
 
+function formatMoney(amount){
+
+  return "₹" +
+  Number(amount || 0)
+  .toLocaleString(
+    "en-IN",
+    {
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    }
+  );
+
+}
+
+
+function escapeHtml(text){
+
+  const div =
+  document.createElement("div");
+
+  div.textContent =
+  String(text || "");
+
+  return div.innerHTML;
+
+}
+
+
+function showToast(message){
+
+  const toast =
+  document.getElementById(
+    "toastNotification"
+  );
+
+  document.getElementById(
+    "toastMessage"
+  ).innerText = message;
+
+  toast.classList.add("show");
+
+  setTimeout(function(){
+
+    toast.classList.remove("show");
+
+  },3000);
+
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+function toggleSidebar(){
+
+  document
+  .getElementById("sidebar")
+  .classList
+  .toggle("active");
+
+  document
+  .getElementById("sidebarOverlay")
+  .classList
+  .toggle("active");
+
+}
+
+
+function closeSidebar(){
+
+  document
+  .getElementById("sidebar")
+  .classList
+  .remove("active");
+
+  document
+  .getElementById("sidebarOverlay")
+  .classList
+  .remove("active");
+
+}
+
+
+/* =====================================================
+   MODALS
+===================================================== */
+
+function openModal(id){
+
+  const modal =
+  document.getElementById(id);
+
+  if(modal){
+    modal.style.display = "flex";
+  }
+
+}
+
+
+function closeModal(id){
+
+  const modal =
+  document.getElementById(id);
+
+  if(modal){
+    modal.style.display = "none";
+  }
+
+}
+
+
+document.addEventListener(
+  "click",
+  function(event){
+
+    if(
+      event.target.classList &&
+      event.target.classList.contains(
+        "modal-overlay"
+      )
+    ){
+      event.target.style.display =
+      "none";
+    }
+
+  }
+);
+
+
+/* =====================================================
+   PACKAGE
+===================================================== */
+
+function detectPackage(profile){
+
+  const packageName =
+  String(
+    profile.package_name || "none"
+  )
+  .trim()
+  .toLowerCase();
+
+  let packageData =
+  PACKAGE_RULES[packageName];
+
+
+  if(!packageData){
+
+    packageData = {
+
+      displayName:
+      profile.package_name ||
+      "NO PACKAGE",
+
+      commissionRate:
+      Number(
+        profile.commission_rate || 0
+      ),
+
+      minWithdrawal:
+      Number(
+        profile.min_withdrawal || 200
+      ),
+
+      dailyWithdrawalLimit:
+      Number(
+        profile.daily_withdrawal_limit || 0
+      ),
+
+      benefits:[
+        "Package benefits configured by admin"
+      ]
+
+    };
+
+  }
+
+
+  activePackage =
+  packageData;
+
+  return packageData;
+
+}
+
+
+function renderPackageUI(){
+
+  const pkg =
+  detectPackage(
+    currentProfile
+  );
+
+
+  const hasPackage =
+  currentProfile.package_name &&
+  String(
+    currentProfile.package_name
+  )
+  .toLowerCase() !== "none";
+
+
+  const badge =
+  document.getElementById(
+    "activePackageBadge"
+  );
+
+
+  badge.innerText =
+  hasPackage
+  ? pkg.displayName + " 👑"
+  : "NO PACKAGE";
+
+
+  if(hasPackage){
+    badge.classList.add("active");
+  }else{
+    badge.classList.remove("active");
+  }
+
+
+  const benefitsHTML =
+  pkg.benefits
+  .map(function(item){
+
+    return `
+    <li>
+      ${escapeHtml(item)}
+    </li>
+    `;
+
+  })
+  .join("");
+
+
+  const packageHTML = `
+
+  <div style="
+    background:#f8fafc;
+    padding:16px;
+    border-radius:14px;
+    border:1px solid #e2e8f0;
+  ">
+
+    <div style="
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:10px;
+    ">
+
+      <b>Package</b>
+
+      <span style="
+        color:#7c3aed;
+        font-weight:800;
+      ">
+        ${escapeHtml(pkg.displayName)}
+      </span>
+
+    </div>
+
+
+    <div style="
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:10px;
+    ">
+
+      <span>Commission Rate</span>
+
+      <b>
+        ${pkg.commissionRate}%
+      </b>
+
+    </div>
+
+
+    <div style="
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:10px;
+    ">
+
+      <span>Minimum Withdrawal</span>
+
+      <b>
+        ${formatMoney(pkg.minWithdrawal)}
+      </b>
+
+    </div>
+
+
+    <div style="
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:10px;
+    ">
+
+      <span>Daily Withdrawal Limit</span>
+
+      <b>
+        ${
+          Number(pkg.dailyWithdrawalLimit) > 0
+          ? formatMoney(pkg.dailyWithdrawalLimit)
+          : "Not Available"
+        }
+      </b>
+
+    </div>
+
+
+    <hr style="
+      border:none;
+      border-top:1px solid #e2e8f0;
+    ">
+
+
+    <b>Benefits</b>
+
+    <ul style="
+      font-size:13px;
+      color:#475569;
+      line-height:1.8;
+    ">
+      ${benefitsHTML}
+    </ul>
+
+  </div>
+
+  `;
+
+
+  document.getElementById(
+    "packageDashboardInfo"
+  ).innerHTML =
+  packageHTML;
+
+
+  document.getElementById(
+    "modalPackageContent"
+  ).innerHTML =
+  packageHTML;
+
+}
+
+
+function openPackageModal(){
+
+  closeSidebar();
+
+  renderPackageUI();
+
+  openModal(
+    "packageModal"
+  );
+
+}
+
+
+/* =====================================================
+   PROFILE IMAGE
+===================================================== */
+
+function getFallbackAvatar(userName){
+
+  return (
+    "https://ui-avatars.com/api/?name=" +
+    encodeURIComponent(
+      userName || "User"
+    ) +
+    "&background=7c3aed&color=fff&size=200"
+  );
+
+}
+
+
+function applyProfileImage(
+  imageUrl,
+  userName
+){
+
+  const fallback =
+  getFallbackAvatar(userName);
+
+
+  const finalImage =
+  imageUrl &&
+  String(imageUrl).trim() !== ""
+  ? imageUrl
+  : fallback;
+
+
+  const imageIds = [
+
+    "mainProfileImg",
+    "sidebarProfileImage",
+    "navAvatarImg"
+
+  ];
+
+
+  imageIds.forEach(
+    function(id){
+
+      const image =
+      document.getElementById(id);
+
+      if(image){
+
+        image.src =
+        finalImage;
+
+        image.onerror =
+        function(){
+
+          this.onerror = null;
+
+          this.src =
+          fallback;
+
+        };
+
+      }
+
+    }
+  );
+
+
+  document.getElementById(
+    "removePhotoLi"
+  ).style.display =
+  imageUrl
+  ? "block"
+  : "none";
+
+}
+
+
+/* =====================================================
+   REFERRAL CODE
+===================================================== */
+
+function generateReferralCode(){
+
+  const random =
+  Math.floor(
+    100000 +
+    Math.random() * 900000
+  );
+
+  const timestamp =
+  Date.now()
+  .toString()
+  .slice(-4);
+
+  return (
+    "SM-" +
+    random +
+    timestamp
+  );
+
+}
+
+
+/* =====================================================
+   LOAD USER PROFILE
+===================================================== */
+
+async function loadUserProfile(){
+
+  const sessionResult =
+  await supabaseClient
+  .auth
+  .getSession();
+
+
+  if(sessionResult.error){
+    throw sessionResult.error;
+  }
+
+
+  const session =
+  sessionResult.data.session;
+
+
+  if(
+    !session ||
+    !session.user
+  ){
+
+    window.location.href =
+    "login.html";
+
+    return false;
+
+  }
+
+
+  const user =
+  session.user;
+
+
+  currentUserId =
+  user.id;
+
+
+  currentUserEmail =
+  user.email || "";
+
+
+  const authName =
+  user.user_metadata?.full_name ||
+  user.user_metadata?.name ||
+  "Smart Money User";
+
+
+  const profileResult =
+  await supabaseClient
+  .from("profiles")
+  .select("*")
+  .eq(
+    "user_id",
+    currentUserId
+  )
+  .maybeSingle();
+
+
+  if(profileResult.error){
+
+    throw new Error(
+      profileResult.error.message
+    );
+
+  }
+
+
+  let profile =
+  profileResult.data;
+
+
+  /* CREATE PROFILE */
+
+  if(!profile){
+
+    const newProfile = {
+
+      user_id:
+      currentUserId,
+
+      email:
+      currentUserEmail,
+
+      full_name:
+      authName,
+
+      balance:0,
+
+      package_name:
+      "none",
+
+      referral_code:
+      generateReferralCode()
+
+    };
+
+
+    const insertResult =
+    await supabaseClient
+    .from("profiles")
+    .insert(newProfile)
+    .select()
+    .single();
+
+
+    if(insertResult.error){
+
+      throw new Error(
+        insertResult.error.message
+      );
+
+    }
+
+
+    profile =
+    insertResult.data;
+
+  }
+
+
+  /* OLD USER WITHOUT REFERRAL CODE */
+
+  if(
+    !profile.referral_code ||
+    String(
+      profile.referral_code
+    )
+    .trim() === ""
+  ){
+
+    const updateResult =
+    await supabaseClient
+    .from("profiles")
+    .update({
+
+      referral_code:
+      generateReferralCode()
+
+    })
+    .eq(
+      "user_id",
+      currentUserId
+    )
+    .select()
+    .single();
+
+
+    if(updateResult.error){
+
+      throw new Error(
+        updateResult.error.message
+      );
+
+    }
+
+
+    profile =
+    updateResult.data;
+
+  }
+
+
+  currentProfile =
+  profile;
+
+
+  userCurrentBalance =
+  Number(
+    profile.balance || 0
+  );
+
+
+  userRefCode =
+  profile.referral_code || "";
+
+
+  return true;
+
+}
+
+
+/* =====================================================
+   RENDER PROFILE
+===================================================== */
+
+function renderProfileUI(){
+
+  const name =
+  currentProfile.full_name ||
+  "Smart Money User";
+
+
+  const email =
+  currentProfile.email ||
+  currentUserEmail;
+
+
+  document.getElementById(
+    "userName"
+  ).innerText =
+  name;
+
+
+  document.getElementById(
+    "sidebarUserName"
+  ).innerText =
+  name;
+
+
+  document.getElementById(
+    "sidebarUserEmail"
+  ).innerText =
+  email;
+
+
+  const dob =
+  currentProfile.date_of_birth;
+
+
+  document.getElementById(
+    "dobDisplayInfo"
+  ).innerText =
+  dob
+  ? "DOB: " + dob
+  : "DOB: Not Set";
+
+
+  document.getElementById(
+    "myRefCode"
+  ).innerText =
+  userRefCode ||
+  "Not Available";
+
+
+  document.getElementById(
+    "fullRefLinkText"
+  ).innerText =
+  userRefCode
+  ? getReferralLink()
+  : "Referral code unavailable";
+
+
+  document.getElementById(
+    "sidebarWalletBal"
+  ).innerText =
+  formatMoney(
+    userCurrentBalance
+  );
+
+
+  document.getElementById(
+    "allTimeRevenueText"
+  ).innerText =
+  formatMoney(
+    userCurrentBalance
+  );
+
+
+  applyProfileImage(
+    currentProfile.profile_pic,
+    name
+  );
+
+
+  renderPackageUI();
+
+}
+
+
+/* =====================================================
+   REFERRAL LINK
+===================================================== */
+
+function getReferralLink(){
+
+  const path =
+  window.location.pathname;
+
+
+  const basePath =
+  path.substring(
+    0,
+    path.lastIndexOf("/") + 1
+  );
+
+
+  return (
+    window.location.origin +
+    basePath +
+    "register.html?ref=" +
+    encodeURIComponent(
+      userRefCode
+    )
+  );
+
+}
+
+
+/* =====================================================
+   COPY / SHARE
+===================================================== */
+
+async function copyText(text){
+
+  try{
+
+    if(
+      navigator.clipboard &&
+      window.isSecureContext
+    ){
+
+      await navigator.clipboard
+      .writeText(text);
+
+      return true;
+
+    }
+
+    const textarea =
+    document.createElement("textarea");
+
+    textarea.value =
+    text;
+
+    textarea.style.position =
+    "fixed";
+
+    textarea.style.opacity =
+    "0";
+
+    document.body.appendChild(
+      textarea
+    );
+
+    textarea.select();
+
+    document.execCommand(
+      "copy"
+    );
+
+    textarea.remove();
+
+    return true;
+
+  }catch(error){
+
+    console.error(error);
+
+    return false;
+
+  }
+
+}
+
+
+async function copyAffiliateLink(){
+
+  const success =
+  await copyText(
+    userRefCode
+  );
+
+
+  if(success){
+
+    showToast(
+      "Referral Code Copied!"
+    );
+
+  }else{
+
+    prompt(
+      "Copy your referral code:",
+      userRefCode
+    );
+
+  }
+
+}
+
+
+async function copyFullReferralLink(){
+
+  const link =
+  getReferralLink();
+
+
+  const success =
+  await copyText(
+    link
+  );
+
+
+  if(success){
+
+    showToast(
+      "Referral Link Copied!"
+    );
+
+  }else{
+
+    prompt(
+      "Copy your referral link:",
+      link
+    );
+
+  }
+
+}
+
+
+async function shareAffiliateLink(){
+
+  const link =
+  getReferralLink();
+
+
+  try{
+
+    if(navigator.share){
+
+      await navigator.share({
+
+        title:"Smart Money",
+
+        text:
+        "Join Smart Money using my referral link!",
+
+        url:link
+
+      });
+
+    }else{
+
+      await copyFullReferralLink();
+
+    }
+
+  }catch(error){
+
+    if(
+      error.name !==
+      "AbortError"
+    ){
+
+      console.error(error);
+
+    }
+
+  }
+
+}
+
+
+/* =====================================================
+   KYC
+===================================================== */
+
+function openKycModal(){
+
+  closeSidebar();
+
+
+  document.getElementById(
+    "kycFullName"
+  ).value =
+  currentProfile.full_name || "";
+
+
+  document.getElementById(
+    "kycDob"
+  ).value =
+  currentProfile.date_of_birth || "";
+
+
+  openModal(
+    "kycModal"
+  );
+
+}
+
+
+async function saveKycDetails(){
+
+  if(!currentUserId){
+
+    showToast(
+      "User session not loaded"
+    );
+
+    return;
+
+  }
+
+
+  const fullName =
+  document.getElementById(
+    "kycFullName"
+  )
+  .value
+  .trim();
+
+
+  const dob =
+  document.getElementById(
+    "kycDob"
+  ).value;
+
+
+  if(!fullName){
+
+    alert(
+      "Please enter your full name"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    fullName.length < 2
+  ){
+
+    alert(
+      "Please enter a valid name"
+    );
+
+    return;
+
+  }
+
+
+  const result =
+  await supabaseClient
+  .from("profiles")
+  .update({
+
+    full_name:
+    fullName,
+
+    date_of_birth:
+    dob || null
+
+  })
+  .eq(
+    "user_id",
+    currentUserId
+  )
+  .select()
+  .single();
+
+
+  if(result.error){
+
+    alert(
+      "Profile save failed: " +
+      result.error.message
+    );
+
+    return;
+
+  }
+
+
+  currentProfile =
+  result.data;
+
+
+  renderProfileUI();
+
+
+  closeModal(
+    "kycModal"
+  );
+
+
+  showToast(
+    "Profile saved successfully!"
+  );
+
+}
+
+
+/* =====================================================
+   PAYOUT
+===================================================== */
+
+function openUpiModal(){
+
+  closeSidebar();
+
+
+  document.getElementById(
+    "editUpiId"
+  ).value =
+  currentProfile.upi_id || "";
+
+
+  document.getElementById(
+    "editAccName"
+  ).value =
+  currentProfile.account_holder_name || "";
+
+
+  document.getElementById(
+    "editAccNo"
+  ).value =
+  currentProfile.bank_account_number || "";
+
+
+  document.getElementById(
+    "editIfsc"
+  ).value =
+  currentProfile.ifsc_code || "";
+
+
+  switchPayoutMode(
+    currentProfile.payout_type ||
+    "upi"
+  );
+
+
+  openModal(
+    "profileSettingsModal"
+  );
+
+}
+
+
+function switchPayoutMode(mode){
+
+  payoutMode =
+  mode === "bank"
+  ? "bank"
+  : "upi";
+
+
+  document.getElementById(
+    "upiSection"
+  ).style.display =
+  payoutMode === "upi"
+  ? "block"
+  : "none";
+
+
+  document.getElementById(
+    "bankSection"
+  ).style.display =
+  payoutMode === "bank"
+  ? "block"
+  : "none";
+
+
+  document.getElementById(
+    "tabUpi"
+  ).className =
+  payoutMode === "upi"
+  ? "payout-tab active"
+  : "payout-tab";
+
+
+  document.getElementById(
+    "tabBank"
+  ).className =
+  payoutMode === "bank"
+  ? "payout-tab active"
+  : "payout-tab";
+
+}
+
+
+async function updateUserPayoutDetails(){
+
+  const button =
+  document.getElementById(
+    "saveProfileBtn"
+  );
+
+
+  button.disabled = true;
+  button.innerText = "Saving...";
+
+
+  try{
+
+    const updateData = {
+
+      payout_type:
+      payoutMode
+
+    };
+
+
+    if(
+      payoutMode === "upi"
+    ){
+
+      const upi =
+      document.getElementById(
+        "editUpiId"
+      )
+      .value
+      .trim();
+
+
+      if(!upi){
+
+        throw new Error(
+          "Enter UPI ID"
+        );
+
+      }
+
+
+      if(!upi.includes("@")){
+
+        throw new Error(
+          "Enter a valid UPI ID"
+        );
+
+      }
+
+
+      updateData.upi_id =
+      upi;
+
+
+    }else{
+
+
+      const holder =
+      document.getElementById(
+        "editAccName"
+      )
+      .value
+      .trim();
+
+
+      const account =
+      document.getElementById(
+        "editAccNo"
+      )
+      .value
+      .trim();
+
+
+      const ifsc =
+      document.getElementById(
+        "editIfsc"
+      )
+      .value
+      .trim()
+      .toUpperCase();
+
+
+      if(
+        !holder ||
+        !account ||
+        !ifsc
+      ){
+
+        throw new Error(
+          "Fill all bank details"
+        );
+
+      }
+
+
+      updateData.account_holder_name =
+      holder;
+
+      updateData.bank_account_number =
+      account;
+
+      updateData.ifsc_code =
+      ifsc;
+
+    }
+
+
+    const result =
+    await supabaseClient
+    .from("profiles")
+    .update(updateData)
+    .eq(
+      "user_id",
+      currentUserId
+    )
+    .select()
+    .single();
+
+
+    if(result.error){
+      throw result.error;
+    }
+
+
+    currentProfile =
+    result.data;
+
+
+    closeModal(
+      "profileSettingsModal"
+    );
+
+
+    showToast(
+      "Payout details saved!"
+    );
+
+
+  }catch(error){
+
+    alert(
+      "Save failed: " +
+      error.message
+    );
+
+  }finally{
+
+    button.disabled = false;
+    button.innerText =
+    "Save Details";
+
+  }
+
+}
+
+
+/* =====================================================
+   PROFILE PHOTO
+===================================================== */
+
+async function uploadProfilePicture(event){
+
+  const file =
+  event.target.files?.[0];
+
+
+  if(!file){
+    return;
+  }
+
+
+  if(
+    !file.type.startsWith(
+      "image/"
+    )
+  ){
+
+    alert(
+      "Please select a valid image"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    file.size >
+    2 * 1024 * 1024
+  ){
+
+    alert(
+      "Image must be under 2MB"
+    );
+
+    return;
+
+  }
+
+
+  const reader =
+  new FileReader();
+
+
+  reader.onload =
+  async function(e){
+
+    try{
+
+      const imageData =
+      e.target.result;
+
+
+      const result =
+      await supabaseClient
+      .from("profiles")
+      .update({
+
+        profile_pic:
+        imageData
+
+      })
+      .eq(
+        "user_id",
+        currentUserId
+      )
+      .select()
+      .single();
+
+
+      if(result.error){
+        throw result.error;
+      }
+
+
+      currentProfile =
+      result.data;
+
+
+      renderProfileUI();
+
+
+      showToast(
+        "Profile picture saved!"
+      );
+
+
+    }catch(error){
+
+      alert(
+        "Image save failed: " +
+        error.message
+      );
+
+    }
+
+  };
+
+
+  reader.onerror =
+  function(){
+
+    alert(
+      "Failed to read image"
+    );
+
+  };
+
+
+  reader.readAsDataURL(file);
+
+
+  event.target.value = "";
+
+}
+
+
+async function removeProfilePicture(){
+
+  const confirmed =
+  confirm(
+    "Remove your profile picture?"
+  );
+
+
+  if(!confirmed){
+    return;
+  }
+
+
+  const result =
+  await supabaseClient
+  .from("profiles")
+  .update({
+
+    profile_pic:null
+
+  })
+  .eq(
+    "user_id",
+    currentUserId
+  )
+  .select()
+  .single();
+
+
+  if(result.error){
+
+    alert(
+      result.error.message
+    );
+
+    return;
+
+  }
+
+
+  currentProfile =
+  result.data;
+
+
+  renderProfileUI();
+
+
+  showToast(
+    "Profile picture removed"
+  );
+
+}
+
+
+/* =====================================================
+   WITHDRAWAL
+===================================================== */
+
+function openWithdrawModal(){
+
+  closeSidebar();
+
+
+  const pkg =
+  activePackage ||
+  detectPackage(
+    currentProfile
+  );
+
+
+  document.getElementById(
+    "withdrawAmount"
+  ).value = "";
+
+
+  document.getElementById(
+    "withdrawModalBalanceText"
+  ).innerText =
+  "Available Balance: " +
+  formatMoney(
+    userCurrentBalance
+  );
+
+
+  document.getElementById(
+    "withdrawPackageLimitText"
+  ).innerText =
+  "Package: " +
+  pkg.displayName +
+  " | Minimum Withdrawal: " +
+  formatMoney(
+    pkg.minWithdrawal
+  ) +
+  (
+    Number(
+      pkg.dailyWithdrawalLimit
+    ) > 0
+    ? " | Daily Limit: " +
+      formatMoney(
+        pkg.dailyWithdrawalLimit
+      )
+    : ""
+  );
+
+
+  openModal(
+    "withdrawModal"
+  );
+
+}
+
+
+function setWithdrawAmount(amount){
+
+  const safeAmount =
+  Math.max(
+    0,
+    Math.min(
+      Number(amount || 0),
+      Number(userCurrentBalance || 0)
+    )
+  );
+
+
+  document.getElementById(
+    "withdrawAmount"
+  ).value =
+  safeAmount.toFixed(2);
+
+}
+
+
+async function getTodayWithdrawnAmount(){
+
+  const now =
+  new Date();
+
+
+  const todayStart =
+  new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
+
+
+  const result =
+  await supabaseClient
+  .from("withdrawal_requests")
+  .select(
+    "amount,status,created_at"
+  )
+  .eq(
+    "user_id",
+    currentUserId
+  )
+  .gte(
+    "created_at",
+    todayStart.toISOString()
+  );
+
+
+  if(result.error){
+
+    console.error(
+      "TODAY WITHDRAW ERROR:",
+      result.error
+    );
+
+    return 0;
+
+  }
+
+
+  return (
+    result.data || []
+  )
+  .filter(function(item){
+
+    const status =
+    String(
+      item.status || ""
+    )
+    .toLowerCase();
+
+
+    return [
+
+      "pending",
+      "approved",
+      "success"
+
+    ]
+    .includes(status);
+
+  })
+  .reduce(
+    function(total,item){
+
+      return (
+        total +
+        Number(
+          item.amount || 0
+        )
+      );
+
+    },
+    0
+  );
+
+}
+
+
+async function submitWithdrawal(){
+
+  if(withdrawalSubmitting){
+    return;
+  }
+
+
+  const amount =
+  Number(
+    document.getElementById(
+      "withdrawAmount"
+    ).value
+  );
+
+
+  const pkg =
+  activePackage ||
+  detectPackage(
+    currentProfile
+  );
+
+
+  if(
+    !Number.isFinite(amount) ||
+    amount <= 0
+  ){
+
+    alert(
+      "Enter a valid amount"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    amount <
+    Number(pkg.minWithdrawal)
+  ){
+
+    alert(
+      "Minimum withdrawal for " +
+      pkg.displayName +
+      " is " +
+      formatMoney(
+        pkg.minWithdrawal
+      )
+    );
+
+    return;
+
+  }
+
+
+  if(
+    amount >
+    Number(userCurrentBalance)
+  ){
+
+    alert(
+      "Insufficient balance"
+    );
+
+    return;
+
+  }
+
+
+  withdrawalSubmitting =
+  true;
+
+
+  const button =
+  document.getElementById(
+    "submitWithdrawBtn"
+  );
+
+
+  button.disabled = true;
+  button.innerText =
+  "Checking...";
+
+
+  try{
+
+
+    /* REFRESH PROFILE FIRST */
+
+    const freshProfileResult =
+    await supabaseClient
+    .from("profiles")
+    .select("*")
+    .eq(
+      "user_id",
+      currentUserId
+    )
+    .single();
+
+
+    if(freshProfileResult.error){
+      throw freshProfileResult.error;
+    }
+
+
+    const freshProfile =
+    freshProfileResult.data;
+
+
+    const freshBalance =
+    Number(
+      freshProfile.balance || 0
+    );
+
+
+    if(
+      amount > freshBalance
+    ){
+
+      throw new Error(
+        "Your balance has changed. Please try again."
+      );
+
+    }
+
+
+    /* DAILY LIMIT */
+
+    if(
+      Number(
+        pkg.dailyWithdrawalLimit
+      ) > 0
+    ){
+
+      const todayAmount =
+      await getTodayWithdrawnAmount();
+
+
+      if(
+        todayAmount + amount >
+        Number(
+          pkg.dailyWithdrawalLimit
+        )
+      ){
+
+        throw new Error(
+          "Daily withdrawal limit for " +
+          pkg.displayName +
+          " is " +
+          formatMoney(
+            pkg.dailyWithdrawalLimit
+          )
+        );
+
+      }
+
+    }
+
+
+    button.innerText =
+    "Processing...";
+
+
+    const newBalance =
+    Number(
+      (
+        freshBalance -
+        amount
+      )
+      .toFixed(2)
+    );
+
+
+    /*
+      IMPORTANT:
+      This conditional update helps prevent
+      accidental overwrite if balance changed.
+    */
+
+    const balanceResult =
+    await supabaseClient
+    .from("profiles")
+    .update({
+
+      balance:
+      newBalance
+
+    })
+    .eq(
+      "user_id",
+      currentUserId
+    )
+    .eq(
+      "balance",
+      freshBalance
+    )
+    .select()
+    .maybeSingle();
+
+
+    if(
+      balanceResult.error
+    ){
+      throw balanceResult.error;
+    }
+
+
+    if(
+      !balanceResult.data
+    ){
+
+      throw new Error(
+        "Balance changed. Please try again."
+      );
+
+    }
+
+
+    /* CREATE WITHDRAWAL REQUEST */
+
+    const withdrawalResult =
+    await supabaseClient
+    .from("withdrawal_requests")
+    .insert({
+
+      user_id:
+      currentUserId,
+
+      amount:
+      amount,
+
+      status:
+      "pending",
+
+      package_name:
+      currentProfile.package_name ||
+      "none"
+
+    });
+
+
+    if(
+      withdrawalResult.error
+    ){
+
+      /*
+        Rollback balance if request creation fails
+      */
+
+      await supabaseClient
+      .from("profiles")
+      .update({
+
+        balance:
+        freshBalance
+
+      })
+      .eq(
+        "user_id",
+        currentUserId
+      )
+      .eq(
+        "balance",
+        newBalance
+      );
+
+
+      throw withdrawalResult.error;
+
+    }
+
+
+    currentProfile =
+    balanceResult.data;
+
+
+    userCurrentBalance =
+    newBalance;
+
+
+    renderProfileUI();
+
+
+    closeModal(
+      "withdrawModal"
+    );
+
+
+    showToast(
+      "Withdrawal request submitted!"
+    );
+
+
+    await loadWithdrawalHistory();
+
+
+  }catch(error){
+
+    alert(
+      "Withdrawal failed: " +
+      error.message
+    );
+
+  }finally{
+
+    withdrawalSubmitting =
+    false;
+
+    button.disabled =
+    false;
+
+    button.innerText =
+    "Submit Request";
+
+  }
+
+}
+
+
+/* =====================================================
+   WITHDRAWAL HISTORY
+===================================================== */
+
+function openHistoryModal(){
+
+  closeSidebar();
+
+  openModal(
+    "historyModal"
+  );
+
+  loadWithdrawalHistory();
+
+}
+
+
+async function loadWithdrawalHistory(){
+
+  if(!currentUserId){
+    return;
+  }
+
+
+  const container =
+  document.getElementById(
+    "withdrawalHistoryList"
+  );
+
+
+  container.innerHTML =
+  "Loading history...";
+
+
+  const result =
+  await supabaseClient
+  .from("withdrawal_requests")
+  .select("*")
+  .eq(
+    "user_id",
+    currentUserId
+  )
+  .order(
+    "created_at",
+    {
+      ascending:false
+    }
+  );
+
+
+  if(result.error){
+
+    container.innerHTML =
+    `<div style="color:#dc2626;">
+      Failed to load history
+    </div>`;
+
+    return;
+
+  }
+
+
+  if(
+    !result.data ||
+    result.data.length === 0
+  ){
+
+    container.innerHTML =
+    `
+    <div style="
+      text-align:center;
+      color:#64748b;
+      padding:15px;
+    ">
+      No withdrawal history found
+    </div>
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+  result.data
+  .map(function(item){
+
+    const status =
+    String(
+      item.status || "pending"
+    )
+    .toLowerCase();
+
+
+    let className =
+    "status-pending";
+
+
+    if(
+      status === "approved" ||
+      status === "success"
+    ){
+
+      className =
+      "status-approved";
+
+    }
+
+
+    if(
+      status === "rejected"
+    ){
+
+      className =
+      "status-rejected";
+
+    }
+
+
+    const date =
+    item.created_at
+    ? new Date(
+        item.created_at
+      )
+      .toLocaleDateString(
+        "en-IN",
+        {
+          day:"2-digit",
+          month:"short",
+          year:"numeric"
+        }
+      )
+    : "";
+
+
+    return `
+
+    <div class="history-card-item">
+
+      <div class="history-row-1">
+
+        <span>
+          ${escapeHtml(date)}
+        </span>
+
+        <span>
+          ${escapeHtml(
+            item.package_name || ""
+          )}
+        </span>
+
+      </div>
+
+      <div class="history-row-2">
+
+        <span class="history-amount">
+          ${formatMoney(
+            item.amount
+          )}
+        </span>
+
+        <span class="
+          status-badge
+          ${className}
+        ">
+          ${escapeHtml(status)}
+        </span>
+
+      </div>
+
+    </div>
+
+    `;
+
+  })
+  .join("");
+
+}
+
+
+/* =====================================================
+   REFERRALS
+===================================================== */
+
+async function loadReferralsData(){
+
+  if(!userRefCode){
+
+    document.getElementById(
+      "referralsListContainer"
+    ).innerHTML =
+    "No referral code found";
+
+    return;
+
+  }
+
+
+  const result =
+  await supabaseClient
+  .from("profiles")
+  .select(
+    "full_name,referral_code,created_at,referred_by"
+  )
+  .eq(
+    "referred_by",
+    userRefCode
+  )
+  .order(
+    "created_at",
+    {
+      ascending:false
+    }
+  );
+
+
+  if(result.error){
+
+    console.error(
+      "REFERRAL ERROR:",
+      result.error
+    );
+
+
+    allReferralsData = [];
+
+
+  }else{
+
+    allReferralsData =
+    result.data || [];
+
+  }
+
+
+  filterReferrals(
+    1,
+    document.querySelector(
+      ".ref-tab"
+    )
+  );
+
+}
+
+
+function filterReferrals(
+  days,
+  button
+){
+
+  document
+  .querySelectorAll(
+    ".ref-tab"
+  )
+  .forEach(function(tab){
+
+    tab.classList.remove(
+      "active"
+    );
+
+  });
+
+
+  if(button){
+
+    button.classList.add(
+      "active"
+    );
+
+  }
+
+
+  const now =
+  new Date();
+
+
+  const filtered =
+  allReferralsData.filter(
+    function(item){
+
+      if(!item.created_at){
+        return false;
+      }
+
+
+      const date =
+      new Date(
+        item.created_at
+      );
+
+
+      const difference =
+      now - date;
+
+
+      const differenceDays =
+      difference /
+      (
+        1000 *
+        60 *
+        60 *
+        24
+      );
+
+
+      return (
+        differenceDays >= 0 &&
+        differenceDays <= days
+      );
+
+    }
+  );
+
+
+  const container =
+  document.getElementById(
+    "referralsListContainer"
+  );
+
+
+  if(
+    filtered.length === 0
+  ){
+
+    container.innerHTML =
+    `
+    <div style="
+      text-align:center;
+      color:#64748b;
+      padding:15px;
+    ">
+      No referrals found
+    </div>
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+  filtered
+  .map(function(ref){
+
+    const name =
+    escapeHtml(
+      ref.full_name || "User"
+    );
+
+
+    const code =
+    escapeHtml(
+      ref.referral_code || "N/A"
+    );
+
+
+    const date =
+    ref.created_at
+    ? new Date(
+        ref.created_at
+      )
+      .toLocaleDateString(
+        "en-IN",
+        {
+          day:"2-digit",
+          month:"short",
+          year:"numeric"
+        }
+      )
+    : "";
+
+
+    return `
+
+    <div class="referral-card-item">
+
+      <div class="ref-user-info">
+
+        <h4>
+          ${name}
+        </h4>
+
+        <span>
+          ID: ${code}
+        </span>
+
+      </div>
+
+      <div class="ref-date">
+
+        Joined
+
+        <br>
+
+        <b>
+          ${date}
+        </b>
+
+      </div>
+
+    </div>
+
+    `;
+
+  })
+  .join("");
+
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+/*
+  NOTE:
+
+  Tumhare current database code me
+  earnings / revenue table ka naam nahi diya gaya hai.
+
+  Isliye fake revenue calculate nahi kiya gaya.
+
+  Agar tumhare paas earnings table hai,
+  uske according yahan real commission
+  calculation add ki ja sakti hai.
+*/
+
+function renderStats(){
+
+  document.getElementById(
+    "todayRevenue"
+  ).innerText =
+  formatMoney(0);
+
+
+  document.getElementById(
+    "sevenDaysRevenue"
+  ).innerText =
+  formatMoney(0);
+
+
+  document.getElementById(
+    "thirtyDaysRevenue"
+  ).innerText =
+  formatMoney(0);
+
+
+  document.getElementById(
+    "allTimeRevenueText"
+  ).innerText =
+  formatMoney(
+    userCurrentBalance
+  );
+
+
+  document.getElementById(
+    "passiveIncome"
+  ).innerText =
+  formatMoney(0);
+
+}
+
+
+/* =====================================================
+   REALTIME
+===================================================== */
+
+function setupRealtimeListener(){
+
+  if(!currentUserId){
+    return;
+  }
+
+
+  if(realtimeChannel){
+
+    supabaseClient.removeChannel(
+      realtimeChannel
+    );
+
+  }
+
+
+  realtimeChannel =
+  supabaseClient
+  .channel(
+    "dashboard-" +
+    currentUserId
+  )
+
+
+  .on(
+
+    "postgres_changes",
+
+    {
+
+      event:"UPDATE",
+
+      schema:"public",
+
+      table:"profiles",
+
+      filter:
+      "user_id=eq." +
+      currentUserId
+
+    },
+
+    function(payload){
+
+      if(payload.new){
+
+        currentProfile =
+        payload.new;
+
+
+        userCurrentBalance =
+        Number(
+          payload.new.balance || 0
+        );
+
+
+        userRefCode =
+        payload.new.referral_code ||
+        userRefCode;
+
+
+        renderProfileUI();
+
+        renderStats();
+
+      }
+
+    }
+
+  )
+
+
+  .on(
+
+    "postgres_changes",
+
+    {
+
+      event:"*",
+
+      schema:"public",
+
+      table:"withdrawal_requests",
+
+      filter:
+      "user_id=eq." +
+      currentUserId
+
+    },
+
+    function(){
+
+      loadWithdrawalHistory();
+
+    }
+
+  )
+
+
+  .subscribe();
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function setupLogout(){
+
+  const logoutButton =
+  document.getElementById(
+    "sideLogoutBtn"
+  );
+
+
+  logoutButton.onclick =
+  async function(){
+
+    logoutButton.disabled =
+    true;
+
+    logoutButton.innerText =
+    "Logging out...";
+
+
+    try{
+
+      const result =
+      await supabaseClient
+      .auth
+      .signOut();
+
+
+      if(result.error){
+        throw result.error;
+      }
+
+
+      window.location.href =
+      "login.html";
+
+
+    }catch(error){
+
+      alert(
+        "Logout failed: " +
+        error.message
+      );
+
+
+      logoutButton.disabled =
+      false;
+
+      logoutButton.innerText =
+      "🚪 Logout";
+
+    }
+
+  };
+
+}
+
+
+/* =====================================================
+   AUTH STATE LISTENER
+===================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+  function(event,session){
+
+    if(
+      event === "SIGNED_OUT" ||
+      !session
+    ){
+
+      if(
+        !window.location.pathname
+        .includes("login.html")
+      ){
+
+        window.location.href =
+        "login.html";
+
+      }
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   START DASHBOARD
+===================================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  async function(){
+
+    try{
+
+      const loaded =
+      await loadUserProfile();
+
+
+      if(!loaded){
+        return;
+      }
+
+
+      renderProfileUI();
+
+
+      renderStats();
+
+
+      await Promise.all([
+
+        loadWithdrawalHistory(),
+
+        loadReferralsData()
+
+      ]);
+
+
+      setupRealtimeListener();
+
+
+      setupLogout();
+
+
+      console.log(
+        "Dashboard loaded successfully"
+      );
+
+
+    }catch(error){
+
+      console.error(
+        "DASHBOARD ERROR:",
+        error
+      );
+
+
+      document.getElementById(
+        "userName"
+      ).innerText =
+      "Profile Error";
+
+
+      document.getElementById(
+        "sidebarUserName"
+      ).innerText =
+      "Profile Error";
+
+
+      document.getElementById(
+        "sidebarUserEmail"
+      ).innerText =
+      error.message;
+
+
+      document.getElementById(
+        "packageDashboardInfo"
+      ).innerHTML =
+      `
+      <div style="color:#dc2626;">
+        Dashboard Error:
+        ${escapeHtml(
+          error.message
+        )}
+      </div>
+      `;
+
+
+      document.getElementById(
+        "fullRefLinkText"
+      ).innerText =
+      "Error: " +
+      error.message;
+
+
+      document.getElementById(
+        "referralsListContainer"
+      ).innerHTML =
+      "Dashboard failed to load";
+
+
+      showToast(
+        "Dashboard loading failed"
+      );
+
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>
