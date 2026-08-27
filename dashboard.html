@@ -241,7 +241,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
     <div class="v-card bg-today">
       <div>
-        <h2 id="todayRevenue">₹0</h2>
+        <h2 id="todayRevenue">₹0.00</h2>
         <p>Today's Revenue</p>
       </div>
       <div>
@@ -252,7 +252,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
     <div class="v-card bg-7days">
       <div>
-        <h2 id="sevenDaysRevenue">₹0</h2>
+        <h2 id="sevenDaysRevenue">₹0.00</h2>
         <p>7 Days Revenue</p>
       </div>
       <div>
@@ -263,7 +263,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
     <div class="v-card bg-30days">
       <div>
-        <h2 id="thirtyDaysRevenue">₹0</h2>
+        <h2 id="thirtyDaysRevenue">₹0.00</h2>
         <p>30 Days Revenue</p>
       </div>
       <div>
@@ -274,7 +274,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
     <div class="v-card bg-alltime">
       <div>
-        <h2 id="allTimeRevenueText">₹0</h2>
+        <h2 id="allTimeRevenueText">₹0.00</h2>
         <p>All Time Revenue</p>
       </div>
       <div>
@@ -285,7 +285,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
     <div class="v-card bg-passive">
       <div>
-        <h2 id="passiveIncome">₹0</h2>
+        <h2 id="passiveIncome">₹0.00</h2>
         <p>Passive Income</p>
       </div>
       <div>
@@ -400,7 +400,7 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 <div id="withdrawModal" class="modal-overlay">
   <div class="modal-box">
     <h3>💸 Request Withdrawal</h3>
-    <p id="withdrawModalBalanceText" style="font-size:13px;color:#475569;margin-bottom:8px;">Available Balance: ₹0</p>
+    <p id="withdrawModalBalanceText" style="font-size:13px;color:#475569;margin-bottom:8px;">Available Balance: ₹0.00</p>
     <div class="amount-chips">
       <div class="chip" onclick="setWithdrawAmount(100)">₹100</div>
       <div class="chip" onclick="setWithdrawAmount(500)">₹500</div>
@@ -416,7 +416,10 @@ body{margin:0;background:#eef2f7;color:#1e293b;}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-emailjs.init("FxcimUvl0-ZxAauRx");
+if (typeof emailjs !== 'undefined') {
+  emailjs.init("FxcimUvl0-ZxAauRx");
+}
+
 const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 
@@ -433,6 +436,7 @@ let allReferralsData = [];
 
 function showToast(msg){
   const t = document.getElementById("toastNotification");
+  if(!t) return;
   document.getElementById("toastMessage").innerText = msg;
   t.classList.add("show");
   setTimeout(() => { t.classList.remove("show"); }, 3000);
@@ -445,12 +449,28 @@ function escapeHtml(text){
 }
 
 function toggleSidebar(){
-  document.getElementById("sidebar").classList.toggle("active");
-  document.getElementById("sidebarOverlay").classList.toggle("active");
+  const s = document.getElementById("sidebar");
+  const o = document.getElementById("sidebarOverlay");
+  if(s) s.classList.toggle("active");
+  if(o) o.classList.toggle("active");
 }
 
-function openModal(id){ document.getElementById(id).style.display = "flex"; }
-function closeModal(id){ document.getElementById(id).style.display = "none"; }
+function closeSidebar(){
+  const s = document.getElementById("sidebar");
+  const o = document.getElementById("sidebarOverlay");
+  if(s) s.classList.remove("active");
+  if(o) o.classList.remove("active");
+}
+
+function openModal(id){ 
+  const el = document.getElementById(id);
+  if(el) el.style.display = "flex"; 
+}
+
+function closeModal(id){ 
+  const el = document.getElementById(id);
+  if(el) el.style.display = "none"; 
+}
 
 function openEarningsModal(title, amount){
   document.getElementById("earningsModalTitle").innerText = "📊 " + title;
@@ -506,11 +526,6 @@ function setWithdrawAmount(amt){
   document.getElementById("withdrawAmount").value = Number(amt).toFixed(2);
 }
 
-function closeSidebar(){
-  document.getElementById("sidebar").classList.remove("active");
-  document.getElementById("sidebarOverlay").classList.remove("active");
-}
-
 function applyProfileImage(imgUrl, userName){
   const mainImg = document.getElementById("mainProfileImg");
   const sidebarImg = document.getElementById("sidebarProfileImage");
@@ -518,16 +533,16 @@ function applyProfileImage(imgUrl, userName){
   const removeLi = document.getElementById("removePhotoLi");
 
   if(imgUrl && imgUrl.trim() !== ""){
-    mainImg.src = imgUrl;
-    sidebarImg.src = imgUrl;
-    navAvatar.src = imgUrl;
+    if(mainImg) mainImg.src = imgUrl;
+    if(sidebarImg) sidebarImg.src = imgUrl;
+    if(navAvatar) navAvatar.src = imgUrl;
     if(removeLi) removeLi.style.display = "block";
   } else {
     const firstLetter = (userName ? userName.charAt(0) : "U").toUpperCase();
     const fallbackUrl = `https://ui-avatars.com/api/?name=${firstLetter}&background=7c3aed&color=fff&size=128&bold=true`;
-    mainImg.src = fallbackUrl;
-    sidebarImg.src = fallbackUrl;
-    navAvatar.src = fallbackUrl;
+    if(mainImg) mainImg.src = fallbackUrl;
+    if(sidebarImg) sidebarImg.src = fallbackUrl;
+    if(navAvatar) navAvatar.src = fallbackUrl;
     if(removeLi) removeLi.style.display = "none";
   }
 }
@@ -538,7 +553,7 @@ async function loadGlobalTopLogo() {
       .from('global_settings')
       .select('setting_value')
       .eq('setting_key', 'admin_top_logo')
-      .single();
+      .maybeSingle();
 
     if (data && data.setting_value) {
       const logoUrl = data.setting_value;
