@@ -1349,91 +1349,47 @@ Close
 </div>
 </div>
 
-<!-- PAYOUT -->
-
-<div id="profileSettingsModal" class="modal-overlay">
-
-<div class="modal-box">
-
-<h3>🏦 View & Update Payout Details</h3>
-
-<div class="payout-tabs">
-
-<div
-class="payout-tab active"
-id="tabUpi"
-onclick="switchPayoutMode('upi')">
-
-UPI ID
-
-</div>
-
-<div
-class="payout-tab"
-id="tabBank"
-onclick="switchPayoutMode('bank')">
-
-Bank Account
-
-</div>
-
-</div>
-
-<div id="upiSection">
-
-<label>UPI ID</label>
-
-<input
-type="text"
-id="editUpiId"
-class="input-field"
-placeholder="yourname@upi">
-
-</div>
-
-<div id="bankSection" style="display:none;">
-
-<label>Account Holder Name</label>
-
-<input
-type="text"
-id="editAccName"
-class="input-field">
-
-<label>Bank Account Number</label>
-
-<input
-type="text"
-id="editAccNo"
-class="input-field">
-
-<label>IFSC Code</label>
-
-<input
-type="text"
-id="editIfsc"
-class="input-field">
-
-</div>
-
-<button
-onclick="updateUserPayoutDetails()"
-class="btn-action"
-id="saveProfileBtn">
-
-Save Details
-
-</button>
-
-<button
-onclick="closeModal('profileSettingsModal')"
-style="width:100%;border:none;background:none;padding:12px;color:#64748b;">
-
-Cancel
-
-</button>
-
-</div>
+<!-- PAYOUT / PAYMENT DETAILS --> 
+<div id="profileSettingsModal" class="modal-overlay"> 
+  <div class="modal-box"> 
+    <h3 style="margin-top:0;color:#7c3aed;"> 🏦 Payment Details </h3> 
+    <p id="payoutInfoText" style="font-size:13px;color:#64748b;line-height:1.6;"> Choose one payment method. After saving your payment details, you cannot change or update them. </p> 
+    
+    <!-- PAYMENT METHOD TABS --> 
+    <div class="payout-tabs"> 
+      <div class="payout-tab active" id="tabUpi" onclick="switchPayoutMode('upi')"> UPI ID </div> 
+      <div class="payout-tab" id="tabBank" onclick="switchPayoutMode('bank')"> Bank Account </div> 
+    </div> 
+    
+    <!-- UPI SECTION --> 
+    <div id="upiSection"> 
+      <label style="font-size:13px;font-weight:700;color:#334155;"> UPI ID </label> 
+      <input type="text" id="editUpiId" class="input-field" placeholder="yourname@upi" autocomplete="off"> 
+    </div> 
+    
+    <!-- BANK SECTION --> 
+    <div id="bankSection" style="display:none;"> 
+      <label style="font-size:13px;font-weight:700;color:#334155;"> Account Holder Name </label> 
+      <input type="text" id="editAccName" class="input-field" placeholder="Enter account holder name" autocomplete="off"> 
+      <label style="font-size:13px;font-weight:700;color:#334155;"> Bank Account Number </label> 
+      <input type="text" id="editAccNo" class="input-field" placeholder="Enter bank account number" autocomplete="off"> 
+      <label style="font-size:13px;font-weight:700;color:#334155;"> IFSC Code </label> 
+      <input type="text" id="editIfsc" class="input-field" placeholder="Example: SBIN0001234" autocomplete="off"> 
+    </div> 
+    
+    <!-- LOCKED PAYMENT MESSAGE --> 
+    <div id="paymentLockedMessage" style="display:none;margin-top:15px;padding:15px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa;"> 
+      <div style="font-size:13px;font-weight:700;color:#9a3412;line-height:1.6;"> 🔒 Payment details change karne ke liye Smart Money Customer Care se contact karein. </div> 
+    </div> 
+    
+    <!-- SAVE BUTTON --> 
+    <button onclick="updateUserPayoutDetails()" class="btn-action" id="saveProfileBtn"> Save Payment Details </button> 
+    
+    <!-- CUSTOMER CARE BUTTON --> 
+    <button id="customerCareBtn" onclick="connectCustomerCare()" style="display:none;width:100%;margin-top:10px;padding:13px;border:none;border-radius:10px;background:#0f172a;color:#ffffff;font-weight:700;cursor:pointer;"> 📧 CONNECT CUSTOMER CARE </button> 
+    
+    <button onclick="closeModal('profileSettingsModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;font-weight:600;"> Cancel </button> 
+  </div> 
 </div>
 
 <!-- KYC -->
@@ -1741,30 +1697,6 @@ loadWithdrawalHistory();
 
 }
 
-function openUpiModal(){
-
-closeSidebar();
-
-document.getElementById("editUpiId").value=
-currentProfile?.upi_id||"";
-
-document.getElementById("editAccName").value=
-currentProfile?.account_holder_name||"";
-
-document.getElementById("editAccNo").value=
-currentProfile?.bank_account_number||"";
-
-document.getElementById("editIfsc").value=
-currentProfile?.ifsc_code||"";
-
-switchPayoutMode(
-currentProfile?.payout_type||"upi"
-);
-
-openModal("profileSettingsModal");
-
-}
-
 function openKycModal(){
 
 closeSidebar();
@@ -1795,29 +1727,233 @@ openModal("withdrawModal");
 
 
 /* =========================================
-   PAYOUT MODE
+   PAYMENT DETAILS LOCK SYSTEM
 ========================================= */
 
-function switchPayoutMode(mode){
+function hasSavedPaymentDetails(){
+const payoutType= String( currentProfile?.payout_type||"" ).trim().toLowerCase();
+if(payoutType==="upi"){
+const upi= String( currentProfile?.upi_id||"" ).trim();
+return upi!=="";
+}
+if(payoutType==="bank"){
+const accountNumber= String( currentProfile?.bank_account_number||"" ).trim();
+return accountNumber!=="";
+}
+return false;
+}
 
+/* =========================================
+   OPEN PAYMENT DETAILS MODAL
+========================================= */
+
+function openUpiModal(){
+closeSidebar();
+const paymentLocked= hasSavedPaymentDetails();
+const savedType= String( currentProfile?.payout_type||"" ).trim().toLowerCase();
+const upiInput= document.getElementById("editUpiId");
+const accNameInput= document.getElementById("editAccName");
+const accNoInput= document.getElementById("editAccNo");
+const ifscInput= document.getElementById("editIfsc");
+const saveBtn= document.getElementById("saveProfileBtn");
+const careBtn= document.getElementById("customerCareBtn");
+const lockedMessage= document.getElementById("paymentLockedMessage");
+const infoText= document.getElementById("payoutInfoText");
+
+/* Fill existing values */
+upiInput.value= currentProfile?.upi_id||"";
+accNameInput.value= currentProfile?.account_holder_name||"";
+accNoInput.value= currentProfile?.bank_account_number||"";
+ifscInput.value= currentProfile?.ifsc_code||"";
+
+/* If payment already saved */
+if(paymentLocked){
+switchPayoutMode( savedType==="bank" ?"bank" :"upi", true );
+/* Disable all inputs */
+upiInput.disabled=true;
+accNameInput.disabled=true;
+accNoInput.disabled=true;
+ifscInput.disabled=true;
+/* Disable tabs */
+document .getElementById("tabUpi") .style.pointerEvents="none";
+document .getElementById("tabBank") .style.pointerEvents="none";
+/* Visual disabled tabs */
+document .getElementById("tabUpi") .style.opacity= savedType==="upi" ?"1" :".4";
+document .getElementById("tabBank") .style.opacity= savedType==="bank" ?"1" :".4";
+/* Hide save */
+saveBtn.style.display="none";
+/* Show support */
+careBtn.style.display="block";
+lockedMessage.style.display="block";
+infoText.innerHTML= `<b style="color:#dc2626;">🔒 Payment Details Locked</b><br> Your ${savedType==="bank"?"Bank Account":"UPI ID"} has been permanently saved. Payment details cannot be edited or changed.`;
+}else{
+/* Enable inputs */
+upiInput.disabled=false;
+accNameInput.disabled=false;
+accNoInput.disabled=false;
+ifscInput.disabled=false;
+/* Enable tabs */
+document .getElementById("tabUpi") .style.pointerEvents="auto";
+document .getElementById("tabBank") .style.pointerEvents="auto";
+document .getElementById("tabUpi") .style.opacity="1";
+document .getElementById("tabBank") .style.opacity="1";
+/* Show save */
+saveBtn.style.display="block";
+careBtn.style.display="none";
+lockedMessage.style.display="none";
+infoText.innerHTML= `Choose <b>UPI ID</b> or <b>Bank Account</b>. After saving, your payment method will be permanently locked and cannot be changed.`;
+/* Default mode */
+if(savedType==="bank"){
+switchPayoutMode("bank");
+}else{
+switchPayoutMode("upi");
+}
+}
+openModal( "profileSettingsModal" );
+}
+
+/* =========================================
+   SWITCH PAYMENT MODE
+========================================= */
+
+function switchPayoutMode(mode,force=false){
+const paymentLocked= hasSavedPaymentDetails();
+const savedType= String( currentProfile?.payout_type||"" ).trim() .toLowerCase();
+/* Prevent switching after payment saved */
+if( paymentLocked&& !force ){
+showToast( "Payment method is permanently locked." );
+return;
+}
+/* Safety */
+if( mode!=="upi"&& mode!=="bank" ){
+mode="upi";
+}
+/* Store selected mode */
 payoutMode=mode;
+/* Sections */
+document .getElementById("upiSection") .style.display= mode==="upi" ?"block" :"none";
+document .getElementById("bankSection") .style.display= mode==="bank" ?"block" :"none";
+/* Tabs */
+document .getElementById("tabUpi") .className= mode==="upi" ?"payout-tab active" :"payout-tab";
+document .getElementById("tabBank") .className= mode==="bank" ?"payout-tab active" :"payout-tab";
+}
 
-document.getElementById("upiSection").style.display=
-mode==="upi"?"block":"none";
+/* =========================================
+   SAVE PAYMENT DETAILS
+========================================= */
 
-document.getElementById("bankSection").style.display=
-mode==="bank"?"block":"none";
+async function updateUserPayoutDetails(){
+/* Extra protection */
+if(hasSavedPaymentDetails()){
+showPaymentChangeBlocked();
+return;
+}
+const saveBtn= document.getElementById( "saveProfileBtn" );
+/* UPI */
+if(payoutMode==="upi"){
+const upiId= document .getElementById("editUpiId") .value .trim();
+if(!upiId){
+alert( "Please enter your UPI ID." );
+return;
+}
+if( !upiId.includes("@") ){
+alert( "Please enter a valid UPI ID." );
+return;
+}
+}
+/* BANK */
+if(payoutMode==="bank"){
+const accountHolder= document .getElementById("editAccName") .value .trim();
+const accountNumber= document .getElementById("editAccNo") .value .trim();
+const ifscCode= document .getElementById("editIfsc") .value .trim() .toUpperCase();
+if(!accountHolder){
+alert( "Please enter account holder name." );
+return;
+}
+if(!accountNumber){
+alert( "Please enter bank account number." );
+return;
+}
+if(!ifscCode){
+alert( "Please enter IFSC code." );
+return;
+}
+}
+/* Disable button */
+saveBtn.disabled=true;
+saveBtn.innerText= "Saving...";
+/* Data */
+const updateData={
+payout_type:payoutMode
+};
+/* UPI DATA */
+if(payoutMode==="upi"){
+updateData.upi_id= document .getElementById("editUpiId") .value .trim();
+/* Clear bank fields */
+updateData.account_holder_name=null;
+updateData.bank_account_number=null;
+updateData.ifsc_code=null;
+}
+/* BANK DATA */
+if(payoutMode==="bank"){
+updateData.account_holder_name= document .getElementById("editAccName") .value .trim();
+updateData.bank_account_number= document .getElementById("editAccNo") .value .trim();
+updateData.ifsc_code= document .getElementById("editIfsc") .value .trim() .toUpperCase();
+/* Clear UPI */
+updateData.upi_id=null;
+}
+try{
+const { data, error }= await supabaseClient .from("profiles") .update(updateData) .eq( "user_id", currentUserId ) .select() .single();
+if(error){
+throw error;
+}
+currentProfile={
+...currentProfile,
+...data
+};
+/* Success */
+showToast( "Payment details saved and permanently locked!" );
+closeModal( "profileSettingsModal" );
+/* Important */
+setTimeout(()=>{
+openUpiModal();
+},300);
+}catch(error){
+console.error( "Payment save error:", error );
+alert( "Error: "+ error.message );
+}finally{
+saveBtn.disabled=false;
+saveBtn.innerText= "Save Payment Details";
+}
+}
 
-document.getElementById("tabUpi").className=
-mode==="upi"
-?"payout-tab active"
-:"payout-tab";
+/* =========================================
+   BLOCK PAYMENT CHANGE
+========================================= */
 
-document.getElementById("tabBank").className=
-mode==="bank"
-?"payout-tab active"
-:"payout-tab";
+function showPaymentChangeBlocked(){
+const modal= document.getElementById( "profileSettingsModal" );
+if( modal&& modal.style.display==="flex" ){
+document .getElementById( "paymentLockedMessage" ) .style.display= "block";
+document .getElementById( "customerCareBtn" ) .style.display= "block";
+document .getElementById( "saveProfileBtn" ) .style.display= "none";
+}
+showToast( "Payment details cannot be changed." );
+}
 
+/* =========================================
+   CONNECT CUSTOMER CARE
+========================================= */
+
+function connectCustomerCare(){
+const userName= currentProfile?.full_name|| "Smart Money User";
+const userEmail= currentProfile?.email|| currentUserEmail|| "";
+const userId= userRefCode|| "Not Available";
+const savedType= String( currentProfile?.payout_type||"" ) .toUpperCase()|| "Payment";
+const subject= encodeURIComponent( "Smart Money - Payment Details Change Request" );
+const body= encodeURIComponent( `Hello Smart Money Customer Care, I want to request a change in my saved payment details. Name: ${userName} Email: ${userEmail} User ID: ${userId} Current Payment Method: ${savedType} Please help me update my payment details. Thank you.` );
+/* Open email compose */
+window.location.href= `mailto:smartmoneysupport1@gmail.com?subject=${subject}&body=${body}`;
 }
 
 
@@ -3152,98 +3288,6 @@ ID: ${refCode}
 `;
 
 }).join("");
-
-}
-
-
-/* =========================================
-   PAYOUT DETAILS
-========================================= */
-
-async function updateUserPayoutDetails(){
-
-const saveBtn=
-document.getElementById(
-"saveProfileBtn"
-);
-
-saveBtn.disabled=true;
-
-saveBtn.innerText="Saving...";
-
-const updateData={
-payout_type:payoutMode
-};
-
-if(payoutMode==="upi"){
-
-updateData.upi_id=
-document
-.getElementById("editUpiId")
-.value
-.trim();
-
-}else{
-
-updateData.account_holder_name=
-document
-.getElementById("editAccName")
-.value
-.trim();
-
-updateData.bank_account_number=
-document
-.getElementById("editAccNo")
-.value
-.trim();
-
-updateData.ifsc_code=
-document
-.getElementById("editIfsc")
-.value
-.trim()
-.toUpperCase();
-
-}
-
-const {data,error}=
-await supabaseClient
-.from("profiles")
-.update(updateData)
-.eq(
-"user_id",
-currentUserId
-)
-.select()
-.single();
-
-saveBtn.disabled=false;
-
-saveBtn.innerText="Save Details";
-
-if(error){
-
-alert(
-"Error: "+
-error.message
-);
-
-return;
-
-}
-
-currentProfile={
-...currentProfile,
-...data
-};
-
-showToast(
-"Payout details saved successfully!"
-);
-
-closeModal(
-"profileSettingsModal"
-);
 
 }
 
