@@ -280,7 +280,7 @@ button:hover{
 table{
   width:100%;
   border-collapse:collapse;
-  min-width:850px;
+  min-width:1000px;
 }
 
 th{
@@ -483,6 +483,37 @@ td{
 }
 
 
+/* WITHDRAWAL DETAILS */
+
+.withdrawal-details{
+  min-width:220px;
+  line-height:1.8;
+}
+
+.withdrawal-details b{
+  color:#e2e8f0;
+}
+
+.withdrawal-type{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:6px;
+  margin-bottom:5px;
+  font-size:11px;
+  font-weight:bold;
+}
+
+.upi-type{
+  background:rgba(99,102,241,.18);
+  color:#a5b4fc;
+}
+
+.bank-type{
+  background:rgba(34,197,94,.12);
+  color:#4ade80;
+}
+
+
 /* MOBILE */
 
 @media(max-width:700px){
@@ -512,9 +543,7 @@ td{
 <body>
 
 
-<!-- =========================
-     LOGIN
-========================= -->
+<!-- LOGIN -->
 
 <div id="loginScreen" class="login-screen">
 
@@ -522,9 +551,7 @@ td{
 
     <h1>🔐 Smart Admin</h1>
 
-    <p>
-      Login with your Supabase Auth admin account.
-    </p>
+    <p>Login with your Supabase Auth admin account.</p>
 
     <input
       id="loginEmail"
@@ -556,9 +583,7 @@ td{
 
 
 
-<!-- =========================
-     ADMIN APP
-========================= -->
+<!-- ADMIN APP -->
 
 <div id="adminApp" class="hidden">
 
@@ -597,9 +622,6 @@ td{
 </header>
 
 
-
-<!-- OVERLAY -->
-
 <div
   id="sidebarOverlay"
   class="overlay"
@@ -607,10 +629,7 @@ td{
 ></div>
 
 
-
-<!-- =========================
-     SIDEBAR
-========================= -->
+<!-- SIDEBAR -->
 
 <aside
   id="adminSidebar"
@@ -619,8 +638,6 @@ td{
 
 <h2>⚙️ Admin Panel</h2>
 
-
-<!-- LOGO -->
 
 <div class="logo-upload">
 
@@ -641,9 +658,6 @@ td{
 
 </div>
 
-
-
-<!-- STATUS UPLOAD -->
 
 <div class="status-upload">
 
@@ -675,9 +689,6 @@ td{
 </div>
 
 
-
-<!-- ACTIVE STATUS -->
-
 <div class="sidebar-section">
 
 <h3>📱 Active Status</h3>
@@ -688,9 +699,6 @@ Loading...
 
 </div>
 
-
-
-<!-- APPROVED HISTORY -->
 
 <div class="sidebar-section">
 
@@ -703,9 +711,6 @@ Loading...
 </div>
 
 
-
-<!-- DELETED USERS -->
-
 <div class="sidebar-section">
 
 <h3>Deleted Users</h3>
@@ -717,9 +722,6 @@ Loading...
 </div>
 
 
-
-<!-- DELETED PAYMENTS -->
-
 <div class="sidebar-section">
 
 <h3>Deleted Payments</h3>
@@ -730,9 +732,6 @@ Loading...
 
 </div>
 
-
-
-<!-- DELETED WITHDRAWALS -->
 
 <div class="sidebar-section">
 
@@ -748,97 +747,56 @@ Loading...
 
 
 
-<!-- =========================
-     MAIN CONTENT
-========================= -->
+<!-- MAIN -->
 
 <main class="container">
 
 
-<!-- STATS -->
-
 <section class="stats">
 
 <div class="stat-card">
-
 <h3>Total Payments</h3>
-
 <p id="statTotal">0</p>
-
 </div>
 
-
 <div class="stat-card">
-
 <h3>Approved</h3>
-
-<p
-  id="statApproved"
-  style="color:#4ade80"
->
-0
-</p>
-
+<p id="statApproved" style="color:#4ade80">0</p>
 </div>
 
-
 <div class="stat-card">
-
 <h3>Rejected</h3>
-
-<p
-  id="statRejected"
-  style="color:#f87171"
->
-0
-</p>
-
+<p id="statRejected" style="color:#f87171">0</p>
 </div>
 
 </section>
 
 
 
-<!-- =========================
-     PAYMENT REQUESTS
-========================= -->
+<!-- PAYMENTS -->
 
 <section class="section">
 
 <div class="section-title">
-
 <h2>💳 Payment Requests</h2>
-
 </div>
 
 
 <div class="filters">
 
-<button
-  class="filter-btn active"
-  onclick="switchPaymentTab('pending',this)"
->
+<button class="filter-btn active" onclick="switchPaymentTab('pending',this)">
 Pending
 </button>
 
-<button
-  class="filter-btn"
-  onclick="switchPaymentTab('approved',this)"
->
+<button class="filter-btn" onclick="switchPaymentTab('approved',this)">
 Approved
 </button>
 
-<button
-  class="filter-btn"
-  onclick="switchPaymentTab('rejected',this)"
->
+<button class="filter-btn" onclick="switchPaymentTab('rejected',this)">
 Rejected
 </button>
 
-<button
-  class="filter-btn"
-  onclick="switchPaymentTab('all',this)"
->
+<button class="filter-btn" onclick="switchPaymentTab('all',this)">
 All
 </button>
 
@@ -850,22 +808,16 @@ All
 <table>
 
 <thead>
-
 <tr>
-
 <th>User</th>
 <th>Package</th>
 <th>Transaction</th>
 <th>Status</th>
 <th>Action</th>
-
 </tr>
-
 </thead>
 
-<tbody
-  id="paymentTableBody"
-></tbody>
+<tbody id="paymentTableBody"></tbody>
 
 </table>
 
@@ -875,16 +827,12 @@ All
 
 
 
-<!-- =========================
-     WITHDRAWALS
-========================= -->
+<!-- WITHDRAWALS -->
 
 <section class="section">
 
 <div class="section-title">
-
 <h2>💰 Withdrawal Requests</h2>
-
 </div>
 
 
@@ -931,6 +879,7 @@ All
 
 <th>User</th>
 <th>Amount</th>
+<th>Withdrawal Details</th>
 <th>Status</th>
 <th>Action</th>
 
@@ -938,9 +887,7 @@ All
 
 </thead>
 
-<tbody
-  id="withdrawalTableBody"
-></tbody>
+<tbody id="withdrawalTableBody"></tbody>
 
 </table>
 
@@ -950,16 +897,12 @@ All
 
 
 
-<!-- =========================
-     USERS
-========================= -->
+<!-- USERS -->
 
 <section class="section">
 
 <div class="section-title">
-
 <h2>👥 Users & Referral Network</h2>
-
 </div>
 
 
@@ -982,9 +925,7 @@ All
 
 </thead>
 
-<tbody
-  id="usersTableBody"
-></tbody>
+<tbody id="usersTableBody"></tbody>
 
 </table>
 
@@ -998,14 +939,9 @@ All
 
 
 
-<!-- =========================
-     REFERRAL MODAL
-========================= -->
+<!-- REFERRAL MODAL -->
 
-<div
-  id="referralModal"
-  class="modal"
->
+<div id="referralModal" class="modal">
 
 <div class="modal-box">
 
@@ -1024,9 +960,7 @@ Referral Members
 
 </div>
 
-<div
-  id="referralMembersContent"
-></div>
+<div id="referralMembersContent"></div>
 
 </div>
 
@@ -1041,13 +975,8 @@ Referral Members
    CONFIG
 ===================================================== */
 
-const ADMIN_EMAIL =
-"sboro3235@gmail.com";
+const ADMIN_EMAIL = "sboro3235@gmail.com";
 
-
-/* =====================================================
-   SUPABASE CONFIG
-===================================================== */
 
 const SUPABASE_URL =
 "https://rvprrulkjegvicbnjuft.supabase.co";
@@ -1070,13 +999,10 @@ window.supabase.createClient(
 ===================================================== */
 
 let allPaymentsData = [];
-
 let allWithdrawalsData = [];
-
 let allUsersData = [];
 
 let currentPaymentTab = "pending";
-
 let currentWithdrawalTab = "pending";
 
 
@@ -1106,7 +1032,7 @@ function escapeHtml(value){
 
 
 /* =====================================================
-   AUTH CHECK
+   AUTH
 ===================================================== */
 
 document.addEventListener(
@@ -1142,10 +1068,6 @@ document.addEventListener(
 
 
 
-/* =====================================================
-   ADMIN LOGIN
-===================================================== */
-
 async function adminLogin(){
 
   const email =
@@ -1169,10 +1091,7 @@ async function adminLogin(){
   errorBox.textContent = "";
 
 
-  if(
-    !email ||
-    !password
-  ){
+  if(!email || !password){
 
     errorBox.textContent =
     "Email and password required.";
@@ -1224,9 +1143,7 @@ async function adminLogin(){
     ADMIN_EMAIL.toLowerCase()
   ){
 
-    await supabaseClient
-    .auth
-    .signOut();
+    await supabaseClient.auth.signOut();
 
     errorBox.textContent =
     "Admin access denied.";
@@ -1242,25 +1159,15 @@ async function adminLogin(){
 
 
 
-/* =====================================================
-   ADMIN LOGOUT
-===================================================== */
-
 async function adminLogout(){
 
-  await supabaseClient
-  .auth
-  .signOut();
+  await supabaseClient.auth.signOut();
 
   showLogin();
 
 }
 
 
-
-/* =====================================================
-   SHOW ADMIN
-===================================================== */
 
 function showAdmin(){
 
@@ -1281,10 +1188,6 @@ function showAdmin(){
 }
 
 
-
-/* =====================================================
-   SHOW LOGIN
-===================================================== */
 
 function showLogin(){
 
@@ -1319,9 +1222,7 @@ function toggleSidebar(){
   .getElementById("sidebarOverlay");
 
 
-  sidebar
-  .classList
-  .toggle("open");
+  sidebar.classList.toggle("open");
 
 
   overlay.style.display =
@@ -1330,12 +1231,9 @@ function toggleSidebar(){
   : "none";
 
 
-  if(
-    sidebar.classList.contains("open")
-  ){
+  if(sidebar.classList.contains("open")){
 
     loadTrashAndHistoryData();
-
     loadActiveStatuses();
 
   }
@@ -1345,7 +1243,7 @@ function toggleSidebar(){
 
 
 /* =====================================================
-   REFRESH ALL
+   REFRESH
 ===================================================== */
 
 async function refreshAllData(){
@@ -1355,9 +1253,7 @@ async function refreshAllData(){
     await Promise.all([
 
       loadPaymentRequests(),
-
       loadWithdrawals(),
-
       loadUsers()
 
     ]);
@@ -1379,27 +1275,23 @@ async function refreshAllData(){
 
 
 /* =====================================================
-   LOGO UPLOAD
+   LOGO
 ===================================================== */
 
 async function uploadAndSaveAdminLogo(){
 
   const input =
-  document
-  .getElementById(
+  document.getElementById(
     "adminLogoFileInput"
   );
 
 
-  const file =
-  input.files[0];
+  const file = input.files[0];
 
 
   if(!file){
 
-    alert(
-      "Pehle image select karo!"
-    );
+    alert("Pehle image select karo!");
 
     return;
 
@@ -1433,11 +1325,7 @@ async function uploadAndSaveAdminLogo(){
     );
 
 
-    if(uploadError){
-
-      throw uploadError;
-
-    }
+    if(uploadError) throw uploadError;
 
 
     const {
@@ -1467,11 +1355,7 @@ async function uploadAndSaveAdminLogo(){
     .maybeSingle();
 
 
-    if(existingError){
-
-      throw existingError;
-
-    }
+    if(existingError) throw existingError;
 
 
     let result;
@@ -1483,9 +1367,7 @@ async function uploadAndSaveAdminLogo(){
       await supabaseClient
       .from("global_settings")
       .update({
-
         setting_value:imageUrl
-
       })
       .eq(
         "setting_key",
@@ -1500,30 +1382,20 @@ async function uploadAndSaveAdminLogo(){
       .from("global_settings")
       .insert([{
 
-        setting_key:
-        "admin_top_logo",
-
-        setting_value:
-        imageUrl
+        setting_key:"admin_top_logo",
+        setting_value:imageUrl
 
       }]);
 
     }
 
 
-    if(result.error){
-
-      throw result.error;
-
-    }
+    if(result.error) throw result.error;
 
 
     input.value = "";
 
-
-    alert(
-      "Logo successfully updated!"
-    );
+    alert("Logo successfully updated!");
 
   }
   catch(error){
@@ -1543,37 +1415,29 @@ async function uploadAndSaveAdminLogo(){
 
 /* =====================================================
    STATUS UPLOAD
-   IMPORTANT:
-   STORAGE BUCKET NAME = status
 ===================================================== */
 
 async function uploadStatus(){
 
   const input =
-  document
-  .getElementById(
+  document.getElementById(
     "statusFileInput"
   );
 
 
   const caption =
   document
-  .getElementById(
-    "statusCaption"
-  )
+  .getElementById("statusCaption")
   .value
   .trim();
 
 
-  const file =
-  input.files[0];
+  const file = input.files[0];
 
 
   if(!file){
 
-    alert(
-      "Photo ya video select karo!"
-    );
+    alert("Photo ya video select karo!");
 
     return;
 
@@ -1583,25 +1447,19 @@ async function uploadStatus(){
   let mediaType = "";
 
 
-  if(
-    file.type.startsWith("image/")
-  ){
+  if(file.type.startsWith("image/")){
 
     mediaType = "image";
 
   }
-  else if(
-    file.type.startsWith("video/")
-  ){
+  else if(file.type.startsWith("video/")){
 
     mediaType = "video";
 
   }
   else{
 
-    alert(
-      "Sirf image ya video allowed hai."
-    );
+    alert("Sirf image ya video allowed hai.");
 
     return;
 
@@ -1624,10 +1482,6 @@ async function uploadStatus(){
     safeName;
 
 
-    /* UPLOAD FILE
-       BUCKET = status
-    */
-
     const {
       error:uploadError
     } =
@@ -1638,23 +1492,14 @@ async function uploadStatus(){
       fileName,
       file,
       {
-
         contentType:file.type,
-
         upsert:false
-
       }
     );
 
 
-    if(uploadError){
+    if(uploadError) throw uploadError;
 
-      throw uploadError;
-
-    }
-
-
-    /* GET PUBLIC URL */
 
     const {
       data:urlData
@@ -1669,16 +1514,12 @@ async function uploadStatus(){
     urlData.publicUrl;
 
 
-    /* 24 HOURS EXPIRY */
-
     const expiresAt =
     new Date(
       Date.now() +
       24 * 60 * 60 * 1000
     ).toISOString();
 
-
-    /* SAVE TO DATABASE */
 
     const {
       error:dbError
@@ -1687,40 +1528,22 @@ async function uploadStatus(){
     .from("status_posts")
     .insert([{
 
-      media_url:
-      mediaUrl,
-
-      media_type:
-      mediaType,
-
-      caption:
-      caption,
-
-      expires_at:
-      expiresAt,
-
-      is_deleted:
-      false
+      media_url:mediaUrl,
+      media_type:mediaType,
+      caption:caption,
+      expires_at:expiresAt,
+      is_deleted:false
 
     }]);
 
 
-    if(dbError){
+    if(dbError) throw dbError;
 
-      throw dbError;
-
-    }
-
-
-    /* RESET */
 
     input.value = "";
 
-
     document
-    .getElementById(
-      "statusCaption"
-    )
+    .getElementById("statusCaption")
     .value = "";
 
 
@@ -1758,8 +1581,7 @@ async function uploadStatus(){
 async function loadActiveStatuses(){
 
   const box =
-  document
-  .getElementById(
+  document.getElementById(
     "statusList"
   );
 
@@ -1767,8 +1589,7 @@ async function loadActiveStatuses(){
   try{
 
     const now =
-    new Date()
-    .toISOString();
+    new Date().toISOString();
 
 
     const {
@@ -1794,17 +1615,10 @@ async function loadActiveStatuses(){
     );
 
 
-    if(error){
-
-      throw error;
-
-    }
+    if(error) throw error;
 
 
-    if(
-      !data ||
-      data.length === 0
-    ){
+    if(!data || data.length === 0){
 
       box.innerHTML =
       `
@@ -1848,14 +1662,12 @@ async function loadActiveStatuses(){
         }
 
         <div class="small">
-          ${escapeHtml(
-            item.caption || ""
-          )}
+          ${escapeHtml(item.caption || "")}
         </div>
 
         <button
           class="btn btn-delete"
-          onclick="deleteStatus('${escapeHtml(item.id)}')"
+          onclick="deleteStatus('${item.id}')"
         >
           Delete
         </button>
@@ -1882,17 +1694,9 @@ async function loadActiveStatuses(){
 
 
 
-/* =====================================================
-   DELETE STATUS
-===================================================== */
-
 async function deleteStatus(id){
 
-  if(
-    !confirm(
-      "Delete this status?"
-    )
-  ){
+  if(!confirm("Delete this status?")){
     return;
   }
 
@@ -1905,9 +1709,7 @@ async function deleteStatus(id){
     await supabaseClient
     .from("status_posts")
     .update({
-
       is_deleted:true
-
     })
     .eq(
       "id",
@@ -1915,11 +1717,7 @@ async function deleteStatus(id){
     );
 
 
-    if(error){
-
-      throw error;
-
-    }
+    if(error) throw error;
 
 
     loadActiveStatuses();
@@ -1961,11 +1759,7 @@ async function loadPaymentRequests(){
   );
 
 
-  if(error){
-
-    throw error;
-
-  }
+  if(error) throw error;
 
 
   allPaymentsData =
@@ -1982,35 +1776,21 @@ async function loadPaymentRequests(){
 
 
 
-/* =====================================================
-   SWITCH PAYMENT TAB
-===================================================== */
+function switchPaymentTab(tab,btn){
 
-function switchPaymentTab(
-  tab,
-  btn
-){
-
-  currentPaymentTab =
-  tab;
+  currentPaymentTab = tab;
 
 
   btn
   .parentElement
-  .querySelectorAll(
-    ".filter-btn"
-  )
+  .querySelectorAll(".filter-btn")
   .forEach(
     button =>
-    button.classList.remove(
-      "active"
-    )
+    button.classList.remove("active")
   );
 
 
-  btn
-  .classList
-  .add("active");
+  btn.classList.add("active");
 
 
   updateStatsAndRenderPayments();
@@ -2019,57 +1799,38 @@ function switchPaymentTab(
 
 
 
-/* =====================================================
-   RENDER PAYMENTS
-===================================================== */
-
 function updateStatsAndRenderPayments(){
 
   const tbody =
-  document
-  .getElementById(
+  document.getElementById(
     "paymentTableBody"
   );
 
 
   document
-  .getElementById(
-    "statTotal"
-  )
+  .getElementById("statTotal")
   .innerText =
   allPaymentsData.length;
 
 
   document
-  .getElementById(
-    "statApproved"
-  )
+  .getElementById("statApproved")
   .innerText =
-  allPaymentsData
-  .filter(
+  allPaymentsData.filter(
     x =>
-    String(
-      x.status || ""
-    )
-    .toLowerCase()
-    === "approved"
+    String(x.status || "")
+    .toLowerCase() === "approved"
   )
   .length;
 
 
   document
-  .getElementById(
-    "statRejected"
-  )
+  .getElementById("statRejected")
   .innerText =
-  allPaymentsData
-  .filter(
+  allPaymentsData.filter(
     x =>
-    String(
-      x.status || ""
-    )
-    .toLowerCase()
-    === "rejected"
+    String(x.status || "")
+    .toLowerCase() === "rejected"
   )
   .length;
 
@@ -2078,9 +1839,7 @@ function updateStatsAndRenderPayments(){
   allPaymentsData;
 
 
-  if(
-    currentPaymentTab !== "all"
-  ){
+  if(currentPaymentTab !== "all"){
 
     filtered =
     allPaymentsData.filter(
@@ -2100,14 +1859,9 @@ function updateStatsAndRenderPayments(){
     tbody.innerHTML =
     `
     <tr>
-
-      <td
-        colspan="5"
-        class="empty"
-      >
+      <td colspan="5" class="empty">
         No records found.
       </td>
-
     </tr>
     `;
 
@@ -2120,9 +1874,7 @@ function updateStatsAndRenderPayments(){
   filtered.map(item=>{
 
     const status =
-    String(
-      item.status || "Pending"
-    );
+    String(item.status || "Pending");
 
 
     const lower =
@@ -2136,17 +1888,13 @@ function updateStatsAndRenderPayments(){
       <td>
 
         <b>
-          ${escapeHtml(
-            item.full_name || "N/A"
-          )}
+          ${escapeHtml(item.full_name || "N/A")}
         </b>
 
         <br>
 
         <span class="small">
-          ${escapeHtml(
-            item.email || ""
-          )}
+          ${escapeHtml(item.email || "")}
         </span>
 
       </td>
@@ -2162,9 +1910,7 @@ function updateStatsAndRenderPayments(){
 
         <br>
 
-        ₹${escapeHtml(
-          item.amount || 0
-        )}
+        ₹${escapeHtml(item.amount || 0)}
 
       </td>
 
@@ -2238,17 +1984,9 @@ function updateStatsAndRenderPayments(){
 
 
 
-/* =====================================================
-   APPROVE PAYMENT
-===================================================== */
-
 async function approvePayment(id){
 
-  if(
-    !confirm(
-      "Approve this payment?"
-    )
-  ){
+  if(!confirm("Approve this payment?")){
     return;
   }
 
@@ -2262,18 +2000,11 @@ async function approvePayment(id){
     await supabaseClient
     .from("payment_requests")
     .select("*")
-    .eq(
-      "id",
-      id
-    )
+    .eq("id",id)
     .maybeSingle();
 
 
-    if(error){
-
-      throw error;
-
-    }
+    if(error) throw error;
 
 
     if(!payment){
@@ -2291,21 +2022,12 @@ async function approvePayment(id){
     await supabaseClient
     .from("payment_requests")
     .update({
-
       status:"Approved"
-
     })
-    .eq(
-      "id",
-      id
-    );
+    .eq("id",id);
 
 
-    if(updateError){
-
-      throw updateError;
-
-    }
+    if(updateError) throw updateError;
 
 
     alert(
@@ -2331,17 +2053,9 @@ async function approvePayment(id){
 
 
 
-/* =====================================================
-   REJECT PAYMENT
-===================================================== */
-
 async function rejectPayment(id){
 
-  if(
-    !confirm(
-      "Reject this payment?"
-    )
-  ){
+  if(!confirm("Reject this payment?")){
     return;
   }
 
@@ -2354,21 +2068,12 @@ async function rejectPayment(id){
     await supabaseClient
     .from("payment_requests")
     .update({
-
       status:"Rejected"
-
     })
-    .eq(
-      "id",
-      id
-    );
+    .eq("id",id);
 
 
-    if(error){
-
-      throw error;
-
-    }
+    if(error) throw error;
 
 
     loadPaymentRequests();
@@ -2378,9 +2083,7 @@ async function rejectPayment(id){
 
     console.error(error);
 
-    alert(
-      error.message
-    );
+    alert(error.message);
 
   }
 
@@ -2409,11 +2112,7 @@ async function loadWithdrawals(){
   );
 
 
-  if(error){
-
-    throw error;
-
-  }
+  if(error) throw error;
 
 
   allWithdrawalsData =
@@ -2430,35 +2129,21 @@ async function loadWithdrawals(){
 
 
 
-/* =====================================================
-   SWITCH WITHDRAWAL TAB
-===================================================== */
+function switchWithdrawalTab(tab,btn){
 
-function switchWithdrawalTab(
-  tab,
-  btn
-){
-
-  currentWithdrawalTab =
-  tab;
+  currentWithdrawalTab = tab;
 
 
   btn
   .parentElement
-  .querySelectorAll(
-    ".filter-btn"
-  )
+  .querySelectorAll(".filter-btn")
   .forEach(
     x =>
-    x.classList.remove(
-      "active"
-    )
+    x.classList.remove("active")
   );
 
 
-  btn
-  .classList
-  .add("active");
+  btn.classList.add("active");
 
 
   renderWithdrawals();
@@ -2469,13 +2154,13 @@ function switchWithdrawalTab(
 
 /* =====================================================
    RENDER WITHDRAWALS
+   BANK + UPI DETAILS INCLUDED
 ===================================================== */
 
 function renderWithdrawals(){
 
   const tbody =
-  document
-  .getElementById(
+  document.getElementById(
     "withdrawalTableBody"
   );
 
@@ -2502,7 +2187,7 @@ function renderWithdrawals(){
     <tr>
 
       <td
-        colspan="4"
+        colspan="5"
         class="empty"
       >
         No withdrawals found.
@@ -2529,9 +2214,86 @@ function renderWithdrawals(){
     status.toLowerCase();
 
 
+    /*
+      COMMON METHOD COLUMN NAMES
+    */
+
+    const method =
+    String(
+      item.withdrawal_method ||
+      item.payment_method ||
+      item.method ||
+      item.withdraw_method ||
+      ""
+    )
+    .toLowerCase();
+
+
+    /*
+      DETECT UPI
+    */
+
+    const isUPI =
+    method.includes("upi") ||
+
+    !!(
+      item.upi_id ||
+      item.upi ||
+      item.upi_code ||
+      item.upi_address
+    );
+
+
+    /*
+      UPI DETAILS
+    */
+
+    const upiId =
+    item.upi_id ||
+    item.upi ||
+    item.upi_code ||
+    item.upi_address ||
+    item.upi_number ||
+    "";
+
+
+    /*
+      BANK DETAILS
+    */
+
+    const accountHolder =
+    item.account_holder_name ||
+    item.account_holder ||
+    item.account_name ||
+    item.bank_account_holder ||
+    "";
+
+
+    const bankName =
+    item.bank_name ||
+    item.bank ||
+    "";
+
+
+    const accountNumber =
+    item.account_number ||
+    item.bank_account_number ||
+    item.account_no ||
+    "";
+
+
+    const ifscCode =
+    item.ifsc_code ||
+    item.ifsc ||
+    item.bank_ifsc ||
+    "";
+
+
     return `
 
     <tr>
+
+      <!-- USER -->
 
       <td>
 
@@ -2558,14 +2320,130 @@ function renderWithdrawals(){
       </td>
 
 
+      <!-- AMOUNT -->
+
       <td>
 
-        ₹${escapeHtml(
-          item.amount || 0
-        )}
+        <b>
+          ₹${escapeHtml(
+            item.amount || 0
+          )}
+        </b>
 
       </td>
 
+
+      <!-- WITHDRAWAL DETAILS -->
+
+      <td>
+
+        <div class="withdrawal-details">
+
+          ${
+            isUPI
+
+            ? `
+
+            <span
+              class="withdrawal-type upi-type"
+            >
+              📱 UPI PAYMENT
+            </span>
+
+            <br>
+
+            <span class="small">
+              UPI ID
+            </span>
+
+            <br>
+
+            <b>
+              ${escapeHtml(
+                upiId ||
+                "Not available"
+              )}
+            </b>
+
+            `
+
+            : `
+
+            <span
+              class="withdrawal-type bank-type"
+            >
+              🏦 BANK ACCOUNT
+            </span>
+
+            <br>
+
+            <span class="small">
+              Account Holder
+            </span>
+
+            <br>
+
+            <b>
+              ${escapeHtml(
+                accountHolder ||
+                "Not available"
+              )}
+            </b>
+
+            <br><br>
+
+            <span class="small">
+              Bank Name
+            </span>
+
+            <br>
+
+            <b>
+              ${escapeHtml(
+                bankName ||
+                "Not available"
+              )}
+            </b>
+
+            <br><br>
+
+            <span class="small">
+              Account Number
+            </span>
+
+            <br>
+
+            <b>
+              ${escapeHtml(
+                accountNumber ||
+                "Not available"
+              )}
+            </b>
+
+            <br><br>
+
+            <span class="small">
+              IFSC Code
+            </span>
+
+            <br>
+
+            <b>
+              ${escapeHtml(
+                ifscCode ||
+                "Not available"
+              )}
+            </b>
+
+            `
+          }
+
+        </div>
+
+      </td>
+
+
+      <!-- STATUS -->
 
       <td>
 
@@ -2579,6 +2457,8 @@ function renderWithdrawals(){
 
       </td>
 
+
+      <!-- ACTION -->
 
       <td>
 
@@ -2631,10 +2511,7 @@ function renderWithdrawals(){
    UPDATE WITHDRAWAL
 ===================================================== */
 
-async function updateWithdrawal(
-  id,
-  status
-){
+async function updateWithdrawal(id,status){
 
   if(
     !confirm(
@@ -2653,9 +2530,7 @@ async function updateWithdrawal(
     await supabaseClient
     .from("withdrawal_requests")
     .update({
-
       status
-
     })
     .eq(
       "id",
@@ -2663,11 +2538,7 @@ async function updateWithdrawal(
     );
 
 
-    if(error){
-
-      throw error;
-
-    }
+    if(error) throw error;
 
 
     loadWithdrawals();
@@ -2677,9 +2548,7 @@ async function updateWithdrawal(
 
     console.error(error);
 
-    alert(
-      error.message
-    );
+    alert(error.message);
 
   }
 
@@ -2694,8 +2563,7 @@ async function updateWithdrawal(
 async function loadUsers(){
 
   const tbody =
-  document
-  .getElementById(
+  document.getElementById(
     "usersTableBody"
   );
 
@@ -2720,15 +2588,9 @@ async function loadUsers(){
     tbody.innerHTML =
     `
     <tr>
-
       <td colspan="6">
-
-        ${escapeHtml(
-          error.message
-        )}
-
+        ${escapeHtml(error.message)}
       </td>
-
     </tr>
     `;
 
@@ -2737,8 +2599,7 @@ async function loadUsers(){
   }
 
 
-  allUsersData =
-  data || [];
+  allUsersData = data || [];
 
 
   const users =
@@ -2753,14 +2614,9 @@ async function loadUsers(){
     tbody.innerHTML =
     `
     <tr>
-
-      <td
-        colspan="6"
-        class="empty"
-      >
+      <td colspan="6" class="empty">
         No users found.
       </td>
-
     </tr>
     `;
 
@@ -2794,15 +2650,12 @@ async function loadUsers(){
 
     <tr>
 
-
       <td>
 
         <b>
-
           ${escapeHtml(
             user.full_name || "User"
           )}
-
         </b>
 
         ${master ? " 👑" : ""}
@@ -2810,22 +2663,16 @@ async function loadUsers(){
         <br>
 
         <span class="small">
-
-          ${escapeHtml(
-            user.email || ""
-          )}
-
+          ${escapeHtml(user.email || "")}
         </span>
 
       </td>
 
 
       <td>
-
         ${escapeHtml(
           user.referral_id || "N/A"
         )}
-
       </td>
 
 
@@ -2847,16 +2694,14 @@ async function loadUsers(){
       <td>
 
         <span class="referral-count">
-
           👥 ${members.length} Direct Join
-
         </span>
 
         <br>
 
         <button
           class="btn btn-info"
-          onclick="showReferralMembers('${escapeHtml(user.referral_id || "")}','${escapeHtml(user.full_name || "User")}')"
+          onclick="showReferralMembers('${escapeHtml(user.referral_id || "")}','${escapeHtml(user.full_name || "User")}' )"
         >
           View Members
         </button>
@@ -2912,7 +2757,6 @@ async function loadUsers(){
 
       </td>
 
-
     </tr>
 
     `;
@@ -2925,7 +2769,7 @@ async function loadUsers(){
 
 
 /* =====================================================
-   SHOW REFERRAL MEMBERS
+   REFERRAL MODAL
 ===================================================== */
 
 function showReferralMembers(
@@ -2934,22 +2778,19 @@ function showReferralMembers(
 ){
 
   const modal =
-  document
-  .getElementById(
+  document.getElementById(
     "referralModal"
   );
 
 
   const title =
-  document
-  .getElementById(
+  document.getElementById(
     "referralModalTitle"
   );
 
 
   const content =
-  document
-  .getElementById(
+  document.getElementById(
     "referralMembersContent"
   );
 
@@ -3008,31 +2849,22 @@ function showReferralMembers(
       <tr>
 
       <td>
-
         ${escapeHtml(
           m.full_name || "User"
         )}
-
       </td>
 
-
       <td>
-
         ${escapeHtml(
           m.email || ""
         )}
-
       </td>
 
-
       <td>
-
         ${escapeHtml(
           m.package_name || "Free"
         )}
-
       </td>
-
 
       <td>
 
@@ -3076,16 +2908,10 @@ function showReferralMembers(
 
 
 
-/* =====================================================
-   CLOSE REFERRAL MODAL
-===================================================== */
-
 function closeReferralModal(){
 
   document
-  .getElementById(
-    "referralModal"
-  )
+  .getElementById("referralModal")
   .classList
   .remove("show");
 
@@ -3094,13 +2920,10 @@ function closeReferralModal(){
 
 
 /* =====================================================
-   BLOCK / UNBLOCK USER
+   USER CONTROL
 ===================================================== */
 
-async function toggleUser(
-  id,
-  status
-){
+async function toggleUser(id,status){
 
   const {
     error
@@ -3108,21 +2931,14 @@ async function toggleUser(
   await supabaseClient
   .from("profiles")
   .update({
-
     is_active:status
-
   })
-  .eq(
-    "id",
-    id
-  );
+  .eq("id",id);
 
 
   if(error){
 
-    alert(
-      error.message
-    );
+    alert(error.message);
 
     return;
 
@@ -3135,17 +2951,9 @@ async function toggleUser(
 
 
 
-/* =====================================================
-   SOFT DELETE USER
-===================================================== */
-
 async function softDeleteUser(id){
 
-  if(
-    !confirm(
-      "Move this user to trash?"
-    )
-  ){
+  if(!confirm("Move this user to trash?")){
     return;
   }
 
@@ -3156,21 +2964,14 @@ async function softDeleteUser(id){
   await supabaseClient
   .from("profiles")
   .update({
-
     is_deleted:true
-
   })
-  .eq(
-    "id",
-    id
-  );
+  .eq("id",id);
 
 
   if(error){
 
-    alert(
-      error.message
-    );
+    alert(error.message);
 
     return;
 
@@ -3187,16 +2988,9 @@ async function softDeleteUser(id){
    SOFT DELETE RECORD
 ===================================================== */
 
-async function softDeleteRecord(
-  id,
-  table
-){
+async function softDeleteRecord(id,table){
 
-  if(
-    !confirm(
-      "Move this record to trash?"
-    )
-  ){
+  if(!confirm("Move this record to trash?")){
     return;
   }
 
@@ -3207,21 +3001,14 @@ async function softDeleteRecord(
   await supabaseClient
   .from(table)
   .update({
-
     is_deleted:true
-
   })
-  .eq(
-    "id",
-    id
-  );
+  .eq("id",id);
 
 
   if(error){
 
-    alert(
-      error.message
-    );
+    alert(error.message);
 
     return;
 
@@ -3229,7 +3016,6 @@ async function softDeleteRecord(
 
 
   refreshAllData();
-
   loadTrashAndHistoryData();
 
 }
@@ -3240,16 +3026,9 @@ async function softDeleteRecord(
    RESTORE RECORD
 ===================================================== */
 
-async function restoreRecord(
-  id,
-  table
-){
+async function restoreRecord(id,table){
 
-  if(
-    !confirm(
-      "Restore this item?"
-    )
-  ){
+  if(!confirm("Restore this item?")){
     return;
   }
 
@@ -3260,21 +3039,14 @@ async function restoreRecord(
   await supabaseClient
   .from(table)
   .update({
-
     is_deleted:false
-
   })
-  .eq(
-    "id",
-    id
-  );
+  .eq("id",id);
 
 
   if(error){
 
-    alert(
-      error.message
-    );
+    alert(error.message);
 
     return;
 
@@ -3282,7 +3054,6 @@ async function restoreRecord(
 
 
   refreshAllData();
-
   loadTrashAndHistoryData();
 
 }
@@ -3293,10 +3064,7 @@ async function restoreRecord(
    PERMANENT DELETE
 ===================================================== */
 
-async function permanentDeleteRecord(
-  id,
-  table
-){
+async function permanentDeleteRecord(id,table){
 
   if(
     !confirm(
@@ -3313,17 +3081,12 @@ async function permanentDeleteRecord(
   await supabaseClient
   .from(table)
   .delete()
-  .eq(
-    "id",
-    id
-  );
+  .eq("id",id);
 
 
   if(error){
 
-    alert(
-      error.message
-    );
+    alert(error.message);
 
     return;
 
@@ -3331,7 +3094,6 @@ async function permanentDeleteRecord(
 
 
   refreshAllData();
-
   loadTrashAndHistoryData();
 
 }
@@ -3349,16 +3111,10 @@ async function loadTrashAndHistoryData(){
     const results =
     await Promise.all([
 
-
-      /* APPROVED PAYMENTS */
-
       supabaseClient
       .from("payment_requests")
       .select("*")
-      .eq(
-        "status",
-        "Approved"
-      )
+      .eq("status","Approved")
       .order(
         "created_at",
         {
@@ -3366,38 +3122,20 @@ async function loadTrashAndHistoryData(){
         }
       ),
 
-
-      /* DELETED USERS */
-
       supabaseClient
       .from("profiles")
       .select("*")
-      .eq(
-        "is_deleted",
-        true
-      ),
-
-
-      /* DELETED PAYMENTS */
+      .eq("is_deleted",true),
 
       supabaseClient
       .from("payment_requests")
       .select("*")
-      .eq(
-        "is_deleted",
-        true
-      ),
-
-
-      /* DELETED WITHDRAWALS */
+      .eq("is_deleted",true),
 
       supabaseClient
       .from("withdrawal_requests")
       .select("*")
-      .eq(
-        "is_deleted",
-        true
-      )
+      .eq("is_deleted",true)
 
     ]);
 
@@ -3432,15 +3170,10 @@ async function loadTrashAndHistoryData(){
 
 
 
-/* =====================================================
-   APPROVED HISTORY
-===================================================== */
-
 function renderApprovedHistory(data){
 
   const box =
-  document
-  .getElementById(
+  document.getElementById(
     "approvedHistoryList"
   );
 
@@ -3462,18 +3195,14 @@ function renderApprovedHistory(data){
 
       <br>
 
-      ₹${escapeHtml(
-        x.amount || 0
-      )}
+      ₹${escapeHtml(x.amount || 0)}
 
       <br>
 
       <span class="small">
-
         ${escapeHtml(
           x.package_name || ""
         )}
-
       </span>
 
     </div>
@@ -3487,15 +3216,10 @@ function renderApprovedHistory(data){
 
 
 
-/* =====================================================
-   DELETED USERS
-===================================================== */
-
 function renderDeletedUsers(data){
 
   const box =
-  document
-  .getElementById(
+  document.getElementById(
     "deletedUsersList"
   );
 
@@ -3508,15 +3232,12 @@ function renderDeletedUsers(data){
     <div class="history-item">
 
       <b>
-
         ${escapeHtml(
           x.full_name || "User"
         )}
-
       </b>
 
       <br>
-
 
       <button
         class="btn btn-restore"
@@ -3544,15 +3265,10 @@ function renderDeletedUsers(data){
 
 
 
-/* =====================================================
-   DELETED PAYMENTS
-===================================================== */
-
 function renderDeletedPayments(data){
 
   const box =
-  document
-  .getElementById(
+  document.getElementById(
     "deletedPaymentsList"
   );
 
@@ -3565,21 +3281,16 @@ function renderDeletedPayments(data){
     <div class="history-item">
 
       <b>
-
         ${escapeHtml(
           x.full_name || "User"
         )}
-
       </b>
 
       <br>
 
-      ₹${escapeHtml(
-        x.amount || 0
-      )}
+      ₹${escapeHtml(x.amount || 0)}
 
       <br>
-
 
       <button
         class="btn btn-restore"
@@ -3607,15 +3318,10 @@ function renderDeletedPayments(data){
 
 
 
-/* =====================================================
-   DELETED WITHDRAWALS
-===================================================== */
-
 function renderDeletedWithdrawals(data){
 
   const box =
-  document
-  .getElementById(
+  document.getElementById(
     "deletedWithdrawalsList"
   );
 
@@ -3628,23 +3334,43 @@ function renderDeletedWithdrawals(data){
     <div class="history-item">
 
       <b>
-
         ${escapeHtml(
           x.full_name ||
           x.name ||
           "User"
         )}
-
       </b>
 
       <br>
 
-      ₹${escapeHtml(
-        x.amount || 0
-      )}
+      ₹${escapeHtml(x.amount || 0)}
 
       <br>
 
+      <span class="small">
+
+        ${
+          x.upi_id ||
+          x.upi ||
+          x.upi_code
+
+          ? "📱 UPI: " +
+            escapeHtml(
+              x.upi_id ||
+              x.upi ||
+              x.upi_code
+            )
+
+          : "🏦 Bank: " +
+            escapeHtml(
+              x.bank_name ||
+              "Bank Account"
+            )
+        }
+
+      </span>
+
+      <br><br>
 
       <button
         class="btn btn-restore"
