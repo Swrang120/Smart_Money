@@ -188,8 +188,9 @@
     const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
     
+    // Auto-login ko rokne ke liye session persistence ko local session par strict kiya gaya hai
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-      auth: { persistSession: true, autoRefreshToken: true }
+      auth: { persistSession: false, autoRefreshToken: false }
     });
 
     document.addEventListener("DOMContentLoaded", async function() {
@@ -199,10 +200,8 @@
           document.getElementById("dynamicLogoImg").src = logoData.setting_value;
         }
 
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (session && session.user) {
-          window.location.href = "dashboard.html";
-        }
+        // Automatic redirection logic ko hata diya gaya hai taaki login page par aane par 
+        // user ko manually credentials dalne padein aur purani session mismatch ki problem solve ho jaye.
       } catch (err) {
         console.log("Initialization error:", err);
       }
@@ -222,12 +221,20 @@
       btn.disabled = true;
 
       try {
+        // Explicitly enable session storage only when the user submits correct login details
+        await supabaseClient.auth.setSession({ access_token: '', refresh_token: '' }).catch(() => {});
+        
         const { data, error } = await supabaseClient.auth.signInWithPassword({
           email: email,
           password: password,
         });
 
         if (error) throw error;
+
+        // Save session properly in localStorage manually upon explicit successful login
+        if (data.session) {
+          localStorage.setItem('sb-rvprrulkjegvicbnjuft-auth-token', JSON.stringify(data.session));
+        }
 
         alert("🎉 Login Successful!");
         window.location.href = "dashboard.html";
@@ -259,19 +266,16 @@
       btn.disabled = true;
 
       try {
-        // Yeh line automatically exact folder path detect karegi (chahe Local ho ya GitHub Pages)
         const currentPath = window.location.pathname;
         const basePath = currentPath.substring(0, currentPath.lastIndexOf('/'));
         const updatePageUrl = window.location.origin + basePath + '/update-password.html';
 
-        // 1. Supabase Auth se reset link generate karwayenge
         const { error: supError } = await supabaseClient.auth.resetPasswordForEmail(email, {
           redirectTo: updatePageUrl,
         });
 
         if (supError) throw supError;
 
-        // 2. EmailJS ke zariye mail trigger karenge
         const templateParams = {
           to_name: email.split('@')[0],
           to_email: email,
