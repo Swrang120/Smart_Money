@@ -220,7 +220,7 @@ button:hover{opacity:.88}
 
 <section class="section"><div class="section-title"><h2>💳 Payment Requests</h2></div><div class="filters"><button class="filter-btn active" onclick="switchPaymentTab('pending',this)">Pending</button><button class="filter-btn" onclick="switchPaymentTab('approved',this)">Approved</button><button class="filter-btn" onclick="switchPaymentTab('rejected',this)">Rejected</button><button class="filter-btn" onclick="switchPaymentTab('all',this)">All</button></div><div class="table-box"><table><thead><tr><th>User</th><th>Package</th><th>Transaction</th><th>Status</th><th>Action</th></tr></thead><tbody id="paymentTableBody"></tbody></table></div></section>
 
-<section class="section"><div class="section-title"><h2>💰 Withdrawal Requests</h2></div><div class="filters"><button class="filter-btn active" onclick="switchWithdrawalTab('pending',this)">Pending</button><button class="filter-btn" onclick="switchWithdrawalTab('approved',this)">Approved</button><button class="filter-btn" onclick="switchWithdrawalTab('rejected',this)">Rejected</button><button class="filter-btn" onclick="switchWithdrawalTab('all',this)">All</button></div><div class="table-box"><table><thead><tr><th>User / User ID</th><th>Amount</th><th>Complete Withdrawal Details</th><th>Status</th><th>Action</th></tr></thead><tbody id="withdrawalTableBody"></tbody></table></div></section>
+<section class="section"><div class="section-title"><h2>💰 Withdrawal Requests</h2></div><div class="filters"><button class="filter-btn active" onclick="switchWithdrawalTab('pending',this)">Pending</button><button class="filter-btn" onclick="switchWithdrawalTab('approved',this)">Approved</button><button class="filter-btn" onclick="switchWithdrawalTab('rejected',this)">Rejected</button><button class="filter-btn" onclick="switchWithdrawalTab('all',this)">All</button></div><div class="table-box"><table><thead><tr><th>User / Referral ID</th><th>Amount</th><th>Complete Withdrawal Details</th><th>Status</th><th>Action</th></tr></thead><tbody id="withdrawalTableBody"></tbody></table></div></section>
 
 <section class="section">
 <div class="section-title"><h2>👥 Users & Referral Network</h2></div>
@@ -253,7 +253,7 @@ function val(...a){return a.find(x=>x!==undefined&&x!==null&&String(x)!=="")||""
 function norm(v){return String(v||"").trim().toLowerCase()}
 function statusOf(v){return norm(v||"pending")}
 
-// Improved function to fetch bank/UPI details from withdrawal item or linked user profile
+// Improved function to pull bank/UPI details dynamically from withdrawal row or user profile fallback
 function paymentDetailsFromItemOrUser(item, u) {
   return {
     upi_id: val(item.upi_id, item.upi, item.upi_code, item.upi_address, u?.upi_id, u?.upi, u?.upi_code, u?.upi_address),
@@ -313,7 +313,7 @@ function findUserForRequest(item){
  const id=val(item.user_id,item.profile_id,item.user_uuid,item.auth_user_id);
  const email=norm(item.email);
  const ref=norm(item.referral_id,item.user_referral_id);
- return allUsersData.find(u=>(id&&(String(u.id)===String(id)||String(u.user_id||"")===String(id)))||(email&&norm(u.email)===email)||(ref&&norm(u.referral_id)===ref))||null
+ return allUsersData.find(u=>(id&&(String(u.id)===String(id) || String(u.user_id||"")===String(id)))||(email&&norm(u.email)===email)||(ref&&norm(u.referral_id)===ref))||null
 }
 
 async function loadWithdrawals(){const {data,error}=await supabaseClient.from("withdrawal_requests").select("*").order("created_at",{ascending:false});if(error)throw error;allWithdrawalsData=(data||[]).filter(x=>x.is_deleted!==true).map(item=>{const u=findUserForRequest(item);const details=paymentDetailsFromItemOrUser(item,u);return {...item,...details,_profile:u}});renderWithdrawals();updateGlobalStats()}
@@ -326,15 +326,26 @@ function renderWithdrawals(){
  if(!list.length){tbody.innerHTML='<tr><td colspan="5" class="empty">No withdrawals found.</td></tr>';return}
  tbody.innerHTML=list.map(x=>{
   const status=x.status||"Pending",lower=statusOf(status);
-  const method=norm(x.withdrawal_method);
+  const method=norm(x.withdrawal_method||x._profile?.payment_method);
+  
+  // MATCH USER ID TO DISPLAY USER'S ORIGINAL DASHBOARD ID (REFERRAL ID)
+  const displayId = val(x._profile?.referral_id, x.referral_id, x.user_referral_id, x.user_id, x.profile_id);
+  const displayName = val(x.full_name, x.name, x._profile?.full_name, "User");
+  const displayEmail = val(x.email, x._profile?.email, "No email");
+
   const upi=val(x.upi_id);
   const holder=val(x.account_holder_name);
   const bank=val(x.bank_name);
   const acc=val(x.account_number);
   const ifsc=val(x.ifsc_code);
   const isUPI=method.includes("upi")||!!upi;
+
   return `<tr>
-   <td><b>${escapeHtml(x.full_name||x.name||x._profile?.full_name||"User")}</b><br><span class="small">${escapeHtml(x.email||x._profile?.email||"No email")}</span><br><span class="small"><b>User ID:</b> ${escapeHtml(x.user_id||x.profile_id||x._profile?.id||"N/A")}</span><br><span class="small"><b>Referral:</b> ${escapeHtml(x.referral_id||x._profile?.referral_id||"N/A")}</span></td>
+   <td>
+     <b>${escapeHtml(displayName)}</b><br>
+     <span class="small">${escapeHtml(displayEmail)}</span><br>
+     <span class="small"><b>User ID:</b> ${escapeHtml(displayId)}</span>
+   </td>
    <td><b>₹${escapeHtml(x.amount||0)}</b></td>
    <td>
     <div class="withdrawal-details">
