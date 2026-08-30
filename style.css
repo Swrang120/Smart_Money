@@ -612,3 +612,33 @@ body {
 @media (min-width: 1024px) {
   .package-container { grid-template-columns: repeat(3, 1fr); max-width: 1100px; }
 }
+.id-value{
+color:#7c3aed;
+font-size:15px;
+font-weight:800;
+letter-spacing:.3px;
+cursor:pointer;
+display:inline-flex;
+align-items:center;
+gap:7px;
+width:max-content;
+padding:6px 10px;
+border-radius:8px;
+background:#f5f3ff;
+transition:.2s;
+user-select:none;
+}
+
+.id-value:hover{
+background:#ede9fe;
+transform:scale(1.02);
+}
+
+.id-value:active{
+transform:scale(.98);
+}
+
+.id-copy-icon{
+font-size:13px;
+opacity:.7;
+}
