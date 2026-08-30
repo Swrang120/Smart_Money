@@ -252,13 +252,18 @@ function escapeHtml(v){return v===null||v===undefined?"":String(v).replace(/&/g,
 function val(...a){return a.find(x=>x!==undefined&&x!==null&&String(x)!=="")||""}
 function norm(v){return String(v||"").trim().toLowerCase()}
 function statusOf(v){return norm(v||"pending")}
-function paymentDetailsFromUser(u){return {
-  upi_id:val(u.upi_id,u.upi,u.upi_code,u.upi_address),
-  account_holder_name:val(u.account_holder_name,u.account_holder,u.account_name,u.bank_account_holder),
-  bank_name:val(u.bank_name,u.bank),
-  account_number:val(u.account_number,u.bank_account_number,u.account_no),
-  ifsc_code:val(u.ifsc_code,u.ifsc,u.bank_ifsc)
-}}
+
+// Improved function to fetch bank/UPI details from withdrawal item or linked user profile
+function paymentDetailsFromItemOrUser(item, u) {
+  return {
+    upi_id: val(item.upi_id, item.upi, item.upi_code, item.upi_address, u?.upi_id, u?.upi, u?.upi_code, u?.upi_address),
+    account_holder_name: val(item.account_holder_name, item.account_holder, item.account_name, item.bank_account_holder, u?.account_holder_name, u?.account_holder, u?.account_name, u?.bank_account_holder),
+    bank_name: val(item.bank_name, item.bank, u?.bank_name, u?.bank),
+    account_number: val(item.account_number, item.bank_account_number, item.account_no, u?.account_number, u?.bank_account_number, u?.account_no),
+    ifsc_code: val(item.ifsc_code, item.ifsc, item.bank_ifsc, u?.ifsc_code, u?.ifsc, u?.bank_ifsc),
+    withdrawal_method: val(item.withdrawal_method, item.payment_method, item.method, u?.payment_method)
+  }
+}
 
 document.addEventListener("DOMContentLoaded",async()=>{
     const {data:{session}}=await supabaseClient.auth.getSession();
@@ -310,10 +315,45 @@ function findUserForRequest(item){
  const ref=norm(item.referral_id,item.user_referral_id);
  return allUsersData.find(u=>(id&&(String(u.id)===String(id)||String(u.user_id||"")===String(id)))||(email&&norm(u.email)===email)||(ref&&norm(u.referral_id)===ref))||null
 }
-function mergedWithdrawal(item){const u=findUserForRequest(item),p=u?paymentDetailsFromUser(u):{};return {...p,...u,...item,_profile:u}}
-async function loadWithdrawals(){const {data,error}=await supabaseClient.from("withdrawal_requests").select("*").order("created_at",{ascending:false});if(error)throw error;allWithdrawalsData=(data||[]).filter(x=>x.is_deleted!==true).map(mergedWithdrawal);renderWithdrawals();updateGlobalStats()}
+
+async function loadWithdrawals(){const {data,error}=await supabaseClient.from("withdrawal_requests").select("*").order("created_at",{ascending:false});if(error)throw error;allWithdrawalsData=(data||[]).filter(x=>x.is_deleted!==true).map(item=>{const u=findUserForRequest(item);const details=paymentDetailsFromItemOrUser(item,u);return {...item,...details,_profile:u}});renderWithdrawals();updateGlobalStats()}
+
 function switchWithdrawalTab(tab,btn){currentWithdrawalTab=tab;btn.parentElement.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");renderWithdrawals()}
-function renderWithdrawals(){const tbody=document.getElementById("withdrawalTableBody");let list=currentWithdrawalTab==="all"?allWithdrawalsData:allWithdrawalsData.filter(x=>statusOf(x.status||"pending")===currentWithdrawalTab);if(!list.length){tbody.innerHTML='<tr><td colspan="5" class="empty">No withdrawals found.</td></tr>';return}tbody.innerHTML=list.map(x=>{const status=x.status||"Pending",lower=statusOf(status),method=norm(x.withdrawal_method,x.payment_method,x.method,x.withdraw_method),upi=val(x.upi_id,x.upi,x.upi_code,x.upi_address,x.upi_number),holder=val(x.account_holder_name,x.account_holder,x.account_name,x.bank_account_holder),bank=val(x.bank_name,x.bank),acc=val(x.account_number,x.bank_account_number,x.account_no),ifsc=val(x.ifsc_code,x.ifsc,x.bank_ifsc),isUPI=method.includes("upi")||!!upi;return `<tr><td><b>${escapeHtml(x.full_name||x.name||"User")}</b><br><span class="small">${escapeHtml(x.email||"No email")}</span><br><span class="small"><b>User ID:</b> ${escapeHtml(x.user_id||x.profile_id||x._profile?.id||"N/A")}</span><br><span class="small"><b>Referral:</b> ${escapeHtml(x.referral_id||x._profile?.referral_id||"N/A")}</span></td><td><b>₹${escapeHtml(x.amount||0)}</b></td><td><div class="withdrawal-details"><span class="withdrawal-type ${isUPI?"upi-type":"bank-type"}">${isUPI?"📱 UPI PAYMENT":"🏦 BANK ACCOUNT"}</span><br>${isUPI?`<span class="small">UPI ID</span><br><b>${escapeHtml(upi||"Not available")}</b>`:`<span class="small">Account Holder</span><br><b>${escapeHtml(holder||"Not available")}</b><br><span class="small">Bank Name</span><br><b>${escapeHtml(bank||"Not available")}</b><br><span class="small">Account Number</span><br><b>${escapeHtml(acc||"Not available")}</b><br><span class="small">IFSC Code</span><br><b>${escapeHtml(ifsc||"Not available")}</b>`}</div></td><td><span class="badge badge-${lower}">${escapeHtml(status)}</span></td><td>${lower==="pending"?`<button class="btn btn-approve" onclick="updateWithdrawal('${x.id}','Approved')">Approve</button><button class="btn btn-reject" onclick="updateWithdrawal('${x.id}','Rejected')">Reject</button>`:""}<button class="btn btn-delete" onclick="softDeleteRecord('${x.id}','withdrawal_requests')">Delete</button></td></tr>`}).join("")}
+
+function renderWithdrawals(){
+ const tbody=document.getElementById("withdrawalTableBody");
+ let list=currentWithdrawalTab==="all"?allWithdrawalsData:allWithdrawalsData.filter(x=>statusOf(x.status||"pending")===currentWithdrawalTab);
+ if(!list.length){tbody.innerHTML='<tr><td colspan="5" class="empty">No withdrawals found.</td></tr>';return}
+ tbody.innerHTML=list.map(x=>{
+  const status=x.status||"Pending",lower=statusOf(status);
+  const method=norm(x.withdrawal_method);
+  const upi=val(x.upi_id);
+  const holder=val(x.account_holder_name);
+  const bank=val(x.bank_name);
+  const acc=val(x.account_number);
+  const ifsc=val(x.ifsc_code);
+  const isUPI=method.includes("upi")||!!upi;
+  return `<tr>
+   <td><b>${escapeHtml(x.full_name||x.name||x._profile?.full_name||"User")}</b><br><span class="small">${escapeHtml(x.email||x._profile?.email||"No email")}</span><br><span class="small"><b>User ID:</b> ${escapeHtml(x.user_id||x.profile_id||x._profile?.id||"N/A")}</span><br><span class="small"><b>Referral:</b> ${escapeHtml(x.referral_id||x._profile?.referral_id||"N/A")}</span></td>
+   <td><b>₹${escapeHtml(x.amount||0)}</b></td>
+   <td>
+    <div class="withdrawal-details">
+     <span class="withdrawal-type ${isUPI?"upi-type":"bank-type"}">${isUPI?"📱 UPI PAYMENT":"🏦 BANK ACCOUNT"}</span><br>
+     ${isUPI?
+      `<span class="small">UPI ID</span><br><b>${escapeHtml(upi||"Not available")}</b>`:
+      `<span class="small">Account Holder</span><br><b>${escapeHtml(holder||"Not available")}</b><br><span class="small">Bank Name</span><br><b>${escapeHtml(bank||"Not available")}</b><br><span class="small">Account Number</span><br><b>${escapeHtml(acc||"Not available")}</b><br><span class="small">IFSC Code</span><br><b>${escapeHtml(ifsc||"Not available")}</b>`
+     }
+    </div>
+   </td>
+   <td><span class="badge badge-${lower}">${escapeHtml(status)}</span></td>
+   <td>
+    ${lower==="pending"?`<button class="btn btn-approve" onclick="updateWithdrawal('${x.id}','Approved')">Approve</button><button class="btn btn-reject" onclick="updateWithdrawal('${x.id}','Rejected')">Reject</button>`:""}
+    <button class="btn btn-delete" onclick="softDeleteRecord('${x.id}','withdrawal_requests')">Delete</button>
+   </td>
+  </tr>`
+ }).join("")
+}
+
 async function updateWithdrawal(id,status){if(!confirm(`Are you sure to ${status} this withdrawal?`))return;const {error}=await supabaseClient.from("withdrawal_requests").update({status}).eq("id",id);if(error){alert(error.message);return}await refreshAllData()}
 
 async function loadUsers(){const tbody=document.getElementById("usersTableBody");const {data,error}=await supabaseClient.from("profiles").select("*").order("created_at",{ascending:false});if(error){tbody.innerHTML=`<tr><td colspan="6">${escapeHtml(error.message)}</td></tr>`;return}allUsersData=data||[];renderUsers()}
@@ -326,7 +366,7 @@ function showReferralMembersById(id){const u=allUsersData.find(x=>String(x.id)==
 function showReferralMembers(referralId,userName){const modal=document.getElementById("referralModal"),title=document.getElementById("referralModalTitle"),content=document.getElementById("referralMembersContent");title.textContent=userName+" - Direct Members";const members=allUsersData.filter(x=>x.is_deleted!==true&&x.referred_by===referralId);content.innerHTML=!members.length?'<div class="empty">No members joined with this referral.</div>':`<div class="table-box"><table><thead><tr><th>Name</th><th>Email</th><th>Package</th><th>Joined</th></tr></thead><tbody>${members.map(m=>`<tr><td>${escapeHtml(m.full_name||"User")}</td><td>${escapeHtml(m.email||"")}</td><td>${escapeHtml(m.package_name||"Free")}</td><td>${m.created_at?escapeHtml(new Date(m.created_at).toLocaleString()):"N/A"}</td></tr>`).join("")}</tbody></table></div>`;modal.classList.add("show")}
 function closeReferralModal(){document.getElementById("referralModal").classList.remove("show")}
 
-function openPaymentDetailsModal(id){const u=allUsersData.find(x=>String(x.id)===String(id));if(!u)return;currentEditUser=u;const p=paymentDetailsFromUser(u);document.getElementById("paymentDetailsModalTitle").textContent=`Edit Bank / UPI - ${u.full_name||"User"}`;document.getElementById("paymentDetailsContent").innerHTML=`
+function openPaymentDetailsModal(id){const u=allUsersData.find(x=>String(x.id)===String(id));if(!u)return;currentEditUser=u;const p={upi_id:val(u.upi_id,u.upi),account_holder_name:val(u.account_holder_name,u.account_holder),bank_name:val(u.bank_name,u.bank),account_number:val(u.account_number,u.account_no),ifsc_code:val(u.ifsc_code,u.ifsc)};document.getElementById("paymentDetailsModalTitle").textContent=`Edit Bank / UPI - ${u.full_name||"User"}`;document.getElementById("paymentDetailsContent").innerHTML=`
 <div class="info-card"><b>User:</b> ${escapeHtml(u.full_name||"User")}<br><b>Referral ID:</b> ${escapeHtml(u.referral_id||"N/A")}<br><b>Email:</b> ${escapeHtml(u.email||"N/A")}<br><b>User ID:</b> ${escapeHtml(u.id||"N/A")}</div>
 <div class="edit-grid">
 <div class="full"><label>Payment Method</label><select id="edit_payment_method"><option value="upi">UPI</option><option value="bank">Bank Account</option></select></div>
@@ -350,7 +390,7 @@ async function loadTrashAndHistoryData(){try{const r=await Promise.all([supabase
 function renderApprovedHistory(d){const b=document.getElementById("approvedHistoryList");b.innerHTML=d.length?d.slice(0,20).map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||"User")}</b><br>₹${escapeHtml(x.amount||0)}<br><span class="small">${escapeHtml(x.package_name||"")}</span></div>`).join(""):"No approved history."}
 function renderDeletedUsers(d){const b=document.getElementById("deletedUsersList");b.innerHTML=d.length?d.map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||"User")}</b><br><button class="btn btn-restore" onclick="restoreRecord('${x.id}','profiles')">Restore</button><button class="btn btn-danger" onclick="permanentDeleteRecord('${x.id}','profiles')">Delete Forever</button></div>`).join(""):"No deleted users."}
 function renderDeletedPayments(d){const b=document.getElementById("deletedPaymentsList");b.innerHTML=d.length?d.map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||"User")}</b><br>₹${escapeHtml(x.amount||0)}<br><button class="btn btn-restore" onclick="restoreRecord('${x.id}','payment_requests')">Restore</button><button class="btn btn-danger" onclick="permanentDeleteRecord('${x.id}','payment_requests')">Delete Forever</button></div>`).join(""):"No deleted payments."}
-function renderDeletedWithdrawals(d){const b=document.getElementById("deletedWithdrawalsList");b.innerHTML=d.length?d.map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||x.name||"User")}</b><br>₹${escapeHtml(x.amount||0)}<br><span class="small">${x.upi_id||x.upi||x.upi_code?"📱 UPI: "+escapeHtml(val(x.upi_id,x.upi,x.upi_code)):"🏦 Bank: "+escapeHtml(x.bank_name||"Bank Account")}</span><br><button class="btn btn-restore" onclick="restoreRecord('${x.id}','withdrawal_requests')">Restore</button><button class="btn btn-danger" onclick="permanentDeleteRecord('${x.id}','withdrawal_requests')">Delete Forever</button></div>`).join(""):"No deleted withdrawals."}
+function renderDeletedWithdrawals(d){const b=document.getElementById("deletedWithdrawalsList");b.innerHTML=d.length?d.map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||x.name||"User")}</b><br>₹${escapeHtml(x.amount||0)}<br><button class="btn btn-restore" onclick="restoreRecord('${x.id}','withdrawal_requests')">Restore</button><button class="btn btn-danger" onclick="permanentDeleteRecord('${x.id}','withdrawal_requests')">Delete Forever</button></div>`).join(""):"No deleted withdrawals."}
 
 // GSAP Lamp Draggable Script
 gsap.registerPlugin(Draggable);
