@@ -253,14 +253,31 @@ function val(...a){return a.find(x=>x!==undefined&&x!==null&&String(x)!=="")||""
 function norm(v){return String(v||"").trim().toLowerCase()}
 function statusOf(v){return norm(v||"pending")}
 
+function findUserForRequest(item) {
+  const itemId = val(item.user_id, item.profile_id, item.user_uuid, item.auth_user_id, item.id);
+  const itemEmail = norm(item.email);
+  const itemRef = norm(item.referral_id, item.user_referral_id);
+
+  return allUsersData.find(u => {
+    const uId = String(u.id || "");
+    const uAuthId = String(u.auth_user_id || u.user_id || "");
+    const uEmail = norm(u.email);
+    const uRef = norm(u.referral_id);
+
+    return (itemId && (uId === String(itemId) || uAuthId === String(itemId))) ||
+           (itemEmail && uEmail === itemEmail) ||
+           (itemRef && uRef === itemRef);
+  }) || null;
+}
+
 function paymentDetailsFromItemOrUser(item, u) {
   return {
-    upi_id: val(item.upi_id, item.upi, item.upi_code, item.upi_address, u?.upi_id, u?.upi, u?.upi_code, u?.upi_address),
-    account_holder_name: val(item.account_holder_name, item.account_holder, item.account_name, item.bank_account_holder, u?.account_holder_name, u?.account_holder, u?.account_name, u?.bank_account_holder),
-    bank_name: val(item.bank_name, item.bank, u?.bank_name, u?.bank),
-    account_number: val(item.account_number, item.bank_account_number, item.account_no, u?.account_number, u?.bank_account_number, u?.account_no),
-    ifsc_code: val(item.ifsc_code, item.ifsc, item.bank_ifsc, u?.ifsc_code, u?.ifsc, u?.bank_ifsc),
-    withdrawal_method: val(item.withdrawal_method, item.payment_method, item.method, u?.payment_method)
+    upi_id: val(u?.upi_id, u?.upi, item.upi_id, item.upi, item.upi_code, item.upi_address),
+    account_holder_name: val(u?.account_holder_name, u?.account_holder, item.account_holder_name, item.account_holder, item.account_name, item.bank_account_holder),
+    bank_name: val(u?.bank_name, u?.bank, item.bank_name),
+    account_number: val(u?.account_number, u?.bank_account_number, u?.account_no, item.account_number, item.bank_account_number, item.account_no),
+    ifsc_code: val(u?.ifsc_code, u?.ifsc, item.ifsc_code, item.ifsc, item.bank_ifsc),
+    withdrawal_method: val(u?.payment_method, item.withdrawal_method, item.payment_method, item.method)
   }
 }
 
@@ -307,13 +324,6 @@ function switchPaymentTab(tab,btn){currentPaymentTab=tab;btn.parentElement.query
 function renderPayments(){const tbody=document.getElementById("paymentTableBody");let list=currentPaymentTab==="all"?allPaymentsData:allPaymentsData.filter(x=>statusOf(x.status||"pending")===currentPaymentTab);if(!list.length){tbody.innerHTML='<tr><td colspan="5" class="empty">No records found.</td></tr>';return}tbody.innerHTML=list.map(x=>{const status=x.status||"Pending",lower=statusOf(status);return `<tr><td><b>${escapeHtml(x.full_name||"N/A")}</b><br><span class="small">${escapeHtml(x.email||"")}</span><br><span class="small">User ID: ${escapeHtml(x.user_id||x.profile_id||"N/A")}</span></td><td><b>${escapeHtml(x.package_name||"Package")}</b><br>₹${escapeHtml(x.amount||0)}</td><td>${escapeHtml(x.transaction_id||x.payment_id||"N/A")}</td><td><span class="badge badge-${lower}">${escapeHtml(status)}</span></td><td>${lower==="pending"?`<button class="btn btn-approve" onclick="approvePayment('${x.id}')">Approve</button><button class="btn btn-reject" onclick="rejectPayment('${x.id}')">Reject</button>`:""}<button class="btn btn-delete" onclick="softDeleteRecord('${x.id}','payment_requests')">Delete</button></td></tr>`}).join("")}
 async function approvePayment(id){if(!confirm("Approve this payment?"))return;const {error}=await supabaseClient.from("payment_requests").update({status:"Approved"}).eq("id",id);if(error){alert("Approval Error: "+error.message);return}await refreshAllData();alert("Payment approved successfully!")}
 async function rejectPayment(id){if(!confirm("Reject this payment?"))return;const {error}=await supabaseClient.from("payment_requests").update({status:"Rejected"}).eq("id",id);if(error){alert(error.message);return}await refreshAllData()}
-
-function findUserForRequest(item){
- const id=val(item.user_id,item.profile_id,item.user_uuid,item.auth_user_id);
- const email=norm(item.email);
- const ref=norm(item.referral_id,item.user_referral_id);
- return allUsersData.find(u=>(id&&(String(u.id)===String(id) || String(u.user_id||"")===String(id)))||(email&&norm(u.email)===email)||(ref&&norm(u.referral_id)===ref))||null
-}
 
 async function loadWithdrawals(){const {data,error}=await supabaseClient.from("withdrawal_requests").select("*").order("created_at",{ascending:false});if(error)throw error;allWithdrawalsData=(data||[]).filter(x=>x.is_deleted!==true).map(item=>{const u=findUserForRequest(item);const details=paymentDetailsFromItemOrUser(item,u);return {...item,...details,_profile:u}});renderWithdrawals();updateGlobalStats()}
 
@@ -399,9 +409,14 @@ async function savePaymentDetails(){
     };
     if(!confirm("Save and update this user's payment details?"))return;
     try{
+        // Update profiles table
         const {error}=await supabaseClient.from("profiles").update(payload).eq("id",currentEditUser.id);
         if(error)throw error;
-        alert("Bank / UPI details updated successfully!");
+
+        // Also update any pending withdrawal requests for this user so it reflects immediately everywhere
+        await supabaseClient.from("withdrawal_requests").update(payload).eq("user_id", currentEditUser.id);
+
+        alert("Bank / UPI details updated successfully and synced with user dashboard!");
         closePaymentDetailsModal();
         await refreshAllData();
     }catch(e){
@@ -419,7 +434,7 @@ async function permanentDeleteRecord(id,table){if(!confirm("WARNING: This will p
 async function loadTrashAndHistoryData(){try{const r=await Promise.all([supabaseClient.from("payment_requests").select("*").eq("status","Approved").order("created_at",{ascending:false}),supabaseClient.from("profiles").select("*").eq("is_deleted",true),supabaseClient.from("payment_requests").select("*").eq("is_deleted",true),supabaseClient.from("withdrawal_requests").select("*").eq("is_deleted",true)]);renderApprovedHistory(r[0].data||[]);renderDeletedUsers(r[1].data||[]);renderDeletedPayments(r[2].data||[]);renderDeletedWithdrawals(r[3].data||[])}catch(e){console.error(e)}}
 function renderApprovedHistory(d){const b=document.getElementById("approvedHistoryList");b.innerHTML=d.length?d.slice(0,20).map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||"User")}</b><br>₹${escapeHtml(x.amount||0)}<br><span class="small">${escapeHtml(x.package_name||"")}</span></div>`).join(""):"No approved history."}
 function renderDeletedUsers(d){const b=document.getElementById("deletedUsersList");b.innerHTML=d.length?d.map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||"User")}</b><br><button class="btn btn-restore" onclick="restoreRecord('${x.id}','profiles')">Restore</button><button class="btn btn-danger" onclick="permanentDeleteRecord('${x.id}','profiles')">Delete Forever</button></div>`).join(""):"No deleted users."}
-function renderDeletedPayments(d){const b=document.getElementById("deletedPaymentsList");b.innerHTML=d.length?d.map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||"User")}</b><br>₹${escapeHtml(x.amount||0)}<br><button class="btn btn-restore" onclick="restoreRecord('${x.id}','payment_requests')">Restore</button><button class="btn btn-danger" onclick="permanentDeleteRecord('${x.id}','payment_requests')">Delete Forever</button></div>`).join(""):"No deleted payments."}
+function renderDeletedPayments(d){const b=document.getElementById("deletedPaymentsList");b.innerHTML=d.length?d.map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||"User")}</b><br>₹${escapeHtml(x.amount||0)}<br><button class="btn btn-restore" onclick="restoreRecord('${x.id}','payment_requests')">Restore</button><button class="btn btn-danger" onclick="permanentDeleteRecord('${x.id}','payment_requests')">Delete Forever}</div>`).join(""):"No deleted payments."}
 function renderDeletedWithdrawals(d){const b=document.getElementById("deletedWithdrawalsList");b.innerHTML=d.length?d.map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||x.name||"User")}</b><br>₹${escapeHtml(x.amount||0)}<br><button class="btn btn-restore" onclick="restoreRecord('${x.id}','withdrawal_requests')">Restore</button><button class="btn btn-danger" onclick="permanentDeleteRecord('${x.id}','withdrawal_requests')">Delete Forever</button></div>`).join(""):"No deleted withdrawals."}
 
 // GSAP Lamp Draggable Script
