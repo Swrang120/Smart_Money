@@ -18,6 +18,9 @@ href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;80
 rel="stylesheet"
 >
 
+<!-- EmailJS Library -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
 <style>
 
 *{
@@ -392,6 +395,11 @@ p{
 
 <script>
 
+/* =========================================
+   EMAILJS INITIALIZATION
+========================================= */
+emailjs.init("nD7bbMhcvotO19ODK");
+
 
 /* =========================================
    SUPABASE CONFIG
@@ -542,6 +550,19 @@ async function sendResetLink(){
 
 
     /* =====================================
+       TRIGGER EMAILJS CUSTOM TEMPLATE
+    ===================================== */
+
+    const templateParams = {
+      to_name: email.split('@')[0],
+      to_email: email,
+      reset_link: redirectUrl
+    };
+
+    await emailjs.send("service_a678nhs", "template_eh1e4fr", templateParams);
+
+
+    /* =====================================
        SUCCESS
     ===================================== */
 
@@ -566,7 +587,7 @@ async function sendResetLink(){
           "Send Reset Link";
 
       },
-      5000
+      5005
     );
 
 
