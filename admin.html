@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Smart Admin Panel</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- EmailJS SDK -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <!-- GSAP for Lamp Pull Cord Interaction -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
@@ -155,10 +157,33 @@ button:hover{opacity:.88}
 .history-item{background:rgba(255,255,255,.04);padding:12px;border-radius:8px;margin-bottom:8px}.referral-count{display:inline-block;margin-top:6px;padding:5px 8px;background:rgba(99,102,241,.15);color:#a5b4fc;border-radius:6px;font-size:11px;font-weight:bold}
 .modal{position:fixed;inset:0;z-index:3000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.7)}.modal.show{display:flex}.modal-box{width:min(900px,100%);max-height:88vh;overflow-y:auto;background:#111827;border:1px solid var(--border);border-radius:16px;padding:20px}.modal-header{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:15px}.close-btn{background:#1e293b;color:white;border:0;width:35px;height:35px;border-radius:8px;cursor:pointer}.empty{text-align:center;color:var(--muted);padding:25px}.status-preview{width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin:8px 0}
 .withdrawal-details{min-width:250px;line-height:1.7}.withdrawal-details b{color:#e2e8f0}.withdrawal-type{display:inline-block;padding:4px 8px;border-radius:6px;margin-bottom:5px;font-size:11px;font-weight:bold}.upi-type{background:rgba(99,102,241,.18);color:#a5b4fc}.bank-type{background:rgba(34,197,94,.12);color:#4ade80}
-.user-search-box{display:flex;gap:10px;flex-wrap:wrap;background:var(--card2);padding:14px;border:1px solid var(--border);border-radius:12px;margin-bottom:15px}.user-search-box input{flex:1;min-width:220px;background:#0f172a;color:white;border:1px solid var(--border);padding:11px;border-radius:8px}.edit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.edit-grid label{font-size:12px;color:#cbd5e1}.edit-grid .full{grid-column:1/-1}.info-card{background:#0f172a;border:1px solid var(--border);padding:12px;border-radius:10px;margin-bottom:12px}.search-note{color:var(--muted);font-size:12px;margin:0 0 8px}
+.user-search-box{display:flex;gap:10px;flex-wrap:wrap;background:var(--card2);padding:14px;border:1px solid var(--border);border-radius:12px;margin-bottom:15px}.user-search-box input{flex:1;min-width:220px;background:#0f172a;color:white;border:1px solid var(--border);padding:11px;border-radius:8px}.edit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.edit-grid label{font-size:14px;font-weight:600;color:#e2e8f0;display:block;margin-bottom:5px}.edit-grid .full{grid-column:1/-1}
 
-.tab-pill-box {display: flex; gap: 8px; margin-bottom: 12px;}
-.tab-pill {background: #1e293b; color: var(--muted); border: 0; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;}
+/* STYLISH MODAL INPUT & TEXT */
+.edit-grid input {
+    width: 100%;
+    padding: 14px 16px;
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+.edit-grid input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25), inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.info-card{background:#0f172a;border:1px solid var(--border);padding:14px;border-radius:12px;margin-bottom:15px;font-size:14px;line-height:1.6}
+.search-note{color:var(--muted);font-size:12px;margin:0 0 8px}
+
+.tab-pill-box {display: flex; gap: 8px; margin-bottom: 15px;}
+.tab-pill {background: #1e293b; color: var(--muted); border: 0; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold;}
 .tab-pill.active {background: var(--accent); color: white;}
 
 @media(max-width:768px){
@@ -248,10 +273,21 @@ const SUPABASE_URL="https://rvprrulkjegvicbnjuft.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 
+// EmailJS Configuration
+const EMAILJS_PUBLIC_KEY = "FxcimUvl0-ZxAauRx";
+const EMAILJS_PAYMENT_SERVICE = "service_4q2gu5k";
+const EMAILJS_PAYMENT_TEMPLATE = "template_5iadm34";
+
+const EMAILJS_WITHDRAWAL_SERVICE = "service_qsy07qr";
+const EMAILJS_WITHDRAWAL_TEMPLATE = "template_mf8enck";
+
+// Initialize EmailJS
+emailjs.init(EMAILJS_PUBLIC_KEY);
+
 let allPaymentsData=[],allWithdrawalsData=[],allUsersData=[];
 let currentPaymentTab="pending",currentWithdrawalTab="pending",currentUserSearch="";
 let currentEditUser=null;
-let editModalTab="upi"; // 'upi' or 'bank'
+let editModalTab="bank"; // 'bank' or 'upi'
 
 function escapeHtml(v){return v===null||v===undefined?"":String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 function val(...a){return a.find(x=>x!==undefined&&x!==null&&String(x)!=="")||""}
@@ -327,7 +363,34 @@ async function deleteStatus(id){if(!confirm("Delete this status?"))return;const 
 async function loadPaymentRequests(){const {data,error}=await supabaseClient.from("payment_requests").select("*").order("created_at",{ascending:false});if(error)throw error;allPaymentsData=(data||[]).filter(x=>x.is_deleted!==true);renderPayments();updateGlobalStats()}
 function switchPaymentTab(tab,btn){currentPaymentTab=tab;btn.parentElement.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");renderPayments()}
 function renderPayments(){const tbody=document.getElementById("paymentTableBody");let list=currentPaymentTab==="all"?allPaymentsData:allPaymentsData.filter(x=>statusOf(x.status||"pending")===currentPaymentTab);if(!list.length){tbody.innerHTML='<tr><td colspan="5" class="empty">No records found.</td></tr>';return}tbody.innerHTML=list.map(x=>{const status=x.status||"Pending",lower=statusOf(status);return `<tr><td><b>${escapeHtml(x.full_name||"N/A")}</b><br><span class="small">${escapeHtml(x.email||"")}</span><br><span class="small">User ID: ${escapeHtml(x.user_id||x.profile_id||"N/A")}</span></td><td><b>${escapeHtml(x.package_name||"Package")}</b><br>₹${escapeHtml(x.amount||0)}</td><td>${escapeHtml(x.transaction_id||x.payment_id||"N/A")}</td><td><span class="badge badge-${lower}">${escapeHtml(status)}</span></td><td>${lower==="pending"?`<button class="btn btn-approve" onclick="approvePayment('${x.id}')">Approve</button><button class="btn btn-reject" onclick="rejectPayment('${x.id}')">Reject</button>`:""}<button class="btn btn-delete" onclick="softDeleteRecord('${x.id}','payment_requests')">Delete</button></td></tr>`}).join("")}
-async function approvePayment(id){if(!confirm("Approve this payment?"))return;const {error}=await supabaseClient.from("payment_requests").update({status:"Approved"}).eq("id",id);if(error){alert("Approval Error: "+error.message);return}await refreshAllData();alert("Payment approved successfully!")}
+
+async function approvePayment(id){
+    if(!confirm("Approve this payment?"))return;
+    const payment = allPaymentsData.find(p => p.id === id);
+    
+    const {error}=await supabaseClient.from("payment_requests").update({status:"Approved"}).eq("id",id);
+    if(error){alert("Approval Error: "+error.message);return}
+
+    // Send Email via EmailJS
+    if(payment && payment.email){
+        try {
+            await emailjs.send(EMAILJS_PAYMENT_SERVICE, EMAILJS_PAYMENT_TEMPLATE, {
+                to_email: payment.email,
+                to_name: payment.full_name || "User",
+                package_name: payment.package_name || "Package",
+                amount: payment.amount || 0,
+                transaction_id: payment.transaction_id || payment.payment_id || "N/A"
+            });
+            console.log("Payment approval email sent successfully!");
+        } catch(mailErr) {
+            console.error("Email send failed:", mailErr);
+        }
+    }
+
+    await refreshAllData();
+    alert("Payment approved and email sent successfully!");
+}
+
 async function rejectPayment(id){if(!confirm("Reject this payment?"))return;const {error}=await supabaseClient.from("payment_requests").update({status:"Rejected"}).eq("id",id);if(error){alert(error.message);return}await refreshAllData()}
 
 async function loadWithdrawals(){const {data,error}=await supabaseClient.from("withdrawal_requests").select("*").order("created_at",{ascending:false});if(error)throw error;allWithdrawalsData=(data||[]).filter(x=>x.is_deleted!==true).map(item=>{const u=findUserForRequest(item);const details=paymentDetailsFromItemOrUser(item,u);return {...item,...details,_profile:u}});renderWithdrawals();updateGlobalStats()}
@@ -351,7 +414,6 @@ function renderWithdrawals(){
   const acc=val(x.account_number);
   const ifsc=val(x.ifsc_code);
   
-  // Strict condition: Show UPI ONLY if upi_id is present and non-empty. Otherwise show Bank Account.
   const hasUpi = !!upi;
 
   return `<tr>
@@ -379,7 +441,32 @@ function renderWithdrawals(){
  }).join("")
 }
 
-async function updateWithdrawal(id,status){if(!confirm(`Are you sure to ${status} this withdrawal?`))return;const {error}=await supabaseClient.from("withdrawal_requests").update({status}).eq("id",id);if(error){alert(error.message);return}await refreshAllData()}
+async function updateWithdrawal(id,status){
+    if(!confirm(`Are you sure to ${status} this withdrawal?`))return;
+    const {error}=await supabaseClient.from("withdrawal_requests").update({status}).eq("id",id);
+    if(error){alert(error.message);return}
+
+    if(status === "Approved") {
+        const withdrawal = allWithdrawalsData.find(w => w.id === id);
+        const userEmail = val(withdrawal?.email, withdrawal?._profile?.email);
+        const userName = val(withdrawal?.full_name, withdrawal?.name, withdrawal?._profile?.full_name, "User");
+        
+        if(userEmail){
+            try {
+                await emailjs.send(EMAILJS_WITHDRAWAL_SERVICE, EMAILJS_WITHDRAWAL_TEMPLATE, {
+                    to_email: userEmail,
+                    to_name: userName,
+                    amount: withdrawal?.amount || 0
+                });
+                console.log("Withdrawal success email sent!");
+            } catch(mailErr) {
+                console.error("Withdrawal email failed:", mailErr);
+            }
+        }
+    }
+
+    await refreshAllData();
+}
 
 async function loadUsers(){const tbody=document.getElementById("usersTableBody");const {data,error}=await supabaseClient.from("profiles").select("*").order("created_at",{ascending:false});if(error){tbody.innerHTML=`<tr><td colspan="6">${escapeHtml(error.message)}</td></tr>`;return}allUsersData=data||[];renderUsers()}
 function renderUsers(){const tbody=document.getElementById("usersTableBody");let users=allUsersData.filter(x=>x.is_deleted!==true);const q=norm(currentUserSearch);if(q)users=users.filter(u=>norm(u.referral_id).includes(q)||norm(u.email).includes(q)||norm(u.full_name).includes(q)||String(u.id||"").toLowerCase().includes(q));if(!users.length){tbody.innerHTML=`<tr><td colspan="6" class="empty">${q?"No matching user found.":"No users found."}</td></tr>`;return}tbody.innerHTML=users.map(u=>{const active=u.is_active!==false,members=allUsersData.filter(m=>m.is_deleted!==true&&m.referred_by===u.referral_id),master=u.referral_id==="SM-smart87046";return `<tr><td><b>${escapeHtml(u.full_name||"User")}</b>${master?" 👑":""}<br><span class="small">${escapeHtml(u.email||"")}</span><br><span class="small">ID: ${escapeHtml(u.id||"")}</span></td><td>${escapeHtml(u.referral_id||"N/A")}</td><td>${escapeHtml(u.package_name||"Free")}<br>₹${escapeHtml(u.balance||0)}</td><td><span class="referral-count">👥 ${members.length} Direct Join</span><br><button class="btn btn-info" onclick="showReferralMembersById('${u.id}')">View Members</button></td><td><span class="badge" style="background:${active?'rgba(34,197,94,.15)':'rgba(239,68,68,.15)'};color:${active?'#4ade80':'#f87171'}">${active?"Active":"Blocked"}</span></td><td><button class="btn btn-info" onclick="openPaymentDetailsModal('${u.id}')">Edit Bank / UPI</button>${!master?`<button class="btn ${active?'btn-reject':'btn-approve'}" onclick="toggleUser('${u.id}',${!active})">${active?"Block":"Unblock"}</button><button class="btn btn-delete" onclick="softDeleteUser('${u.id}')">Delete</button>`:"<br>Master Admin"}</td></tr>`}).join("")}
@@ -396,10 +483,9 @@ function openPaymentDetailsModal(id){
     if(!u)return;
     currentEditUser=u;
     
-    // Determine default tab based on what exists
     const hasUpi = !!val(u.upi_id, u.upi);
     const hasBank = !!val(u.account_number, u.bank_name, u.account_holder_name);
-    editModalTab = hasUpi ? "upi" : (hasBank ? "bank" : "upi");
+    editModalTab = hasBank ? "bank" : (hasUpi ? "upi" : "bank");
 
     renderPaymentDetailsModalContent();
     document.getElementById("paymentDetailsModal").classList.add("show");
@@ -425,22 +511,22 @@ function renderPaymentDetailsModalContent(){
     <div class="info-card"><b>User:</b> ${escapeHtml(u.full_name||"User")}<br><b>Referral ID:</b> ${escapeHtml(u.referral_id||"N/A")}<br><b>Email:</b> ${escapeHtml(u.email||"N/A")}<br><b>User ID:</b> ${escapeHtml(u.id||"")}</div>
     
     <div class="tab-pill-box">
-        <button class="tab-pill ${editModalTab==='upi'?'active':''}" onclick="switchEditModalTab('upi')">📱 UPI Details</button>
         <button class="tab-pill ${editModalTab==='bank'?'active':''}" onclick="switchEditModalTab('bank')">🏦 Bank Account Details</button>
+        <button class="tab-pill ${editModalTab==='upi'?'active':''}" onclick="switchEditModalTab('upi')">📱 UPI Details</button>
     </div>
 
     <div class="edit-grid">
-    ${editModalTab==='upi'?`
-        <div class="full"><label>UPI ID</label><input id="edit_upi_id" value="${escapeHtml(p.upi_id)}" placeholder="example@upi"></div>
+    ${editModalTab==='bank'?`
+        <div class="full"><label>Account Holder Name</label><input id="edit_account_holder_name" value="${escapeHtml(p.account_holder_name)}" placeholder="Enter account holder name"></div>
+        <div><label>Account No</label><input id="edit_account_number" type="password" value="${escapeHtml(p.account_number)}" placeholder="Enter account number"></div>
+        <div><label>Confirm Account</label><input id="edit_confirm_account_number" value="${escapeHtml(p.account_number)}" placeholder="Re-enter account number"></div>
+        <div class="full"><label>IFSC No</label><input id="edit_ifsc_code" value="${escapeHtml(p.ifsc_code)}" placeholder="Enter IFSC code" style="text-transform: uppercase;"></div>
     `:`
-        <div><label>Account Holder Name</label><input id="edit_account_holder_name" value="${escapeHtml(p.account_holder_name)}"></div>
-        <div><label>Bank Name</label><input id="edit_bank_name" value="${escapeHtml(p.bank_name)}"></div>
-        <div><label>Account Number</label><input id="edit_account_number" value="${escapeHtml(p.account_number)}"></div>
-        <div><label>IFSC Code</label><input id="edit_ifsc_code" value="${escapeHtml(p.ifsc_code)}"></div>
+        <div class="full"><label>UPI ID</label><input id="edit_upi_id" value="${escapeHtml(p.upi_id)}" placeholder="example@upi"></div>
     `}
-    <div class="full" style="margin-top:10px;">
-        <button class="btn btn-primary" onclick="savePaymentDetails()">Save Payment Details</button>
-        <button class="btn btn-delete" onclick="closePaymentDetailsModal()">Cancel</button>
+    <div class="full" style="margin-top:15px;">
+        <button class="btn btn-primary" style="padding: 12px 20px; font-size: 15px;" onclick="savePaymentDetails()">Save Payment Details</button>
+        <button class="btn btn-delete" style="padding: 12px 20px; font-size: 15px;" onclick="closePaymentDetailsModal()">Cancel</button>
     </div>
     </div>`;
 }
@@ -461,16 +547,26 @@ async function savePaymentDetails(){
             ifsc_code: null
         };
     } else {
+        const holderName = document.getElementById("edit_account_holder_name").value.trim();
+        const accNo = document.getElementById("edit_account_number").value.trim();
+        const confirmAccNo = document.getElementById("edit_confirm_account_number").value.trim();
+        const ifsc = document.getElementById("edit_ifsc_code").value.trim();
+
+        if(accNo !== confirmAccNo) {
+            alert("Account Number and Confirm Account Number do not match!");
+            return;
+        }
+
         payload = {
             upi_id: null,
-            account_holder_name: document.getElementById("edit_account_holder_name").value.trim(),
-            bank_name: document.getElementById("edit_bank_name").value.trim(),
-            account_number: document.getElementById("edit_account_number").value.trim(),
-            ifsc_code: document.getElementById("edit_ifsc_code").value.trim()
+            account_holder_name: holderName,
+            bank_name: null,
+            account_number: accNo,
+            ifsc_code: ifsc
         };
     }
 
-    if(!confirm("Save and update this user's payment details? (Swapping will automatically clear out the other method)"))return;
+    if(!confirm("Save and update this user's payment details?"))return;
     try{
         const {error}=await supabaseClient.from("profiles").update(payload).eq("id",currentEditUser.id);
         if(error)throw error;
@@ -495,7 +591,7 @@ async function permanentDeleteRecord(id,table){if(!confirm("WARNING: This will p
 async function loadTrashAndHistoryData(){try{const r=await Promise.all([supabaseClient.from("payment_requests").select("*").eq("status","Approved").order("created_at",{ascending:false}),supabaseClient.from("profiles").select("*").eq("is_deleted",true),supabaseClient.from("payment_requests").select("*").eq("is_deleted",true),supabaseClient.from("withdrawal_requests").select("*").eq("is_deleted",true)]);renderApprovedHistory(r[0].data||[]);renderDeletedUsers(r[1].data||[]);renderDeletedPayments(r[2].data||[]);renderDeletedWithdrawals(r[3].data||[])}catch(e){console.error(e)}}
 function renderApprovedHistory(d){const b=document.getElementById("approvedHistoryList");b.innerHTML=d.length?d.slice(0,20).map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||"User")}</b><br>₹${escapeHtml(x.amount||0)}<br><span class="small">${escapeHtml(x.package_name||"")}</span></div>`).join(""):"No approved history."}
 function renderDeletedUsers(d){const b=document.getElementById("deletedUsersList");b.innerHTML=d.length?d.map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||"User")}</b><br><button class="btn btn-restore" onclick="restoreRecord('${x.id}','profiles')">Restore</button><button class="btn btn-danger" onclick="permanentDeleteRecord('${x.id}','profiles')">Delete Forever</button></div>`).join(""):"No deleted users."}
-function renderDeletedPayments(d){const b=document.getElementById("deletedPaymentsList");b.innerHTML=d.length?d.map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||"User")}</b><br>₹${escapeHtml(x.amount||0)}<br><button class="btn btn-restore" onclick="restoreRecord('${x.id}','payment_requests')">Restore</button><button class="btn btn-danger" onclick="permanentDeleteRecord('${x.id}','payment_requests')">Delete Forever}</div>`).join(""):"No deleted payments."}
+function renderDeletedPayments(d){const b=document.getElementById("deletedPaymentsList");b.innerHTML=d.length?d.map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||"User")}</b><br>₹${escapeHtml(x.amount||0)}<br><button class="btn btn-restore" onclick="restoreRecord('${x.id}','payment_requests')">Restore</button><button class="btn btn-danger" onclick="permanentDeleteRecord('${x.id}','payment_requests')">Delete Forever</button></div>`).join(""):"No deleted payments."}
 function renderDeletedWithdrawals(d){const b=document.getElementById("deletedWithdrawalsList");b.innerHTML=d.length?d.map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||x.name||"User")}</b><br>₹${escapeHtml(x.amount||0)}<br><button class="btn btn-restore" onclick="restoreRecord('${x.id}','withdrawal_requests')">Restore</button><button class="btn btn-danger" onclick="permanentDeleteRecord('${x.id}','withdrawal_requests')">Delete Forever</button></div>`).join(""):"No deleted withdrawals."}
 
 // GSAP Lamp Draggable Script
