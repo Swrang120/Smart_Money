@@ -1009,45 +1009,30 @@ Cancel
 
 </button>    </div>
 
-</div>    <!-- WITHDRAW -->    <div id="withdrawModal" class="modal-overlay">    <div class="modal-box">    <h3>💸 Request Withdrawal</h3>    <p      
-id="withdrawModalBalanceText"      
-style="font-size:13px;color:#475569;">    Available Balance: ₹0  </p>    <div class="amount-chips">    <div      
-class="chip"      
-onclick="setWithdrawAmount(100)">      
-₹100      
-</div>    <div      
-class="chip"      
-onclick="setWithdrawAmount(500)">      
-₹500      
-</div>    <div      
-class="chip"      
-onclick="setWithdrawAmount(1000)">      
-₹1000      
-</div>    <div      
-class="chip"      
-onclick="setWithdrawAmount(userCurrentBalance)">      
-MAX      
-</div>    </div>    <label>Enter Amount</label>  <input      
-type="number"      
-id="withdrawAmount"      
-class="input-field"      
-placeholder="Amount">
+</div>    <!-- WITHDRAW -->    <div id="withdrawModal" class="modal-overlay">    
+  <div class="modal-box">    
+    <h3>💸 Request Withdrawal</h3>    
+    <p id="withdrawModalBalanceText" style="font-size:13px;color:#475569;margin-bottom:12px;"> Available Balance: ₹0 </p>    
+    
+    <!-- WITHDRAW PAYMENT PREVIEW CONTAINER -->
+    <div id="withdrawPaymentPreview" style="background:#f8fafc;padding:14px;border-radius:14px;border:1px solid #e2e8f0;margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:800;color:#64748b;letter-spacing:0.5px;margin-bottom:4px;">PAYING TO:</div>
+      <div id="withdrawPaymentDetailsContent" style="font-size:13px;font-weight:700;color:#0f172a;">Loading payment info...</div>
+    </div>
 
-<button      
-onclick="submitWithdrawal()"      
-class="btn-action"      
-id="submitWithdrawBtn">
+    <div class="amount-chips">    
+      <div class="chip" onclick="setWithdrawAmount(100)"> ₹100 </div>    
+      <div class="chip" onclick="setWithdrawAmount(500)"> ₹500 </div>    
+      <div class="chip" onclick="setWithdrawAmount(1000)"> ₹1000 </div>    
+      <div class="chip" onclick="setWithdrawAmount(userCurrentBalance)"> MAX </div>    
+    </div>    
+    
+    <label>Enter Amount</label>  
+    <input type="number" id="withdrawAmount" class="input-field" placeholder="Amount">
 
-Submit Request
-
-</button>    <button      
-onclick="closeModal('withdrawModal')"      
-style="width:100%;border:none;background:none;padding:12px;color:#64748b;">
-
-Cancel
-
-</button>    </div>
-
+    <button onclick="submitWithdrawal()" class="btn-action" id="submitWithdrawBtn"> Submit Request </button>    
+    <button onclick="closeModal('withdrawModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;"> Cancel </button>    
+  </div>
 </div>    <script>      /* =========================================
 CONFIGURATION
 ========================================= */
@@ -1263,17 +1248,35 @@ openModal("kycModal");
 }
 
 function openWithdrawModal(){
+  closeSidebar();
+  
+  // Check if payment details are added
+  if(!hasSavedPaymentDetails()){
+    alert("⚠️ Please add your UPI ID or Bank Account details first before requesting a withdrawal!");
+    openUpiModal();
+    return;
+  }
 
-closeSidebar();
+  // Render payment details inside withdrawal modal preview
+  const previewBox = document.getElementById("withdrawPaymentDetailsContent");
+  const savedType = String(currentProfile?.payout_type || "").trim().toLowerCase();
 
-document.getElementById("withdrawAmount").value="";
+  if(savedType === "bank"){
+    const accName = currentProfile?.account_holder_name || "N/A";
+    const accNo = currentProfile?.bank_account_number || "N/A";
+    const ifsc = currentProfile?.ifsc_code || "N/A";
+    previewBox.innerHTML = `🏦 <b>Bank Account:</b> ${escapeHtml(accNo)} <br><span style="font-size:11px;color:#64748b;">Holder: ${escapeHtml(accName)} | IFSC: ${escapeHtml(ifsc)}</span>`;
+  } else {
+    const upi = currentProfile?.upi_id || "N/A";
+    previewBox.innerHTML = `⚡ <b>UPI ID:</b> <span style="color:#7c3aed;">${escapeHtml(upi)}</span>`;
+  }
 
-document.getElementById("withdrawModalBalanceText").innerText=
-"Available Balance: ₹"+
-Number(userCurrentBalance).toFixed(2);
+  document.getElementById("withdrawAmount").value="";
+  document.getElementById("withdrawModalBalanceText").innerText=
+  "Available Balance: ₹"+
+  Number(userCurrentBalance).toFixed(2);
 
-openModal("withdrawModal");
-
+  openModal("withdrawModal");
 }
 
 /* =========================================
@@ -2992,174 +2995,181 @@ SUBMIT WITHDRAWAL
 ========================================= */
 
 async function submitWithdrawal(){
+  // Strict safety check: Ensure payment details are added before allowing withdrawal request
+  if(!hasSavedPaymentDetails()){
+    alert("⚠️ Please add your payment details (UPI ID or Bank Account) before requesting a withdrawal.");
+    closeModal("withdrawModal");
+    openUpiModal();
+    return;
+  }
 
-const amount=
-Number(
-document
-.getElementById("withdrawAmount")
-.value
-);
+  const amount=
+  Number(
+  document
+  .getElementById("withdrawAmount")
+  .value
+  );
 
-const submitBtn=
-document.getElementById(
-"submitWithdrawBtn"
-);
+  const submitBtn=
+  document.getElementById(
+  "submitWithdrawBtn"
+  );
 
-const packageName=
-String(
-currentProfile?.package_name||""
-).toLowerCase();
+  const packageName=
+  String(
+  currentProfile?.package_name||""
+  ).toLowerCase();
 
-let minWithdrawLimit=200;
+  let minWithdrawLimit=200;
 
-if(
-packageName && packageName !== "none"
-){
+  if(
+  packageName && packageName !== "none"
+  ){
 
-minWithdrawLimit=100;
+  minWithdrawLimit=100;
 
-}
+  }
 
-if(
-!Number.isFinite(amount)
-||
-amount<=0
-){
+  if(
+  !Number.isFinite(amount)
+  ||
+  amount<=0
+  ){
 
-alert(
-"Please enter a valid amount."
-);
+  alert(
+  "Please enter a valid amount."
+  );
 
-return;
+  return;
 
-}
+  }
 
-if(amount<minWithdrawLimit){
+  if(amount<minWithdrawLimit){
 
-alert(
-`Minimum withdrawal limit is ₹${minWithdrawLimit}.`
-);
+  alert(
+  `Minimum withdrawal limit is ₹${minWithdrawLimit}.`
+  );
 
-return;
+  return;
 
-}
+  }
 
-if(amount>userCurrentBalance){
+  if(amount>userCurrentBalance){
 
-alert(
-"Insufficient balance."
-);
+  alert(
+  "Insufficient balance."
+  );
 
-return;
+  return;
 
-}
+  }
 
-submitBtn.disabled=true;
+  submitBtn.disabled=true;
 
-submitBtn.innerText=
-"Processing...";
+  submitBtn.innerText=
+  "Processing...";
 
-try{
+  try{
 
-/* Create withdrawal request */
+  /* Create withdrawal request */
 
-const {data:withdrawData,error:insertError}=
-await supabaseClient
-.from("withdrawal_requests")
-.insert({
+  const {data:withdrawData,error:insertError}=
+  await supabaseClient
+  .from("withdrawal_requests")
+  .insert({
 
-user_id:currentUserId,
+  user_id:currentUserId,
 
-amount:amount,
+  amount:amount,
 
-status:"pending"
+  status:"pending"
 
-})
-.select()
-.single();
+  })
+  .select()
+  .single();
 
-if(insertError){
-throw insertError;
-}
+  if(insertError){
+  throw insertError;
+  }
 
-/* Update user balance */
+  /* Update user balance */
 
-const newBalance=
-Number(userCurrentBalance)-amount;
+  const newBalance=
+  Number(userCurrentBalance)-amount;
 
-const {data:updatedProfile,error:balanceError}=
-await supabaseClient
-.from("profiles")
-.update({
+  const {data:updatedProfile,error:balanceError}=
+  await supabaseClient
+  .from("profiles")
+  .update({
 
-balance:newBalance
+  balance:newBalance
 
-})
-.eq(
-"user_id",
-currentUserId
-)
-.select()
-.single();
+  })
+  .eq(
+  "user_id",
+  currentUserId
+  )
+  .select()
+  .single();
 
-if(balanceError){
+  if(balanceError){
 
-/* Withdrawal created but balance update failed */
-console.error(
-"Balance update failed:",
-balanceError
-);
+  /* Withdrawal created but balance update failed */
+  console.error(
+  "Balance update failed:",
+  balanceError
+  );
 
-throw balanceError;
+  throw balanceError;
 
-}
+  }
 
-currentProfile={
-...currentProfile,
-...updatedProfile
-};
+  currentProfile={
+  ...currentProfile,
+  ...updatedProfile
+  };
 
-userCurrentBalance=
-Number(
-updatedProfile.balance||0
-);
+  userCurrentBalance=
+  Number(
+  updatedProfile.balance||0
+  );
 
-document.getElementById(
-"sidebarWalletBal"
-).innerText=
-"₹"+
-userCurrentBalance.toFixed(2);
+  document.getElementById(
+  "sidebarWalletBal"
+  ).innerText=
+  "₹"+
+  userCurrentBalance.toFixed(2);
 
-showToast(
-"Withdrawal request submitted successfully!"
-);
+  showToast(
+  "Withdrawal request submitted successfully!"
+  );
 
-closeModal(
-"withdrawModal"
-);
+  closeModal(
+  "withdrawModal"
+  );
 
-await loadWithdrawalHistory();
+  await loadWithdrawalHistory();
 
-}catch(error){
+  }catch(error){
 
-console.error(
-"Withdrawal error:",
-error
-);
+  console.error(
+  "Withdrawal error:",
+  error
+  );
 
-alert(
-"Withdrawal failed: "+
-error.message
-);
+  alert(
+  "Withdrawal failed: "+
+  error.message
+  );
 
-}finally{
+  }finally{
 
-submitBtn.disabled=false;
+  submitBtn.disabled=false;
 
-submitBtn.innerText=
-"Submit Request";
+  submitBtn.innerText=
+  "Submit Request";
 
-}
+  }
 
 }
 
@@ -3514,4 +3524,4 @@ showToast(
 
 </script>    </body>
 
-</html>    
+</html>
