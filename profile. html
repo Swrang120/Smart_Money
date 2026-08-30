@@ -6,7 +6,7 @@
 <title>User Profile - Smart Money</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--bg:#0b1020;--card:#121a2d;--card2:#172137;--text:#f8fafc;--muted:#94a3b8;--accent:#6366f1;--border:rgba(255,255,255,.08)}
+:root{--bg:#0b1020;--card:#121a2d;--text:#f8fafc;--muted:#94a3b8;--accent:#6366f1;--border:rgba(255,255,255,.08)}
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:20px}
 .container{max-width:600px;margin:auto}
@@ -23,7 +23,6 @@ body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text
 </style>
 </head>
 <body>
-
 <div class="container">
     <div class="card">
         <div class="profile-header">
@@ -33,18 +32,15 @@ body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text
                 <p id="userEmail">Loading...</p>
             </div>
         </div>
-        
         <div class="details-box">
             <div><b>Referral ID:</b> <span id="userReferral">...</span></div>
             <div><b>Package:</b> <span id="userPackage">...</span></div>
             <div><b>Balance:</b> ₹<span id="userBalance">0</span></div>
-            <div><b>Payment Method Added:</b> <span id="userPaymentMethod">None</span></div>
+            <div><b>Payment Method:</b> <span id="userPaymentMethod">None</span></div>
         </div>
-
         <button class="btn" onclick="window.location.href='index.html'">Back to Dashboard</button>
     </div>
 </div>
-
 <script>
 const SUPABASE_URL="https://rvprrulkjegvicbnjuft.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
@@ -52,21 +48,15 @@ const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHA
 
 async function loadUserProfile() {
     const { data: { session } } = await supabaseClient.auth.getSession();
-    if (!session) {
-        window.location.href = "login.html";
-        return;
-    }
+    if (!session) { window.location.href = "login.html"; return; }
 
     const { data, error } = await supabaseClient
         .from("profiles")
         .select("*")
-        .eq("id", session.user.id)
+        .eq("user_id", session.user.id)
         .single();
 
-    if (error || !data) {
-        console.error(error);
-        return;
-    }
+    if (error || !data) { console.error(error); return; }
 
     document.getElementById("userName").textContent = data.full_name || "User";
     document.getElementById("userEmail").textContent = data.email || session.user.email;
@@ -74,11 +64,9 @@ async function loadUserProfile() {
     document.getElementById("userPackage").textContent = data.package_name || "Free";
     document.getElementById("userBalance").textContent = data.balance || 0;
 
-    const hasUpi = !!data.upi_id;
-    const hasBank = !!data.account_number;
     let methodText = "None";
-    if (hasUpi) methodText = "UPI (" + data.upi_id + ")";
-    else if (hasBank) methodText = "Bank Account (" + data.bank_name + ")";
+    if (data.upi_id) methodText = "UPI (" + data.upi_id + ")";
+    else if (data.account_number) methodText = "Bank Account";
     document.getElementById("userPaymentMethod").textContent = methodText;
 
     if (data.profile_photo) {
@@ -87,7 +75,6 @@ async function loadUserProfile() {
         document.getElementById("userAvatar").textContent = (data.full_name || "U")[0].toUpperCase();
     }
 }
-
 document.addEventListener("DOMContentLoaded", loadUserProfile);
 </script>
 </body>
