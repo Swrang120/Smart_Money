@@ -290,7 +290,7 @@ let currentEditUser=null;
 let editModalTab="bank"; // 'bank' or 'upi'
 
 function escapeHtml(v){return v===null||v===undefined?"":String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
-function val(...a){return a.find(x=>x!==undefined&&x!==null&&String(x)!=="")||""}
+function val(...a){return a.find(x=>x!==undefined&&x!==null&&String(x).trim()!=="")||""}
 function norm(v){return String(v||"").trim().toLowerCase()}
 function statusOf(v){return norm(v||"pending")}
 
@@ -301,7 +301,7 @@ function findUserForRequest(item) {
 
   return allUsersData.find(u => {
     const uId = String(u.id || "");
-    const uAuthId = String(u.auth_user_id || u.user_id || "");
+    const uAuthId = String(u.auth_user_id || u.user_id || u.profile_id || "");
     const uEmail = norm(u.email);
     const uRef = norm(u.referral_id);
 
@@ -313,12 +313,12 @@ function findUserForRequest(item) {
 
 function paymentDetailsFromItemOrUser(item, u) {
   return {
-    upi_id: val(u?.upi_id, u?.upi, item.upi_id, item.upi, item.upi_code, item.upi_address),
-    account_holder_name: val(u?.account_holder_name, u?.account_holder, item.account_holder_name, item.account_holder, item.account_name, item.bank_account_holder),
-    bank_name: val(u?.bank_name, u?.bank, item.bank_name),
-    account_number: val(u?.account_number, u?.bank_account_number, u?.account_no, item.account_number, item.bank_account_number, item.account_no),
-    ifsc_code: val(u?.ifsc_code, u?.ifsc, item.ifsc_code, item.ifsc, item.bank_ifsc),
-    withdrawal_method: val(u?.payment_method, item.withdrawal_method, item.payment_method, item.method)
+    upi_id: val(item.upi_id, item.upi, item.upi_code, item.upi_address, u?.upi_id, u?.upi),
+    account_holder_name: val(item.account_holder_name, item.account_holder, item.account_name, item.bank_account_holder, u?.account_holder_name, u?.account_holder),
+    bank_name: val(item.bank_name, item.bank, u?.bank_name, u?.bank),
+    account_number: val(item.account_number, item.bank_account_number, item.account_no, u?.account_number, u?.bank_account_number, u?.account_no),
+    ifsc_code: val(item.ifsc_code, item.ifsc, item.bank_ifsc, u?.ifsc_code, u?.ifsc),
+    withdrawal_method: val(item.withdrawal_method, item.payment_method, item.method, u?.payment_method)
   }
 }
 
@@ -371,7 +371,6 @@ async function approvePayment(id){
     const {error}=await supabaseClient.from("payment_requests").update({status:"Approved"}).eq("id",id);
     if(error){alert("Approval Error: "+error.message);return}
 
-    // Send Email via EmailJS
     if(payment && payment.email){
         try {
             await emailjs.send(EMAILJS_PAYMENT_SERVICE, EMAILJS_PAYMENT_TEMPLATE, {
@@ -381,7 +380,6 @@ async function approvePayment(id){
                 amount: payment.amount || 0,
                 transaction_id: payment.transaction_id || payment.payment_id || "N/A"
             });
-            console.log("Payment approval email sent successfully!");
         } catch(mailErr) {
             console.error("Email send failed:", mailErr);
         }
@@ -408,13 +406,14 @@ function renderWithdrawals(){
   const displayName = val(x.full_name, x.name, x._profile?.full_name, "User");
   const displayEmail = val(x.email, x._profile?.email, "No email");
 
-  const upi=val(x.upi_id);
-  const holder=val(x.account_holder_name);
-  const bank=val(x.bank_name);
-  const acc=val(x.account_number);
-  const ifsc=val(x.ifsc_code);
+  const upi = val(x.upi_id);
+  const holder = val(x.account_holder_name);
+  const bank = val(x.bank_name);
+  const acc = val(x.account_number);
+  const ifsc = val(x.ifsc_code);
   
   const hasUpi = !!upi;
+  const hasBank = !!(acc || ifsc || bank || holder);
 
   return `<tr>
    <td>
@@ -425,10 +424,18 @@ function renderWithdrawals(){
    <td><b>₹${escapeHtml(x.amount||0)}</b></td>
    <td>
     <div class="withdrawal-details">
-     <span class="withdrawal-type ${hasUpi?"upi-type":"bank-type"}">${hasUpi?"📱 UPI PAYMENT":"🏦 BANK ACCOUNT"}</span><br>
-     ${hasUpi?
-      `<span class="small">UPI ID</span><br><b>${escapeHtml(upi)}</b>`:
-      `<span class="small">Account Holder</span><br><b>${escapeHtml(holder||"Not available")}</b><br><span class="small">Bank Name</span><br><b>${escapeHtml(bank||"Not available")}</b><br><span class="small">Account Number</span><br><b>${escapeHtml(acc||"Not available")}</b><br><span class="small">IFSC Code</span><br><b>${escapeHtml(ifsc||"Not available")}</b>`
+     ${hasUpi ? 
+      `<span class="withdrawal-type upi-type">📱 UPI PAYMENT</span><br>
+       <span class="small">UPI ID</span><br><b>${escapeHtml(upi)}</b>` :
+      (hasBank ? 
+       `<span class="withdrawal-type bank-type">🏦 BANK ACCOUNT</span><br>
+        <span class="small">Account Holder</span><br><b>${escapeHtml(holder||"Not available")}</b><br>
+        <span class="small">Bank Name</span><br><b>${escapeHtml(bank||"Not available")}</b><br>
+        <span class="small">Account Number</span><br><b>${escapeHtml(acc||"Not available")}</b><br>
+        <span class="small">IFSC Code</span><br><b>${escapeHtml(ifsc||"Not available")}</b>` :
+       `<span class="withdrawal-type" style="background:rgba(239,68,68,.15);color:#f87171">⚠️ NO DETAILS ADDED</span><br>
+        <span class="small">User ne UPI ya Bank details add nahi kiya hai.</span>`
+      )
      }
     </div>
    </td>
@@ -458,7 +465,6 @@ async function updateWithdrawal(id,status){
                     to_name: userName,
                     amount: withdrawal?.amount || 0
                 });
-                console.log("Withdrawal success email sent!");
             } catch(mailErr) {
                 console.error("Withdrawal email failed:", mailErr);
             }
