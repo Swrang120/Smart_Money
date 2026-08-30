@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Profile - Smart Money</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#0b1020;--card:#121a2d;--card2:#172137;--text:#f8fafc;--muted:#94a3b8;--accent:#6366f1;--border:rgba(255,255,255,.08)}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:20px}
+.container{max-width:600px;margin:auto}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
+.profile-header{display:flex;align-items:center;gap:20px;margin-bottom:20px}
+.avatar{width:80px;height:80px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:bold;color:white;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.info h2{margin:0 0 5px;font-size:22px}
+.info p{margin:0;color:var(--muted);font-size:14px}
+.details-box{background:#0f172a;border:1px solid var(--border);border-radius:12px;padding:15px;margin-top:20px}
+.details-box div{margin-bottom:10px;font-size:14px}
+.details-box b{color:var(--muted)}
+.btn{background:var(--accent);color:white;border:0;padding:12px 20px;border-radius:10px;cursor:pointer;font-weight:bold;width:100%;margin-top:15px}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <div class="profile-header">
+            <div class="avatar" id="userAvatar">U</div>
+            <div class="info">
+                <h2 id="userName">Loading...</h2>
+                <p id="userEmail">Loading...</p>
+            </div>
+        </div>
+        
+        <div class="details-box">
+            <div><b>Referral ID:</b> <span id="userReferral">...</span></div>
+            <div><b>Package:</b> <span id="userPackage">...</span></div>
+            <div><b>Balance:</b> ₹<span id="userBalance">0</span></div>
+            <div><b>Payment Method Added:</b> <span id="userPaymentMethod">None</span></div>
+        </div>
+
+        <button class="btn" onclick="window.location.href='index.html'">Back to Dashboard</button>
+    </div>
+</div>
+
+<script>
+const SUPABASE_URL="https://rvprrulkjegvicbnjuft.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+
+async function loadUserProfile() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    const { data, error } = await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+
+    if (error || !data) {
+        console.error(error);
+        return;
+    }
+
+    document.getElementById("userName").textContent = data.full_name || "User";
+    document.getElementById("userEmail").textContent = data.email || session.user.email;
+    document.getElementById("userReferral").textContent = data.referral_id || "N/A";
+    document.getElementById("userPackage").textContent = data.package_name || "Free";
+    document.getElementById("userBalance").textContent = data.balance || 0;
+
+    const hasUpi = !!data.upi_id;
+    const hasBank = !!data.account_number;
+    let methodText = "None";
+    if (hasUpi) methodText = "UPI (" + data.upi_id + ")";
+    else if (hasBank) methodText = "Bank Account (" + data.bank_name + ")";
+    document.getElementById("userPaymentMethod").textContent = methodText;
+
+    if (data.profile_photo) {
+        document.getElementById("userAvatar").innerHTML = `<img src="${data.profile_photo}" alt="Profile">`;
+    } else {
+        document.getElementById("userAvatar").textContent = (data.full_name || "U")[0].toUpperCase();
+    }
+}
+
+document.addEventListener("DOMContentLoaded", loadUserProfile);
+</script>
+</body>
+</html>
