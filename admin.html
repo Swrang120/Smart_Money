@@ -157,6 +157,10 @@ button:hover{opacity:.88}
 .withdrawal-details{min-width:250px;line-height:1.7}.withdrawal-details b{color:#e2e8f0}.withdrawal-type{display:inline-block;padding:4px 8px;border-radius:6px;margin-bottom:5px;font-size:11px;font-weight:bold}.upi-type{background:rgba(99,102,241,.18);color:#a5b4fc}.bank-type{background:rgba(34,197,94,.12);color:#4ade80}
 .user-search-box{display:flex;gap:10px;flex-wrap:wrap;background:var(--card2);padding:14px;border:1px solid var(--border);border-radius:12px;margin-bottom:15px}.user-search-box input{flex:1;min-width:220px;background:#0f172a;color:white;border:1px solid var(--border);padding:11px;border-radius:8px}.edit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.edit-grid label{font-size:12px;color:#cbd5e1}.edit-grid .full{grid-column:1/-1}.info-card{background:#0f172a;border:1px solid var(--border);padding:12px;border-radius:10px;margin-bottom:12px}.search-note{color:var(--muted);font-size:12px;margin:0 0 8px}
 
+.tab-pill-box {display: flex; gap: 8px; margin-bottom: 12px;}
+.tab-pill {background: #1e293b; color: var(--muted); border: 0; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;}
+.tab-pill.active {background: var(--accent); color: white;}
+
 @media(max-width:768px){
     .login-container { flex-direction: column; gap: 10px; }
     .lamp-wrapper { width: 130px; height: 180px; }
@@ -247,6 +251,7 @@ const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHA
 let allPaymentsData=[],allWithdrawalsData=[],allUsersData=[];
 let currentPaymentTab="pending",currentWithdrawalTab="pending",currentUserSearch="";
 let currentEditUser=null;
+let editModalTab="upi"; // 'upi' or 'bank'
 
 function escapeHtml(v){return v===null||v===undefined?"":String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 function val(...a){return a.find(x=>x!==undefined&&x!==null&&String(x)!=="")||""}
@@ -335,7 +340,6 @@ function renderWithdrawals(){
  if(!list.length){tbody.innerHTML='<tr><td colspan="5" class="empty">No withdrawals found.</td></tr>';return}
  tbody.innerHTML=list.map(x=>{
   const status=x.status||"Pending",lower=statusOf(status);
-  const method=norm(x.withdrawal_method||x._profile?.payment_method);
   
   const displayId = val(x._profile?.referral_id, x.referral_id, x.user_referral_id, x.user_id, x.profile_id);
   const displayName = val(x.full_name, x.name, x._profile?.full_name, "User");
@@ -346,7 +350,9 @@ function renderWithdrawals(){
   const bank=val(x.bank_name);
   const acc=val(x.account_number);
   const ifsc=val(x.ifsc_code);
-  const isUPI=method.includes("upi")||!!upi;
+  
+  // Strict condition: Show UPI ONLY if upi_id is present and non-empty. Otherwise show Bank Account.
+  const hasUpi = !!upi;
 
   return `<tr>
    <td>
@@ -357,9 +363,9 @@ function renderWithdrawals(){
    <td><b>₹${escapeHtml(x.amount||0)}</b></td>
    <td>
     <div class="withdrawal-details">
-     <span class="withdrawal-type ${isUPI?"upi-type":"bank-type"}">${isUPI?"📱 UPI PAYMENT":"🏦 BANK ACCOUNT"}</span><br>
-     ${isUPI?
-      `<span class="small">UPI ID</span><br><b>${escapeHtml(upi||"Not available")}</b>`:
+     <span class="withdrawal-type ${hasUpi?"upi-type":"bank-type"}">${hasUpi?"📱 UPI PAYMENT":"🏦 BANK ACCOUNT"}</span><br>
+     ${hasUpi?
+      `<span class="small">UPI ID</span><br><b>${escapeHtml(upi)}</b>`:
       `<span class="small">Account Holder</span><br><b>${escapeHtml(holder||"Not available")}</b><br><span class="small">Bank Name</span><br><b>${escapeHtml(bank||"Not available")}</b><br><span class="small">Account Number</span><br><b>${escapeHtml(acc||"Not available")}</b><br><span class="small">IFSC Code</span><br><b>${escapeHtml(ifsc||"Not available")}</b>`
      }
     </div>
@@ -385,38 +391,93 @@ function showReferralMembersById(id){const u=allUsersData.find(x=>String(x.id)==
 function showReferralMembers(referralId,userName){const modal=document.getElementById("referralModal"),title=document.getElementById("referralModalTitle"),content=document.getElementById("referralMembersContent");title.textContent=userName+" - Direct Members";const members=allUsersData.filter(x=>x.is_deleted!==true&&x.referred_by===referralId);content.innerHTML=!members.length?'<div class="empty">No members joined with this referral.</div>':`<div class="table-box"><table><thead><tr><th>Name</th><th>Email</th><th>Package</th><th>Joined</th></tr></thead><tbody>${members.map(m=>`<tr><td>${escapeHtml(m.full_name||"User")}</td><td>${escapeHtml(m.email||"")}</td><td>${escapeHtml(m.package_name||"Free")}</td><td>${m.created_at?escapeHtml(new Date(m.created_at).toLocaleString()):"N/A"}</td></tr>`).join("")}</tbody></table></div>`;modal.classList.add("show")}
 function closeReferralModal(){document.getElementById("referralModal").classList.remove("show")}
 
-function openPaymentDetailsModal(id){const u=allUsersData.find(x=>String(x.id)===String(id));if(!u)return;currentEditUser=u;const p={upi_id:val(u.upi_id,u.upi),account_holder_name:val(u.account_holder_name,u.account_holder),bank_name:val(u.bank_name,u.bank),account_number:val(u.account_number,u.account_no),ifsc_code:val(u.ifsc_code,u.ifsc)};document.getElementById("paymentDetailsModalTitle").textContent=`Edit Bank / UPI - ${u.full_name||"User"}`;document.getElementById("paymentDetailsContent").innerHTML=`
-<div class="info-card"><b>User:</b> ${escapeHtml(u.full_name||"User")}<br><b>Referral ID:</b> ${escapeHtml(u.referral_id||"N/A")}<br><b>Email:</b> ${escapeHtml(u.email||"N/A")}<br><b>User ID:</b> ${escapeHtml(u.id||"ID: "+u.id)}</div>
-<div class="edit-grid">
-<div class="full"><label>UPI ID</label><input id="edit_upi_id" value="${escapeHtml(p.upi_id)}" placeholder="example@upi"></div>
-<div><label>Account Holder Name</label><input id="edit_account_holder_name" value="${escapeHtml(p.account_holder_name)}"></div>
-<div><label>Bank Name</label><input id="edit_bank_name" value="${escapeHtml(p.bank_name)}"></div>
-<div><label>Account Number</label><input id="edit_account_number" value="${escapeHtml(p.account_number)}"></div>
-<div><label>IFSC Code</label><input id="edit_ifsc_code" value="${escapeHtml(p.ifsc_code)}"></div>
-<div class="full"><button class="btn btn-primary" onclick="savePaymentDetails()">Save Payment Details</button><button class="btn btn-delete" onclick="closePaymentDetailsModal()">Cancel</button></div>
-</div>`;document.getElementById("paymentDetailsModal").classList.add("show")}
+function openPaymentDetailsModal(id){
+    const u=allUsersData.find(x=>String(x.id)===String(id));
+    if(!u)return;
+    currentEditUser=u;
+    
+    // Determine default tab based on what exists
+    const hasUpi = !!val(u.upi_id, u.upi);
+    const hasBank = !!val(u.account_number, u.bank_name, u.account_holder_name);
+    editModalTab = hasUpi ? "upi" : (hasBank ? "bank" : "upi");
+
+    renderPaymentDetailsModalContent();
+    document.getElementById("paymentDetailsModal").classList.add("show");
+}
+
+function switchEditModalTab(tab){
+    editModalTab = tab;
+    renderPaymentDetailsModalContent();
+}
+
+function renderPaymentDetailsModalContent(){
+    const u = currentEditUser;
+    const p = {
+        upi_id: val(u.upi_id, u.upi),
+        account_holder_name: val(u.account_holder_name, u.account_holder),
+        bank_name: val(u.bank_name, u.bank),
+        account_number: val(u.account_number, u.account_no),
+        ifsc_code: val(u.ifsc_code, u.ifsc)
+    };
+
+    document.getElementById("paymentDetailsModalTitle").textContent=`Edit Bank / UPI - ${u.full_name||"User"}`;
+    document.getElementById("paymentDetailsContent").innerHTML=`
+    <div class="info-card"><b>User:</b> ${escapeHtml(u.full_name||"User")}<br><b>Referral ID:</b> ${escapeHtml(u.referral_id||"N/A")}<br><b>Email:</b> ${escapeHtml(u.email||"N/A")}<br><b>User ID:</b> ${escapeHtml(u.id||"")}</div>
+    
+    <div class="tab-pill-box">
+        <button class="tab-pill ${editModalTab==='upi'?'active':''}" onclick="switchEditModalTab('upi')">📱 UPI Details</button>
+        <button class="tab-pill ${editModalTab==='bank'?'active':''}" onclick="switchEditModalTab('bank')">🏦 Bank Account Details</button>
+    </div>
+
+    <div class="edit-grid">
+    ${editModalTab==='upi'?`
+        <div class="full"><label>UPI ID</label><input id="edit_upi_id" value="${escapeHtml(p.upi_id)}" placeholder="example@upi"></div>
+    `:`
+        <div><label>Account Holder Name</label><input id="edit_account_holder_name" value="${escapeHtml(p.account_holder_name)}"></div>
+        <div><label>Bank Name</label><input id="edit_bank_name" value="${escapeHtml(p.bank_name)}"></div>
+        <div><label>Account Number</label><input id="edit_account_number" value="${escapeHtml(p.account_number)}"></div>
+        <div><label>IFSC Code</label><input id="edit_ifsc_code" value="${escapeHtml(p.ifsc_code)}"></div>
+    `}
+    <div class="full" style="margin-top:10px;">
+        <button class="btn btn-primary" onclick="savePaymentDetails()">Save Payment Details</button>
+        <button class="btn btn-delete" onclick="closePaymentDetailsModal()">Cancel</button>
+    </div>
+    </div>`;
+}
 
 function closePaymentDetailsModal(){document.getElementById("paymentDetailsModal").classList.remove("show");currentEditUser=null}
 
 async function savePaymentDetails(){
     if(!currentEditUser)return;
-    const payload={
-        upi_id:document.getElementById("edit_upi_id").value.trim(),
-        account_holder_name:document.getElementById("edit_account_holder_name").value.trim(),
-        bank_name:document.getElementById("edit_bank_name").value.trim(),
-        account_number:document.getElementById("edit_account_number").value.trim(),
-        ifsc_code:document.getElementById("edit_ifsc_code").value.trim()
-    };
-    if(!confirm("Save and update this user's payment details?"))return;
+
+    let payload = {};
+    if(editModalTab === 'upi') {
+        const upiVal = document.getElementById("edit_upi_id").value.trim();
+        payload = {
+            upi_id: upiVal,
+            account_holder_name: null,
+            bank_name: null,
+            account_number: null,
+            ifsc_code: null
+        };
+    } else {
+        payload = {
+            upi_id: null,
+            account_holder_name: document.getElementById("edit_account_holder_name").value.trim(),
+            bank_name: document.getElementById("edit_bank_name").value.trim(),
+            account_number: document.getElementById("edit_account_number").value.trim(),
+            ifsc_code: document.getElementById("edit_ifsc_code").value.trim()
+        };
+    }
+
+    if(!confirm("Save and update this user's payment details? (Swapping will automatically clear out the other method)"))return;
     try{
-        // Update profiles table
         const {error}=await supabaseClient.from("profiles").update(payload).eq("id",currentEditUser.id);
         if(error)throw error;
 
-        // Also update any pending withdrawal requests for this user so it reflects immediately everywhere
         await supabaseClient.from("withdrawal_requests").update(payload).eq("user_id", currentEditUser.id);
 
-        alert("Bank / UPI details updated successfully and synced with user dashboard!");
+        alert("Payment details updated successfully!");
         closePaymentDetailsModal();
         await refreshAllData();
     }catch(e){
@@ -455,7 +516,7 @@ Draggable.create(hitArea, {
     },
     onRelease: function() {
         clickSound.currentTime = 0;
-        clickSound.play().catch(e => {});
+        clickSound.pop?.() || clickSound.play().catch(e => {});
         isOn = !isOn;
         root.style.setProperty('--on', isOn ? 1 : 0);
         gsap.to(cordBead, { y: 0, duration: 0.4, ease: "elastic.out(1.5, 0.3)" });
