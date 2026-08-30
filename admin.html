@@ -253,7 +253,6 @@ function val(...a){return a.find(x=>x!==undefined&&x!==null&&String(x)!=="")||""
 function norm(v){return String(v||"").trim().toLowerCase()}
 function statusOf(v){return norm(v||"pending")}
 
-// Improved function to pull bank/UPI details dynamically from withdrawal row or user profile fallback
 function paymentDetailsFromItemOrUser(item, u) {
   return {
     upi_id: val(item.upi_id, item.upi, item.upi_code, item.upi_address, u?.upi_id, u?.upi, u?.upi_code, u?.upi_address),
@@ -328,7 +327,6 @@ function renderWithdrawals(){
   const status=x.status||"Pending",lower=statusOf(status);
   const method=norm(x.withdrawal_method||x._profile?.payment_method);
   
-  // MATCH USER ID TO DISPLAY USER'S ORIGINAL DASHBOARD ID (REFERRAL ID)
   const displayId = val(x._profile?.referral_id, x.referral_id, x.user_referral_id, x.user_id, x.profile_id);
   const displayName = val(x.full_name, x.name, x._profile?.full_name, "User");
   const displayEmail = val(x.email, x._profile?.email, "No email");
@@ -378,18 +376,39 @@ function showReferralMembers(referralId,userName){const modal=document.getElemen
 function closeReferralModal(){document.getElementById("referralModal").classList.remove("show")}
 
 function openPaymentDetailsModal(id){const u=allUsersData.find(x=>String(x.id)===String(id));if(!u)return;currentEditUser=u;const p={upi_id:val(u.upi_id,u.upi),account_holder_name:val(u.account_holder_name,u.account_holder),bank_name:val(u.bank_name,u.bank),account_number:val(u.account_number,u.account_no),ifsc_code:val(u.ifsc_code,u.ifsc)};document.getElementById("paymentDetailsModalTitle").textContent=`Edit Bank / UPI - ${u.full_name||"User"}`;document.getElementById("paymentDetailsContent").innerHTML=`
-<div class="info-card"><b>User:</b> ${escapeHtml(u.full_name||"User")}<br><b>Referral ID:</b> ${escapeHtml(u.referral_id||"N/A")}<br><b>Email:</b> ${escapeHtml(u.email||"N/A")}<br><b>User ID:</b> ${escapeHtml(u.id||"N/A")}</div>
+<div class="info-card"><b>User:</b> ${escapeHtml(u.full_name||"User")}<br><b>Referral ID:</b> ${escapeHtml(u.referral_id||"N/A")}<br><b>Email:</b> ${escapeHtml(u.email||"N/A")}<br><b>User ID:</b> ${escapeHtml(u.id||"ID: "+u.id)}</div>
 <div class="edit-grid">
-<div class="full"><label>Payment Method</label><select id="edit_payment_method"><option value="upi">UPI</option><option value="bank">Bank Account</option></select></div>
 <div class="full"><label>UPI ID</label><input id="edit_upi_id" value="${escapeHtml(p.upi_id)}" placeholder="example@upi"></div>
 <div><label>Account Holder Name</label><input id="edit_account_holder_name" value="${escapeHtml(p.account_holder_name)}"></div>
 <div><label>Bank Name</label><input id="edit_bank_name" value="${escapeHtml(p.bank_name)}"></div>
 <div><label>Account Number</label><input id="edit_account_number" value="${escapeHtml(p.account_number)}"></div>
 <div><label>IFSC Code</label><input id="edit_ifsc_code" value="${escapeHtml(p.ifsc_code)}"></div>
 <div class="full"><button class="btn btn-primary" onclick="savePaymentDetails()">Save Payment Details</button><button class="btn btn-delete" onclick="closePaymentDetailsModal()">Cancel</button></div>
-</div>`;const hasUpi=!!p.upi_id;document.getElementById("edit_payment_method").value=hasUpi?"upi":"bank";document.getElementById("paymentDetailsModal").classList.add("show")}
+</div>`;document.getElementById("paymentDetailsModal").classList.add("show")}
+
 function closePaymentDetailsModal(){document.getElementById("paymentDetailsModal").classList.remove("show");currentEditUser=null}
-async function savePaymentDetails(){if(!currentEditUser)return;const payload={payment_method:document.getElementById("edit_payment_method").value,upi_id:document.getElementById("edit_upi_id").value.trim(),account_holder_name:document.getElementById("edit_account_holder_name").value.trim(),bank_name:document.getElementById("edit_bank_name").value.trim(),account_number:document.getElementById("edit_account_number").value.trim(),ifsc_code:document.getElementById("edit_ifsc_code").value.trim()};if(!confirm("Save and update this user's payment details?"))return;try{const {error}=await supabaseClient.from("profiles").update(payload).eq("id",currentEditUser.id);if(error)throw error;alert("Bank / UPI details updated successfully!");closePaymentDetailsModal();await refreshAllData()}catch(e){console.error(e);alert("Update failed: "+e.message)}}
+
+async function savePaymentDetails(){
+    if(!currentEditUser)return;
+    const payload={
+        upi_id:document.getElementById("edit_upi_id").value.trim(),
+        account_holder_name:document.getElementById("edit_account_holder_name").value.trim(),
+        bank_name:document.getElementById("edit_bank_name").value.trim(),
+        account_number:document.getElementById("edit_account_number").value.trim(),
+        ifsc_code:document.getElementById("edit_ifsc_code").value.trim()
+    };
+    if(!confirm("Save and update this user's payment details?"))return;
+    try{
+        const {error}=await supabaseClient.from("profiles").update(payload).eq("id",currentEditUser.id);
+        if(error)throw error;
+        alert("Bank / UPI details updated successfully!");
+        closePaymentDetailsModal();
+        await refreshAllData();
+    }catch(e){
+        console.error(e);
+        alert("Update failed: "+e.message);
+    }
+}
 
 async function toggleUser(id,status){const {error}=await supabaseClient.from("profiles").update({is_active:status}).eq("id",id);if(error){alert(error.message);return}loadUsers()}
 async function softDeleteUser(id){if(!confirm("Move this user to trash?"))return;const {error}=await supabaseClient.from("profiles").update({is_deleted:true}).eq("id",id);if(error){alert(error.message);return}loadUsers()}
