@@ -243,6 +243,24 @@ background:rgba(124,58,237,.35);
 color:#fff;
 }
 
+/* PREMIUM WITHDRAW SIDEBAR BUTTON */
+.sidebar-menu .withdraw-sidebar-btn {
+background: linear-gradient(135deg, #059669, #10b981);
+color: #ffffff;
+box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+border: 1px solid rgba(255, 255, 255, 0.2);
+display: flex;
+align-items: center;
+justify-content: space-between;
+transition: all 0.2s ease;
+}
+
+.sidebar-menu .withdraw-sidebar-btn:hover {
+background: linear-gradient(135deg, #047857, #059669);
+box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+transform: translateY(-1px);
+}
+
 /* DASHBOARD */
 
 .dash-container{
@@ -794,10 +812,9 @@ Loading...
 <li>
 <button
 onclick="openWithdrawModal()"
-style="color:#10b981;font-weight:700;">
-💸 Available Balance:
-<span id="sidebarWalletBal">₹0.00</span>
-(Withdraw)
+class="withdraw-sidebar-btn">
+<span>💸 Available Balance: <b id="sidebarWalletBal">₹0.00</b></span>
+<span style="background:rgba(255,255,255,0.2); padding:4px 8px; border-radius:6px; font-size:11px;">Withdraw ›</span>
 </button>
 </li>
 <li>
@@ -1785,7 +1802,6 @@ FIXED DASHBOARD PROFILE LOADER
 
 async function loadDashboardProfile(){
 try {
-// Fallback check to ensure user object is securely retrieved
 let user = null;
 const { data: userData, error: userError } = await supabaseClient.auth.getUser();
 if (userData?.user) {
@@ -2134,9 +2150,14 @@ function setupLogout(){
 const logoutBtn=document.getElementById("sideLogoutBtn");
 if(!logoutBtn) return;
 logoutBtn.onclick=async function(){
-if(realtimeChannel) await supabaseClient.removeChannel(realtimeChannel);
-await supabaseClient.auth.signOut();
-window.location.href="login.html";
+try {
+  if(realtimeChannel) await supabaseClient.removeChannel(realtimeChannel);
+  await supabaseClient.auth.signOut();
+} catch(e) {
+  console.error("Logout error:", e);
+} finally {
+  window.location.href="login.html";
+}
 };
 }
 
