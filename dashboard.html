@@ -1785,15 +1785,24 @@ FIXED DASHBOARD PROFILE LOADER
 
 async function loadDashboardProfile(){
 try {
-const {data:{session},error:sessionError}=await supabaseClient.auth.getSession();
+// Fallback check to ensure user object is securely retrieved
+let user = null;
+const { data: userData, error: userError } = await supabaseClient.auth.getUser();
+if (userData?.user) {
+  user = userData.user;
+} else {
+  const { data: sessionData } = await supabaseClient.auth.getSession();
+  if (sessionData?.session?.user) {
+    user = sessionData.session.user;
+  }
+}
 
-if(sessionError || !session?.user){
-console.log("No active session found, redirecting to login...");
+if(!user){
+console.log("No active user found, redirecting to login...");
 window.location.href="login.html";
 return false;
 }
 
-const user=session.user;
 currentUserId=user.id;
 currentUserEmail=user.email||"";
 
