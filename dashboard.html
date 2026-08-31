@@ -784,7 +784,7 @@ font-weight:500;
 <h2 id="userName">Loading...</h2>
 </div>
 <div class="profile-info-row">
-<span class="profile-label">USER ID</span>
+<span class="profile-label">USER ID / REFERRAL CODE</span>
 <div class="id-value-wrap">
 <div class="profile-value id-value" id="topUserId">Loading...</div>
 <button class="copy-btn" onclick="copyUserReferralCode()">Copy</button>
@@ -1315,17 +1315,8 @@ function isCorrectReferralCode(code){
 return /^SM-smart\d{5}$/.test(String(code||""));
 }
 
-async function fixInvalidReferralCode(profile){
-const oldCode=String(profile?.referral_code||"").trim();
-if(isCorrectReferralCode(oldCode)) return oldCode;
-const newCode=await createUniqueReferralCode();
-const {data}=await supabaseClient.from("profiles").update({referral_code:newCode}).eq("user_id",currentUserId).select().single();
-if(data) currentProfile={...currentProfile,...data};
-return newCode;
-}
-
 /* =========================================
-PROFILE LOADER & DASHBOARD INIT (FIXED HANG)
+PROFILE LOADER & DASHBOARD INIT (FIXED)
 ========================================= */
 async function loadDashboardProfile(){
 try {
@@ -1371,12 +1362,21 @@ referral_code:newReferralCode
 };
 const {data:createdProfile}=await supabaseClient.from("profiles").upsert(newProfile,{onConflict:"user_id"}).select().single();
 finalProfile=createdProfile || newProfile;
+} else {
+const existingCode = String(finalProfile?.referral_code || "").trim();
+if (!isCorrectReferralCode(existingCode)) {
+  const newReferralCode = await createUniqueReferralCode();
+  const { data: updatedCodeProfile } = await supabaseClient.from("profiles").update({ referral_code: newReferralCode }).eq("user_id", currentUserId).select().single();
+  if (updatedCodeProfile) {
+    finalProfile = updatedCodeProfile;
+  } else {
+    finalProfile.referral_code = newReferralCode;
+  }
+}
 }
 
 currentProfile=finalProfile;
-const permanentCode=await fixInvalidReferralCode(finalProfile);
-currentProfile.referral_code=permanentCode;
-userRefCode=permanentCode;
+userRefCode=currentProfile.referral_code;
 
 renderProfile(currentProfile,authName);
 return true;
@@ -1596,45 +1596,43 @@ showToast("Profile picture removed!");
 }
 
 async function submitWithdrawal(){
-if(!hasSavedPaymentDetails()){
-alert("⚠️ Please add your payment details first.");
-closeModal("withdrawModal");
-openUpiModal();
-return;
-}
-const amount=Number(document.getElementById("withdrawAmount").value);
-const submitBtn=document.getElementById("submitWithdrawBtn");
-const packageName=String(currentProfile?.package_name||"").toLowerCase();
-let minLimit=packageName&&packageName!=="none"?100:200;
+  if(!hasSavedPaymentDetails()){
+    alert("⚠️ Please add your payment details first.");
+    closeModal("withdrawModal");
+    openUpiModal();
+    return;
+  }
+  const amount=Number(document.getElementById("withdrawAmount").value);
+  const submitBtn=document.getElementById("submitWithdrawBtn");
+  const packageName=String(currentProfile?.package_name||"").toLowerCase();
+  let minLimit=packageName&&packageName!=="none"?100:200;
 
-if(!Number.isFinite(amount)||amount<=0){ alert("Enter a valid amount."); return; }
-if(amount<minLimit){ alert(`Minimum withdrawal limit is ₹${minLimit}.`); return; }
-if(amount>userCurrentBalance){ alert("Insufficient balance."); return; }
+  if(!Number.isFinite(amount)||amount<=0){ alert("Enter a valid amount."); return; }
+  if(amount<minLimit){ alert(`Minimum withdrawal limit is ₹${minLimit}.`); return; }
+  if(amount>userCurrentBalance){ alert("Insufficient balance."); return; }
 
-submitBtn.disabled=true;
-submitBtn.innerText="Processing...";
+  submitBtn.disabled=true;
+  submitBtn.innerText="Processing...";
 
-try{
-const {error:insertError}=await supabaseClient.from("withdrawal_requests").insert({user_id:currentUserId,amount:amount,status:"pending"});
-if(insertError) throw insertError;
+  try{
+    // Call secure Postgres RPC function
+    const { data, error } = await supabaseClient.rpc('request_withdrawal', { p_amount: amount });
+    if(error) throw error;
+    if(data && data.success){
+      userCurrentBalance = Number(data.new_balance || 0);
+      currentProfile.balance = userCurrentBalance;
+      document.getElementById("sidebarWalletBal").innerText="₹"+userCurrentBalance.toFixed(2);
 
-const newBalance=Number(userCurrentBalance)-amount;
-const {data:updatedProfile,error:balanceError}=await supabaseClient.from("profiles").update({balance:newBalance}).eq("user_id",currentUserId).select().single();
-if(balanceError) throw balanceError;
-
-currentProfile={...currentProfile,...updatedProfile};
-userCurrentBalance=Number(updatedProfile.balance||0);
-document.getElementById("sidebarWalletBal").innerText="₹"+userCurrentBalance.toFixed(2);
-
-showToast("Withdrawal request submitted successfully!");
-closeModal("withdrawModal");
-await loadWithdrawalHistory();
-}catch(e){
-alert("Withdrawal failed: "+e.message);
-}finally{
-submitBtn.disabled=false;
-submitBtn.innerText="Submit Request";
-}
+      showToast("Withdrawal request submitted successfully!");
+      closeModal("withdrawModal");
+      await loadWithdrawalHistory();
+    }
+  }catch(e){
+    alert("Withdrawal failed: "+e.message);
+  }finally{
+    submitBtn.disabled=false;
+    submitBtn.innerText="Submit Request";
+  }
 }
 
 async function sendWithdrawalApprovedEmail(withdrawal){
