@@ -243,7 +243,6 @@ background:rgba(124,58,237,.35);
 color:#fff;
 }
 
-/* PREMIUM WITHDRAW SIDEBAR BUTTON */
 .sidebar-menu .withdraw-sidebar-btn {
 background: linear-gradient(135deg, #059669, #10b981);
 color: #ffffff;
@@ -447,25 +446,11 @@ font-size:14px;
 font-weight:700;
 }
 
-.bg-today{
-background:linear-gradient(135deg,#7c3aed,#5b21b6);
-}
-
-.bg-7days{
-background:linear-gradient(135deg,#6366f1,#4338ca);
-}
-
-.bg-30days{
-background:linear-gradient(135deg,#db2777,#be185d);
-}
-
-.bg-alltime{
-background:linear-gradient(135deg,#0284c7,#075985);
-}
-
-.bg-passive{
-background:linear-gradient(135deg,#d97706,#b45309);
-}
+.bg-today{ background:linear-gradient(135deg,#7c3aed,#5b21b6); }
+.bg-7days{ background:linear-gradient(135deg,#6366f1,#4338ca); }
+.bg-30days{ background:linear-gradient(135deg,#db2777,#be185d); }
+.bg-alltime{ background:linear-gradient(135deg,#0284c7,#075985); }
+.bg-passive{ background:linear-gradient(135deg,#d97706,#b45309); }
 
 /* SECTION */
 
@@ -667,38 +652,13 @@ font-weight:700;
 text-transform:uppercase;
 }
 
-.status-approved{
-background:#d1fae5;
-color:#059669;
-}
+.status-approved{ background:#d1fae5; color:#059669; }
+.status-pending{ background:#fef3c7; color:#d97706; }
+.status-rejected{ background:#fee2e2; color:#dc2626; }
 
-.status-pending{
-background:#fef3c7;
-color:#d97706;
-}
-
-.status-rejected{
-background:#fee2e2;
-color:#dc2626;
-}
-
-.earning-title{
-font-size:14px;
-font-weight:800;
-color:#0f172a;
-}
-
-.earning-amount{
-font-size:16px;
-font-weight:800;
-color:#059669;
-}
-
-.earning-date{
-font-size:11px;
-color:#64748b;
-margin-top:5px;
-}
+.earning-title{ font-size:14px; font-weight:800; color:#0f172a; }
+.earning-amount{ font-size:16px; font-weight:800; color:#059669; }
+.earning-date{ font-size:11px; color:#64748b; margin-top:5px; }
 
 #toastNotification{
 position:fixed;
@@ -733,37 +693,13 @@ font-weight:500;
 }
 
 @media(max-width:600px){
-
-.dash-container{
-padding:18px 12px 35px;
+.dash-container{ padding:18px 12px 35px; }
+.profile-card{ padding:18px; gap:14px; min-height:160px; }
+.profile-img-wrap{ width:76px; height:76px; min-width:76px; }
+.user-info h2{ font-size:20px; }
+.v-card{ padding:20px; }
+.v-card h2{ font-size:28px; }
 }
-
-.profile-card{
-padding:18px;
-gap:14px;
-min-height:160px;
-}
-
-.profile-img-wrap{
-width:76px;
-height:76px;
-min-width:76px;
-}
-
-.user-info h2{
-font-size:20px;
-}
-
-.v-card{
-padding:20px;
-}
-
-.v-card h2{
-font-size:28px;
-}
-
-}
-
 </style>
 </head>
 <body>
@@ -776,161 +712,76 @@ font-size:28px;
 <span>Smart Money</span>
 </a>
 <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
-
 </div>
 <div class="sidebar-profile">
-<img
-id="sidebarProfileImage"
-class="sidebar-profile-img"
-src="1000819130.jpg"
-alt="Profile">
+<img id="sidebarProfileImage" class="sidebar-profile-img" src="1000819130.jpg" alt="Profile">
 <div class="sidebar-profile-info">
-<div id="sidebarUserName" class="sidebar-profile-name">
-Loading...
-</div>
-<div id="sidebarUserEmail" class="sidebar-profile-email">
-Loading...
-</div>
+<div id="sidebarUserName" class="sidebar-profile-name">Loading...</div>
+<div id="sidebarUserEmail" class="sidebar-profile-email">Loading...</div>
 </div>
 </div>
 <ul class="sidebar-menu">
+<li><a href="index.html">🌐 Home / Landing Page</a></li>
+<li><button onclick="openPackageModal()">👑 My Package</button></li>
+<li><button onclick="openEarningsHistoryModal()">📊 My Earnings & Transactions</button></li>
 <li>
-<a href="index.html">
-🌐 Home / Landing Page
-</a>
-</li>
-<li>
-<button onclick="openPackageModal()">
-👑 My Package
-</button>
-</li>
-<li>
-<button onclick="openEarningsHistoryModal()">
-📊 My Earnings & Transactions
-</button>
-</li>
-<li>
-<button
-onclick="openWithdrawModal()"
-class="withdraw-sidebar-btn">
+<button onclick="openWithdrawModal()" class="withdraw-sidebar-btn">
 <span>💸 Available Balance: <b id="sidebarWalletBal">₹0.00</b></span>
 <span style="background:rgba(255,255,255,0.2); padding:4px 8px; border-radius:6px; font-size:11px;">Withdraw ›</span>
 </button>
 </li>
-<li>
-<button onclick="openHistoryModal()">
-📜 View Withdrawal History
-</button>
-</li>
-<li>
-<button onclick="document.getElementById('profilePhotoInputSidebar').click()">
-📷 Change Profile Picture
-</button>
-</li>
-<input
-type="file"
-id="profilePhotoInputSidebar"
-style="display:none;"
-accept="image/*"
-onchange="uploadProfilePicture(event)">
+<li><button onclick="openHistoryModal()">📜 View Withdrawal History</button></li>
+<li><button onclick="document.getElementById('profilePhotoInputSidebar').click()">📷 Change Profile Picture</button></li>
+<input type="file" id="profilePhotoInputSidebar" style="display:none;" accept="image/*" onchange="uploadProfilePicture(event)">
 <li id="removePhotoLi" style="display:none;">
-<button
-onclick="removeProfilePicture()"
-style="color:#ef4444;">
-🗑️ Remove Profile Picture
-</button>
+<button onclick="removeProfilePicture()" style="color:#ef4444;">🗑️ Remove Profile Picture</button>
 </li>
-<li>
-<button onclick="openUpiModal()">
-🏦 View & Edit Bank / UPI Details
-</button>
-</li>
-<li>
-<button onclick="openKycModal()">
-🆔 KYC & Date of Birth
-</button>
-</li>
-<li>
-<button
-id="sideLogoutBtn"
-style="color:#f87171;">
-🚪 Logout
-</button>
-</li>
+<li><button onclick="openUpiModal()">🏦 View & Edit Bank / UPI Details</button></li>
+<li><button onclick="openKycModal()">🆔 KYC & Date of Birth</button></li>
+<li><button id="sideLogoutBtn" style="color:#f87171;">🚪 Logout</button></li>
 </ul>
 </aside>
 <header class="navbar">
 <a href="dashboard.html" class="brand-logo">
-<img
-id="navBrandLogoImg"
-src="1000819130.jpg"
-alt="Logo">
+<img id="navBrandLogoImg" src="1000819130.jpg" alt="Logo">
 <span>Smart Money</span>
-
 </a>
 <div class="nav-right">
-<a href="index.html" class="nav-home-btn">
-🌐 Home
-</a>
-<img
-src="1000819130.jpg"
-class="nav-avatar"
-alt="Avatar"
-id="navAvatarImg">
-
-<button class="menu-btn" onclick="toggleSidebar()">
-☰
-</button>
+<a href="index.html" class="nav-home-btn">🌐 Home</a>
+<img src="1000819130.jpg" class="nav-avatar" alt="Avatar" id="navAvatarImg">
+<button class="menu-btn" onclick="toggleSidebar()">☰</button>
 </div>
 </header>
 <div class="dash-container">
 <!-- PROFILE -->
 <div class="profile-card">
-<div class="package-badge" id="activePackageBadge">
-NO PACKAGE
-</div>
+<div class="package-badge" id="activePackageBadge">NO PACKAGE</div>
 <div class="profile-img-wrap">
-<img
-src="1000819130.jpg"
-alt="Profile"
-class="profile-img"
-id="mainProfileImg">
+<img src="1000819130.jpg" alt="Profile" class="profile-img" id="mainProfileImg">
 </div>
 <div class="user-info">
 <div class="profile-info-row">
 <span class="profile-label">NAME</span>
-<h2 id="userName">
-Loading...
-</h2>
+<h2 id="userName">Loading...</h2>
 </div>
 <div class="profile-info-row">
 <span class="profile-label">USER ID</span>
 <div class="id-value-wrap">
-<div
-class="profile-value id-value"
-id="topUserId">
-Loading...
-</div>
+<div class="profile-value id-value" id="topUserId">Loading...</div>
 <button class="copy-btn" onclick="copyUserReferralCode()">Copy</button>
 </div>
 </div>
 <div class="profile-info-row">
-<span class="profile-label">
-DATE OF BIRTH
-</span>
-<div
-class="profile-value"
-id="dobDisplayInfo">
-Not Set
-</div>
+<span class="profile-label">DATE OF BIRTH</span>
+<div class="profile-value" id="dobDisplayInfo">Not Set</div>
 </div>
 </div>
 </div>
 
 <!-- ADMIN STATUS CONTAINER -->
 <div id="adminStatusContainer" style="background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 15px; margin: 0 0 20px 0;">
-    <h3 style="margin: 0 0 10px; font-size: 16px; color: var(--accent);">📢 Admin Updates & Status</h3>
-    <div id="statusList">Loading updates...</div>
+<h3 style="margin: 0 0 10px; font-size: 16px; color: var(--accent);">📢 Admin Updates & Status</h3>
+<div id="statusList">Loading updates...</div>
 </div>
 
 <!-- EARNINGS CARDS -->
@@ -942,14 +793,7 @@ Not Set
 </div>
 <div>
 <div class="card-divider"></div>
-<a
-href="#"
-class="card-footer-link"
-onclick="openEarningsModal('Today Earnings',document.getElementById('todayRevenue').innerText);return false;">
-View details
-<span>›</span>
-
-</a>
+<a href="#" class="card-footer-link" onclick="openEarningsModal('Today Earnings',document.getElementById('todayRevenue').innerText);return false;">View details<span>›</span></a>
 </div>
 </div>
 <div class="v-card bg-7days">
@@ -959,15 +803,7 @@ View details
 </div>
 <div>
 <div class="card-divider"></div>
-<a
-href="#"
-class="card-footer-link"
-onclick="openEarningsModal('7 Days Earnings',document.getElementById('sevenDaysRevenue').innerText);return false;">
-
-View details
-<span>›</span>
-
-</a>
+<a href="#" class="card-footer-link" onclick="openEarningsModal('7 Days Earnings',document.getElementById('sevenDaysRevenue').innerText);return false;">View details<span>›</span></a>
 </div>
 </div>
 <div class="v-card bg-30days">
@@ -977,15 +813,7 @@ View details
 </div>
 <div>
 <div class="card-divider"></div>
-<a
-href="#"
-class="card-footer-link"
-onclick="openEarningsModal('30 Days Earnings',document.getElementById('thirtyDaysRevenue').innerText);return false;">
-
-View details
-<span>›</span>
-
-</a>
+<a href="#" class="card-footer-link" onclick="openEarningsModal('30 Days Earnings',document.getElementById('thirtyDaysRevenue').innerText);return false;">View details<span>›</span></a>
 </div>
 </div>
 <div class="v-card bg-alltime">
@@ -995,15 +823,7 @@ View details
 </div>
 <div>
 <div class="card-divider"></div>
-<a
-href="#"
-class="card-footer-link"
-onclick="openEarningsModal('All Time Earnings',document.getElementById('allTimeRevenueText').innerText);return false;">
-
-View details
-<span>›</span>
-
-</a>
+<a href="#" class="card-footer-link" onclick="openEarningsModal('All Time Earnings',document.getElementById('allTimeRevenueText').innerText);return false;">View details<span>›</span></a>
 </div>
 </div>
 <div class="v-card bg-passive">
@@ -1013,329 +833,171 @@ View details
 </div>
 <div>
 <div class="card-divider"></div>
-<a
-href="#"
-class="card-footer-link"
-onclick="openEarningsModal('Passive Income',document.getElementById('passiveIncome').innerText);return false;">
+<a href="#" class="card-footer-link" onclick="openEarningsModal('Passive Income',document.getElementById('passiveIncome').innerText);return false;">View details<span>›</span></a>
+</div>
+</div>
+</div>
 
-View details
-<span>›</span>
-
-</a>
-</div>
-</div>
-</div>
 <!-- REFERRALS -->
 <div class="section-box">
 <h3>👥 My Referrals & Joins</h3>
 <div class="referral-tabs">
-<button
-class="ref-tab active"
-onclick="filterReferrals(1,this)">
-1 Day (Today)
-</button>
-
-<button
-class="ref-tab"
-onclick="filterReferrals(7,this)">
-7 Days
-</button>
-
-<button
-class="ref-tab"
-onclick="filterReferrals(15,this)">
-15 Days
-</button>
-
-<button
-class="ref-tab"
-onclick="filterReferrals(30,this)">
-30 Days
-</button>
-
+<button class="ref-tab active" onclick="filterReferrals(1,this)">1 Day (Today)</button>
+<button class="ref-tab" onclick="filterReferrals(7,this)">7 Days</button>
+<button class="ref-tab" onclick="filterReferrals(15,this)">15 Days</button>
+<button class="ref-tab" onclick="filterReferrals(30,this)">30 Days</button>
 </div>
 <div id="referralsListContainer">
-<div
-style="text-align:center;color:#64748b;font-size:13px;padding:10px;">
-Loading referrals...
-</div>
+<div style="text-align:center;color:#64748b;font-size:13px;padding:10px;">Loading referrals...</div>
 </div>
 </div>
 <div class="app-footer-credit">
-Website Created in August 2026 by
-<b>Swrang Swargiary</b>
+Website Created in August 2026 by <b>Swrang Swargiary</b>
 </div>
 </div>
 </div>
+
 <!-- TOAST -->
-<div id="toastNotification">
-⚡
-<span id="toastMessage">
-Success Message
-</span>
-</div>
+<div id="toastNotification">⚡<span id="toastMessage">Success Message</span></div>
+
 <!-- EARNINGS MODAL -->
 <div id="earningsModal" class="modal-overlay">
 <div class="modal-box">
-<h3
-id="earningsModalTitle"
-style="color:#7c3aed;margin-top:0;">
-📊 Earning Details
-</h3>
-<p
-style="font-size:13px;color:#475569;margin-bottom:15px;">
-Breakdown of your selected revenue duration:
-</p>
-<div
-style="background:#f8fafc;padding:16px;border-radius:14px;border:1px solid #e2e8f0;text-align:center;margin-bottom:15px;">
-<span
-style="font-size:12px;color:#64748b;font-weight:600;display:block;margin-bottom:4px;">
-Total Collected
-
-</span>
-<h2
-id="earningsModalAmount"
-style="font-size:32px;color:#0f172a;margin:0;font-weight:800;">
-₹0
-
-</h2>
+<h3 id="earningsModalTitle" style="color:#7c3aed;margin-top:0;">📊 Earning Details</h3>
+<p style="font-size:13px;color:#475569;margin-bottom:15px;">Breakdown of your selected revenue duration:</p>
+<div style="background:#f8fafc;padding:16px;border-radius:14px;border:1px solid #e2e8f0;text-align:center;margin-bottom:15px;">
+<span style="font-size:12px;color:#64748b;font-weight:600;display:block;margin-bottom:4px;">Total Collected</span>
+<h2 id="earningsModalAmount" style="font-size:32px;color:#0f172a;margin:0;font-weight:800;">₹0</h2>
 </div>
-<button
-onclick="closeModal('earningsModal')"
-class="btn-action">
-Close
-
-</button>
+<button onclick="closeModal('earningsModal')" class="btn-action">Close</button>
+</div>
 </div>
 
-</div>
 <!-- PACKAGE MODAL -->
 <div id="packageModal" class="modal-overlay">
 <div class="modal-box">
-<h3 style="color:#7c3aed;margin-top:0;">
-👑 My Package
-</h3>
-<div
-style="background:#f8fafc;padding:18px;border-radius:14px;border:1px solid #e2e8f0;">
-<div
-style="font-size:12px;color:#64748b;margin-bottom:5px;">
-CURRENT PACKAGE
-</div>
-<h2
-id="modalPkgName"
-style="margin:0;color:#0f172a;font-size:24px;">
-No Package Active
-</h2>
-<div
-style="margin-top:18px;border-top:1px solid #e2e8f0;padding-top:15px;">
-<p style="font-size:13px;color:#475569;">
-<b>Package Status:</b>
-<span id="modalPkgStatus">
-No Active Package
-</span>
-</p>
-<p style="font-size:13px;color:#475569;">
-<b>Commission:</b>
-<span id="modalPkgCommission">
-Not Available
-</span>
-</p>
-<p style="font-size:13px;color:#475569;">
-<b>Withdrawal Limit:</b>
-<span id="modalPkgWithdraw">
-₹200 Minimum
-</span>
-</p>
+<h3 style="color:#7c3aed;margin-top:0;">👑 My Package</h3>
+<div style="background:#f8fafc;padding:18px;border-radius:14px;border:1px solid #e2e8f0;">
+<div style="font-size:12px;color:#64748b;margin-bottom:5px;">CURRENT PACKAGE</div>
+<h2 id="modalPkgName" style="margin:0;color:#0f172a;font-size:24px;">No Package Active</h2>
+<div style="margin-top:18px;border-top:1px solid #e2e8f0;padding-top:15px;">
+<p style="font-size:13px;color:#475569;"><b>Package Status:</b> <span id="modalPkgStatus">No Active Package</span></p>
+<p style="font-size:13px;color:#475569;"><b>Commission:</b> <span id="modalPkgCommission">Not Available</span></p>
+<p style="font-size:13px;color:#475569;"><b>Withdrawal Limit:</b> <span id="modalPkgWithdraw">₹200 Minimum</span></p>
 </div>
 </div>
-<button
-onclick="closeModal('packageModal')"
-class="btn-action">
-Close
-
-</button>
+<button onclick="closeModal('packageModal')" class="btn-action">Close</button>
+</div>
 </div>
 
-</div>
 <!-- EARNINGS HISTORY -->
 <div id="earningsHistoryModal" class="modal-overlay">
 <div class="modal-box">
-<h3 style="color:#7c3aed;margin-top:0;">
-📊 My Earnings & Transactions
-</h3>
-<p style="font-size:13px;color:#64748b;">
-Your commission and earnings history will appear here.
-</p>
+<h3 style="color:#7c3aed;margin-top:0;">📊 My Earnings & Transactions</h3>
+<p style="font-size:13px;color:#64748b;">Your commission and earnings history will appear here.</p>
 <div id="earningsHistoryList">
-<div
-style="text-align:center;color:#64748b;font-size:13px;padding:20px;">
-Loading earnings...
+<div style="text-align:center;color:#64748b;font-size:13px;padding:20px;">Loading earnings...</div>
 </div>
+<button onclick="closeModal('earningsHistoryModal')" class="btn-action" style="margin-top:15px;">Close</button>
 </div>
-<button
-onclick="closeModal('earningsHistoryModal')"
-class="btn-action"
-style="margin-top:15px;">
-Close
-
-</button>
 </div>
 
-</div>
 <!-- WITHDRAW HISTORY -->
 <div id="historyModal" class="modal-overlay">
 <div class="modal-box">
-<h3 style="color:#0f172a;margin-top:0;">
-📜 Withdrawal History
-</h3>
+<h3 style="color:#0f172a;margin-top:0;">📜 Withdrawal History</h3>
 <div id="withdrawalHistoryList">
-<div
-style="text-align:center;color:#64748b;font-size:13px;padding:10px;">
-Loading history...
+<div style="text-align:center;color:#64748b;font-size:13px;padding:10px;">Loading history...</div>
 </div>
+<button onclick="closeModal('historyModal')" class="btn-action" style="margin-top:15px;">Close</button>
 </div>
-<button
-onclick="closeModal('historyModal')"
-class="btn-action"
-style="margin-top:15px;">
-Close
-
-</button>
 </div>
 
-</div>
 <!-- PAYOUT / PAYMENT DETAILS -->
 <div id="profileSettingsModal" class="modal-overlay">
-  <div class="modal-box">
-    <h3 style="margin-top:0;color:#7c3aed;"> 🏦 Payment Details </h3>
-    <p id="payoutInfoText" style="font-size:13px;color:#64748b;line-height:1.6;"> Choose one payment method. After saving your payment details, you cannot change or update them. </p>
-<!-- PAYMENT METHOD TABS -->
+<div class="modal-box">
+<h3 style="margin-top:0;color:#7c3aed;">🏦 Payment Details</h3>
+<p id="payoutInfoText" style="font-size:13px;color:#64748b;line-height:1.6;">Choose one payment method. After saving your payment details, you cannot change or update them.</p>
 <div class="payout-tabs">
-  <div class="payout-tab active" id="tabUpi" onclick="switchPayoutMode('upi')"> UPI ID </div>
-  <div class="payout-tab" id="tabBank" onclick="switchPayoutMode('bank')"> Bank Account </div>
+<div class="payout-tab active" id="tabUpi" onclick="switchPayoutMode('upi')">UPI ID</div>
+<div class="payout-tab" id="tabBank" onclick="switchPayoutMode('bank')">Bank Account</div>
 </div>
-<!-- UPI SECTION -->
 <div id="upiSection">
-  <label style="font-size:13px;font-weight:700;color:#334155;"> UPI ID </label>
-  <input type="text" id="editUpiId" class="input-field" placeholder="yourname@upi" autocomplete="off">
+<label style="font-size:13px;font-weight:700;color:#334155;">UPI ID</label>
+<input type="text" id="editUpiId" class="input-field" placeholder="yourname@upi" autocomplete="off">
 </div>
-<!-- BANK SECTION -->
 <div id="bankSection" style="display:none;">
-  <label style="font-size:13px;font-weight:700;color:#334155;"> Account Holder Name </label>
-  <input type="text" id="editAccName" class="input-field" placeholder="Enter account holder name" autocomplete="off">
-  <label style="font-size:13px;font-weight:700;color:#334155;"> Bank Account Number </label>
-  <input type="text" id="editAccNo" class="input-field" placeholder="Enter bank account number" autocomplete="off">
-  <label style="font-size:13px;font-weight:700;color:#334155;"> IFSC Code </label>
-  <input type="text" id="editIfsc" class="input-field" placeholder="Example: SBIN0001234" autocomplete="off">
+<label style="font-size:13px;font-weight:700;color:#334155;">Account Holder Name</label>
+<input type="text" id="editAccName" class="input-field" placeholder="Enter account holder name" autocomplete="off">
+<label style="font-size:13px;font-weight:700;color:#334155;">Bank Account Number</label>
+<input type="text" id="editAccNo" class="input-field" placeholder="Enter bank account number" autocomplete="off">
+<label style="font-size:13px;font-weight:700;color:#334155;">IFSC Code</label>
+<input type="text" id="editIfsc" class="input-field" placeholder="Example: SBIN0001234" autocomplete="off">
 </div>
-<!-- LOCKED PAYMENT MESSAGE -->
 <div id="paymentLockedMessage" style="display:none;margin-top:15px;padding:15px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa;">
-  <div style="font-size:13px;font-weight:700;color:#9a3412;line-height:1.6;"> 🔒 Payment details change karne ke liye Smart Money Customer Care se contact karein. </div>
+<div style="font-size:13px;font-weight:700;color:#9a3412;line-height:1.6;">🔒 Payment details change karne ke liye Smart Money Customer Care se contact karein.</div>
 </div>
-<!-- SAVE BUTTON -->
-<button onclick="updateUserPayoutDetails()" class="btn-action" id="saveProfileBtn"> Save Payment Details </button>
-
-<!-- CUSTOMER CARE BUTTON -->
-<button id="customerCareBtn" onclick="connectCustomerCare()" style="display:none;width:100%;margin-top:10px;padding:13px;border:none;border-radius:10px;background:#0f172a;color:#ffffff;font-weight:700;cursor:pointer;"> 📧 CONNECT CUSTOMER CARE </button>
-
-<button onclick="closeModal('profileSettingsModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;font-weight:600;"> Cancel </button>
-
-  </div>
+<button onclick="updateUserPayoutDetails()" class="btn-action" id="saveProfileBtn">Save Payment Details</button>
+<button id="customerCareBtn" onclick="connectCustomerCare()" style="display:none;width:100%;margin-top:10px;padding:13px;border:none;border-radius:10px;background:#0f172a;color:#ffffff;font-weight:700;cursor:pointer;">📧 CONNECT CUSTOMER CARE</button>
+<button onclick="closeModal('profileSettingsModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;font-weight:600;">Cancel</button>
 </div>
+</div>
+
 <!-- KYC -->
 <div id="kycModal" class="modal-overlay">
 <div class="modal-box">
 <h3>🆔 KYC & Date of Birth</h3>
 <label>Full Name</label>
-<input
-type="text"
-id="kycFullName"
-class="input-field">
-
+<input type="text" id="kycFullName" class="input-field">
 <label>Date of Birth</label>
-
-<input
-type="date"
-id="kycDob"
-class="input-field">
-
-<button
-onclick="saveKycDetails()"
-class="btn-action">
-
-Save KYC
-
-</button>
-<button
-onclick="closeModal('kycModal')"
-style="width:100%;border:none;background:none;padding:12px;color:#64748b;">
-
-Cancel
-
-</button>
+<input type="date" id="kycDob" class="input-field">
+<button onclick="saveKycDetails()" class="btn-action">Save KYC</button>
+<button onclick="closeModal('kycModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;">Cancel</button>
+</div>
 </div>
 
-</div>
 <!-- WITHDRAW -->
 <div id="withdrawModal" class="modal-overlay">
-  <div class="modal-box">
-    <h3>💸 Request Withdrawal</h3>
-    <p id="withdrawModalBalanceText" style="font-size:13px;color:#475569;margin-bottom:12px;"> Available Balance: ₹0 </p>
-    
-    <!-- WITHDRAW PAYMENT PREVIEW CONTAINER -->
-    <div id="withdrawPaymentPreview" style="background:#f8fafc;padding:14px;border-radius:14px;border:1px solid #e2e8f0;margin-bottom:14px;">
-      <div style="font-size:11px;font-weight:800;color:#64748b;letter-spacing:0.5px;margin-bottom:4px;">PAYING TO:</div>
-      <div id="withdrawPaymentDetailsContent" style="font-size:13px;font-weight:700;color:#0f172a;">Loading payment info...</div>
-    </div>
-
-    <div class="amount-chips">
-      <div class="chip" onclick="setWithdrawAmount(100)"> ₹100 </div>
-      <div class="chip" onclick="setWithdrawAmount(500)"> ₹500 </div>
-      <div class="chip" onclick="setWithdrawAmount(1000)"> ₹1000 </div>
-      <div class="chip" onclick="setWithdrawAmount(userCurrentBalance)"> MAX </div>
-    </div>
-    
-    <label>Enter Amount</label>
-    <input type="number" id="withdrawAmount" class="input-field" placeholder="Amount">
-
-    <button onclick="submitWithdrawal()" class="btn-action" id="submitWithdrawBtn"> Submit Request </button>
-    <button onclick="closeModal('withdrawModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;"> Cancel </button>
-  </div>
+<div class="modal-box">
+<h3>💸 Request Withdrawal</h3>
+<p id="withdrawModalBalanceText" style="font-size:13px;color:#475569;margin-bottom:12px;">Available Balance: ₹0</p>
+<div id="withdrawPaymentPreview" style="background:#f8fafc;padding:14px;border-radius:14px;border:1px solid #e2e8f0;margin-bottom:14px;">
+<div style="font-size:11px;font-weight:800;color:#64748b;letter-spacing:0.5px;margin-bottom:4px;">PAYING TO:</div>
+<div id="withdrawPaymentDetailsContent" style="font-size:13px;font-weight:700;color:#0f172a;">Loading payment info...</div>
 </div>
+<div class="amount-chips">
+<div class="chip" onclick="setWithdrawAmount(100)">₹100</div>
+<div class="chip" onclick="setWithdrawAmount(500)">₹500</div>
+<div class="chip" onclick="setWithdrawAmount(1000)">₹1000</div>
+<div class="chip" onclick="setWithdrawAmount(userCurrentBalance)">MAX</div>
+</div>
+<label>Enter Amount</label>
+<input type="number" id="withdrawAmount" class="input-field" placeholder="Amount">
+<button onclick="submitWithdrawal()" class="btn-action" id="submitWithdrawBtn">Submit Request</button>
+<button onclick="closeModal('withdrawModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;">Cancel</button>
+</div>
+</div>
+
 <script>
 /* =========================================
 CONFIGURATION
 ========================================= */
-
 const EMAILJS_PUBLIC_KEY="FxcimUvl0-ZxAauRx";
 const EMAILJS_SERVICE_ID="service_qsy07qr";
 const EMAILJS_WITHDRAW_APPROVED_TEMPLATE="template_mf8enck";
 
 emailjs.init(EMAILJS_PUBLIC_KEY);
 
-const SUPABASE_URL=
-"https://rvprrulkjegvicbnjuft.supabase.co";
+const SUPABASE_URL="https://rvprrulkjegvicbnjuft.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 
-const SUPABASE_PUBLISHABLE_KEY=
-"sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-
-const supabaseClient=
-window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_PUBLISHABLE_KEY,
-{
-auth:{
-persistSession:true,
-autoRefreshToken:true,
-detectSessionInUrl:true
-}
-}
-);
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
+auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:true }
+});
 
 /* =========================================
 GLOBAL VARIABLES
 ========================================= */
-
 let currentUserId=null;
 let currentProfile={};
 let userCurrentBalance=0;
@@ -1348,258 +1010,150 @@ let dashboardInitialized=false;
 let allEarningsData=[];
 
 /* =========================================
-TOAST
+TOAST & ESCAPE
 ========================================= */
-
 function showToast(msg){
-
-const toast=
-document.getElementById("toastNotification");
-
-const message=
-document.getElementById("toastMessage");
-
+const toast=document.getElementById("toastNotification");
+const message=document.getElementById("toastMessage");
 if(!toast||!message)return;
-
 message.innerText=msg;
-
 toast.classList.add("show");
-
 clearTimeout(window.toastTimer);
-
-window.toastTimer=setTimeout(()=>{
-
-toast.classList.remove("show");
-
-},3000);
-
+window.toastTimer=setTimeout(()=>{ toast.classList.remove("show"); },3000);
 }
-
-/* =========================================
-ESCAPE HTML
-========================================= */
 
 function escapeHtml(text){
-
 const div=document.createElement("div");
-
 div.textContent=text||"";
-
 return div.innerHTML;
-
 }
-
-/* =========================================
-COPY USER REFERRAL CODE
-========================================= */
 
 function copyUserReferralCode(){
-if(!userRefCode) {
-showToast("Referral code not available");
-return;
-}
+if(!userRefCode) { showToast("Referral code not available"); return; }
 navigator.clipboard.writeText(userRefCode).then(()=>{
 showToast("Referral ID copied to clipboard!");
-}).catch(err=>{
-showToast("Failed to copy code");
-});
+}).catch(err=>{ showToast("Failed to copy code"); });
 }
 
 /* =========================================
-SIDEBAR
+SIDEBAR & MODALS
 ========================================= */
-
 function toggleSidebar(){
-
-document
-.getElementById("sidebar")
-?.classList.toggle("active");
-
-document
-.getElementById("sidebarOverlay")
-?.classList.toggle("active");
-
+document.getElementById("sidebar")?.classList.toggle("active");
+document.getElementById("sidebarOverlay")?.classList.toggle("active");
 }
 
 function closeSidebar(){
-
-document
-.getElementById("sidebar")
-?.classList.remove("active");
-
-document
-.getElementById("sidebarOverlay")
-?.classList.remove("active");
-
+document.getElementById("sidebar")?.classList.remove("active");
+document.getElementById("sidebarOverlay")?.classList.remove("active");
 }
-
-/* =========================================
-MODALS
-========================================= */
 
 function openModal(id){
-
 const modal=document.getElementById(id);
-
-if(modal){
-modal.style.display="flex";
-}
-
+if(modal){ modal.style.display="flex"; }
 }
 
 function closeModal(id){
-
 const modal=document.getElementById(id);
-
-if(modal){
-modal.style.display="none";
+if(modal){ modal.style.display="none"; }
 }
-
-}
-
-/* =========================================
-OPEN MODALS
-========================================= */
 
 function openEarningsModal(title,amount){
-
-document.getElementById("earningsModalTitle").innerText=
-"📊 "+title;
-
-document.getElementById("earningsModalAmount").innerText=
-amount;
-
+document.getElementById("earningsModalTitle").innerText="📊 "+title;
+document.getElementById("earningsModalAmount").innerText=amount;
 openModal("earningsModal");
-
 }
 
 function openPackageModal(){
-
 closeSidebar();
-
 updatePackageModal();
-
 openModal("packageModal");
-
 }
 
 function openEarningsHistoryModal(){
-
 closeSidebar();
-
 openModal("earningsHistoryModal");
-
 loadEarningsHistory();
-
 }
 
 function openHistoryModal(){
-
 closeSidebar();
-
 openModal("historyModal");
-
 loadWithdrawalHistory();
-
 }
 
 function openKycModal(){
-
 closeSidebar();
-
-document.getElementById("kycFullName").value=
-currentProfile?.full_name||"";
-
-document.getElementById("kycDob").value=
-currentProfile?.date_of_birth||"";
-
+document.getElementById("kycFullName").value=currentProfile?.full_name||"";
+document.getElementById("kycDob").value=currentProfile?.date_of_birth||"";
 openModal("kycModal");
-
 }
 
 function openWithdrawModal(){
-  closeSidebar();
-  
-  if(!hasSavedPaymentDetails()){
-    alert("⚠️ Please add your UPI ID or Bank Account details first before requesting a withdrawal!");
-    openUpiModal();
-    return;
-  }
-
-  const previewBox = document.getElementById("withdrawPaymentDetailsContent");
-  const savedType = String(currentProfile?.payout_type || "").trim().toLowerCase();
-
-  if(savedType === "bank"){
-    const accName = currentProfile?.account_holder_name || "N/A";
-    const accNo = currentProfile?.bank_account_number || "N/A";
-    const ifsc = currentProfile?.ifsc_code || "N/A";
-    previewBox.innerHTML = `🏦 <b>Bank Account:</b> ${escapeHtml(accNo)} <br><span style="font-size:11px;color:#64748b;">Holder: ${escapeHtml(accName)} | IFSC: ${escapeHtml(ifsc)}</span>`;
-  } else {
-    const upi = currentProfile?.upi_id || "N/A";
-    previewBox.innerHTML = `⚡ <b>UPI ID:</b> <span style="color:#7c3aed;">${escapeHtml(upi)}</span>`;
-  }
-
-  document.getElementById("withdrawAmount").value="";
-  document.getElementById("withdrawModalBalanceText").innerText=
-  "Available Balance: ₹"+
-  Number(userCurrentBalance).toFixed(2);
-
-  openModal("withdrawModal");
+closeSidebar();
+if(!hasSavedPaymentDetails()){
+alert("⚠️ Please add your UPI ID or Bank Account details first before requesting a withdrawal!");
+openUpiModal();
+return;
+}
+const previewBox=document.getElementById("withdrawPaymentDetailsContent");
+const savedType=String(currentProfile?.payout_type||"").trim().toLowerCase();
+if(savedType==="bank"){
+const accName=currentProfile?.account_holder_name||"N/A";
+const accNo=currentProfile?.bank_account_number||"N/A";
+const ifsc=currentProfile?.ifsc_code||"N/A";
+previewBox.innerHTML=`🏦 <b>Bank Account:</b> ${escapeHtml(accNo)} <br><span style="font-size:11px;color:#64748b;">Holder: ${escapeHtml(accName)} | IFSC: ${escapeHtml(ifsc)}</span>`;
+}else{
+const upi=currentProfile?.upi_id||"N/A";
+previewBox.innerHTML=`⚡ <b>UPI ID:</b> <span style="color:#7c3aed;">${escapeHtml(upi)}</span>`;
+}
+document.getElementById("withdrawAmount").value="";
+document.getElementById("withdrawModalBalanceText").innerText="Available Balance: ₹"+Number(userCurrentBalance).toFixed(2);
+openModal("withdrawModal");
 }
 
 /* =========================================
-PAYMENT DETAILS LOCK SYSTEM
+PAYMENT DETAILS LOCK & SETTINGS
 ========================================= */
-
 function hasSavedPaymentDetails(){
-const payoutType= String( currentProfile?.payout_type||"" ).trim().toLowerCase();
-if(payoutType==="upi"){
-const upi= String( currentProfile?.upi_id||"" ).trim();
-return upi!=="";
-}
-if(payoutType==="bank"){
-const accountNumber= String( currentProfile?.bank_account_number||"" ).trim();
-return accountNumber!=="";
-}
+const payoutType=String(currentProfile?.payout_type||"").trim().toLowerCase();
+if(payoutType==="upi"){ return String(currentProfile?.upi_id||"").trim()!==""; }
+if(payoutType==="bank"){ return String(currentProfile?.bank_account_number||"").trim()!==""; }
 return false;
 }
 
-/* =========================================
-OPEN PAYMENT DETAILS MODAL
-========================================= */
-
 function openUpiModal(){
 closeSidebar();
-const paymentLocked= hasSavedPaymentDetails();
-const savedType= String( currentProfile?.payout_type||"" ).trim().toLowerCase();
-const upiInput= document.getElementById("editUpiId");
-const accNameInput= document.getElementById("editAccName");
-const accNoInput= document.getElementById("editAccNo");
-const ifscInput= document.getElementById("editIfsc");
-const saveBtn= document.getElementById("saveProfileBtn");
-const careBtn= document.getElementById("customerCareBtn");
-const lockedMessage= document.getElementById("paymentLockedMessage");
-const infoText= document.getElementById("payoutInfoText");
+const paymentLocked=hasSavedPaymentDetails();
+const savedType=String(currentProfile?.payout_type||"").trim().toLowerCase();
+const upiInput=document.getElementById("editUpiId");
+const accNameInput=document.getElementById("editAccName");
+const accNoInput=document.getElementById("editAccNo");
+const ifscInput=document.getElementById("editIfsc");
+const saveBtn=document.getElementById("saveProfileBtn");
+const careBtn=document.getElementById("customerCareBtn");
+const lockedMessage=document.getElementById("paymentLockedMessage");
+const infoText=document.getElementById("payoutInfoText");
 
-upiInput.value= currentProfile?.upi_id||"";
-accNameInput.value= currentProfile?.account_holder_name||"";
-accNoInput.value= currentProfile?.bank_account_number||"";
-ifscInput.value= currentProfile?.ifsc_code||"";
+upiInput.value=currentProfile?.upi_id||"";
+accNameInput.value=currentProfile?.account_holder_name||"";
+accNoInput.value=currentProfile?.bank_account_number||"";
+ifscInput.value=currentProfile?.ifsc_code||"";
 
 if(paymentLocked){
-switchPayoutMode( savedType==="bank" ?"bank" :"upi", true );
+switchPayoutMode(savedType==="bank"?"bank":"upi",true);
 upiInput.disabled=true;
 accNameInput.disabled=true;
 accNoInput.disabled=true;
 ifscInput.disabled=true;
 document.getElementById("tabUpi").style.pointerEvents="none";
 document.getElementById("tabBank").style.pointerEvents="none";
-document.getElementById("tabUpi").style.opacity= savedType==="upi" ?"1" :".4";
-document.getElementById("tabBank").style.opacity= savedType==="bank" ?"1" :".4";
+document.getElementById("tabUpi").style.opacity=savedType==="upi"?"1":".4";
+document.getElementById("tabBank").style.opacity=savedType==="bank"?"1":".4";
 saveBtn.style.display="none";
 careBtn.style.display="block";
 lockedMessage.style.display="block";
-infoText.innerHTML= `<b style="color:#dc2626;">🔒 Payment Details Locked</b><br> Your ${savedType==="bank"?"Bank Account":"UPI ID"} has been permanently saved.`;
+infoText.innerHTML=`<b style="color:#dc2626;">🔒 Payment Details Locked</b><br> Your ${savedType==="bank"?"Bank Account":"UPI ID"} has been permanently saved.`;
 }else{
 upiInput.disabled=false;
 accNameInput.disabled=false;
@@ -1612,61 +1166,35 @@ document.getElementById("tabBank").style.opacity="1";
 saveBtn.style.display="block";
 careBtn.style.display="none";
 lockedMessage.style.display="none";
-infoText.innerHTML= `Choose <b>UPI ID</b> or <b>Bank Account</b>. After saving, your payment method will be permanently locked.`;
-if(savedType==="bank"){
-switchPayoutMode("bank");
-}else{
-switchPayoutMode("upi");
-}
+infoText.innerHTML=`Choose <b>UPI ID</b> or <b>Bank Account</b>. After saving, your payment method will be permanently locked.`;
+switchPayoutMode(savedType==="bank"?"bank":"upi");
 }
 openModal("profileSettingsModal");
 }
 
-/* =========================================
-SWITCH PAYMENT MODE
-========================================= */
-
 function switchPayoutMode(mode,force=false){
-const paymentLocked= hasSavedPaymentDetails();
-if( paymentLocked&& !force ){
-showToast("Payment method is permanently locked.");
-return;
-}
-if(mode!=="upi"&&mode!=="bank"){
-mode="upi";
-}
+const paymentLocked=hasSavedPaymentDetails();
+if(paymentLocked&&!force){ showToast("Payment method is permanently locked."); return; }
+if(mode!=="upi"&&mode!=="bank"){ mode="upi"; }
 payoutMode=mode;
-document.getElementById("upiSection").style.display= mode==="upi" ?"block" :"none";
-document.getElementById("bankSection").style.display= mode==="bank" ?"block" :"none";
-document.getElementById("tabUpi").className= mode==="upi" ?"payout-tab active" :"payout-tab";
-document.getElementById("tabBank").className= mode==="bank" ?"payout-tab active" :"payout-tab";
+document.getElementById("upiSection").style.display=mode==="upi"?"block":"none";
+document.getElementById("bankSection").style.display=mode==="bank"?"block":"none";
+document.getElementById("tabUpi").className=mode==="upi"?"payout-tab active":"payout-tab";
+document.getElementById("tabBank").className=mode==="bank"?"payout-tab active":"payout-tab";
 }
-
-/* =========================================
-SAVE PAYMENT DETAILS
-========================================= */
 
 async function updateUserPayoutDetails(){
-if(hasSavedPaymentDetails()){
-showPaymentChangeBlocked();
-return;
-}
+if(hasSavedPaymentDetails()){ showPaymentChangeBlocked(); return; }
 const saveBtn=document.getElementById("saveProfileBtn");
 if(payoutMode==="upi"){
 const upiId=document.getElementById("editUpiId").value.trim();
-if(!upiId || !upiId.includes("@")){
-alert("Please enter a valid UPI ID.");
-return;
-}
+if(!upiId||!upiId.includes("@")){ alert("Please enter a valid UPI ID."); return; }
 }
 if(payoutMode==="bank"){
 const accountHolder=document.getElementById("editAccName").value.trim();
 const accountNumber=document.getElementById("editAccNo").value.trim();
 const ifscCode=document.getElementById("editIfsc").value.trim().toUpperCase();
-if(!accountHolder || !accountNumber || !ifscCode){
-alert("Please fill all bank details.");
-return;
-}
+if(!accountHolder||!accountNumber||!ifscCode){ alert("Please fill all bank details."); return; }
 }
 saveBtn.disabled=true;
 saveBtn.innerText="Saving...";
@@ -1687,7 +1215,7 @@ updateData.upi_id=null;
 try{
 const {data,error}=await supabaseClient.from("profiles").update(updateData).eq("user_id",currentUserId).select().single();
 if(error) throw error;
-currentProfile={ ...currentProfile, ...data };
+currentProfile={...currentProfile,...data};
 showToast("Payment details saved successfully!");
 closeModal("profileSettingsModal");
 setTimeout(()=>{ openUpiModal(); },300);
@@ -1797,39 +1325,28 @@ return newCode;
 }
 
 /* =========================================
-FIXED DASHBOARD PROFILE LOADER
+PROFILE LOADER & DASHBOARD INIT
 ========================================= */
-
 async function loadDashboardProfile(){
 try {
-let user = null;
+let user=null;
 const { data: userData, error: userError } = await supabaseClient.auth.getUser();
-if (userData?.user) {
-  user = userData.user;
-} else {
-  const { data: sessionData } = await supabaseClient.auth.getSession();
-  if (sessionData?.session?.user) {
-    user = sessionData.session.user;
-  }
+if(userData?.user){ user=userData.user; }
+else {
+const { data: sessionData } = await supabaseClient.auth.getSession();
+if(sessionData?.session?.user){ user=sessionData.session.user; }
 }
 
 if(!user){
-console.log("No active user found, redirecting to login...");
 window.location.href="login.html";
 return false;
 }
 
 currentUserId=user.id;
 currentUserEmail=user.email||"";
-
 const authName=user.user_metadata?.full_name||user.user_metadata?.name||"Smart Money User";
 
 const {data:profile,error:profileError}=await supabaseClient.from("profiles").select("*").eq("user_id",currentUserId).maybeSingle();
-
-if(profileError){
-console.error("Profile load error:",profileError);
-}
-
 let finalProfile=profile;
 
 if(!finalProfile){
@@ -1843,10 +1360,7 @@ package_name:null,
 referral_code:newReferralCode
 };
 const {data:createdProfile,error:createError}=await supabaseClient.from("profiles").upsert(newProfile,{onConflict:"user_id"}).select().single();
-if(createError){
-console.error("Profile create error:",createError);
-return false;
-}
+if(createError) return false;
 finalProfile=createdProfile;
 }
 
@@ -1858,7 +1372,6 @@ userRefCode=permanentCode;
 renderProfile(currentProfile,authName);
 return true;
 } catch(err) {
-console.error("Critical error in loadDashboardProfile:", err);
 return false;
 }
 }
@@ -1950,9 +1463,7 @@ const now=new Date();
 return allEarningsData.filter(item=>{
 if(!item.created_at) return false;
 const created=new Date(item.created_at);
-if(days==="today"){
-return created.toDateString()===now.toDateString();
-}
+if(days==="today"){ return created.toDateString()===now.toDateString(); }
 const diff=(now.getTime()-created.getTime())/(1000*60*60*24);
 return diff>=0 && diff<=days;
 }).reduce((sum,item)=>sum+Number(item.amount||0),0);
@@ -2153,9 +1664,7 @@ logoutBtn.onclick=async function(){
 try {
   if(realtimeChannel) await supabaseClient.removeChannel(realtimeChannel);
   await supabaseClient.auth.signOut();
-} catch(e) {
-  console.error("Logout error:", e);
-} finally {
+} catch(e) {} finally {
   window.location.href="login.html";
 }
 };
@@ -2191,7 +1700,6 @@ event.target.style.display="none";
 /* =========================================
 INITIALIZE DASHBOARD
 ========================================= */
-
 document.addEventListener("DOMContentLoaded",async function(){
 if(dashboardInitialized) return;
 dashboardInitialized=true;
@@ -2199,10 +1707,7 @@ dashboardInitialized=true;
 try{
 await loadGlobalTopLogo();
 const profileLoaded=await loadDashboardProfile();
-
-if(!profileLoaded){
-return;
-}
+if(!profileLoaded){ return; }
 
 await Promise.all([
 loadWithdrawalHistory(),
@@ -2214,11 +1719,9 @@ loadAdminStatus()
 setupRealtimeListener();
 setupLogout();
 }catch(error){
-console.error("Dashboard initialization error:",error);
 showToast("Dashboard loading error. Please refresh.");
 }
 });
-
 </script>
 </body>
 </html>
