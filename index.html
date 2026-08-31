@@ -130,15 +130,8 @@ justify-content:center;
 color:white;
 font-weight:800;
 font-size:18px;
-overflow:hidden;
 box-shadow:
 0 8px 20px rgba(124,58,237,.25);
-}
-
-.logo-circle img{
-width:100%;
-height:100%;
-object-fit:cover;
 }
 
 .brand-text h2{
@@ -192,13 +185,6 @@ color:#7c3aed;
 display:flex;
 align-items:center;
 justify-content:center;
-overflow:hidden;
-}
-
-.profile-icon-btn img{
-width:100%;
-height:100%;
-object-fit:cover;
 }
 
 .hamburger{
@@ -231,7 +217,6 @@ z-index:3000;
 padding:25px;
 transition:.35s;
 box-shadow:-10px 0 30px rgba(0,0,0,.12);
-overflow-y:auto;
 }
 
 .mobile-menu.active{
@@ -242,50 +227,7 @@ right:0;
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:20px;
-}
-
-.mobile-user-profile{
-display:flex;
-align-items:center;
-gap:12px;
-padding:12px;
-background:#f8fafc;
-border-radius:14px;
-margin-bottom:20px;
-border:1px solid #eef2f7;
-}
-
-.mobile-user-avatar{
-width:45px;
-height:45px;
-border-radius:12px;
-background:linear-gradient(135deg,#7c3aed,#2563eb);
-display:flex;
-align-items:center;
-justify-content:center;
-color:white;
-font-weight:800;
-font-size:16px;
-overflow:hidden;
-}
-
-.mobile-user-avatar img{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.mobile-user-info h4{
-font-size:13px;
-font-weight:800;
-color:#111827;
-}
-
-.mobile-user-info p{
-font-size:10px;
-color:#64748b;
-font-weight:600;
+margin-bottom:30px;
 }
 
 .close-menu{
@@ -304,7 +246,9 @@ padding:14px;
 border-bottom:1px solid #eef2f7;
 font-weight:700;
 font-size:14px;
-color:#334155;
+background:linear-gradient(135deg, #7c3aed, #2563eb);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
 .menu-overlay{
@@ -1174,9 +1118,7 @@ font-size:26px;
 
 <a href="#" class="brand">
 
-<div class="logo-circle" id="navLogoContainer">
-  SM
-</div>
+<div class="logo-circle">SM</div>
 
 <div class="brand-text">
 <h2>Smart Money</h2>
@@ -1195,8 +1137,10 @@ font-size:26px;
 <a href="#support">Support</a>
 
 <a href="dashboard.html"
-class="dashboard-btn" id="desktopDashboardBtn">
+class="dashboard-btn">
+
 My Dashboard
+
 </a>
 
 </div>
@@ -1206,7 +1150,7 @@ My Dashboard
 
 <a href="dashboard.html"
 class="profile-icon-btn"
-title="My Dashboard" id="desktopProfileBtn">
+title="My Dashboard">
 
 <svg width="20"
 height="20"
@@ -1264,17 +1208,6 @@ onclick="toggleMenu()">
 
 </div>
 
-<!-- Mobile User Profile Preview (Synced with Admin Panel / LocalStorage) -->
-<div class="mobile-user-profile" id="mobileUserProfileContainer">
-  <div class="mobile-user-avatar" id="mobileUserAvatar">
-    👤
-  </div>
-  <div class="mobile-user-info">
-    <h4 id="mobileUserName">Welcome User</h4>
-    <p id="mobileUserStatus">Explore Dashboard</p>
-  </div>
-</div>
-
 <a href="#home"
 onclick="toggleMenu()">🏠 Home</a>
 
@@ -1290,13 +1223,9 @@ onclick="toggleMenu()">⭐ Feedback</a>
 <a href="#support"
 onclick="toggleMenu()">💬 Contact Support</a>
 
-<a href="dashboard.html" id="mobileDashboardLink">
+<a href="dashboard.html"
+id="authMenuLink">
 👤 My Dashboard
-</a>
-
-<!-- Dynamic Login / Logout Link inside the 3-line Menu -->
-<a href="#" id="mobileAuthLink" onclick="handleAuthAction(event)">
-  🔑 Login
 </a>
 
 </div>
@@ -2424,7 +2353,7 @@ Package Details
 
 <div class="detail-row">
 
-<span>Dashboard / Profile Info</span>
+<span>Withdrawal Limit</span>
 
 <span id="modalWithdrawal"></span>
 
@@ -2473,91 +2402,113 @@ Package Details
 
 <script>
 
+
 function toggleMenu(){
-document.getElementById("mobileMenu").classList.toggle("active");
-document.getElementById("menuOverlay").classList.toggle("active");
+
+document
+.getElementById("mobileMenu")
+.classList
+.toggle("active");
+
+
+document
+.getElementById("menuOverlay")
+.classList
+.toggle("active");
+
 }
 
-function openPackageModal(name, courses, commission, withdrawal, frequency, processing, fee){
-document.getElementById("modalTitle").innerText=name;
-document.getElementById("modalCourses").innerText=courses;
-document.getElementById("modalCommission").innerText=commission;
-document.getElementById("modalWithdrawal").innerText=withdrawal;
-document.getElementById("modalFrequency").innerText=frequency;
-document.getElementById("modalProcessing").innerText=processing;
-document.getElementById("modalFee").innerText=fee;
-document.getElementById("packageModal").style.display="flex";
+
+function openPackageModal(
+name,
+courses,
+commission,
+withdrawal,
+frequency,
+processing,
+fee
+){
+
+document
+.getElementById("modalTitle")
+.innerText=name;
+
+
+document
+.getElementById("modalCourses")
+.innerText=courses;
+
+
+document
+.getElementById("modalCommission")
+.innerText=commission;
+
+
+document
+.getElementById("modalWithdrawal")
+.innerText=withdrawal;
+
+
+document
+.getElementById("modalFrequency")
+.innerText=frequency;
+
+
+document
+.getElementById("modalProcessing")
+.innerText=processing;
+
+
+document
+.getElementById("modalFee")
+.innerText=fee;
+
+
+document
+.getElementById("packageModal")
+.style.display="flex";
+
 }
+
 
 function closePackageModal(){
-document.getElementById("packageModal").style.display="none";
+
+document
+.getElementById("packageModal")
+.style.display="none";
+
 }
+
 
 window.onclick=function(event){
-const modal=document.getElementById("modal="ackageModal");
+
+const modal=
+document.getElementById("packageModal");
+
 if(event.target===modal){
+
 closePackageModal();
+
 }
+
 }
 
-// Sync Admin Panel Profile Picture & Dynamic Login/Logout State
-document.addEventListener("DOMContentLoaded", function() {
-  // Check localStorage keys commonly used for profile & auth state (e.g., 'adminProfilePic', 'userProfilePic', 'isLoggedIn', 'userName')
-  const savedProfilePic = localStorage.getItem('adminProfilePic') || localStorage.getItem('userProfilePic');
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || localStorage.getItem('userToken');
-  const userName = localStorage.getItem('userName') || 'Swrang Swargiary';
-
-  // 1. Update Navbar Logo if profile pic exists
-  if (savedProfilePic) {
-    const logoContainer = document.getElementById('navLogoContainer');
-    if (logoContainer) {
-      logoContainer.innerHTML = `<img src="${savedProfilePic}" alt="Profile">`;
+// Dynamic Login/Logout status update for Mobile Menu
+window.addEventListener('DOMContentLoaded', () => {
+    const authLink = document.getElementById('authMenuLink');
+    if (authLink) {
+        // Change condition based on your login tracking (e.g., localStorage.getItem('isLoggedIn'))
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; 
+        
+        if (isLoggedIn) {
+            authLink.href = "logout.html"; // Update with your logout handler link or function
+            authLink.innerHTML = "🚪 Logout";
+        } else {
+            authLink.href = "login.html"; // Update with your login page link
+            authLink.innerHTML = "👤 Login";
+        }
     }
-
-    const desktopProfileBtn = document.getElementById('desktopProfileBtn');
-    if (desktopProfileBtn) {
-      desktopProfileBtn.innerHTML = `<img src="${savedProfilePic}" alt="Profile">`;
-    }
-
-    // Update Mobile Menu Avatar
-    const mobileUserAvatar = document.getElementById('mobileUserAvatar');
-    if (mobileUserAvatar) {
-      mobileUserAvatar.innerHTML = `<img src="${savedProfilePic}" alt="Profile">`;
-    }
-  }
-
-  // 2. Update Mobile User Name if logged in
-  const mobileUserName = document.getElementById('mobileUserName');
-  const mobileUserStatus = document.getElementById('mobileUserStatus');
-  if (isLoggedIn && mobileUserName) {
-    mobileUserName.innerText = userName;
-    if (mobileUserStatus) mobileUserStatus.innerText = "Active Learner";
-  }
-
-  // 3. Toggle Login / Logout inside the 3-line mobile menu
-  const mobileAuthLink = document.getElementById('mobileAuthLink');
-  if (mobileAuthLink) {
-    if (isLoggedIn) {
-      mobileAuthLink.innerHTML = "🚪 Logout";
-      mobileAuthLink.setAttribute('href', '#logout');
-    } else {
-      mobileAuthLink.innerHTML = "🔑 Login";
-      mobileAuthLink.setAttribute('href', 'login.html'); // Adjust login page link as needed
-    }
-  }
 });
-
-function handleAuthAction(e) {
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || localStorage.getItem('userToken');
-  if (isLoggedIn) {
-    e.preventDefault();
-    // Clear session storage / localStorage login flags
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userToken');
-    alert('Logged out successfully!');
-    window.location.reload();
-  }
-}
 
 </script>
 
