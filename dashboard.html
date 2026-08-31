@@ -986,7 +986,9 @@ const EMAILJS_PUBLIC_KEY="FxcimUvl0-ZxAauRx";
 const EMAILJS_SERVICE_ID="service_qsy07qr";
 const EMAILJS_WITHDRAW_APPROVED_TEMPLATE="template_mf8enck";
 
-emailjs.init(EMAILJS_PUBLIC_KEY);
+if(window.emailjs && EMAILJS_PUBLIC_KEY) {
+  try { emailjs.init(EMAILJS_PUBLIC_KEY); } catch(e){}
+}
 
 const SUPABASE_URL="https://rvprrulkjegvicbnjuft.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
@@ -1325,21 +1327,32 @@ return newCode;
 }
 
 /* =========================================
-PROFILE LOADER & DASHBOARD INIT
+PROFILE LOADER & DASHBOARD INIT (FIXED)
 ========================================= */
 async function loadDashboardProfile(){
 try {
-let user=null;
-const { data: userData, error: userError } = await supabaseClient.auth.getUser();
-if(userData?.user){ user=userData.user; }
-else {
-const { data: sessionData } = await supabaseClient.auth.getSession();
-if(sessionData?.session?.user){ user=sessionData.session.user; }
+let user = null;
+
+// Use Promise.race with a 4-second timeout so it never hangs indefinitely
+const getUserPromise = supabaseClient.auth.getUser();
+const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Auth timeout")), 4000));
+
+try {
+  const res = await Promise.race([getUserPromise, timeoutPromise]);
+  if (res?.data?.user) {
+    user = res.data.user;
+  }
+} catch (err) {
+  // Fallback to getSession if getUser times out or fails
+  const { data: sessionData } = await supabaseClient.auth.getSession();
+  if (sessionData?.session?.user) {
+    user = sessionData.session.user;
+  }
 }
 
 if(!user){
-window.location.href="login.html";
-return false;
+  window.location.href="login.html";
+  return false;
 }
 
 currentUserId=user.id;
@@ -1372,6 +1385,7 @@ userRefCode=permanentCode;
 renderProfile(currentProfile,authName);
 return true;
 } catch(err) {
+window.location.href="login.html";
 return false;
 }
 }
@@ -1621,7 +1635,7 @@ submitBtn.innerText="Submit Request";
 
 async function sendWithdrawalApprovedEmail(withdrawal){
 try{
-if(!withdrawal?.id) return;
+if(!withdrawal?.id || !window.emailjs) return;
 const emailKey=`withdrawal_approved_email_${withdrawal.id}`;
 if(localStorage.getItem(emailKey)) return;
 const amount=Number(withdrawal.amount||0).toFixed(2);
@@ -1639,22 +1653,24 @@ showToast("Withdrawal approved notification sent.");
 
 function setupRealtimeListener(){
 if(!currentUserId || realtimeChannel) return;
-realtimeChannel=supabaseClient.channel(`dashboard-${currentUserId}`)
-.on("postgres_changes",{event:"UPDATE",schema:"public",table:"profiles",filter:`user_id=eq.${currentUserId}`},payload=>{
-if(!payload.new) return;
-currentProfile={...currentProfile,...payload.new};
-userCurrentBalance=Number(currentProfile.balance||0);
-renderProfile(currentProfile,currentProfile.full_name);
-})
-.on("postgres_changes",{event:"*",schema:"public",table:"withdrawal_requests",filter:`user_id=eq.${currentUserId}`},async payload=>{
-await loadWithdrawalHistory();
-const newData=payload?.new||{};
-if(String(newData.status||"").toLowerCase()==="approved"){
-await sendWithdrawalApprovedEmail(newData);
-showToast("Your withdrawal has been approved!");
-}
-})
-.subscribe();
+try {
+  realtimeChannel=supabaseClient.channel(`dashboard-${currentUserId}`)
+  .on("postgres_changes",{event:"UPDATE",schema:"public",table:"profiles",filter:`user_id=eq.${currentUserId}`},payload=>{
+  if(!payload.new) return;
+  currentProfile={...currentProfile,...payload.new};
+  userCurrentBalance=Number(currentProfile.balance||0);
+  renderProfile(currentProfile,currentProfile.full_name);
+  })
+  .on("postgres_changes",{event:"*",schema:"public",table:"withdrawal_requests",filter:`user_id=eq.${currentUserId}`},async payload=>{
+  await loadWithdrawalHistory();
+  const newData=payload?.new||{};
+  if(String(newData.status||"").toLowerCase()==="approved"){
+  await sendWithdrawalApprovedEmail(newData);
+  showToast("Your withdrawal has been approved!");
+  }
+  })
+  .subscribe();
+} catch(e){}
 }
 
 function setupLogout(){
