@@ -141,11 +141,11 @@ left:-350px;
 width:330px;
 max-width:90vw;
 height:100%;
-background:linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+background:linear-gradient(180deg, #090d16 0%, #17153b 100%);
 z-index:9999;
 transition:left .35s cubic-bezier(0.4, 0, 0.2, 1);
 overflow-y:auto;
-box-shadow:15px 0 40px rgba(0,0,0,.4);
+box-shadow:15px 0 40px rgba(0,0,0,.5);
 }
 
 .sidebar.active{
@@ -215,7 +215,7 @@ text-overflow:ellipsis;
 }
 
 .sidebar-profile-email{
-color:#cbd5e1;
+color:#94a3b8;
 font-size:11px;
 margin-top:4px;
 white-space:nowrap;
@@ -231,52 +231,70 @@ margin:0;
 }
 
 .sidebar-menu li{
-margin-bottom:10px;
+margin-bottom:12px;
 }
 
 .sidebar-menu a,
 .sidebar-menu button{
 width:100%;
-border:1px solid rgba(255,255,255,0.06);
-background:rgba(255,255,255,0.04);
+border:1px solid rgba(255,255,255,0.08);
+background:rgba(255,255,255,0.03);
 color:#f8fafc;
 text-align:left;
-padding:13px 16px;
-border-radius:14px;
+padding:14px 18px;
+border-radius:16px;
 cursor:pointer;
 text-decoration:none;
 font-size:13px;
 font-weight:600;
-transition:all 0.25s ease;
+transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 display:flex;
 align-items:center;
-gap:12px;
-box-shadow:0 4px 12px rgba(0,0,0,0.1);
+gap:14px;
+box-shadow:0 4px 15px rgba(0,0,0,0.2);
 }
 
 .sidebar-menu a:hover,
 .sidebar-menu button:hover{
-background:linear-gradient(135deg, rgba(124,58,237,0.5), rgba(219,39,119,0.4));
-border-color:rgba(192,132,252,0.4);
+background:linear-gradient(135deg, rgba(124,58,237,0.4), rgba(219,39,119,0.3));
+border-color:rgba(192,132,252,0.5);
 color:#fff;
-transform:translateX(4px);
-box-shadow:0 6px 20px rgba(124,58,237,0.3);
+transform:translateX(6px);
+box-shadow:0 6px 20px rgba(124,58,237,0.4);
 }
 
+/* PREMIUM ULTRA-GLOW WITHDRAW BUTTON */
 .sidebar-menu .withdraw-sidebar-btn {
-background: linear-gradient(135deg, #059669, #10b981);
+background: linear-gradient(135deg, #059669 0%, #10b981 100%);
 color: #ffffff;
-box-shadow: 0 4px 18px rgba(16, 185, 129, 0.4);
-border: 1px solid rgba(255, 255, 255, 0.2);
+box-shadow: 0 6px 22px rgba(16, 185, 129, 0.45);
+border: 1px solid rgba(255, 255, 255, 0.3);
 display: flex;
 align-items: center;
 justify-content: space-between;
+position: relative;
+overflow: hidden;
+}
+
+.sidebar-menu .withdraw-sidebar-btn::before {
+content: '';
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+transition: 0.5s;
+}
+
+.sidebar-menu .withdraw-sidebar-btn:hover::before {
+left: 100%;
 }
 
 .sidebar-menu .withdraw-sidebar-btn:hover {
-background: linear-gradient(135deg, #047857, #059669);
-box-shadow: 0 6px 22px rgba(16, 185, 129, 0.6);
-transform: translateY(-2px);
+background: linear-gradient(135deg, #047857 0%, #059669 100%);
+box-shadow: 0 8px 25px rgba(16, 185, 129, 0.65);
+transform: translateY(-2px) translateX(4px);
 }
 
 /* DASHBOARD */
@@ -1336,23 +1354,28 @@ function isCorrectReferralCode(code){
 return /^SM-smart\d{5}$/.test(String(code||""));
 }
 
-async function fixInvalidReferralCode(profile){
-const oldCode=String(profile?.referral_code||"").trim();
-if(isCorrectReferralCode(oldCode)) return oldCode;
+async function ensurePermanentReferralCode(profile){
+const existingCode=String(profile?.referral_code||"").trim();
+if(existingCode && isCorrectReferralCode(existingCode)){
+  return existingCode;
+}
+// If code is missing or invalid, generate one ONCE and lock it permanently
 const newCode=await createUniqueReferralCode();
-const {data}=await supabaseClient.from("profiles").update({referral_code:newCode}).eq("user_id",currentUserId).select().single();
-if(data) currentProfile={...currentProfile,...data};
-return newCode;
+const {data, error}=await supabaseClient.from("profiles").update({referral_code:newCode}).eq("user_id",currentUserId).select().single();
+if(data && data.referral_code) {
+  currentProfile={...currentProfile,...data};
+  return data.referral_code;
+}
+return existingCode || newCode;
 }
 
 /* =========================================
-PROFILE LOADER & DASHBOARD INIT (FIXED HANG)
+PROFILE LOADER & DASHBOARD INIT (FIXED)
 ========================================= */
 async function loadDashboardProfile(){
 try {
 let user = null;
 
-// Faster and reliable session grab with 3-second fallback timeout
 try {
   const sessionPromise = supabaseClient.auth.getSession();
   const sessionTimeout = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 3000));
@@ -1396,7 +1419,7 @@ finalProfile=createdProfile || newProfile;
 }
 
 currentProfile=finalProfile;
-const permanentCode=await fixInvalidReferralCode(finalProfile);
+const permanentCode=await ensurePermanentReferralCode(finalProfile);
 currentProfile.referral_code=permanentCode;
 userRefCode=permanentCode;
 
@@ -1416,7 +1439,7 @@ const packageName=profile?.package_name||"";
 const dob=profile?.date_of_birth||"";
 
 document.getElementById("userName").textContent=finalName;
-document.getElementById("topUserId").textContent=userRefCode||"Not Available";
+document.getElementById("topUserId").textContent=userRefCode||profile?.referral_code||"Not Available";
 document.getElementById("sidebarUserName").textContent=finalName;
 document.getElementById("sidebarUserEmail").textContent=finalEmail;
 document.getElementById("sidebarWalletBal").textContent="₹"+userCurrentBalance.toFixed(2);
