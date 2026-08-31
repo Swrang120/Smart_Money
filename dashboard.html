@@ -119,15 +119,16 @@ align-items:center;
 justify-content:center;
 }
 
-/* SIDEBAR & PREMIUM MENU STYLING */
+/* HIGH PREMIUM SIDEBAR STYLING */
 
 .sidebar-overlay{
 position:fixed;
 inset:0;
-background:rgba(15,23,42,.7);
-backdrop-filter:blur(5px);
+background:rgba(11, 15, 25, 0.75);
+backdrop-filter:blur(8px);
 display:none;
 z-index:9998;
+transition:all 0.3s ease;
 }
 
 .sidebar-overlay.active{
@@ -137,15 +138,16 @@ display:block;
 .sidebar{
 position:fixed;
 top:0;
-left:-350px;
+left:-360px;
 width:330px;
 max-width:90vw;
 height:100%;
-background:linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+background:linear-gradient(180deg, #090d16 0%, #111827 50%, #1e1b4b 100%);
 z-index:9999;
-transition:left .35s cubic-bezier(0.4, 0, 0.2, 1);
+transition:left .38s cubic-bezier(0.16, 1, 0.3, 1);
 overflow-y:auto;
-box-shadow:15px 0 40px rgba(0,0,0,.4);
+box-shadow:20px 0 50px rgba(0,0,0,0.5);
+border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .sidebar.active{
@@ -153,40 +155,41 @@ left:0;
 }
 
 .sidebar-header{
-min-height:72px;
-padding:16px 20px;
+min-height:75px;
+padding:18px 22px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-border-bottom:1px solid rgba(255,255,255,.08);
+border-bottom:1px solid rgba(255,255,255,0.06);
 }
 
 .sidebar-close{
-background:rgba(255,255,255,.1);
-border:none;
+background:rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.12);
 color:#fff;
 width:36px;
 height:36px;
 border-radius:50%;
-font-size:18px;
+font-size:16px;
 cursor:pointer;
 display:flex;
 align-items:center;
 justify-content:center;
-transition:background 0.2s;
+transition:all 0.2s ease;
 }
 
 .sidebar-close:hover{
-background:rgba(255,255,255,.2);
+background:rgba(255,255,255,0.2);
+transform:rotate(90deg);
 }
 
 .sidebar-profile{
-padding:22px 20px;
+padding:22px;
 display:flex;
 align-items:center;
 gap:14px;
-border-bottom:1px solid rgba(255,255,255,.08);
-background:rgba(255,255,255,.02);
+border-bottom:1px solid rgba(255,255,255,0.06);
+background:linear-gradient(135deg, rgba(124, 58, 237, 0.15) 0%, rgba(219, 39, 119, 0.05) 100%);
 }
 
 .sidebar-profile-img{
@@ -195,8 +198,8 @@ height:58px;
 min-width:58px;
 border-radius:50%;
 object-fit:cover;
-border:2px solid #c084fc;
-box-shadow:0 0 15px rgba(192,132,252,0.4);
+border:2px solid #a855f7;
+box-shadow:0 0 20px rgba(168, 85, 247, 0.5);
 background:#fff;
 }
 
@@ -207,39 +210,40 @@ min-width:0;
 
 .sidebar-profile-name{
 color:#ffffff;
-font-size:15px;
+font-size:16px;
 font-weight:700;
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
+letter-spacing: -0.2px;
 }
 
 .sidebar-profile-email{
-color:#cbd5e1;
+color:#94a3b8;
 font-size:11px;
-margin-top:4px;
+margin-top:3px;
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
 }
 
-/* PREMIUM MENU ITEMS */
+/* ULTRA PREMIUM MENU ITEMS */
 .sidebar-menu{
-padding:18px 14px;
+padding:16px 14px;
 list-style:none;
 margin:0;
 }
 
 .sidebar-menu li{
-margin-bottom:10px;
+margin-bottom:8px;
 }
 
 .sidebar-menu a,
 .sidebar-menu button{
 width:100%;
 border:1px solid rgba(255,255,255,0.06);
-background:rgba(255,255,255,0.04);
-color:#f8fafc;
+background:rgba(255,255,255,0.03);
+color:#f1f5f9;
 text-align:left;
 padding:13px 16px;
 border-radius:14px;
@@ -247,26 +251,26 @@ cursor:pointer;
 text-decoration:none;
 font-size:13px;
 font-weight:600;
-transition:all 0.25s ease;
+transition:all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 display:flex;
 align-items:center;
 gap:12px;
-box-shadow:0 4px 12px rgba(0,0,0,0.1);
+box-shadow:0 2px 8px rgba(0,0,0,0.15);
 }
 
 .sidebar-menu a:hover,
 .sidebar-menu button:hover{
-background:linear-gradient(135deg, rgba(124,58,237,0.5), rgba(219,39,119,0.4));
-border-color:rgba(192,132,252,0.4);
+background:linear-gradient(135deg, rgba(124,58,237,0.35), rgba(219,39,119,0.3));
+border-color:rgba(168,85,247,0.4);
 color:#fff;
-transform:translateX(4px);
-box-shadow:0 6px 20px rgba(124,58,237,0.3);
+transform:translateX(5px);
+box-shadow:0 6px 20px rgba(124,58,237,0.25);
 }
 
 .sidebar-menu .withdraw-sidebar-btn {
 background: linear-gradient(135deg, #059669, #10b981);
 color: #ffffff;
-box-shadow: 0 4px 18px rgba(16, 185, 129, 0.4);
+box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
 border: 1px solid rgba(255, 255, 255, 0.2);
 display: flex;
 align-items: center;
@@ -275,8 +279,8 @@ justify-content: space-between;
 
 .sidebar-menu .withdraw-sidebar-btn:hover {
 background: linear-gradient(135deg, #047857, #059669);
-box-shadow: 0 6px 22px rgba(16, 185, 129, 0.6);
-transform: translateY(-2px);
+box-shadow: 0 6px 22px rgba(16, 185, 129, 0.5);
+transform: translateY(-2px) translateX(0px);
 }
 
 /* DASHBOARD */
@@ -745,7 +749,7 @@ font-weight:500;
 <li><button onclick="openEarningsHistoryModal()">📊 <span>My Earnings & Transactions</span></button></li>
 <li>
 <button onclick="openWithdrawModal()" class="withdraw-sidebar-btn">
-<span style="display:flex; align-items:center; gap:8px;">💸 Available Balance: <b id="sidebarWalletBal">₹0.00</b></span>
+<span style="display:flex; align-items:center; gap:8px;">💸 Balance: <b id="sidebarWalletBal">₹0.00</b></span>
 <span style="background:rgba(255,255,255,0.25); padding:4px 9px; border-radius:6px; font-size:11px; font-weight:800;">Withdraw ›</span>
 </button>
 </li>
@@ -1311,12 +1315,8 @@ if(!data||data.length===0) return code;
 return "SM-smart"+String(Date.now()).slice(-5);
 }
 
-function isCorrectReferralCode(code){
-return /^SM-smart\d{5}$/.test(String(code||""));
-}
-
 /* =========================================
-PROFILE LOADER & DASHBOARD INIT (FIXED)
+PROFILE LOADER & DASHBOARD INIT
 ========================================= */
 async function loadDashboardProfile(){
 try {
@@ -1363,8 +1363,7 @@ referral_code:newReferralCode
 const {data:createdProfile}=await supabaseClient.from("profiles").upsert(newProfile,{onConflict:"user_id"}).select().single();
 finalProfile=createdProfile || newProfile;
 } else {
-const existingCode = String(finalProfile?.referral_code || "").trim();
-if (!isCorrectReferralCode(existingCode)) {
+if (!finalProfile.referral_code || String(finalProfile.referral_code).trim() === "") {
   const newReferralCode = await createUniqueReferralCode();
   const { data: updatedCodeProfile } = await supabaseClient.from("profiles").update({ referral_code: newReferralCode }).eq("user_id", currentUserId).select().single();
   if (updatedCodeProfile) {
@@ -1560,15 +1559,19 @@ showToast("KYC saved successfully!");
 closeModal("kycModal");
 }
 
+/* =========================================
+FIXED PROFILE PICTURE UPLOAD FUNCTION
+========================================= */
 async function uploadProfilePicture(event){
 const file=event.target.files?.[0];
 if(!file || !currentUserId) return;
 try{
 showToast("Uploading profile picture...");
-const fileExt = file.name.split('.').pop();
-const fileName = `${currentUserId}-${Date.now()}.${fileExt}`;
+const fileExt = file.name.split('.').pop().toLowerCase();
+const fileName = `${currentUserId}_${Date.now()}.${fileExt}`;
 const filePath = `${fileName}`;
 
+// Supabase Storage upload
 const { error: uploadError } = await supabaseClient.storage.from('profile-pics').upload(filePath, file, { upsert: true });
 if(uploadError) throw uploadError;
 
@@ -1576,11 +1579,12 @@ const { data: { publicUrl } } = supabaseClient.storage.from('profile-pics').getP
 
 const {data,error}=await supabaseClient.from("profiles").update({profile_pic:publicUrl}).eq("user_id",currentUserId).select().single();
 if(error) throw error;
+
 currentProfile={...currentProfile,...data};
 applyProfileImage(data.profile_pic,currentProfile.full_name);
 showToast("Profile picture uploaded successfully!");
 }catch(e){
-alert("Failed to upload picture: "+e.message);
+alert("Failed to upload picture: "+(e.message || "Please check Supabase Storage 'profile-pics' bucket permissions."));
 }finally{
 event.target.value="";
 }
@@ -1615,7 +1619,6 @@ async function submitWithdrawal(){
   submitBtn.innerText="Processing...";
 
   try{
-    // Call secure Postgres RPC function
     const { data, error } = await supabaseClient.rpc('request_withdrawal', { p_amount: amount });
     if(error) throw error;
     if(data && data.success){
