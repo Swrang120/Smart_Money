@@ -119,13 +119,13 @@ align-items:center;
 justify-content:center;
 }
 
-/* SIDEBAR - PREMIUM STYLING */
+/* SIDEBAR & PREMIUM MENU STYLING */
 
 .sidebar-overlay{
 position:fixed;
 inset:0;
 background:rgba(15,23,42,.7);
-backdrop-filter:blur(4px);
+backdrop-filter:blur(5px);
 display:none;
 z-index:9998;
 }
@@ -137,16 +137,15 @@ display:block;
 .sidebar{
 position:fixed;
 top:0;
-left:-330px;
-width:320px;
-max-width:88vw;
+left:-350px;
+width:330px;
+max-width:90vw;
 height:100%;
 background:linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
 z-index:9999;
-transition:left .3s cubic-bezier(0.4, 0, 0.2, 1);
+transition:left .35s cubic-bezier(0.4, 0, 0.2, 1);
 overflow-y:auto;
-box-shadow:15px 0 35px rgba(0,0,0,0.4);
-border-right: 1px solid rgba(255,255,255,0.08);
+box-shadow:15px 0 40px rgba(0,0,0,.4);
 }
 
 .sidebar.active{
@@ -155,22 +154,21 @@ left:0;
 
 .sidebar-header{
 min-height:72px;
-padding:14px 18px;
+padding:16px 20px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-border-bottom:1px solid rgba(255,255,255,.1);
-background: rgba(15,23,42,0.5);
+border-bottom:1px solid rgba(255,255,255,.08);
 }
 
 .sidebar-close{
-background:rgba(255,255,255,0.08);
+background:rgba(255,255,255,.1);
 border:none;
 color:#fff;
-font-size:18px;
 width:36px;
 height:36px;
 border-radius:50%;
+font-size:18px;
 cursor:pointer;
 display:flex;
 align-items:center;
@@ -179,16 +177,16 @@ transition:background 0.2s;
 }
 
 .sidebar-close:hover{
-background:rgba(255,255,255,0.2);
+background:rgba(255,255,255,.2);
 }
 
 .sidebar-profile{
-padding:22px 18px;
+padding:22px 20px;
 display:flex;
 align-items:center;
-gap:13px;
-border-bottom:1px solid rgba(255,255,255,.1);
-background:linear-gradient(135deg, rgba(124,58,237,0.15), transparent);
+gap:14px;
+border-bottom:1px solid rgba(255,255,255,.08);
+background:rgba(255,255,255,.02);
 }
 
 .sidebar-profile-img{
@@ -198,8 +196,8 @@ min-width:58px;
 border-radius:50%;
 object-fit:cover;
 border:2px solid #c084fc;
+box-shadow:0 0 15px rgba(192,132,252,0.4);
 background:#fff;
-box-shadow:0 4px 12px rgba(124,58,237,0.4);
 }
 
 .sidebar-profile-info{
@@ -223,11 +221,11 @@ margin-top:4px;
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
-opacity:0.8;
 }
 
+/* PREMIUM MENU ITEMS */
 .sidebar-menu{
-padding:16px 12px;
+padding:18px 14px;
 list-style:none;
 margin:0;
 }
@@ -240,7 +238,7 @@ margin-bottom:10px;
 .sidebar-menu button{
 width:100%;
 border:1px solid rgba(255,255,255,0.06);
-background:rgba(255,255,255,0.03);
+background:rgba(255,255,255,0.04);
 color:#f8fafc;
 text-align:left;
 padding:13px 16px;
@@ -253,33 +251,32 @@ transition:all 0.25s ease;
 display:flex;
 align-items:center;
 gap:12px;
-box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+box-shadow:0 4px 12px rgba(0,0,0,0.1);
 }
 
 .sidebar-menu a:hover,
 .sidebar-menu button:hover{
-background:linear-gradient(135deg, rgba(124,58,237,0.4), rgba(219,39,119,0.3));
-border-color:rgba(192,132,252,0.3);
+background:linear-gradient(135deg, rgba(124,58,237,0.5), rgba(219,39,119,0.4));
+border-color:rgba(192,132,252,0.4);
 color:#fff;
 transform:translateX(4px);
-box-shadow: 0 4px 15px rgba(124,58,237,0.3);
+box-shadow:0 6px 20px rgba(124,58,237,0.3);
 }
 
 .sidebar-menu .withdraw-sidebar-btn {
 background: linear-gradient(135deg, #059669, #10b981);
 color: #ffffff;
-box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+box-shadow: 0 4px 18px rgba(16, 185, 129, 0.4);
 border: 1px solid rgba(255, 255, 255, 0.2);
 display: flex;
 align-items: center;
 justify-content: space-between;
-transition: all 0.25s ease;
 }
 
 .sidebar-menu .withdraw-sidebar-btn:hover {
 background: linear-gradient(135deg, #047857, #059669);
-box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
-transform: translateY(-1px) translateX(0);
+box-shadow: 0 6px 22px rgba(16, 185, 129, 0.6);
+transform: translateY(-2px);
 }
 
 /* DASHBOARD */
@@ -748,19 +745,19 @@ font-weight:500;
 <li><button onclick="openEarningsHistoryModal()">📊 <span>My Earnings & Transactions</span></button></li>
 <li>
 <button onclick="openWithdrawModal()" class="withdraw-sidebar-btn">
-<span>💸 Available Balance: <b id="sidebarWalletBal">₹0.00</b></span>
-<span style="background:rgba(255,255,255,0.2); padding:4px 8px; border-radius:6px; font-size:11px;">Withdraw ›</span>
+<span style="display:flex; align-items:center; gap:8px;">💸 Available Balance: <b id="sidebarWalletBal">₹0.00</b></span>
+<span style="background:rgba(255,255,255,0.25); padding:4px 9px; border-radius:6px; font-size:11px; font-weight:800;">Withdraw ›</span>
 </button>
 </li>
 <li><button onclick="openHistoryModal()">📜 <span>View Withdrawal History</span></button></li>
 <li><button onclick="document.getElementById('profilePhotoInputSidebar').click()">📷 <span>Change Profile Picture</span></button></li>
 <input type="file" id="profilePhotoInputSidebar" style="display:none;" accept="image/*" onchange="uploadProfilePicture(event)">
 <li id="removePhotoLi" style="display:none;">
-<button onclick="removeProfilePicture()" style="color:#fca5a5; border-color:rgba(239,68,68,0.3); background:rgba(239,68,68,0.1);">🗑️ <span>Remove Profile Picture</span></button>
+<button onclick="removeProfilePicture()" style="color:#f87171; border-color:rgba(239,68,68,0.2); background:rgba(239,68,68,0.08);">🗑️ <span>Remove Profile Picture</span></button>
 </li>
 <li><button onclick="openUpiModal()">🏦 <span>View & Edit Bank / UPI Details</span></button></li>
 <li><button onclick="openKycModal()">🆔 <span>KYC & Date of Birth</span></button></li>
-<li><button id="sideLogoutBtn" style="color:#fca5a5; border-color:rgba(239,68,68,0.3); background:rgba(239,68,68,0.1);">🚪 <span>Logout</span></button></li>
+<li><button id="sideLogoutBtn" style="color:#fca5a5; border-color:rgba(248,113,113,0.2); background:rgba(239,68,68,0.1);">🚪 <span>Logout Account</span></button></li>
 </ul>
 </aside>
 <header class="navbar">
@@ -1349,25 +1346,27 @@ return newCode;
 }
 
 /* =========================================
-PROFILE LOADER & DASHBOARD INIT (FIXED)
+PROFILE LOADER & DASHBOARD INIT (FIXED HANG)
 ========================================= */
 async function loadDashboardProfile(){
 try {
 let user = null;
 
-const getUserPromise = supabaseClient.auth.getUser();
-const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Auth timeout")), 4000));
-
+// Faster and reliable session grab with 3-second fallback timeout
 try {
-  const res = await Promise.race([getUserPromise, timeoutPromise]);
-  if (res?.data?.user) {
-    user = res.data.user;
+  const sessionPromise = supabaseClient.auth.getSession();
+  const sessionTimeout = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 3000));
+  const res = await Promise.race([sessionPromise, sessionTimeout]);
+  if (res?.data?.session?.user) {
+    user = res.data.session.user;
   }
-} catch (err) {
-  const { data: sessionData } = await supabaseClient.auth.getSession();
-  if (sessionData?.session?.user) {
-    user = sessionData.session.user;
-  }
+} catch (e) {}
+
+if (!user) {
+  try {
+    const { data: userData } = await supabaseClient.auth.getUser();
+    if (userData?.user) user = userData.user;
+  } catch (err) {}
 }
 
 if(!user){
@@ -1379,7 +1378,7 @@ currentUserId=user.id;
 currentUserEmail=user.email||"";
 const authName=user.user_metadata?.full_name||user.user_metadata?.name||"Smart Money User";
 
-const {data:profile,error:profileError}=await supabaseClient.from("profiles").select("*").eq("user_id",currentUserId).maybeSingle();
+const {data:profile}=await supabaseClient.from("profiles").select("*").eq("user_id",currentUserId).maybeSingle();
 let finalProfile=profile;
 
 if(!finalProfile){
@@ -1392,9 +1391,8 @@ balance:0,
 package_name:null,
 referral_code:newReferralCode
 };
-const {data:createdProfile,error:createError}=await supabaseClient.from("profiles").upsert(newProfile,{onConflict:"user_id"}).select().single();
-if(createError) return false;
-finalProfile=createdProfile;
+const {data:createdProfile}=await supabaseClient.from("profiles").upsert(newProfile,{onConflict:"user_id"}).select().single();
+finalProfile=createdProfile || newProfile;
 }
 
 currentProfile=finalProfile;
