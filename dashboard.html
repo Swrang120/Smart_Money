@@ -3,1753 +3,5918 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Smart Money - Affiliate Dashboard</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
-<!-- EmailJS -->
+
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{
-box-sizing:border-box;
-font-family:'Plus Jakarta Sans',sans-serif;
+    box-sizing:border-box;
+    font-family:'Plus Jakarta Sans',sans-serif;
 }
 
-:root {
---card: #ffffff;
---border: #e2e8f0;
---accent: #7c3aed;
---muted: #64748b;
---text: #0f172a;
+:root{
+    --bg:#eef2f7;
+    --card:#ffffff;
+    --border:#e2e8f0;
+    --accent:#7c3aed;
+    --accent2:#a855f7;
+    --muted:#64748b;
+    --text:#0f172a;
+    --dark:#0b1220;
+    --dark2:#111827;
+    --success:#10b981;
+    --danger:#ef4444;
+}
+
+html{
+    scroll-behavior:smooth;
 }
 
 body{
-margin:0;
-background:#eef2f7;
-color:var(--text);
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+}
+
+button,
+input{
+    font-family:inherit;
+}
+
+button{
+    -webkit-tap-highlight-color:transparent;
 }
 
 .app-wrapper{
-width:100%;
-max-width:850px;
-min-height:100vh;
-margin:auto;
-background:#f1f5f9;
-box-shadow:0 0 40px rgba(0,0,0,.08);
-position:relative;
+    width:100%;
+    max-width:850px;
+    min-height:100vh;
+    margin:auto;
+    background:#f1f5f9;
+    box-shadow:0 0 40px rgba(0,0,0,.08);
+    position:relative;
 }
 
-/* NAVBAR */
+/* =========================
+   NAVBAR
+========================= */
 
 .navbar{
-height:68px;
-background:#ffffff;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 18px;
-position:sticky;
-top:0;
-z-index:100;
-box-shadow:0 3px 15px rgba(0,0,0,.06);
+    height:68px;
+    background:rgba(255,255,255,.96);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 18px;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 3px 18px rgba(15,23,42,.07);
+    backdrop-filter:blur(15px);
 }
 
 .brand-logo{
-display:flex;
-align-items:center;
-gap:10px;
-text-decoration:none;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
 }
 
 .brand-logo img{
-width:42px;
-height:42px;
-border-radius:50%;
-object-fit:cover;
-border:2px solid #7c3aed;
-background:#fff;
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid var(--accent);
+    background:#fff;
 }
 
 .brand-logo span{
-font-size:20px;
-font-weight:800;
-letter-spacing:-0.5px;
-background:linear-gradient(135deg,#7c3aed,#db2777,#f59e0b);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:-.5px;
+    background:linear-gradient(135deg,#7c3aed,#db2777,#f59e0b);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
 }
 
 .nav-right{
-display:flex;
-align-items:center;
-gap:10px;
+    display:flex;
+    align-items:center;
+    gap:9px;
 }
 
 .nav-home-btn{
-padding:8px 13px;
-border-radius:10px;
-text-decoration:none;
-background:#f3e8ff;
-color:#7c3aed;
-font-size:12px;
-font-weight:700;
+    padding:9px 13px;
+    border-radius:11px;
+    text-decoration:none;
+    background:#f3e8ff;
+    color:#7c3aed;
+    font-size:12px;
+    font-weight:800;
 }
 
 .nav-avatar{
-width:40px;
-height:40px;
-border-radius:50%;
-object-fit:cover;
-border:2px solid #7c3aed;
-background:#fff;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #7c3aed;
+    background:#fff;
 }
 
 .menu-btn{
-border:1px solid #e2e8f0;
-background:#f8fafc;
-border-radius:10px;
-width:45px;
-height:42px;
-font-size:21px;
-cursor:pointer;
-display:flex;
-align-items:center;
-justify-content:center;
+    border:1px solid #e2e8f0;
+    background:#f8fafc;
+    border-radius:11px;
+    width:44px;
+    height:42px;
+    font-size:20px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
-/* HIGH PREMIUM SIDEBAR STYLING */
+/* =========================
+   PREMIUM SIDEBAR
+========================= */
 
 .sidebar-overlay{
-position:fixed;
-inset:0;
-background:rgba(11, 15, 25, 0.75);
-backdrop-filter:blur(8px);
-display:none;
-z-index:9998;
-transition:all 0.3s ease;
+    position:fixed;
+    inset:0;
+    background:rgba(2,6,23,.68);
+    backdrop-filter:blur(5px);
+    display:none;
+    z-index:9998;
 }
 
 .sidebar-overlay.active{
-display:block;
+    display:block;
 }
 
 .sidebar{
-position:fixed;
-top:0;
-left:-360px;
-width:330px;
-max-width:90vw;
-height:100%;
-background:linear-gradient(180deg, #090d16 0%, #111827 50%, #1e1b4b 100%);
-z-index:9999;
-transition:left .38s cubic-bezier(0.16, 1, 0.3, 1);
-overflow-y:auto;
-box-shadow:20px 0 50px rgba(0,0,0,0.5);
-border-right: 1px solid rgba(255, 255, 255, 0.08);
+    position:fixed;
+    top:0;
+    left:-350px;
+    width:335px;
+    max-width:90vw;
+    height:100%;
+    background:
+        radial-gradient(circle at 20% 0%,rgba(124,58,237,.25),transparent 32%),
+        linear-gradient(180deg,#0b1220,#0f172a 55%,#080d18);
+    z-index:9999;
+    transition:left .3s cubic-bezier(.4,0,.2,1);
+    overflow-y:auto;
+    box-shadow:15px 0 45px rgba(0,0,0,.38);
+    color:#fff;
 }
 
 .sidebar.active{
-left:0;
+    left:0;
+}
+
+.sidebar::-webkit-scrollbar{
+    width:4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb{
+    background:rgba(255,255,255,.18);
+    border-radius:10px;
 }
 
 .sidebar-header{
-min-height:75px;
-padding:18px 22px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-border-bottom:1px solid rgba(255,255,255,0.06);
+    min-height:74px;
+    padding:14px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.sidebar-header .brand-logo span{
+    color:#fff;
+    background:none;
+    -webkit-text-fill-color:#fff;
 }
 
 .sidebar-close{
-background:rgba(255,255,255,0.08);
-border:1px solid rgba(255,255,255,0.12);
-color:#fff;
-width:36px;
-height:36px;
-border-radius:50%;
-font-size:16px;
-cursor:pointer;
-display:flex;
-align-items:center;
-justify-content:center;
-transition:all 0.2s ease;
-}
-
-.sidebar-close:hover{
-background:rgba(255,255,255,0.2);
-transform:rotate(90deg);
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.08);
+    color:#fff;
+    font-size:18px;
+    width:38px;
+    height:38px;
+    border-radius:11px;
+    cursor:pointer;
 }
 
 .sidebar-profile{
-padding:22px;
-display:flex;
-align-items:center;
-gap:14px;
-border-bottom:1px solid rgba(255,255,255,0.06);
-background:linear-gradient(135deg, rgba(124, 58, 237, 0.15) 0%, rgba(219, 39, 119, 0.05) 100%);
+    margin:16px;
+    padding:15px;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:18px;
+    background:linear-gradient(
+        135deg,
+        rgba(255,255,255,.08),
+        rgba(255,255,255,.025)
+    );
+    box-shadow:inset 0 1px rgba(255,255,255,.05);
 }
 
 .sidebar-profile-img{
-width:58px;
-height:58px;
-min-width:58px;
-border-radius:50%;
-object-fit:cover;
-border:2px solid #a855f7;
-box-shadow:0 0 20px rgba(168, 85, 247, 0.5);
-background:#fff;
+    width:55px;
+    height:55px;
+    min-width:55px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #a855f7;
+    background:#fff;
 }
 
 .sidebar-profile-info{
-flex:1;
-min-width:0;
+    flex:1;
+    min-width:0;
 }
 
 .sidebar-profile-name{
-color:#ffffff;
-font-size:16px;
-font-weight:700;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
-letter-spacing: -0.2px;
+    color:#fff;
+    font-size:14px;
+    font-weight:800;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
 .sidebar-profile-email{
-color:#94a3b8;
-font-size:11px;
-margin-top:3px;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
+    color:#94a3b8;
+    font-size:9px;
+    margin-top:5px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
-/* ULTRA PREMIUM MENU ITEMS */
+.sidebar-balance{
+    margin:0 16px 18px;
+    padding:16px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#7c3aed,#4f46e5);
+    box-shadow:0 10px 28px rgba(124,58,237,.27);
+    position:relative;
+    overflow:hidden;
+}
+
+.sidebar-balance:after{
+    content:"";
+    position:absolute;
+    width:110px;
+    height:110px;
+    right:-35px;
+    top:-50px;
+    border-radius:50%;
+    background:rgba(255,255,255,.12);
+}
+
+.sidebar-balance-label{
+    font-size:10px;
+    color:rgba(255,255,255,.72);
+    font-weight:700;
+    letter-spacing:.7px;
+}
+
+.sidebar-balance-value{
+    margin-top:4px;
+    font-size:24px;
+    font-weight:800;
+}
+
+.sidebar-balance-action{
+    margin-top:12px;
+    width:100%;
+    padding:9px 11px;
+    border:1px solid rgba(255,255,255,.2);
+    border-radius:10px;
+    background:rgba(255,255,255,.12);
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.sidebar-section-title{
+    padding:0 20px 8px;
+    color:#64748b;
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:1.2px;
+    text-transform:uppercase;
+}
+
 .sidebar-menu{
-padding:16px 14px;
-list-style:none;
-margin:0;
+    padding:0 12px 20px;
+    list-style:none;
+    margin:0;
 }
 
 .sidebar-menu li{
-margin-bottom:8px;
+    margin-bottom:6px;
 }
 
 .sidebar-menu a,
 .sidebar-menu button{
-width:100%;
-border:1px solid rgba(255,255,255,0.06);
-background:rgba(255,255,255,0.03);
-color:#f1f5f9;
-text-align:left;
-padding:13px 16px;
-border-radius:14px;
-cursor:pointer;
-text-decoration:none;
-font-size:13px;
-font-weight:600;
-transition:all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-display:flex;
-align-items:center;
-gap:12px;
-box-shadow:0 2px 8px rgba(0,0,0,0.15);
+    width:100%;
+    border:1px solid transparent;
+    background:transparent;
+    color:#dbe4f0;
+    text-align:left;
+    padding:12px 13px;
+    border-radius:13px;
+    cursor:pointer;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:700;
+    transition:.2s;
+    display:flex;
+    align-items:center;
+    gap:11px;
 }
 
 .sidebar-menu a:hover,
 .sidebar-menu button:hover{
-background:linear-gradient(135deg, rgba(124,58,237,0.35), rgba(219,39,119,0.3));
-border-color:rgba(168,85,247,0.4);
-color:#fff;
-transform:translateX(5px);
-box-shadow:0 6px 20px rgba(124,58,237,0.25);
+    background:rgba(124,58,237,.15);
+    border-color:rgba(168,85,247,.15);
+    color:#fff;
+    transform:translateX(2px);
 }
 
-.sidebar-menu .withdraw-sidebar-btn {
-background: linear-gradient(135deg, #059669, #10b981);
-color: #ffffff;
-box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
-border: 1px solid rgba(255, 255, 255, 0.2);
-display: flex;
-align-items: center;
-justify-content: space-between;
+.side-icon{
+    width:31px;
+    height:31px;
+    min-width:31px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:9px;
+    background:rgba(255,255,255,.07);
+    font-size:15px;
 }
 
-.sidebar-menu .withdraw-sidebar-btn:hover {
-background: linear-gradient(135deg, #047857, #059669);
-box-shadow: 0 6px 22px rgba(16, 185, 129, 0.5);
-transform: translateY(-2px) translateX(0px);
+.side-arrow{
+    margin-left:auto;
+    color:#64748b;
+    font-size:16px;
 }
 
-/* DASHBOARD */
+.withdraw-sidebar-btn{
+    background:linear-gradient(
+        135deg,
+        rgba(5,150,105,.22),
+        rgba(16,185,129,.10)
+    ) !important;
+    border-color:rgba(16,185,129,.25) !important;
+}
+
+.withdraw-sidebar-btn .side-icon{
+    background:rgba(16,185,129,.18);
+}
+
+.logout-item{
+    margin-top:8px;
+    padding-top:10px;
+    border-top:1px solid rgba(255,255,255,.07);
+}
+
+.logout-btn{
+    color:#fca5a5 !important;
+}
+
+.logout-btn .side-icon{
+    background:rgba(239,68,68,.12);
+}
+
+/* =========================
+   DASHBOARD
+========================= */
 
 .dash-container{
-padding:25px 18px 40px;
+    padding:25px 18px 40px;
 }
 
-/* PROFILE */
+/* =========================
+   PROFILE
+========================= */
 
 .profile-card{
-position:relative;
-min-height:190px;
-border-radius:20px;
-overflow:hidden;
-margin-bottom:20px;
-display:flex;
-align-items:center;
-padding:25px;
-gap:22px;
-background:linear-gradient(
-135deg,
-#ffffff 0%,
-#ffffff 55%,
-#f5f3ff 55%,
-#ede9fe 100%
-);
-box-shadow:0 10px 25px rgba(15,23,42,.10);
-border:1px solid #e2e8f0;
+    position:relative;
+    min-height:190px;
+    border-radius:20px;
+    overflow:hidden;
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    padding:25px;
+    gap:22px;
+    background:linear-gradient(
+        135deg,
+        #ffffff 0%,
+        #ffffff 55%,
+        #f5f3ff 55%,
+        #ede9fe 100%
+    );
+    box-shadow:0 10px 25px rgba(15,23,42,.10);
+    border:1px solid #e2e8f0;
 }
 
 .package-badge{
-position:absolute;
-top:0;
-right:0;
-padding:8px 17px;
-background:linear-gradient(135deg,#64748b,#475569);
-color:#fff;
-font-size:9px;
-font-weight:800;
-letter-spacing:.5px;
-border-bottom-left-radius:14px;
+    position:absolute;
+    top:0;
+    right:0;
+    padding:8px 17px;
+    background:linear-gradient(135deg,#64748b,#475569);
+    color:#fff;
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:.5px;
+    border-bottom-left-radius:14px;
 }
 
 .package-badge.active{
-background:linear-gradient(135deg,#f59e0b,#ec4899);
+    background:linear-gradient(135deg,#f59e0b,#ec4899);
 }
 
 .profile-img-wrap{
-width:96px;
-height:96px;
-min-width:96px;
-border-radius:50%;
-background:#fff;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:4px;
-box-shadow:0 6px 20px rgba(0,0,0,.18);
-border:3px solid #7c3aed;
+    width:96px;
+    height:96px;
+    min-width:96px;
+    border-radius:50%;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:4px;
+    box-shadow:0 6px 20px rgba(0,0,0,.18);
+    border:3px solid #7c3aed;
 }
 
 .profile-img{
-width:100%;
-height:100%;
-border-radius:50%;
-object-fit:cover;
-background:#fff;
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    object-fit:cover;
+    background:#fff;
 }
 
 .user-info{
-flex:1;
-min-width:0;
-display:flex;
-flex-direction:column;
-gap:10px;
+    flex:1;
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
 }
 
 .profile-info-row{
-display:flex;
-flex-direction:column;
-gap:3px;
+    display:flex;
+    flex-direction:column;
+    gap:3px;
 }
 
 .profile-label{
-font-size:10px;
-font-weight:800;
-letter-spacing:1px;
-color:#94a3b8;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1px;
+    color:#94a3b8;
 }
 
 .user-info h2{
-margin:0;
-font-size:27px;
-color:#0f172a;
-font-weight:800;
-letter-spacing:-0.5px;
-line-height:1.2;
+    margin:0;
+    font-size:27px;
+    color:#0f172a;
+    font-weight:800;
+    letter-spacing:-.5px;
+    line-height:1.2;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
 .profile-value{
-font-size:14px;
-color:#475569;
-font-weight:700;
+    font-size:14px;
+    color:#475569;
+    font-weight:700;
 }
 
-.id-value-wrap {
-display: flex;
-align-items: center;
-gap: 8px;
+.id-value-wrap{
+    display:flex;
+    align-items:center;
+    gap:8px;
 }
 
 .id-value{
-color:#7c3aed;
-font-size:15px;
-font-weight:800;
-letter-spacing:.3px;
+    color:#7c3aed;
+    font-size:15px;
+    font-weight:800;
+    letter-spacing:.3px;
 }
 
-.copy-btn {
-background: #f3e8ff;
-border: none;
-color: #7c3aed;
-padding: 4px 8px;
-border-radius: 6px;
-font-size: 11px;
-font-weight: 700;
-cursor: pointer;
-transition: background 0.2s;
+.copy-btn{
+    background:#f3e8ff;
+    border:none;
+    color:#7c3aed;
+    padding:4px 8px;
+    border-radius:6px;
+    font-size:11px;
+    font-weight:700;
+    cursor:pointer;
 }
 
-.copy-btn:hover {
-background: #7c3aed;
-color: #fff;
+/* =========================
+   ADMIN STATUS
+========================= */
+
+.admin-status{
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:18px;
+    padding:17px;
+    margin-bottom:20px;
+    box-shadow:0 5px 18px rgba(15,23,42,.04);
 }
 
-/* STAT CARDS */
+.admin-status-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:11px;
+}
+
+.admin-status-title h3{
+    margin:0;
+    font-size:15px;
+}
+
+.status-loading{
+    color:#94a3b8;
+    font-size:12px;
+}
+
+.admin-update{
+    border-top:1px solid #edf2f7;
+    padding:10px 0;
+}
+
+.admin-update:first-child{
+    border-top:0;
+}
+
+.admin-update-title{
+    font-size:13px;
+    font-weight:800;
+    color:#0f172a;
+}
+
+.admin-update-message{
+    font-size:12px;
+    color:#475569;
+    line-height:1.6;
+    margin-top:3px;
+}
+
+.admin-update img{
+    max-width:100%;
+    border-radius:10px;
+    margin-top:8px;
+}
+
+/* =========================
+   STAT CARDS
+========================= */
 
 .stats-stack{
-display:flex;
-flex-direction:column;
-gap:15px;
-margin-bottom:20px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    margin-bottom:20px;
 }
 
 .v-card{
-border-radius:20px;
-padding:22px 24px;
-color:white;
-display:flex;
-flex-direction:column;
-justify-content:space-between;
-box-shadow:0 8px 25px rgba(0,0,0,.12);
-position:relative;
-overflow:hidden;
+    border-radius:20px;
+    padding:22px 24px;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+    position:relative;
+    overflow:hidden;
+}
+
+.v-card:after{
+    content:"";
+    position:absolute;
+    width:120px;
+    height:120px;
+    right:-40px;
+    top:-50px;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
 }
 
 .v-card h2{
-margin:0 0 4px;
-font-size:32px;
-font-weight:800;
-letter-spacing:-0.5px;
+    margin:0 0 4px;
+    font-size:32px;
+    font-weight:800;
+    letter-spacing:-.5px;
 }
 
 .v-card p{
-margin:0 0 18px;
-font-size:14px;
-opacity:.9;
-font-weight:500;
+    margin:0 0 18px;
+    font-size:14px;
+    opacity:.9;
+    font-weight:500;
 }
 
 .card-divider{
-width:100%;
-height:1px;
-background:rgba(255,255,255,.25);
-margin-bottom:12px;
+    width:100%;
+    height:1px;
+    background:rgba(255,255,255,.25);
+    margin-bottom:12px;
 }
 
 .card-footer-link{
-display:flex;
-align-items:center;
-justify-content:space-between;
-color:#fff;
-text-decoration:none;
-font-size:14px;
-font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    color:#fff;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:700;
+    position:relative;
+    z-index:2;
 }
 
-.bg-today{ background:linear-gradient(135deg,#7c3aed,#5b21b6); }
-.bg-7days{ background:linear-gradient(135deg,#6366f1,#4338ca); }
-.bg-30days{ background:linear-gradient(135deg,#db2777,#be185d); }
-.bg-alltime{ background:linear-gradient(135deg,#0284c7,#075985); }
-.bg-passive{ background:linear-gradient(135deg,#d97706,#b45309); }
+.bg-today{
+    background:linear-gradient(135deg,#7c3aed,#5b21b6);
+}
 
-/* SECTION */
+.bg-7days{
+    background:linear-gradient(135deg,#6366f1,#4338ca);
+}
+
+.bg-30days{
+    background:linear-gradient(135deg,#db2777,#be185d);
+}
+
+.bg-alltime{
+    background:linear-gradient(135deg,#0284c7,#075985);
+}
+
+.bg-passive{
+    background:linear-gradient(135deg,#d97706,#b45309);
+}
+
+/* =========================
+   REFERRALS
+========================= */
 
 .section-box{
-background:#fff;
-border:1px solid #e2e8f0;
-border-radius:18px;
-padding:20px;
-margin-bottom:18px;
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:18px;
+}
+
+.section-box h3{
+    margin-top:0;
 }
 
 .referral-tabs{
-display:flex;
-gap:6px;
-margin-bottom:15px;
-overflow-x:auto;
-padding-bottom:5px;
+    display:flex;
+    gap:6px;
+    margin-bottom:15px;
+    overflow-x:auto;
+    padding-bottom:5px;
 }
 
 .ref-tab{
-padding:8px 14px;
-border-radius:20px;
-background:#f1f5f9;
-color:#475569;
-font-size:12px;
-font-weight:700;
-border:none;
-cursor:pointer;
-white-space:nowrap;
+    padding:8px 14px;
+    border-radius:20px;
+    background:#f1f5f9;
+    color:#475569;
+    font-size:12px;
+    font-weight:700;
+    border:none;
+    cursor:pointer;
+    white-space:nowrap;
 }
 
 .ref-tab.active{
-background:#7c3aed;
-color:#fff;
+    background:#7c3aed;
+    color:#fff;
 }
 
 .referral-card-item{
-background:#f8fafc;
-border:1px solid #e2e8f0;
-border-radius:14px;
-padding:12px 16px;
-margin-bottom:10px;
-display:flex;
-justify-content:space-between;
-align-items:center;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:14px;
+    padding:12px 16px;
+    margin-bottom:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
 .ref-user-info h4{
-margin:0 0 3px;
-font-size:14px;
-color:#0f172a;
-font-weight:700;
+    margin:0 0 3px;
+    font-size:14px;
+    color:#0f172a;
+    font-weight:700;
 }
 
 .ref-user-info span{
-font-size:11px;
-color:#7c3aed;
-font-weight:600;
+    font-size:11px;
+    color:#7c3aed;
+    font-weight:600;
 }
 
 .ref-date{
-font-size:11px;
-color:#64748b;
-font-weight:600;
-text-align:right;
+    font-size:11px;
+    color:#64748b;
+    font-weight:600;
+    text-align:right;
 }
 
-/* MODALS */
+/* =========================
+   MODALS
+========================= */
 
 .modal-overlay{
-display:none;
-position:fixed;
-inset:0;
-z-index:10000;
-background:rgba(15,23,42,.65);
-backdrop-filter:blur(4px);
-justify-content:center;
-align-items:center;
-padding:15px;
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:10000;
+    background:rgba(15,23,42,.68);
+    backdrop-filter:blur(5px);
+    justify-content:center;
+    align-items:center;
+    padding:15px;
 }
 
 .modal-box{
-width:100%;
-max-width:440px;
-background:#fff;
-border-radius:20px;
-padding:22px;
-max-height:90vh;
-overflow:auto;
+    width:100%;
+    max-width:440px;
+    background:#fff;
+    border-radius:20px;
+    padding:22px;
+    max-height:90vh;
+    overflow:auto;
+    box-shadow:0 25px 70px rgba(0,0,0,.25);
 }
 
 .input-field{
-width:100%;
-padding:12px;
-border-radius:10px;
-border:1px solid #cbd5e1;
-margin:6px 0 12px;
-outline:none;
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #cbd5e1;
+    margin:6px 0 12px;
+    outline:none;
+}
+
+.input-field:focus{
+    border-color:#8b5cf6;
+    box-shadow:0 0 0 3px rgba(124,58,237,.1);
+}
+
+.input-field:disabled{
+    background:#f1f5f9;
+    color:#64748b;
 }
 
 .btn-action{
-width:100%;
-padding:13px;
-border:none;
-border-radius:10px;
-color:#fff;
-font-weight:700;
-cursor:pointer;
-background:linear-gradient(135deg,#7c3aed,#6d28d9);
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:10px;
+    color:#fff;
+    font-weight:700;
+    cursor:pointer;
+    background:linear-gradient(135deg,#7c3aed,#6d28d9);
 }
 
 .btn-action:disabled{
-opacity:.6;
-cursor:not-allowed;
+    opacity:.6;
+    cursor:not-allowed;
 }
 
+/* =========================
+   PAYOUT
+========================= */
+
 .payout-tabs{
-display:flex;
-gap:8px;
-margin:12px 0 16px;
+    display:flex;
+    gap:8px;
+    margin:12px 0 16px;
 }
 
 .payout-tab{
-flex:1;
-text-align:center;
-padding:10px;
-border-radius:9px;
-background:#f1f5f9;
-cursor:pointer;
-font-size:12px;
-font-weight:700;
+    flex:1;
+    text-align:center;
+    padding:10px;
+    border-radius:9px;
+    background:#f1f5f9;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:700;
 }
 
 .payout-tab.active{
-background:#7c3aed;
-color:#fff;
+    background:#7c3aed;
+    color:#fff;
 }
 
 .amount-chips{
-display:flex;
-gap:6px;
-margin-bottom:10px;
+    display:flex;
+    gap:6px;
+    margin-bottom:10px;
 }
 
 .chip{
-flex:1;
-padding:6px;
-border:1px solid #cbd5e1;
-background:#f8fafc;
-border-radius:8px;
-font-size:11px;
-font-weight:700;
-cursor:pointer;
-text-align:center;
-color:#475569;
+    flex:1;
+    padding:6px;
+    border:1px solid #cbd5e1;
+    background:#f8fafc;
+    border-radius:8px;
+    font-size:11px;
+    font-weight:700;
+    cursor:pointer;
+    text-align:center;
+    color:#475569;
 }
 
 .chip:hover{
-background:#ede9fe;
-border-color:#7c3aed;
-color:#7c3aed;
+    background:#ede9fe;
+    border-color:#7c3aed;
+    color:#7c3aed;
 }
+
+/* =========================
+   HISTORY
+========================= */
 
 .history-card-item,
 .earning-item{
-background:#f8fafc;
-border:1px solid #e2e8f0;
-border-radius:14px;
-padding:14px 16px;
-margin-bottom:10px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:14px;
+    padding:14px 16px;
+    margin-bottom:10px;
 }
 
 .history-row-1,
 .history-row-2,
 .earning-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
 .history-row-1{
-font-size:13px;
-color:#64748b;
-font-weight:600;
-margin-bottom:6px;
+    font-size:13px;
+    color:#64748b;
+    font-weight:600;
+    margin-bottom:6px;
 }
 
 .history-amount{
-font-size:18px;
-font-weight:800;
-color:#0f172a;
+    font-size:18px;
+    font-weight:800;
+    color:#0f172a;
 }
 
 .status-badge{
-padding:4px 10px;
-border-radius:20px;
-font-size:10px;
-font-weight:700;
-text-transform:uppercase;
+    padding:4px 10px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
 }
 
-.status-approved{ background:#d1fae5; color:#059669; }
-.status-pending{ background:#fef3c7; color:#d97706; }
-.status-rejected{ background:#fee2e2; color:#dc2626; }
+.status-approved{
+    background:#d1fae5;
+    color:#059669;
+}
 
-.earning-title{ font-size:14px; font-weight:800; color:#0f172a; }
-.earning-amount{ font-size:16px; font-weight:800; color:#059669; }
-.earning-date{ font-size:11px; color:#64748b; margin-top:5px; }
+.status-pending{
+    background:#fef3c7;
+    color:#d97706;
+}
+
+.status-rejected{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+.earning-title{
+    font-size:14px;
+    font-weight:800;
+    color:#0f172a;
+}
+
+.earning-amount{
+    font-size:16px;
+    font-weight:800;
+    color:#059669;
+}
+
+.earning-date{
+    font-size:11px;
+    color:#64748b;
+    margin-top:5px;
+}
+
+/* =========================
+   UPLOAD
+========================= */
+
+.upload-area{
+    margin-top:12px;
+    padding:13px;
+    border-radius:13px;
+    background:#f8fafc;
+    border:1px dashed #cbd5e1;
+    text-align:center;
+}
+
+.upload-progress{
+    display:none;
+    margin-top:10px;
+    height:6px;
+    border-radius:10px;
+    background:#e2e8f0;
+    overflow:hidden;
+}
+
+.upload-progress-bar{
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg,#7c3aed,#a855f7);
+    transition:width .2s ease;
+}
+
+/* =========================
+   TOAST
+========================= */
 
 #toastNotification{
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translateX(-50%) translateY(100px);
-background:#0f172a;
-color:#fff;
-padding:12px 24px;
-border-radius:30px;
-font-size:13px;
-font-weight:700;
-box-shadow:0 10px 30px rgba(0,0,0,.3);
-transition:transform .3s ease;
-z-index:99999;
-display:flex;
-align-items:center;
-gap:10px;
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%) translateY(100px);
+    background:#0f172a;
+    color:#fff;
+    padding:12px 24px;
+    border-radius:30px;
+    font-size:13px;
+    font-weight:700;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+    transition:transform .3s ease;
+    z-index:99999;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    max-width:90%;
+    white-space:nowrap;
 }
 
 #toastNotification.show{
-transform:translateX(-50%) translateY(0);
+    transform:translateX(-50%) translateY(0);
 }
 
 .app-footer-credit{
-text-align:center;
-font-size:11px;
-color:#94a3b8;
-margin-top:20px;
-padding-bottom:10px;
-font-weight:500;
+    text-align:center;
+    font-size:11px;
+    color:#94a3b8;
+    margin-top:20px;
+    padding-bottom:10px;
+    font-weight:500;
 }
 
+/* =========================
+   MOBILE
+========================= */
+
 @media(max-width:600px){
-.dash-container{ padding:18px 12px 35px; }
-.profile-card{ padding:18px; gap:14px; min-height:160px; }
-.profile-img-wrap{ width:76px; height:76px; min-width:76px; }
-.user-info h2{ font-size:20px; }
-.v-card{ padding:20px; }
-.v-card h2{ font-size:28px; }
+
+    .navbar{
+        padding:0 12px;
+    }
+
+    .brand-logo span{
+        font-size:17px;
+    }
+
+    .nav-home-btn{
+        display:none;
+    }
+
+    .dash-container{
+        padding:18px 12px 35px;
+    }
+
+    .profile-card{
+        padding:18px;
+        gap:14px;
+        min-height:160px;
+    }
+
+    .profile-img-wrap{
+        width:76px;
+        height:76px;
+        min-width:76px;
+    }
+
+    .user-info h2{
+        font-size:20px;
+    }
+
+    .profile-value{
+        font-size:12px;
+    }
+
+    .v-card{
+        padding:20px;
+    }
+
+    .v-card h2{
+        font-size:28px;
+    }
+
+    .sidebar{
+        width:330px;
+    }
 }
 </style>
 </head>
+
 <body>
+
 <div class="app-wrapper">
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- =========================
+SIDEBAR OVERLAY
+========================= -->
+
+<div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+    onclick="closeSidebar()">
+</div>
+
+<!-- =========================
+PREMIUM SIDEBAR
+========================= -->
+
 <aside class="sidebar" id="sidebar">
-<div class="sidebar-header">
-<a href="dashboard.html" class="brand-logo">
-<img id="sidebarLogo" src="1000819130.jpg" alt="Logo">
-<span>Smart Money</span>
-</a>
-<button class="sidebar-close" onclick="toggleSidebar()">✕</button>
-</div>
-<div class="sidebar-profile">
-<img id="sidebarProfileImage" class="sidebar-profile-img" src="1000819130.jpg" alt="Profile">
-<div class="sidebar-profile-info">
-<div id="sidebarUserName" class="sidebar-profile-name">Loading...</div>
-<div id="sidebarUserEmail" class="sidebar-profile-email">Loading...</div>
-</div>
-</div>
-<ul class="sidebar-menu">
-<li><a href="index.html">🌐 <span>Home / Landing Page</span></a></li>
-<li><button onclick="openPackageModal()">👑 <span>My Package</span></button></li>
-<li><button onclick="openEarningsHistoryModal()">📊 <span>My Earnings & Transactions</span></button></li>
-<li>
-<button onclick="openWithdrawModal()" class="withdraw-sidebar-btn">
-<span style="display:flex; align-items:center; gap:8px;">💸 Balance: <b id="sidebarWalletBal">₹0.00</b></span>
-<span style="background:rgba(255,255,255,0.25); padding:4px 9px; border-radius:6px; font-size:11px; font-weight:800;">Withdraw ›</span>
-</button>
-</li>
-<li><button onclick="openHistoryModal()">📜 <span>View Withdrawal History</span></button></li>
-<li><button onclick="document.getElementById('profilePhotoInputSidebar').click()">📷 <span>Change Profile Picture</span></button></li>
-<input type="file" id="profilePhotoInputSidebar" style="display:none;" accept="image/*" onchange="uploadProfilePicture(event)">
-<li id="removePhotoLi" style="display:none;">
-<button onclick="removeProfilePicture()" style="color:#f87171; border-color:rgba(239,68,68,0.2); background:rgba(239,68,68,0.08);">🗑️ <span>Remove Profile Picture</span></button>
-</li>
-<li><button onclick="openUpiModal()">🏦 <span>View & Edit Bank / UPI Details</span></button></li>
-<li><button onclick="openKycModal()">🆔 <span>KYC & Date of Birth</span></button></li>
-<li><button id="sideLogoutBtn" style="color:#fca5a5; border-color:rgba(248,113,113,0.2); background:rgba(239,68,68,0.1);">🚪 <span>Logout Account</span></button></li>
-</ul>
+
+    <div class="sidebar-header">
+
+        <a href="dashboard.html" class="brand-logo">
+
+            <img
+                id="sidebarLogo"
+                src="1000819130.jpg"
+                alt="Smart Money">
+
+            <span>Smart Money</span>
+
+        </a>
+
+        <button
+            class="sidebar-close"
+            onclick="closeSidebar()">
+            ✕
+        </button>
+
+    </div>
+
+    <div class="sidebar-profile">
+
+        <img
+            id="sidebarProfileImage"
+            class="sidebar-profile-img"
+            src="1000819130.jpg"
+            alt="Profile">
+
+        <div class="sidebar-profile-info">
+
+            <div
+                id="sidebarUserName"
+                class="sidebar-profile-name">
+                Loading...
+            </div>
+
+            <div
+                id="sidebarUserEmail"
+                class="sidebar-profile-email">
+                Loading...
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="sidebar-balance">
+
+        <div class="sidebar-balance-label">
+            AVAILABLE BALANCE
+        </div>
+
+        <div
+            id="sidebarWalletBal"
+            class="sidebar-balance-value">
+            ₹0.00
+        </div>
+
+        <button
+            class="sidebar-balance-action"
+            onclick="openWithdrawModal()">
+            💸 Withdraw Balance
+        </button>
+
+    </div>
+
+    <div class="sidebar-section-title">
+        Dashboard
+    </div>
+
+    <ul class="sidebar-menu">
+
+        <li>
+            <a href="index.html">
+                <span class="side-icon">🌐</span>
+                <span>Home / Landing Page</span>
+                <span class="side-arrow">›</span>
+            </a>
+        </li>
+
+        <li>
+            <button onclick="openPackageModal()">
+                <span class="side-icon">👑</span>
+                <span>My Package</span>
+                <span class="side-arrow">›</span>
+            </button>
+        </li>
+
+        <li>
+            <button onclick="openEarningsHistoryModal()">
+                <span class="side-icon">📊</span>
+                <span>Earnings & Transactions</span>
+                <span class="side-arrow">›</span>
+            </button>
+        </li>
+
+        <li>
+            <button
+                onclick="openWithdrawModal()"
+                class="withdraw-sidebar-btn">
+
+                <span class="side-icon">💸</span>
+
+                <span>
+                    Withdraw Money
+                </span>
+
+                <span class="side-arrow">›</span>
+
+            </button>
+        </li>
+
+        <li>
+            <button onclick="openHistoryModal()">
+                <span class="side-icon">📜</span>
+                <span>Withdrawal History</span>
+                <span class="side-arrow">›</span>
+            </button>
+        </li>
+
+    </ul>
+
+    <div class="sidebar-section-title">
+        Account Settings
+    </div>
+
+    <ul class="sidebar-menu">
+
+        <li>
+            <button onclick="document.getElementById('profilePhotoInputSidebar').click()">
+                <span class="side-icon">📷</span>
+                <span>Change Profile Picture</span>
+                <span class="side-arrow">›</span>
+            </button>
+        </li>
+
+        <input
+            type="file"
+            id="profilePhotoInputSidebar"
+            style="display:none"
+            accept="image/jpeg,image/png,image/webp"
+            onchange="uploadProfilePicture(event)">
+
+        <li id="removePhotoLi" style="display:none">
+
+            <button
+                onclick="removeProfilePicture()"
+                style="color:#fca5a5">
+
+                <span class="side-icon">🗑️</span>
+                <span>Remove Profile Picture</span>
+                <span class="side-arrow">›</span>
+
+            </button>
+
+        </li>
+
+        <li>
+            <button onclick="openUpiModal()">
+                <span class="side-icon">🏦</span>
+                <span>Bank / UPI Details</span>
+                <span class="side-arrow">›</span>
+            </button>
+        </li>
+
+        <li>
+            <button onclick="openKycModal()">
+                <span class="side-icon">🆔</span>
+                <span>KYC & Date of Birth</span>
+                <span class="side-arrow">›</span>
+            </button>
+        </li>
+
+        <li class="logout-item">
+
+            <button
+                id="sideLogoutBtn"
+                class="logout-btn">
+
+                <span class="side-icon">🚪</span>
+                <span>Logout Account</span>
+                <span class="side-arrow">›</span>
+
+            </button>
+
+        </li>
+
+    </ul>
+
 </aside>
+
+<!-- =========================
+NAVBAR
+========================= -->
+
 <header class="navbar">
-<a href="dashboard.html" class="brand-logo">
-<img id="navBrandLogoImg" src="1000819130.jpg" alt="Logo">
-<span>Smart Money</span>
-</a>
-<div class="nav-right">
-<a href="index.html" class="nav-home-btn">🌐 Home</a>
-<img src="1000819130.jpg" class="nav-avatar" alt="Avatar" id="navAvatarImg">
-<button class="menu-btn" onclick="toggleSidebar()">☰</button>
-</div>
+
+    <a href="dashboard.html" class="brand-logo">
+
+        <img
+            id="navBrandLogoImg"
+            src="1000819130.jpg"
+            alt="Logo">
+
+        <span>Smart Money</span>
+
+    </a>
+
+    <div class="nav-right">
+
+        <a
+            href="index.html"
+            class="nav-home-btn">
+            🌐 Home
+        </a>
+
+        <img
+            src="1000819130.jpg"
+            class="nav-avatar"
+            alt="Avatar"
+            id="navAvatarImg">
+
+        <button
+            class="menu-btn"
+            onclick="toggleSidebar()">
+            ☰
+        </button>
+
+    </div>
+
 </header>
+
+<!-- =========================
+DASHBOARD
+========================= -->
+
 <div class="dash-container">
-<!-- PROFILE -->
-<div class="profile-card">
-<div class="package-badge" id="activePackageBadge">NO PACKAGE</div>
-<div class="profile-img-wrap">
-<img src="1000819130.jpg" alt="Profile" class="profile-img" id="mainProfileImg">
-</div>
-<div class="user-info">
-<div class="profile-info-row">
-<span class="profile-label">NAME</span>
-<h2 id="userName">Loading...</h2>
-</div>
-<div class="profile-info-row">
-<span class="profile-label">USER ID / REFERRAL CODE</span>
-<div class="id-value-wrap">
-<div class="profile-value id-value" id="topUserId">Loading...</div>
-<button class="copy-btn" onclick="copyUserReferralCode()">Copy</button>
-</div>
-</div>
-<div class="profile-info-row">
-<span class="profile-label">DATE OF BIRTH</span>
-<div class="profile-value" id="dobDisplayInfo">Not Set</div>
-</div>
-</div>
+
+    <!-- PROFILE -->
+
+    <div class="profile-card">
+
+        <div
+            class="package-badge"
+            id="activePackageBadge">
+            NO PACKAGE
+        </div>
+
+        <div class="profile-img-wrap">
+
+            <img
+                src="1000819130.jpg"
+                alt="Profile"
+                class="profile-img"
+                id="mainProfileImg">
+
+        </div>
+
+        <div class="user-info">
+
+            <div class="profile-info-row">
+
+                <span class="profile-label">
+                    NAME
+                </span>
+
+                <h2 id="userName">
+                    Loading...
+                </h2>
+
+            </div>
+
+            <div class="profile-info-row">
+
+                <span class="profile-label">
+                    USER ID
+                </span>
+
+                <div class="id-value-wrap">
+
+                    <div
+                        class="profile-value id-value"
+                        id="topUserId">
+                        Loading...
+                    </div>
+
+                    <button
+                        class="copy-btn"
+                        onclick="copyUserReferralCode()">
+                        Copy
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="profile-info-row">
+
+                <span class="profile-label">
+                    DATE OF BIRTH
+                </span>
+
+                <div
+                    class="profile-value"
+                    id="dobDisplayInfo">
+                    Not Set
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ADMIN STATUS -->
+
+    <div
+        id="adminStatusContainer"
+        class="admin-status">
+
+        <div class="admin-status-title">
+
+            <span>📢</span>
+
+            <h3>
+                Admin Updates & Status
+            </h3>
+
+        </div>
+
+        <div id="statusList">
+            <span class="status-loading">
+                Loading updates...
+            </span>
+        </div>
+
+    </div>
+
+    <!-- EARNINGS -->
+
+    <div class="stats-stack">
+
+        <div class="v-card bg-today">
+
+            <div>
+                <h2 id="todayRevenue">₹0.00</h2>
+                <p>Today's Revenue</p>
+            </div>
+
+            <div>
+
+                <div class="card-divider"></div>
+
+                <a
+                    href="#"
+                    class="card-footer-link"
+                    onclick="openEarningsModal('Today Earnings',document.getElementById('todayRevenue').innerText);return false;">
+
+                    View details
+                    <span>›</span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="v-card bg-7days">
+
+            <div>
+                <h2 id="sevenDaysRevenue">₹0.00</h2>
+                <p>7 Days Revenue</p>
+            </div>
+
+            <div>
+
+                <div class="card-divider"></div>
+
+                <a
+                    href="#"
+                    class="card-footer-link"
+                    onclick="openEarningsModal('7 Days Earnings',document.getElementById('sevenDaysRevenue').innerText);return false;">
+
+                    View details
+                    <span>›</span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="v-card bg-30days">
+
+            <div>
+                <h2 id="thirtyDaysRevenue">₹0.00</h2>
+                <p>30 Days Revenue</p>
+            </div>
+
+            <div>
+
+                <div class="card-divider"></div>
+
+                <a
+                    href="#"
+                    class="card-footer-link"
+                    onclick="openEarningsModal('30 Days Earnings',document.getElementById('thirtyDaysRevenue').innerText);return false;">
+
+                    View details
+                    <span>›</span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="v-card bg-alltime">
+
+            <div>
+                <h2 id="allTimeRevenueText">₹0.00</h2>
+                <p>All Time Revenue</p>
+            </div>
+
+            <div>
+
+                <div class="card-divider"></div>
+
+                <a
+                    href="#"
+                    class="card-footer-link"
+                    onclick="openEarningsModal('All Time Earnings',document.getElementById('allTimeRevenueText').innerText);return false;">
+
+                    View details
+                    <span>›</span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="v-card bg-passive">
+
+            <div>
+                <h2 id="passiveIncome">₹0.00</h2>
+                <p>Passive Income</p>
+            </div>
+
+            <div>
+
+                <div class="card-divider"></div>
+
+                <a
+                    href="#"
+                    class="card-footer-link"
+                    onclick="openEarningsModal('Passive Income',document.getElementById('passiveIncome').innerText);return false;">
+
+                    View details
+                    <span>›</span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- REFERRALS -->
+
+    <div class="section-box">
+
+        <h3>
+            👥 My Referrals & Joins
+        </h3>
+
+        <div class="referral-tabs">
+
+            <button
+                class="ref-tab active"
+                onclick="filterReferrals(1,this)">
+                1 Day (Today)
+            </button>
+
+            <button
+                class="ref-tab"
+                onclick="filterReferrals(7,this)">
+                7 Days
+            </button>
+
+            <button
+                class="ref-tab"
+                onclick="filterReferrals(15,this)">
+                15 Days
+            </button>
+
+            <button
+                class="ref-tab"
+                onclick="filterReferrals(30,this)">
+                30 Days
+            </button>
+
+        </div>
+
+        <div id="referralsListContainer">
+
+            <div
+                style="text-align:center;color:#64748b;font-size:13px;padding:10px">
+                Loading referrals...
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="app-footer-credit">
+
+        Website Created in August 2026 by
+        <b>Swrang Swargiary</b>
+
+    </div>
+
 </div>
 
-<!-- ADMIN STATUS CONTAINER -->
-<div id="adminStatusContainer" style="background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 15px; margin: 0 0 20px 0;">
-<h3 style="margin: 0 0 10px; font-size: 16px; color: var(--accent);">📢 Admin Updates & Status</h3>
-<div id="statusList">Loading updates...</div>
 </div>
 
-<!-- EARNINGS CARDS -->
-<div class="stats-stack">
-<div class="v-card bg-today">
-<div>
-<h2 id="todayRevenue">₹0.00</h2>
-<p>Today's Revenue</p>
-</div>
-<div>
-<div class="card-divider"></div>
-<a href="#" class="card-footer-link" onclick="openEarningsModal('Today Earnings',document.getElementById('todayRevenue').innerText);return false;">View details<span>›</span></a>
-</div>
-</div>
-<div class="v-card bg-7days">
-<div>
-<h2 id="sevenDaysRevenue">₹0.00</h2>
-<p>7 Days Revenue</p>
-</div>
-<div>
-<div class="card-divider"></div>
-<a href="#" class="card-footer-link" onclick="openEarningsModal('7 Days Earnings',document.getElementById('sevenDaysRevenue').innerText);return false;">View details<span>›</span></a>
-</div>
-</div>
-<div class="v-card bg-30days">
-<div>
-<h2 id="thirtyDaysRevenue">₹0.00</h2>
-<p>30 Days Revenue</p>
-</div>
-<div>
-<div class="card-divider"></div>
-<a href="#" class="card-footer-link" onclick="openEarningsModal('30 Days Earnings',document.getElementById('thirtyDaysRevenue').innerText);return false;">View details<span>›</span></a>
-</div>
-</div>
-<div class="v-card bg-alltime">
-<div>
-<h2 id="allTimeRevenueText">₹0.00</h2>
-<p>All Time Revenue</p>
-</div>
-<div>
-<div class="card-divider"></div>
-<a href="#" class="card-footer-link" onclick="openEarningsModal('All Time Earnings',document.getElementById('allTimeRevenueText').innerText);return false;">View details<span>›</span></a>
-</div>
-</div>
-<div class="v-card bg-passive">
-<div>
-<h2 id="passiveIncome">₹0.00</h2>
-<p>Passive Income</p>
-</div>
-<div>
-<div class="card-divider"></div>
-<a href="#" class="card-footer-link" onclick="openEarningsModal('Passive Income',document.getElementById('passiveIncome').innerText);return false;">View details<span>›</span></a>
-</div>
-</div>
+<!-- =========================
+TOAST
+========================= -->
+
+<div id="toastNotification">
+
+    ⚡
+
+    <span id="toastMessage">
+        Success Message
+    </span>
+
 </div>
 
-<!-- REFERRALS -->
-<div class="section-box">
-<h3>👥 My Referrals & Joins</h3>
-<div class="referral-tabs">
-<button class="ref-tab active" onclick="filterReferrals(1,this)">1 Day (Today)</button>
-<button class="ref-tab" onclick="filterReferrals(7,this)">7 Days</button>
-<button class="ref-tab" onclick="filterReferrals(15,this)">15 Days</button>
-<button class="ref-tab" onclick="filterReferrals(30,this)">30 Days</button>
-</div>
-<div id="referralsListContainer">
-<div style="text-align:center;color:#64748b;font-size:13px;padding:10px;">Loading referrals...</div>
-</div>
-</div>
-<div class="app-footer-credit">
-Website Created in August 2026 by <b>Swrang Swargiary</b>
-</div>
-</div>
+<!-- =========================
+EARNINGS MODAL
+========================= -->
+
+<div
+    id="earningsModal"
+    class="modal-overlay">
+
+    <div class="modal-box">
+
+        <h3
+            id="earningsModalTitle"
+            style="color:#7c3aed;margin-top:0">
+            📊 Earning Details
+        </h3>
+
+        <p
+            style="font-size:13px;color:#475569;margin-bottom:15px">
+
+            Breakdown of your selected revenue duration.
+
+        </p>
+
+        <div
+            style="background:#f8fafc;padding:16px;border-radius:14px;border:1px solid #e2e8f0;text-align:center;margin-bottom:15px">
+
+            <span
+                style="font-size:12px;color:#64748b;font-weight:600;display:block;margin-bottom:4px">
+                Total Collected
+            </span>
+
+            <h2
+                id="earningsModalAmount"
+                style="font-size:32px;color:#0f172a;margin:0;font-weight:800">
+                ₹0
+            </h2>
+
+        </div>
+
+        <button
+            onclick="closeModal('earningsModal')"
+            class="btn-action">
+            Close
+        </button>
+
+    </div>
+
 </div>
 
-<!-- TOAST -->
-<div id="toastNotification">⚡<span id="toastMessage">Success Message</span></div>
+<!-- =========================
+PACKAGE MODAL
+========================= -->
 
-<!-- EARNINGS MODAL -->
-<div id="earningsModal" class="modal-overlay">
-<div class="modal-box">
-<h3 id="earningsModalTitle" style="color:#7c3aed;margin-top:0;">📊 Earning Details</h3>
-<p style="font-size:13px;color:#475569;margin-bottom:15px;">Breakdown of your selected revenue duration:</p>
-<div style="background:#f8fafc;padding:16px;border-radius:14px;border:1px solid #e2e8f0;text-align:center;margin-bottom:15px;">
-<span style="font-size:12px;color:#64748b;font-weight:600;display:block;margin-bottom:4px;">Total Collected</span>
-<h2 id="earningsModalAmount" style="font-size:32px;color:#0f172a;margin:0;font-weight:800;">₹0</h2>
-</div>
-<button onclick="closeModal('earningsModal')" class="btn-action">Close</button>
-</div>
-</div>
+<div
+    id="packageModal"
+    class="modal-overlay">
 
-<!-- PACKAGE MODAL -->
-<div id="packageModal" class="modal-overlay">
-<div class="modal-box">
-<h3 style="color:#7c3aed;margin-top:0;">👑 My Package</h3>
-<div style="background:#f8fafc;padding:18px;border-radius:14px;border:1px solid #e2e8f0;">
-<div style="font-size:12px;color:#64748b;margin-bottom:5px;">CURRENT PACKAGE</div>
-<h2 id="modalPkgName" style="margin:0;color:#0f172a;font-size:24px;">No Package Active</h2>
-<div style="margin-top:18px;border-top:1px solid #e2e8f0;padding-top:15px;">
-<p style="font-size:13px;color:#475569;"><b>Package Status:</b> <span id="modalPkgStatus">No Active Package</span></p>
-<p style="font-size:13px;color:#475569;"><b>Commission:</b> <span id="modalPkgCommission">Not Available</span></p>
-<p style="font-size:13px;color:#475569;"><b>Withdrawal Limit:</b> <span id="modalPkgWithdraw">₹200 Minimum</span></p>
-</div>
-</div>
-<button onclick="closeModal('packageModal')" class="btn-action">Close</button>
-</div>
-</div>
+    <div class="modal-box">
 
-<!-- EARNINGS HISTORY -->
-<div id="earningsHistoryModal" class="modal-overlay">
-<div class="modal-box">
-<h3 style="color:#7c3aed;margin-top:0;">📊 My Earnings & Transactions</h3>
-<p style="font-size:13px;color:#64748b;">Your commission and earnings history will appear here.</p>
-<div id="earningsHistoryList">
-<div style="text-align:center;color:#64748b;font-size:13px;padding:20px;">Loading earnings...</div>
-</div>
-<button onclick="closeModal('earningsHistoryModal')" class="btn-action" style="margin-top:15px;">Close</button>
-</div>
-</div>
+        <h3 style="color:#7c3aed;margin-top:0">
+            👑 My Package
+        </h3>
 
-<!-- WITHDRAW HISTORY -->
-<div id="historyModal" class="modal-overlay">
-<div class="modal-box">
-<h3 style="color:#0f172a;margin-top:0;">📜 Withdrawal History</h3>
-<div id="withdrawalHistoryList">
-<div style="text-align:center;color:#64748b;font-size:13px;padding:10px;">Loading history...</div>
-</div>
-<button onclick="closeModal('historyModal')" class="btn-action" style="margin-top:15px;">Close</button>
-</div>
-</div>
+        <div
+            style="background:#f8fafc;padding:18px;border-radius:14px;border:1px solid #e2e8f0">
 
-<!-- PAYOUT / PAYMENT DETAILS -->
-<div id="profileSettingsModal" class="modal-overlay">
-<div class="modal-box">
-<h3 style="margin-top:0;color:#7c3aed;">🏦 Payment Details</h3>
-<p id="payoutInfoText" style="font-size:13px;color:#64748b;line-height:1.6;">Choose one payment method. After saving your payment details, you cannot change or update them.</p>
-<div class="payout-tabs">
-<div class="payout-tab active" id="tabUpi" onclick="switchPayoutMode('upi')">UPI ID</div>
-<div class="payout-tab" id="tabBank" onclick="switchPayoutMode('bank')">Bank Account</div>
-</div>
-<div id="upiSection">
-<label style="font-size:13px;font-weight:700;color:#334155;">UPI ID</label>
-<input type="text" id="editUpiId" class="input-field" placeholder="yourname@upi" autocomplete="off">
-</div>
-<div id="bankSection" style="display:none;">
-<label style="font-size:13px;font-weight:700;color:#334155;">Account Holder Name</label>
-<input type="text" id="editAccName" class="input-field" placeholder="Enter account holder name" autocomplete="off">
-<label style="font-size:13px;font-weight:700;color:#334155;">Bank Account Number</label>
-<input type="text" id="editAccNo" class="input-field" placeholder="Enter bank account number" autocomplete="off">
-<label style="font-size:13px;font-weight:700;color:#334155;">IFSC Code</label>
-<input type="text" id="editIfsc" class="input-field" placeholder="Example: SBIN0001234" autocomplete="off">
-</div>
-<div id="paymentLockedMessage" style="display:none;margin-top:15px;padding:15px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa;">
-<div style="font-size:13px;font-weight:700;color:#9a3412;line-height:1.6;">🔒 Payment details change karne ke liye Smart Money Customer Care se contact karein.</div>
-</div>
-<button onclick="updateUserPayoutDetails()" class="btn-action" id="saveProfileBtn">Save Payment Details</button>
-<button id="customerCareBtn" onclick="connectCustomerCare()" style="display:none;width:100%;margin-top:10px;padding:13px;border:none;border-radius:10px;background:#0f172a;color:#ffffff;font-weight:700;cursor:pointer;">📧 CONNECT CUSTOMER CARE</button>
-<button onclick="closeModal('profileSettingsModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;font-weight:600;">Cancel</button>
-</div>
+            <div
+                style="font-size:12px;color:#64748b;margin-bottom:5px">
+                CURRENT PACKAGE
+            </div>
+
+            <h2
+                id="modalPkgName"
+                style="margin:0;color:#0f172a;font-size:24px">
+                No Package Active
+            </h2>
+
+            <div
+                style="margin-top:18px;border-top:1px solid #e2e8f0;padding-top:15px">
+
+                <p style="font-size:13px;color:#475569">
+                    <b>Package Status:</b>
+                    <span id="modalPkgStatus">
+                        No Active Package
+                    </span>
+                </p>
+
+                <p style="font-size:13px;color:#475569">
+                    <b>Commission:</b>
+                    <span id="modalPkgCommission">
+                        Not Available
+                    </span>
+                </p>
+
+                <p style="font-size:13px;color:#475569">
+                    <b>Withdrawal Limit:</b>
+                    <span id="modalPkgWithdraw">
+                        ₹200 Minimum
+                    </span>
+                </p>
+
+            </div>
+
+        </div>
+
+        <button
+            onclick="closeModal('packageModal')"
+            class="btn-action"
+            style="margin-top:15px">
+            Close
+        </button>
+
+    </div>
+
 </div>
 
-<!-- KYC -->
-<div id="kycModal" class="modal-overlay">
-<div class="modal-box">
-<h3>🆔 KYC & Date of Birth</h3>
-<label>Full Name</label>
-<input type="text" id="kycFullName" class="input-field">
-<label>Date of Birth</label>
-<input type="date" id="kycDob" class="input-field">
-<button onclick="saveKycDetails()" class="btn-action">Save KYC</button>
-<button onclick="closeModal('kycModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;">Cancel</button>
-</div>
+<!-- =========================
+EARNINGS HISTORY
+========================= -->
+
+<div
+    id="earningsHistoryModal"
+    class="modal-overlay">
+
+    <div class="modal-box">
+
+        <h3 style="color:#7c3aed;margin-top:0">
+            📊 My Earnings & Transactions
+        </h3>
+
+        <p
+            style="font-size:13px;color:#64748b">
+            Your commission and earnings history.
+        </p>
+
+        <div id="earningsHistoryList">
+
+            <div
+                style="text-align:center;color:#64748b;font-size:13px;padding:20px">
+                Loading earnings...
+            </div>
+
+        </div>
+
+        <button
+            onclick="closeModal('earningsHistoryModal')"
+            class="btn-action"
+            style="margin-top:15px">
+            Close
+        </button>
+
+    </div>
+
 </div>
 
-<!-- WITHDRAW -->
-<div id="withdrawModal" class="modal-overlay">
-<div class="modal-box">
-<h3>💸 Request Withdrawal</h3>
-<p id="withdrawModalBalanceText" style="font-size:13px;color:#475569;margin-bottom:12px;">Available Balance: ₹0</p>
-<div id="withdrawPaymentPreview" style="background:#f8fafc;padding:14px;border-radius:14px;border:1px solid #e2e8f0;margin-bottom:14px;">
-<div style="font-size:11px;font-weight:800;color:#64748b;letter-spacing:0.5px;margin-bottom:4px;">PAYING TO:</div>
-<div id="withdrawPaymentDetailsContent" style="font-size:13px;font-weight:700;color:#0f172a;">Loading payment info...</div>
+<!-- =========================
+WITHDRAW HISTORY
+========================= -->
+
+<div
+    id="historyModal"
+    class="modal-overlay">
+
+    <div class="modal-box">
+
+        <h3 style="color:#0f172a;margin-top:0">
+            📜 Withdrawal History
+        </h3>
+
+        <div id="withdrawalHistoryList">
+
+            <div
+                style="text-align:center;color:#64748b;font-size:13px;padding:10px">
+                Loading history...
+            </div>
+
+        </div>
+
+        <button
+            onclick="closeModal('historyModal')"
+            class="btn-action"
+            style="margin-top:15px">
+            Close
+        </button>
+
+    </div>
+
 </div>
-<div class="amount-chips">
-<div class="chip" onclick="setWithdrawAmount(100)">₹100</div>
-<div class="chip" onclick="setWithdrawAmount(500)">₹500</div>
-<div class="chip" onclick="setWithdrawAmount(1000)">₹1000</div>
-<div class="chip" onclick="setWithdrawAmount(userCurrentBalance)">MAX</div>
+
+<!-- =========================
+PAYMENT DETAILS
+========================= -->
+
+<div
+    id="profileSettingsModal"
+    class="modal-overlay">
+
+    <div class="modal-box">
+
+        <h3 style="margin-top:0;color:#7c3aed">
+            🏦 Payment Details
+        </h3>
+
+        <p
+            id="payoutInfoText"
+            style="font-size:13px;color:#64748b;line-height:1.6">
+
+            Choose one payment method.
+
+        </p>
+
+        <div class="payout-tabs">
+
+            <div
+                class="payout-tab active"
+                id="tabUpi"
+                onclick="switchPayoutMode('upi')">
+                UPI ID
+            </div>
+
+            <div
+                class="payout-tab"
+                id="tabBank"
+                onclick="switchPayoutMode('bank')">
+                Bank Account
+            </div>
+
+        </div>
+
+        <div id="upiSection">
+
+            <label
+                style="font-size:13px;font-weight:700;color:#334155">
+                UPI ID
+            </label>
+
+            <input
+                type="text"
+                id="editUpiId"
+                class="input-field"
+                placeholder="yourname@upi"
+                autocomplete="off">
+
+        </div>
+
+        <div
+            id="bankSection"
+            style="display:none">
+
+            <label
+                style="font-size:13px;font-weight:700;color:#334155">
+                Account Holder Name
+            </label>
+
+            <input
+                type="text"
+                id="editAccName"
+                class="input-field"
+                placeholder="Enter account holder name"
+                autocomplete="off">
+
+            <label
+                style="font-size:13px;font-weight:700;color:#334155">
+                Bank Account Number
+            </label>
+
+            <input
+                type="text"
+                id="editAccNo"
+                class="input-field"
+                placeholder="Enter bank account number"
+                autocomplete="off">
+
+            <label
+                style="font-size:13px;font-weight:700;color:#334155">
+                IFSC Code
+            </label>
+
+            <input
+                type="text"
+                id="editIfsc"
+                class="input-field"
+                placeholder="Example: SBIN0001234"
+                autocomplete="off">
+
+        </div>
+
+        <div
+            id="paymentLockedMessage"
+            style="display:none;margin-top:15px;padding:15px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa">
+
+            <div
+                style="font-size:13px;font-weight:700;color:#9a3412;line-height:1.6">
+
+                🔒 Payment details change karne ke liye Smart Money Customer Care se contact karein.
+
+            </div>
+
+        </div>
+
+        <button
+            onclick="updateUserPayoutDetails()"
+            class="btn-action"
+            id="saveProfileBtn">
+
+            Save Payment Details
+
+        </button>
+
+        <button
+            id="customerCareBtn"
+            onclick="connectCustomerCare()"
+            style="display:none;width:100%;margin-top:10px;padding:13px;border:none;border-radius:10px;background:#0f172a;color:#fff;font-weight:700;cursor:pointer">
+
+            📧 CONNECT CUSTOMER CARE
+
+        </button>
+
+        <button
+            onclick="closeModal('profileSettingsModal')"
+            style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;font-weight:600">
+
+            Cancel
+
+        </button>
+
+    </div>
+
 </div>
-<label>Enter Amount</label>
-<input type="number" id="withdrawAmount" class="input-field" placeholder="Amount">
-<button onclick="submitWithdrawal()" class="btn-action" id="submitWithdrawBtn">Submit Request</button>
-<button onclick="closeModal('withdrawModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;">Cancel</button>
+
+<!-- =========================
+KYC
+========================= -->
+
+<div
+    id="kycModal"
+    class="modal-overlay">
+
+    <div class="modal-box">
+
+        <h3>🆔 KYC & Date of Birth</h3>
+
+        <label>Full Name</label>
+
+        <input
+            type="text"
+            id="kycFullName"
+            class="input-field">
+
+        <label>Date of Birth</label>
+
+        <input
+            type="date"
+            id="kycDob"
+            class="input-field">
+
+        <button
+            onclick="saveKycDetails()"
+            class="btn-action">
+            Save KYC
+        </button>
+
+        <button
+            onclick="closeModal('kycModal')"
+            style="width:100%;border:none;background:none;padding:12px;color:#64748b">
+
+            Cancel
+
+        </button>
+
+    </div>
+
 </div>
+
+<!-- =========================
+WITHDRAW
+========================= -->
+
+<div
+    id="withdrawModal"
+    class="modal-overlay">
+
+    <div class="modal-box">
+
+        <h3>💸 Request Withdrawal</h3>
+
+        <p
+            id="withdrawModalBalanceText"
+            style="font-size:13px;color:#475569;margin-bottom:12px">
+
+            Available Balance: ₹0
+
+        </p>
+
+        <div
+            id="withdrawPaymentPreview"
+            style="background:#f8fafc;padding:14px;border-radius:14px;border:1px solid #e2e8f0;margin-bottom:14px">
+
+            <div
+                style="font-size:11px;font-weight:800;color:#64748b;letter-spacing:.5px;margin-bottom:4px">
+
+                PAYING TO:
+
+            </div>
+
+            <div
+                id="withdrawPaymentDetailsContent"
+                style="font-size:13px;font-weight:700;color:#0f172a">
+
+                Loading payment info...
+
+            </div>
+
+        </div>
+
+        <div class="amount-chips">
+
+            <div
+                class="chip"
+                onclick="setWithdrawAmount(100)">
+                ₹100
+            </div>
+
+            <div
+                class="chip"
+                onclick="setWithdrawAmount(500)">
+                ₹500
+            </div>
+
+            <div
+                class="chip"
+                onclick="setWithdrawAmount(1000)">
+                ₹1000
+            </div>
+
+            <div
+                class="chip"
+                onclick="setWithdrawAmount(userCurrentBalance)">
+                MAX
+            </div>
+
+        </div>
+
+        <label>Enter Amount</label>
+
+        <input
+            type="number"
+            id="withdrawAmount"
+            class="input-field"
+            placeholder="Amount">
+
+        <button
+            onclick="submitWithdrawal()"
+            class="btn-action"
+            id="submitWithdrawBtn">
+
+            Submit Request
+
+        </button>
+
+        <button
+            onclick="closeModal('withdrawModal')"
+            style="width:100%;border:none;background:none;padding:12px;color:#64748b">
+
+            Cancel
+
+        </button>
+
+    </div>
+
 </div>
 
 <script>
-/* =========================================
-CONFIGURATION
-========================================= */
-const EMAILJS_PUBLIC_KEY="FxcimUvl0-ZxAauRx";
-const EMAILJS_SERVICE_ID="service_qsy07qr";
-const EMAILJS_WITHDRAW_APPROVED_TEMPLATE="template_mf8enck";
 
-if(window.emailjs && EMAILJS_PUBLIC_KEY) {
-  try { emailjs.init(EMAILJS_PUBLIC_KEY); } catch(e){}
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const EMAILJS_PUBLIC_KEY =
+"FxcimUvl0-ZxAauRx";
+
+const EMAILJS_SERVICE_ID =
+"service_qsy07qr";
+
+const EMAILJS_WITHDRAW_APPROVED_TEMPLATE =
+"template_mf8enck";
+
+const SUPABASE_URL =
+"https://rvprrulkjegvicbnjuft.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+
+/*
+   IMPORTANT:
+   Supabase Storage bucket name.
+*/
+const PROFILE_BUCKET =
+"profile-images";
+
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY,
+    {
+        auth:{
+            persistSession:true,
+            autoRefreshToken:true,
+            detectSessionInUrl:true
+        }
+    }
+);
+
+
+/* =========================================================
+   EMAILJS
+========================================================= */
+
+if(window.emailjs){
+
+    try{
+
+        emailjs.init(
+            EMAILJS_PUBLIC_KEY
+        );
+
+    }catch(e){}
+
 }
 
-const SUPABASE_URL="https://rvprrulkjegvicbnjuft.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY="sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 
-const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
-auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:true }
-});
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
 
-/* =========================================
-GLOBAL VARIABLES
-========================================= */
-let currentUserId=null;
-let currentProfile={};
-let userCurrentBalance=0;
-let userRefCode="";
-let payoutMode="upi";
-let currentUserEmail="";
-let allReferralsData=[];
-let realtimeChannel=null;
-let adminRealtimeChannel=null;
-let dashboardInitialized=false;
-let allEarningsData=[];
+let currentUserId = null;
 
-/* =========================================
-TOAST & ESCAPE
-========================================= */
-function showToast(msg){
-const toast=document.getElementById("toastNotification");
-const message=document.getElementById("toastMessage");
-if(!toast||!message)return;
-message.innerText=msg;
-toast.classList.add("show");
-clearTimeout(window.toastTimer);
-window.toastTimer=setTimeout(()=>{ toast.classList.remove("show"); },3000);
+let currentProfile = {};
+
+let userCurrentBalance = 0;
+
+let userRefCode = "";
+
+let payoutMode = "upi";
+
+let currentUserEmail = "";
+
+let allReferralsData = [];
+
+let allEarningsData = [];
+
+let realtimeChannel = null;
+
+let dashboardInitialized = false;
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById(
+            "toastNotification"
+        );
+
+    const text =
+        document.getElementById(
+            "toastMessage"
+        );
+
+    if(!toast || !text) return;
+
+    text.innerText = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(
+        window.toastTimer
+    );
+
+    window.toastTimer =
+        setTimeout(
+            ()=>{
+                toast.classList.remove("show");
+            },
+            3000
+        );
 }
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
 
 function escapeHtml(text){
-const div=document.createElement("div");
-div.textContent=text||"";
-return div.innerHTML;
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text == null ? "" : String(text);
+
+    return div.innerHTML;
 }
 
-function copyUserReferralCode(){
-if(!userRefCode) { showToast("Referral code not available"); return; }
-navigator.clipboard.writeText(userRefCode).then(()=>{
-showToast("Referral ID copied to clipboard!");
-}).catch(err=>{ showToast("Failed to copy code"); });
-}
 
-/* =========================================
-SIDEBAR & MODALS
-========================================= */
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
 function toggleSidebar(){
-document.getElementById("sidebar")?.classList.toggle("active");
-document.getElementById("sidebarOverlay")?.classList.toggle("active");
+
+    document
+        .getElementById("sidebar")
+        ?.classList.toggle("active");
+
+    document
+        .getElementById("sidebarOverlay")
+        ?.classList.toggle("active");
+
 }
 
 function closeSidebar(){
-document.getElementById("sidebar")?.classList.remove("active");
-document.getElementById("sidebarOverlay")?.classList.remove("active");
+
+    document
+        .getElementById("sidebar")
+        ?.classList.remove("active");
+
+    document
+        .getElementById("sidebarOverlay")
+        ?.classList.remove("active");
+
 }
 
+
+/* =========================================================
+   MODALS
+========================================================= */
+
 function openModal(id){
-const modal=document.getElementById(id);
-if(modal){ modal.style.display="flex"; }
+
+    const modal =
+        document.getElementById(id);
+
+    if(modal){
+
+        modal.style.display =
+            "flex";
+
+    }
+
 }
 
 function closeModal(id){
-const modal=document.getElementById(id);
-if(modal){ modal.style.display="none"; }
+
+    const modal =
+        document.getElementById(id);
+
+    if(modal){
+
+        modal.style.display =
+            "none";
+
+    }
+
 }
 
-function openEarningsModal(title,amount){
-document.getElementById("earningsModalTitle").innerText="📊 "+title;
-document.getElementById("earningsModalAmount").innerText=amount;
-openModal("earningsModal");
+
+/* =========================================================
+   EARNING MODAL
+========================================================= */
+
+function openEarningsModal(
+    title,
+    amount
+){
+
+    document
+        .getElementById(
+            "earningsModalTitle"
+        )
+        .innerText =
+            "📊 " + title;
+
+    document
+        .getElementById(
+            "earningsModalAmount"
+        )
+        .innerText =
+            amount;
+
+    openModal(
+        "earningsModal"
+    );
+
 }
+
+
+/* =========================================================
+   PACKAGE
+========================================================= */
 
 function openPackageModal(){
-closeSidebar();
-updatePackageModal();
-openModal("packageModal");
+
+    closeSidebar();
+
+    updatePackageModal();
+
+    openModal(
+        "packageModal"
+    );
+
 }
+
+
+/* =========================================================
+   EARNINGS HISTORY
+========================================================= */
 
 function openEarningsHistoryModal(){
-closeSidebar();
-openModal("earningsHistoryModal");
-loadEarningsHistory();
+
+    closeSidebar();
+
+    openModal(
+        "earningsHistoryModal"
+    );
+
+    loadEarningsHistory();
+
 }
+
+
+/* =========================================================
+   WITHDRAWAL HISTORY
+========================================================= */
 
 function openHistoryModal(){
-closeSidebar();
-openModal("historyModal");
-loadWithdrawalHistory();
+
+    closeSidebar();
+
+    openModal(
+        "historyModal"
+    );
+
+    loadWithdrawalHistory();
+
 }
+
+
+/* =========================================================
+   KYC
+========================================================= */
 
 function openKycModal(){
-closeSidebar();
-document.getElementById("kycFullName").value=currentProfile?.full_name||"";
-document.getElementById("kycDob").value=currentProfile?.date_of_birth||"";
-openModal("kycModal");
+
+    closeSidebar();
+
+    document
+        .getElementById(
+            "kycFullName"
+        )
+        .value =
+            currentProfile?.full_name || "";
+
+    document
+        .getElementById(
+            "kycDob"
+        )
+        .value =
+            currentProfile?.date_of_birth || "";
+
+    openModal(
+        "kycModal"
+    );
+
 }
 
-function openWithdrawModal(){
-closeSidebar();
-if(!hasSavedPaymentDetails()){
-alert("⚠️ Please add your UPI ID or Bank Account details first before requesting a withdrawal!");
-openUpiModal();
-return;
-}
-const previewBox=document.getElementById("withdrawPaymentDetailsContent");
-const savedType=String(currentProfile?.payout_type||"").trim().toLowerCase();
-if(savedType==="bank"){
-const accName=currentProfile?.account_holder_name||"N/A";
-const accNo=currentProfile?.bank_account_number||"N/A";
-const ifsc=currentProfile?.ifsc_code||"N/A";
-previewBox.innerHTML=`🏦 <b>Bank Account:</b> ${escapeHtml(accNo)} <br><span style="font-size:11px;color:#64748b;">Holder: ${escapeHtml(accName)} | IFSC: ${escapeHtml(ifsc)}</span>`;
-}else{
-const upi=currentProfile?.upi_id||"N/A";
-previewBox.innerHTML=`⚡ <b>UPI ID:</b> <span style="color:#7c3aed;">${escapeHtml(upi)}</span>`;
-}
-document.getElementById("withdrawAmount").value="";
-document.getElementById("withdrawModalBalanceText").innerText="Available Balance: ₹"+Number(userCurrentBalance).toFixed(2);
-openModal("withdrawModal");
-}
 
-/* =========================================
-PAYMENT DETAILS LOCK & SETTINGS
-========================================= */
+/* =========================================================
+   PAYMENT DETAILS
+========================================================= */
+
 function hasSavedPaymentDetails(){
-const payoutType=String(currentProfile?.payout_type||"").trim().toLowerCase();
-if(payoutType==="upi"){ return String(currentProfile?.upi_id||"").trim()!==""; }
-if(payoutType==="bank"){ return String(currentProfile?.bank_account_number||"").trim()!==""; }
-return false;
+
+    const type =
+        String(
+            currentProfile?.payout_type || ""
+        )
+        .trim()
+        .toLowerCase();
+
+    if(type === "upi"){
+
+        return Boolean(
+            String(
+                currentProfile?.upi_id || ""
+            ).trim()
+        );
+
+    }
+
+    if(type === "bank"){
+
+        return Boolean(
+            String(
+                currentProfile?.bank_account_number || ""
+            ).trim()
+        );
+
+    }
+
+    return false;
 }
+
 
 function openUpiModal(){
-closeSidebar();
-const paymentLocked=hasSavedPaymentDetails();
-const savedType=String(currentProfile?.payout_type||"").trim().toLowerCase();
-const upiInput=document.getElementById("editUpiId");
-const accNameInput=document.getElementById("editAccName");
-const accNoInput=document.getElementById("editAccNo");
-const ifscInput=document.getElementById("editIfsc");
-const saveBtn=document.getElementById("saveProfileBtn");
-const careBtn=document.getElementById("customerCareBtn");
-const lockedMessage=document.getElementById("paymentLockedMessage");
-const infoText=document.getElementById("payoutInfoText");
 
-upiInput.value=currentProfile?.upi_id||"";
-accNameInput.value=currentProfile?.account_holder_name||"";
-accNoInput.value=currentProfile?.bank_account_number||"";
-ifscInput.value=currentProfile?.ifsc_code||"";
+    closeSidebar();
 
-if(paymentLocked){
-switchPayoutMode(savedType==="bank"?"bank":"upi",true);
-upiInput.disabled=true;
-accNameInput.disabled=true;
-accNoInput.disabled=true;
-ifscInput.disabled=true;
-document.getElementById("tabUpi").style.pointerEvents="none";
-document.getElementById("tabBank").style.pointerEvents="none";
-document.getElementById("tabUpi").style.opacity=savedType==="upi"?"1":".4";
-document.getElementById("tabBank").style.opacity=savedType==="bank"?"1":".4";
-saveBtn.style.display="none";
-careBtn.style.display="block";
-lockedMessage.style.display="block";
-infoText.innerHTML=`<b style="color:#dc2626;">🔒 Payment Details Locked</b><br> Your ${savedType==="bank"?"Bank Account":"UPI ID"} has been permanently saved.`;
-}else{
-upiInput.disabled=false;
-accNameInput.disabled=false;
-accNoInput.disabled=false;
-ifscInput.disabled=false;
-document.getElementById("tabUpi").style.pointerEvents="auto";
-document.getElementById("tabBank").style.pointerEvents="auto";
-document.getElementById("tabUpi").style.opacity="1";
-document.getElementById("tabBank").style.opacity="1";
-saveBtn.style.display="block";
-careBtn.style.display="none";
-lockedMessage.style.display="none";
-infoText.innerHTML=`Choose <b>UPI ID</b> or <b>Bank Account</b>. After saving, your payment method will be permanently locked.`;
-switchPayoutMode(savedType==="bank"?"bank":"upi");
-}
-openModal("profileSettingsModal");
+    const locked =
+        hasSavedPaymentDetails();
+
+    const savedType =
+        String(
+            currentProfile?.payout_type || ""
+        )
+        .trim()
+        .toLowerCase();
+
+    const upiInput =
+        document.getElementById(
+            "editUpiId"
+        );
+
+    const accNameInput =
+        document.getElementById(
+            "editAccName"
+        );
+
+    const accNoInput =
+        document.getElementById(
+            "editAccNo"
+        );
+
+    const ifscInput =
+        document.getElementById(
+            "editIfsc"
+        );
+
+    const saveBtn =
+        document.getElementById(
+            "saveProfileBtn"
+        );
+
+    const careBtn =
+        document.getElementById(
+            "customerCareBtn"
+        );
+
+    const lockedMessage =
+        document.getElementById(
+            "paymentLockedMessage"
+        );
+
+    const infoText =
+        document.getElementById(
+            "payoutInfoText"
+        );
+
+
+    upiInput.value =
+        currentProfile?.upi_id || "";
+
+    accNameInput.value =
+        currentProfile?.account_holder_name || "";
+
+    accNoInput.value =
+        currentProfile?.bank_account_number || "";
+
+    ifscInput.value =
+        currentProfile?.ifsc_code || "";
+
+
+    if(locked){
+
+        switchPayoutMode(
+            savedType === "bank"
+                ? "bank"
+                : "upi",
+            true
+        );
+
+        upiInput.disabled = true;
+        accNameInput.disabled = true;
+        accNoInput.disabled = true;
+        ifscInput.disabled = true;
+
+        document.getElementById(
+            "tabUpi"
+        ).style.pointerEvents = "none";
+
+        document.getElementById(
+            "tabBank"
+        ).style.pointerEvents = "none";
+
+        document.getElementById(
+            "tabUpi"
+        ).style.opacity =
+            savedType === "upi"
+                ? "1"
+                : ".4";
+
+        document.getElementById(
+            "tabBank"
+        ).style.opacity =
+            savedType === "bank"
+                ? "1"
+                : ".4";
+
+        saveBtn.style.display =
+            "none";
+
+        careBtn.style.display =
+            "block";
+
+        lockedMessage.style.display =
+            "block";
+
+        infoText.innerHTML =
+            `<b style="color:#dc2626">
+            🔒 Payment Details Locked
+            </b><br>
+            Your ${
+                savedType === "bank"
+                    ? "Bank Account"
+                    : "UPI ID"
+            } has been permanently saved.`;
+
+    }else{
+
+        upiInput.disabled = false;
+        accNameInput.disabled = false;
+        accNoInput.disabled = false;
+        ifscInput.disabled = false;
+
+        document.getElementById(
+            "tabUpi"
+        ).style.pointerEvents =
+            "auto";
+
+        document.getElementById(
+            "tabBank"
+        ).style.pointerEvents =
+            "auto";
+
+        document.getElementById(
+            "tabUpi"
+        ).style.opacity =
+            "1";
+
+        document.getElementById(
+            "tabBank"
+        ).style.opacity =
+            "1";
+
+        saveBtn.style.display =
+            "block";
+
+        careBtn.style.display =
+            "none";
+
+        lockedMessage.style.display =
+            "none";
+
+        infoText.innerHTML =
+            `Choose <b>UPI ID</b> or <b>Bank Account</b>.
+            After saving, your payment method will be permanently locked.`;
+
+        switchPayoutMode(
+            savedType === "bank"
+                ? "bank"
+                : "upi"
+        );
+
+    }
+
+    openModal(
+        "profileSettingsModal"
+    );
+
 }
 
-function switchPayoutMode(mode,force=false){
-const paymentLocked=hasSavedPaymentDetails();
-if(paymentLocked&&!force){ showToast("Payment method is permanently locked."); return; }
-if(mode!=="upi"&&mode!=="bank"){ mode="upi"; }
-payoutMode=mode;
-document.getElementById("upiSection").style.display=mode==="upi"?"block":"none";
-document.getElementById("bankSection").style.display=mode==="bank"?"block":"none";
-document.getElementById("tabUpi").className=mode==="upi"?"payout-tab active":"payout-tab";
-document.getElementById("tabBank").className=mode==="bank"?"payout-tab active":"payout-tab";
+
+function switchPayoutMode(
+    mode,
+    force = false
+){
+
+    if(
+        hasSavedPaymentDetails()
+        && !force
+    ){
+
+        showToast(
+            "Payment method is permanently locked."
+        );
+
+        return;
+    }
+
+    if(
+        mode !== "upi"
+        && mode !== "bank"
+    ){
+
+        mode = "upi";
+
+    }
+
+    payoutMode = mode;
+
+    document.getElementById(
+        "upiSection"
+    ).style.display =
+        mode === "upi"
+            ? "block"
+            : "none";
+
+    document.getElementById(
+        "bankSection"
+    ).style.display =
+        mode === "bank"
+            ? "block"
+            : "none";
+
+    document.getElementById(
+        "tabUpi"
+    ).className =
+        mode === "upi"
+            ? "payout-tab active"
+            : "payout-tab";
+
+    document.getElementById(
+        "tabBank"
+    ).className =
+        mode === "bank"
+            ? "payout-tab active"
+            : "payout-tab";
+
 }
+
+
+/* =========================================================
+   SAVE PAYMENT
+========================================================= */
 
 async function updateUserPayoutDetails(){
-if(hasSavedPaymentDetails()){ showPaymentChangeBlocked(); return; }
-const saveBtn=document.getElementById("saveProfileBtn");
-if(payoutMode==="upi"){
-const upiId=document.getElementById("editUpiId").value.trim();
-if(!upiId||!upiId.includes("@")){ alert("Please enter a valid UPI ID."); return; }
-}
-if(payoutMode==="bank"){
-const accountHolder=document.getElementById("editAccName").value.trim();
-const accountNumber=document.getElementById("editAccNo").value.trim();
-const ifscCode=document.getElementById("editIfsc").value.trim().toUpperCase();
-if(!accountHolder||!accountNumber||!ifscCode){ alert("Please fill all bank details."); return; }
-}
-saveBtn.disabled=true;
-saveBtn.innerText="Saving...";
 
-const updateData={ payout_type:payoutMode };
-if(payoutMode==="upi"){
-updateData.upi_id=document.getElementById("editUpiId").value.trim();
-updateData.account_holder_name=null;
-updateData.bank_account_number=null;
-updateData.ifsc_code=null;
+    if(
+        hasSavedPaymentDetails()
+    ){
+
+        showPaymentChangeBlocked();
+
+        return;
+    }
+
+    const saveBtn =
+        document.getElementById(
+            "saveProfileBtn"
+        );
+
+    let updateData = {
+        payout_type:payoutMode
+    };
+
+
+    if(payoutMode === "upi"){
+
+        const upiId =
+            document
+                .getElementById(
+                    "editUpiId"
+                )
+                .value
+                .trim();
+
+        if(
+            !upiId
+            || !upiId.includes("@")
+        ){
+
+            alert(
+                "Please enter a valid UPI ID."
+            );
+
+            return;
+        }
+
+        updateData.upi_id =
+            upiId;
+
+        updateData.account_holder_name =
+            null;
+
+        updateData.bank_account_number =
+            null;
+
+        updateData.ifsc_code =
+            null;
+
+    }
+
+
+    if(payoutMode === "bank"){
+
+        const accountHolder =
+            document
+                .getElementById(
+                    "editAccName"
+                )
+                .value
+                .trim();
+
+        const accountNumber =
+            document
+                .getElementById(
+                    "editAccNo"
+                )
+                .value
+                .trim();
+
+        const ifscCode =
+            document
+                .getElementById(
+                    "editIfsc"
+                )
+                .value
+                .trim()
+                .toUpperCase();
+
+        if(
+            !accountHolder
+            || !accountNumber
+            || !ifscCode
+        ){
+
+            alert(
+                "Please fill all bank details."
+            );
+
+            return;
+        }
+
+        updateData.account_holder_name =
+            accountHolder;
+
+        updateData.bank_account_number =
+            accountNumber;
+
+        updateData.ifsc_code =
+            ifscCode;
+
+        updateData.upi_id =
+            null;
+
+    }
+
+
+    saveBtn.disabled = true;
+
+    saveBtn.innerText =
+        "Saving...";
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+            .from("profiles")
+            .update(updateData)
+            .eq(
+                "user_id",
+                currentUserId
+            )
+            .select()
+            .single();
+
+        if(error)
+            throw error;
+
+        currentProfile = {
+            ...currentProfile,
+            ...data
+        };
+
+        showToast(
+            "Payment details saved successfully!"
+        );
+
+        closeModal(
+            "profileSettingsModal"
+        );
+
+    }catch(error){
+
+        alert(
+            "Error: " + error.message
+        );
+
+    }finally{
+
+        saveBtn.disabled = false;
+
+        saveBtn.innerText =
+            "Save Payment Details";
+
+    }
+
 }
-if(payoutMode==="bank"){
-updateData.account_holder_name=document.getElementById("editAccName").value.trim();
-updateData.bank_account_number=document.getElementById("editAccNo").value.trim();
-updateData.ifsc_code=document.getElementById("editIfsc").value.trim().toUpperCase();
-updateData.upi_id=null;
-}
-try{
-const {data,error}=await supabaseClient.from("profiles").update(updateData).eq("user_id",currentUserId).select().single();
-if(error) throw error;
-currentProfile={...currentProfile,...data};
-showToast("Payment details saved successfully!");
-closeModal("profileSettingsModal");
-setTimeout(()=>{ openUpiModal(); },300);
-}catch(error){
-alert("Error: "+error.message);
-}finally{
-saveBtn.disabled=false;
-saveBtn.innerText="Save Payment Details";
-}
-}
+
 
 function showPaymentChangeBlocked(){
-document.getElementById("paymentLockedMessage").style.display="block";
-document.getElementById("customerCareBtn").style.display="block";
-document.getElementById("saveProfileBtn").style.display="none";
-showToast("Payment details cannot be changed.");
+
+    document.getElementById(
+        "paymentLockedMessage"
+    ).style.display =
+        "block";
+
+    document.getElementById(
+        "customerCareBtn"
+    ).style.display =
+        "block";
+
+    document.getElementById(
+        "saveProfileBtn"
+    ).style.display =
+        "none";
+
+    showToast(
+        "Payment details cannot be changed."
+    );
+
 }
+
+
+/* =========================================================
+   CUSTOMER CARE
+========================================================= */
 
 function connectCustomerCare(){
-const userName=currentProfile?.full_name||"Smart Money User";
-const userEmail=currentProfile?.email||currentUserEmail||"";
-const userId=userRefCode||"Not Available";
-window.location.href=`mailto:smartmoneysupport1@gmail.com?subject=Payment Change Request&body=Name: ${userName}%0EEmail: ${userEmail}%0EUser ID: ${userId}`;
+
+    const userName =
+        currentProfile?.full_name
+        || "Smart Money User";
+
+    const userEmail =
+        currentProfile?.email
+        || currentUserEmail
+        || "";
+
+    const userId =
+        userRefCode
+        || "Not Available";
+
+    const subject =
+        encodeURIComponent(
+            "Payment Change Request"
+        );
+
+    const body =
+        encodeURIComponent(
+`Name: ${userName}
+Email: ${userEmail}
+User ID: ${userId}`
+        );
+
+    window.location.href =
+        `mailto:smartmoneysupport1@gmail.com?subject=${subject}&body=${body}`;
+
 }
 
-function setWithdrawAmount(amount){
-document.getElementById("withdrawAmount").value=Number(amount||0).toFixed(2);
+
+/* =========================================================
+   WITHDRAW
+========================================================= */
+
+function openWithdrawModal(){
+
+    closeSidebar();
+
+    if(
+        !hasSavedPaymentDetails()
+    ){
+
+        alert(
+            "⚠️ Please add your UPI ID or Bank Account details first before requesting a withdrawal!"
+        );
+
+        openUpiModal();
+
+        return;
+    }
+
+
+    const preview =
+        document.getElementById(
+            "withdrawPaymentDetailsContent"
+        );
+
+    const savedType =
+        String(
+            currentProfile?.payout_type || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    if(savedType === "bank"){
+
+        const accName =
+            currentProfile?.account_holder_name
+            || "N/A";
+
+        const accNo =
+            currentProfile?.bank_account_number
+            || "N/A";
+
+        const ifsc =
+            currentProfile?.ifsc_code
+            || "N/A";
+
+        preview.innerHTML =
+            `🏦 <b>Bank Account:</b>
+            ${escapeHtml(accNo)}
+            <br>
+            <span style="font-size:11px;color:#64748b">
+            Holder: ${escapeHtml(accName)}
+            | IFSC: ${escapeHtml(ifsc)}
+            </span>`;
+
+    }else{
+
+        const upi =
+            currentProfile?.upi_id
+            || "N/A";
+
+        preview.innerHTML =
+            `⚡ <b>UPI ID:</b>
+            <span style="color:#7c3aed">
+            ${escapeHtml(upi)}
+            </span>`;
+
+    }
+
+
+    document.getElementById(
+        "withdrawAmount"
+    ).value = "";
+
+    document.getElementById(
+        "withdrawModalBalanceText"
+    ).innerText =
+        "Available Balance: ₹"
+        + Number(
+            userCurrentBalance
+        ).toFixed(2);
+
+    openModal(
+        "withdrawModal"
+    );
+
 }
 
-function applyProfileImage(imgUrl,userName){
-const mainImg=document.getElementById("mainProfileImg");
-const sidebarImg=document.getElementById("sidebarProfileImage");
-const navAvatar=document.getElementById("navAvatarImg");
-const removeLi=document.getElementById("removePhotoLi");
 
-if(imgUrl&&String(imgUrl).trim()!==""){
-if(mainImg)mainImg.src=imgUrl;
-if(sidebarImg)sidebarImg.src=imgUrl;
-if(navAvatar)navAvatar.src=imgUrl;
-if(removeLi)removeLi.style.display="block";
-}else{
-const firstLetter=(userName||"U").charAt(0).toUpperCase();
-const fallbackUrl=`https://ui-avatars.com/api/?name=${encodeURIComponent(firstLetter)}&background=7c3aed&color=fff&size=128&bold=true`;
-if(mainImg)mainImg.src=fallbackUrl;
-if(sidebarImg)sidebarImg.src=fallbackUrl;
-if(navAvatar)navAvatar.src=fallbackUrl;
-if(removeLi)removeLi.style.display="none";
-}
+function setWithdrawAmount(
+    amount
+){
+
+    document.getElementById(
+        "withdrawAmount"
+    ).value =
+        Number(
+            amount || 0
+        ).toFixed(2);
+
 }
 
-async function loadGlobalTopLogo(){
-try{
-const {data}=await supabaseClient.from("global_settings").select("setting_value").eq("setting_key","admin_top_logo").maybeSingle();
-if(data?.setting_value){
-document.getElementById("navBrandLogoImg").src=data.setting_value;
-document.getElementById("sidebarLogo").src=data.setting_value;
-}
-}catch(e){}
-}
 
-function generateReferralCode(){
-return "SM-smart"+Math.floor(10000+Math.random()*90000);
-}
+/* =========================================================
+   PROFILE IMAGE
+   SUPABASE STORAGE VERSION
+========================================================= */
 
-async function createUniqueReferralCode(){
-for(let i=0;i<10;i++){
-const code=generateReferralCode();
-const {data}=await supabaseClient.from("profiles").select("user_id").eq("referral_code",code).limit(1);
-if(!data||data.length===0) return code;
-}
-return "SM-smart"+String(Date.now()).slice(-5);
-}
+function applyProfileImage(
+    imgUrl,
+    userName
+){
 
-/* =========================================
-PROFILE LOADER & DASHBOARD INIT
-========================================= */
-async function loadDashboardProfile(){
-try {
-let user = null;
+    const mainImg =
+        document.getElementById(
+            "mainProfileImg"
+        );
 
-try {
-  const sessionPromise = supabaseClient.auth.getSession();
-  const sessionTimeout = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 3000));
-  const res = await Promise.race([sessionPromise, sessionTimeout]);
-  if (res?.data?.session?.user) {
-    user = res.data.session.user;
-  }
-} catch (e) {}
+    const sidebarImg =
+        document.getElementById(
+            "sidebarProfileImage"
+        );
 
-if (!user) {
-  try {
-    const { data: userData } = await supabaseClient.auth.getUser();
-    if (userData?.user) user = userData.user;
-  } catch (err) {}
-}
+    const navAvatar =
+        document.getElementById(
+            "navAvatarImg"
+        );
 
-if(!user){
-  window.location.href="login.html";
-  return false;
-}
+    const removeLi =
+        document.getElementById(
+            "removePhotoLi"
+        );
 
-currentUserId=user.id;
-currentUserEmail=user.email||"";
-const authName=user.user_metadata?.full_name||user.user_metadata?.name||"Smart Money User";
 
-const {data:profile}=await supabaseClient.from("profiles").select("*").eq("user_id",currentUserId).maybeSingle();
-let finalProfile=profile;
+    if(
+        imgUrl
+        && String(imgUrl).trim() !== ""
+    ){
 
-if(!finalProfile){
-const newReferralCode=await createUniqueReferralCode();
-const newProfile={
-user_id:currentUserId,
-email:currentUserEmail,
-full_name:authName,
-balance:0,
-package_name:null,
-referral_code:newReferralCode
-};
-const {data:createdProfile}=await supabaseClient.from("profiles").upsert(newProfile,{onConflict:"user_id"}).select().single();
-finalProfile=createdProfile || newProfile;
-} else {
-if (!finalProfile.referral_code || String(finalProfile.referral_code).trim() === "") {
-  const newReferralCode = await createUniqueReferralCode();
-  const { data: updatedCodeProfile } = await supabaseClient.from("profiles").update({ referral_code: newReferralCode }).eq("user_id", currentUserId).select().single();
-  if (updatedCodeProfile) {
-    finalProfile = updatedCodeProfile;
-  } else {
-    finalProfile.referral_code = newReferralCode;
-  }
-}
-}
+        if(mainImg)
+            mainImg.src =
+                imgUrl;
 
-currentProfile=finalProfile;
-userRefCode=currentProfile.referral_code;
+        if(sidebarImg)
+            sidebarImg.src =
+                imgUrl;
 
-renderProfile(currentProfile,authName);
-return true;
-} catch(err) {
-window.location.href="login.html";
-return false;
-}
+        if(navAvatar)
+            navAvatar.src =
+                imgUrl;
+
+        if(removeLi)
+            removeLi.style.display =
+                "block";
+
+        return;
+    }
+
+
+    const firstLetter =
+        (
+            userName
+            || "U"
+        )
+        .charAt(0)
+        .toUpperCase();
+
+    const fallbackUrl =
+        `https://ui-avatars.com/api/?name=${encodeURIComponent(firstLetter)}&background=7c3aed&color=fff&size=128&bold=true`;
+
+    if(mainImg)
+        mainImg.src =
+            fallbackUrl;
+
+    if(sidebarImg)
+        sidebarImg.src =
+            fallbackUrl;
+
+    if(navAvatar)
+        navAvatar.src =
+            fallbackUrl;
+
+    if(removeLi)
+        removeLi.style.display =
+            "none";
+
 }
 
-function renderProfile(profile,fallbackName){
-const finalName=profile?.full_name||fallbackName||"Smart Money User";
-const finalEmail=profile?.email||currentUserEmail;
-userCurrentBalance=Number(profile?.balance||0);
-const packageName=profile?.package_name||"";
-const dob=profile?.date_of_birth||"";
 
-document.getElementById("userName").textContent=finalName;
-document.getElementById("topUserId").textContent=userRefCode||"Not Available";
-document.getElementById("sidebarUserName").textContent=finalName;
-document.getElementById("sidebarUserEmail").textContent=finalEmail;
-document.getElementById("sidebarWalletBal").textContent="₹"+userCurrentBalance.toFixed(2);
-document.getElementById("dobDisplayInfo").textContent=dob||"Not Set";
+/* =========================================================
+   IMAGE VALIDATION
+========================================================= */
 
-const badge=document.getElementById("activePackageBadge");
-if(packageName&&packageName.trim()!==""&&packageName.toLowerCase()!=="none"){
-badge.innerText=packageName.toUpperCase()+" 👑";
-badge.classList.add("active");
-}else{
-badge.innerText="NO PACKAGE";
-badge.classList.remove("active");
+function validateImageFile(
+    file
+){
+
+    if(!file)
+        throw new Error(
+            "No image selected."
+        );
+
+    const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+    if(
+        !allowedTypes.includes(
+            file.type
+        )
+    ){
+
+        throw new Error(
+            "Only JPG, PNG or WEBP images are allowed."
+        );
+
+    }
+
+    const maxSize =
+        5 * 1024 * 1024;
+
+    if(
+        file.size > maxSize
+    ){
+
+        throw new Error(
+            "Image must be smaller than 5MB."
+        );
+
+    }
+
 }
 
-applyProfileImage(profile?.profile_pic,finalName);
-updatePackageModal();
+
+/* =========================================================
+   IMAGE COMPRESSION
+========================================================= */
+
+function compressProfileImage(
+    file
+){
+
+    return new Promise(
+        (resolve,reject)=>{
+
+            const reader =
+                new FileReader();
+
+            reader.onerror =
+                ()=>{
+                    reject(
+                        new Error(
+                            "Unable to read image."
+                        )
+                    );
+                };
+
+
+            reader.onload =
+                function(e){
+
+                    const img =
+                        new Image();
+
+                    img.onerror =
+                        ()=>{
+                            reject(
+                                new Error(
+                                    "Invalid image."
+                                )
+                            );
+                        };
+
+
+                    img.onload =
+                        function(){
+
+                            const canvas =
+                                document.createElement(
+                                    "canvas"
+                                );
+
+                            let width =
+                                img.width;
+
+                            let height =
+                                img.height;
+
+                            const MAX =
+                                800;
+
+
+                            if(
+                                width > height
+                                && width > MAX
+                            ){
+
+                                height =
+                                    Math.round(
+                                        height * MAX / width
+                                    );
+
+                                width =
+                                    MAX;
+
+                            }else if(
+                                height >= width
+                                && height > MAX
+                            ){
+
+                                width =
+                                    Math.round(
+                                        width * MAX / height
+                                    );
+
+                                height =
+                                    MAX;
+
+                            }
+
+
+                            canvas.width =
+                                width;
+
+                            canvas.height =
+                                height;
+
+
+                            const ctx =
+                                canvas.getContext(
+                                    "2d"
+                                );
+
+                            ctx.drawImage(
+                                img,
+                                0,
+                                0,
+                                width,
+                                height
+                            );
+
+
+                            canvas.toBlob(
+                                blob=>{
+
+                                    if(!blob){
+
+                                        reject(
+                                            new Error(
+                                                "Image compression failed."
+                                            )
+                                        );
+
+                                        return;
+                                    }
+
+                                    resolve(blob);
+
+                                },
+                                "image/jpeg",
+                                .82
+                            );
+
+                        };
+
+
+                    img.src =
+                        e.target.result;
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+    );
+
 }
 
-function updatePackageModal(){
-const packageName=String(currentProfile?.package_name||"").trim().toLowerCase();
-const hasPackage=packageName&&packageName!=="none";
-let commissionText="Not Available";
-let withdrawLimitText="₹200 Minimum";
-let pkgDisplayName="No Package Active";
 
-if(hasPackage){
-pkgDisplayName=currentProfile.package_name.toUpperCase();
-withdrawLimitText="₹100 Minimum";
-commissionText="Automatic Multi-Level Commission Enabled";
+/* =========================================================
+   UPLOAD PROFILE PICTURE
+   STORAGE + DATABASE URL
+========================================================= */
+
+async function uploadProfilePicture(
+    event
+){
+
+    const file =
+        event.target.files?.[0];
+
+    if(
+        !file
+        || !currentUserId
+    ){
+
+        return;
+    }
+
+
+    try{
+
+        validateImageFile(
+            file
+        );
+
+
+        showToast(
+            "Preparing profile picture..."
+        );
+
+
+        const compressedBlob =
+            await compressProfileImage(
+                file
+            );
+
+
+        const extension =
+            "jpg";
+
+        /*
+           Each user gets a unique file.
+           This prevents browser/cache problems.
+        */
+
+        const filePath =
+            `${currentUserId}/profile-${Date.now()}.${extension}`;
+
+
+        const progress =
+            document.querySelector(
+                ".upload-progress"
+            );
+
+        const progressBar =
+            document.querySelector(
+                ".upload-progress-bar"
+            );
+
+        if(progress)
+            progress.style.display =
+                "block";
+
+        if(progressBar)
+            progressBar.style.width =
+                "25%";
+
+
+        showToast(
+            "Uploading profile picture..."
+        );
+
+
+        const {
+            error:uploadError
+        } =
+        await supabaseClient
+            .storage
+            .from(PROFILE_BUCKET)
+            .upload(
+                filePath,
+                compressedBlob,
+                {
+                    contentType:
+                        "image/jpeg",
+
+                    upsert:false,
+
+                    cacheControl:
+                        "3600"
+                }
+            );
+
+
+        if(uploadError)
+            throw uploadError;
+
+
+        if(progressBar)
+            progressBar.style.width =
+                "70%";
+
+
+        /*
+           Get public URL.
+           Bucket should be PUBLIC.
+        */
+
+        const {
+            data:urlData
+        } =
+        supabaseClient
+            .storage
+            .from(PROFILE_BUCKET)
+            .getPublicUrl(
+                filePath
+            );
+
+
+        const publicUrl =
+            urlData?.publicUrl;
+
+
+        if(!publicUrl){
+
+            throw new Error(
+                "Could not create image URL."
+            );
+
+        }
+
+
+        if(progressBar)
+            progressBar.style.width =
+                "85%";
+
+
+        /*
+           Save ONLY the Storage URL
+           in profiles.profile_pic.
+        */
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+            .from("profiles")
+            .update({
+                profile_pic:
+                    publicUrl
+            })
+            .eq(
+                "user_id",
+                currentUserId
+            )
+            .select()
+            .single();
+
+
+        if(error)
+            throw error;
+
+
+        currentProfile = {
+            ...currentProfile,
+            ...data
+        };
+
+
+        applyProfileImage(
+            publicUrl,
+            currentProfile.full_name
+        );
+
+
+        if(progressBar)
+            progressBar.style.width =
+                "100%";
+
+
+        showToast(
+            "Profile picture updated successfully!"
+        );
+
+
+        setTimeout(
+            ()=>{
+
+                if(progress)
+                    progress.style.display =
+                        "none";
+
+                if(progressBar)
+                    progressBar.style.width =
+                        "0%";
+
+            },
+            600
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "Profile upload error:",
+            error
+        );
+
+        alert(
+            "Failed to upload profile picture:\n"
+            + error.message
+        );
+
+        const progress =
+            document.querySelector(
+                ".upload-progress"
+            );
+
+        if(progress)
+            progress.style.display =
+                "none";
+
+    }finally{
+
+        event.target.value =
+            "";
+
+    }
+
 }
 
-document.getElementById("modalPkgName").innerText=pkgDisplayName;
-document.getElementById("modalPkgStatus").innerText=hasPackage?"Active":"No Active Package";
-document.getElementById("modalPkgCommission").innerText=commissionText;
-document.getElementById("modalPkgWithdraw").innerText=withdrawLimitText;
-}
 
-async function loadWithdrawalHistory(){
-if(!currentUserId) return;
-const container=document.getElementById("withdrawalHistoryList");
-if(!container) return;
-
-try{
-const {data}=await supabaseClient.from("withdrawal_requests").select("*").eq("user_id",currentUserId).order("created_at",{ascending:false});
-if(!data||data.length===0){
-container.innerHTML=`<div style="text-align:center;color:#64748b;font-size:13px;padding:15px;">No withdrawal history found</div>`;
-return;
-}
-container.innerHTML=data.map(item=>{
-const status=String(item.status||"pending").toLowerCase();
-let statusClass="status-pending", statusText="Pending";
-if(status==="approved"||status==="success"||status==="paid"){ statusClass="status-approved"; statusText="Approved"; }
-else if(status==="rejected"||status==="failed"){ statusClass="status-rejected"; statusText="Rejected"; }
-const date=item.created_at?new Date(item.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}):"-";
-return `<div class="history-card-item"><div class="history-row-1"><span>Date: ${date}</span><span>ID: ${escapeHtml(String(item.id||"").slice(0,8))}</span></div><div class="history-row-2"><span class="history-amount">₹${Number(item.amount||0).toFixed(2)}</span><span class="status-badge ${statusClass}">${statusText}</span></div></div>`;
-}).join("");
-}catch(e){
-container.innerHTML=`<div style="text-align:center;color:#ef4444;font-size:13px;padding:15px;">Error loading history</div>`;
-}
-}
-
-async function loadEarningsData(){
-if(!currentUserId) return;
-try{
-const {data}=await supabaseClient.from("earnings").select("*").eq("user_id",currentUserId).order("created_at",{ascending:false});
-allEarningsData=data||[];
-updateEarningsCards();
-}catch(e){
-allEarningsData=[];
-updateEarningsCards();
-}
-}
-
-function getEarningsForDays(days){
-const now=new Date();
-return allEarningsData.filter(item=>{
-if(!item.created_at) return false;
-const created=new Date(item.created_at);
-if(days==="today"){ return created.toDateString()===now.toDateString(); }
-const diff=(now.getTime()-created.getTime())/(1000*60*60*24);
-return diff>=0 && diff<=days;
-}).reduce((sum,item)=>sum+Number(item.amount||0),0);
-}
-
-function updateEarningsCards(){
-const today=getEarningsForDays("today");
-const sevenDays=getEarningsForDays(7);
-const thirtyDays=getEarningsForDays(30);
-const allTime=allEarningsData.reduce((sum,item)=>sum+Number(item.amount||0),0);
-const passive=allEarningsData.filter(i=>String(i.earning_type||"").toLowerCase().includes("passive")).reduce((s,i)=>s+Number(i.amount||0),0);
-
-document.getElementById("todayRevenue").innerText="₹"+today.toFixed(2);
-document.getElementById("sevenDaysRevenue").innerText="₹"+sevenDays.toFixed(2);
-document.getElementById("thirtyDaysRevenue").innerText="₹"+thirtyDays.toFixed(2);
-document.getElementById("allTimeRevenueText").innerText="₹"+allTime.toFixed(2);
-document.getElementById("passiveIncome").innerText="₹"+passive.toFixed(2);
-}
-
-async function loadEarningsHistory(){
-const container=document.getElementById("earningsHistoryList");
-if(!container) return;
-await loadEarningsData();
-if(!allEarningsData.length){
-container.innerHTML=`<div style="text-align:center;color:#64748b;font-size:13px;padding:20px;">No earnings yet.</div>`;
-return;
-}
-container.innerHTML=allEarningsData.map(item=>{
-const type=escapeHtml(item.earning_type||item.type||"Commission");
-const amount=Number(item.amount||0);
-const date=item.created_at?new Date(item.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}):"-";
-return `<div class="earning-item"><div class="earning-top"><div class="earning-title">${type}</div><div class="earning-amount">+₹${amount.toFixed(2)}</div></div><div class="earning-date">${date}</div></div>`;
-}).join("");
-}
-
-async function loadReferralsData(){
-if(!currentUserId || !userRefCode) return;
-const container=document.getElementById("referralsListContainer");
-try{
-const {data}=await supabaseClient.from("profiles").select("full_name,referral_code,created_at,referred_by").eq("referred_by",userRefCode).order("created_at",{ascending:false});
-allReferralsData=data||[];
-filterReferrals(1,document.querySelector(".ref-tab"));
-}catch(e){
-allReferralsData=[];
-filterReferrals(1);
-}
-}
-
-function filterReferrals(days,btnElement){
-document.querySelectorAll(".ref-tab").forEach(t=>t.classList.remove("active"));
-if(btnElement) btnElement.classList.add("active");
-const container=document.getElementById("referralsListContainer");
-if(!container) return;
-
-const now=new Date();
-const filtered=allReferralsData.filter(item=>{
-if(!item.created_at) return false;
-const diff=(now.getTime()-new Date(item.created_at).getTime())/(1000*60*60*24);
-return diff>=0 && diff<=days;
-});
-
-if(!filtered.length){
-container.innerHTML=`<div style="text-align:center;color:#64748b;font-size:13px;padding:15px;">No referrals found in the last ${days} day(s).</div>`;
-return;
-}
-
-container.innerHTML=filtered.map(ref=>{
-const name=escapeHtml(ref.full_name||"User");
-const refCode=escapeHtml(ref.referral_code||"N/A");
-const date=ref.created_at?new Date(ref.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}):"-";
-return `<div class="referral-card-item"><div class="ref-user-info"><h4>${name}</h4><span>ID: ${refCode}</span></div><div class="ref-date"><span>Joined</span><br><b>${date}</b></div></div>`;
-}).join("");
-}
-
-async function saveKycDetails(){
-const fullName=document.getElementById("kycFullName").value.trim();
-const dob=document.getElementById("kycDob").value;
-if(!fullName){ alert("Please enter your full name."); return; }
-const {data,error}=await supabaseClient.from("profiles").update({full_name:fullName,date_of_birth:dob||null}).eq("user_id",currentUserId).select().single();
-if(error){ alert("Error: "+error.message); return; }
-currentProfile={...currentProfile,...data};
-renderProfile(currentProfile,fullName);
-showToast("KYC saved successfully!");
-closeModal("kycModal");
-}
-
-/* =========================================
-FIXED PROFILE PICTURE UPLOAD FUNCTION
-========================================= */
-async function uploadProfilePicture(event){
-const file=event.target.files?.[0];
-if(!file || !currentUserId) return;
-try{
-showToast("Uploading profile picture...");
-const fileExt = file.name.split('.').pop().toLowerCase();
-const fileName = `${currentUserId}_${Date.now()}.${fileExt}`;
-const filePath = `${fileName}`;
-
-// Supabase Storage upload
-const { error: uploadError } = await supabaseClient.storage.from('profile-pics').upload(filePath, file, { upsert: true });
-if(uploadError) throw uploadError;
-
-const { data: { publicUrl } } = supabaseClient.storage.from('profile-pics').getPublicUrl(filePath);
-
-const {data,error}=await supabaseClient.from("profiles").update({profile_pic:publicUrl}).eq("user_id",currentUserId).select().single();
-if(error) throw error;
-
-currentProfile={...currentProfile,...data};
-applyProfileImage(data.profile_pic,currentProfile.full_name);
-showToast("Profile picture uploaded successfully!");
-}catch(e){
-alert("Failed to upload picture: "+(e.message || "Please check Supabase Storage 'profile-pics' bucket permissions."));
-}finally{
-event.target.value="";
-}
-}
+/* =========================================================
+   REMOVE PROFILE PICTURE
+========================================================= */
 
 async function removeProfilePicture(){
-if(!confirm("Remove profile picture?")) return;
-const {data,error}=await supabaseClient.from("profiles").update({profile_pic:null}).eq("user_id",currentUserId).select().single();
-if(error){ alert("Failed: "+error.message); return; }
-currentProfile={...currentProfile,...data};
-applyProfileImage(null,currentProfile.full_name);
-showToast("Profile picture removed!");
+
+    if(
+        !currentUserId
+    )
+        return;
+
+
+    if(
+        !confirm(
+            "Remove profile picture?"
+        )
+    )
+        return;
+
+
+    try{
+
+        showToast(
+            "Removing profile picture..."
+        );
+
+
+        const oldUrl =
+            currentProfile?.profile_pic
+            || "";
+
+
+        /*
+           First remove database URL.
+        */
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+            .from("profiles")
+            .update({
+                profile_pic:null
+            })
+            .eq(
+                "user_id",
+                currentUserId
+            )
+            .select()
+            .single();
+
+
+        if(error)
+            throw error;
+
+
+        /*
+           Try deleting old Storage file.
+           Failure here should not prevent
+           profile from being cleared.
+        */
+
+        try{
+
+            if(
+                oldUrl
+                && oldUrl.includes(
+                    `/storage/v1/object/public/${PROFILE_BUCKET}/`
+                )
+            ){
+
+                const marker =
+                    `/storage/v1/object/public/${PROFILE_BUCKET}/`;
+
+                const path =
+                    oldUrl.split(marker)[1];
+
+                if(path){
+
+                    await supabaseClient
+                        .storage
+                        .from(PROFILE_BUCKET)
+                        .remove([
+                            path
+                        ]);
+
+                }
+
+            }
+
+        }catch(storageError){
+
+            console.warn(
+                "Old image cleanup failed:",
+                storageError
+            );
+
+        }
+
+
+        currentProfile = {
+            ...currentProfile,
+            ...data
+        };
+
+
+        applyProfileImage(
+            null,
+            currentProfile.full_name
+        );
+
+
+        showToast(
+            "Profile picture removed!"
+        );
+
+
+    }catch(error){
+
+        alert(
+            "Failed: "
+            + error.message
+        );
+
+    }
+
 }
+
+
+/* =========================================================
+   GLOBAL LOGO
+========================================================= */
+
+async function loadGlobalTopLogo(){
+
+    try{
+
+        const {
+            data
+        } =
+        await supabaseClient
+            .from("global_settings")
+            .select("setting_value")
+            .eq(
+                "setting_key",
+                "admin_top_logo"
+            )
+            .maybeSingle();
+
+
+        if(
+            data?.setting_value
+        ){
+
+            document.getElementById(
+                "navBrandLogoImg"
+            ).src =
+                data.setting_value;
+
+            document.getElementById(
+                "sidebarLogo"
+            ).src =
+                data.setting_value;
+
+        }
+
+    }catch(e){
+
+        console.warn(
+            "Logo loading skipped."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   REFERRAL CODE
+========================================================= */
+
+function generateReferralCode(){
+
+    return "SM-smart"
+        + Math.floor(
+            10000
+            + Math.random() * 90000
+        );
+
+}
+
+
+function isCorrectReferralCode(
+    code
+){
+
+    return /^SM-smart\d{5}$/.test(
+        String(code || "")
+    );
+
+}
+
+
+async function createUniqueReferralCode(){
+
+    for(
+        let i=0;
+        i<10;
+        i++
+    ){
+
+        const code =
+            generateReferralCode();
+
+        const {
+            data
+        } =
+        await supabaseClient
+            .from("profiles")
+            .select("user_id")
+            .eq(
+                "referral_code",
+                code
+            )
+            .limit(1);
+
+
+        if(
+            !data
+            || data.length === 0
+        ){
+
+            return code;
+
+        }
+
+    }
+
+
+    return "SM-smart"
+        + String(
+            Date.now()
+        ).slice(-5);
+
+}
+
+
+async function fixInvalidReferralCode(
+    profile
+){
+
+    const oldCode =
+        String(
+            profile?.referral_code || ""
+        ).trim();
+
+
+    if(
+        isCorrectReferralCode(
+            oldCode
+        )
+    ){
+
+        return oldCode;
+
+    }
+
+
+    const newCode =
+        await createUniqueReferralCode();
+
+
+    const {
+        data
+    } =
+    await supabaseClient
+        .from("profiles")
+        .update({
+            referral_code:
+                newCode
+        })
+        .eq(
+            "user_id",
+            currentUserId
+        )
+        .select()
+        .single();
+
+
+    if(data){
+
+        currentProfile = {
+            ...currentProfile,
+            ...data
+        };
+
+    }
+
+
+    return newCode;
+
+}
+
+
+/* =========================================================
+   LOAD DASHBOARD PROFILE
+   FAST VERSION
+========================================================= */
+
+async function loadDashboardProfile(){
+
+    try{
+
+        /*
+           getSession is faster because the local
+           Supabase session is already persisted.
+        */
+
+        const {
+            data:sessionData
+        } =
+        await supabaseClient
+            .auth
+            .getSession();
+
+
+        let user =
+            sessionData?.session?.user
+            || null;
+
+
+        /*
+           Only call getUser when no local session.
+        */
+
+        if(!user){
+
+            const {
+                data:userData
+            } =
+            await supabaseClient
+                .auth
+                .getUser();
+
+            user =
+                userData?.user
+                || null;
+
+        }
+
+
+        if(!user){
+
+            window.location.href =
+                "login.html";
+
+            return false;
+
+        }
+
+
+        currentUserId =
+            user.id;
+
+        currentUserEmail =
+            user.email || "";
+
+
+        const authName =
+            user.user_metadata?.full_name
+            || user.user_metadata?.name
+            || "Smart Money User";
+
+
+        /*
+           Load profile.
+        */
+
+        let {
+            data:profile
+        } =
+        await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq(
+                "user_id",
+                currentUserId
+            )
+            .maybeSingle();
+
+
+        /*
+           Create profile only if missing.
+        */
+
+        if(!profile){
+
+            const newReferralCode =
+                await createUniqueReferralCode();
+
+
+            const newProfile = {
+
+                user_id:
+                    currentUserId,
+
+                email:
+                    currentUserEmail,
+
+                full_name:
+                    authName,
+
+                balance:
+                    0,
+
+                package_name:
+                    null,
+
+                referral_code:
+                    newReferralCode
+
+            };
+
+
+            const {
+                data:createdProfile,
+                error
+            } =
+            await supabaseClient
+                .from("profiles")
+                .upsert(
+                    newProfile,
+                    {
+                        onConflict:
+                            "user_id"
+                    }
+                )
+                .select()
+                .single();
+
+
+            if(error)
+                throw error;
+
+
+            profile =
+                createdProfile;
+
+        }
+
+
+        currentProfile =
+            profile;
+
+
+        const permanentCode =
+            await fixInvalidReferralCode(
+                profile
+            );
+
+
+        currentProfile.referral_code =
+            permanentCode;
+
+        userRefCode =
+            permanentCode;
+
+
+        /*
+           Render immediately.
+           This removes the long loading feeling.
+        */
+
+        renderProfile(
+            currentProfile,
+            authName
+        );
+
+
+        return true;
+
+
+    }catch(error){
+
+        console.error(
+            "Profile loading error:",
+            error
+        );
+
+        window.location.href =
+            "login.html";
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER PROFILE
+========================================================= */
+
+function renderProfile(
+    profile,
+    fallbackName
+){
+
+    const finalName =
+        profile?.full_name
+        || fallbackName
+        || "Smart Money User";
+
+    const finalEmail =
+        profile?.email
+        || currentUserEmail;
+
+
+    userCurrentBalance =
+        Number(
+            profile?.balance || 0
+        );
+
+
+    const packageName =
+        profile?.package_name
+        || "";
+
+    const dob =
+        profile?.date_of_birth
+        || "";
+
+
+    document.getElementById(
+        "userName"
+    ).textContent =
+        finalName;
+
+    document.getElementById(
+        "topUserId"
+    ).textContent =
+        userRefCode
+        || "Not Available";
+
+    document.getElementById(
+        "sidebarUserName"
+    ).textContent =
+        finalName;
+
+    document.getElementById(
+        "sidebarUserEmail"
+    ).textContent =
+        finalEmail;
+
+    document.getElementById(
+        "sidebarWalletBal"
+    ).textContent =
+        "₹"
+        + userCurrentBalance.toFixed(2);
+
+    document.getElementById(
+        "dobDisplayInfo"
+    ).textContent =
+        dob
+        || "Not Set";
+
+
+    const badge =
+        document.getElementById(
+            "activePackageBadge"
+        );
+
+
+    if(
+        packageName
+        && packageName.trim() !== ""
+        && packageName.toLowerCase()
+            !== "none"
+    ){
+
+        badge.innerText =
+            packageName.toUpperCase()
+            + " 👑";
+
+        badge.classList.add(
+            "active"
+        );
+
+    }else{
+
+        badge.innerText =
+            "NO PACKAGE";
+
+        badge.classList.remove(
+            "active"
+        );
+
+    }
+
+
+    applyProfileImage(
+        profile?.profile_pic,
+        finalName
+    );
+
+
+    updatePackageModal();
+
+}
+
+
+/* =========================================================
+   COPY REFERRAL
+========================================================= */
+
+function copyUserReferralCode(){
+
+    if(!userRefCode){
+
+        showToast(
+            "Referral code not available"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        navigator.clipboard
+    ){
+
+        navigator.clipboard
+            .writeText(
+                userRefCode
+            )
+            .then(
+                ()=>{
+                    showToast(
+                        "Referral ID copied!"
+                    );
+                }
+            )
+            .catch(
+                ()=>{
+                    showToast(
+                        "Failed to copy code"
+                    );
+                }
+            );
+
+    }
+
+}
+
+
+/* =========================================================
+   PACKAGE MODAL
+========================================================= */
+
+function updatePackageModal(){
+
+    const packageName =
+        String(
+            currentProfile?.package_name
+            || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    const hasPackage =
+        packageName
+        && packageName !== "none";
+
+
+    let commissionText =
+        "Not Available";
+
+    let withdrawLimitText =
+        "₹200 Minimum";
+
+    let pkgDisplayName =
+        "No Package Active";
+
+
+    if(hasPackage){
+
+        pkgDisplayName =
+            currentProfile
+                .package_name
+                .toUpperCase();
+
+        withdrawLimitText =
+            "₹100 Minimum";
+
+        commissionText =
+            "Automatic Multi-Level Commission Enabled";
+
+    }
+
+
+    document.getElementById(
+        "modalPkgName"
+    ).innerText =
+        pkgDisplayName;
+
+    document.getElementById(
+        "modalPkgStatus"
+    ).innerText =
+        hasPackage
+            ? "Active"
+            : "No Active Package";
+
+    document.getElementById(
+        "modalPkgCommission"
+    ).innerText =
+        commissionText;
+
+    document.getElementById(
+        "modalPkgWithdraw"
+    ).innerText =
+        withdrawLimitText;
+
+}
+
+
+/* =========================================================
+   WITHDRAWAL HISTORY
+========================================================= */
+
+async function loadWithdrawalHistory(){
+
+    if(!currentUserId)
+        return;
+
+
+    const container =
+        document.getElementById(
+            "withdrawalHistoryList"
+        );
+
+
+    if(!container)
+        return;
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+            .from("withdrawal_requests")
+            .select("*")
+            .eq(
+                "user_id",
+                currentUserId
+            )
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            );
+
+
+        if(error)
+            throw error;
+
+
+        if(
+            !data
+            || data.length === 0
+        ){
+
+            container.innerHTML =
+                `<div style="text-align:center;color:#64748b;font-size:13px;padding:15px">
+                No withdrawal history found
+                </div>`;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            data.map(
+                item=>{
+
+                    const status =
+                        String(
+                            item.status
+                            || "pending"
+                        )
+                        .toLowerCase();
+
+
+                    let statusClass =
+                        "status-pending";
+
+                    let statusText =
+                        "Pending";
+
+
+                    if(
+                        status === "approved"
+                        || status === "success"
+                        || status === "paid"
+                    ){
+
+                        statusClass =
+                            "status-approved";
+
+                        statusText =
+                            "Approved";
+
+                    }else if(
+                        status === "rejected"
+                        || status === "failed"
+                    ){
+
+                        statusClass =
+                            "status-rejected";
+
+                        statusText =
+                            "Rejected";
+
+                    }
+
+
+                    const date =
+                        item.created_at
+                            ? new Date(
+                                item.created_at
+                            ).toLocaleDateString(
+                                "en-IN",
+                                {
+                                    day:"numeric",
+                                    month:"short",
+                                    year:"numeric"
+                                }
+                            )
+                            : "-";
+
+
+                    return `
+                    <div class="history-card-item">
+
+                        <div class="history-row-1">
+
+                            <span>
+                                Date: ${date}
+                            </span>
+
+                            <span>
+                                ID:
+                                ${escapeHtml(
+                                    String(
+                                        item.id || ""
+                                    ).slice(0,8)
+                                )}
+                            </span>
+
+                        </div>
+
+                        <div class="history-row-2">
+
+                            <span class="history-amount">
+                                ₹${Number(
+                                    item.amount || 0
+                                ).toFixed(2)}
+                            </span>
+
+                            <span class="status-badge ${statusClass}">
+                                ${statusText}
+                            </span>
+
+                        </div>
+
+                    </div>
+                    `;
+
+                }
+            ).join("");
+
+
+    }catch(error){
+
+        console.error(
+            error
+        );
+
+        container.innerHTML =
+            `<div style="text-align:center;color:#ef4444;font-size:13px;padding:15px">
+            Error loading history
+            </div>`;
+
+    }
+
+}
+
+
+/* =========================================================
+   EARNINGS DATA
+========================================================= */
+
+async function loadEarningsData(){
+
+    if(!currentUserId)
+        return;
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+            .from("earnings")
+            .select("*")
+            .eq(
+                "user_id",
+                currentUserId
+            )
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            );
+
+
+        if(error)
+            throw error;
+
+
+        allEarningsData =
+            data || [];
+
+
+        updateEarningsCards();
+
+
+    }catch(error){
+
+        console.error(
+            "Earnings:",
+            error
+        );
+
+        allEarningsData =
+            [];
+
+        updateEarningsCards();
+
+    }
+
+}
+
+
+function getEarningsForDays(
+    days
+){
+
+    const now =
+        new Date();
+
+
+    return allEarningsData
+        .filter(
+            item=>{
+
+                if(!item.created_at)
+                    return false;
+
+
+                const created =
+                    new Date(
+                        item.created_at
+                    );
+
+
+                if(days === "today"){
+
+                    return (
+                        created.toDateString()
+                        ===
+                        now.toDateString()
+                    );
+
+                }
+
+
+                const diff =
+                    (
+                        now.getTime()
+                        -
+                        created.getTime()
+                    )
+                    /
+                    (
+                        1000
+                        * 60
+                        * 60
+                        * 24
+                    );
+
+
+                return (
+                    diff >= 0
+                    && diff <= days
+                );
+
+            }
+        )
+        .reduce(
+            (
+                sum,
+                item
+            )=>
+                sum
+                +
+                Number(
+                    item.amount || 0
+                ),
+            0
+        );
+
+}
+
+
+function updateEarningsCards(){
+
+    const today =
+        getEarningsForDays(
+            "today"
+        );
+
+    const sevenDays =
+        getEarningsForDays(
+            7
+        );
+
+    const thirtyDays =
+        getEarningsForDays(
+            30
+        );
+
+    const allTime =
+        allEarningsData
+            .reduce(
+                (
+                    sum,
+                    item
+                )=>
+                    sum
+                    +
+                    Number(
+                        item.amount || 0
+                    ),
+                0
+            );
+
+
+    const passive =
+        allEarningsData
+            .filter(
+                item=>
+                    String(
+                        item.earning_type
+                        || ""
+                    )
+                    .toLowerCase()
+                    .includes(
+                        "passive"
+                    )
+            )
+            .reduce(
+                (
+                    sum,
+                    item
+                )=>
+                    sum
+                    +
+                    Number(
+                        item.amount || 0
+                    ),
+                0
+            );
+
+
+    document.getElementById(
+        "todayRevenue"
+    ).innerText =
+        "₹"
+        + today.toFixed(2);
+
+    document.getElementById(
+        "sevenDaysRevenue"
+    ).innerText =
+        "₹"
+        + sevenDays.toFixed(2);
+
+    document.getElementById(
+        "thirtyDaysRevenue"
+    ).innerText =
+        "₹"
+        + thirtyDays.toFixed(2);
+
+    document.getElementById(
+        "allTimeRevenueText"
+    ).innerText =
+        "₹"
+        + allTime.toFixed(2);
+
+    document.getElementById(
+        "passiveIncome"
+    ).innerText =
+        "₹"
+        + passive.toFixed(2);
+
+}
+
+
+/* =========================================================
+   EARNINGS HISTORY
+========================================================= */
+
+async function loadEarningsHistory(){
+
+    const container =
+        document.getElementById(
+            "earningsHistoryList"
+        );
+
+
+    if(!container)
+        return;
+
+
+    await loadEarningsData();
+
+
+    if(
+        !allEarningsData.length
+    ){
+
+        container.innerHTML =
+            `<div style="text-align:center;color:#64748b;font-size:13px;padding:20px">
+            No earnings yet.
+            </div>`;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        allEarningsData.map(
+            item=>{
+
+                const type =
+                    escapeHtml(
+                        item.earning_type
+                        || item.type
+                        || "Commission"
+                    );
+
+                const amount =
+                    Number(
+                        item.amount || 0
+                    );
+
+                const date =
+                    item.created_at
+                        ? new Date(
+                            item.created_at
+                        ).toLocaleDateString(
+                            "en-IN",
+                            {
+                                day:"numeric",
+                                month:"short",
+                                year:"numeric"
+                            }
+                        )
+                        : "-";
+
+
+                return `
+                <div class="earning-item">
+
+                    <div class="earning-top">
+
+                        <div class="earning-title">
+                            ${type}
+                        </div>
+
+                        <div class="earning-amount">
+                            +₹${amount.toFixed(2)}
+                        </div>
+
+                    </div>
+
+                    <div class="earning-date">
+                        ${date}
+                    </div>
+
+                </div>
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+/* =========================================================
+   REFERRALS
+========================================================= */
+
+async function loadReferralsData(){
+
+    if(
+        !currentUserId
+        || !userRefCode
+    )
+        return;
+
+
+    const container =
+        document.getElementById(
+            "referralsListContainer"
+        );
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+            .from("profiles")
+            .select(
+                "full_name,referral_code,created_at,referred_by"
+            )
+            .eq(
+                "referred_by",
+                userRefCode
+            )
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            );
+
+
+        if(error)
+            throw error;
+
+
+        allReferralsData =
+            data || [];
+
+
+        filterReferrals(
+            1,
+            document.querySelector(
+                ".ref-tab"
+            )
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "Referrals:",
+            error
+        );
+
+        allReferralsData =
+            [];
+
+        filterReferrals(
+            1
+        );
+
+    }
+
+}
+
+
+function filterReferrals(
+    days,
+    btnElement
+){
+
+    document
+        .querySelectorAll(
+            ".ref-tab"
+        )
+        .forEach(
+            tab=>
+                tab.classList.remove(
+                    "active"
+                )
+        );
+
+
+    if(btnElement)
+        btnElement.classList.add(
+            "active"
+        );
+
+
+    const container =
+        document.getElementById(
+            "referralsListContainer"
+        );
+
+
+    if(!container)
+        return;
+
+
+    const now =
+        new Date();
+
+
+    const filtered =
+        allReferralsData.filter(
+            item=>{
+
+                if(!item.created_at)
+                    return false;
+
+
+                const diff =
+                    (
+                        now.getTime()
+                        -
+                        new Date(
+                            item.created_at
+                        ).getTime()
+                    )
+                    /
+                    (
+                        1000
+                        * 60
+                        * 60
+                        * 24
+                    );
+
+
+                return (
+                    diff >= 0
+                    && diff <= days
+                );
+
+            }
+        );
+
+
+    if(!filtered.length){
+
+        container.innerHTML =
+            `<div style="text-align:center;color:#64748b;font-size:13px;padding:15px">
+            No referrals found in the last ${days} day(s).
+            </div>`;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        filtered.map(
+            ref=>{
+
+                const name =
+                    escapeHtml(
+                        ref.full_name
+                        || "User"
+                    );
+
+                const refCode =
+                    escapeHtml(
+                        ref.referral_code
+                        || "N/A"
+                    );
+
+                const date =
+                    ref.created_at
+                        ? new Date(
+                            ref.created_at
+                        ).toLocaleDateString(
+                            "en-IN",
+                            {
+                                day:"numeric",
+                                month:"short",
+                                year:"numeric"
+                            }
+                        )
+                        : "-";
+
+
+                return `
+                <div class="referral-card-item">
+
+                    <div class="ref-user-info">
+
+                        <h4>
+                            ${name}
+                        </h4>
+
+                        <span>
+                            ID: ${refCode}
+                        </span>
+
+                    </div>
+
+                    <div class="ref-date">
+
+                        <span>
+                            Joined
+                        </span>
+
+                        <br>
+
+                        <b>
+                            ${date}
+                        </b>
+
+                    </div>
+
+                </div>
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+/* =========================================================
+   KYC SAVE
+========================================================= */
+
+async function saveKycDetails(){
+
+    const fullName =
+        document.getElementById(
+            "kycFullName"
+        ).value.trim();
+
+    const dob =
+        document.getElementById(
+            "kycDob"
+        ).value;
+
+
+    if(!fullName){
+
+        alert(
+            "Please enter your full name."
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+            .from("profiles")
+            .update({
+                full_name:
+                    fullName,
+
+                date_of_birth:
+                    dob || null
+            })
+            .eq(
+                "user_id",
+                currentUserId
+            )
+            .select()
+            .single();
+
+
+        if(error)
+            throw error;
+
+
+        currentProfile = {
+            ...currentProfile,
+            ...data
+        };
+
+
+        renderProfile(
+            currentProfile,
+            fullName
+        );
+
+
+        showToast(
+            "KYC saved successfully!"
+        );
+
+
+        closeModal(
+            "kycModal"
+        );
+
+
+    }catch(error){
+
+        alert(
+            "Error: "
+            + error.message
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SUBMIT WITHDRAWAL
+========================================================= */
 
 async function submitWithdrawal(){
-  if(!hasSavedPaymentDetails()){
-    alert("⚠️ Please add your payment details first.");
-    closeModal("withdrawModal");
-    openUpiModal();
-    return;
-  }
-  const amount=Number(document.getElementById("withdrawAmount").value);
-  const submitBtn=document.getElementById("submitWithdrawBtn");
-  const packageName=String(currentProfile?.package_name||"").toLowerCase();
-  let minLimit=packageName&&packageName!=="none"?100:200;
 
-  if(!Number.isFinite(amount)||amount<=0){ alert("Enter a valid amount."); return; }
-  if(amount<minLimit){ alert(`Minimum withdrawal limit is ₹${minLimit}.`); return; }
-  if(amount>userCurrentBalance){ alert("Insufficient balance."); return; }
+    if(
+        !hasSavedPaymentDetails()
+    ){
 
-  submitBtn.disabled=true;
-  submitBtn.innerText="Processing...";
+        alert(
+            "⚠️ Please add your payment details first."
+        );
 
-  try{
-    const { data, error } = await supabaseClient.rpc('request_withdrawal', { p_amount: amount });
-    if(error) throw error;
-    if(data && data.success){
-      userCurrentBalance = Number(data.new_balance || 0);
-      currentProfile.balance = userCurrentBalance;
-      document.getElementById("sidebarWalletBal").innerText="₹"+userCurrentBalance.toFixed(2);
+        closeModal(
+            "withdrawModal"
+        );
 
-      showToast("Withdrawal request submitted successfully!");
-      closeModal("withdrawModal");
-      await loadWithdrawalHistory();
+        openUpiModal();
+
+        return;
+
     }
-  }catch(e){
-    alert("Withdrawal failed: "+e.message);
-  }finally{
-    submitBtn.disabled=false;
-    submitBtn.innerText="Submit Request";
-  }
+
+
+    const amount =
+        Number(
+            document.getElementById(
+                "withdrawAmount"
+            ).value
+        );
+
+
+    const submitBtn =
+        document.getElementById(
+            "submitWithdrawBtn"
+        );
+
+
+    const packageName =
+        String(
+            currentProfile?.package_name
+            || ""
+        ).toLowerCase();
+
+
+    const minLimit =
+        packageName
+        && packageName !== "none"
+            ? 100
+            : 200;
+
+
+    if(
+        !Number.isFinite(amount)
+        || amount <= 0
+    ){
+
+        alert(
+            "Enter a valid amount."
+        );
+
+        return;
+
+    }
+
+
+    if(
+        amount < minLimit
+    ){
+
+        alert(
+            `Minimum withdrawal limit is ₹${minLimit}.`
+        );
+
+        return;
+
+    }
+
+
+    if(
+        amount > userCurrentBalance
+    ){
+
+        alert(
+            "Insufficient balance."
+        );
+
+        return;
+
+    }
+
+
+    submitBtn.disabled =
+        true;
+
+    submitBtn.innerText =
+        "Processing...";
+
+
+    try{
+
+        const {
+            error:insertError
+        } =
+        await supabaseClient
+            .from(
+                "withdrawal_requests"
+            )
+            .insert({
+                user_id:
+                    currentUserId,
+
+                amount:
+                    amount,
+
+                status:
+                    "pending"
+            });
+
+
+        if(insertError)
+            throw insertError;
+
+
+        const newBalance =
+            Number(
+                userCurrentBalance
+            )
+            -
+            amount;
+
+
+        const {
+            data:updatedProfile,
+            error:balanceError
+        } =
+        await supabaseClient
+            .from("profiles")
+            .update({
+                balance:
+                    newBalance
+            })
+            .eq(
+                "user_id",
+                currentUserId
+            )
+            .select()
+            .single();
+
+
+        if(balanceError)
+            throw balanceError;
+
+
+        currentProfile = {
+            ...currentProfile,
+            ...updatedProfile
+        };
+
+
+        userCurrentBalance =
+            Number(
+                updatedProfile.balance
+                || 0
+            );
+
+
+        renderProfile(
+            currentProfile,
+            currentProfile.full_name
+        );
+
+
+        showToast(
+            "Withdrawal request submitted successfully!"
+        );
+
+
+        closeModal(
+            "withdrawModal"
+        );
+
+
+        await loadWithdrawalHistory();
+
+
+    }catch(error){
+
+        console.error(
+            "Withdrawal:",
+            error
+        );
+
+        alert(
+            "Withdrawal failed: "
+            + error.message
+        );
+
+
+    }finally{
+
+        submitBtn.disabled =
+            false;
+
+        submitBtn.innerText =
+            "Submit Request";
+
+    }
+
 }
 
-async function sendWithdrawalApprovedEmail(withdrawal){
-try{
-if(!withdrawal?.id || !window.emailjs) return;
-const emailKey=`withdrawal_approved_email_${withdrawal.id}`;
-if(localStorage.getItem(emailKey)) return;
-const amount=Number(withdrawal.amount||0).toFixed(2);
-const userName=currentProfile?.full_name||"Smart Money User";
-const userEmail=currentProfile?.email||currentUserEmail;
-if(!userEmail) return;
 
-await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_WITHDRAW_APPROVED_TEMPLATE,{
-to_name:userName, to_email:userEmail, user_name:userName, user_email:userEmail, amount:"₹"+amount, withdrawal_amount:"₹"+amount, status:"APPROVED", withdrawal_id:String(withdrawal.id||"")
-});
-localStorage.setItem(emailKey,"sent");
-showToast("Withdrawal approved notification sent.");
-}catch(e){}
+/* =========================================================
+   EMAIL NOTIFICATION
+========================================================= */
+
+async function sendWithdrawalApprovedEmail(
+    withdrawal
+){
+
+    try{
+
+        if(
+            !withdrawal?.id
+            || !window.emailjs
+        )
+            return;
+
+
+        const emailKey =
+            `withdrawal_approved_email_${withdrawal.id}`;
+
+
+        if(
+            localStorage.getItem(
+                emailKey
+            )
+        )
+            return;
+
+
+        const amount =
+            Number(
+                withdrawal.amount || 0
+            ).toFixed(2);
+
+
+        const userName =
+            currentProfile?.full_name
+            || "Smart Money User";
+
+
+        const userEmail =
+            currentProfile?.email
+            || currentUserEmail;
+
+
+        if(!userEmail)
+            return;
+
+
+        await emailjs.send(
+            EMAILJS_SERVICE_ID,
+            EMAILJS_WITHDRAW_APPROVED_TEMPLATE,
+            {
+                to_name:
+                    userName,
+
+                to_email:
+                    userEmail,
+
+                user_name:
+                    userName,
+
+                user_email:
+                    userEmail,
+
+                amount:
+                    "₹" + amount,
+
+                withdrawal_amount:
+                    "₹" + amount,
+
+                status:
+                    "APPROVED",
+
+                withdrawal_id:
+                    String(
+                        withdrawal.id
+                    )
+            }
+        );
+
+
+        localStorage.setItem(
+            emailKey,
+            "sent"
+        );
+
+
+    }catch(error){
+
+        console.warn(
+            "Email notification failed:",
+            error
+        );
+
+    }
+
 }
+
+
+/* =========================================================
+   REALTIME
+========================================================= */
 
 function setupRealtimeListener(){
-if(!currentUserId || realtimeChannel) return;
-try {
-  realtimeChannel=supabaseClient.channel(`dashboard-${currentUserId}`)
-  .on("postgres_changes",{event:"UPDATE",schema:"public",table:"profiles",filter:`user_id=eq.${currentUserId}`},payload=>{
-  if(!payload.new) return;
-  currentProfile={...currentProfile,...payload.new};
-  userCurrentBalance=Number(currentProfile.balance||0);
-  renderProfile(currentProfile,currentProfile.full_name);
-  })
-  .on("postgres_changes",{event:"*",schema:"public",table:"withdrawal_requests",filter:`user_id=eq.${currentUserId}`},async payload=>{
-  await loadWithdrawalHistory();
-  const newData=payload?.new||{};
-  if(String(newData.status||"").toLowerCase()==="approved"){
-  await sendWithdrawalApprovedEmail(newData);
-  showToast("Your withdrawal has been approved!");
-  }
-  })
-  .subscribe();
 
-  adminRealtimeChannel=supabaseClient.channel('admin-updates-realtime')
-  .on("postgres_changes",{event:"*",schema:"public",table:"admin_updates"},()=>{
-  loadAdminStatus();
-  })
-  .subscribe();
-} catch(e){}
+    if(
+        !currentUserId
+        || realtimeChannel
+    )
+        return;
+
+
+    try{
+
+        realtimeChannel =
+            supabaseClient
+                .channel(
+                    `dashboard-${currentUserId}`
+                )
+
+                .on(
+                    "postgres_changes",
+                    {
+                        event:"UPDATE",
+                        schema:"public",
+                        table:"profiles",
+                        filter:
+                            `user_id=eq.${currentUserId}`
+                    },
+                    payload=>{
+
+                        if(
+                            !payload.new
+                        )
+                            return;
+
+
+                        currentProfile = {
+                            ...currentProfile,
+                            ...payload.new
+                        };
+
+
+                        userCurrentBalance =
+                            Number(
+                                currentProfile.balance
+                                || 0
+                            );
+
+
+                        renderProfile(
+                            currentProfile,
+                            currentProfile.full_name
+                        );
+
+                    }
+                )
+
+                .on(
+                    "postgres_changes",
+                    {
+                        event:"*",
+                        schema:"public",
+                        table:"withdrawal_requests",
+                        filter:
+                            `user_id=eq.${currentUserId}`
+                    },
+                    async payload=>{
+
+                        await loadWithdrawalHistory();
+
+
+                        const newData =
+                            payload?.new
+                            || {};
+
+
+                        if(
+                            String(
+                                newData.status
+                                || ""
+                            ).toLowerCase()
+                            ===
+                            "approved"
+                        ){
+
+                            await sendWithdrawalApprovedEmail(
+                                newData
+                            );
+
+
+                            showToast(
+                                "Your withdrawal has been approved!"
+                            );
+
+                        }
+
+                    }
+                )
+
+                .subscribe();
+
+
+    }catch(error){
+
+        console.warn(
+            "Realtime setup skipped:",
+            error
+        );
+
+    }
+
 }
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
 
 function setupLogout(){
-const logoutBtn=document.getElementById("sideLogoutBtn");
-if(!logoutBtn) return;
-logoutBtn.onclick=async function(){
-try {
-  if(realtimeChannel) await supabaseClient.removeChannel(realtimeChannel);
-  if(adminRealtimeChannel) await supabaseClient.removeChannel(adminRealtimeChannel);
-  await supabaseClient.auth.signOut();
-} catch(e) {} finally {
-  window.location.href="login.html";
+
+    const logoutBtn =
+        document.getElementById(
+            "sideLogoutBtn"
+        );
+
+
+    if(!logoutBtn)
+        return;
+
+
+    logoutBtn.onclick =
+        async function(){
+
+            closeSidebar();
+
+
+            try{
+
+                if(
+                    realtimeChannel
+                ){
+
+                    await supabaseClient
+                        .removeChannel(
+                            realtimeChannel
+                        );
+
+                    realtimeChannel =
+                        null;
+
+                }
+
+
+                await supabaseClient
+                    .auth
+                    .signOut();
+
+
+            }catch(error){
+
+                console.warn(
+                    error
+                );
+
+            }finally{
+
+                window.location.href =
+                    "login.html";
+
+            }
+
+        };
+
 }
-};
-}
+
+
+/* =========================================================
+   ADMIN STATUS
+========================================================= */
 
 async function loadAdminStatus(){
-try{
-const {data}=await supabaseClient.from('admin_updates').select('*').order('created_at',{ascending:false});
-const container=document.getElementById('statusList');
-if(!container) return;
-if(!data || data.length===0){
-container.innerHTML='<p style="color: var(--muted); margin: 0; font-size: 14px;">No updates from admin yet.</p>';
-return;
-}
-container.innerHTML=data.map(item=>`
-<div style="border-bottom: 1px solid var(--border); padding: 8px 0;">
-${item.title ? `<b>${item.title}</b><br>` : ''}
-<span style="font-size: 14px; color: var(--text);">${item.message || ''}</span>
-${item.image_url ? `<br><img src="${item.image_url}" style="max-width:100%; border-radius:8px; margin-top:8px;">` : ''}
-</div>
-`).join('');
-}catch(e){
-document.getElementById('statusList').innerHTML='<p style="color: var(--muted); margin: 0; font-size: 14px;">Unable to load updates.</p>';
-}
+
+    const container =
+        document.getElementById(
+            "statusList"
+        );
+
+
+    if(!container)
+        return;
+
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+            .from(
+                "admin_updates"
+            )
+            .select("*")
+            .order(
+                "created_at",
+                {
+                    ascending:false
+                }
+            );
+
+
+        if(error)
+            throw error;
+
+
+        if(
+            !data
+            || data.length === 0
+        ){
+
+            container.innerHTML =
+                `<p style="color:#64748b;margin:0;font-size:12px">
+                No updates from admin yet.
+                </p>`;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            data.map(
+                item=>{
+
+                    return `
+                    <div class="admin-update">
+
+                        ${
+                            item.title
+                            ? `
+                            <div class="admin-update-title">
+                                ${escapeHtml(
+                                    item.title
+                                )}
+                            </div>
+                            `
+                            : ""
+                        }
+
+                        <div class="admin-update-message">
+                            ${escapeHtml(
+                                item.message || ""
+                            )}
+                        </div>
+
+                        ${
+                            item.image_url
+                            ? `
+                            <img
+                                src="${escapeHtml(
+                                    item.image_url
+                                )}"
+                                alt="Admin update">
+                            `
+                            : ""
+                        }
+
+                    </div>
+                    `;
+
+                }
+            ).join("");
+
+
+    }catch(error){
+
+        console.warn(
+            "Admin status:",
+            error
+        );
+
+
+        container.innerHTML =
+            `<p style="color:#64748b;margin:0;font-size:12px">
+            Unable to load updates.
+            </p>`;
+
+    }
+
 }
 
-document.addEventListener("click",function(event){
-if(event.target.classList.contains("modal-overlay")){
-event.target.style.display="none";
+
+/* =========================================================
+   ADMIN REALTIME
+========================================================= */
+
+function setupAdminRealtime(){
+
+    try{
+
+        supabaseClient
+            .channel(
+                "admin-updates-dashboard"
+            )
+            .on(
+                "postgres_changes",
+                {
+                    event:"*",
+                    schema:"public",
+                    table:"admin_updates"
+                },
+                ()=>{
+                    loadAdminStatus();
+                }
+            )
+            .subscribe();
+
+    }catch(error){
+
+        console.warn(
+            "Admin realtime unavailable:",
+            error
+        );
+
+    }
+
 }
-});
 
-/* =========================================
-INITIALIZE DASHBOARD
-========================================= */
-document.addEventListener("DOMContentLoaded",async function(){
-if(dashboardInitialized) return;
-dashboardInitialized=true;
 
-try{
-await loadGlobalTopLogo();
-const profileLoaded=await loadDashboardProfile();
-if(!profileLoaded){ return; }
+/* =========================================================
+   MODAL OUTSIDE CLICK
+========================================================= */
 
-await Promise.all([
-loadWithdrawalHistory(),
-loadReferralsData(),
-loadEarningsData(),
-loadAdminStatus()
-]);
+document.addEventListener(
+    "click",
+    function(event){
 
-setupRealtimeListener();
-setupLogout();
-}catch(error){
-showToast("Dashboard loading error. Please refresh.");
-}
-});
+        if(
+            event.target.classList
+                .contains(
+                    "modal-overlay"
+                )
+        ){
+
+            event.target.style.display =
+                "none";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function(){
+
+        if(
+            dashboardInitialized
+        )
+            return;
+
+
+        dashboardInitialized =
+            true;
+
+
+        /*
+           Start logo separately.
+           It no longer blocks dashboard.
+        */
+
+        loadGlobalTopLogo();
+
+
+        /*
+           Main profile is loaded first.
+           User sees dashboard quickly.
+        */
+
+        const profileLoaded =
+            await loadDashboardProfile();
+
+
+        if(!profileLoaded)
+            return;
+
+
+        /*
+           Secondary data loads in parallel.
+           This is much faster than waiting
+           one-by-one.
+        */
+
+        Promise.allSettled([
+
+            loadWithdrawalHistory(),
+
+            loadReferralsData(),
+
+            loadEarningsData(),
+
+            loadAdminStatus()
+
+        ]);
+
+
+        setupRealtimeListener();
+
+        setupAdminRealtime();
+
+        setupLogout();
+
+
+        /*
+           Create upload progress UI dynamically.
+        */
+
+        const uploadArea =
+            document.createElement(
+                "div"
+            );
+
+        uploadArea.className =
+            "upload-area";
+
+        uploadArea.innerHTML = `
+            <div
+                style="
+                    font-size:10px;
+                    color:#64748b;
+                    font-weight:700;
+                ">
+                PROFILE IMAGE
+            </div>
+
+            <div
+                class="upload-progress">
+                <div
+                    class="upload-progress-bar">
+                </div>
+            </div>
+        `;
+
+        /*
+           Hidden helper area.
+           Actual upload is controlled
+           from sidebar input.
+        */
+
+        uploadArea.style.display =
+            "none";
+
+        document.body.appendChild(
+            uploadArea
+        );
+
+
+        /*
+           Move progress elements into
+           DOM without changing sidebar UI.
+        */
+
+        const progress =
+            uploadArea.querySelector(
+                ".upload-progress"
+            );
+
+        const progressBar =
+            uploadArea.querySelector(
+                ".upload-progress-bar"
+            );
+
+
+        progress.id =
+            "profileUploadProgress";
+
+        progressBar.id =
+            "profileUploadProgressBar";
+
+
+        /*
+           Make querySelector work
+           with upload function.
+        */
+
+        const oldProgress =
+            document.querySelector(
+                ".upload-progress"
+            );
+
+        if(oldProgress){
+
+            oldProgress.id =
+                "profileUploadProgress";
+
+        }
+
+
+        const oldBar =
+            document.querySelector(
+                ".upload-progress-bar"
+            );
+
+        if(oldBar){
+
+            oldBar.id =
+                "profileUploadProgressBar";
+
+        }
+
+    }
+);
+
 </script>
+
 </body>
 </html>
