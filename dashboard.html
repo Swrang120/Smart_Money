@@ -1503,14 +1503,12 @@ openModal("kycModal");
 function openWithdrawModal(){
   closeSidebar();
   
-  // Check if payment details are added
   if(!hasSavedPaymentDetails()){
     alert("⚠️ Please add your UPI ID or Bank Account details first before requesting a withdrawal!");
     openUpiModal();
     return;
   }
 
-  // Render payment details inside withdrawal modal preview
   const previewBox = document.getElementById("withdrawPaymentDetailsContent");
   const savedType = String(currentProfile?.payout_type || "").trim().toLowerCase();
 
@@ -1566,56 +1564,45 @@ const careBtn= document.getElementById("customerCareBtn");
 const lockedMessage= document.getElementById("paymentLockedMessage");
 const infoText= document.getElementById("payoutInfoText");
 
-/* Fill existing values */
 upiInput.value= currentProfile?.upi_id||"";
 accNameInput.value= currentProfile?.account_holder_name||"";
 accNoInput.value= currentProfile?.bank_account_number||"";
 ifscInput.value= currentProfile?.ifsc_code||"";
 
-/* If payment already saved */
 if(paymentLocked){
 switchPayoutMode( savedType==="bank" ?"bank" :"upi", true );
-/* Disable all inputs */
 upiInput.disabled=true;
 accNameInput.disabled=true;
 accNoInput.disabled=true;
 ifscInput.disabled=true;
-/* Disable tabs */
-document .getElementById("tabUpi") .style.pointerEvents="none";
-document .getElementById("tabBank") .style.pointerEvents="none";
-/* Visual disabled tabs */
-document .getElementById("tabUpi") .style.opacity= savedType==="upi" ?"1" :".4";
-document .getElementById("tabBank") .style.opacity= savedType==="bank" ?"1" :".4";
-/* Hide save */
+document.getElementById("tabUpi").style.pointerEvents="none";
+document.getElementById("tabBank").style.pointerEvents="none";
+document.getElementById("tabUpi").style.opacity= savedType==="upi" ?"1" :".4";
+document.getElementById("tabBank").style.opacity= savedType==="bank" ?"1" :".4";
 saveBtn.style.display="none";
-/* Show support */
 careBtn.style.display="block";
 lockedMessage.style.display="block";
-infoText.innerHTML= `<b style="color:#dc2626;">🔒 Payment Details Locked</b><br> Your ${savedType==="bank"?"Bank Account":"UPI ID"} has been permanently saved. Payment details cannot be edited or changed.`;
+infoText.innerHTML= `<b style="color:#dc2626;">🔒 Payment Details Locked</b><br> Your ${savedType==="bank"?"Bank Account":"UPI ID"} has been permanently saved.`;
 }else{
-/* Enable inputs */
 upiInput.disabled=false;
 accNameInput.disabled=false;
 accNoInput.disabled=false;
 ifscInput.disabled=false;
-/* Enable tabs */
-document .getElementById("tabUpi") .style.pointerEvents="auto";
-document .getElementById("tabBank") .style.pointerEvents="auto";
-document .getElementById("tabUpi") .style.opacity="1";
-document .getElementById("tabBank") .style.opacity="1";
-/* Show save */
+document.getElementById("tabUpi").style.pointerEvents="auto";
+document.getElementById("tabBank").style.pointerEvents="auto";
+document.getElementById("tabUpi").style.opacity="1";
+document.getElementById("tabBank").style.opacity="1";
 saveBtn.style.display="block";
 careBtn.style.display="none";
 lockedMessage.style.display="none";
-infoText.innerHTML= `Choose <b>UPI ID</b> or <b>Bank Account</b>. After saving, your payment method will be permanently locked and cannot be changed.`;
-/* Default mode */
+infoText.innerHTML= `Choose <b>UPI ID</b> or <b>Bank Account</b>. After saving, your payment method will be permanently locked.`;
 if(savedType==="bank"){
 switchPayoutMode("bank");
 }else{
 switchPayoutMode("upi");
 }
 }
-openModal( "profileSettingsModal" );
+openModal("profileSettingsModal");
 }
 
 /* =========================================
@@ -1624,24 +1611,18 @@ SWITCH PAYMENT MODE
 
 function switchPayoutMode(mode,force=false){
 const paymentLocked= hasSavedPaymentDetails();
-const savedType= String( currentProfile?.payout_type||"" ).trim() .toLowerCase();
-/* Prevent switching after payment saved */
 if( paymentLocked&& !force ){
-showToast( "Payment method is permanently locked." );
+showToast("Payment method is permanently locked.");
 return;
 }
-/* Safety */
-if( mode!=="upi"&& mode!=="bank" ){
+if(mode!=="upi"&&mode!=="bank"){
 mode="upi";
 }
-/* Store selected mode */
 payoutMode=mode;
-/* Sections */
-document .getElementById("upiSection") .style.display= mode==="upi" ?"block" :"none";
-document .getElementById("bankSection") .style.display= mode==="bank" ?"block" :"none";
-/* Tabs */
-document .getElementById("tabUpi") .className= mode==="upi" ?"payout-tab active" :"payout-tab";
-document .getElementById("tabBank") .className= mode==="bank" ?"payout-tab active" :"payout-tab";
+document.getElementById("upiSection").style.display= mode==="upi" ?"block" :"none";
+document.getElementById("bankSection").style.display= mode==="bank" ?"block" :"none";
+document.getElementById("tabUpi").className= mode==="upi" ?"payout-tab active" :"payout-tab";
+document.getElementById("tabBank").className= mode==="bank" ?"payout-tab active" :"payout-tab";
 }
 
 /* =========================================
@@ -1649,2159 +1630,564 @@ SAVE PAYMENT DETAILS
 ========================================= */
 
 async function updateUserPayoutDetails(){
-/* Extra protection */
 if(hasSavedPaymentDetails()){
 showPaymentChangeBlocked();
 return;
 }
-const saveBtn= document.getElementById( "saveProfileBtn" );
-/* UPI */
+const saveBtn=document.getElementById("saveProfileBtn");
 if(payoutMode==="upi"){
-const upiId= document .getElementById("editUpiId") .value .trim();
-if(!upiId){
-alert( "Please enter your UPI ID." );
-return;
-}
-if( !upiId.includes("@") ){
-alert( "Please enter a valid UPI ID." );
+const upiId=document.getElementById("editUpiId").value.trim();
+if(!upiId || !upiId.includes("@")){
+alert("Please enter a valid UPI ID.");
 return;
 }
 }
-/* BANK */
 if(payoutMode==="bank"){
-const accountHolder= document .getElementById("editAccName") .value .trim();
-const accountNumber= document .getElementById("editAccNo") .value .trim();
-const ifscCode= document .getElementById("editIfsc") .value .trim() .toUpperCase();
-if(!accountHolder){
-alert( "Please enter account holder name." );
-return;
-}
-if(!accountNumber){
-alert( "Please enter bank account number." );
-return;
-}
-if(!ifscCode){
-alert( "Please enter IFSC code." );
+const accountHolder=document.getElementById("editAccName").value.trim();
+const accountNumber=document.getElementById("editAccNo").value.trim();
+const ifscCode=document.getElementById("editIfsc").value.trim().toUpperCase();
+if(!accountHolder || !accountNumber || !ifscCode){
+alert("Please fill all bank details.");
 return;
 }
 }
-/* Disable button */
 saveBtn.disabled=true;
-saveBtn.innerText= "Saving...";
-/* Data */
-const updateData={
-payout_type:payoutMode
-};
-/* UPI DATA */
+saveBtn.innerText="Saving...";
+
+const updateData={ payout_type:payoutMode };
 if(payoutMode==="upi"){
-updateData.upi_id= document .getElementById("editUpiId") .value .trim();
-/* Clear bank fields */
+updateData.upi_id=document.getElementById("editUpiId").value.trim();
 updateData.account_holder_name=null;
 updateData.bank_account_number=null;
 updateData.ifsc_code=null;
 }
-/* BANK DATA */
 if(payoutMode==="bank"){
-updateData.account_holder_name= document .getElementById("editAccName") .value .trim();
-updateData.bank_account_number= document .getElementById("editAccNo") .value .trim();
-updateData.ifsc_code= document .getElementById("editIfsc") .value .trim() .toUpperCase();
-/* Clear UPI */
+updateData.account_holder_name=document.getElementById("editAccName").value.trim();
+updateData.bank_account_number=document.getElementById("editAccNo").value.trim();
+updateData.ifsc_code=document.getElementById("editIfsc").value.trim().toUpperCase();
 updateData.upi_id=null;
 }
 try{
-const { data, error }= await supabaseClient .from("profiles") .update(updateData) .eq( "user_id", currentUserId ) .select() .single();
-if(error){
-throw error;
-}
-currentProfile={
-...currentProfile,
-...data
-};
-/* Success */
-showToast( "Payment details saved and permanently locked!" );
-closeModal( "profileSettingsModal" );
-/* Important */
-setTimeout(()=>{
-openUpiModal();
-},300);
+const {data,error}=await supabaseClient.from("profiles").update(updateData).eq("user_id",currentUserId).select().single();
+if(error) throw error;
+currentProfile={ ...currentProfile, ...data };
+showToast("Payment details saved successfully!");
+closeModal("profileSettingsModal");
+setTimeout(()=>{ openUpiModal(); },300);
 }catch(error){
-console.error( "Payment save error:", error );
-alert( "Error: "+ error.message );
+alert("Error: "+error.message);
 }finally{
 saveBtn.disabled=false;
-saveBtn.innerText= "Save Payment Details";
+saveBtn.innerText="Save Payment Details";
 }
 }
-
-/* =========================================
-BLOCK PAYMENT CHANGE
-========================================= */
 
 function showPaymentChangeBlocked(){
-const modal= document.getElementById( "profileSettingsModal" );
-if( modal&& modal.style.display==="flex" ){
-document .getElementById( "paymentLockedMessage" ) .style.display= "block";
-document .getElementById( "customerCareBtn" ) .style.display= "block";
-document .getElementById( "saveProfileBtn" ) .style.display= "none";
+document.getElementById("paymentLockedMessage").style.display="block";
+document.getElementById("customerCareBtn").style.display="block";
+document.getElementById("saveProfileBtn").style.display="none";
+showToast("Payment details cannot be changed.");
 }
-showToast( "Payment details cannot be changed." );
-}
-
-/* =========================================
-CONNECT CUSTOMER CARE
-========================================= */
 
 function connectCustomerCare(){
-const userName= currentProfile?.full_name|| "Smart Money User";
-const userEmail= currentProfile?.email|| currentUserEmail|| "";
-const userId= userRefCode|| "Not Available";
-const savedType= String( currentProfile?.payout_type||"" ) .toUpperCase()|| "Payment";
-const subject= encodeURIComponent( "Smart Money - Payment Details Change Request" );
-const body= encodeURIComponent( `Hello Smart Money Customer Care,\n\nI want to request a change in my saved payment details.\n\nName: ${userName}\nEmail: ${userEmail}\nUser ID: ${userId}\nCurrent Payment Method: ${savedType}\n\nPlease help me update my payment details.\n\nThank you.` );
-/* Open email compose */
-window.location.href= `mailto:smartmoneysupport1@gmail.com?subject=${subject}&body=${body}`;
+const userName=currentProfile?.full_name||"Smart Money User";
+const userEmail=currentProfile?.email||currentUserEmail||"";
+const userId=userRefCode||"Not Available";
+window.location.href=`mailto:smartmoneysupport1@gmail.com?subject=Payment Change Request&body=Name: ${userName}%0EEmail: ${userEmail}%0EUser ID: ${userId}`;
 }
-
-/* =========================================
-WITHDRAW AMOUNT
-========================================= */
 
 function setWithdrawAmount(amount){
-
-const finalAmount=
-Number(amount||0);
-
-document.getElementById("withdrawAmount").value=
-finalAmount.toFixed(2);
-
+document.getElementById("withdrawAmount").value=Number(amount||0).toFixed(2);
 }
-
-/* =========================================
-PROFILE IMAGE
-========================================= */
 
 function applyProfileImage(imgUrl,userName){
-
-const mainImg=
-document.getElementById("mainProfileImg");
-
-const sidebarImg=
-document.getElementById("sidebarProfileImage");
-
-const navAvatar=
-document.getElementById("navAvatarImg");
-
-const removeLi=
-document.getElementById("removePhotoLi");
+const mainImg=document.getElementById("mainProfileImg");
+const sidebarImg=document.getElementById("sidebarProfileImage");
+const navAvatar=document.getElementById("navAvatarImg");
+const removeLi=document.getElementById("removePhotoLi");
 
 if(imgUrl&&String(imgUrl).trim()!==""){
-
 if(mainImg)mainImg.src=imgUrl;
-
 if(sidebarImg)sidebarImg.src=imgUrl;
-
 if(navAvatar)navAvatar.src=imgUrl;
-
-if(removeLi){
-removeLi.style.display="block";
-}
-
+if(removeLi)removeLi.style.display="block";
 }else{
-
-const firstLetter=
-(userName||"U")
-.charAt(0)
-.toUpperCase();
-
-const fallbackUrl=
-`https://ui-avatars.com/api/?name=${encodeURIComponent(firstLetter)}&background=7c3aed&color=fff&size=128&bold=true`;
-
+const firstLetter=(userName||"U").charAt(0).toUpperCase();
+const fallbackUrl=`https://ui-avatars.com/api/?name=${encodeURIComponent(firstLetter)}&background=7c3aed&color=fff&size=128&bold=true`;
 if(mainImg)mainImg.src=fallbackUrl;
-
 if(sidebarImg)sidebarImg.src=fallbackUrl;
-
 if(navAvatar)navAvatar.src=fallbackUrl;
-
-if(removeLi){
-removeLi.style.display="none";
+if(removeLi)removeLi.style.display="none";
 }
-
 }
-
-}
-
-/* =========================================
-COMPRESS PROFILE IMAGE
-========================================= */
 
 function compressProfileImage(file){
-
 return new Promise((resolve,reject)=>{
-
-if(!file.type.startsWith("image/")){
-
-reject(
-new Error("Please select a valid image")
-);
-
-return;
-
-}
-
+if(!file.type.startsWith("image/")){ reject(new Error("Valid image required")); return; }
 const reader=new FileReader();
-
-reader.onerror=()=>{
-
-reject(
-new Error("Unable to read image")
-);
-
+reader.onload=function(e){
+const img=new Image();
+img.onload=function(){
+const canvas=document.createElement("canvas");
+let w=img.width, h=img.height;
+const MAX=500;
+if(w>h && w>MAX){ h=Math.round(h*MAX/w); w=MAX; }
+else if(h>=w && h>MAX){ w=Math.round(w*MAX/h); h=MAX; }
+canvas.width=w; canvas.height=h;
+canvas.getContext("2d").drawImage(img,0,0,w,h);
+resolve(canvas.toDataURL("image/jpeg",0.8));
 };
-
-reader.onload=function(event){
-
-const image=new Image();
-
-image.onerror=()=>{
-
-reject(
-new Error("Invalid image")
-);
-
+img.src=e.target.result;
 };
-
-image.onload=function(){
-
-const MAX_SIZE=500;
-
-let width=image.width;
-let height=image.height;
-
-if(width>height&&width>MAX_SIZE){
-
-height=
-Math.round(
-height*MAX_SIZE/width
-);
-
-width=MAX_SIZE;
-
-}else if(
-height>=width&&
-height>MAX_SIZE
-){
-
-width=
-Math.round(
-width*MAX_SIZE/height
-);
-
-height=MAX_SIZE;
-
-}
-
-const canvas=
-document.createElement("canvas");
-
-canvas.width=width;
-canvas.height=height;
-
-const ctx=
-canvas.getContext("2d");
-
-ctx.drawImage(
-image,
-0,
-0,
-width,
-height
-);
-
-resolve(
-canvas.toDataURL(
-"image/jpeg",
-0.80
-)
-);
-
-};
-
-image.src=event.target.result;
-
-};
-
 reader.readAsDataURL(file);
-
 });
-
 }
-
-/* =========================================
-LOAD GLOBAL LOGO
-========================================= */
 
 async function loadGlobalTopLogo(){
-
 try{
-
-const {data,error}=
-await supabaseClient
-.from("global_settings")
-.select("setting_value")
-.eq(
-"setting_key",
-"admin_top_logo"
-)
-.maybeSingle();
-
-if(error||!data?.setting_value){
-return;
+const {data}=await supabaseClient.from("global_settings").select("setting_value").eq("setting_key","admin_top_logo").maybeSingle();
+if(data?.setting_value){
+document.getElementById("navBrandLogoImg").src=data.setting_value;
+document.getElementById("sidebarLogo").src=data.setting_value;
 }
-
-const logoUrl=data.setting_value;
-
-const navBrand=
-document.getElementById(
-"navBrandLogoImg"
-);
-
-const sidebarLogo=
-document.getElementById(
-"sidebarLogo"
-);
-
-if(navBrand){
-navBrand.src=logoUrl;
+}catch(e){}
 }
-
-if(sidebarLogo){
-sidebarLogo.src=logoUrl;
-}
-
-}catch(error){
-
-console.log(
-"Logo load skipped:",
-error.message
-);
-
-}
-
-}
-
-/* =========================================
-REFERRAL CODE
-FORMAT: SM-smart12345
-========================================= */
 
 function generateReferralCode(){
-
-const randomNumber=
-Math.floor(
-10000+
-Math.random()*90000
-);
-
-return "SM-smart"+randomNumber;
-
+return "SM-smart"+Math.floor(10000+Math.random()*90000);
 }
-
-/* =========================================
-ENSURE UNIQUE REFERRAL CODE
-========================================= */
 
 async function createUniqueReferralCode(){
-
-for(let attempt=0;attempt<20;attempt++){
-
-const newCode=
-generateReferralCode();
-
-const {data,error}=
-await supabaseClient
-.from("profiles")
-.select("user_id")
-.eq("referral_code",newCode)
-.limit(1);
-
-if(error){
-
-console.log(
-"Referral check:",
-error.message
-);
-
-return newCode;
-
+for(let i=0;i<10;i++){
+const code=generateReferralCode();
+const {data}=await supabaseClient.from("profiles").select("user_id").eq("referral_code",code).limit(1);
+if(!data||data.length===0) return code;
 }
-
-if(!data||data.length===0){
-
-return newCode;
-
+return "SM-smart"+String(Date.now()).slice(-5);
 }
-
-}
-
-return "SM-smart"+
-String(Date.now()).slice(-5);
-
-}
-
-/* =========================================
-ENSURE USER HAS REFERRAL CODE
-========================================= */
-
-async function ensurePermanentReferralCode(profile){
-
-const existingCode=
-profile?.referral_code;
-
-if(
-existingCode&&
-String(existingCode).trim()!==""
-){
-
-return String(existingCode).trim();
-
-}
-
-const newCode=
-await createUniqueReferralCode();
-
-try{
-
-const {data,error}=
-await supabaseClient
-.from("profiles")
-.update({
-referral_code:newCode
-})
-.eq(
-"user_id",
-currentUserId
-)
-.select()
-.single();
-
-if(error){
-
-console.error(
-"Referral code update error:",
-error
-);
-
-return newCode;
-
-}
-
-if(data){
-
-currentProfile={
-...currentProfile,
-...data
-};
-
-}
-
-return newCode;
-
-}catch(error){
-
-console.error(error);
-
-return newCode;
-
-}
-
-}
-
-/* =========================================
-FIX OLD INVALID REFERRAL CODE
-========================================= */
 
 function isCorrectReferralCode(code){
-
-return /^SM-smart\d{5}$/.test(
-String(code||"")
-);
-
+return /^SM-smart\d{5}$/.test(String(code||""));
 }
 
 async function fixInvalidReferralCode(profile){
-
-const oldCode=
-String(
-profile?.referral_code||""
-).trim();
-
-if(isCorrectReferralCode(oldCode)){
-
-return oldCode;
-
-}
-
-const newCode=
-await createUniqueReferralCode();
-
-const {data,error}=
-await supabaseClient
-.from("profiles")
-.update({
-referral_code:newCode
-})
-.eq(
-"user_id",
-currentUserId
-)
-.select()
-.single();
-
-if(error){
-
-console.error(
-"Referral code fix error:",
-error.message
-);
-
-return oldCode||newCode;
-
-}
-
-if(data){
-
-currentProfile={
-...currentProfile,
-...data
-};
-
-}
-
+const oldCode=String(profile?.referral_code||"").trim();
+if(isCorrectReferralCode(oldCode)) return oldCode;
+const newCode=await createUniqueReferralCode();
+const {data}=await supabaseClient.from("profiles").update({referral_code:newCode}).eq("user_id",currentUserId).select().single();
+if(data) currentProfile={...currentProfile,...data};
 return newCode;
-
 }
 
 /* =========================================
-LOAD DASHBOARD PROFILE
+FIXED DASHBOARD PROFILE LOADER
 ========================================= */
 
 async function loadDashboardProfile(){
+try {
+const {data:{session},error:sessionError}=await supabaseClient.auth.getSession();
 
-const {
-data:{session},
-error:sessionError
-}=
-await supabaseClient.auth.getSession();
-
-if(sessionError||!session?.user){
-
+if(sessionError || !session?.user){
+console.log("No active session found, redirecting to login...");
 window.location.href="login.html";
-
 return false;
-
 }
 
 const user=session.user;
-
 currentUserId=user.id;
+currentUserEmail=user.email||"";
 
-currentUserEmail=
-user.email||"";
+const authName=user.user_metadata?.full_name||user.user_metadata?.name||"Smart Money User";
 
-const authName=
-user.user_metadata?.full_name||
-user.user_metadata?.name||
-"Smart Money User";
-
-const {data:profile,error:profileError}=
-await supabaseClient
-.from("profiles")
-.select("*")
-.eq(
-"user_id",
-currentUserId
-)
-.maybeSingle();
+const {data:profile,error:profileError}=await supabaseClient.from("profiles").select("*").eq("user_id",currentUserId).maybeSingle();
 
 if(profileError){
-
-console.error(
-"Profile load error:",
-profileError
-);
-
-showToast(
-"Profile loading problem. Please refresh."
-);
-
-return false;
-
+console.error("Profile load error:",profileError);
 }
 
 let finalProfile=profile;
 
 if(!finalProfile){
-
-const newReferralCode=
-await createUniqueReferralCode();
-
+const newReferralCode=await createUniqueReferralCode();
 const newProfile={
-
 user_id:currentUserId,
-
 email:currentUserEmail,
-
 full_name:authName,
-
 balance:0,
-
 package_name:null,
-
 referral_code:newReferralCode
-
 };
-
-const {
-data:createdProfile,
-error:createError
-}=
-await supabaseClient
-.from("profiles")
-.upsert(
-newProfile,
-{
-onConflict:"user_id"
-}
-)
-.select()
-.single();
-
+const {data:createdProfile,error:createError}=await supabaseClient.from("profiles").upsert(newProfile,{onConflict:"user_id"}).select().single();
 if(createError){
-
-console.error(
-"Profile create error:",
-createError
-);
-
+console.error("Profile create error:",createError);
 return false;
-
 }
-
 finalProfile=createdProfile;
-
 }
 
 currentProfile=finalProfile;
+const permanentCode=await fixInvalidReferralCode(finalProfile);
+currentProfile.referral_code=permanentCode;
+userRefCode=permanentCode;
 
-/* Fix old referral code */
-
-const permanentCode=
-await fixInvalidReferralCode(
-finalProfile
-);
-
-currentProfile.referral_code=
-permanentCode;
-
-userRefCode=
-permanentCode;
-
-renderProfile(
-currentProfile,
-authName
-);
-
+renderProfile(currentProfile,authName);
 return true;
-
+} catch(err) {
+console.error("Critical error in loadDashboardProfile:", err);
+return false;
 }
-
-/* =========================================
-RENDER PROFILE
-========================================= */
+}
 
 function renderProfile(profile,fallbackName){
+const finalName=profile?.full_name||fallbackName||"Smart Money User";
+const finalEmail=profile?.email||currentUserEmail;
+userCurrentBalance=Number(profile?.balance||0);
+const packageName=profile?.package_name||"";
+const dob=profile?.date_of_birth||"";
 
-const finalName=
-profile?.full_name||
-fallbackName||
-"Smart Money User";
+document.getElementById("userName").textContent=finalName;
+document.getElementById("topUserId").textContent=userRefCode||"Not Available";
+document.getElementById("sidebarUserName").textContent=finalName;
+document.getElementById("sidebarUserEmail").textContent=finalEmail;
+document.getElementById("sidebarWalletBal").textContent="₹"+userCurrentBalance.toFixed(2);
+document.getElementById("dobDisplayInfo").textContent=dob||"Not Set";
 
-const finalEmail=
-profile?.email||
-currentUserEmail;
-
-userCurrentBalance=
-Number(
-profile?.balance||0
-);
-
-const packageName=
-profile?.package_name||"";
-
-const dob=
-profile?.date_of_birth||"";
-
-document.getElementById("userName").textContent=
-finalName;
-
-document.getElementById("topUserId").textContent=
-userRefCode||
-"Not Available";
-
-document.getElementById("sidebarUserName").textContent=
-finalName;
-
-document.getElementById("sidebarUserEmail").textContent=
-finalEmail;
-
-document.getElementById("sidebarWalletBal").textContent=
-"₹"+
-userCurrentBalance.toFixed(2);
-
-document.getElementById("dobDisplayInfo").textContent=
-dob||"Not Set";
-
-const badge=
-document.getElementById(
-"activePackageBadge"
-);
-
-if(
-packageName&&
-packageName.trim()!==""&&
-packageName.toLowerCase()!=="none"
-){
-
-badge.innerText=
-packageName.toUpperCase()+
-" 👑";
-
+const badge=document.getElementById("activePackageBadge");
+if(packageName&&packageName.trim()!==""&&packageName.toLowerCase()!=="none"){
+badge.innerText=packageName.toUpperCase()+" 👑";
 badge.classList.add("active");
-
 }else{
-
 badge.innerText="NO PACKAGE";
-
 badge.classList.remove("active");
-
 }
 
-applyProfileImage(
-profile?.profile_pic,
-finalName
-);
-
+applyProfileImage(profile?.profile_pic,finalName);
 updatePackageModal();
-
 }
-
-/* =========================================
-PACKAGE MODAL & AUTOMATIC SYSTEM CONFIG
-========================================= */
 
 function updatePackageModal(){
+const packageName=String(currentProfile?.package_name||"").trim().toLowerCase();
+const hasPackage=packageName&&packageName!=="none";
+let commissionText="Not Available";
+let withdrawLimitText="₹200 Minimum";
+let pkgDisplayName="No Package Active";
 
-const packageName=
-String(
-currentProfile?.package_name||""
-).trim().toLowerCase();
-
-const hasPackage=
-packageName&&
-packageName!=="none";
-
-let commissionText = "Not Available";
-let withdrawLimitText = "₹200 Minimum";
-let pkgDisplayName = "No Package Active";
-
-if(hasPackage) {
-pkgDisplayName = currentProfile.package_name.toUpperCase();
-if(packageName === "starter" || packageName === "basic") {
-commissionText = "Level 1: 50% | Level 2: 10%";
-withdrawLimitText = "₹100 Minimum";
-} else if(packageName === "pro" || packageName === "gold") {
-commissionText = "Level 1: 60% | Level 2: 15% | Level 3: 5%";
-withdrawLimitText = "₹100 Minimum";
-} else if(packageName === "vip" || packageName === "elite") {
-commissionText = "Level 1: 70% | Level 2: 20% | Level 3: 10%";
-withdrawLimitText = "₹100 Minimum";
-} else {
-commissionText = "Automatic Multi-Level Commission Enabled";
-withdrawLimitText = "₹100 Minimum";
-}
+if(hasPackage){
+pkgDisplayName=currentProfile.package_name.toUpperCase();
+withdrawLimitText="₹100 Minimum";
+commissionText="Automatic Multi-Level Commission Enabled";
 }
 
-document.getElementById(
-"modalPkgName"
-).innerText= pkgDisplayName;
-
-document.getElementById(
-"modalPkgStatus"
-).innerText=
-hasPackage
-?"Active"
-:"No Active Package";
-
-document.getElementById(
-"modalPkgCommission"
-).innerText= commissionText;
-
-document.getElementById(
-"modalPkgWithdraw"
-).innerText= withdrawLimitText;
-
+document.getElementById("modalPkgName").innerText=pkgDisplayName;
+document.getElementById("modalPkgStatus").innerText=hasPackage?"Active":"No Active Package";
+document.getElementById("modalPkgCommission").innerText=commissionText;
+document.getElementById("modalPkgWithdraw").innerText=withdrawLimitText;
 }
-
-/* =========================================
-WITHDRAWAL HISTORY
-========================================= */
 
 async function loadWithdrawalHistory(){
-
-if(!currentUserId){
-return;
-}
-
-const container=
-document.getElementById(
-"withdrawalHistoryList"
-);
-
-if(!container){
-return;
-}
-
-container.innerHTML=
-`<div style="text-align:center;color:#64748b;font-size:13px;padding:15px;">
-Loading withdrawal history...
-
-</div>`;      try{
-
-const {data,error}=
-await supabaseClient
-.from("withdrawal_requests")
-.select("*")
-.eq(
-"user_id",
-currentUserId
-)
-.order(
-"created_at",
-{
-ascending:false
-}
-);
-
-if(error){
-
-console.error(
-"Withdrawal history error:",
-error
-);
-
-container.innerHTML=
-`<div style="text-align:center;color:#ef4444;font-size:13px;padding:15px;">
-Unable to load withdrawal history.
-
-</div>`;      return;
-
-}
-
-if(!data||data.length===0){
-
-container.innerHTML=
-`<div style="text-align:center;color:#64748b;font-size:13px;padding:15px;">
-No withdrawal history found
-
-</div>`;      return;
-
-}
-
-container.innerHTML=
-data.map(item=>{
-
-const status=
-String(
-item.status||"pending"
-).toLowerCase();
-
-let statusClass=
-"status-pending";
-
-let statusText=
-"Pending";
-
-if(
-status==="approved"||
-status==="success"||
-status==="successful"||
-status==="paid"
-){
-
-statusClass=
-"status-approved";
-
-statusText=
-"Approved";
-
-}else if(
-status==="rejected"||
-status==="cancelled"||
-status==="failed"
-){
-
-statusClass=
-"status-rejected";
-
-statusText=
-"Rejected";
-
-}
-
-const date=
-item.created_at
-?
-new Date(
-item.created_at
-).toLocaleDateString(
-"en-IN",
-{
-day:"numeric",
-month:"short",
-year:"numeric"
-}
-)
-:"-";
-
-return `
-
-<div class="history-card-item">      <div class="history-row-1">      <span>      
-Date: ${date}      
-</span>      <span>      
-ID: ${escapeHtml(String(item.id||"").slice(0,8))}      
-</span>      </div>      <div class="history-row-2">      <span class="history-amount">      
-₹${Number(item.amount||0).toFixed(2)}      
-</span>      <span class="status-badge ${statusClass}">      
-${statusText}      
-</span>      </div>      </div>      `;
-
-}).join("");
-
-}catch(error){
-
-console.error(
-"Withdrawal history exception:",
-error
-);
-
-container.innerHTML=
-`<div style="text-align:center;color:#ef4444;font-size:13px;padding:15px;">
-Unable to load withdrawal history.
-
-</div>`;      }
-
-}
-
-/* =========================================
-EARNINGS
-========================================= */
-
-async function loadEarningsData(){
-
-if(!currentUserId){
-return;
-}
+if(!currentUserId) return;
+const container=document.getElementById("withdrawalHistoryList");
+if(!container) return;
 
 try{
-
-const {data,error}=
-await supabaseClient
-.from("earnings")
-.select("*")
-.eq(
-"user_id",
-currentUserId
-)
-.order(
-"created_at",
-{
-ascending:false
-}
-);
-
-if(error){
-
-console.log(
-"Earnings load error:",
-error.message
-);
-
-allEarningsData=[];
-
-updateEarningsCards();
-
+const {data}=await supabaseClient.from("withdrawal_requests").select("*").eq("user_id",currentUserId).order("created_at",{ascending:false});
+if(!data||data.length===0){
+container.innerHTML=`<div style="text-align:center;color:#64748b;font-size:13px;padding:15px;">No withdrawal history found</div>`;
 return;
-
+}
+container.innerHTML=data.map(item=>{
+const status=String(item.status||"pending").toLowerCase();
+let statusClass="status-pending", statusText="Pending";
+if(status==="approved"||status==="success"||status==="paid"){ statusClass="status-approved"; statusText="Approved"; }
+else if(status==="rejected"||status==="failed"){ statusClass="status-rejected"; statusText="Rejected"; }
+const date=item.created_at?new Date(item.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}):"-";
+return `<div class="history-card-item"><div class="history-row-1"><span>Date: ${date}</span><span>ID: ${escapeHtml(String(item.id||"").slice(0,8))}</span></div><div class="history-row-2"><span class="history-amount">₹${Number(item.amount||0).toFixed(2)}</span><span class="status-badge ${statusClass}">${statusText}</span></div></div>`;
+}).join("");
+}catch(e){
+container.innerHTML=`<div style="text-align:center;color:#ef4444;font-size:13px;padding:15px;">Error loading history</div>`;
+}
 }
 
+async function loadEarningsData(){
+if(!currentUserId) return;
+try{
+const {data}=await supabaseClient.from("earnings").select("*").eq("user_id",currentUserId).order("created_at",{ascending:false});
 allEarningsData=data||[];
-
 updateEarningsCards();
-
-}catch(error){
-
+}catch(e){
 allEarningsData=[];
-
 updateEarningsCards();
-
 }
-
 }
 
 function getEarningsForDays(days){
-
 const now=new Date();
-
-return allEarningsData
-.filter(item=>{
-
-if(!item.created_at){
-return false;
-}
-
-const created=
-new Date(item.created_at);
-
+return allEarningsData.filter(item=>{
+if(!item.created_at) return false;
+const created=new Date(item.created_at);
 if(days==="today"){
-
-return
-created.getFullYear()===
-now.getFullYear()
-&&
-created.getMonth()===
-now.getMonth()
-&&
-created.getDate()===
-now.getDate();
-
+return created.toDateString()===now.toDateString();
 }
-
-const difference=
-now.getTime()-
-created.getTime();
-
-const daysDifference=
-difference/
-(1000*60*60*24);
-
-return
-daysDifference>=0
-&&
-daysDifference<=days;
-
-})
-.reduce((sum,item)=>{
-
-return
-sum+
-Number(item.amount||0);
-
-},0);
-
+const diff=(now.getTime()-created.getTime())/(1000*60*60*24);
+return diff>=0 && diff<=days;
+}).reduce((sum,item)=>sum+Number(item.amount||0),0);
 }
 
 function updateEarningsCards(){
+const today=getEarningsForDays("today");
+const sevenDays=getEarningsForDays(7);
+const thirtyDays=getEarningsForDays(30);
+const allTime=allEarningsData.reduce((sum,item)=>sum+Number(item.amount||0),0);
+const passive=allEarningsData.filter(i=>String(i.earning_type||"").toLowerCase().includes("passive")).reduce((s,i)=>s+Number(i.amount||0),0);
 
-const today=
-getEarningsForDays("today");
-
-const sevenDays=
-getEarningsForDays(7);
-
-const thirtyDays=
-getEarningsForDays(30);
-
-const allTime=
-allEarningsData.reduce(
-(sum,item)=>{
-
-return
-sum+
-Number(item.amount||0);
-
-},
-0
-);
-
-const passive=
-allEarningsData
-.filter(item=>
-String(
-item.earning_type||""
-)
-.toLowerCase()
-.includes("passive")
-)
-.reduce((sum,item)=>{
-
-return
-sum+
-Number(item.amount||0);
-
-},0);
-
-document.getElementById(
-"todayRevenue"
-).innerText=
-"₹"+today.toFixed(2);
-
-document.getElementById(
-"sevenDaysRevenue"
-).innerText=
-"₹"+sevenDays.toFixed(2);
-
-document.getElementById(
-"thirtyDaysRevenue"
-).innerText=
-"₹"+thirtyDays.toFixed(2);
-
-document.getElementById(
-"allTimeRevenueText"
-).innerText=
-"₹"+allTime.toFixed(2);
-
-document.getElementById(
-"passiveIncome"
-).innerText=
-"₹"+passive.toFixed(2);
-
+document.getElementById("todayRevenue").innerText="₹"+today.toFixed(2);
+document.getElementById("sevenDaysRevenue").innerText="₹"+sevenDays.toFixed(2);
+document.getElementById("thirtyDaysRevenue").innerText="₹"+thirtyDays.toFixed(2);
+document.getElementById("allTimeRevenueText").innerText="₹"+allTime.toFixed(2);
+document.getElementById("passiveIncome").innerText="₹"+passive.toFixed(2);
 }
-
-/* =========================================
-EARNINGS HISTORY
-========================================= */
 
 async function loadEarningsHistory(){
-
-const container=
-document.getElementById(
-"earningsHistoryList"
-);
-
-if(!container){
+const container=document.getElementById("earningsHistoryList");
+if(!container) return;
+await loadEarningsData();
+if(!allEarningsData.length){
+container.innerHTML=`<div style="text-align:center;color:#64748b;font-size:13px;padding:20px;">No earnings yet.</div>`;
 return;
 }
-
-container.innerHTML=
-`<div style="text-align:center;color:#64748b;font-size:13px;padding:20px;">
-Loading earnings...
-
-</div>`;      await loadEarningsData();
-
-if(!allEarningsData.length){
-
-container.innerHTML=
-`<div style="text-align:center;color:#64748b;font-size:13px;padding:20px;">
-No earnings or transactions yet.
-
-</div>`;      return;
-
-}
-
-container.innerHTML=
-allEarningsData.map(item=>{
-
-const type=
-escapeHtml(
-item.earning_type||
-item.type||
-"Commission"
-);
-
-const amount=
-Number(item.amount||0);
-
-const date=
-item.created_at
-?
-new Date(
-item.created_at
-).toLocaleDateString(
-"en-IN",
-{
-day:"numeric",
-month:"short",
-year:"numeric"
-}
-)
-:"-";
-
-return `
-
-<div class="earning-item">      <div class="earning-top">      <div class="earning-title">      
-${type}      
-</div>      <div class="earning-amount">      
-+₹${amount.toFixed(2)}      
-</div>      </div>      <div class="earning-date">      
-${date}      
-</div>      </div>      `;
-
+container.innerHTML=allEarningsData.map(item=>{
+const type=escapeHtml(item.earning_type||item.type||"Commission");
+const amount=Number(item.amount||0);
+const date=item.created_at?new Date(item.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}):"-";
+return `<div class="earning-item"><div class="earning-top"><div class="earning-title">${type}</div><div class="earning-amount">+₹${amount.toFixed(2)}</div></div><div class="earning-date">${date}</div></div>`;
 }).join("");
-
 }
-
-/* =========================================
-REFERRALS
-========================================= */
 
 async function loadReferralsData(){
-
-if(
-!currentUserId||
-!userRefCode
-){
-return;
-}
-
-const container=
-document.getElementById(
-"referralsListContainer"
-);
-
-if(container){
-
-container.innerHTML=
-`<div style="text-align:center;color:#64748b;font-size:13px;padding:10px;">
-Loading referrals...
-
-</div>`;      }
-
+if(!currentUserId || !userRefCode) return;
+const container=document.getElementById("referralsListContainer");
 try{
-
-const {data,error}=
-await supabaseClient
-.from("profiles")
-.select(
-"full_name,referral_code,created_at,referred_by"
-)
-.eq(
-"referred_by",
-userRefCode
-)
-.order(
-"created_at",
-{
-ascending:false
-}
-);
-
-if(error){
-
-console.error(
-"Referral error:",
-error.message
-);
-
-allReferralsData=[];
-
-}else{
-
+const {data}=await supabaseClient.from("profiles").select("full_name,referral_code,created_at,referred_by").eq("referred_by",userRefCode).order("created_at",{ascending:false});
 allReferralsData=data||[];
-
-}
-
-const firstTab=
-document.querySelector(
-".ref-tab"
-);
-
-filterReferrals(
-1,
-firstTab
-);
-
-}catch(error){
-
+filterReferrals(1,document.querySelector(".ref-tab"));
+}catch(e){
 allReferralsData=[];
-
 filterReferrals(1);
-
 }
-
 }
 
 function filterReferrals(days,btnElement){
-
-document
-.querySelectorAll(".ref-tab")
-.forEach(tab=>{
-
-tab.classList.remove("active");
-
-});
-
-if(btnElement){
-
-btnElement.classList.add("active");
-
-}
-
-const container=
-document.getElementById(
-"referralsListContainer"
-);
-
-if(!container){
-return;
-}
+document.querySelectorAll(".ref-tab").forEach(t=>t.classList.remove("active"));
+if(btnElement) btnElement.classList.add("active");
+const container=document.getElementById("referralsListContainer");
+if(!container) return;
 
 const now=new Date();
-
-const filtered=
-allReferralsData.filter(item=>{
-
-if(!item.created_at){
-return false;
-}
-
-const date=
-new Date(item.created_at);
-
-const difference=
-now.getTime()-
-date.getTime();
-
-const daysDifference=
-difference/
-(1000*60*60*24);
-
-return
-daysDifference>=0
-&&
-daysDifference<=days;
-
+const filtered=allReferralsData.filter(item=>{
+if(!item.created_at) return false;
+const diff=(now.getTime()-new Date(item.created_at).getTime())/(1000*60*60*24);
+return diff>=0 && diff<=days;
 });
 
 if(!filtered.length){
-
-container.innerHTML=
-`<div style="text-align:center;color:#64748b;font-size:13px;padding:15px;">
-No referrals found in the last ${days} day(s).
-
-</div>`;      return;
-
+container.innerHTML=`<div style="text-align:center;color:#64748b;font-size:13px;padding:15px;">No referrals found in the last ${days} day(s).</div>`;
+return;
 }
 
-container.innerHTML=
-filtered.map(ref=>{
-
-const name=
-escapeHtml(
-ref.full_name||"User"
-);
-
-const refCode=
-escapeHtml(
-ref.referral_code||"N/A"
-);
-
-const date=
-ref.created_at
-?
-new Date(
-ref.created_at
-).toLocaleDateString(
-"en-IN",
-{
-day:"numeric",
-month:"short",
-year:"numeric"
-}
-)
-:"-";
-
-return `
-
-<div class="referral-card-item">      <div class="ref-user-info">      <h4>${name}</h4>      <span>      
-ID: ${refCode}      
-</span>      </div>      <div class="ref-date">      <span>Joined</span>
-
-<br>      <b>${date}</b>
-
-</div>      </div>      `;
-
+container.innerHTML=filtered.map(ref=>{
+const name=escapeHtml(ref.full_name||"User");
+const refCode=escapeHtml(ref.referral_code||"N/A");
+const date=ref.created_at?new Date(ref.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}):"-";
+return `<div class="referral-card-item"><div class="ref-user-info"><h4>${name}</h4><span>ID: ${refCode}</span></div><div class="ref-date"><span>Joined</span><br><b>${date}</b></div></div>`;
 }).join("");
-
 }
-
-/* =========================================
-SAVE KYC
-========================================= */
 
 async function saveKycDetails(){
-
-const fullName=
-document
-.getElementById("kycFullName")
-.value
-.trim();
-
-const dob=
-document
-.getElementById("kycDob")
-.value;
-
-if(!fullName){
-
-alert(
-"Please enter your full name."
-);
-
-return;
-
-}
-
-const {data,error}=
-await supabaseClient
-.from("profiles")
-.update({
-
-full_name:fullName,
-
-date_of_birth:
-dob||null
-
-})
-.eq(
-"user_id",
-currentUserId
-)
-.select()
-.single();
-
-if(error){
-
-alert(
-"Error: "+
-error.message
-);
-
-return;
-
-}
-
-currentProfile={
-...currentProfile,
-...data
-};
-
-renderProfile(
-currentProfile,
-fullName
-);
-
-showToast(
-"KYC saved successfully!"
-);
-
+const fullName=document.getElementById("kycFullName").value.trim();
+const dob=document.getElementById("kycDob").value;
+if(!fullName){ alert("Please enter your full name."); return; }
+const {data,error}=await supabaseClient.from("profiles").update({full_name:fullName,date_of_birth:dob||null}).eq("user_id",currentUserId).select().single();
+if(error){ alert("Error: "+error.message); return; }
+currentProfile={...currentProfile,...data};
+renderProfile(currentProfile,fullName);
+showToast("KYC saved successfully!");
 closeModal("kycModal");
-
 }
-
-/* =========================================
-UPLOAD PROFILE PICTURE
-========================================= */
 
 async function uploadProfilePicture(event){
-
-const file=
-event.target.files?.[0];
-
-if(!file){
-return;
-}
-
-if(!currentUserId){
-
-showToast(
-"Please wait, profile is loading."
-);
-
-return;
-
-}
-
+const file=event.target.files?.[0];
+if(!file || !currentUserId) return;
 try{
-
-showToast(
-"Saving profile picture..."
-);
-
-const compressedImage=
-await compressProfileImage(file);
-
-const {data,error}=
-await supabaseClient
-.from("profiles")
-.update({
-profile_pic:compressedImage
-})
-.eq(
-"user_id",
-currentUserId
-)
-.select()
-.single();
-
-if(error){
-throw error;
-}
-
-currentProfile={
-...currentProfile,
-...data
-};
-
-applyProfileImage(
-data.profile_pic,
-currentProfile.full_name
-);
-
-showToast(
-"Profile picture saved!"
-);
-
-}catch(error){
-
-console.error(error);
-
-alert(
-"Failed to save picture: "+
-error.message
-);
-
+showToast("Saving profile picture...");
+const compressedImage=await compressProfileImage(file);
+const {data,error}=await supabaseClient.from("profiles").update({profile_pic:compressedImage}).eq("user_id",currentUserId).select().single();
+if(error) throw error;
+currentProfile={...currentProfile,...data};
+applyProfileImage(data.profile_pic,currentProfile.full_name);
+showToast("Profile picture saved!");
+}catch(e){
+alert("Failed to save picture: "+e.message);
 }finally{
-
 event.target.value="";
-
 }
-
 }
-
-/* =========================================
-REMOVE PROFILE PICTURE
-========================================= */
 
 async function removeProfilePicture(){
-
-const confirmed=
-confirm(
-"Are you sure you want to remove your profile picture?"
-);
-
-if(!confirmed){
-return;
+if(!confirm("Remove profile picture?")) return;
+const {data,error}=await supabaseClient.from("profiles").update({profile_pic:null}).eq("user_id",currentUserId).select().single();
+if(error){ alert("Failed: "+error.message); return; }
+currentProfile={...currentProfile,...data};
+applyProfileImage(null,currentProfile.full_name);
+showToast("Profile picture removed!");
 }
-
-const {data,error}=
-await supabaseClient
-.from("profiles")
-.update({
-profile_pic:null
-})
-.eq(
-"user_id",
-currentUserId
-)
-.select()
-.single();
-
-if(error){
-
-alert(
-"Failed to remove picture: "+
-error.message
-);
-
-return;
-
-}
-
-currentProfile={
-...currentProfile,
-...data
-};
-
-applyProfileImage(
-null,
-currentProfile.full_name
-);
-
-showToast(
-"Profile picture removed!"
-);
-
-}
-
-/* =========================================
-SUBMIT WITHDRAWAL
-========================================= */
 
 async function submitWithdrawal(){
-  // Strict safety check: Ensure payment details are added before allowing withdrawal request
-  if(!hasSavedPaymentDetails()){
-    alert("⚠️ Please add your payment details (UPI ID or Bank Account) before requesting a withdrawal.");
-    closeModal("withdrawModal");
-    openUpiModal();
-    return;
-  }
-
-  const amount=
-  Number(
-  document
-  .getElementById("withdrawAmount")
-  .value
-  );
-
-  const submitBtn=
-  document.getElementById(
-  "submitWithdrawBtn"
-  );
-
-  const packageName=
-  String(
-  currentProfile?.package_name||""
-  ).toLowerCase();
-
-  let minWithdrawLimit=200;
-
-  if(
-  packageName && packageName !== "none"
-  ){
-
-  minWithdrawLimit=100;
-
-  }
-
-  if(
-  !Number.isFinite(amount)
-  ||
-  amount<=0
-  ){
-
-  alert(
-  "Please enter a valid amount."
-  );
-
-  return;
-
-  }
-
-  if(amount<minWithdrawLimit){
-
-  alert(
-  `Minimum withdrawal limit is ₹${minWithdrawLimit}.`
-  );
-
-  return;
-
-  }
-
-  if(amount>userCurrentBalance){
-
-  alert(
-  "Insufficient balance."
-  );
-
-  return;
-
-  }
-
-  submitBtn.disabled=true;
-
-  submitBtn.innerText=
-  "Processing...";
-
-  try{
-
-  /* Create withdrawal request */
-
-  const {data:withdrawData,error:insertError}=
-  await supabaseClient
-  .from("withdrawal_requests")
-  .insert({
-
-  user_id:currentUserId,
-
-  amount:amount,
-
-  status:"pending"
-
-  })
-  .select()
-  .single();
-
-  if(insertError){
-  throw insertError;
-  }
-
-  /* Update user balance */
-
-  const newBalance=
-  Number(userCurrentBalance)-amount;
-
-  const {data:updatedProfile,error:balanceError}=
-  await supabaseClient
-  .from("profiles")
-  .update({
-
-  balance:newBalance
-
-  })
-  .eq(
-  "user_id",
-  currentUserId
-  )
-  .select()
-  .single();
-
-  if(balanceError){
-
-  /* Withdrawal created but balance update failed */
-  console.error(
-  "Balance update failed:",
-  balanceError
-  );
-
-  throw balanceError;
-
-  }
-
-  currentProfile={
-  ...currentProfile,
-  ...updatedProfile
-  };
-
-  userCurrentBalance=
-  Number(
-  updatedProfile.balance||0
-  );
-
-  document.getElementById(
-  "sidebarWalletBal"
-  ).innerText=
-  "₹"+
-  userCurrentBalance.toFixed(2);
-
-  showToast(
-  "Withdrawal request submitted successfully!"
-  );
-
-  closeModal(
-  "withdrawModal"
-  );
-
-  await loadWithdrawalHistory();
-
-  }catch(error){
-
-  console.error(
-  "Withdrawal error:",
-  error
-  );
-
-  alert(
-  "Withdrawal failed: "+
-  error.message
-  );
-
-  }finally{
-
-  submitBtn.disabled=false;
-
-  submitBtn.innerText=
-  "Submit Request";
-
-  }
-
+if(!hasSavedPaymentDetails()){
+alert("⚠️ Please add your payment details first.");
+closeModal("withdrawModal");
+openUpiModal();
+return;
 }
+const amount=Number(document.getElementById("withdrawAmount").value);
+const submitBtn=document.getElementById("submitWithdrawBtn");
+const packageName=String(currentProfile?.package_name||"").toLowerCase();
+let minLimit=packageName&&packageName!=="none"?100:200;
 
-/* =========================================
-EMAILJS
-WITHDRAWAL APPROVED EMAIL
-========================================= */
+if(!Number.isFinite(amount)||amount<=0){ alert("Enter a valid amount."); return; }
+if(amount<minLimit){ alert(`Minimum withdrawal limit is ₹${minLimit}.`); return; }
+if(amount>userCurrentBalance){ alert("Insufficient balance."); return; }
+
+submitBtn.disabled=true;
+submitBtn.innerText="Processing...";
+
+try{
+const {error:insertError}=await supabaseClient.from("withdrawal_requests").insert({user_id:currentUserId,amount:amount,status:"pending"});
+if(insertError) throw insertError;
+
+const newBalance=Number(userCurrentBalance)-amount;
+const {data:updatedProfile,error:balanceError}=await supabaseClient.from("profiles").update({balance:newBalance}).eq("user_id",currentUserId).select().single();
+if(balanceError) throw balanceError;
+
+currentProfile={...currentProfile,...updatedProfile};
+userCurrentBalance=Number(updatedProfile.balance||0);
+document.getElementById("sidebarWalletBal").innerText="₹"+userCurrentBalance.toFixed(2);
+
+showToast("Withdrawal request submitted successfully!");
+closeModal("withdrawModal");
+await loadWithdrawalHistory();
+}catch(e){
+alert("Withdrawal failed: "+e.message);
+}finally{
+submitBtn.disabled=false;
+submitBtn.innerText="Submit Request";
+}
+}
 
 async function sendWithdrawalApprovedEmail(withdrawal){
-
 try{
+if(!withdrawal?.id) return;
+const emailKey=`withdrawal_approved_email_${withdrawal.id}`;
+if(localStorage.getItem(emailKey)) return;
+const amount=Number(withdrawal.amount||0).toFixed(2);
+const userName=currentProfile?.full_name||"Smart Money User";
+const userEmail=currentProfile?.email||currentUserEmail;
+if(!userEmail) return;
 
-if(!withdrawal?.id){
-return;
+await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_WITHDRAW_APPROVED_TEMPLATE,{
+to_name:userName, to_email:userEmail, user_name:userName, user_email:userEmail, amount:"₹"+amount, withdrawal_amount:"₹"+amount, status:"APPROVED", withdrawal_id:String(withdrawal.id||"")
+});
+localStorage.setItem(emailKey,"sent");
+showToast("Withdrawal approved notification sent.");
+}catch(e){}
 }
-
-/* Prevent duplicate email in same browser */
-
-const emailKey=
-`withdrawal_approved_email_${withdrawal.id}`;
-
-if(
-localStorage.getItem(emailKey)
-){
-return;
-}
-
-const amount=
-Number(
-withdrawal.amount||0
-).toFixed(2);
-
-const userName=
-currentProfile?.full_name||
-"Smart Money User";
-
-const userEmail=
-currentProfile?.email||
-currentUserEmail;
-
-if(!userEmail){
-return;
-}
-
-const templateParams={
-
-to_name:userName,
-
-to_email:userEmail,
-
-user_name:userName,
-
-user_email:userEmail,
-
-amount:"₹"+amount,
-
-withdrawal_amount:"₹"+amount,
-
-status:"APPROVED",
-
-withdrawal_id:
-String(withdrawal.id||""),
-
-message:
-`Congratulations! Your withdrawal request of ₹${amount} has been approved.`
-
-};
-
-await emailjs.send(
-EMAILJS_SERVICE_ID,
-EMAILJS_WITHDRAW_APPROVED_TEMPLATE,
-templateParams
-);
-
-localStorage.setItem(
-emailKey,
-"sent"
-);
-
-console.log(
-"Withdrawal approved email sent."
-);
-
-showToast(
-"Withdrawal approved! Email notification sent."
-);
-
-}catch(error){
-
-console.error(
-"EmailJS withdrawal approved error:",
-error
-);
-
-}
-
-}
-
-/* =========================================
-REALTIME
-========================================= */
 
 function setupRealtimeListener(){
-
-if(
-!currentUserId||
-realtimeChannel
-){
-return;
-}
-
-realtimeChannel=
-supabaseClient
-.channel(
-`dashboard-${currentUserId}`
-)
-
-/* PROFILE UPDATE */
-
-.on(
-"postgres_changes",
-{
-
-event:"UPDATE",
-
-schema:"public",
-
-table:"profiles",
-
-filter:
-`user_id=eq.${currentUserId}`
-
-},
-payload=>{
-
-if(!payload.new){
-return;
-}
-
-currentProfile={
-...currentProfile,
-...payload.new
-};
-
-userCurrentBalance=
-Number(
-currentProfile.balance||0
-);
-
-renderProfile(
-currentProfile,
-currentProfile.full_name
-);
-
-}
-)
-
-/* WITHDRAWAL UPDATE */
-
-.on(
-"postgres_changes",
-{
-
-event:"*",
-
-schema:"public",
-
-table:"withdrawal_requests",
-
-filter:
-`user_id=eq.${currentUserId}`
-},
-async payload=>{
-
+if(!currentUserId || realtimeChannel) return;
+realtimeChannel=supabaseClient.channel(`dashboard-${currentUserId}`)
+.on("postgres_changes",{event:"UPDATE",schema:"public",table:"profiles",filter:`user_id=eq.${currentUserId}`},payload=>{
+if(!payload.new) return;
+currentProfile={...currentProfile,...payload.new};
+userCurrentBalance=Number(currentProfile.balance||0);
+renderProfile(currentProfile,currentProfile.full_name);
+})
+.on("postgres_changes",{event:"*",schema:"public",table:"withdrawal_requests",filter:`user_id=eq.${currentUserId}`},async payload=>{
 await loadWithdrawalHistory();
-
-/* If withdrawal approved */
-
-const newData=
-payload?.new||{};
-
-const newStatus=
-String(
-newData.status||""
-).toLowerCase();
-
-if(
-newStatus==="approved"||
-newStatus==="success"||
-newStatus==="successful"||
-newStatus==="paid"
-){
-
-await sendWithdrawalApprovedEmail(
-newData
-);
-
-showToast(
-"Your withdrawal has been approved!"
-);
-
-}else if(
-payload.eventType==="UPDATE"
-){
-
-showToast(
-"Withdrawal status updated!"
-);
-
+const newData=payload?.new||{};
+if(String(newData.status||"").toLowerCase()==="approved"){
+await sendWithdrawalApprovedEmail(newData);
+showToast("Your withdrawal has been approved!");
 }
-
+})
+.subscribe();
 }
-)
-
-.subscribe(status=>{
-
-console.log(
-"Realtime status:",
-status
-);
-
-});
-
-}
-
-/* =========================================
-LOGOUT
-========================================= */
 
 function setupLogout(){
+const logoutBtn=document.getElementById("sideLogoutBtn");
+if(!logoutBtn) return;
+logoutBtn.onclick=async function(){
+if(realtimeChannel) await supabaseClient.removeChannel(realtimeChannel);
+await supabaseClient.auth.signOut();
+window.location.href="login.html";
+};
+}
 
-const logoutBtn=
-document.getElementById(
-"sideLogoutBtn"
-);
-
-if(!logoutBtn){
+async function loadAdminStatus(){
+try{
+const {data}=await supabaseClient.from('admin_updates').select('*').order('created_at',{ascending:false});
+const container=document.getElementById('statusList');
+if(!container) return;
+if(!data || data.length===0){
+container.innerHTML='<p style="color: var(--muted); margin: 0; font-size: 14px;">No updates from admin yet.</p>';
 return;
 }
-
-logoutBtn.onclick=
-async function(){
-
-try{
-
-if(realtimeChannel){
-
-await supabaseClient.removeChannel(
-realtimeChannel
-);
-
-realtimeChannel=null;
-
+container.innerHTML=data.map(item=>`
+<div style="border-bottom: 1px solid var(--border); padding: 8px 0;">
+${item.title ? `<b>${item.title}</b><br>` : ''}
+<span style="font-size: 14px; color: var(--text);">${item.message || ''}</span>
+${item.image_url ? `<br><img src="${item.image_url}" style="max-width:100%; border-radius:8px; margin-top:8px;">` : ''}
+</div>
+`).join('');
+}catch(e){
+document.getElementById('statusList').innerHTML='<p style="color: var(--muted); margin: 0; font-size: 14px;">Unable to load updates.</p>';
+}
 }
 
-await supabaseClient.auth.signOut();
-
-window.location.href=
-"login.html";
-
-}catch(error){
-
-console.error(
-"Logout error:",
-error
-);
-
-window.location.href=
-"login.html";
-
-}
-
-};
-
-}
-
-/* =========================================
-ADMIN STATUS & UPDATES
-========================================= */
-async function loadAdminStatus() {
-    const { data, error } = await supabaseClient
-        .from('admin_updates')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-    const container = document.getElementById('statusList');
-    if (!container) return;
-    
-    if (error || !data || data.length === 0) {
-        container.innerHTML = '<p style="color: var(--muted); margin: 0; font-size: 14px;">No updates from admin yet.</p>';
-        return;
-    }
-
-    container.innerHTML = data.map(item => `
-        <div style="border-bottom: 1px solid var(--border); padding: 8px 0;">
-            ${item.title ? `<b>${item.title}</b><br>` : ''}
-            <span style="font-size: 14px; color: var(--text);">${item.message || ''}</span>
-            ${item.image_url ? `<br><img src="${item.image_url}" style="max-width:100%; border-radius:8px; margin-top:8px;">` : ''}
-        </div>
-    `).join('');
-}
-
-/* =========================================
-CLOSE MODAL ON OUTSIDE CLICK
-========================================= */
-
-document.addEventListener(
-"click",
-function(event){
-
-if(
-event.target.classList.contains(
-"modal-overlay"
-)
-){
-
+document.addEventListener("click",function(event){
+if(event.target.classList.contains("modal-overlay")){
 event.target.style.display="none";
-
 }
-
-}
-);
+});
 
 /* =========================================
 INITIALIZE DASHBOARD
 ========================================= */
 
-document.addEventListener(
-"DOMContentLoaded",
-async function(){
-
-if(dashboardInitialized){
-return;
-}
-
+document.addEventListener("DOMContentLoaded",async function(){
+if(dashboardInitialized) return;
 dashboardInitialized=true;
 
 try{
-
 await loadGlobalTopLogo();
-
-const profileLoaded=
-await loadDashboardProfile();
+const profileLoaded=await loadDashboardProfile();
 
 if(!profileLoaded){
 return;
 }
 
 await Promise.all([
-
 loadWithdrawalHistory(),
-
 loadReferralsData(),
-
 loadEarningsData(),
-
 loadAdminStatus()
-
 ]);
 
 setupRealtimeListener();
-
 setupLogout();
-
 }catch(error){
-
-console.error(
-"Dashboard initialization error:",
-error
-);
-
-showToast(
-"Dashboard loading error. Please refresh."
-);
-
+console.error("Dashboard initialization error:",error);
+showToast("Dashboard loading error. Please refresh.");
 }
-
-}
-);
+});
 
 </script>
 </body>
