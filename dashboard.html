@@ -119,13 +119,13 @@ align-items:center;
 justify-content:center;
 }
 
-/* SIDEBAR */
+/* SIDEBAR - PREMIUM STYLING */
 
 .sidebar-overlay{
 position:fixed;
 inset:0;
-background:rgba(15,23,42,.65);
-backdrop-filter:blur(3px);
+background:rgba(15,23,42,.7);
+backdrop-filter:blur(4px);
 display:none;
 z-index:9998;
 }
@@ -141,11 +141,12 @@ left:-330px;
 width:320px;
 max-width:88vw;
 height:100%;
-background:#0f172a;
+background:linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
 z-index:9999;
-transition:left .3s ease;
+transition:left .3s cubic-bezier(0.4, 0, 0.2, 1);
 overflow-y:auto;
-box-shadow:10px 0 30px rgba(0,0,0,.3);
+box-shadow:15px 0 35px rgba(0,0,0,0.4);
+border-right: 1px solid rgba(255,255,255,0.08);
 }
 
 .sidebar.active{
@@ -158,15 +159,27 @@ padding:14px 18px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-border-bottom:1px solid rgba(255,255,255,.12);
+border-bottom:1px solid rgba(255,255,255,.1);
+background: rgba(15,23,42,0.5);
 }
 
 .sidebar-close{
-background:none;
+background:rgba(255,255,255,0.08);
 border:none;
 color:#fff;
-font-size:28px;
+font-size:18px;
+width:36px;
+height:36px;
+border-radius:50%;
 cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+transition:background 0.2s;
+}
+
+.sidebar-close:hover{
+background:rgba(255,255,255,0.2);
 }
 
 .sidebar-profile{
@@ -174,7 +187,8 @@ padding:22px 18px;
 display:flex;
 align-items:center;
 gap:13px;
-border-bottom:1px solid rgba(255,255,255,.12);
+border-bottom:1px solid rgba(255,255,255,.1);
+background:linear-gradient(135deg, rgba(124,58,237,0.15), transparent);
 }
 
 .sidebar-profile-img{
@@ -183,8 +197,9 @@ height:58px;
 min-width:58px;
 border-radius:50%;
 object-fit:cover;
-border:2px solid #a855f7;
+border:2px solid #c084fc;
 background:#fff;
+box-shadow:0 4px 12px rgba(124,58,237,0.4);
 }
 
 .sidebar-profile-info{
@@ -202,12 +217,13 @@ text-overflow:ellipsis;
 }
 
 .sidebar-profile-email{
-color:#94a3b8;
-font-size:10px;
-margin-top:5px;
+color:#cbd5e1;
+font-size:11px;
+margin-top:4px;
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
+opacity:0.8;
 }
 
 .sidebar-menu{
@@ -217,30 +233,36 @@ margin:0;
 }
 
 .sidebar-menu li{
-margin-bottom:8px;
+margin-bottom:10px;
 }
 
 .sidebar-menu a,
 .sidebar-menu button{
 width:100%;
-border:none;
-background:transparent;
-color:#f1f5f9;
+border:1px solid rgba(255,255,255,0.06);
+background:rgba(255,255,255,0.03);
+color:#f8fafc;
 text-align:left;
-padding:14px 16px;
-border-radius:12px;
+padding:13px 16px;
+border-radius:14px;
 cursor:pointer;
 text-decoration:none;
-font-size:14px;
+font-size:13px;
 font-weight:600;
-transition:.2s;
-display:block;
+transition:all 0.25s ease;
+display:flex;
+align-items:center;
+gap:12px;
+box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .sidebar-menu a:hover,
 .sidebar-menu button:hover{
-background:rgba(124,58,237,.35);
+background:linear-gradient(135deg, rgba(124,58,237,0.4), rgba(219,39,119,0.3));
+border-color:rgba(192,132,252,0.3);
 color:#fff;
+transform:translateX(4px);
+box-shadow: 0 4px 15px rgba(124,58,237,0.3);
 }
 
 .sidebar-menu .withdraw-sidebar-btn {
@@ -251,13 +273,13 @@ border: 1px solid rgba(255, 255, 255, 0.2);
 display: flex;
 align-items: center;
 justify-content: space-between;
-transition: all 0.2s ease;
+transition: all 0.25s ease;
 }
 
 .sidebar-menu .withdraw-sidebar-btn:hover {
 background: linear-gradient(135deg, #047857, #059669);
 box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
-transform: translateY(-1px);
+transform: translateY(-1px) translateX(0);
 }
 
 /* DASHBOARD */
@@ -721,24 +743,24 @@ font-weight:500;
 </div>
 </div>
 <ul class="sidebar-menu">
-<li><a href="index.html">🌐 Home / Landing Page</a></li>
-<li><button onclick="openPackageModal()">👑 My Package</button></li>
-<li><button onclick="openEarningsHistoryModal()">📊 My Earnings & Transactions</button></li>
+<li><a href="index.html">🌐 <span>Home / Landing Page</span></a></li>
+<li><button onclick="openPackageModal()">👑 <span>My Package</span></button></li>
+<li><button onclick="openEarningsHistoryModal()">📊 <span>My Earnings & Transactions</span></button></li>
 <li>
 <button onclick="openWithdrawModal()" class="withdraw-sidebar-btn">
 <span>💸 Available Balance: <b id="sidebarWalletBal">₹0.00</b></span>
 <span style="background:rgba(255,255,255,0.2); padding:4px 8px; border-radius:6px; font-size:11px;">Withdraw ›</span>
 </button>
 </li>
-<li><button onclick="openHistoryModal()">📜 View Withdrawal History</button></li>
-<li><button onclick="document.getElementById('profilePhotoInputSidebar').click()">📷 Change Profile Picture</button></li>
+<li><button onclick="openHistoryModal()">📜 <span>View Withdrawal History</span></button></li>
+<li><button onclick="document.getElementById('profilePhotoInputSidebar').click()">📷 <span>Change Profile Picture</span></button></li>
 <input type="file" id="profilePhotoInputSidebar" style="display:none;" accept="image/*" onchange="uploadProfilePicture(event)">
 <li id="removePhotoLi" style="display:none;">
-<button onclick="removeProfilePicture()" style="color:#ef4444;">🗑️ Remove Profile Picture</button>
+<button onclick="removeProfilePicture()" style="color:#fca5a5; border-color:rgba(239,68,68,0.3); background:rgba(239,68,68,0.1);">🗑️ <span>Remove Profile Picture</span></button>
 </li>
-<li><button onclick="openUpiModal()">🏦 View & Edit Bank / UPI Details</button></li>
-<li><button onclick="openKycModal()">🆔 KYC & Date of Birth</button></li>
-<li><button id="sideLogoutBtn" style="color:#f87171;">🚪 Logout</button></li>
+<li><button onclick="openUpiModal()">🏦 <span>View & Edit Bank / UPI Details</span></button></li>
+<li><button onclick="openKycModal()">🆔 <span>KYC & Date of Birth</span></button></li>
+<li><button id="sideLogoutBtn" style="color:#fca5a5; border-color:rgba(239,68,68,0.3); background:rgba(239,68,68,0.1);">🚪 <span>Logout</span></button></li>
 </ul>
 </aside>
 <header class="navbar">
@@ -1333,7 +1355,6 @@ async function loadDashboardProfile(){
 try {
 let user = null;
 
-// Use Promise.race with a 4-second timeout so it never hangs indefinitely
 const getUserPromise = supabaseClient.auth.getUser();
 const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Auth timeout")), 4000));
 
@@ -1343,7 +1364,6 @@ try {
     user = res.data.user;
   }
 } catch (err) {
-  // Fallback to getSession if getUser times out or fails
   const { data: sessionData } = await supabaseClient.auth.getSession();
   if (sessionData?.session?.user) {
     user = sessionData.session.user;
