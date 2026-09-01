@@ -943,26 +943,6 @@ button{
 }
 
 /* =========================
-   UPLOAD
-========================= */
-
-.upload-progress{
-    display:none;
-    margin-top:10px;
-    height:6px;
-    border-radius:10px;
-    background:#e2e8f0;
-    overflow:hidden;
-}
-
-.upload-progress-bar{
-    width:0%;
-    height:100%;
-    background:linear-gradient(90deg,#7c3aed,#a855f7);
-    transition:width .2s ease;
-}
-
-/* =========================
    TOAST
 ========================= */
 
@@ -1597,7 +1577,7 @@ DASHBOARD
     <div class="app-footer-credit">
 
         Website Created in August 2026 by
-        <b>Swrang Swargiary</b>[span_6](start_span)[span_6](end_span)
+        <b>Swrang Swargiary</b>
 
     </div>
 
@@ -1913,7 +1893,7 @@ PAYMENT DETAILS
             <div
                 style="font-size:13px;font-weight:700;color:#9a3412;line-height:1.6">
 
-                🔒 Payment details change karne ke liye Smart Money Customer Care से contact karein.
+                🔒 Payment details change karne ke liye Smart Money Customer Care se contact karein.
 
             </div>
 
@@ -2367,7 +2347,7 @@ function switchPayoutMode(mode, force = false){
 
 
 /* =========================================================
-   SAVE PAYMENT (FIXED WITH MAYBESINGLE)
+   SAVE PAYMENT
 ========================================================= */
 
 async function updateUserPayoutDetails(){
@@ -2440,16 +2420,40 @@ function showPaymentChangeBlocked(){
 
 
 /* =========================================================
-   CUSTOMER CARE
+   CUSTOMER CARE (FIXED WITH 2 SEPARATE OPTIONS)
 ========================================================= */
 
 function connectCustomerCare(){
     const userName = currentProfile?.full_name || "Smart Money User";
     const userEmail = currentProfile?.email || currentUserEmail || "";
     const userId = userRefCode || "Not Available";
+    
+    const savedType = String(currentProfile?.payout_type || "").trim().toLowerCase();
+    let oldDetails = "";
+    if(savedType === "bank"){
+        oldDetails = `Bank Account No: ${currentProfile?.bank_account_number || "N/A"} | Holder: ${currentProfile?.account_holder_name || "N/A"} | IFSC: ${currentProfile?.ifsc_code || "N/A"}`;
+    }else{
+        oldDetails = `UPI ID: ${currentProfile?.upi_id || "N/A"}`;
+    }
 
-    const subject = encodeURIComponent("Payment Change Request");
-    const body = encodeURIComponent(`Name: ${userName}\nEmail: ${userEmail}\nUser ID: ${userId}`);
+    const subject = encodeURIComponent("Payment Details Change Request");
+    const body = encodeURIComponent(
+`Hello Smart Money Support,
+
+I want to change my locked payment details. Here are my details:
+
+Name: ${userName}
+Email: ${userEmail}
+User ID: ${userId}
+
+--- 1) OLD ACCOUNT / UPI DETAILS ---
+${oldDetails}
+
+--- 2) NEW BANK ACCOUNT / UPI DETAILS ---
+[Please enter your new Bank Account Number, Holder Name, IFSC OR new UPI ID here]
+
+Thank you.`
+    );
 
     window.location.href = `mailto:smartmoneysupport1@gmail.com?subject=${subject}&body=${body}`;
 }
@@ -2578,7 +2582,6 @@ async function uploadProfilePicture(event){
 
         const compressedDataUrl = await compressProfileImage(file);
 
-        // Save locally to bypass bucket issue & sync to DB if column exists
         localStorage.setItem(`profile_pic_${currentUserId}`, compressedDataUrl);
 
         try{
@@ -2643,7 +2646,7 @@ async function loadGlobalTopLogo(){
 
 
 /* =========================================================
-   REFERRAL CODE
+   REFERRAL CODE (FIXED PERMANENT CREATION & STORAGE)
 ========================================================= */
 
 function generateReferralCode(){
@@ -2670,31 +2673,17 @@ async function createUniqueReferralCode(){
     return "SM-smart" + String(Date.now()).slice(-5);
 }
 
-async function fixInvalidReferralCode(profile){
-    const oldCode = String(profile?.referral_code || "").trim();
-    if(isCorrectReferralCode(oldCode)){
-        return oldCode;
+async function getOrCreatePermanentReferralCode(existingCode){
+    if(isCorrectReferralCode(existingCode)){
+        return existingCode;
     }
-
     const newCode = await createUniqueReferralCode();
-    try{
-        const { data } = await supabaseClient
-            .from("profiles")
-            .update({ referral_code: newCode })
-            .eq("user_id", currentUserId)
-            .select()
-            .maybeSingle();
-
-        if(data){
-            currentProfile = { ...currentProfile, ...data };
-        }
-    }catch(e){}
     return newCode;
 }
 
 
 /* =========================================================
-   LOAD DASHBOARD PROFILE (FIXED WITH MAYBESINGLE)
+   LOAD DASHBOARD PROFILE (FIXED WITH PERMANENT PROFILE SYNC)
 ========================================================= */
 
 async function loadDashboardProfile(){
@@ -2734,15 +2723,16 @@ async function loadDashboardProfile(){
             .eq("user_id", currentUserId)
             .maybeSingle();
 
+        const permanentCode = await getOrCreatePermanentReferralCode(profile?.referral_code);
+
         if(!profile){
-            const newReferralCode = await createUniqueReferralCode();
             const newProfile = {
                 user_id: currentUserId,
                 email: currentUserEmail,
                 full_name: authName,
                 balance: 0,
                 package_name: null,
-                referral_code: newReferralCode
+                referral_code: permanentCode
             };
 
             const { data: createdProfile } = await supabaseClient
@@ -2752,20 +2742,23 @@ async function loadDashboardProfile(){
                 .maybeSingle();
 
             profile = createdProfile || newProfile;
+        } else if(!isCorrectReferralCode(profile.referral_code)){
+            // Save permanently if missing or malformed
+            await supabaseClient
+                .from("profiles")
+                .update({ referral_code: permanentCode })
+                .eq("user_id", currentUserId);
+            profile.referral_code = permanentCode;
         }
 
         currentProfile = profile || {};
         if(!currentProfile.full_name) currentProfile.full_name = authName;
+        userRefCode = currentProfile.referral_code;
 
-        const permanentCode = await fixInvalidReferralCode(currentProfile);
-        currentProfile.referral_code = permanentCode;
-        userRefCode = permanentCode;
-
-        // Load local profile pic if saved
         const localPic = localStorage.getItem(`profile_pic_${currentUserId}`);
         if(localPic) currentProfile.profile_pic = localPic;
 
-        renderProfile(currentProfile, authName);
+        renderProfile(currentProfile, currentProfile.full_name);
         return true;
 
     }catch(error){
@@ -3055,10 +3048,7 @@ function filterReferrals(days, btnElement){
 
 
 /* =========================================================
-   KYC SAVE (FIXED WITH MAYBESINGLE)
-=========================================================
-=========================================================
-   KYC SAVE (FIXED WITH MAYBESINGLE)
+   KYC SAVE (FIXED PROFILE NAME & DOB PERSISTENCE)
 ========================================================= */
 
 async function saveKycDetails(){
@@ -3089,8 +3079,7 @@ async function saveKycDetails(){
 }
 
 
-/*
-=========================================================
+/* =========================================================
    SUBMIT WITHDRAWAL
 ========================================================= */
 
@@ -3178,7 +3167,7 @@ async function sendWithdrawalApprovedEmail(withdrawal){
             amount: "₹" + amount,
             withdrawal_amount: "₹" + amount,
             status: "APPROVED",
-            withdrawal_id: String(withdrawal.id)
+            withdrawal_id: string(withdrawal.id)
         });
 
         localStorage.setItem(emailKey, "sent");
