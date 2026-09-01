@@ -62,7 +62,10 @@ button{
     position:relative;
 }
 
-/* NAVBAR */
+/* =========================
+   NAVBAR
+========================= */
+
 .navbar{
     height:68px;
     background:rgba(255,255,255,.96);
@@ -140,7 +143,10 @@ button{
     justify-content:center;
 }
 
-/* SIDEBAR */
+/* =========================
+   PREMIUM SIDEBAR
+========================= */
+
 .sidebar-overlay{
     position:fixed;
     inset:0;
@@ -218,7 +224,12 @@ button{
     gap:13px;
     border:1px solid rgba(255,255,255,.09);
     border-radius:18px;
-    background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.025));
+    background:linear-gradient(
+        135deg,
+        rgba(255,255,255,.08),
+        rgba(255,255,255,.025)
+    );
+    box-shadow:inset 0 1px rgba(255,255,255,.05);
 }
 
 .sidebar-profile-img{
@@ -262,6 +273,17 @@ button{
     box-shadow:0 10px 28px rgba(124,58,237,.27);
     position:relative;
     overflow:hidden;
+}
+
+.sidebar-balance:after{
+    content:"";
+    position:absolute;
+    width:110px;
+    height:110px;
+    right:-35px;
+    top:-50px;
+    border-radius:50%;
+    background:rgba(255,255,255,.12);
 }
 
 .sidebar-balance-label{
@@ -355,18 +377,43 @@ button{
 }
 
 .withdraw-sidebar-btn{
-    background:linear-gradient(135deg,rgba(5,150,105,.22),rgba(16,185,129,.10)) !important;
+    background:linear-gradient(
+        135deg,
+        rgba(5,150,105,.22),
+        rgba(16,185,129,.10)
+    ) !important;
     border-color:rgba(16,185,129,.25) !important;
+}
+
+.withdraw-sidebar-btn .side-icon{
+    background:rgba(16,185,129,.18);
+}
+
+.logout-item{
+    margin-top:8px;
+    padding-top:10px;
+    border-top:1px solid rgba(255,255,255,.07);
 }
 
 .logout-btn{
     color:#fca5a5 !important;
 }
 
-/* DASHBOARD */
+.logout-btn .side-icon{
+    background:rgba(239,68,68,.12);
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+
 .dash-container{
     padding:25px 18px 40px;
 }
+
+/* =========================
+   PROFILE
+========================= */
 
 .profile-card{
     position:relative;
@@ -378,7 +425,13 @@ button{
     align-items:center;
     padding:25px;
     gap:22px;
-    background:linear-gradient(135deg,#ffffff 0%,#ffffff 55%,#f5f3ff 55%,#ede9fe 100%);
+    background:linear-gradient(
+        135deg,
+        #ffffff 0%,
+        #ffffff 55%,
+        #f5f3ff 55%,
+        #ede9fe 100%
+    );
     box-shadow:0 10px 25px rgba(15,23,42,.10);
     border:1px solid #e2e8f0;
 }
@@ -419,6 +472,7 @@ button{
     height:100%;
     border-radius:50%;
     object-fit:cover;
+    background:#fff;
 }
 
 .user-info{
@@ -427,6 +481,12 @@ button{
     display:flex;
     flex-direction:column;
     gap:10px;
+}
+
+.profile-info-row{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
 }
 
 .profile-label{
@@ -441,6 +501,10 @@ button{
     font-size:27px;
     color:#0f172a;
     font-weight:800;
+    letter-spacing:-.5px;
+    line-height:1.2;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
 .profile-value{
@@ -459,6 +523,7 @@ button{
     color:#7c3aed;
     font-size:15px;
     font-weight:800;
+    letter-spacing:.3px;
 }
 
 .copy-btn{
@@ -471,6 +536,10 @@ button{
     font-weight:700;
     cursor:pointer;
 }
+
+/* =========================
+   ADMIN STATUS
+========================= */
 
 .admin-status{
     background:#fff;
@@ -491,6 +560,11 @@ button{
 .admin-status-title h3{
     margin:0;
     font-size:15px;
+}
+
+.status-loading{
+    color:#94a3b8;
+    font-size:12px;
 }
 
 .admin-update{
@@ -515,6 +589,16 @@ button{
     margin-top:3px;
 }
 
+.admin-update img{
+    max-width:100%;
+    border-radius:10px;
+    margin-top:8px;
+}
+
+/* =========================
+   STAT CARDS
+========================= */
+
 .stats-stack{
     display:flex;
     flex-direction:column;
@@ -534,16 +618,29 @@ button{
     overflow:hidden;
 }
 
+.v-card:after{
+    content:"";
+    position:absolute;
+    width:120px;
+    height:120px;
+    right:-40px;
+    top:-50px;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+}
+
 .v-card h2{
     margin:0 0 4px;
     font-size:32px;
     font-weight:800;
+    letter-spacing:-.5px;
 }
 
 .v-card p{
     margin:0 0 18px;
     font-size:14px;
     opacity:.9;
+    font-weight:500;
 }
 
 .card-divider{
@@ -561,13 +658,33 @@ button{
     text-decoration:none;
     font-size:14px;
     font-weight:700;
+    position:relative;
+    z-index:2;
 }
 
-.bg-today{ background:linear-gradient(135deg,#7c3aed,#5b21b6); }
-.bg-7days{ background:linear-gradient(135deg,#6366f1,#4338ca); }
-.bg-30days{ background:linear-gradient(135deg,#db2777,#be185d); }
-.bg-alltime{ background:linear-gradient(135deg,#0284c7,#075985); }
-.bg-passive{ background:linear-gradient(135deg,#d97706,#b45309); }
+.bg-today{
+    background:linear-gradient(135deg,#7c3aed,#5b21b6);
+}
+
+.bg-7days{
+    background:linear-gradient(135deg,#6366f1,#4338ca);
+}
+
+.bg-30days{
+    background:linear-gradient(135deg,#db2777,#be185d);
+}
+
+.bg-alltime{
+    background:linear-gradient(135deg,#0284c7,#075985);
+}
+
+.bg-passive{
+    background:linear-gradient(135deg,#d97706,#b45309);
+}
+
+/* =========================
+   REFERRALS
+========================= */
 
 .section-box{
     background:#fff;
@@ -577,11 +694,16 @@ button{
     margin-bottom:18px;
 }
 
+.section-box h3{
+    margin-top:0;
+}
+
 .referral-tabs{
     display:flex;
     gap:6px;
     margin-bottom:15px;
     overflow-x:auto;
+    padding-bottom:5px;
 }
 
 .ref-tab{
@@ -593,6 +715,7 @@ button{
     font-weight:700;
     border:none;
     cursor:pointer;
+    white-space:nowrap;
 }
 
 .ref-tab.active{
@@ -615,6 +738,7 @@ button{
     margin:0 0 3px;
     font-size:14px;
     color:#0f172a;
+    font-weight:700;
 }
 
 .ref-user-info span{
@@ -626,10 +750,14 @@ button{
 .ref-date{
     font-size:11px;
     color:#64748b;
+    font-weight:600;
     text-align:right;
 }
 
-/* MODALS */
+/* =========================
+   MODALS
+========================= */
+
 .modal-overlay{
     display:none;
     position:fixed;
@@ -650,6 +778,7 @@ button{
     padding:22px;
     max-height:90vh;
     overflow:auto;
+    box-shadow:0 25px 70px rgba(0,0,0,.25);
 }
 
 .input-field{
@@ -663,6 +792,7 @@ button{
 
 .input-field:focus{
     border-color:#8b5cf6;
+    box-shadow:0 0 0 3px rgba(124,58,237,.1);
 }
 
 .input-field:disabled{
@@ -680,6 +810,15 @@ button{
     cursor:pointer;
     background:linear-gradient(135deg,#7c3aed,#6d28d9);
 }
+
+.btn-action:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+/* =========================
+   PAYOUT
+========================= */
 
 .payout-tabs{
     display:flex;
@@ -722,6 +861,16 @@ button{
     color:#475569;
 }
 
+.chip:hover{
+    background:#ede9fe;
+    border-color:#7c3aed;
+    color:#7c3aed;
+}
+
+/* =========================
+   HISTORY
+========================= */
+
 .history-card-item,
 .earning-item{
     background:#f8fafc;
@@ -739,6 +888,13 @@ button{
     align-items:center;
 }
 
+.history-row-1{
+    font-size:13px;
+    color:#64748b;
+    font-weight:600;
+    margin-bottom:6px;
+}
+
 .history-amount{
     font-size:18px;
     font-weight:800;
@@ -753,9 +909,42 @@ button{
     text-transform:uppercase;
 }
 
-.status-approved{ background:#d1fae5; color:#059669; }
-.status-pending{ background:#fef3c7; color:#d97706; }
-.status-rejected{ background:#fee2e2; color:#dc2626; }
+.status-approved{
+    background:#d1fae5;
+    color:#059669;
+}
+
+.status-pending{
+    background:#fef3c7;
+    color:#d97706;
+}
+
+.status-rejected{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+.earning-title{
+    font-size:14px;
+    font-weight:800;
+    color:#0f172a;
+}
+
+.earning-amount{
+    font-size:16px;
+    font-weight:800;
+    color:#059669;
+}
+
+.earning-date{
+    font-size:11px;
+    color:#64748b;
+    margin-top:5px;
+}
+
+/* =========================
+   TOAST
+========================= */
 
 #toastNotification{
     position:fixed;
@@ -768,12 +957,14 @@ button{
     border-radius:30px;
     font-size:13px;
     font-weight:700;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
     transition:transform .3s ease;
     z-index:99999;
     display:flex;
     align-items:center;
     gap:10px;
     max-width:90%;
+    white-space:nowrap;
 }
 
 #toastNotification.show{
@@ -786,6 +977,62 @@ button{
     color:#94a3b8;
     margin-top:20px;
     padding-bottom:10px;
+    font-weight:500;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:600px){
+
+    .navbar{
+        padding:0 12px;
+    }
+
+    .brand-logo span{
+        font-size:17px;
+    }
+
+    .nav-home-btn{
+        display:none;
+    }
+
+    .dash-container{
+        padding:18px 12px 35px;
+    }
+
+    .profile-card{
+        padding:18px;
+        gap:14px;
+        min-height:160px;
+    }
+
+    .profile-img-wrap{
+        width:76px;
+        height:76px;
+        min-width:76px;
+    }
+
+    .user-info h2{
+        font-size:20px;
+    }
+
+    .profile-value{
+        font-size:12px;
+    }
+
+    .v-card{
+        padding:20px;
+    }
+
+    .v-card h2{
+        font-size:28px;
+    }
+
+    .sidebar{
+        width:330px;
+    }
 }
 </style>
 </head>
@@ -794,297 +1041,1090 @@ button{
 
 <div class="app-wrapper">
 
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+<!-- =========================
+SIDEBAR OVERLAY
+========================= -->
+
+<div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+    onclick="closeSidebar()">
+</div>
+
+<!-- =========================
+PREMIUM SIDEBAR
+========================= -->
 
 <aside class="sidebar" id="sidebar">
+
     <div class="sidebar-header">
+
         <a href="dashboard.html" class="brand-logo">
-            <img id="sidebarLogo" src="1000819130.jpg" alt="Smart Money">
+
+            <img
+                id="sidebarLogo"
+                src="1000819130.jpg"
+                alt="Smart Money">
+
             <span>Smart Money</span>
+
         </a>
-        <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+
+        <button
+            class="sidebar-close"
+            onclick="closeSidebar()">
+            ✕
+        </button>
+
     </div>
 
     <div class="sidebar-profile">
-        <img id="sidebarProfileImage" class="sidebar-profile-img" src="1000819130.jpg" alt="Profile">
+
+        <img
+            id="sidebarProfileImage"
+            class="sidebar-profile-img"
+            src="1000819130.jpg"
+            alt="Profile">
+
         <div class="sidebar-profile-info">
-            <div id="sidebarUserName" class="sidebar-profile-name">Loading...</div>
-            <div id="sidebarUserEmail" class="sidebar-profile-email">Loading...</div>
+
+            <div
+                id="sidebarUserName"
+                class="sidebar-profile-name">
+                Loading...
+            </div>
+
+            <div
+                id="sidebarUserEmail"
+                class="sidebar-profile-email">
+                Loading...
+            </div>
+
         </div>
+
     </div>
 
     <div class="sidebar-balance">
-        <div class="sidebar-balance-label">AVAILABLE BALANCE</div>
-        <div id="sidebarWalletBal" class="sidebar-balance-value">₹0.00</div>
-        <button class="sidebar-balance-action" onclick="openWithdrawModal()">💸 Withdraw Balance</button>
+
+        <div class="sidebar-balance-label">
+            AVAILABLE BALANCE
+        </div>
+
+        <div
+            id="sidebarWalletBal"
+            class="sidebar-balance-value">
+            ₹0.00
+        </div>
+
+        <button
+            class="sidebar-balance-action"
+            onclick="openWithdrawModal()">
+            💸 Withdraw Balance
+        </button>
+
     </div>
 
-    <div class="sidebar-section-title">Dashboard</div>
+    <div class="sidebar-section-title">
+        Dashboard
+    </div>
+
     <ul class="sidebar-menu">
-        <li><a href="index.html"><span class="side-icon">🌐</span><span>Home / Landing Page</span><span class="side-arrow">›</span></a></li>
-        <li><button onclick="openPackageModal()"><span class="side-icon">👑</span><span>My Package</span><span class="side-arrow">›</span></button></li>
-        <li><button onclick="openEarningsHistoryModal()"><span class="side-icon">📊</span><span>Earnings & Transactions</span><span class="side-arrow">›</span></button></li>
-        <li><button onclick="openWithdrawModal()" class="withdraw-sidebar-btn"><span class="side-icon">💸</span><span>Withdraw Money</span><span class="side-arrow">›</span></button></li>
-        <li><button onclick="openHistoryModal()"><span class="side-icon">📜</span><span>Withdrawal History</span><span class="side-arrow">›</span></button></li>
+
+        <li>
+            <a href="index.html">
+                <span class="side-icon">🌐</span>
+                <span>Home / Landing Page</span>
+                <span class="side-arrow">›</span>
+            </a>
+        </li>
+
+        <li>
+            <button onclick="openPackageModal()">
+                <span class="side-icon">👑</span>
+                <span>My Package</span>
+                <span class="side-arrow">›</span>
+            </button>
+        </li>
+
+        <li>
+            <button onclick="openEarningsHistoryModal()">
+                <span class="side-icon">📊</span>
+                <span>Earnings & Transactions</span>
+                <span class="side-arrow">›</span>
+            </button>
+        </li>
+
+        <li>
+            <button
+                onclick="openWithdrawModal()"
+                class="withdraw-sidebar-btn">
+
+                <span class="side-icon">💸</span>
+
+                <span>
+                    Withdraw Money
+                </span>
+
+                <span class="side-arrow">›</span>
+
+            </button>
+        </li>
+
+        <li>
+            <button onclick="openHistoryModal()">
+                <span class="side-icon">📜</span>
+                <span>Withdrawal History</span>
+                <span class="side-arrow">›</span>
+            </button>
+        </li>
+
     </ul>
 
-    <div class="sidebar-section-title">Account Settings</div>
+    <div class="sidebar-section-title">
+        Account Settings
+    </div>
+
     <ul class="sidebar-menu">
-        <li><button onclick="document.getElementById('profilePhotoInputSidebar').click()"><span class="side-icon">📷</span><span>Change Profile Picture</span><span class="side-arrow">›</span></button></li>
-        <input type="file" id="profilePhotoInputSidebar" style="display:none" accept="image/jpeg,image/png,image/webp" onchange="uploadProfilePicture(event)">
-        <li id="removePhotoLi" style="display:none"><button onclick="removeProfilePicture()" style="color:#fca5a5"><span class="side-icon">🗑️</span><span>Remove Profile Picture</span><span class="side-arrow">›</span></button></li>
-        <li><button onclick="openUpiModal()"><span class="side-icon">🏦</span><span>Bank / UPI Details</span><span class="side-arrow">›</span></button></li>
-        <li><button onclick="openKycModal()"><span class="side-icon">🆔</span><span>KYC & Date of Birth</span><span class="side-arrow">›</span></button></li>
-        <li class="logout-item"><button id="sideLogoutBtn" class="logout-btn"><span class="side-icon">🚪</span><span>Logout Account</span><span class="side-arrow">›</span></button></li>
+
+        <li>
+            <button onclick="document.getElementById('profilePhotoInputSidebar').click()">
+                <span class="side-icon">📷</span>
+                <span>Change Profile Picture</span>
+                <span class="side-arrow">›</span>
+            </button>
+        </li>
+
+        <input
+            type="file"
+            id="profilePhotoInputSidebar"
+            style="display:none"
+            accept="image/jpeg,image/png,image/webp"
+            onchange="uploadProfilePicture(event)">
+
+        <li id="removePhotoLi" style="display:none">
+
+            <button
+                onclick="removeProfilePicture()"
+                style="color:#fca5a5">
+
+                <span class="side-icon">🗑️</span>
+                <span>Remove Profile Picture</span>
+                <span class="side-arrow">›</span>
+
+            </button>
+
+        </li>
+
+        <li>
+            <button onclick="openUpiModal()">
+                <span class="side-icon">🏦</span>
+                <span>Bank / UPI Details</span>
+                <span class="side-arrow">›</span>
+            </button>
+        </li>
+
+        <li>
+            <button onclick="openKycModal()">
+                <span class="side-icon">🆔</span>
+                <span>KYC & Date of Birth</span>
+                <span class="side-arrow">›</span>
+            </button>
+        </li>
+
+        <li class="logout-item">
+
+            <button
+                id="sideLogoutBtn"
+                class="logout-btn">
+
+                <span class="side-icon">🚪</span>
+                <span>Logout Account</span>
+                <span class="side-arrow">›</span>
+
+            </button>
+
+        </li>
+
     </ul>
+
 </aside>
 
+<!-- =========================
+NAVBAR
+========================= -->
+
 <header class="navbar">
+
     <a href="dashboard.html" class="brand-logo">
-        <img id="navBrandLogoImg" src="1000819130.jpg" alt="Logo">
+
+        <img
+            id="navBrandLogoImg"
+            src="1000819130.jpg"
+            alt="Logo">
+
         <span>Smart Money</span>
+
     </a>
+
     <div class="nav-right">
-        <a href="index.html" class="nav-home-btn">🌐 Home</a>
-        <img src="1000819130.jpg" class="nav-avatar" alt="Avatar" id="navAvatarImg">
-        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+
+        <a
+            href="index.html"
+            class="nav-home-btn">
+            🌐 Home
+        </a>
+
+        <img
+            src="1000819130.jpg"
+            class="nav-avatar"
+            alt="Avatar"
+            id="navAvatarImg">
+
+        <button
+            class="menu-btn"
+            onclick="toggleSidebar()">
+            ☰
+        </button>
+
     </div>
+
 </header>
 
+<!-- =========================
+DASHBOARD
+========================= -->
+
 <div class="dash-container">
+
+    <!-- PROFILE -->
+
     <div class="profile-card">
-        <div class="package-badge" id="activePackageBadge">NO PACKAGE</div>
+
+        <div
+            class="package-badge"
+            id="activePackageBadge">
+            NO PACKAGE
+        </div>
+
         <div class="profile-img-wrap">
-            <img src="1000819130.jpg" alt="Profile" class="profile-img" id="mainProfileImg">
+
+            <img
+                src="1000819130.jpg"
+                alt="Profile"
+                class="profile-img"
+                id="mainProfileImg">
+
         </div>
+
         <div class="user-info">
+
             <div class="profile-info-row">
-                <span class="profile-label">NAME</span>
-                <h2 id="userName">Loading...</h2>
+
+                <span class="profile-label">
+                    NAME
+                </span>
+
+                <h2 id="userName">
+                    Loading...
+                </h2>
+
             </div>
+
             <div class="profile-info-row">
-                <span class="profile-label">USER ID</span>
+
+                <span class="profile-label">
+                    USER ID
+                </span>
+
                 <div class="id-value-wrap">
-                    <div class="profile-value id-value" id="topUserId">Loading...</div>
-                    <button class="copy-btn" onclick="copyUserReferralCode()">Copy</button>
+
+                    <div
+                        class="profile-value id-value"
+                        id="topUserId">
+                        Loading...
+                    </div>
+
+                    <button
+                        class="copy-btn"
+                        onclick="copyUserReferralCode()">
+                        Copy
+                    </button>
+
                 </div>
+
             </div>
+
             <div class="profile-info-row">
-                <span class="profile-label">DATE OF BIRTH</span>
-                <div class="profile-value" id="dobDisplayInfo">Not Set</div>
+
+                <span class="profile-label">
+                    DATE OF BIRTH
+                </span>
+
+                <div
+                    class="profile-value"
+                    id="dobDisplayInfo">
+                    Not Set
+                </div>
+
             </div>
+
         </div>
+
     </div>
 
-    <div id="adminStatusContainer" class="admin-status">
+    <!-- ADMIN STATUS -->
+
+    <div
+        id="adminStatusContainer"
+        class="admin-status">
+
         <div class="admin-status-title">
+
             <span>📢</span>
-            <h3>Admin Updates & Status</h3>
+
+            <h3>
+                Admin Updates & Status
+            </h3>
+
         </div>
+
         <div id="statusList">
-            <span class="status-loading">Loading updates...</span>
+            <span class="status-loading">
+                Loading updates...
+            </span>
         </div>
+
     </div>
+
+    <!-- EARNINGS -->
 
     <div class="stats-stack">
+
         <div class="v-card bg-today">
+
             <div>
                 <h2 id="todayRevenue">₹0.00</h2>
                 <p>Today's Revenue</p>
             </div>
+
             <div>
+
                 <div class="card-divider"></div>
-                <a href="#" class="card-footer-link" onclick="openEarningsModal('Today Earnings',document.getElementById('todayRevenue').innerText);return false;">View details<span>›</span></a>
+
+                <a
+                    href="#"
+                    class="card-footer-link"
+                    onclick="openEarningsModal('Today Earnings',document.getElementById('todayRevenue').innerText);return false;">
+
+                    View details
+                    <span>›</span>
+
+                </a>
+
             </div>
+
         </div>
 
         <div class="v-card bg-7days">
+
             <div>
                 <h2 id="sevenDaysRevenue">₹0.00</h2>
                 <p>7 Days Revenue</p>
             </div>
+
             <div>
+
                 <div class="card-divider"></div>
-                <a href="#" class="card-footer-link" onclick="openEarningsModal('7 Days Earnings',document.getElementById('sevenDaysRevenue').innerText);return false;">View details<span>›</span></a>
+
+                <a
+                    href="#"
+                    class="card-footer-link"
+                    onclick="openEarningsModal('7 Days Earnings',document.getElementById('sevenDaysRevenue').innerText);return false;">
+
+                    View details
+                    <span>›</span>
+
+                </a>
+
             </div>
+
         </div>
 
         <div class="v-card bg-30days">
+
             <div>
                 <h2 id="thirtyDaysRevenue">₹0.00</h2>
                 <p>30 Days Revenue</p>
             </div>
+
             <div>
+
                 <div class="card-divider"></div>
-                <a href="#" class="card-footer-link" onclick="openEarningsModal('30 Days Earnings',document.getElementById('thirtyDaysRevenue').innerText);return false;">View details<span>›</span></a>
+
+                <a
+                    href="#"
+                    class="card-footer-link"
+                    onclick="openEarningsModal('30 Days Earnings',document.getElementById('thirtyDaysRevenue').innerText);return false;">
+
+                    View details
+                    <span>›</span>
+
+                </a>
+
             </div>
+
         </div>
 
         <div class="v-card bg-alltime">
+
             <div>
                 <h2 id="allTimeRevenueText">₹0.00</h2>
                 <p>All Time Revenue</p>
             </div>
+
             <div>
+
                 <div class="card-divider"></div>
-                <a href="#" class="card-footer-link" onclick="openEarningsModal('All Time Earnings',document.getElementById('allTimeRevenueText').innerText);return false;">View details<span>›</span></a>
+
+                <a
+                    href="#"
+                    class="card-footer-link"
+                    onclick="openEarningsModal('All Time Earnings',document.getElementById('allTimeRevenueText').innerText);return false;">
+
+                    View details
+                    <span>›</span>
+
+                </a>
+
             </div>
+
         </div>
 
         <div class="v-card bg-passive">
+
             <div>
                 <h2 id="passiveIncome">₹0.00</h2>
                 <p>Passive Income</p>
             </div>
+
             <div>
+
                 <div class="card-divider"></div>
-                <a href="#" class="card-footer-link" onclick="openEarningsModal('Passive Income',document.getElementById('passiveIncome').innerText);return false;">View details<span>›</span></a>
+
+                <a
+                    href="#"
+                    class="card-footer-link"
+                    onclick="openEarningsModal('Passive Income',document.getElementById('passiveIncome').innerText);return false;">
+
+                    View details
+                    <span>›</span>
+
+                </a>
+
             </div>
+
         </div>
+
     </div>
+
+    <!-- REFERRALS -->
 
     <div class="section-box">
-        <h3>👥 My Referrals & Joins</h3>
+
+        <h3>
+            👥 My Referrals & Joins
+        </h3>
+
         <div class="referral-tabs">
-            <button class="ref-tab active" onclick="filterReferrals(1,this)">1 Day (Today)</button>
-            <button class="ref-tab" onclick="filterReferrals(7,this)">7 Days</button>
-            <button class="ref-tab" onclick="filterReferrals(15,this)">15 Days</button>
-            <button class="ref-tab" onclick="filterReferrals(30,this)">30 Days</button>
+
+            <button
+                class="ref-tab active"
+                onclick="filterReferrals(1,this)">
+                1 Day (Today)
+            </button>
+
+            <button
+                class="ref-tab"
+                onclick="filterReferrals(7,this)">
+                7 Days
+            </button>
+
+            <button
+                class="ref-tab"
+                onclick="filterReferrals(15,this)">
+                15 Days
+            </button>
+
+            <button
+                class="ref-tab"
+                onclick="filterReferrals(30,this)">
+                30 Days
+            </button>
+
         </div>
+
         <div id="referralsListContainer">
-            <div style="text-align:center;color:#64748b;font-size:13px;padding:10px">Loading referrals...</div>
-        </div>
-    </div>
 
-    <div class="app-footer-credit">Website Created in August 2026 by <b>Swrang Swargiary</b></div>
-</div>
-
-</div>
-
-<div id="toastNotification">⚡ <span id="toastMessage">Success Message</span></div>
-
-<div id="earningsModal" class="modal-overlay">
-    <div class="modal-box">
-        <h3 id="earningsModalTitle" style="color:#7c3aed;margin-top:0">📊 Earning Details</h3>
-        <div style="background:#f8fafc;padding:16px;border-radius:14px;border:1px solid #e2e8f0;text-align:center;margin-bottom:15px">
-            <span style="font-size:12px;color:#64748b;font-weight:600;display:block;margin-bottom:4px">Total Collected</span>
-            <h2 id="earningsModalAmount" style="font-size:32px;color:#0f172a;margin:0;font-weight:800">₹0</h2>
-        </div>
-        <button onclick="closeModal('earningsModal')" class="btn-action">Close</button>
-    </div>
-</div>
-
-<div id="packageModal" class="modal-overlay">
-    <div class="modal-box">
-        <h3 style="color:#7c3aed;margin-top:0">👑 My Package</h3>
-        <div style="background:#f8fafc;padding:18px;border-radius:14px;border:1px solid #e2e8f0">
-            <div style="font-size:12px;color:#64748b;margin-bottom:5px">CURRENT PACKAGE</div>
-            <h2 id="modalPkgName" style="margin:0;color:#0f172a;font-size:24px">No Package Active</h2>
-            <div style="margin-top:18px;border-top:1px solid #e2e8f0;padding-top:15px">
-                <p style="font-size:13px;color:#475569"><b>Package Status:</b> <span id="modalPkgStatus">No Active Package</span></p>
-                <p style="font-size:13px;color:#475569"><b>Commission:</b> <span id="modalPkgCommission">Not Available</span></p>
-                <p style="font-size:13px;color:#475569"><b>Withdrawal Limit:</b> <span id="modalPkgWithdraw">₹200 Minimum</span></p>
+            <div
+                style="text-align:center;color:#64748b;font-size:13px;padding:10px">
+                Loading referrals...
             </div>
+
         </div>
-        <button onclick="closeModal('packageModal')" class="btn-action" style="margin-top:15px">Close</button>
+
     </div>
+
+    <div class="app-footer-credit">
+
+        Website Created in August 2026 by
+        <b>Swrang Swargiary</b>
+
+    </div>
+
 </div>
 
-<div id="earningsHistoryModal" class="modal-overlay">
-    <div class="modal-box">
-        <h3 style="color:#7c3aed;margin-top:0">📊 My Earnings & Transactions</h3>
-        <div id="earningsHistoryList"><div style="text-align:center;color:#64748b;font-size:13px;padding:20px">Loading earnings...</div></div>
-        <button onclick="closeModal('earningsHistoryModal')" class="btn-action" style="margin-top:15px">Close</button>
-    </div>
 </div>
 
-<div id="historyModal" class="modal-overlay">
-    <div class="modal-box">
-        <h3 style="color:#0f172a;margin-top:0">📜 Withdrawal History</h3>
-        <div id="withdrawalHistoryList"><div style="text-align:center;color:#64748b;font-size:13px;padding:10px">Loading history...</div></div>
-        <button onclick="closeModal('historyModal')" class="btn-action" style="margin-top:15px">Close</button>
-    </div>
+<!-- =========================
+TOAST
+========================= -->
+
+<div id="toastNotification">
+
+    ⚡
+
+    <span id="toastMessage">
+        Success Message
+    </span>
+
 </div>
 
-<div id="profileSettingsModal" class="modal-overlay">
+<!-- =========================
+EARNINGS MODAL
+========================= -->
+
+<div
+    id="earningsModal"
+    class="modal-overlay">
+
     <div class="modal-box">
-        <h3 style="margin-top:0;color:#7c3aed">🏦 Payment Details</h3>
-        <p id="payoutInfoText" style="font-size:13px;color:#64748b;line-height:1.6">Choose one payment method. Once saved, it will be permanently secured.</p>
-        
+
+        <h3
+            id="earningsModalTitle"
+            style="color:#7c3aed;margin-top:0">
+            📊 Earning Details
+        </h3>
+
+        <p
+            style="font-size:13px;color:#475569;margin-bottom:15px">
+
+            Breakdown of your selected revenue duration.
+
+        </p>
+
+        <div
+            style="background:#f8fafc;padding:16px;border-radius:14px;border:1px solid #e2e8f0;text-align:center;margin-bottom:15px">
+
+            <span
+                style="font-size:12px;color:#64748b;font-weight:600;display:block;margin-bottom:4px">
+                Total Collected
+            </span>
+
+            <h2
+                id="earningsModalAmount"
+                style="font-size:32px;color:#0f172a;margin:0;font-weight:800">
+                ₹0
+            </h2>
+
+        </div>
+
+        <button
+            onclick="closeModal('earningsModal')"
+            class="btn-action">
+            Close
+        </button>
+
+    </div>
+
+</div>
+
+<!-- =========================
+PACKAGE MODAL
+========================= -->
+
+<div
+    id="packageModal"
+    class="modal-overlay">
+
+    <div class="modal-box">
+
+        <h3 style="color:#7c3aed;margin-top:0">
+            👑 My Package
+        </h3>
+
+        <div
+            style="background:#f8fafc;padding:18px;border-radius:14px;border:1px solid #e2e8f0">
+
+            <div
+                style="font-size:12px;color:#64748b;margin-bottom:5px">
+                CURRENT PACKAGE
+            </div>
+
+            <h2
+                id="modalPkgName"
+                style="margin:0;color:#0f172a;font-size:24px">
+                No Package Active
+            </h2>
+
+            <div
+                style="margin-top:18px;border-top:1px solid #e2e8f0;padding-top:15px">
+
+                <p style="font-size:13px;color:#475569">
+                    <b>Package Status:</b>
+                    <span id="modalPkgStatus">
+                        No Active Package
+                    </span>
+                </p>
+
+                <p style="font-size:13px;color:#475569">
+                    <b>Commission:</b>
+                    <span id="modalPkgCommission">
+                        Not Available
+                    </span>
+                </p>
+
+                <p style="font-size:13px;color:#475569">
+                    <b>Withdrawal Limit:</b>
+                    <span id="modalPkgWithdraw">
+                        ₹200 Minimum
+                    </span>
+                </p>
+
+            </div>
+
+        </div>
+
+        <button
+            onclick="closeModal('packageModal')"
+            class="btn-action"
+            style="margin-top:15px">
+            Close
+        </button>
+
+    </div>
+
+</div>
+
+<!-- =========================
+EARNINGS HISTORY
+========================= -->
+
+<div
+    id="earningsHistoryModal"
+    class="modal-overlay">
+
+    <div class="modal-box">
+
+        <h3 style="color:#7c3aed;margin-top:0">
+            📊 My Earnings & Transactions
+        </h3>
+
+        <p
+            style="font-size:13px;color:#64748b">
+            Your commission and earnings history.
+        </p>
+
+        <div id="earningsHistoryList">
+
+            <div
+                style="text-align:center;color:#64748b;font-size:13px;padding:20px">
+                Loading earnings...
+            </div>
+
+        </div>
+
+        <button
+            onclick="closeModal('earningsHistoryModal')"
+            class="btn-action"
+            style="margin-top:15px">
+            Close
+        </button>
+
+    </div>
+
+</div>
+
+<!-- =========================
+WITHDRAW HISTORY
+========================= -->
+
+<div
+    id="historyModal"
+    class="modal-overlay">
+
+    <div class="modal-box">
+
+        <h3 style="color:#0f172a;margin-top:0">
+            📜 Withdrawal History
+        </h3>
+
+        <div id="withdrawalHistoryList">
+
+            <div
+                style="text-align:center;color:#64748b;font-size:13px;padding:10px">
+                Loading history...
+            </div>
+
+        </div>
+
+        <button
+            onclick="closeModal('historyModal')"
+            class="btn-action"
+            style="margin-top:15px">
+            Close
+        </button>
+
+    </div>
+
+</div>
+
+<!-- =========================
+PAYMENT DETAILS
+========================= -->
+
+<div
+    id="profileSettingsModal"
+    class="modal-overlay">
+
+    <div class="modal-box">
+
+        <h3 style="margin-top:0;color:#7c3aed">
+            🏦 Payment Details
+        </h3>
+
+        <p
+            id="payoutInfoText"
+            style="font-size:13px;color:#64748b;line-height:1.6">
+
+            Choose one payment method.
+
+        </p>
+
         <div class="payout-tabs">
-            <div class="payout-tab active" id="tabUpi" onclick="switchPayoutMode('upi')">UPI ID</div>
-            <div class="payout-tab" id="tabBank" onclick="switchPayoutMode('bank')">Bank Account</div>
+
+            <div
+                class="payout-tab active"
+                id="tabUpi"
+                onclick="switchPayoutMode('upi')">
+                UPI ID
+            </div>
+
+            <div
+                class="payout-tab"
+                id="tabBank"
+                onclick="switchPayoutMode('bank')">
+                Bank Account
+            </div>
+
         </div>
 
         <div id="upiSection">
-            <label style="font-size:13px;font-weight:700;color:#334155">UPI ID</label>
-            <input type="text" id="editUpiId" class="input-field" placeholder="yourname@upi" autocomplete="off">
+
+            <label
+                style="font-size:13px;font-weight:700;color:#334155">
+                UPI ID
+            </label>
+
+            <input
+                type="text"
+                id="editUpiId"
+                class="input-field"
+                placeholder="yourname@upi"
+                autocomplete="off">
+
         </div>
 
-        <div id="bankSection" style="display:none">
-            <label style="font-size:13px;font-weight:700;color:#334155">Account Holder Name</label>
-            <input type="text" id="editAccName" class="input-field" placeholder="Enter account holder name" autocomplete="off">
-            <label style="font-size:13px;font-weight:700;color:#334155">Bank Account Number</label>
-            <input type="text" id="editAccNo" class="input-field" placeholder="Enter bank account number" autocomplete="off">
-            <label style="font-size:13px;font-weight:700;color:#334155">IFSC Code</label>
-            <input type="text" id="editIfsc" class="input-field" placeholder="Example: SBIN0001234" autocomplete="off">
+        <div
+            id="bankSection"
+            style="display:none">
+
+            <label
+                style="font-size:13px;font-weight:700;color:#334155">
+                Account Holder Name
+            </label>
+
+            <input
+                type="text"
+                id="editAccName"
+                class="input-field"
+                placeholder="Enter account holder name"
+                autocomplete="off">
+
+            <label
+                style="font-size:13px;font-weight:700;color:#334155">
+                Bank Account Number
+            </label>
+
+            <input
+                type="text"
+                id="editAccNo"
+                class="input-field"
+                placeholder="Enter bank account number"
+                autocomplete="off">
+
+            <label
+                style="font-size:13px;font-weight:700;color:#334155">
+                IFSC Code
+            </label>
+
+            <input
+                type="text"
+                id="editIfsc"
+                class="input-field"
+                placeholder="Example: SBIN0001234"
+                autocomplete="off">
+
         </div>
 
-        <div id="paymentLockedMessage" style="display:none;margin-top:15px;padding:15px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa">
-            <div style="font-size:13px;font-weight:700;color:#9a3412;line-height:1.6">🔒 Payment details are securely locked. To change, contact Customer Care.</div>
+        <div
+            id="paymentLockedMessage"
+            style="display:none;margin-top:15px;padding:15px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa">
+
+            <div
+                style="font-size:13px;font-weight:700;color:#9a3412;line-height:1.6">
+
+                🔒 Payment details change karne ke liye Smart Money Customer Care se contact karein.
+
+            </div>
+
         </div>
 
-        <button onclick="updateUserPayoutDetails()" class="btn-action" id="saveProfileBtn">Save Payment Details</button>
-        <button id="customerCareBtn" onclick="connectCustomerCare()" style="display:none;width:100%;margin-top:10px;padding:13px;border:none;border-radius:10px;background:#0f172a;color:#fff;font-weight:700;cursor:pointer">📧 CONNECT CUSTOMER CARE</button>
-        <button onclick="closeModal('profileSettingsModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;font-weight:600">Cancel</button>
+        <button
+            onclick="updateUserPayoutDetails()"
+            class="btn-action"
+            id="saveProfileBtn">
+
+            Save Payment Details
+
+        </button>
+
+        <button
+            id="customerCareBtn"
+            onclick="connectCustomerCare()"
+            style="display:none;width:100%;margin-top:10px;padding:13px;border:none;border-radius:10px;background:#0f172a;color:#fff;font-weight:700;cursor:pointer">
+
+            📧 CONNECT CUSTOMER CARE
+
+        </button>
+
+        <button
+            onclick="closeModal('profileSettingsModal')"
+            style="width:100%;border:none;background:none;padding:12px;color:#64748b;cursor:pointer;font-weight:600">
+
+            Cancel
+
+        </button>
+
     </div>
+
 </div>
 
-<div id="kycModal" class="modal-overlay">
+<!-- =========================
+KYC
+========================= -->
+
+<div
+    id="kycModal"
+    class="modal-overlay">
+
     <div class="modal-box">
+
         <h3>🆔 KYC & Date of Birth</h3>
+
         <label>Full Name</label>
-        <input type="text" id="kycFullName" class="input-field">
+
+        <input
+            type="text"
+            id="kycFullName"
+            class="input-field">
+
         <label>Date of Birth</label>
-        <input type="date" id="kycDob" class="input-field">
-        <button onclick="saveKycDetails()" class="btn-action">Save KYC</button>
-        <button onclick="closeModal('kycModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b">Cancel</button>
+
+        <input
+            type="date"
+            id="kycDob"
+            class="input-field">
+
+        <button
+            onclick="saveKycDetails()"
+            class="btn-action">
+            Save KYC
+        </button>
+
+        <button
+            onclick="closeModal('kycModal')"
+            style="width:100%;border:none;background:none;padding:12px;color:#64748b">
+
+            Cancel
+
+        </button>
+
     </div>
+
 </div>
 
-<div id="withdrawModal" class="modal-overlay">
+<!-- =========================
+WITHDRAW
+========================= -->
+
+<div
+    id="withdrawModal"
+    class="modal-overlay">
+
     <div class="modal-box">
+
         <h3>💸 Request Withdrawal</h3>
-        <p id="withdrawModalBalanceText" style="font-size:13px;color:#475569;margin-bottom:12px">Available Balance: ₹0</p>
-        <div id="withdrawPaymentPreview" style="background:#f8fafc;padding:14px;border-radius:14px;border:1px solid #e2e8f0;margin-bottom:14px">
-            <div style="font-size:11px;font-weight:800;color:#64748b;margin-bottom:4px">PAYING TO:</div>
-            <div id="withdrawPaymentDetailsContent" style="font-size:13px;font-weight:700;color:#0f172a">Loading payment info...</div>
+
+        <p
+            id="withdrawModalBalanceText"
+            style="font-size:13px;color:#475569;margin-bottom:12px">
+
+            Available Balance: ₹0
+
+        </p>
+
+        <div
+            id="withdrawPaymentPreview"
+            style="background:#f8fafc;padding:14px;border-radius:14px;border:1px solid #e2e8f0;margin-bottom:14px">
+
+            <div
+                style="font-size:11px;font-weight:800;color:#64748b;letter-spacing:.5px;margin-bottom:4px">
+
+                PAYING TO:
+
+            </div>
+
+            <div
+                id="withdrawPaymentDetailsContent"
+                style="font-size:13px;font-weight:700;color:#0f172a">
+
+                Loading payment info...
+
+            </div>
+
         </div>
+
         <div class="amount-chips">
-            <div class="chip" onclick="setWithdrawAmount(100)">₹100</div>
-            <div class="chip" onclick="setWithdrawAmount(500)">₹500</div>
-            <div class="chip" onclick="setWithdrawAmount(1000)">₹1000</div>
-            <div class="chip" onclick="setWithdrawAmount(userCurrentBalance)">MAX</div>
+
+            <div
+                class="chip"
+                onclick="setWithdrawAmount(100)">
+                ₹100
+            </div>
+
+            <div
+                class="chip"
+                onclick="setWithdrawAmount(500)">
+                ₹500
+            </div>
+
+            <div
+                class="chip"
+                onclick="setWithdrawAmount(1000)">
+                ₹1000
+            </div>
+
+            <div
+                class="chip"
+                onclick="setWithdrawAmount(userCurrentBalance)">
+                MAX
+            </div>
+
         </div>
+
         <label>Enter Amount</label>
-        <input type="number" id="withdrawAmount" class="input-field" placeholder="Amount">
-        <button onclick="submitWithdrawal()" class="btn-action" id="submitWithdrawBtn">Submit Request</button>
-        <button onclick="closeModal('withdrawModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b">Cancel</button>
+
+        <input
+            type="number"
+            id="withdrawAmount"
+            class="input-field"
+            placeholder="Amount">
+
+        <button
+            onclick="submitWithdrawal()"
+            class="btn-action"
+            id="submitWithdrawBtn">
+
+            Submit Request
+
+        </button>
+
+        <button
+            onclick="closeModal('withdrawModal')"
+            style="width:100%;border:none;background:none;padding:12px;color:#64748b">
+
+            Cancel
+
+        </button>
+
     </div>
+
 </div>
 
 <script>
-const EMAILJS_PUBLIC_KEY = "FxcimUvl0-ZxAauRx";
-const EMAILJS_SERVICE_ID = "service_qsy07qr";
-const EMAILJS_WITHDRAW_APPROVED_TEMPLATE = "template_mf8enck";
-const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-});
+/* =========================================================
+   CONFIG
+========================================================= */
 
-if(window.emailjs){ try{ emailjs.init(EMAILJS_PUBLIC_KEY); }catch(e){} }
+const EMAILJS_PUBLIC_KEY =
+"FxcimUvl0-ZxAauRx";
+
+const EMAILJS_SERVICE_ID =
+"service_qsy07qr";
+
+const EMAILJS_WITHDRAW_APPROVED_TEMPLATE =
+"template_mf8enck";
+
+const SUPABASE_URL =
+"https://rvprrulkjegvicbnjuft.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+
+
+/* =========================================================
+   SUPABASE CLIENT CONFIGURATION
+========================================================= */
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY,
+    {
+        auth:{
+            persistSession:true,
+            autoRefreshToken:true,
+            detectSessionInUrl:true
+        }
+    }
+);
+
+
+/* =========================================================
+   EMAILJS
+========================================================= */
+
+if(window.emailjs){
+    try{
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+    }catch(e){}
+}
+
+
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
 
 let currentUserId = null;
 let currentProfile = {};
@@ -1096,13 +2136,10 @@ let allReferralsData = [];
 let allEarningsData = [];
 let realtimeChannel = null;
 
-// Package Commission Matrix setup based on your details:
-const PACKAGE_COMMISSIONS = {
-    'starter': 0.30,       // 30% Commission
-    'intermediate': 0.50,  // 50% Commission
-    'expert': 0.70,        // 70% Commission
-    'brahmastra': 0.80     // 80% Commission (or custom tier)
-};
+
+/* =========================================================
+   TOAST
+========================================================= */
 
 function showToast(message){
     const toast = document.getElementById("toastNotification");
@@ -1111,8 +2148,15 @@ function showToast(message){
     text.innerText = message;
     toast.classList.add("show");
     clearTimeout(window.toastTimer);
-    window.toastTimer = setTimeout(()=>{ toast.classList.remove("show"); }, 3000);
+    window.toastTimer = setTimeout(()=>{
+        toast.classList.remove("show");
+    }, 3000);
 }
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
 
 function escapeHtml(text){
     const div = document.createElement("div");
@@ -1120,10 +2164,44 @@ function escapeHtml(text){
     return div.innerHTML;
 }
 
-function toggleSidebar(){ document.getElementById("sidebar")?.classList.toggle("active"); document.getElementById("sidebarOverlay")?.classList.toggle("active"); }
-function closeSidebar(){ document.getElementById("sidebar")?.classList.remove("active"); document.getElementById("sidebarOverlay")?.classList.remove("active"); }
-function openModal(id){ document.getElementById(id).style.display = "flex"; }
-function closeModal(id){ document.getElementById(id).style.display = "none"; }
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+function toggleSidebar(){
+    document.getElementById("sidebar")?.classList.toggle("active");
+    document.getElementById("sidebarOverlay")?.classList.toggle("active");
+}
+
+function closeSidebar(){
+    document.getElementById("sidebar")?.classList.remove("active");
+    document.getElementById("sidebarOverlay")?.classList.remove("active");
+}
+
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+function openModal(id){
+    const modal = document.getElementById(id);
+    if(modal){
+        modal.style.display = "flex";
+    }
+}
+
+function closeModal(id){
+    const modal = document.getElementById(id);
+    if(modal){
+        modal.style.display = "none";
+    }
+}
+
+
+/* =========================================================
+   EARNING MODAL
+========================================================= */
 
 function openEarningsModal(title, amount){
     document.getElementById("earningsModalTitle").innerText = "📊 " + title;
@@ -1131,9 +2209,43 @@ function openEarningsModal(title, amount){
     openModal("earningsModal");
 }
 
-function openPackageModal(){ closeSidebar(); updatePackageModal(); openModal("packageModal"); }
-function openEarningsHistoryModal(){ closeSidebar(); openModal("earningsHistoryModal"); loadEarningsHistory(); }
-function openHistoryModal(){ closeSidebar(); openModal("historyModal"); loadWithdrawalHistory(); }
+
+/* =========================================================
+   PACKAGE
+========================================================= */
+
+function openPackageModal(){
+    closeSidebar();
+    updatePackageModal();
+    openModal("packageModal");
+}
+
+
+/* =========================================================
+   EARNINGS HISTORY
+========================================================= */
+
+function openEarningsHistoryModal(){
+    closeSidebar();
+    openModal("earningsHistoryModal");
+    loadEarningsHistory();
+}
+
+
+/* =========================================================
+   WITHDRAWAL HISTORY
+========================================================= */
+
+function openHistoryModal(){
+    closeSidebar();
+    openModal("historyModal");
+    loadWithdrawalHistory();
+}
+
+
+/* =========================================================
+   KYC
+========================================================= */
 
 function openKycModal(){
     closeSidebar();
@@ -1142,12 +2254,22 @@ function openKycModal(){
     openModal("kycModal");
 }
 
+
+/* =========================================================
+   PAYMENT DETAILS
+========================================================= */
+
 function hasSavedPaymentDetails(){
     const type = String(currentProfile?.payout_type || "").trim().toLowerCase();
-    if(type === "upi") return Boolean(String(currentProfile?.upi_id || "").trim());
-    if(type === "bank") return Boolean(String(currentProfile?.bank_account_number || "").trim());
+    if(type === "upi"){
+        return Boolean(String(currentProfile?.upi_id || "").trim());
+    }
+    if(type === "bank"){
+        return Boolean(String(currentProfile?.bank_account_number || "").trim());
+    }
     return false;
 }
+
 
 function openUpiModal(){
     closeSidebar();
@@ -1170,24 +2292,52 @@ function openUpiModal(){
 
     if(locked){
         switchPayoutMode(savedType === "bank" ? "bank" : "upi", true);
-        upiInput.disabled = accNameInput.disabled = accNoInput.disabled = ifscInput.disabled = true;
-        document.getElementById("tabUpi").style.pointerEvents = document.getElementById("tabBank").style.pointerEvents = "none";
+        upiInput.disabled = true;
+        accNameInput.disabled = true;
+        accNoInput.disabled = true;
+        ifscInput.disabled = true;
+
+        document.getElementById("tabUpi").style.pointerEvents = "none";
+        document.getElementById("tabBank").style.pointerEvents = "none";
+        document.getElementById("tabUpi").style.opacity = savedType === "upi" ? "1" : ".4";
+        document.getElementById("tabBank").style.opacity = savedType === "bank" ? "1" : ".4";
+
         saveBtn.style.display = "none";
         careBtn.style.display = "block";
         lockedMessage.style.display = "block";
+
+        infoText.innerHTML = `<b style="color:#dc2626">🔒 Payment Details Locked</b><br>Your ${savedType === "bank" ? "Bank Account" : "UPI ID"} has been permanently saved.`;
     }else{
-        upiInput.disabled = accNameInput.disabled = accNoInput.disabled = ifscInput.disabled = false;
-        document.getElementById("tabUpi").style.pointerEvents = document.getElementById("tabBank").style.pointerEvents = "auto";
+        upiInput.disabled = false;
+        accNameInput.disabled = false;
+        accNoInput.disabled = false;
+        ifscInput.disabled = false;
+
+        document.getElementById("tabUpi").style.pointerEvents = "auto";
+        document.getElementById("tabBank").style.pointerEvents = "auto";
+        document.getElementById("tabUpi").style.opacity = "1";
+        document.getElementById("tabBank").style.opacity = "1";
+
         saveBtn.style.display = "block";
         careBtn.style.display = "none";
         lockedMessage.style.display = "none";
+
+        infoText.innerHTML = `Choose <b>UPI ID</b> or <b>Bank Account</b>. After saving, your payment method will be permanently locked.`;
         switchPayoutMode(savedType === "bank" ? "bank" : "upi");
     }
+
     openModal("profileSettingsModal");
 }
 
+
 function switchPayoutMode(mode, force = false){
-    if(hasSavedPaymentDetails() && !force) return;
+    if(hasSavedPaymentDetails() && !force){
+        showToast("Payment method is permanently locked.");
+        return;
+    }
+    if(mode !== "upi" && mode !== "bank"){
+        mode = "upi";
+    }
     payoutMode = mode;
     document.getElementById("upiSection").style.display = mode === "upi" ? "block" : "none";
     document.getElementById("bankSection").style.display = mode === "bank" ? "block" : "none";
@@ -1195,21 +2345,41 @@ function switchPayoutMode(mode, force = false){
     document.getElementById("tabBank").className = mode === "bank" ? "payout-tab active" : "payout-tab";
 }
 
+
+/* =========================================================
+   SAVE PAYMENT
+========================================================= */
+
 async function updateUserPayoutDetails(){
-    if(hasSavedPaymentDetails()) return;
+    if(hasSavedPaymentDetails()){
+        showPaymentChangeBlocked();
+        return;
+    }
+
     const saveBtn = document.getElementById("saveProfileBtn");
     let updateData = { payout_type: payoutMode };
 
     if(payoutMode === "upi"){
         const upiId = document.getElementById("editUpiId").value.trim();
-        if(!upiId || !upiId.includes("@")){ alert("Enter a valid UPI ID."); return; }
+        if(!upiId || !upiId.includes("@")){
+            alert("Please enter a valid UPI ID.");
+            return;
+        }
         updateData.upi_id = upiId;
-        updateData.account_holder_name = updateData.bank_account_number = updateData.ifsc_code = null;
-    } else {
+        updateData.account_holder_name = null;
+        updateData.bank_account_number = null;
+        updateData.ifsc_code = null;
+    }
+
+    if(payoutMode === "bank"){
         const accountHolder = document.getElementById("editAccName").value.trim();
         const accountNumber = document.getElementById("editAccNo").value.trim();
         const ifscCode = document.getElementById("editIfsc").value.trim().toUpperCase();
-        if(!accountHolder || !accountNumber || !ifscCode){ alert("Fill all bank details."); return; }
+
+        if(!accountHolder || !accountNumber || !ifscCode){
+            alert("Please fill all bank details.");
+            return;
+        }
         updateData.account_holder_name = accountHolder;
         updateData.bank_account_number = accountNumber;
         updateData.ifsc_code = ifscCode;
@@ -1220,10 +2390,17 @@ async function updateUserPayoutDetails(){
     saveBtn.innerText = "Saving...";
 
     try{
-        const { data, error } = await supabaseClient.from("profiles").update(updateData).eq("user_id", currentUserId).select().maybeSingle();
+        const { data, error } = await supabaseClient
+            .from("profiles")
+            .update(updateData)
+            .eq("user_id", currentUserId)
+            .select()
+            .maybeSingle();
+
         if(error) throw error;
+
         currentProfile = { ...currentProfile, ...(data || updateData) };
-        showToast("Payment details saved permanently!");
+        showToast("Payment details saved successfully!");
         closeModal("profileSettingsModal");
     }catch(error){
         alert("Error: " + error.message);
@@ -1233,33 +2410,94 @@ async function updateUserPayoutDetails(){
     }
 }
 
+
+function showPaymentChangeBlocked(){
+    document.getElementById("paymentLockedMessage").style.display = "block";
+    document.getElementById("customerCareBtn").style.display = "block";
+    document.getElementById("saveProfileBtn").style.display = "none";
+    showToast("Payment details cannot be changed.");
+}
+
+
+/* =========================================================
+   CUSTOMER CARE (FIXED WITH 2 SEPARATE OPTIONS)
+========================================================= */
+
 function connectCustomerCare(){
     const userName = currentProfile?.full_name || "Smart Money User";
     const userEmail = currentProfile?.email || currentUserEmail || "";
     const userId = userRefCode || "Not Available";
-    window.location.href = `mailto:smartmoneysupport1@gmail.com?subject=Change Payment Details&body=Name: ${userName}%0DEmail: ${userEmail}%0DUser ID: ${userId}%0ARequest to reset payment details.`;
+    
+    const savedType = String(currentProfile?.payout_type || "").trim().toLowerCase();
+    let oldDetails = "";
+    if(savedType === "bank"){
+        oldDetails = `Bank Account No: ${currentProfile?.bank_account_number || "N/A"} | Holder: ${currentProfile?.account_holder_name || "N/A"} | IFSC: ${currentProfile?.ifsc_code || "N/A"}`;
+    }else{
+        oldDetails = `UPI ID: ${currentProfile?.upi_id || "N/A"}`;
+    }
+
+    const subject = encodeURIComponent("Payment Details Change Request");
+    const body = encodeURIComponent(
+`Hello Smart Money Support,
+
+I want to change my locked payment details. Here are my details:
+
+Name: ${userName}
+Email: ${userEmail}
+User ID: ${userId}
+
+--- 1) OLD ACCOUNT / UPI DETAILS ---
+${oldDetails}
+
+--- 2) NEW BANK ACCOUNT / UPI DETAILS ---
+[Please enter your new Bank Account Number, Holder Name, IFSC OR new UPI ID here]
+
+Thank you.`
+    );
+
+    window.location.href = `mailto:smartmoneysupport1@gmail.com?subject=${subject}&body=${body}`;
 }
+
+
+/* =========================================================
+   WITHDRAW
+========================================================= */
 
 function openWithdrawModal(){
     closeSidebar();
     if(!hasSavedPaymentDetails()){
-        alert("⚠️ Please add your UPI ID or Bank Account details first!");
+        alert("⚠️ Please add your UPI ID or Bank Account details first before requesting a withdrawal!");
         openUpiModal();
         return;
     }
+
     const preview = document.getElementById("withdrawPaymentDetailsContent");
     const savedType = String(currentProfile?.payout_type || "").trim().toLowerCase();
+
     if(savedType === "bank"){
-        preview.innerHTML = `🏦 <b>Bank:</b> ${escapeHtml(currentProfile?.bank_account_number)}<br><span style="font-size:11px;color:#64748b">Holder: ${escapeHtml(currentProfile?.account_holder_name)} | IFSC: ${escapeHtml(currentProfile?.ifsc_code)}</span>`;
+        const accName = currentProfile?.account_holder_name || "N/A";
+        const accNo = currentProfile?.bank_account_number || "N/A";
+        const ifsc = currentProfile?.ifsc_code || "N/A";
+        preview.innerHTML = `🏦 <b>Bank Account:</b> ${escapeHtml(accNo)}<br><span style="font-size:11px;color:#64748b">Holder: ${escapeHtml(accName)} | IFSC: ${escapeHtml(ifsc)}</span>`;
     }else{
-        preview.innerHTML = `⚡ <b>UPI ID:</b> <span style="color:#7c3aed">${escapeHtml(currentProfile?.upi_id)}</span>`;
+        const upi = currentProfile?.upi_id || "N/A";
+        preview.innerHTML = `⚡ <b>UPI ID:</b> <span style="color:#7c3aed">${escapeHtml(upi)}</span>`;
     }
+
     document.getElementById("withdrawAmount").value = "";
     document.getElementById("withdrawModalBalanceText").innerText = "Available Balance: ₹" + Number(userCurrentBalance).toFixed(2);
     openModal("withdrawModal");
 }
 
-function setWithdrawAmount(amount){ document.getElementById("withdrawAmount").value = Number(amount || 0).toFixed(2); }
+
+function setWithdrawAmount(amount){
+    document.getElementById("withdrawAmount").value = Number(amount || 0).toFixed(2);
+}
+
+
+/* =========================================================
+   PROFILE IMAGE & LOCAL STORAGE FALLBACK FIX
+========================================================= */
 
 function applyProfileImage(imgUrl, userName){
     const mainImg = document.getElementById("mainProfileImg");
@@ -1274,43 +2512,131 @@ function applyProfileImage(imgUrl, userName){
         if(removeLi) removeLi.style.display = "block";
         return;
     }
-    const firstLetter = (userName && userName !== "Loading..." ? userName : "User").charAt(0).toUpperCase();
+
+    const firstLetter = (userName && userName !== "Loading..." && userName.trim() !== "" ? userName : "User").charAt(0).toUpperCase();
     const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(firstLetter)}&background=7c3aed&color=fff&size=128&bold=true`;
+
     if(mainImg) mainImg.src = fallbackUrl;
     if(sidebarImg) sidebarImg.src = fallbackUrl;
     if(navAvatar) navAvatar.src = fallbackUrl;
     if(removeLi) removeLi.style.display = "none";
 }
 
+
+function validateImageFile(file){
+    if(!file) throw new Error("No image selected.");
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    if(!allowedTypes.includes(file.type)){
+        throw new Error("Only JPG, PNG or WEBP images are allowed.");
+    }
+    const maxSize = 2 * 1024 * 1024; // 2MB safe limit for localStorage
+    if(file.size > maxSize){
+        throw new Error("Image must be smaller than 2MB.");
+    }
+}
+
+
+function compressProfileImage(file){
+    return new Promise((resolve, reject)=>{
+        const reader = new FileReader();
+        reader.onerror = ()=> reject(new Error("Unable to read image."));
+        reader.onload = function(e){
+            const img = new Image();
+            img.onerror = ()=> reject(new Error("Invalid image."));
+            img.onload = function(){
+                const canvas = document.createElement("canvas");
+                let width = img.width;
+                let height = img.height;
+                const MAX = 400;
+
+                if(width > height && width > MAX){
+                    height = Math.round(height * MAX / width);
+                    width = MAX;
+                }else if(height >= width && height > MAX){
+                    width = Math.round(width * MAX / height);
+                    height = MAX;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, width, height);
+
+                const dataUrl = canvas.toDataURL("image/jpeg", 0.75);
+                resolve(dataUrl);
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+
 async function uploadProfilePicture(event){
     const file = event.target.files?.[0];
     if(!file || !currentUserId) return;
+
     try{
-        const reader = new FileReader();
-        reader.onload = async function(e){
-            const dataUrl = e.target.result;
-            localStorage.setItem(`profile_pic_${currentUserId}`, dataUrl);
-            await supabaseClient.from("profiles").update({ profile_pic: dataUrl }).eq("user_id", currentUserId);
-            currentProfile.profile_pic = dataUrl;
-            applyProfileImage(dataUrl, currentProfile.full_name);
-            showToast("Profile picture updated!");
-        };
-        reader.readAsDataURL(file);
-    }catch(e){ alert("Upload failed"); }
+        validateImageFile(file);
+        showToast("Processing profile picture...");
+
+        const compressedDataUrl = await compressProfileImage(file);
+
+        localStorage.setItem(`profile_pic_${currentUserId}`, compressedDataUrl);
+
+        try{
+            await supabaseClient
+                .from("profiles")
+                .update({ profile_pic: compressedDataUrl })
+                .eq("user_id", currentUserId);
+        }catch(e){}
+
+        currentProfile.profile_pic = compressedDataUrl;
+        applyProfileImage(compressedDataUrl, currentProfile.full_name);
+        showToast("Profile picture updated successfully!");
+
+    }catch(error){
+        alert("Failed to update profile picture:\n" + error.message);
+    }finally{
+        event.target.value = "";
+    }
 }
+
 
 async function removeProfilePicture(){
     if(!currentUserId) return;
-    localStorage.removeItem(`profile_pic_${currentUserId}`);
-    await supabaseClient.from("profiles").update({ profile_pic: null }).eq("user_id", currentUserId);
-    currentProfile.profile_pic = null;
-    applyProfileImage(null, currentProfile.full_name);
-    showToast("Profile picture removed!");
+    if(!confirm("Remove profile picture?")) return;
+
+    try{
+        localStorage.removeItem(`profile_pic_${currentUserId}`);
+        try{
+            await supabaseClient
+                .from("profiles")
+                .update({ profile_pic: null })
+                .eq("user_id", currentUserId);
+        }catch(e){}
+
+        currentProfile.profile_pic = null;
+        applyProfileImage(null, currentProfile.full_name);
+        showToast("Profile picture removed!");
+    }catch(error){
+        alert("Failed: " + error.message);
+    }
 }
+
+
+/* =========================================================
+   GLOBAL LOGO
+========================================================= */
 
 async function loadGlobalTopLogo(){
     try{
-        const { data } = await supabaseClient.from("global_settings").select("setting_value").eq("setting_key", "admin_top_logo").maybeSingle();
+        const { data } = await supabaseClient
+            .from("global_settings")
+            .select("setting_value")
+            .eq("setting_key", "admin_top_logo")
+            .maybeSingle();
+
         if(data?.setting_value){
             document.getElementById("navBrandLogoImg").src = data.setting_value;
             document.getElementById("sidebarLogo").src = data.setting_value;
@@ -1318,41 +2644,113 @@ async function loadGlobalTopLogo(){
     }catch(e){}
 }
 
-// Fixed Permanent Referral Code Generator
-function generateReferralCode(){ return "SM-smart" + Math.floor(10000 + Math.random() * 90000); }
+
+/* =========================================================
+   REFERRAL CODE (FIXED PERMANENT CREATION & STORAGE)
+========================================================= */
+
+function generateReferralCode(){
+    return "SM-smart" + Math.floor(10000 + Math.random() * 90000);
+}
+
+function isCorrectReferralCode(code){
+    return /^SM-smart\d{5}$/.test(String(code || ""));
+}
+
+async function createUniqueReferralCode(){
+    for(let i=0; i<10; i++){
+        const code = generateReferralCode();
+        const { data } = await supabaseClient
+            .from("profiles")
+            .select("user_id")
+            .eq("referral_code", code)
+            .limit(1);
+
+        if(!data || data.length === 0){
+            return code;
+        }
+    }
+    return "SM-smart" + String(Date.now()).slice(-5);
+}
+
+async function getOrCreatePermanentReferralCode(existingCode){
+    if(isCorrectReferralCode(existingCode)){
+        return existingCode;
+    }
+    const newCode = await createUniqueReferralCode();
+    return newCode;
+}
+
+
+/* =========================================================
+   LOAD DASHBOARD PROFILE (FIXED WITH PERMANENT PROFILE SYNC)
+========================================================= */
 
 async function loadDashboardProfile(){
     let user = null;
-    try{
-        const { data } = await supabaseClient.auth.getSession();
-        user = data?.session?.user || null;
-    }catch(e){ user = null; }
 
-    if(!user){ window.location.href = "login.html"; return false; }
+    try{
+        const { data: sessionData } = await supabaseClient.auth.getSession();
+        user = sessionData?.session?.user || null;
+
+        if(!user){
+            const { data: userData } = await supabaseClient.auth.getUser();
+            user = userData?.user || null;
+        }
+    }catch(authError){
+        await new Promise(r => setTimeout(r, 1000));
+        try{
+            const { data: retryData } = await supabaseClient.auth.getSession();
+            user = retryData?.session?.user || null;
+        }catch(e){
+            user = null;
+        }
+    }
+
+    if(!user){
+        window.location.href = "login.html";
+        return false;
+    }
 
     currentUserId = user.id;
     currentUserEmail = user.email || "";
     const authName = user.user_metadata?.full_name || user.user_metadata?.name || currentUserEmail.split("@")[0] || "Smart Money User";
 
     try{
-        let { data: profile } = await supabaseClient.from("profiles").select("*").eq("user_id", currentUserId).maybeSingle();
+        let { data: profile } = await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq("user_id", currentUserId)
+            .maybeSingle();
 
-        if(!profile || !profile.referral_code){
-            // Create permanent code once
-            const newCode = generateReferralCode();
+        const permanentCode = await getOrCreatePermanentReferralCode(profile?.referral_code);
+
+        if(!profile){
             const newProfile = {
                 user_id: currentUserId,
                 email: currentUserEmail,
                 full_name: authName,
                 balance: 0,
                 package_name: null,
-                referral_code: newCode
+                referral_code: permanentCode
             };
-            const { data: created } = await supabaseClient.from("profiles").upsert(newProfile, { onConflict: "user_id" }).select().maybeSingle();
-            profile = created || newProfile;
+
+            const { data: createdProfile } = await supabaseClient
+                .from("profiles")
+                .upsert(newProfile, { onConflict: "user_id" })
+                .select()
+                .maybeSingle();
+
+            profile = createdProfile || newProfile;
+        } else if(!isCorrectReferralCode(profile.referral_code)){
+            await supabaseClient
+                .from("profiles")
+                .update({ referral_code: permanentCode })
+                .eq("user_id", currentUserId);
+            profile.referral_code = permanentCode;
         }
 
-        currentProfile = profile;
+        currentProfile = profile || {};
         if(!currentProfile.full_name) currentProfile.full_name = authName;
         userRefCode = currentProfile.referral_code;
 
@@ -1361,27 +2759,38 @@ async function loadDashboardProfile(){
 
         renderProfile(currentProfile, currentProfile.full_name);
         return true;
+
     }catch(error){
-        currentProfile = { user_id: currentUserId, full_name: authName, balance: 0, referral_code: generateReferralCode() };
-        userRefCode = currentProfile.referral_code;
+        console.error("Profile error:", error);
+        currentProfile = { user_id: currentUserId, full_name: authName, balance: 0 };
+        userRefCode = await createUniqueReferralCode();
+        currentProfile.referral_code = userRefCode;
         renderProfile(currentProfile, authName);
         return true;
     }
 }
 
+
+/* =========================================================
+   RENDER PROFILE
+========================================================= */
+
 function renderProfile(profile, fallbackName){
     const finalName = profile?.full_name || fallbackName || "Smart Money User";
+    const finalEmail = profile?.email || currentUserEmail;
     userCurrentBalance = Number(profile?.balance || 0);
     const packageName = profile?.package_name || "";
+    const dob = profile?.date_of_birth || "";
 
     document.getElementById("userName").textContent = finalName;
-    document.getElementById("topUserId").textContent = userRefCode || profile?.referral_code;
+    document.getElementById("topUserId").textContent = userRefCode || profile?.referral_code || "Not Available";
     document.getElementById("sidebarUserName").textContent = finalName;
-    document.getElementById("sidebarUserEmail").textContent = profile?.email || currentUserEmail;
+    document.getElementById("sidebarUserEmail").textContent = finalEmail;
     document.getElementById("sidebarWalletBal").textContent = "₹" + userCurrentBalance.toFixed(2);
-    document.getElementById("dobDisplayInfo").textContent = profile?.date_of_birth || "Not Set";
+    document.getElementById("dobDisplayInfo").textContent = dob || "Not Set";
 
     const badge = document.getElementById("activePackageBadge");
+
     if(packageName && packageName.trim() !== "" && packageName.toLowerCase() !== "none"){
         badge.innerText = packageName.toUpperCase() + " 👑";
         badge.classList.add("active");
@@ -1389,191 +2798,515 @@ function renderProfile(profile, fallbackName){
         badge.innerText = "NO PACKAGE";
         badge.classList.remove("active");
     }
+
     applyProfileImage(profile?.profile_pic, finalName);
     updatePackageModal();
 }
 
+
+/* =========================================================
+   COPY REFERRAL
+========================================================= */
+
 function copyUserReferralCode(){
-    navigator.clipboard.writeText(userRefCode);
-    showToast("Referral ID copied!");
+    const codeToCopy = userRefCode || document.getElementById("topUserId").innerText;
+    if(!codeToCopy || codeToCopy === "Loading..."){
+        showToast("Referral code not available");
+        return;
+    }
+    if(navigator.clipboard){
+        navigator.clipboard.writeText(codeToCopy).then(()=>{
+            showToast("Referral ID copied!");
+        }).catch(()=>{
+            showToast("Failed to copy code");
+        });
+    }
 }
+
+
+/* =========================================================
+   PACKAGE MODAL
+========================================================= */
 
 function updatePackageModal(){
     const packageName = String(currentProfile?.package_name || "").trim().toLowerCase();
     const hasPackage = packageName && packageName !== "none";
-    document.getElementById("modalPkgName").innerText = hasPackage ? packageName.toUpperCase() : "No Package Active";
+
+    let commissionText = "Not Available";
+    let withdrawLimitText = "₹200 Minimum";
+    let pkgDisplayName = "No Package Active";
+
+    if(hasPackage){
+        pkgDisplayName = currentProfile.package_name.toUpperCase();
+        withdrawLimitText = "₹100 Minimum";
+        commissionText = "Automatic Multi-Level Commission Enabled";
+    }
+
+    document.getElementById("modalPkgName").innerText = pkgDisplayName;
     document.getElementById("modalPkgStatus").innerText = hasPackage ? "Active" : "No Active Package";
-    document.getElementById("modalPkgCommission").innerText = hasPackage ? "Tier Commission Enabled" : "Not Available";
-    document.getElementById("modalPkgWithdraw").innerText = "₹100 Minimum";
+    document.getElementById("modalPkgCommission").innerText = commissionText;
+    document.getElementById("modalPkgWithdraw").innerText = withdrawLimitText;
 }
+
+
+/* =========================================================
+   WITHDRAWAL HISTORY
+========================================================= */
 
 async function loadWithdrawalHistory(){
     if(!currentUserId) return;
     const container = document.getElementById("withdrawalHistoryList");
+    if(!container) return;
+
     try{
-        const { data } = await supabaseClient.from("withdrawal_requests").select("*").eq("user_id", currentUserId).order("created_at", { ascending: false });
-        if(!data || data.length === 0){ container.innerHTML = `<div style="text-align:center;color:#64748b;font-size:13px;padding:15px">No history found</div>`; return; }
+        const { data } = await supabaseClient
+            .from("withdrawal_requests")
+            .select("*")
+            .eq("user_id", currentUserId)
+            .order("created_at", { ascending: false });
+
+        if(!data || data.length === 0){
+            container.innerHTML = `<div style="text-align:center;color:#64748b;font-size:13px;padding:15px">No withdrawal history found</div>`;
+            return;
+        }
 
         container.innerHTML = data.map(item=>{
-            let statusClass = "status-pending", statusText = "Pending";
-            const status = String(item.status || "").toLowerCase();
-            if(status === "approved" || status === "success" || status === "paid"){ statusClass = "status-approved"; statusText = "Approved"; }
-            else if(status === "rejected" || status === "failed"){ statusClass = "status-rejected"; statusText = "Rejected"; }
-            return `<div class="history-card-item">
-                <div class="history-row-1"><span>Date: ${new Date(item.created_at).toLocaleDateString()}</span><span>ID: ${item.id.slice(0,8)}</span></div>
-                <div class="history-row-2"><span class="history-amount">₹${Number(item.amount).toFixed(2)}</span><span class="status-badge ${statusClass}">${statusText}</span></div>
+            const status = String(item.status || "pending").toLowerCase();
+            let statusClass = "status-pending";
+            let statusText = "Pending";
+
+            if(status === "approved" || status === "success" || status === "paid"){
+                statusClass = "status-approved";
+                statusText = "Approved";
+            }else if(status === "rejected" || status === "failed"){
+                statusClass = "status-rejected";
+                statusText = "Rejected";
+            }
+
+            const date = item.created_at ? new Date(item.created_at).toLocaleDateString("en-IN", { day:"numeric", month:"short", year:"numeric" }) : "-";
+
+            return `
+            <div class="history-card-item">
+                <div class="history-row-1">
+                    <span>Date: ${date}</span>
+                    <span>ID: ${escapeHtml(String(item.id || "").slice(0,8))}</span>
+                </div>
+                <div class="history-row-2">
+                    <span class="history-amount">₹${Number(item.amount || 0).toFixed(2)}</span>
+                    <span class="status-badge ${statusClass}">${statusText}</span>
+                </div>
             </div>`;
         }).join("");
-    }catch(e){ container.innerHTML = `<div style="text-align:center;color:#64748b;font-size:13px;padding:15px">No history found</div>`; }
+
+    }catch(error){
+        container.innerHTML = `<div style="text-align:center;color:#64748b;font-size:13px;padding:15px">No withdrawal history found</div>`;
+    }
 }
+
+
+/* =========================================================
+   EARNINGS DATA
+========================================================= */
 
 async function loadEarningsData(){
     if(!currentUserId) return;
     try{
-        const { data } = await supabaseClient.from("earnings").select("*").eq("user_id", currentUserId).order("created_at", { ascending: false });
+        const { data } = await supabaseClient
+            .from("earnings")
+            .select("*")
+            .eq("user_id", currentUserId)
+            .order("created_at", { ascending: false });
+
         allEarningsData = data || [];
         updateEarningsCards();
-    }catch(e){ allEarningsData = []; updateEarningsCards(); }
+    }catch(error){
+        allEarningsData = [];
+        updateEarningsCards();
+    }
 }
+
 
 function getEarningsForDays(days){
     const now = new Date();
     return allEarningsData.filter(item=>{
         if(!item.created_at) return false;
         const created = new Date(item.created_at);
-        if(days === "today") return created.toDateString() === now.toDateString();
-        return (now - created) / (1000*60*60*24) <= days;
-    }).reduce((s, i)=> s + Number(i.amount || 0), 0);
+        if(days === "today"){
+            return created.toDateString() === now.toDateString();
+        }
+        const diff = (now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24);
+        return diff >= 0 && diff <= days;
+    }).reduce((sum, item)=> sum + Number(item.amount || 0), 0);
 }
 
+
 function updateEarningsCards(){
-    document.getElementById("todayRevenue").innerText = "₹" + getEarningsForDays("today").toFixed(2);
-    document.getElementById("sevenDaysRevenue").innerText = "₹" + getEarningsForDays(7).toFixed(2);
-    document.getElementById("thirtyDaysRevenue").innerText = "₹" + getEarningsForDays(30).toFixed(2);
-    document.getElementById("allTimeRevenueText").innerText = "₹" + allEarningsData.reduce((s, i)=> s + Number(i.amount || 0), 0).toFixed(2);
-    document.getElementById("passiveIncome").innerText = "₹" + allEarningsData.filter(i=> String(i.earning_type || "").toLowerCase().includes("passive")).reduce((s, i)=> s + Number(i.amount || 0), 0).toFixed(2);
+    const today = getEarningsForDays("today");
+    const sevenDays = getEarningsForDays(7);
+    const thirtyDays = getEarningsForDays(30);
+    const allTime = allEarningsData.reduce((sum, item)=> sum + Number(item.amount || 0), 0);
+    const passive = allEarningsData.filter(item=> String(item.earning_type || "").toLowerCase().includes("passive")).reduce((sum, item)=> sum + Number(item.amount || 0), 0);
+
+    document.getElementById("todayRevenue").innerText = "₹" + today.toFixed(2);
+    document.getElementById("sevenDaysRevenue").innerText = "₹" + sevenDays.toFixed(2);
+    document.getElementById("thirtyDaysRevenue").innerText = "₹" + thirtyDays.toFixed(2);
+    document.getElementById("allTimeRevenueText").innerText = "₹" + allTime.toFixed(2);
+    document.getElementById("passiveIncome").innerText = "₹" + passive.toFixed(2);
 }
+
+
+/* =========================================================
+   EARNINGS HISTORY MODAL
+========================================================= */
 
 async function loadEarningsHistory(){
     const container = document.getElementById("earningsHistoryList");
+    if(!container) return;
     await loadEarningsData();
-    if(!allEarningsData.length){ container.innerHTML = `<div style="text-align:center;color:#64748b;font-size:13px;padding:20px">No earnings yet.</div>`; return; }
-    container.innerHTML = allEarningsData.map(item=>`
+
+    if(!allEarningsData.length){
+        container.innerHTML = `<div style="text-align:center;color:#64748b;font-size:13px;padding:20px">No earnings yet.</div>`;
+        return;
+    }
+
+    container.innerHTML = allEarningsData.map(item=>{
+        const type = escapeHtml(item.earning_type || item.type || "Commission");
+        const amount = Number(item.amount || 0);
+        const date = item.created_at ? new Date(item.created_at).toLocaleDateString("en-IN", { day:"numeric", month:"short", year:"numeric" }) : "-";
+
+        return `
         <div class="earning-item">
-            <div class="earning-top"><div class="earning-title">${escapeHtml(item.earning_type || "Commission")}</div><div class="earning-amount">+₹${Number(item.amount).toFixed(2)}</div></div>
-            <div class="earning-date" style="font-size:11px;color:#64748b;margin-top:4px">${new Date(item.created_at).toLocaleDateString()}</div>
-        </div>`).join("");
+            <div class="earning-top">
+                <div class="earning-title">${type}</div>
+                <div class="earning-amount">+₹${amount.toFixed(2)}</div>
+            </div>
+            <div class="earning-date">${date}</div>
+        </div>`;
+    }).join("");
 }
+
+
+/* =========================================================
+   REFERRALS
+========================================================= */
 
 async function loadReferralsData(){
     if(!currentUserId || !userRefCode) return;
     try{
-        const { data } = await supabaseClient.from("profiles").select("full_name,referral_code,created_at,referred_by").eq("referred_by", userRefCode).order("created_at", { ascending: false });
+        const { data } = await supabaseClient
+            .from("profiles")
+            .select("full_name,referral_code,created_at,referred_by")
+            .eq("referred_by", userRefCode)
+            .order("created_at", { ascending: false });
+
         allReferralsData = data || [];
         filterReferrals(1, document.querySelector(".ref-tab"));
-    }catch(e){ allReferralsData = []; filterReferrals(1); }
+    }catch(error){
+        allReferralsData = [];
+        filterReferrals(1);
+    }
 }
+
 
 function filterReferrals(days, btnElement){
-    if(btnElement){
-        document.querySelectorAll(".ref-tab").forEach(t=> t.classList.remove("active"));
-        btnElement.classList.add("active");
-    }
+    document.querySelectorAll(".ref-tab").forEach(tab=> tab.classList.remove("active"));
+    if(btnElement) btnElement.classList.add("active");
+
     const container = document.getElementById("referralsListContainer");
+    if(!container) return;
+
     const now = new Date();
-    const filtered = allReferralsData.filter(item=> (now - new Date(item.created_at)) / (1000*60*60*24) <= days);
-    if(!filtered.length){ container.innerHTML = `<div style="text-align:center;color:#64748b;font-size:13px;padding:15px">No referrals found.</div>`; return; }
-    container.innerHTML = filtered.map(ref=>`
+    const filtered = allReferralsData.filter(item=>{
+        if(!item.created_at) return false;
+        const diff = (now.getTime() - new Date(item.created_at).getTime()) / (1000 * 60 * 60 * 24);
+        return diff >= 0 && diff <= days;
+    });
+
+    if(!filtered.length){
+        container.innerHTML = `<div style="text-align:center;color:#64748b;font-size:13px;padding:15px">No referrals found in the last ${days} day(s).</div>`;
+        return;
+    }
+
+    container.innerHTML = filtered.map(ref=>{
+        const name = escapeHtml(ref.full_name || "User");
+        const refCode = escapeHtml(ref.referral_code || "N/A");
+        const date = ref.created_at ? new Date(ref.created_at).toLocaleDateString("en-IN", { day:"numeric", month:"short", year:"numeric" }) : "-";
+
+        return `
         <div class="referral-card-item">
-            <div class="ref-user-info"><h4>${escapeHtml(ref.full_name)}</h4><span>ID: ${escapeHtml(ref.referral_code)}</span></div>
-            <div class="ref-date"><span>Joined</span><br><b>${new Date(ref.created_at).toLocaleDateString()}</b></div>
-        </div>`).join("");
+            <div class="ref-user-info">
+                <h4>${name}</h4>
+                <span>ID: ${refCode}</span>
+            </div>
+            <div class="ref-date">
+                <span>Joined</span><br><b>${date}</b>
+            </div>
+        </div>`;
+    }).join("");
 }
 
-// KYC Fixed - Update and persist instantly
+
+/* =========================================================
+   KYC SAVE (FIXED PROFILE NAME & DOB PERSISTENCE)
+========================================================= */
+
 async function saveKycDetails(){
     const fullName = document.getElementById("kycFullName").value.trim();
     const dob = document.getElementById("kycDob").value;
-    if(!fullName){ alert("Enter your full name."); return; }
+
+    if(!fullName){
+        alert("Please enter your full name.");
+        return;
+    }
+
     try{
-        const { data, error } = await supabaseClient.from("profiles").update({ full_name: fullName, date_of_birth: dob || null }).eq("user_id", currentUserId).select().maybeSingle();
+        const { data, error } = await supabaseClient
+            .from("profiles")
+            .update({ full_name: fullName, date_of_birth: dob || null })
+            .eq("user_id", currentUserId)
+            .select()
+            .maybeSingle();
+
         if(error) throw error;
         currentProfile = { ...currentProfile, ...(data || { full_name: fullName, date_of_birth: dob }) };
         renderProfile(currentProfile, fullName);
         showToast("KYC saved successfully!");
         closeModal("kycModal");
-    }catch(e){ alert("Error: " + e.message); }
+    }catch(error){
+        alert("Error: " + error.message);
+    }
 }
+
+
+/* =========================================================
+   SUBMIT WITHDRAWAL
+========================================================= */
 
 async function submitWithdrawal(){
-    if(!hasSavedPaymentDetails()){ alert("Add payment details first."); closeModal("withdrawModal"); openUpiModal(); return; }
+    if(!hasSavedPaymentDetails()){
+        alert("⚠️ Please add your payment details first.");
+        closeModal("withdrawModal");
+        openUpiModal();
+        return;
+    }
+
     const amount = Number(document.getElementById("withdrawAmount").value);
-    const minLimit = 100;
-    if(amount < minLimit){ alert(`Minimum limit is ₹${minLimit}.`); return; }
-    if(amount > userCurrentBalance){ alert("Insufficient balance."); return; }
+    const submitBtn = document.getElementById("submitWithdrawBtn");
+    const packageName = String(currentProfile?.package_name || "").toLowerCase();
+    const minLimit = packageName && packageName !== "none" ? 100 : 200;
+
+    if(!Number.isFinite(amount) || amount <= 0){
+        alert("Enter a valid amount.");
+        return;
+    }
+
+    if(amount < minLimit){
+        alert(`Minimum withdrawal limit is ₹${minLimit}.`);
+        return;
+    }
+
+    if(amount > userCurrentBalance){
+        alert("Insufficient balance.");
+        return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Processing...";
 
     try{
-        await supabaseClient.from("withdrawal_requests").insert({ user_id: currentUserId, amount: amount, status: "pending" });
-        const newBalance = userCurrentBalance - amount;
-        const { data } = await supabaseClient.from("profiles").update({ balance: newBalance }).eq("user_id", currentUserId).select().maybeSingle();
-        currentProfile = { ...currentProfile, ...(data || { balance: newBalance }) };
-        userCurrentBalance = Number(currentProfile.balance);
+        const { error: insertError } = await supabaseClient
+            .from("withdrawal_requests")
+            .insert({ user_id: currentUserId, amount: amount, status: "pending" });
+
+        if(insertError) throw insertError;
+
+        const newBalance = Number(userCurrentBalance) - amount;
+        const { data: updatedProfile } = await supabaseClient
+            .from("profiles")
+            .update({ balance: newBalance })
+            .eq("user_id", currentUserId)
+            .select()
+            .maybeSingle();
+
+        currentProfile = { ...currentProfile, ...(updatedProfile || { balance: newBalance }) };
+        userCurrentBalance = Number(currentProfile.balance || 0);
         renderProfile(currentProfile, currentProfile.full_name);
-        showToast("Withdrawal requested!");
+        showToast("Withdrawal request submitted successfully!");
         closeModal("withdrawModal");
-        loadWithdrawalHistory();
-    }catch(e){ alert("Failed: " + e.message); }
+        await loadWithdrawalHistory();
+    }catch(error){
+        alert("Withdrawal failed: " + error.message);
+    }finally{
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Submit Request";
+    }
 }
 
-// Realtime sync & Auto refund on withdrawal rejection
+
+/* =========================================================
+   EMAIL NOTIFICATION
+========================================================= */
+
+async function sendWithdrawalApprovedEmail(withdrawal){
+    try{
+        if(!withdrawal?.id || !window.emailjs) return;
+        const emailKey = `withdrawal_approved_email_${withdrawal.id}`;
+        if(localStorage.getItem(emailKey)) return;
+
+        const amount = Number(withdrawal.amount || 0).toFixed(2);
+        const userName = currentProfile?.full_name || "Smart Money User";
+        const userEmail = currentProfile?.email || currentUserEmail;
+        if(!userEmail) return;
+
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_WITHDRAW_APPROVED_TEMPLATE, {
+            to_name: userName,
+            to_email: userEmail,
+            user_name: userName,
+            user_email: userEmail,
+            amount: "₹" + amount,
+            withdrawal_amount: "₹" + amount,
+            status: "APPROVED",
+            withdrawal_id: String(withdrawal.id)
+        });
+
+        localStorage.setItem(emailKey, "sent");
+    }catch(error){}
+}
+
+
+/* =========================================================
+   REALTIME
+========================================================= */
+
 function setupRealtimeListener(){
     if(!currentUserId || realtimeChannel) return;
-    realtimeChannel = supabaseClient.channel(`dashboard-${currentUserId}`)
-        .on("postgres_changes", { event:"UPDATE", schema:"public", table:"profiles", filter:`user_id=eq.${currentUserId}` }, payload=>{
-            if(!payload.new) return;
-            currentProfile = { ...currentProfile, ...payload.new };
-            userCurrentBalance = Number(currentProfile.balance || 0);
-            renderProfile(currentProfile, currentProfile.full_name);
-        })
-        .on("postgres_changes", { event:"UPDATE", schema:"public", table:"withdrawal_requests", filter:`user_id=eq.${currentUserId}` }, async payload=>{
-            loadWithdrawalHistory();
-            const oldStatus = payload.old?.status;
-            const newStatus = payload.new?.status;
-            // Agar admin ne withdrawal reject kiya hai, toh balance wapas user ke account mein refund ho jayega
-            if(oldStatus === "pending" && (newStatus === "rejected" || newStatus === "failed")){
-                const refundAmount = Number(payload.new.amount || 0);
-                const restoredBalance = userCurrentBalance + refundAmount;
-                await supabaseClient.from("profiles").update({ balance: restoredBalance }).eq("user_id", currentUserId);
-                showToast(`Withdrawal rejected! ₹${refundAmount} refunded to your wallet.`);
-            }
-        })
-        .subscribe();
+
+    try{
+        realtimeChannel = supabaseClient
+            .channel(`dashboard-${currentUserId}`)
+            .on("postgres_changes", { event:"UPDATE", schema:"public", table:"profiles", filter:`user_id=eq.${currentUserId}` }, payload=>{
+                if(!payload.new) return;
+                currentProfile = { ...currentProfile, ...payload.new };
+                userCurrentBalance = Number(currentProfile.balance || 0);
+                renderProfile(currentProfile, currentProfile.full_name);
+            })
+            .on("postgres_changes", { event:"*", schema:"public", table:"withdrawal_requests", filter:`user_id=eq.${currentUserId}` }, async payload=>{
+                await loadWithdrawalHistory();
+                const newData = payload?.new || {};
+                const oldData = payload?.old || {};
+                const newStatus = String(newData.status || "").toLowerCase();
+                const oldStatus = String(oldData.status || "").toLowerCase();
+
+                if(newStatus === "approved" && oldStatus !== "approved"){
+                    await sendWithdrawalApprovedEmail(newData);
+                    showToast("Your withdrawal has been approved!");
+                }
+
+                if(newStatus === "rejected" && oldStatus !== "rejected"){
+                    const refundAmount = Number(newData.amount || 0);
+
+                    const { data: freshProfile } = await supabaseClient
+                        .from("profiles")
+                        .select("balance")
+                        .eq("user_id", currentUserId)
+                        .maybeSingle();
+
+                    const currentBal = Number(freshProfile?.balance ?? currentProfile.balance ?? 0);
+                    const newBalance = currentBal + refundAmount;
+
+                    const { data: updatedProfile } = await supabaseClient
+                        .from("profiles")
+                        .update({ balance: newBalance })
+                        .eq("user_id", currentUserId)
+                        .select()
+                        .maybeSingle();
+
+                    currentProfile = { ...currentProfile, ...(updatedProfile || { balance: newBalance }) };
+                    userCurrentBalance = Number(currentProfile.balance || 0);
+                    renderProfile(currentProfile, currentProfile.full_name);
+                    showToast("Withdrawal rejected — ₹" + refundAmount.toFixed(2) + " refunded to your balance");
+                }
+            })
+            .subscribe();
+    }catch(error){}
 }
 
-async function loadAdminStatus(){
-    try{
-        const { data } = await supabaseClient.from("admin_updates").select("*").order("created_at", { ascending: false });
-        const container = document.getElementById("statusList");
-        if(!data || !data.length){ container.innerHTML = `<p style="color:#64748b;margin:0;font-size:12px">No updates yet.</p>`; return; }
-        container.innerHTML = data.map(item=>`<div class="admin-update">${item.title?`<div class="admin-update-title">${escapeHtml(item.title)}</div>`:""}<div class="admin-update-message">${escapeHtml(item.message)}</div></div>`).join("");
-    }catch(e){}
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function setupLogout(){
+    const logoutBtn = document.getElementById("sideLogoutBtn");
+    if(!logoutBtn) return;
+
+    logoutBtn.onclick = async function(){
+        closeSidebar();
+        try{
+            if(realtimeChannel){
+                await supabaseClient.removeChannel(realtimeChannel);
+                realtimeChannel = null;
+            }
+            await supabaseClient.auth.signOut();
+        }catch(error){
+        }finally{
+            window.location.href = "login.html";
+        }
+    };
 }
+
+
+/* =========================================================
+   ADMIN STATUS
+========================================================= */
+
+async function loadAdminStatus(){
+    const container = document.getElementById("statusList");
+    if(!container) return;
+
+    try{
+        const { data } = await supabaseClient
+            .from("admin_updates")
+            .select("*")
+            .order("created_at", { ascending: false });
+
+        if(!data || data.length === 0){
+            container.innerHTML = `<p style="color:#64748b;margin:0;font-size:12px">No updates from admin yet.</p>`;
+            return;
+        }
+
+        container.innerHTML = data.map(item=>{
+            return `
+            <div class="admin-update">
+                ${item.title ? `<div class="admin-update-title">${escapeHtml(item.title)}</div>` : ""}
+                <div class="admin-update-message">${escapeHtml(item.message || "")}</div>
+                ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="Update">` : ""}
+            </div>`;
+        }).join("");
+
+    }catch(error){
+        container.innerHTML = `<p style="color:#64748b;margin:0;font-size:12px">No updates from admin yet.</p>`;
+    }
+}
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
 
 window.addEventListener("DOMContentLoaded", async ()=>{
     const ok = await loadDashboardProfile();
     if(ok){
+        setupLogout();
         setupRealtimeListener();
         loadEarningsData();
         loadReferralsData();
         loadWithdrawalHistory();
         loadGlobalTopLogo();
         loadAdminStatus();
-        document.getElementById("sideLogoutBtn").onclick = async ()=>{
-            await supabaseClient.auth.signOut();
-            window.location.href = "login.html";
-        };
     }
 });
+
 </script>
 </body>
 </html>
