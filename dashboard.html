@@ -3067,14 +3067,13 @@ async function saveKycDetails(){
     }
 
     try{
-        console.log("Saving profile for user:", currentUserId);
+        console.log("Saving for user_id:", currentUserId);
 
         const { data, error } = await supabaseClient
             .from("profiles")
             .update({ 
                 full_name: fullName, 
-                date_of_birth: dob || null,
-                updated_at: new Date()
+                date_of_birth: dob || null 
             })
             .eq("user_id", currentUserId)
             .select()
@@ -3082,23 +3081,22 @@ async function saveKycDetails(){
 
         if(error) throw error;
 
-        // Fallback if data is null (meaning RLS blocked the update or row didn't match)
-        if (!data) {
-            throw new Error("Update failed. Please check if your user ID matches the profile row or if RLS policies allow updates.");
+        // Agar data null aaya matlab database me is user_id ki row hi nahi mili
+        if(!data){
+            throw new Error("No profile row found for this user_id in database!");
         }
 
-        console.log("Successfully updated in DB:", data);
-
+        console.log("Successfully saved:", data);
         currentProfile = { ...currentProfile, ...data };
         renderProfile(currentProfile, fullName);
         showToast("KYC saved successfully!");
         closeModal("kycModal");
     }catch(error){
-        console.error("KYC Save Error:", error);
+        console.error("Save failed error:", error);
         alert("Error: " + error.message);
     }
 }
-  =========================================================
+=========================================================
    SUBMIT WITHDRAWAL
 ========================================================= */
 
