@@ -432,7 +432,29 @@ async function approvePayment(id){
 
 async function rejectPayment(id){if(!confirm("Reject this payment?"))return;const {error}=await supabaseClient.from("payment_requests").update({status:"Rejected"}).eq("id",id);if(error){alert(error.message);return}await refreshAllData()}
 
-async function loadWithdrawals(){const {data,error}=await supabaseClient.from("withdrawal_requests").select("*").order("created_at",{ascending:false});if(error)throw error;allWithdrawalsData=(data||[]).filter(x=>x.is_deleted!==true).map(item=>{const u=findUserForRequest(item);const details=paymentDetailsFromItemOrUser(item,u);return {...item,...details,_profile:u}});renderWithdrawals();updateGlobalStats()}
+async function loadWithdrawals(){
+    const {data,error}=await supabaseClient.from("withdrawal_requests").select("*").order("created_at",{ascending:false});
+    if(error)throw error;
+    
+    // Sabse pehle profiles load karlo taaki sahi mapping ho jaye
+    await loadUsersSilent();
+
+    allWithdrawalsData=(data||[]).filter(x=>x.is_deleted!==true).map(item=>{
+        const u=findUserForRequest(item);
+        const details=paymentDetailsFromItemOrUser(item,u);
+        return {...item,...details,_profile:u}
+    });
+    renderWithdrawals();
+    updateGlobalStats();
+}
+
+// Silent load users without re-rendering the whole user table every time withdrawals refresh
+async function loadUsersSilent(){
+    const {data,error}=await supabaseClient.from("profiles").select("*");
+    if(!error && data) {
+        allUsersData = data;
+    }
+}
 
 function switchWithdrawalTab(tab,btn){currentWithdrawalTab=tab;btn.parentElement.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");renderWithdrawals()}
 
@@ -706,6 +728,8 @@ Draggable.create(hitArea, {
         clickSound.pop?.() || clickSound.play().catch(e => {});
         isOn = !isOn;
         root.style.setProperty('--on', isOn ? 1 : 0);
+        gsap.to(cordBead, { y: 0, duration: 0.4, ease: "elastic.out(1.5, 0.3)" });
+        gsap.to(cordDirect, { y: 0 }); // safe fallback
         gsap.to(cordBead, { y: 0, duration: 0.4, ease: "elastic.out(1.5, 0.3)" });
         gsap.to(cordLine, { attr: { y2: 180 }, duration: 0.4, ease: "elastic.out(1.5, 0.3)" });
         gsap.to(hitArea, { y: 0, duration: 0.4, ease: "elastic.out(1.5, 0.3)" });
