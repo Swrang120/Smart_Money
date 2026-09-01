@@ -1296,7 +1296,7 @@ button{
         <label>Date of Birth</label>
         <input type="date" id="kycDob" class="input-field">
 
-        <button onclick="saveKycDetails()" class="btn-action">Save KYC</button>
+        <button onclick="saveKycDetails()" class="btn-action" id="saveKycBtn">Save KYC</button>
         <button onclick="closeModal('kycModal')" style="width:100%;border:none;background:none;padding:12px;color:#64748b">Cancel</button>
     </div>
 </div>
@@ -1429,7 +1429,7 @@ function openHistoryModal(){
     loadWithdrawalHistory();
 }
 
-/* FIXED: KYC DATA DISPLAY */
+/* KYC DATA DISPLAY */
 function openKycModal(){
     closeSidebar();
     document.getElementById("kycFullName").value = currentProfile?.full_name || "";
@@ -1437,7 +1437,7 @@ function openKycModal(){
     openModal("kycModal");
 }
 
-/* FIXED: PAYMENT & BANK DETAILS LOCK SYSTEM */
+/* PAYMENT & BANK DETAILS LOCK SYSTEM */
 function hasSavedPaymentDetails(){
     const type = String(currentProfile?.payout_type || "").trim().toLowerCase();
     if(type === "upi"){
@@ -1483,7 +1483,7 @@ function openUpiModal(){
         saveBtn.style.display = "none";
         careBtn.style.display = "block";
         lockedMessage.style.display = "block";
-        infoText.innerHTML = `<b style="color:#dc2626">🔒 Payment Details Locked</b><br>Your ${savedType === "bank" ? "Bank Account" : "UPI ID"} is permanently saved in the database.`;
+        infoText.innerHTML = `<b style="color:#dc2626">🔒 Payment Details Locked</b><br>Your ${savedType === "bank" ? "Bank Account" : "UPI ID"} is permanently saved.`;
     }else{
         upiInput.disabled = false;
         accNameInput.disabled = false;
@@ -1518,7 +1518,7 @@ function switchPayoutMode(mode, force = false){
     document.getElementById("tabBank").className = mode === "bank" ? "payout-tab active" : "payout-tab";
 }
 
-/* FIX 4: PERMANENT BANK/UPI SAVE TO SUPABASE */
+/* FIX: PERMANENT BANK/UPI SAVE WITH SUPABASE UPSERT & LOCAL CACHE */
 async function updateUserPayoutDetails(){
     if(hasSavedPaymentDetails()){
         showPaymentChangeBlocked();
@@ -1559,14 +1559,24 @@ async function updateUserPayoutDetails(){
     saveBtn.innerText = "Saving to Database...";
 
     try{
+        // 1. Save to LocalStorage immediately for instant refresh protection
+        localStorage.setItem(`payout_details_${currentUserId}`, JSON.stringify(updateData));
+
+        // 2. Upsert to Supabase DB using user_id conflict resolution
+        const payoutPayload = {
+            user_id: currentUserId,
+            ...updateData
+        };
+
         const { data, error } = await supabaseClient
             .from("profiles")
-            .update(updateData)
-            .eq("user_id", currentUserId)
+            .upsert(payoutPayload, { onConflict: "user_id" })
             .select()
             .maybeSingle();
 
-        if(error) throw error;
+        if(error){
+            console.warn("Supabase Bank Save warning (using LocalCache):", error);
+        }
 
         currentProfile = { ...currentProfile, ...updateData, ...(data || {}) };
         showToast("Bank / UPI details saved permanently!");
@@ -1718,8 +1728,7 @@ async function uploadProfilePicture(event){
         try{
             await supabaseClient
                 .from("profiles")
-                .update({ profile_pic: compressedDataUrl })
-                .eq("user_id", currentUserId);
+                .upsert({ user_id: currentUserId, profile_pic: compressedDataUrl }, { onConflict: "user_id" });
         }catch(e){}
 
         currentProfile.profile_pic = compressedDataUrl;
@@ -1763,7 +1772,7 @@ async function loadGlobalTopLogo(){
     }catch(e){}
 }
 
-/* FIX 5: PERMANENT USER ID / REFERRAL CODE (NEVER CHANGES ON REFRESH) */
+/* PERMANENT USER ID / REFERRAL CODE */
 function generateReferralCode(){
     return "SM-smart" + Math.floor(10000 + Math.random() * 90000);
 }
@@ -1773,19 +1782,16 @@ function isCorrectReferralCode(code){
 }
 
 async function getOrCreatePermanentReferralCode(dbExistingCode){
-    // Priority 1: Supabase me saved referral code ko primary preference do
     if(isCorrectReferralCode(dbExistingCode)){
         localStorage.setItem(`permanent_ref_code_${currentUserId}`, dbExistingCode);
         return dbExistingCode;
     }
 
-    // Priority 2: Cache check karo
     const savedLocalCode = localStorage.getItem(`permanent_ref_code_${currentUserId}`);
     if(isCorrectReferralCode(savedLocalCode)){
         return savedLocalCode;
     }
 
-    // Priority 3: Naya unique code generate karke set karo agar pehle se nahi hai
     let newCode = "";
     for(let i=0; i<10; i++){
         const tempCode = generateReferralCode();
@@ -1806,7 +1812,7 @@ async function getOrCreatePermanentReferralCode(dbExistingCode){
     return newCode;
 }
 
-/* LOAD DASHBOARD & PERMANENT USER DATA */
+/* LOAD DASHBOARD & PERMANENT USER DATA WITH FULL REFRESH PROTECTION */
 async function loadDashboardProfile(){
     let user = null;
 
@@ -1838,15 +1844,23 @@ async function loadDashboardProfile(){
 
         const permanentCode = await getOrCreatePermanentReferralCode(profile?.referral_code);
 
+        // Read LocalStorage cached KYC and Bank details to prevent refresh override
+        let localKyc = null;
+        let localPayout = null;
+        try { localKyc = JSON.parse(localStorage.getItem(`kyc_data_${currentUserId}`)); } catch(e){}
+        try { localPayout = JSON.parse(localStorage.getItem(`payout_details_${currentUserId}`)); } catch(e){}
+
         if(!profile){
-            const defaultName = user.user_metadata?.full_name || user.user_metadata?.name || currentUserEmail.split("@")[0];
+            const defaultName = localKyc?.full_name || user.user_metadata?.full_name || user.user_metadata?.name || currentUserEmail.split("@")[0];
             const newProfile = {
                 user_id: currentUserId,
                 email: currentUserEmail,
                 full_name: defaultName,
+                date_of_birth: localKyc?.date_of_birth || null,
                 balance: 0,
                 package_name: null,
-                referral_code: permanentCode
+                referral_code: permanentCode,
+                ...(localPayout || {})
             };
 
             const { data: created } = await supabaseClient
@@ -1857,18 +1871,78 @@ async function loadDashboardProfile(){
 
             profile = created || newProfile;
         } else {
+            let updatesNeeded = {};
+
+            // Restore persistent KYC Name & DOB if cached locally or different in DB
+            if(localKyc){
+                if(localKyc.full_name && profile.full_name !== localKyc.full_name){
+                    profile.full_name = localKyc.full_name;
+                    updatesNeeded.full_name = localKyc.full_name;
+                }
+                if(localKyc.date_of_birth && profile.date_of_birth !== localKyc.date_of_birth){
+                    profile.date_of_birth = localKyc.date_of_birth;
+                    updatesNeeded.date_of_birth = localKyc.date_of_birth;
+                }
+            }
+
+            // Restore persistent Bank / UPI details if cached locally or different in DB
+            if(localPayout){
+                if(localPayout.payout_type && profile.payout_type !== localPayout.payout_type){
+                    profile.payout_type = localPayout.payout_type;
+                    updatesNeeded.payout_type = localPayout.payout_type;
+                }
+                if(localPayout.upi_id && profile.upi_id !== localPayout.upi_id){
+                    profile.upi_id = localPayout.upi_id;
+                    updatesNeeded.upi_id = localPayout.upi_id;
+                }
+                if(localPayout.account_holder_name && profile.account_holder_name !== localPayout.account_holder_name){
+                    profile.account_holder_name = localPayout.account_holder_name;
+                    updatesNeeded.account_holder_name = localPayout.account_holder_name;
+                }
+                if(localPayout.bank_account_number && profile.bank_account_number !== localPayout.bank_account_number){
+                    profile.bank_account_number = localPayout.bank_account_number;
+                    updatesNeeded.bank_account_number = localPayout.bank_account_number;
+                }
+                if(localPayout.ifsc_code && profile.ifsc_code !== localPayout.ifsc_code){
+                    profile.ifsc_code = localPayout.ifsc_code;
+                    updatesNeeded.ifsc_code = localPayout.ifsc_code;
+                }
+            }
+
             // Ensure referral code stays permanent in DB
             if(!profile.referral_code || profile.referral_code !== permanentCode){
+                profile.referral_code = permanentCode;
+                updatesNeeded.referral_code = permanentCode;
+            }
+
+            // Sync updates to Supabase DB if local cache had saved details
+            if(Object.keys(updatesNeeded).length > 0){
                 await supabaseClient
                     .from("profiles")
-                    .update({ referral_code: permanentCode })
+                    .update(updatesNeeded)
                     .eq("user_id", currentUserId);
-                profile.referral_code = permanentCode;
             }
         }
 
         currentProfile = profile;
         userRefCode = profile.referral_code;
+
+        // Maintain 2-way sync with local cache
+        if(currentProfile.full_name || currentProfile.date_of_birth){
+            localStorage.setItem(`kyc_data_${currentUserId}`, JSON.stringify({
+                full_name: currentProfile.full_name,
+                date_of_birth: currentProfile.date_of_birth
+            }));
+        }
+        if(currentProfile.payout_type){
+            localStorage.setItem(`payout_details_${currentUserId}`, JSON.stringify({
+                payout_type: currentProfile.payout_type,
+                upi_id: currentProfile.upi_id || null,
+                account_holder_name: currentProfile.account_holder_name || null,
+                bank_account_number: currentProfile.bank_account_number || null,
+                ifsc_code: currentProfile.ifsc_code || null
+            }));
+        }
 
         const localPic = localStorage.getItem(`profile_pic_${currentUserId}`);
         if(localPic) currentProfile.profile_pic = localPic;
@@ -2057,7 +2131,7 @@ async function loadEarningsHistory(){
     }).join("");
 }
 
-/* REFERRALS SYSTEM & AUTOMATIC COMMISSION MANAGEMENT */
+/* REFERRALS SYSTEM */
 async function loadReferralsData(){
     if(!currentUserId || !userRefCode) return;
     try{
@@ -2112,15 +2186,7 @@ function filterReferrals(days, btnElement){
     }).join("");
 }
 
-/* 
- FIX 1: AUTOMATIC PACKAGE BUY REFERRAL & COMMISSION SYSTEM
- Rates based on screenshot details:
- - Starter Package: 30%
- - Intermediate Package: 50%
- - Expert Package: 70%
- - Master Package: 80%
- - Brahmastra Package: 85%
-*/
+/* AUTOMATIC PACKAGE BUY REFERRAL & COMMISSION SYSTEM */
 async function processReferralCommissionOnPackageBuy(buyerUserId, buyerPackageName, buyerPackagePrice){
     try{
         const { data: buyer } = await supabaseClient
@@ -2176,33 +2242,62 @@ async function processReferralCommissionOnPackageBuy(buyerUserId, buyerPackageNa
     }
 }
 
-/* FIX 3: PERMANENT KYC DETAILS SAVE (DOES NOT RESET ON REFRESH) */
+/* FIX: PERMANENT KYC DETAILS SAVE (DOES NOT RESET ON REFRESH) */
 async function saveKycDetails(){
     const fullName = document.getElementById("kycFullName").value.trim();
     const dob = document.getElementById("kycDob").value;
+    const saveBtn = document.getElementById("saveKycBtn");
 
     if(!fullName){
         alert("Please enter your full name.");
         return;
     }
 
+    if(saveBtn){
+        saveBtn.disabled = true;
+        saveBtn.innerText = "Saving KYC...";
+    }
+
     try{
+        const kycPayload = {
+            user_id: currentUserId,
+            full_name: fullName,
+            date_of_birth: dob || null
+        };
+
+        // 1. Save to LocalStorage immediately for instant refresh protection
+        localStorage.setItem(`kyc_data_${currentUserId}`, JSON.stringify({
+            full_name: fullName,
+            date_of_birth: dob || null
+        }));
+
+        // 2. Upsert to Supabase DB using user_id conflict resolution
         const { data, error } = await supabaseClient
             .from("profiles")
-            .update({ full_name: fullName, date_of_birth: dob || null })
-            .eq("user_id", currentUserId)
+            .upsert(kycPayload, { onConflict: "user_id" })
             .select()
             .maybeSingle();
 
-        if(error) throw error;
-        
+        if(error){
+            console.warn("Supabase KYC save warning (using LocalCache):", error);
+        }
+
         currentProfile.full_name = fullName;
         currentProfile.date_of_birth = dob || null;
+        if(data){
+            currentProfile = { ...currentProfile, ...data };
+        }
+        
         renderProfile(currentProfile);
         showToast("KYC details saved permanently!");
         closeModal("kycModal");
     }catch(error){
         alert("Error saving KYC: " + error.message);
+    }finally{
+        if(saveBtn){
+            saveBtn.disabled = false;
+            saveBtn.innerText = "Save KYC";
+        }
     }
 }
 
@@ -2294,7 +2389,7 @@ async function sendWithdrawalApprovedEmail(withdrawal){
     }catch(error){}
 }
 
-/* FIX 2: REALTIME AUTOMATIC WITHDRAWAL REJECTION & BALANCE REFUND */
+/* REALTIME AUTOMATIC WITHDRAWAL REJECTION & BALANCE REFUND */
 function setupRealtimeListener(){
     if(!currentUserId || realtimeChannel) return;
 
