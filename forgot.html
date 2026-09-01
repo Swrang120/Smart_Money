@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Smart Money - Forgot Password</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
-
 <style>
 *{box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif;}
 body{
@@ -72,9 +69,7 @@ p{font-size:13px;color:#9ca3af;margin-bottom:25px;text-align:center;line-height:
 .status.success{display:block;background:rgba(34,197,94,.10);border:1px solid rgba(34,197,94,.25);color:#86efac;}
 .status.error{display:block;background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.25);color:#fca5a5;}
 </style>
-
 </head>
-
 <body>
 
 <div class="box">
@@ -88,14 +83,11 @@ p{font-size:13px;color:#9ca3af;margin-bottom:25px;text-align:center;line-height:
   </div>
 
   <button onclick="sendResetLink()" class="btn-action" id="resetBtn">Send Reset Link</button>
-
   <div id="statusBox" class="status"></div>
-
   <a href="login.html" class="back-link">← Back to Login</a>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
@@ -131,10 +123,7 @@ async function sendResetLink() {
 
   try {
     const redirectUrl = "https://swrang120.github.io/Smart_Money/update-password.html";
-
-    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-      redirectTo: redirectUrl
-    });
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: redirectUrl });
 
     if (error) throw error;
 
@@ -161,6 +150,5 @@ document.getElementById("forgotEmail").addEventListener("keydown", function(even
   }
 });
 </script>
-
 </body>
 </html>
