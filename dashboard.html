@@ -3056,8 +3056,7 @@ function filterReferrals(days, btnElement){
 
 /* =========================================================
    KYC SAVE (FIXED WITH MAYBESINGLE)
-========================================================= */
-
+=========================================================
 async function saveKycDetails(){
     const fullName = document.getElementById("kycFullName").value.trim();
     const dob = document.getElementById("kycDob").value;
@@ -3068,25 +3067,38 @@ async function saveKycDetails(){
     }
 
     try{
+        console.log("Saving profile for user:", currentUserId);
+
         const { data, error } = await supabaseClient
             .from("profiles")
-            .update({ full_name: fullName, date_of_birth: dob || null })
+            .update({ 
+                full_name: fullName, 
+                date_of_birth: dob || null,
+                updated_at: new Date()
+            })
             .eq("user_id", currentUserId)
             .select()
             .maybeSingle();
 
         if(error) throw error;
-        currentProfile = { ...currentProfile, ...(data || { full_name: fullName, date_of_birth: dob }) };
+
+        // Fallback if data is null (meaning RLS blocked the update or row didn't match)
+        if (!data) {
+            throw new Error("Update failed. Please check if your user ID matches the profile row or if RLS policies allow updates.");
+        }
+
+        console.log("Successfully updated in DB:", data);
+
+        currentProfile = { ...currentProfile, ...data };
         renderProfile(currentProfile, fullName);
         showToast("KYC saved successfully!");
         closeModal("kycModal");
     }catch(error){
+        console.error("KYC Save Error:", error);
         alert("Error: " + error.message);
     }
 }
-
-
-/* =========================================================
+  =========================================================
    SUBMIT WITHDRAWAL
 ========================================================= */
 
