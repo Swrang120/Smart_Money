@@ -1518,7 +1518,7 @@ function switchPayoutMode(mode, force = false){
     document.getElementById("tabBank").className = mode === "bank" ? "payout-tab active" : "payout-tab";
 }
 
-/* FIX: PERMANENT BANK/UPI SAVE WITH SUPABASE UPSERT & LOCAL CACHE */
+/* PERMANENT BANK/UPI SAVE WITH SUPABASE UPSERT & LOCAL CACHE */
 async function updateUserPayoutDetails(){
     if(hasSavedPaymentDetails()){
         showPaymentChangeBlocked();
@@ -1559,10 +1559,8 @@ async function updateUserPayoutDetails(){
     saveBtn.innerText = "Saving to Database...";
 
     try{
-        // 1. Save to LocalStorage immediately for instant refresh protection
         localStorage.setItem(`payout_details_${currentUserId}`, JSON.stringify(updateData));
 
-        // 2. Upsert to Supabase DB using user_id conflict resolution
         const payoutPayload = {
             user_id: currentUserId,
             ...updateData
@@ -1844,7 +1842,6 @@ async function loadDashboardProfile(){
 
         const permanentCode = await getOrCreatePermanentReferralCode(profile?.referral_code);
 
-        // Read LocalStorage cached KYC and Bank details to prevent refresh override
         let localKyc = null;
         let localPayout = null;
         try { localKyc = JSON.parse(localStorage.getItem(`kyc_data_${currentUserId}`)); } catch(e){}
@@ -1873,7 +1870,6 @@ async function loadDashboardProfile(){
         } else {
             let updatesNeeded = {};
 
-            // Restore persistent KYC Name & DOB if cached locally or different in DB
             if(localKyc){
                 if(localKyc.full_name && profile.full_name !== localKyc.full_name){
                     profile.full_name = localKyc.full_name;
@@ -1885,7 +1881,6 @@ async function loadDashboardProfile(){
                 }
             }
 
-            // Restore persistent Bank / UPI details if cached locally or different in DB
             if(localPayout){
                 if(localPayout.payout_type && profile.payout_type !== localPayout.payout_type){
                     profile.payout_type = localPayout.payout_type;
@@ -1909,13 +1904,11 @@ async function loadDashboardProfile(){
                 }
             }
 
-            // Ensure referral code stays permanent in DB
             if(!profile.referral_code || profile.referral_code !== permanentCode){
                 profile.referral_code = permanentCode;
                 updatesNeeded.referral_code = permanentCode;
             }
 
-            // Sync updates to Supabase DB if local cache had saved details
             if(Object.keys(updatesNeeded).length > 0){
                 await supabaseClient
                     .from("profiles")
@@ -1927,7 +1920,6 @@ async function loadDashboardProfile(){
         currentProfile = profile;
         userRefCode = profile.referral_code;
 
-        // Maintain 2-way sync with local cache
         if(currentProfile.full_name || currentProfile.date_of_birth){
             localStorage.setItem(`kyc_data_${currentUserId}`, JSON.stringify({
                 full_name: currentProfile.full_name,
@@ -2012,7 +2004,42 @@ function updatePackageModal(){
     document.getElementById("modalPkgWithdraw").innerText = withdrawLimitText;
 }
 
-/* WITHDRAWAL HISTORY */
+/* EMAILJS APPROVED TRIGGER (FIXED) */
+async function sendWithdrawalApprovedEmail(withdrawal){
+    try{
+        if(!withdrawal || !withdrawal.id || !window.emailjs) return;
+        const emailKey = `withdrawal_approved_email_${withdrawal.id}`;
+        if(localStorage.getItem(emailKey)) return;
+
+        const amount = Number(withdrawal.amount || 0).toFixed(2);
+        const userName = currentProfile?.full_name || "Smart Money User";
+        const userEmail = currentProfile?.email || currentUserEmail;
+        if(!userEmail) return;
+
+        await emailjs.send(
+            EMAILJS_SERVICE_ID,
+            EMAILJS_WITHDRAW_APPROVED_TEMPLATE,
+            {
+                to_name: userName,
+                to_email: userEmail,
+                user_name: userName,
+                user_email: userEmail,
+                amount: "₹" + amount,
+                withdrawal_amount: "₹" + amount,
+                status: "APPROVED",
+                withdrawal_id: String(withdrawal.id)
+            },
+            EMAILJS_PUBLIC_KEY
+        );
+
+        localStorage.setItem(emailKey, "sent");
+        console.log("Withdrawal approval email sent successfully via EmailJS!");
+    }catch(error){
+        console.error("EmailJS Send Error:", error);
+    }
+}
+
+/* WITHDRAWAL HISTORY & AUTO EMAIL CHECK */
 async function loadWithdrawalHistory(){
     if(!currentUserId) return;
     const container = document.getElementById("withdrawalHistoryList");
@@ -2029,6 +2056,14 @@ async function loadWithdrawalHistory(){
             container.innerHTML = `<div style="text-align:center;color:#64748b;font-size:13px;padding:15px">No withdrawal history found</div>`;
             return;
         }
+
+        // Automatic Email Trigger Check for Approved Withdrawals
+        data.forEach(item => {
+            const st = String(item.status || "").toLowerCase();
+            if(st === "approved" || st === "success" || st === "paid"){
+                sendWithdrawalApprovedEmail(item);
+            }
+        });
 
         container.innerHTML = data.map(item=>{
             const status = String(item.status || "pending").toLowerCase();
@@ -2222,7 +2257,6 @@ async function processReferralCommissionOnPackageBuy(buyerUserId, buyerPackageNa
 
         const commissionAmount = Number(buyerPackagePrice) * commissionRate;
 
-        // Earning Transaction Entry
         await supabaseClient.from("earnings").insert({
             user_id: sponsor.user_id,
             amount: commissionAmount,
@@ -2230,7 +2264,6 @@ async function processReferralCommissionOnPackageBuy(buyerUserId, buyerPackageNa
             created_at: new Date().toISOString()
         });
 
-        // Credit Sponsor Balance
         const newSponsorBal = Number(sponsor.balance || 0) + commissionAmount;
         await supabaseClient
             .from("profiles")
@@ -2242,7 +2275,7 @@ async function processReferralCommissionOnPackageBuy(buyerUserId, buyerPackageNa
     }
 }
 
-/* FIX: PERMANENT KYC DETAILS SAVE (DOES NOT RESET ON REFRESH) */
+/* PERMANENT KYC DETAILS SAVE */
 async function saveKycDetails(){
     const fullName = document.getElementById("kycFullName").value.trim();
     const dob = document.getElementById("kycDob").value;
@@ -2265,13 +2298,11 @@ async function saveKycDetails(){
             date_of_birth: dob || null
         };
 
-        // 1. Save to LocalStorage immediately for instant refresh protection
         localStorage.setItem(`kyc_data_${currentUserId}`, JSON.stringify({
             full_name: fullName,
             date_of_birth: dob || null
         }));
 
-        // 2. Upsert to Supabase DB using user_id conflict resolution
         const { data, error } = await supabaseClient
             .from("profiles")
             .upsert(kycPayload, { onConflict: "user_id" })
@@ -2362,34 +2393,7 @@ async function submitWithdrawal(){
     }
 }
 
-/* EMAILJS APPROVED TRIGGER */
-async function sendWithdrawalApprovedEmail(withdrawal){
-    try{
-        if(!withdrawal?.id || !window.emailjs) return;
-        const emailKey = `withdrawal_approved_email_${withdrawal.id}`;
-        if(localStorage.getItem(emailKey)) return;
-
-        const amount = Number(withdrawal.amount || 0).toFixed(2);
-        const userName = currentProfile?.full_name || "Smart Money User";
-        const userEmail = currentProfile?.email || currentUserEmail;
-        if(!userEmail) return;
-
-        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_WITHDRAW_APPROVED_TEMPLATE, {
-            to_name: userName,
-            to_email: userEmail,
-            user_name: userName,
-            user_email: userEmail,
-            amount: "₹" + amount,
-            withdrawal_amount: "₹" + amount,
-            status: "APPROVED",
-            withdrawal_id: String(withdrawal.id)
-        });
-
-        localStorage.setItem(emailKey, "sent");
-    }catch(error){}
-}
-
-/* REALTIME AUTOMATIC WITHDRAWAL REJECTION & BALANCE REFUND */
+/* REALTIME LISTENER WITH AUTOMATIC WITHDRAWAL REJECTION & APPROVAL TRIGGER */
 function setupRealtimeListener(){
     if(!currentUserId || realtimeChannel) return;
 
@@ -2409,12 +2413,11 @@ function setupRealtimeListener(){
                 const newStatus = String(newData.status || "").toLowerCase();
                 const oldStatus = String(oldData.status || "").toLowerCase();
 
-                if(newStatus === "approved" && oldStatus !== "approved"){
+                if(newStatus === "approved" || newStatus === "success" || newStatus === "paid"){
                     await sendWithdrawalApprovedEmail(newData);
                     showToast("Your withdrawal request has been approved!");
                 }
 
-                // Automatic balance refund on rejection
                 if((newStatus === "rejected" || newStatus === "failed") && oldStatus !== "rejected" && oldStatus !== "failed"){
                     const refundAmount = Number(newData.amount || 0);
 
