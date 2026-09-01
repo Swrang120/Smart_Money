@@ -2,13 +2,13 @@
 <html lang="en">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Money - Forgot Password OTP</title>
+<title>Smart Money - Forgot Password</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
 <style>
 *{box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif;}
@@ -49,6 +49,7 @@ p{font-size:13px;color:#9ca3af;margin-bottom:25px;text-align:center;line-height:
   font-size:14px;
   transition:.3s;
 }
+.input-field::placeholder{color:#6b7280;}
 .input-field:focus{border-color:#8b5cf6;box-shadow:0 0 10px rgba(139,92,246,.30);}
 .btn-action{
   width:100%;
@@ -70,48 +71,38 @@ p{font-size:13px;color:#9ca3af;margin-bottom:25px;text-align:center;line-height:
 .status{display:none;margin-top:15px;padding:12px;border-radius:10px;font-size:12px;text-align:center;line-height:1.5;}
 .status.success{display:block;background:rgba(34,197,94,.10);border:1px solid rgba(34,197,94,.25);color:#86efac;}
 .status.error{display:block;background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.25);color:#fca5a5;}
-.hidden{display:none;}
 </style>
+
 </head>
 
 <body>
 
 <div class="box">
   <div class="brand-title">💎 SMART MONEY</div>
-  <h2>Forgot Password</h2>
-  <p id="instructionText">Enter your registered email address to receive a 6-digit verification OTP.</p>
+  <h2>Forgot Password?</h2>
+  <p>Enter your registered email address. We will send you a secure password reset link.</p>
 
-  <!-- Step 1: Email Input Form -->
-  <div id="emailStep">
-    <div class="form-group">
-      <label>Email Address</label>
-      <input type="email" id="forgotEmail" class="input-field" placeholder="name@example.com" autocomplete="email" required>
-    </div>
-    <button onclick="sendOtp()" class="btn-action" id="sendBtn">Send OTP</button>
+  <div class="form-group">
+    <label>Email Address</label>
+    <input type="email" id="forgotEmail" class="input-field" placeholder="name@example.com" autocomplete="email" required>
   </div>
 
-  <!-- Step 2: OTP Verification Form (Hidden Initially) -->
-  <div id="otpStep" class="hidden">
-    <div class="form-group">
-      <label>Enter 6-Digit OTP</label>
-      <input type="text" id="otpInput" class="input-field" placeholder="123456" maxlength="6">
-    </div>
-    <button onclick="verifyOtp()" class="btn-action" id="verifyBtn">Verify OTP</button>
-  </div>
+  <button onclick="sendResetLink()" class="btn-action" id="resetBtn">Send Reset Link</button>
 
   <div id="statusBox" class="status"></div>
 
   <a href="login.html" class="back-link">← Back to Login</a>
 </div>
 
-<script>
-/* =========================================
-   EMAILJS INITIALIZATION
-========================================= */
-emailjs.init("nD7bbMhcvotO19ODK");
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-let generatedOtp = "";
-let userEmail = "";
+<script>
+const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+});
 
 function showStatus(message, type) {
   const box = document.getElementById("statusBox");
@@ -119,83 +110,56 @@ function showStatus(message, type) {
   box.className = "status " + type;
 }
 
-/* =========================================
-   SEND OTP VIA EMAILJS
-========================================= */
-async function sendOtp() {
-  userEmail = document.getElementById("forgotEmail").value.trim().toLowerCase();
-  const btn = document.getElementById("sendBtn");
+async function sendResetLink() {
+  const email = document.getElementById("forgotEmail").value.trim().toLowerCase();
+  const btn = document.getElementById("resetBtn");
 
-  if (!userEmail) {
+  if (!email) {
     showStatus("Please enter your email address.", "error");
     return;
   }
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailPattern.test(userEmail)) {
+  if (!emailPattern.test(email)) {
     showStatus("Please enter a valid email address.", "error");
     return;
   }
 
   btn.disabled = true;
-  btn.innerText = "Sending OTP...";
+  btn.innerText = "Sending Reset Link...";
   document.getElementById("statusBox").className = "status";
 
-  // Generate 6-digit random OTP
-  generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
-
-  const templateParams = {
-    to_name: userEmail.split('@')[0],
-    to_email: userEmail,
-    otp_code: generatedOtp,
-    reset_link: "Use this OTP: " + generatedOtp
-  };
-
   try {
-    // Send using your EmailJS credentials
-    await emailjs.send("service_4q2gu5k", "template_eh1e4fr", templateParams);
+    const redirectUrl = "https://swrang120.github.io/Smart_Money/update-password.html";
 
-    showStatus("✓ OTP sent successfully to your email! Please check your inbox and spam.", "success");
-    
-    // Switch to OTP entry view
-    document.getElementById("emailStep").classList.add("hidden");
-    document.getElementById("otpStep").classList.remove("hidden");
-    document.getElementById("instructionText").innerText = "Enter the 6-digit verification code sent to " + userEmail;
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+      redirectTo: redirectUrl
+    });
 
-  } catch (err) {
-    console.error("EmailJS Error:", err);
-    showStatus("Error: Unable to send OTP. Please check your network or try again.", "error");
-    btn.disabled = false;
-    btn.innerText = "Send OTP";
-  }
-}
+    if (error) throw error;
 
-/* =========================================
-   VERIFY ENTERED OTP
-========================================= */
-function verifyOtp() {
-  const enteredOtp = document.getElementById("otpInput").value.trim();
-  const verifyBtn = document.getElementById("verifyBtn");
-
-  if (!enteredOtp || enteredOtp.length !== 6) {
-    showStatus("Please enter a valid 6-digit OTP.", "error");
-    return;
-  }
-
-  if (enteredOtp === generatedOtp) {
-    showStatus("✓ OTP Verified Successfully! Redirecting...", "success");
-    verifyBtn.innerText = "Verified ✓";
-    
-    // Save email temporarily so update-password page knows who is changing password
-    localStorage.setItem("reset_email", userEmail);
+    showStatus("✓ A secure password reset link has been sent to your email. Please check your Gmail inbox and spam folder.", "success");
+    btn.innerText = "Reset Link Sent ✓";
 
     setTimeout(() => {
-      window.location.href = "update-password.html";
-    }, 2000);
-  } else {
-    showStatus("Invalid OTP. Please check and try again.", "error");
+      btn.disabled = false;
+      btn.innerText = "Send Reset Link";
+    }, 5000);
+
+  } catch (err) {
+    console.error("Password Reset Error:", err);
+    showStatus("Error: " + (err.message || "Unable to send reset link. Please try again."), "error");
+    btn.disabled = false;
+    btn.innerText = "Send Reset Link";
   }
 }
+
+document.getElementById("forgotEmail").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    sendResetLink();
+  }
+});
 </script>
 
 </body>
