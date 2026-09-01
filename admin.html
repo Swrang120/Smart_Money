@@ -463,9 +463,10 @@ async function uploadPreviewImage(){
     if(!file){alert("Pehle preview image select karo!");return}
     try{
         const fileName = "preview_" + Date.now() + "_" + file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
-        let {error} = await supabaseClient.storage.from("avatars").upload(fileName, file, {contentType: file.type});
+        // FIX: Uploading to 'admin_updates' bucket to resolve the error shown in the screenshot
+        let {error} = await supabaseClient.storage.from("admin_updates").upload(fileName, file, {contentType: file.type});
         if(error) throw error;
-        const {data:url} = supabaseClient.storage.from("avatars").getPublicUrl(fileName);
+        const {data:url} = supabaseClient.storage.from("admin_updates").getPublicUrl(fileName);
         const imageUrl = url.publicUrl;
 
         // Upsert setting_key = 'index_preview_image' in global_settings table
