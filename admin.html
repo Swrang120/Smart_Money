@@ -90,10 +90,6 @@ button:hover{opacity:.88}
     opacity: var(--on);
     transition: opacity var(--transition);
 }
-.lamp-shade-path {
-    fill: var(--lamp-shade);
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
-}
 .lamp-base {
     fill: var(--lamp-base);
 }
@@ -149,6 +145,38 @@ button:hover{opacity:.88}
 
 .header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 20px;background:#111827;border-bottom:1px solid var(--border)}.logo{font-size:20px;font-weight:800}.logo span{color:#818cf8}.header-actions{display:flex;align-items:center;gap:8px}.menu-btn,.refresh-btn,.logout-btn{border:0;color:white;padding:10px 14px;border-radius:8px;cursor:pointer}.menu-btn{background:var(--accent)}.refresh-btn{background:#1e293b}.logout-btn{background:#991b1b}
 .sidebar{position:fixed;top:0;left:-330px;width:310px;height:100vh;z-index:1000;background:#111827;border-right:1px solid var(--border);padding:20px;transition:.3s;overflow-y:auto}.sidebar.open{left:0}.sidebar-section{margin-top:25px;padding-top:15px;border-top:1px solid var(--border)}.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:999;display:none}.logo-upload,.status-upload{background:var(--card2);padding:15px;border-radius:10px}.status-upload{margin-top:15px}.logo-upload input,.status-upload input,.status-upload textarea{width:100%;margin:10px 0;color:white;background:#0f172a;border:1px solid var(--border);padding:9px;border-radius:7px}
+
+/* ACCORDION COLLAPSIBLE SIDEBAR STYLES */
+.sidebar-section h3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 15px;
+    margin: 0;
+    user-select: none;
+}
+.sidebar-section h3::after {
+    content: '▼';
+    font-size: 11px;
+    transition: transform 0.3s ease;
+}
+.sidebar-section.collapsed h3::after {
+    transform: rotate(-90deg);
+}
+.sidebar-content {
+    max-height: 1000px;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    opacity: 1;
+    margin-top: 12px;
+}
+.sidebar-section.collapsed .sidebar-content {
+    max-height: 0;
+    opacity: 0;
+    margin-top: 0;
+}
+
 .container{width:min(1400px,95%);margin:auto;padding:25px 0 60px; position: relative; z-index: 5;}
 .section{margin-bottom:35px}.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:25px}.stat-card{background:var(--card);padding:20px;border-radius:14px;border:1px solid var(--border)}.stat-card h3{margin:0;color:var(--muted);font-size:13px}.stat-card p{margin:8px 0 0;font-size:28px;font-weight:bold}
 .table-box{overflow-x:auto;background:var(--card);border:1px solid var(--border);border-radius:14px}table{width:100%;border-collapse:collapse;min-width:1000px}th{background:rgba(255,255,255,.03);color:#cbd5e1;text-align:left}th,td{padding:14px;border-bottom:1px solid var(--border);vertical-align:middle}
@@ -245,12 +273,47 @@ button:hover{opacity:.88}
     <button class="btn btn-primary" onclick="uploadPreviewImage()">Upload Preview</button>
 </div>
 
-<div class="sidebar-section"><h3>🖼️ Active Preview Image</h3><div id="previewImageList">Loading...</div></div>
-<div class="sidebar-section"><h3>📱 Active Status</h3><div id="statusList">Loading...</div></div>
-<div class="sidebar-section"><h3>Approved History</h3><div id="approvedHistoryList">Loading...</div></div>
-<div class="sidebar-section"><h3>Deleted Users</h3><div id="deletedUsersList">Loading...</div></div>
-<div class="sidebar-section"><h3>Deleted Payments</h3><div id="deletedPaymentsList">Loading...</div></div>
-<div class="sidebar-section"><h3>Deleted Withdrawals</h3><div id="deletedWithdrawalsList">Loading...</div></div>
+<div class="sidebar-section collapsed" onclick="toggleAccordion(this)">
+    <h3>🖼️ Active Preview Image</h3>
+    <div class="sidebar-content" onclick="event.stopPropagation()">
+        <div id="previewImageList">Loading...</div>
+    </div>
+</div>
+
+<div class="sidebar-section collapsed" onclick="toggleAccordion(this)">
+    <h3>📱 Active Status</h3>
+    <div class="sidebar-content" onclick="event.stopPropagation()">
+        <div id="statusList">Loading...</div>
+    </div>
+</div>
+
+<div class="sidebar-section collapsed" onclick="toggleAccordion(this)">
+    <h3>Approved History</h3>
+    <div class="sidebar-content" onclick="event.stopPropagation()">
+        <div id="approvedHistoryList">Loading...</div>
+    </div>
+</div>
+
+<div class="sidebar-section collapsed" onclick="toggleAccordion(this)">
+    <h3>Deleted Users</h3>
+    <div class="sidebar-content" onclick="event.stopPropagation()">
+        <div id="deletedUsersList">Loading...</div>
+    </div>
+</div>
+
+<div class="sidebar-section collapsed" onclick="toggleAccordion(this)">
+    <h3>Deleted Payments</h3>
+    <div class="sidebar-content" onclick="event.stopPropagation()">
+        <div id="deletedPaymentsList">Loading...</div>
+    </div>
+</div>
+
+<div class="sidebar-section collapsed" onclick="toggleAccordion(this)">
+    <h3>Deleted Withdrawals</h3>
+    <div class="sidebar-content" onclick="event.stopPropagation()">
+        <div id="deletedWithdrawalsList">Loading...</div>
+    </div>
+</div>
 </aside>
 
 <main class="container">
@@ -357,6 +420,10 @@ function showAdmin(){document.getElementById("loginScreen").classList.add("hidde
 function showLogin(){document.getElementById("adminApp").classList.add("hidden");document.getElementById("loginScreen").classList.remove("hidden")}
 
 function toggleSidebar(){const s=document.getElementById("adminSidebar"),o=document.getElementById("sidebarOverlay");s.classList.toggle("open");o.style.display=s.classList.contains("open")?"block":"none";if(s.classList.contains("open")){loadTrashAndHistoryData();loadActiveStatuses();loadActivePreviewImage()}}
+
+function toggleAccordion(element) {
+    element.classList.toggle('collapsed');
+}
 
 async function refreshAllData(){try{await Promise.all([loadUsers(),loadPaymentRequests(),loadWithdrawals()]);updateGlobalStats()}catch(e){console.error(e);alert("Refresh failed: "+(e.message||"Unknown error"))}}
 function updateGlobalStats(){
