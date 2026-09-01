@@ -196,7 +196,7 @@ object-fit: cover;
 }
 
 .hamburger{
-display:none;
+display:flex; /* Enabled for both Desktop and Mobile for uniform layout */
 width:38px;
 height:38px;
 background:#f1f5f9;
@@ -218,7 +218,7 @@ border-radius:10px;
 
 
 /* ================================
-   MOBILE MENU (SIDEBAR)
+   UNIFORM SIDEBAR MENU (BOTH DESKTOP & MOBILE)
 ================================ */
 
 .mobile-menu{
@@ -1099,18 +1099,10 @@ color:#64748b;
 
 
 /* ================================
-   RESPONSIVE MEDIA QUERIES (Force Sidebar on Mobile/Desktop-Site View)
+   RESPONSIVE MEDIA QUERIES
 ================================ */
 
 @media(max-width:992px){
-
-.nav-links{
-display:none;
-}
-
-.hamburger{
-display:flex;
-}
 
 .packages-grid{
 grid-template-columns:repeat(2,1fr);
@@ -1298,25 +1290,6 @@ font-size:24px;
 
 </a>
 
-
-<div class="nav-links">
-
-<a href="#home">Home</a>
-<a href="#about">About Us</a>
-<a href="#packages">Plans</a>
-<a href="#testimonials">Feedback</a>
-<a href="#support">Support</a>
-
-<a href="dashboard.html"
-class="dashboard-btn">
-
-My Dashboard
-
-</a>
-
-</div>
-
-
 <div class="nav-right-icons">
 
 <a href="dashboard.html"
@@ -1341,7 +1314,6 @@ r="4"></circle>
 
 </a>
 
-
 <div class="hamburger"
 onclick="toggleMenu()">
 
@@ -1356,7 +1328,7 @@ onclick="toggleMenu()">
 </nav>
 
 
-<!-- MOBILE MENU -->
+<!-- UNIFORM SIDEBAR MENU (BOTH DESKTOP & MOBILE) -->
 
 <div class="menu-overlay"
 id="menuOverlay"
@@ -1388,8 +1360,8 @@ onclick="toggleMenu()">
 
 <a href="#packages" class="m-link" onclick="toggleMenu()">👑 Plans & Packages</a>
 
-<!-- Added Preview Option for Supabase Admin Updates -->
-<a href="preview.html" class="m-link" id="previewMenuLink" onclick="toggleMenu()">👁️ Preview (Admin Updates)</a>
+<!-- Preview Option (Admin Updates from Supabase bucket/storage) -->
+<a href="#" class="m-link" id="previewMenuLink" onclick="openAdminPreviewModal(); toggleMenu();">👁️ Preview (Admin Updates)</a>
 
 <a href="#testimonials" class="m-link" onclick="toggleMenu()">⭐ Feedback</a>
 
@@ -2629,6 +2601,18 @@ Package Details
 </div>
 
 
+<!-- ADMIN PREVIEW MODAL (Loads Supabase / Admin updates photo dynamically to prevent 404) -->
+<div class="modal-overlay" id="adminPreviewModal">
+<div class="modal-box" style="text-align:center;">
+<button class="modal-close" onclick="closeAdminPreviewModal()">✕</button>
+<h2 style="margin-bottom:15px;">Admin Update Preview</h2>
+<div id="previewImageContainer" style="min-height:200px; display:flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:12px; overflow:hidden;">
+<p id="noPreviewText" style="color:#64748b; font-size:13px;">No preview image uploaded from admin panel yet or loading from Supabase bucket...</p>
+</div>
+</div>
+</div>
+
+
 <script>
 
 
@@ -2708,16 +2692,37 @@ document
 
 }
 
+function openAdminPreviewModal(){
+    const modal = document.getElementById("adminPreviewModal");
+    const container = document.getElementById("previewImageContainer");
+    
+    // Fetching the uploaded image from localStorage / Supabase admin updates storege
+    const previewImgUrl = localStorage.getItem('index_preview_image') || localStorage.getItem('adminUploadedProfile') || localStorage.getItem('userProfilePic');
+    
+    if(previewImgUrl) {
+        container.innerHTML = `<img src="${previewImgUrl}" alt="Admin Preview" style="width:100%; height:auto; max-height:350px; object-fit:contain;">`;
+    } else {
+        container.innerHTML = `<p style="color:#64748b; font-size:13px; padding:20px;">No preview photo found from admin panel storage (` + `admin_updates` + `). Please upload an image from your admin panel first.</p>`;
+    }
+    
+    modal.style.display = "flex";
+}
+
+function closeAdminPreviewModal(){
+    document.getElementById("adminPreviewModal").style.display = "none";
+}
+
 
 window.onclick=function(event){
 
-const modal=
-document.getElementById("packageModal");
+const pkgModal=document.getElementById("packageModal");
+const adminModal=document.getElementById("adminPreviewModal");
 
-if(event.target===modal){
-
+if(event.target===pkgModal){
 closePackageModal();
-
+}
+if(event.target===adminModal){
+closeAdminPreviewModal();
 }
 
 }
