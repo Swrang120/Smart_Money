@@ -294,10 +294,10 @@ function val(...a){return a.find(x=>x!==undefined&&x!==null&&String(x).trim()!==
 function norm(v){return String(v||"").trim().toLowerCase()}
 function statusOf(v){return norm(v||"pending")}
 
-// Helper to reliably get profile unique key/id
+// Helper to reliably get profile unique key/id and ensure user ID displays properly
 function getUserKey(u) {
     if (!u) return "";
-    return val(u.user_id, u.auth_user_id, u.id);
+    return val(u.id, u.user_id, u.auth_user_id);
 }
 
 function findUserForRequest(item) {
@@ -436,7 +436,6 @@ async function loadWithdrawals(){
     const {data,error}=await supabaseClient.from("withdrawal_requests").select("*").order("created_at",{ascending:false});
     if(error)throw error;
     
-    // Sabse pehle profiles load karlo taaki sahi mapping ho jaye
     await loadUsersSilent();
 
     allWithdrawalsData=(data||[]).filter(x=>x.is_deleted!==true).map(item=>{
@@ -448,7 +447,6 @@ async function loadWithdrawals(){
     updateGlobalStats();
 }
 
-// Silent load users without re-rendering the whole user table every time withdrawals refresh
 async function loadUsersSilent(){
     const {data,error}=await supabaseClient.from("profiles").select("*");
     if(!error && data) {
@@ -465,7 +463,7 @@ function renderWithdrawals(){
  tbody.innerHTML=list.map(x=>{
   const status=x.status||"Pending",lower=statusOf(status);
   
-  const displayId = val(x._profile?.referral_id, x.referral_id, x.user_referral_id, x.user_id, x.profile_id, x._profile ? getUserKey(x._profile) : "");
+  const displayId = val(x._profile?.id, x._profile?.user_id, x.user_id, x.profile_id, x.referral_id);
   const displayName = val(x.full_name, x.name, x._profile?.full_name, "User");
   const displayEmail = val(x.email, x._profile?.email, "No email");
 
@@ -641,8 +639,7 @@ async function savePaymentDetails(){
         const uKey = getUserKey(currentEditUser);
         let updated = false;
 
-        // Try updating by user_id first, then auth_user_id, then id
-        const keyColumns = ['user_id', 'auth_user_id', 'id'];
+        const keyColumns = ['id', 'user_id', 'auth_user_id'];
         for (const col of keyColumns) {
             if (currentEditUser[col] || uKey) {
                 const searchVal = currentEditUser[col] || uKey;
@@ -658,7 +655,6 @@ async function savePaymentDetails(){
             throw new Error("Could not match user key in profiles table.");
         }
 
-        // Also update pending withdrawal requests if any
         for (const col of keyColumns) {
             if (currentEditUser[col] || uKey) {
                 const searchVal = currentEditUser[col] || uKey;
@@ -676,7 +672,7 @@ async function savePaymentDetails(){
 }
 
 async function executeProfileUpdate(id, payload) {
-    const keyColumns = ['user_id', 'auth_user_id', 'id'];
+    const keyColumns = ['id', 'user_id', 'auth_user_id'];
     for (const col of keyColumns) {
         const { error } = await supabaseClient.from("profiles").update(payload).eq(col, id);
         if (!error) return true;
@@ -695,11 +691,45 @@ async function softDeleteUser(id){
     const success = await executeProfileUpdate(id, {is_deleted: true});
     if(!success) alert("Failed to delete user.");
     loadUsers();
+    loadTrashAndHistoryData();
 }
 
 async function softDeleteRecord(id,table){if(!confirm("Move this record to trash?"))return;const {error}=await supabaseClient.from(table).update({is_deleted:true}).eq("id",id);if(error){alert(error.message);return}await refreshAllData();loadTrashAndHistoryData()}
-async function restoreRecord(id,table){if(!confirm("Restore this item?"))return;const {error}=await supabaseClient.from(table).update({is_deleted:false}).eq("id",id);if(error){alert(error.message);return}await refreshAllData();loadTrashAndHistoryData()}
-async function permanentDeleteRecord(id,table){if(!confirm("WARNING: This will permanently delete the record. Continue?"))return;const {error}=await supabaseClient.from(table).delete().eq("id",id);if(error){alert(error.message);return}await refreshAllData();loadTrashAndHistoryData()}
+async function restoreRecord(id,table){
+    if(!confirm("Restore this item?"))return;
+    let error = null;
+    if(table === 'profiles') {
+        const success = await executeProfileUpdate(id, {is_deleted: false});
+        if(!success) error = { message: "Failed to restore profile." };
+    } else {
+        const res = await supabaseClient.from(table).update({is_deleted:false}).eq("id",id);
+        error = res.error;
+    }
+    if(error){alert(error.message);return}
+    await refreshAllData();
+    loadTrashAndHistoryData();
+}
+
+async function permanentDeleteRecord(id,table){
+    if(!confirm("WARNING: This will permanently delete the record from Supabase database. Continue?"))return;
+    let error = null;
+    if(table === 'profiles') {
+        const keyColumns = ['id', 'user_id', 'auth_user_id'];
+        for (const col of keyColumns) {
+            const res = await supabaseClient.from("profiles").delete().eq(col, id);
+            if(!res.error) { error = null; break; }
+            else { error = res.error; }
+        }
+    } else {
+        const res = await supabaseClient.from(table).delete().eq("id", id);
+        error = res.error;
+    }
+
+    if(error){alert(error.message);return}
+    await refreshAllData();
+    loadTrashAndHistoryData();
+    alert("Permanently deleted from database successfully!");
+}
 
 async function loadTrashAndHistoryData(){try{const r=await Promise.all([supabaseClient.from("payment_requests").select("*").eq("status","Approved").order("created_at",{ascending:false}),supabaseClient.from("profiles").select("*").eq("is_deleted",true),supabaseClient.from("payment_requests").select("*").eq("is_deleted",true),supabaseClient.from("withdrawal_requests").select("*").eq("is_deleted",true)]);renderApprovedHistory(r[0].data||[]);renderDeletedUsers(r[1].data||[]);renderDeletedPayments(r[2].data||[]);renderDeletedWithdrawals(r[3].data||[])}catch(e){console.error(e)}}
 function renderApprovedHistory(d){const b=document.getElementById("approvedHistoryList");b.innerHTML=d.length?d.slice(0,20).map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||"User")}</b><br>₹${escapeHtml(x.amount||0)}<br><span class="small">${escapeHtml(x.package_name||"")}</span></div>`).join(""):"No approved history."}
@@ -729,10 +759,8 @@ Draggable.create(hitArea, {
         isOn = !isOn;
         root.style.setProperty('--on', isOn ? 1 : 0);
         gsap.to(cordBead, { y: 0, duration: 0.4, ease: "elastic.out(1.5, 0.3)" });
-        gsap.to(cordDirect, { y: 0 }); // safe fallback
-        gsap.to(cordBead, { y: 0, duration: 0.4, ease: "elastic.out(1.5, 0.3)" });
         gsap.to(cordLine, { attr: { y2: 180 }, duration: 0.4, ease: "elastic.out(1.5, 0.3)" });
-        gsap.to(hitArea, { y: 0, duration: 0.4, ease: "elastic.out(1.5, 0.3)" });
+        gsap.to(hitArea, { y: 0, duration: 0.4, ease: "registered" });
     }
 });
 </script>
