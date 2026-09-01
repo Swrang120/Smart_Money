@@ -294,18 +294,23 @@ function val(...a){return a.find(x=>x!==undefined&&x!==null&&String(x).trim()!==
 function norm(v){return String(v||"").trim().toLowerCase()}
 function statusOf(v){return norm(v||"pending")}
 
+// Helper to reliably get profile unique key/id
+function getUserKey(u) {
+    if (!u) return "";
+    return val(u.user_id, u.auth_user_id, u.id);
+}
+
 function findUserForRequest(item) {
   const itemId = val(item.user_id, item.profile_id, item.user_uuid, item.auth_user_id, item.id);
   const itemEmail = norm(item.email);
   const itemRef = norm(item.referral_id, item.user_referral_id);
 
   return allUsersData.find(u => {
-    const uId = String(u.id || "");
-    const uAuthId = String(u.auth_user_id || u.user_id || u.profile_id || "");
+    const uId = String(getUserKey(u));
     const uEmail = norm(u.email);
     const uRef = norm(u.referral_id);
 
-    return (itemId && (uId === String(itemId) || uAuthId === String(itemId))) ||
+    return (itemId && uId === String(itemId)) ||
            (itemEmail && uEmail === itemEmail) ||
            (itemRef && uRef === itemRef);
   }) || null;
@@ -438,7 +443,7 @@ function renderWithdrawals(){
  tbody.innerHTML=list.map(x=>{
   const status=x.status||"Pending",lower=statusOf(status);
   
-  const displayId = val(x._profile?.referral_id, x.referral_id, x.user_referral_id, x.user_id, x.profile_id);
+  const displayId = val(x._profile?.referral_id, x.referral_id, x.user_referral_id, x.user_id, x.profile_id, x._profile ? getUserKey(x._profile) : "");
   const displayName = val(x.full_name, x.name, x._profile?.full_name, "User");
   const displayEmail = val(x.email, x._profile?.email, "No email");
 
@@ -511,17 +516,17 @@ async function updateWithdrawal(id,status){
 }
 
 async function loadUsers(){const tbody=document.getElementById("usersTableBody");const {data,error}=await supabaseClient.from("profiles").select("*").order("created_at",{ascending:false});if(error){tbody.innerHTML=`<tr><td colspan="6">${escapeHtml(error.message)}</td></tr>`;return}allUsersData=data||[];renderUsers()}
-function renderUsers(){const tbody=document.getElementById("usersTableBody");let users=allUsersData.filter(x=>x.is_deleted!==true);const q=norm(currentUserSearch);if(q)users=users.filter(u=>norm(u.referral_id).includes(q)||norm(u.email).includes(q)||norm(u.full_name).includes(q)||String(u.id||"").toLowerCase().includes(q));if(!users.length){tbody.innerHTML=`<tr><td colspan="6" class="empty">${q?"No matching user found.":"No users found."}</td></tr>`;return}tbody.innerHTML=users.map(u=>{const active=u.is_active!==false,members=allUsersData.filter(m=>m.is_deleted!==true&&m.referred_by===u.referral_id),master=u.referral_id==="SM-smart87046";return `<tr><td><b>${escapeHtml(u.full_name||"User")}</b>${master?" 👑":""}<br><span class="small">${escapeHtml(u.email||"")}</span><br><span class="small">ID: ${escapeHtml(u.id||"")}</span></td><td>${escapeHtml(u.referral_id||"N/A")}</td><td>${escapeHtml(u.package_name||"Free")}<br>₹${escapeHtml(u.balance||0)}</td><td><span class="referral-count">👥 ${members.length} Direct Join</span><br><button class="btn btn-info" onclick="showReferralMembersById('${u.id}')">View Members</button></td><td><span class="badge" style="background:${active?'rgba(34,197,94,.15)':'rgba(239,68,68,.15)'};color:${active?'#4ade80':'#f87171'}">${active?"Active":"Blocked"}</span></td><td><button class="btn btn-info" onclick="openPaymentDetailsModal('${u.id}')">Edit Bank / UPI</button>${!master?`<button class="btn ${active?'btn-reject':'btn-approve'}" onclick="toggleUser('${u.id}',${!active})">${active?"Block":"Unblock"}</button><button class="btn btn-delete" onclick="softDeleteUser('${u.id}')">Delete</button>`:"<br>Master Admin"}</td></tr>`}).join("")}
+function renderUsers(){const tbody=document.getElementById("usersTableBody");let users=allUsersData.filter(x=>x.is_deleted!==true);const q=norm(currentUserSearch);if(q)users=users.filter(u=>norm(u.referral_id).includes(q)||norm(u.email).includes(q)||norm(u.full_name).includes(q)||String(getUserKey(u)).toLowerCase().includes(q));if(!users.length){tbody.innerHTML=`<tr><td colspan="6" class="empty">${q?"No matching user found.":"No users found."}</td></tr>`;return}tbody.innerHTML=users.map(u=>{const uKey=getUserKey(u);const active=u.is_active!==false,members=allUsersData.filter(m=>m.is_deleted!==true&&m.referred_by===u.referral_id),master=u.referral_id==="SM-smart87046";return `<tr><td><b>${escapeHtml(u.full_name||"User")}</b>${master?" 👑":""}<br><span class="small">${escapeHtml(u.email||"")}</span><br><span class="small">ID: ${escapeHtml(uKey||"N/A")}</span></td><td>${escapeHtml(u.referral_id||"N/A")}</td><td>${escapeHtml(u.package_name||"Free")}<br>₹${escapeHtml(u.balance||0)}</td><td><span class="referral-count">👥 ${members.length} Direct Join</span><br><button class="btn btn-info" onclick="showReferralMembersById('${uKey}')">View Members</button></td><td><span class="badge" style="background:${active?'rgba(34,197,94,.15)':'rgba(239,68,68,.15)'};color:${active?'#4ade80':'#f87171'}">${active?"Active":"Blocked"}</span></td><td><button class="btn btn-info" onclick="openPaymentDetailsModal('${uKey}')">Edit Bank / UPI</button>${!master?`<button class="btn ${active?'btn-reject':'btn-approve'}" onclick="toggleUser('${uKey}',${!active})">${active?"Block":"Unblock"}</button><button class="btn btn-delete" onclick="softDeleteUser('${uKey}')">Delete</button>`:"<br>Master Admin"}</td></tr>`}).join("")}
 function searchUsers(){currentUserSearch=document.getElementById("userSearchInput").value.trim();renderUsers()}
 function clearUserSearch(){document.getElementById("userSearchInput").value="";currentUserSearch="";renderUsers()}
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&document.activeElement?.id==="userSearchInput")searchUsers()})
 
-function showReferralMembersById(id){const u=allUsersData.find(x=>String(x.id)===String(id));if(!u)return;showReferralMembers(u.referral_id,u.full_name||"User")}
+function showReferralMembersById(id){const u=allUsersData.find(x=>String(getUserKey(x))===String(id));if(!u)return;showReferralMembers(u.referral_id,u.full_name||"User")}
 function showReferralMembers(referralId,userName){const modal=document.getElementById("referralModal"),title=document.getElementById("referralModalTitle"),content=document.getElementById("referralMembersContent");title.textContent=userName+" - Direct Members";const members=allUsersData.filter(x=>x.is_deleted!==true&&x.referred_by===referralId);content.innerHTML=!members.length?'<div class="empty">No members joined with this referral.</div>':`<div class="table-box"><table><thead><tr><th>Name</th><th>Email</th><th>Package</th><th>Joined</th></tr></thead><tbody>${members.map(m=>`<tr><td>${escapeHtml(m.full_name||"User")}</td><td>${escapeHtml(m.email||"")}</td><td>${escapeHtml(m.package_name||"Free")}</td><td>${m.created_at?escapeHtml(new Date(m.created_at).toLocaleString()):"N/A"}</td></tr>`).join("")}</tbody></table></div>`;modal.classList.add("show")}
 function closeReferralModal(){document.getElementById("referralModal").classList.remove("show")}
 
 function openPaymentDetailsModal(id){
-    const u=allUsersData.find(x=>String(x.id)===String(id));
+    const u=allUsersData.find(x=>String(getUserKey(x))===String(id));
     if(!u)return;
     currentEditUser=u;
     
@@ -540,6 +545,7 @@ function switchEditModalTab(tab){
 
 function renderPaymentDetailsModalContent(){
     const u = currentEditUser;
+    const uKey = getUserKey(u);
     const p = {
         upi_id: val(u.upi_id, u.upi),
         account_holder_name: val(u.account_holder_name, u.account_holder),
@@ -550,7 +556,7 @@ function renderPaymentDetailsModalContent(){
 
     document.getElementById("paymentDetailsModalTitle").textContent=`Edit Bank / UPI - ${u.full_name||"User"}`;
     document.getElementById("paymentDetailsContent").innerHTML=`
-    <div class="info-card"><b>User:</b> ${escapeHtml(u.full_name||"User")}<br><b>Referral ID:</b> ${escapeHtml(u.referral_id||"N/A")}<br><b>Email:</b> ${escapeHtml(u.email||"N/A")}<br><b>User ID:</b> ${escapeHtml(u.id||"")}</div>
+    <div class="info-card"><b>User:</b> ${escapeHtml(u.full_name||"User")}<br><b>Referral ID:</b> ${escapeHtml(u.referral_id||"N/A")}<br><b>Email:</b> ${escapeHtml(u.email||"N/A")}<br><b>User ID:</b> ${escapeHtml(uKey)}</div>
     
     <div class="tab-pill-box">
         <button class="tab-pill ${editModalTab==='bank'?'active':''}" onclick="switchEditModalTab('bank')">🏦 Bank Account Details</button>
@@ -610,10 +616,33 @@ async function savePaymentDetails(){
 
     if(!confirm("Save and update this user's payment details?"))return;
     try{
-        const {error}=await supabaseClient.from("profiles").update(payload).eq("id",currentEditUser.id);
-        if(error)throw error;
+        const uKey = getUserKey(currentEditUser);
+        let updated = false;
 
-        await supabaseClient.from("withdrawal_requests").update(payload).eq("user_id", currentEditUser.id);
+        // Try updating by user_id first, then auth_user_id, then id
+        const keyColumns = ['user_id', 'auth_user_id', 'id'];
+        for (const col of keyColumns) {
+            if (currentEditUser[col] || uKey) {
+                const searchVal = currentEditUser[col] || uKey;
+                const { error } = await supabaseClient.from("profiles").update(payload).eq(col, searchVal);
+                if (!error) {
+                    updated = true;
+                    break;
+                }
+            }
+        }
+
+        if(!updated) {
+            throw new Error("Could not match user key in profiles table.");
+        }
+
+        // Also update pending withdrawal requests if any
+        for (const col of keyColumns) {
+            if (currentEditUser[col] || uKey) {
+                const searchVal = currentEditUser[col] || uKey;
+                await supabaseClient.from("withdrawal_requests").update(payload).eq(col, searchVal);
+            }
+        }
 
         alert("Payment details updated successfully!");
         closePaymentDetailsModal();
@@ -624,15 +653,35 @@ async function savePaymentDetails(){
     }
 }
 
-async function toggleUser(id,status){const {error}=await supabaseClient.from("profiles").update({is_active:status}).eq("id",id);if(error){alert(error.message);return}loadUsers()}
-async function softDeleteUser(id){if(!confirm("Move this user to trash?"))return;const {error}=await supabaseClient.from("profiles").update({is_deleted:true}).eq("id",id);if(error){alert(error.message);return}loadUsers()}
+async function executeProfileUpdate(id, payload) {
+    const keyColumns = ['user_id', 'auth_user_id', 'id'];
+    for (const col of keyColumns) {
+        const { error } = await supabaseClient.from("profiles").update(payload).eq(col, id);
+        if (!error) return true;
+    }
+    return false;
+}
+
+async function toggleUser(id,status){
+    const success = await executeProfileUpdate(id, {is_active: status});
+    if(!success) alert("Failed to update status.");
+    loadUsers();
+}
+
+async function softDeleteUser(id){
+    if(!confirm("Move this user to trash?"))return;
+    const success = await executeProfileUpdate(id, {is_deleted: true});
+    if(!success) alert("Failed to delete user.");
+    loadUsers();
+}
+
 async function softDeleteRecord(id,table){if(!confirm("Move this record to trash?"))return;const {error}=await supabaseClient.from(table).update({is_deleted:true}).eq("id",id);if(error){alert(error.message);return}await refreshAllData();loadTrashAndHistoryData()}
 async function restoreRecord(id,table){if(!confirm("Restore this item?"))return;const {error}=await supabaseClient.from(table).update({is_deleted:false}).eq("id",id);if(error){alert(error.message);return}await refreshAllData();loadTrashAndHistoryData()}
 async function permanentDeleteRecord(id,table){if(!confirm("WARNING: This will permanently delete the record. Continue?"))return;const {error}=await supabaseClient.from(table).delete().eq("id",id);if(error){alert(error.message);return}await refreshAllData();loadTrashAndHistoryData()}
 
 async function loadTrashAndHistoryData(){try{const r=await Promise.all([supabaseClient.from("payment_requests").select("*").eq("status","Approved").order("created_at",{ascending:false}),supabaseClient.from("profiles").select("*").eq("is_deleted",true),supabaseClient.from("payment_requests").select("*").eq("is_deleted",true),supabaseClient.from("withdrawal_requests").select("*").eq("is_deleted",true)]);renderApprovedHistory(r[0].data||[]);renderDeletedUsers(r[1].data||[]);renderDeletedPayments(r[2].data||[]);renderDeletedWithdrawals(r[3].data||[])}catch(e){console.error(e)}}
 function renderApprovedHistory(d){const b=document.getElementById("approvedHistoryList");b.innerHTML=d.length?d.slice(0,20).map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||"User")}</b><br>₹${escapeHtml(x.amount||0)}<br><span class="small">${escapeHtml(x.package_name||"")}</span></div>`).join(""):"No approved history."}
-function renderDeletedUsers(d){const b=document.getElementById("deletedUsersList");b.innerHTML=d.length?d.map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||"User")}</b><br><button class="btn btn-restore" onclick="restoreRecord('${x.id}','profiles')">Restore</button><button class="btn btn-danger" onclick="permanentDeleteRecord('${x.id}','profiles')">Delete Forever</button></div>`).join(""):"No deleted users."}
+function renderDeletedUsers(d){const b=document.getElementById("deletedUsersList");b.innerHTML=d.length?d.map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||"User")}</b><br><button class="btn btn-restore" onclick="restoreRecord('${getUserKey(x)}','profiles')">Restore</button><button class="btn btn-danger" onclick="permanentDeleteRecord('${getUserKey(x)}','profiles')">Delete Forever</button></div>`).join(""):"No deleted users."}
 function renderDeletedPayments(d){const b=document.getElementById("deletedPaymentsList");b.innerHTML=d.length?d.map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||"User")}</b><br>₹${escapeHtml(x.amount||0)}<br><button class="btn btn-restore" onclick="restoreRecord('${x.id}','payment_requests')">Restore</button><button class="btn btn-danger" onclick="permanentDeleteRecord('${x.id}','payment_requests')">Delete Forever</button></div>`).join(""):"No deleted payments."}
 function renderDeletedWithdrawals(d){const b=document.getElementById("deletedWithdrawalsList");b.innerHTML=d.length?d.map(x=>`<div class="history-item"><b>${escapeHtml(x.full_name||x.name||"User")}</b><br>₹${escapeHtml(x.amount||0)}<br><button class="btn btn-restore" onclick="restoreRecord('${x.id}','withdrawal_requests')">Restore</button><button class="btn btn-danger" onclick="permanentDeleteRecord('${x.id}','withdrawal_requests')">Delete Forever</button></div>`).join(""):"No deleted withdrawals."}
 
