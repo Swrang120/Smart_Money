@@ -1429,7 +1429,7 @@ function openHistoryModal(){
     loadWithdrawalHistory();
 }
 
-/* FIXED: KYC PERMANENT DATA LOADING */
+/* FIXED: KYC DATA DISPLAY */
 function openKycModal(){
     closeSidebar();
     document.getElementById("kycFullName").value = currentProfile?.full_name || "";
@@ -1518,7 +1518,7 @@ function switchPayoutMode(mode, force = false){
     document.getElementById("tabBank").className = mode === "bank" ? "payout-tab active" : "payout-tab";
 }
 
-/* FIXED: SAVE PAYOUT DETAILS IN DATABASE (PERMANENT) */
+/* FIX 4: PERMANENT BANK/UPI SAVE TO SUPABASE */
 async function updateUserPayoutDetails(){
     if(hasSavedPaymentDetails()){
         showPaymentChangeBlocked();
@@ -1568,7 +1568,7 @@ async function updateUserPayoutDetails(){
 
         if(error) throw error;
 
-        currentProfile = { ...currentProfile, ...(data || updateData) };
+        currentProfile = { ...currentProfile, ...updateData, ...(data || {}) };
         showToast("Bank / UPI details saved permanently!");
         closeModal("profileSettingsModal");
     }catch(error){
@@ -1763,7 +1763,7 @@ async function loadGlobalTopLogo(){
     }catch(e){}
 }
 
-/* FIXED: PERMANENT UNIQUE REFERRAL CODE / USER ID */
+/* FIX 5: PERMANENT USER ID / REFERRAL CODE (NEVER CHANGES ON REFRESH) */
 function generateReferralCode(){
     return "SM-smart" + Math.floor(10000 + Math.random() * 90000);
 }
@@ -1772,20 +1772,20 @@ function isCorrectReferralCode(code){
     return /^SM-smart\d{5}$/.test(String(code || ""));
 }
 
-async function getOrCreatePermanentReferralCode(existingCode){
-    // 1. Check local persistent storage
+async function getOrCreatePermanentReferralCode(dbExistingCode){
+    // Priority 1: Supabase me saved referral code ko primary preference do
+    if(isCorrectReferralCode(dbExistingCode)){
+        localStorage.setItem(`permanent_ref_code_${currentUserId}`, dbExistingCode);
+        return dbExistingCode;
+    }
+
+    // Priority 2: Cache check karo
     const savedLocalCode = localStorage.getItem(`permanent_ref_code_${currentUserId}`);
     if(isCorrectReferralCode(savedLocalCode)){
         return savedLocalCode;
     }
 
-    // 2. Check existing database code
-    if(isCorrectReferralCode(existingCode)){
-        localStorage.setItem(`permanent_ref_code_${currentUserId}`, existingCode);
-        return existingCode;
-    }
-
-    // 3. Generate a new unique code if none exists
+    // Priority 3: Naya unique code generate karke set karo agar pehle se nahi hai
     let newCode = "";
     for(let i=0; i<10; i++){
         const tempCode = generateReferralCode();
@@ -1800,13 +1800,13 @@ async function getOrCreatePermanentReferralCode(existingCode){
             break;
         }
     }
-    if(!newCode) newCode = "SM-smart" + String(Date.now()).slice(-5);
+    if(!newCode) newCode = "SM-smart" + Math.floor(10000 + Math.random() * 90000);
 
     localStorage.setItem(`permanent_ref_code_${currentUserId}`, newCode);
     return newCode;
 }
 
-/* LOAD DASHBOARD & PERMANENT USER DATA FIX */
+/* LOAD DASHBOARD & PERMANENT USER DATA */
 async function loadDashboardProfile(){
     let user = null;
 
@@ -1839,10 +1839,11 @@ async function loadDashboardProfile(){
         const permanentCode = await getOrCreatePermanentReferralCode(profile?.referral_code);
 
         if(!profile){
+            const defaultName = user.user_metadata?.full_name || user.user_metadata?.name || currentUserEmail.split("@")[0];
             const newProfile = {
                 user_id: currentUserId,
                 email: currentUserEmail,
-                full_name: user.user_metadata?.full_name || currentUserEmail.split("@")[0],
+                full_name: defaultName,
                 balance: 0,
                 package_name: null,
                 referral_code: permanentCode
@@ -1855,16 +1856,19 @@ async function loadDashboardProfile(){
                 .maybeSingle();
 
             profile = created || newProfile;
-        } else if(profile.referral_code !== permanentCode){
-            await supabaseClient
-                .from("profiles")
-                .update({ referral_code: permanentCode })
-                .eq("user_id", currentUserId);
-            profile.referral_code = permanentCode;
+        } else {
+            // Ensure referral code stays permanent in DB
+            if(!profile.referral_code || profile.referral_code !== permanentCode){
+                await supabaseClient
+                    .from("profiles")
+                    .update({ referral_code: permanentCode })
+                    .eq("user_id", currentUserId);
+                profile.referral_code = permanentCode;
+            }
         }
 
         currentProfile = profile;
-        userRefCode = permanentCode;
+        userRefCode = profile.referral_code;
 
         const localPic = localStorage.getItem(`profile_pic_${currentUserId}`);
         if(localPic) currentProfile.profile_pic = localPic;
@@ -2109,16 +2113,16 @@ function filterReferrals(days, btnElement){
 }
 
 /* 
- (1) FIX: PACKAGE PURCHASE DIRECT & MULTI-LEVEL COMMISSION LOGIC
- Rates based on package tiers:
- - Starter (₹289 / ₹560): 30%
- - Intermediate (₹560 / ₹1149): 50%
- - Expert (₹1149): 60%
- - Master: 70%
+ FIX 1: AUTOMATIC PACKAGE BUY REFERRAL & COMMISSION SYSTEM
+ Rates based on screenshot details:
+ - Starter Package: 30%
+ - Intermediate Package: 50%
+ - Expert Package: 70%
+ - Master Package: 80%
+ - Brahmastra Package: 85%
 */
 async function processReferralCommissionOnPackageBuy(buyerUserId, buyerPackageName, buyerPackagePrice){
     try{
-        // Get buyer profile
         const { data: buyer } = await supabaseClient
             .from("profiles")
             .select("referred_by")
@@ -2127,7 +2131,6 @@ async function processReferralCommissionOnPackageBuy(buyerUserId, buyerPackageNa
 
         if(!buyer || !buyer.referred_by) return;
 
-        // Find sponsor (referrer) by code
         const { data: sponsor } = await supabaseClient
             .from("profiles")
             .select("user_id, balance")
@@ -2139,19 +2142,21 @@ async function processReferralCommissionOnPackageBuy(buyerUserId, buyerPackageNa
         let commissionRate = 0.30;
         const pkgLower = String(buyerPackageName).toLowerCase();
 
-        if(pkgLower.includes("starter")){
-            commissionRate = 0.30;
+        if(pkgLower.includes("brahmastra")){
+            commissionRate = 0.85;
+        }else if(pkgLower.includes("master")){
+            commissionRate = 0.80;
+        }else if(pkgLower.includes("expert")){
+            commissionRate = 0.70;
         }else if(pkgLower.includes("intermediate")){
             commissionRate = 0.50;
-        }else if(pkgLower.includes("expert")){
-            commissionRate = 0.60;
-        }else if(pkgLower.includes("master")){
-            commissionRate = 0.70;
+        }else if(pkgLower.includes("starter")){
+            commissionRate = 0.30;
         }
 
         const commissionAmount = Number(buyerPackagePrice) * commissionRate;
 
-        // Add Earning Entry
+        // Earning Transaction Entry
         await supabaseClient.from("earnings").insert({
             user_id: sponsor.user_id,
             amount: commissionAmount,
@@ -2171,7 +2176,7 @@ async function processReferralCommissionOnPackageBuy(buyerUserId, buyerPackageNa
     }
 }
 
-/* FIXED: PERMANENT KYC DETAILS SAVE */
+/* FIX 3: PERMANENT KYC DETAILS SAVE (DOES NOT RESET ON REFRESH) */
 async function saveKycDetails(){
     const fullName = document.getElementById("kycFullName").value.trim();
     const dob = document.getElementById("kycDob").value;
@@ -2191,7 +2196,8 @@ async function saveKycDetails(){
 
         if(error) throw error;
         
-        currentProfile = { ...currentProfile, ...(data || { full_name: fullName, date_of_birth: dob }) };
+        currentProfile.full_name = fullName;
+        currentProfile.date_of_birth = dob || null;
         renderProfile(currentProfile);
         showToast("KYC details saved permanently!");
         closeModal("kycModal");
@@ -2288,7 +2294,7 @@ async function sendWithdrawalApprovedEmail(withdrawal){
     }catch(error){}
 }
 
-/* (2) FIX: AUTOMATIC WITHDRAWAL REJECTION & REFUND LISTENERS */
+/* FIX 2: REALTIME AUTOMATIC WITHDRAWAL REJECTION & BALANCE REFUND */
 function setupRealtimeListener(){
     if(!currentUserId || realtimeChannel) return;
 
@@ -2333,9 +2339,11 @@ function setupRealtimeListener(){
                         .select()
                         .maybeSingle();
 
-                    currentProfile = { ...currentProfile, ...(updatedProfile || { balance: newBalance }) };
-                    userCurrentBalance = Number(currentProfile.balance || 0);
-                    renderProfile(currentProfile);
+                    if(updatedProfile){
+                        currentProfile.balance = updatedProfile.balance;
+                        userCurrentBalance = Number(updatedProfile.balance || 0);
+                        renderProfile(currentProfile);
+                    }
                     showToast(`Withdrawal Rejected — ₹${refundAmount.toFixed(2)} refunded to your balance!`);
                 }
             })
