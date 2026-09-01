@@ -148,7 +148,7 @@ button:hover{opacity:.88}
 .login-error{margin-top:12px;color:#f87171;font-size:13px}
 
 .header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 20px;background:#111827;border-bottom:1px solid var(--border)}.logo{font-size:20px;font-weight:800}.logo span{color:#818cf8}.header-actions{display:flex;align-items:center;gap:8px}.menu-btn,.refresh-btn,.logout-btn{border:0;color:white;padding:10px 14px;border-radius:8px;cursor:pointer}.menu-btn{background:var(--accent)}.refresh-btn{background:#1e293b}.logout-btn{background:#991b1b}
-.sidebar{position:fixed;top:0;left:-330px;width:310px;height:100vh;z-index:1000;background:#111827;border-right:1px solid var(--border);padding:20px;transition:.3s;overflow-y:auto}.sidebar.open{left:0}.sidebar-section{margin-top:25px;padding-top:15px;border-top:1px solid var(--border)}.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:999;display:none}.logo-upload,.status-upload{background:var(--card2);padding:15px;border-radius:10px}.status-upload{margin-top:15px}.logo-upload input,.status-upload input{width:100%;margin:10px 0;color:white;background:#0f172a;border:1px solid var(--border);padding:9px;border-radius:7px}
+.sidebar{position:fixed;top:0;left:-330px;width:310px;height:100vh;z-index:1000;background:#111827;border-right:1px solid var(--border);padding:20px;transition:.3s;overflow-y:auto}.sidebar.open{left:0}.sidebar-section{margin-top:25px;padding-top:15px;border-top:1px solid var(--border)}.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:999;display:none}.logo-upload,.status-upload{background:var(--card2);padding:15px;border-radius:10px}.status-upload{margin-top:15px}.logo-upload input,.status-upload input,.status-upload textarea{width:100%;margin:10px 0;color:white;background:#0f172a;border:1px solid var(--border);padding:9px;border-radius:7px}
 .container{width:min(1400px,95%);margin:auto;padding:25px 0 60px; position: relative; z-index: 5;}
 .section{margin-bottom:35px}.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:25px}.stat-card{background:var(--card);padding:20px;border-radius:14px;border:1px solid var(--border)}.stat-card h3{margin:0;color:var(--muted);font-size:13px}.stat-card p{margin:8px 0 0;font-size:28px;font-weight:bold}
 .table-box{overflow-x:auto;background:var(--card);border:1px solid var(--border);border-radius:14px}table{width:100%;border-collapse:collapse;min-width:1000px}th{background:rgba(255,255,255,.03);color:#cbd5e1;text-align:left}th,td{padding:14px;border-bottom:1px solid var(--border);vertical-align:middle}
@@ -236,7 +236,16 @@ button:hover{opacity:.88}
 <aside id="adminSidebar" class="sidebar">
 <h2>⚙️ Admin Panel</h2>
 <div class="logo-upload"><b>Global Logo</b><input type="file" id="adminLogoFileInput" accept="image/*"><button class="btn btn-primary" onclick="uploadAndSaveAdminLogo()">Upload Logo</button></div>
-<div class="status-upload"><b>📱 Upload 24 Hour Status</b><p class="small">Photo ya video upload karo. 24 hours ke baad automatically hide ho jayega.</p><input type="file" id="statusFileInput" accept="image/*,video/*"><button class="btn btn-primary" onclick="uploadStatus()">Upload Status</button></div>
+<div class="status-upload"><b>📱 Upload 24 Hour Status</b><p class="small">Photo ya video upload karo. 24 hours ke baad automatically hide ho jayega.</p><input type="file" id="statusFileInput" accept="image/*,video/*"><textarea id="statusCaption" placeholder="Status caption (optional)"></textarea><button class="btn btn-primary" onclick="uploadStatus()">Upload Status</button></div>
+
+<div class="status-upload" style="margin-top: 15px;">
+    <b>🖼️ Upload Preview Photo</b>
+    <p class="small">Yeh photo index page ke preview option par tab tak dikhegi jab tak aap ise delete nahi karte.</p>
+    <input type="file" id="previewImageFileInput" accept="image/*">
+    <button class="btn btn-primary" onclick="uploadPreviewImage()">Upload Preview</button>
+</div>
+
+<div class="sidebar-section"><h3>🖼️ Active Preview Image</h3><div id="previewImageList">Loading...</div></div>
 <div class="sidebar-section"><h3>📱 Active Status</h3><div id="statusList">Loading...</div></div>
 <div class="sidebar-section"><h3>Approved History</h3><div id="approvedHistoryList">Loading...</div></div>
 <div class="sidebar-section"><h3>Deleted Users</h3><div id="deletedUsersList">Loading...</div></div>
@@ -347,7 +356,7 @@ async function adminLogout(){await supabaseClient.auth.signOut();showLogin()}
 function showAdmin(){document.getElementById("loginScreen").classList.add("hidden");document.getElementById("adminApp").classList.remove("hidden");refreshAllData()}
 function showLogin(){document.getElementById("adminApp").classList.add("hidden");document.getElementById("loginScreen").classList.remove("hidden")}
 
-function toggleSidebar(){const s=document.getElementById("adminSidebar"),o=document.getElementById("sidebarOverlay");s.classList.toggle("open");o.style.display=s.classList.contains("open")?"block":"none";if(s.classList.contains("open")){loadTrashAndHistoryData();loadActiveStatuses()}}
+function toggleSidebar(){const s=document.getElementById("adminSidebar"),o=document.getElementById("sidebarOverlay");s.classList.toggle("open");o.style.display=s.classList.contains("open")?"block":"none";if(s.classList.contains("open")){loadTrashAndHistoryData();loadActiveStatuses();loadActivePreviewImage()}}
 
 async function refreshAllData(){try{await Promise.all([loadUsers(),loadPaymentRequests(),loadWithdrawals()]);updateGlobalStats()}catch(e){console.error(e);alert("Refresh failed: "+(e.message||"Unknown error"))}}
 function updateGlobalStats(){
@@ -361,7 +370,7 @@ function updateGlobalStats(){
 async function uploadAndSaveAdminLogo(){const input=document.getElementById("adminLogoFileInput"),file=input.files[0];if(!file){alert("Pehle image select karo!");return}try{const fileName="global_logo_"+Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");let {error}=await supabaseClient.storage.from("avatars").upload(fileName,file,{contentType:file.type});if(error)throw error;const {data:url}=supabaseClient.storage.from("avatars").getPublicUrl(fileName);const imageUrl=url.publicUrl;const {data:existing,error:ee}=await supabaseClient.from("global_settings").select("id").eq("setting_key","admin_top_logo").maybeSingle();if(ee)throw ee;const r=existing?await supabaseClient.from("global_settings").update({setting_value:imageUrl}).eq("setting_key","admin_top_logo"):await supabaseClient.from("global_settings").insert([{setting_key:"admin_top_logo",setting_value:imageUrl}]);if(r.error)throw r.error;input.value="";alert("Logo successfully updated!")}catch(e){alert("Logo upload failed: "+e.message)}}
 
 async function uploadStatus(){
-    const input=document.getElementById("statusFileInput"),file=input.files[0];
+    const input=document.getElementById("statusFileInput"),caption=document.getElementById("statusCaption").value.trim(),file=input.files[0];
     if(!file){alert("Photo ya video select karo!");return}
     let mediaType=file.type.startsWith("image/")?"image":file.type.startsWith("video/")?"video":"";
     if(!mediaType){alert("Sirf image ya video allowed hai.");return}
@@ -371,13 +380,70 @@ async function uploadStatus(){
         if(error)throw error;
         const {data:url}=supabaseClient.storage.from("status").getPublicUrl(fileName);
         const expires_at=new Date(Date.now()+86400000).toISOString();
-        let r=await supabaseClient.from("status_posts").insert([{media_url:url.publicUrl,media_type:mediaType,caption:"",expires_at,is_deleted:false}]);
+        let r=await supabaseClient.from("status_posts").insert([{media_url:url.publicUrl,media_type:mediaType,caption,expires_at,is_deleted:false}]);
         if(r.error)throw r.error;
         input.value="";
+        document.getElementById("statusCaption").value="";
         alert("Status uploaded successfully!");
         loadActiveStatuses();
     }catch(e){
         alert("Status upload failed: "+e.message);
+    }
+}
+
+async function uploadPreviewImage(){
+    const input = document.getElementById("previewImageFileInput"), file = input.files[0];
+    if(!file){alert("Pehle preview image select karo!");return}
+    try{
+        const fileName = "preview_" + Date.now() + "_" + file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+        let {error} = await supabaseClient.storage.from("avatars").upload(fileName, file, {contentType: file.type});
+        if(error) throw error;
+        const {data:url} = supabaseClient.storage.from("avatars").getPublicUrl(fileName);
+        const imageUrl = url.publicUrl;
+
+        // Upsert setting_key = 'index_preview_image' in global_settings table
+        const {data:existing, error:ee} = await supabaseClient.from("global_settings").select("id").eq("setting_key", "index_preview_image").maybeSingle();
+        if(ee) throw ee;
+
+        const r = existing 
+            ? await supabaseClient.from("global_settings").update({setting_value: imageUrl}).eq("setting_key", "index_preview_image")
+            : await supabaseClient.from("global_settings").insert([{setting_key: "index_preview_image", setting_value: imageUrl}]);
+
+        if(r.error) throw r.error;
+        input.value = "";
+        alert("Preview image uploaded successfully!");
+        loadActivePreviewImage();
+    } catch(e) {
+        alert("Preview image upload failed: " + e.message);
+    }
+}
+
+async function loadActivePreviewImage(){
+    const box = document.getElementById("previewImageList");
+    if(!box) return;
+    box.innerHTML = '<div class="small">Loading preview image...</div>';
+    try {
+        const {data, error} = await supabaseClient.from("global_settings").select("*").eq("setting_key", "index_preview_image").maybeSingle();
+        if(error) throw error;
+        if(!data || !data.setting_value){
+            box.innerHTML = '<div class="small">No active preview image uploaded.</div>';
+            return;
+        }
+        box.innerHTML = `<div class="history-item"><img src="${escapeHtml(data.setting_value)}" class="status-preview"><button class="btn btn-delete" onclick="deletePreviewImage()">Delete Preview</button></div>`;
+    } catch(e) {
+        box.innerHTML = `<div class="small" style="color:#f87171;">Error loading preview: ${escapeHtml(e.message)}</div>`;
+    }
+}
+
+async function deletePreviewImage(){
+    if(!confirm("Are you sure you want to delete the active preview image?")) return;
+    try {
+        const {error} = await supabaseClient.from("global_settings").update({setting_value: ""}).eq("setting_key", "index_preview_image");
+        if(error) throw error;
+        alert("Preview image deleted successfully!");
+        loadActivePreviewImage();
+    } catch(e) {
+        alert("Failed to delete preview image: " + e.message);
     }
 }
 
@@ -392,7 +458,7 @@ async function loadActiveStatuses(){
             box.innerHTML='<div class="small">No active status.</div>';
             return;
         }
-        box.innerHTML=data.map(x=>`<div class="history-item"><b>${escapeHtml(x.media_type)}</b>${x.media_type==="image"?`<img src="${escapeHtml(x.media_url)}" class="status-preview">`:`<video src="${escapeHtml(x.media_url)}" class="status-preview" controls></video>`}<button class="btn btn-delete" onclick="deleteStatus('${x.id}')">Delete</button></div>`).join("");
+        box.innerHTML=data.map(x=>`<div class="history-item"><b>${escapeHtml(x.media_type)}</b>${x.media_type==="image"?`<img src="${escapeHtml(x.media_url)}" class="status-preview">`:`<video src="${escapeHtml(x.media_url)}" class="status-preview" controls></video>`}<div class="small">${escapeHtml(x.caption||"")}</div><button class="btn btn-delete" onclick="deleteStatus('${x.id}')">Delete</button></div>`).join("");
     }catch(e){
         box.innerHTML=`<div class="small" style="color:#f87171;">Error loading status: ${escapeHtml(e.message)}</div>`;
     }
