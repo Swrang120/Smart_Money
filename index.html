@@ -148,7 +148,7 @@ font-weight:600;
 
 .nav-links{
 display:flex;
-gap:25px;
+gap:22px;
 align-items:center;
 }
 
@@ -173,7 +173,7 @@ color:#fff !important;
 .nav-right-icons{
 display:flex;
 align-items:center;
-gap:15px;
+gap:12px;
 }
 
 .profile-icon-btn{
@@ -190,14 +190,21 @@ justify-content:center;
 .hamburger{
 display:none;
 width:38px;
+height:38px;
+background:#f1f5f9;
+border-radius:10px;
+align-items:center;
+justify-content:center;
+flex-direction:column;
 cursor:pointer;
 }
 
 .hamburger span{
-height:3px;
+height:2.5px;
+width:20px;
 background:#111827;
 display:block;
-margin:5px 0;
+margin:3px 0;
 border-radius:10px;
 }
 
@@ -217,6 +224,8 @@ z-index:3000;
 padding:25px;
 transition:.35s;
 box-shadow:-10px 0 30px rgba(0,0,0,.12);
+display:flex;
+flex-direction:column;
 }
 
 .mobile-menu.active{
@@ -227,7 +236,7 @@ right:0;
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:30px;
+margin-bottom:20px;
 }
 
 .close-menu{
@@ -238,17 +247,45 @@ height:38px;
 border-radius:10px;
 font-size:20px;
 cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#111827;
 }
 
-.mobile-menu a{
+.mobile-menu .mobile-nav-links{
+display:flex;
+flex-direction:column;
+gap:8px;
+overflow-y:auto;
+}
+
+.mobile-menu a.m-link{
 display:block;
-padding:14px;
-border-bottom:1px solid #eef2f7;
+padding:12px 14px;
+border-radius:10px;
 font-weight:700;
 font-size:14px;
-background:linear-gradient(135deg, #7c3aed, #2563eb);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
+color:#475569;
+background:#f8fafc;
+transition:all .2s;
+}
+
+.mobile-menu a.m-link:hover{
+background:#f1f5f9;
+color:#7c3aed;
+}
+
+.mobile-menu a.mobile-dashboard-btn{
+margin-top:10px;
+display:block;
+text-align:center;
+padding:12px;
+border-radius:10px;
+background:#7c3aed;
+color:#fff;
+font-weight:700;
+font-size:14px;
 }
 
 .menu-overlay{
@@ -496,6 +533,7 @@ display:flex;
 align-items:center;
 justify-content:center;
 font-size:21px;
+flex-shrink:0;
 }
 
 .audience-info h4{
@@ -840,6 +878,9 @@ background:#fff;
 border:1px solid #e5eaf2;
 padding:22px;
 border-radius:18px;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
 }
 
 .client-info{
@@ -870,6 +911,102 @@ font-size:12px;
 line-height:1.8;
 color:#64748b;
 margin-top:18px;
+}
+
+
+/* ================================
+   FEEDBACK SUBMISSION FORM
+================================ */
+
+.feedback-form-card{
+background:#fff;
+border:1px solid #e5eaf2;
+padding:24px;
+border-radius:18px;
+margin-top:30px;
+box-shadow:0 10px 30px rgba(15,23,42,.04);
+}
+
+.feedback-form-card h3{
+font-size:18px;
+font-weight:800;
+margin-bottom:6px;
+color:#172033;
+}
+
+.feedback-form-card p{
+font-size:12px;
+color:#64748b;
+margin-bottom:20px;
+}
+
+.feedback-form{
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+.form-row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+}
+
+.form-group{
+display:flex;
+flex-direction:column;
+gap:6px;
+}
+
+.form-group label{
+font-size:11px;
+font-weight:700;
+color:#475569;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select{
+width:100%;
+padding:12px 14px;
+border-radius:10px;
+border:1px solid #cbd5e1;
+font-size:12px;
+outline:none;
+background:#f8fafc;
+color:#172033;
+transition:.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus{
+border-color:#7c3aed;
+background:#fff;
+box-shadow:0 0 0 3px rgba(124,58,237,.1);
+}
+
+.form-group textarea{
+resize:vertical;
+height:90px;
+}
+
+.submit-feedback-btn{
+padding:13px 20px;
+background:linear-gradient(135deg, #7c3aed, #2563eb);
+color:#fff;
+border:none;
+border-radius:10px;
+font-size:13px;
+font-weight:800;
+cursor:pointer;
+transition:.2s;
+margin-top:5px;
+}
+
+.submit-feedback-btn:hover{
+opacity:.95;
+transform:translateY(-1px);
 }
 
 
@@ -957,14 +1094,14 @@ color:#64748b;
    MOBILE RESPONSIVENESS FIXES
 ================================ */
 
-@media(max-width:900px){
+@media(max-width:992px){
 
 .nav-links{
 display:none;
 }
 
 .hamburger{
-display:block;
+display:flex;
 }
 
 .packages-grid{
@@ -976,7 +1113,24 @@ grid-template-columns:repeat(2,1fr);
 }
 
 .testimonial-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.support-grid{
 grid-template-columns:1fr;
+}
+
+.footer-grid{
+grid-template-columns:1fr;
+gap:25px;
+}
+
+.about-grid{
+grid-template-columns:1fr;
+}
+
+.mission-vision{
+grid-template-columns:1fr 1fr;
 }
 
 }
@@ -1004,70 +1158,36 @@ border-radius:10px;
 }
 
 .hero{
-min-height:460px;
+min-height:500px;
 }
 
 .hero-content{
-padding:50px 0 70px;
+padding:70px 0 90px;
 }
 
 .hero h1{
-font-size:28px;
+font-size:30px;
 letter-spacing:-1px;
-line-height:1.2;
 }
 
 .hero p{
 font-size:13px;
-line-height:1.6;
-}
-
-.hero-buttons{
-gap:10px;
-margin-top:20px;
-}
-
-.hero-btn-primary,
-.hero-btn-secondary{
-padding:11px 16px;
-font-size:12px;
-width:100%;
-text-align:center;
 }
 
 .welcome-section{
-margin-top:-30px;
-padding-bottom:40px;
+margin-top:-45px;
 }
 
 .welcome-top{
-padding:22px 14px;
+padding:28px 18px;
 }
 
 .welcome-top h2{
-font-size:20px;
-line-height:1.3;
-}
-
-.welcome-top p{
-font-size:12px;
-}
-
-.status-live{
-font-size:10px;
-padding:6px 12px;
+font-size:22px;
 }
 
 .who-section{
-padding:18px 12px;
-}
-
-.who-title h3{
-font-size:18px;
-}
-
-.who-title p{
-font-size:11px;
+padding:22px 15px;
 }
 
 .audience-grid{
@@ -1077,202 +1197,57 @@ gap:10px;
 
 .audience-card{
 padding:14px;
-gap:10px;
 }
 
 .audience-icon{
 width:40px;
 height:40px;
 font-size:18px;
-border-radius:10px;
-}
-
-.audience-info h4{
-font-size:12px;
-}
-
-.audience-info p{
-font-size:10px;
 }
 
 .join-request{
-margin:0 12px 18px;
-padding:18px;
+margin:0 15px 20px;
+padding:20px;
 flex-direction:column;
 align-items:flex-start;
-gap:14px;
-}
-
-.join-request h3{
-font-size:16px;
-}
-
-.join-request p{
-font-size:11px;
 }
 
 .join-btn{
 width:100%;
 text-align:center;
-padding:11px;
-font-size:12px;
 }
 
-.about-grid{
-grid-template-columns:1fr;
-gap:25px;
-}
-
-.about-text p{
-font-size:12px;
-line-height:1.7;
+.about-images img{
+height:160px;
 }
 
 .mission-vision{
 grid-template-columns:1fr;
-gap:10px;
-}
-
-.mv-box{
-padding:14px;
-}
-
-.about-images{
-grid-template-columns:1fr;
-gap:10px;
-}
-
-.about-images img{
-height:180px;
-border-radius:14px;
 }
 
 .packages-grid{
 grid-template-columns:1fr;
-gap:16px;
-}
-
-.package-card{
-border-radius:14px;
-}
-
-.pkg-banner{
-padding:16px;
-}
-
-.pkg-title h3{
-font-size:15px;
-}
-
-.pkg-title p{
-font-size:9px;
-}
-
-.pkg-badge{
-font-size:22px;
-}
-
-.pkg-body{
-padding:15px;
-}
-
-.pkg-summary-text{
-font-size:11px;
-min-height:auto;
-}
-
-.pkg-footer{
-padding:12px 15px;
-}
-
-.current-price{
-font-size:15px;
-}
-
-.buy-btn{
-padding:8px 14px;
-font-size:10px;
 }
 
 .testimonial-grid{
 grid-template-columns:1fr;
-gap:14px;
 }
 
-.testimonial-card{
-padding:16px;
-}
-
-.feedback{
-font-size:11px;
-line-height:1.6;
-margin-top:12px;
-}
-
-.support-grid{
+.form-row{
 grid-template-columns:1fr;
-gap:14px;
+gap:15px;
 }
 
-.support-card{
+.feedback-form-card{
 padding:18px;
-}
-
-.support-card h3{
-font-size:14px;
-margin-bottom:10px;
-}
-
-.support-card p{
-font-size:11px;
-line-height:1.8;
-}
-
-.footer-grid{
-grid-template-columns:1fr;
-gap:25px;
-}
-
-.footer h3{
-font-size:16px;
-}
-
-.footer h4{
-font-size:12px;
-margin-bottom:10px;
-}
-
-.footer p,
-.footer a{
-font-size:11px;
 }
 
 .section{
-padding:40px 0;
+padding:50px 0;
 }
 
 .section-title{
-font-size:22px;
-}
-
-.section-tag{
-font-size:9px;
-}
-
-.modal-box{
-width:92%;
-padding:18px;
-border-radius:16px;
-}
-
-.modal-box h2{
-font-size:18px;
-margin-bottom:14px;
-}
-
-.detail-row{
-font-size:11px;
-padding:10px 0;
+font-size:24px;
 }
 
 }
@@ -1384,37 +1359,35 @@ id="mobileMenu">
 
 <div class="mobile-menu-top">
 
-<div>
+<div style="display:flex;align-items:center;gap:10px;">
+<div class="logo-circle" style="width:34px;height:34px;font-size:14px;border-radius:8px;">SM</div>
 <b>Smart Money</b>
 </div>
 
 <button class="close-menu"
 onclick="toggleMenu()">
 
-×
+✕
 </button>
 
 </div>
 
-<a href="#home"
-onclick="toggleMenu()">🏠 Home</a>
+<div class="mobile-nav-links">
+<a href="#home" class="m-link" onclick="toggleMenu()">🏠 Home</a>
 
-<a href="#about"
-onclick="toggleMenu()">ℹ️ About Us</a>
+<a href="#about" class="m-link" onclick="toggleMenu()">ℹ️ About Us</a>
 
-<a href="#packages"
-onclick="toggleMenu()">👑 Plans & Packages</a>
+<a href="#packages" class="m-link" onclick="toggleMenu()">👑 Plans & Packages</a>
 
-<a href="#testimonials"
-onclick="toggleMenu()">⭐ Feedback</a>
+<a href="#testimonials" class="m-link" onclick="toggleMenu()">⭐ Feedback</a>
 
-<a href="#support"
-onclick="toggleMenu()">💬 Contact Support</a>
+<a href="#support" class="m-link" onclick="toggleMenu()">💬 Contact Support</a>
 
 <a href="dashboard.html"
-id="authMenuLink">
+class="mobile-dashboard-btn" id="authMenuLink">
 👤 My Dashboard
 </a>
+</div>
 
 </div>
 
@@ -2262,7 +2235,7 @@ Explore Feedback From
 
 
 <div class="testimonial-card">
-
+<div>
 <div class="client-info">
 
 <img
@@ -2285,12 +2258,12 @@ alt="Client">
 new online tools and improve my confidence."
 
 </p>
-
+</div>
 </div>
 
 
 <div class="testimonial-card">
-
+<div>
 <div class="client-info">
 
 <img
@@ -2313,12 +2286,12 @@ alt="Client">
 me explore new digital skills at my own pace."
 
 </p>
-
+</div>
 </div>
 
 
 <div class="testimonial-card">
-
+<div>
 <div class="client-info">
 
 <img
@@ -2341,9 +2314,65 @@ alt="Client">
 more clarity about developing digital skills."
 
 </p>
+</div>
+</div>
+
 
 </div>
 
+
+<!-- FEEDBACK SUBMISSION FORM -->
+
+<div class="feedback-form-card">
+
+<h3>Share Your Feedback</h3>
+
+<p>We value your thoughts! Submit your experience below, and it will be sent directly to our support team.</p>
+
+<form class="feedback-form" onsubmit="sendFeedbackEmail(event)">
+
+<div class="form-row">
+
+<div class="form-group">
+<label for="fbName">Your Name</label>
+<input type="text" id="fbName" placeholder="Enter your full name" required>
+</div>
+
+<div class="form-group">
+<label for="fbId">Your User ID / Email ID</label>
+<input type="text" id="fbId" placeholder="Enter your ID or registered email" required>
+</div>
+
+</div>
+
+<div class="form-row">
+
+<div class="form-group">
+<label for="fbRating">Rating</label>
+<select id="fbRating" required>
+<option value="5 Stars - ★★★★★">★★★★★ (5 Stars - Excellent)</option>
+<option value="4 Stars - ★★★★☆">★★★★☆ (4 Stars - Good)</option>
+<option value="3 Stars - ★★★☆☆">★★★☆☆ (3 Stars - Average)</option>
+<option value="2 Stars - ★★☆☆☆">★★☆☆☆ (2 Stars - Poor)</option>
+<option value="1 Star - ★☆☆☆☆">★☆☆☆☆ (1 Star - Very Bad)</option>
+</select>
+</div>
+
+<div class="form-group">
+<label for="fbSubject">Subject / Course Name</label>
+<input type="text" id="fbSubject" placeholder="e.g. Starter Package / General Experience" required>
+</div>
+
+</div>
+
+<div class="form-group">
+<label for="fbMessage">Your Feedback Message</label>
+<textarea id="fbMessage" placeholder="Write your feedback here..." required></textarea>
+</div>
+
+<button type="submit" class="submit-feedback-btn">Send Feedback Directly →</button>
+
+</form>
 
 </div>
 
@@ -2513,7 +2542,7 @@ id="packageModal">
 <button class="modal-close"
 onclick="closePackageModal()">
 
-×
+✕
 </button>
 
 <h2 id="modalTitle">
@@ -2681,18 +2710,46 @@ closePackageModal();
 
 }
 
+
+// Function to send feedback directly to smartmoneysupport1@gmail.com
+function sendFeedbackEmail(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('fbName').value;
+    const userId = document.getElementById('fbId').value;
+    const rating = document.getElementById('fbRating').value;
+    const subject = document.getElementById('fbSubject').value;
+    const message = document.getElementById('fbMessage').value;
+
+    const recipientEmail = "smartmoneysupport1@gmail.com";
+    const emailSubject = encodeURIComponent(`New User Feedback: ${subject} (${name})`);
+    const emailBody = encodeURIComponent(
+        `Hello Smart Money Support,\n\nYou have received new feedback from your website:\n\n` +
+        `• Name: ${name}\n` +
+        `• User ID / Email: ${userId}\n` +
+        `• Rating: ${rating}\n` +
+        `• Subject: ${subject}\n\n` +
+        `Feedback Message:\n${message}\n\n` +
+        `-----------------------------------------\n` +
+        `Submitted on Smart Money Platform`
+    );
+
+    // Open user's email client directly pre-filled with the support email and feedback details
+    window.location.href = `mailto:${recipientEmail}?subject=${emailSubject}&body=${emailBody}`;
+}
+
+
 // Dynamic Login/Logout status update for Mobile Menu
 window.addEventListener('DOMContentLoaded', () => {
     const authLink = document.getElementById('authMenuLink');
     if (authLink) {
-        // Change condition based on your login tracking (e.g., localStorage.getItem('isLoggedIn'))
         const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; 
         
         if (isLoggedIn) {
-            authLink.href = "logout.html"; // Update with your logout handler link or function
+            authLink.href = "logout.html";
             authLink.innerHTML = "🚪 Logout";
         } else {
-            authLink.href = "login.html"; // Update with your login page link
+            authLink.href = "login.html";
             authLink.innerHTML = "👤 Login";
         }
     }
