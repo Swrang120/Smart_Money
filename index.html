@@ -18,6 +18,9 @@ crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
 rel="stylesheet">
 
+<!-- Supabase CDN for fetching data directly -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 
 /* ================================
@@ -196,7 +199,7 @@ object-fit: cover;
 }
 
 .hamburger{
-display:flex; /* Enabled for both Desktop and Mobile for uniform layout */
+display:flex;
 width:38px;
 height:38px;
 background:#f1f5f9;
@@ -218,7 +221,7 @@ border-radius:10px;
 
 
 /* ================================
-   UNIFORM SIDEBAR MENU (BOTH DESKTOP & MOBILE)
+   UNIFORM SIDEBAR MENU
 ================================ */
 
 .mobile-menu{
@@ -721,29 +724,12 @@ align-items:center;
 justify-content:space-between;
 }
 
-.bg-1{
-background:linear-gradient(135deg,#f97316,#ea580c);
-}
-
-.bg-2{
-background:linear-gradient(135deg,#2563eb,#1d4ed8);
-}
-
-.bg-3{
-background:linear-gradient(135deg,#7c3aed,#5b21b6);
-}
-
-.bg-4{
-background:linear-gradient(135deg,#172033,#334155);
-}
-
-.bg-5{
-background:linear-gradient(135deg,#e11d48,#be123c);
-}
-
-.bg-6{
-background:linear-gradient(135deg,#0891b2,#0e7490);
-}
+.bg-1{ background:linear-gradient(135deg,#f97316,#ea580c); }
+.bg-2{ background:linear-gradient(135deg,#2563eb,#1d4ed8); }
+.bg-3{ background:linear-gradient(135deg,#7c3aed,#5b21b6); }
+.bg-4{ background:linear-gradient(135deg,#172033,#334155); }
+.bg-5{ background:linear-gradient(135deg,#e11d48,#be123c); }
+.bg-6{ background:linear-gradient(135deg,#0891b2,#0e7490); }
 
 .pkg-title h3{
 font-size:17px;
@@ -1103,153 +1089,41 @@ color:#64748b;
 ================================ */
 
 @media(max-width:992px){
-
-.packages-grid{
-grid-template-columns:repeat(2,1fr);
-}
-
-.audience-grid{
-grid-template-columns:repeat(2,1fr);
-}
-
-.testimonial-grid{
-grid-template-columns:repeat(2,1fr);
-}
-
-.support-grid{
-grid-template-columns:1fr;
-}
-
-.footer-grid{
-grid-template-columns:1fr;
-gap:25px;
-}
-
-.about-grid{
-grid-template-columns:1fr;
-}
-
-.mission-vision{
-grid-template-columns:1fr 1fr;
-}
-
+.packages-grid{ grid-template-columns:repeat(2,1fr); }
+.audience-grid{ grid-template-columns:repeat(2,1fr); }
+.testimonial-grid{ grid-template-columns:repeat(2,1fr); }
+.support-grid{ grid-template-columns:1fr; }
+.footer-grid{ grid-template-columns:1fr; gap:25px; }
+.about-grid{ grid-template-columns:1fr; }
+.mission-vision{ grid-template-columns:1fr 1fr; }
 }
 
 @media(max-width:650px){
-
-.navbar{
-height:68px;
-padding:0 4%;
-}
-
-.brand-text h2{
-font-size:15px;
-}
-
-.brand-text span{
-font-size:9px;
-}
-
-.logo-circle{
-width:36px;
-height:36px;
-font-size:15px;
-border-radius:10px;
-}
-
-.hero{
-min-height:500px;
-}
-
-.hero-content{
-padding:70px 0 90px;
-}
-
-.hero h1{
-font-size:30px;
-letter-spacing:-1px;
-}
-
-.hero p{
-font-size:13px;
-}
-
-.welcome-section{
-margin-top:-45px;
-}
-
-.welcome-top{
-padding:28px 18px;
-}
-
-.welcome-top h2{
-font-size:22px;
-}
-
-.who-section{
-padding:22px 15px;
-}
-
-.audience-grid{
-grid-template-columns:1fr;
-gap:10px;
-}
-
-.audience-card{
-padding:14px;
-}
-
-.audience-icon{
-width:40px;
-height:40px;
-font-size:18px;
-}
-
-.join-request{
-margin:0 15px 20px;
-padding:20px;
-flex-direction:column;
-align-items:flex-start;
-}
-
-.join-btn{
-width:100%;
-text-align:center;
-}
-
-.about-images img{
-height:160px;
-}
-
-.mission-vision{
-grid-template-columns:1fr;
-}
-
-.packages-grid{
-grid-template-columns:1fr;
-}
-
-.testimonial-grid{
-grid-template-columns:1fr;
-}
-
-.form-row{
-grid-template-columns:1fr;
-gap:15px;
-}
-
-.feedback-form-card{
-padding:18px;
-}
-
-.section{
-padding:50px 0;
-}
-
-.section-title{
-font-size:24px;
-}
-
+.navbar{ height:68px; padding:0 4%; }
+.brand-text h2{ font-size:15px; }
+.brand-text span{ font-size:9px; }
+.logo-circle{ width:36px; height:36px; font-size:15px; border-radius:10px; }
+.hero{ min-height:500px; }
+.hero-content{ padding:70px 0 90px; }
+.hero h1{ font-size:30px; letter-spacing:-1px; }
+.hero p{ font-size:13px; }
+.welcome-section{ margin-top:-45px; }
+.welcome-top{ padding:28px 18px; }
+.welcome-top h2{ font-size:22px; }
+.who-section{ padding:22px 15px; }
+.audience-grid{ grid-template-columns:1fr; gap:10px; }
+.audience-card{ padding:14px; }
+.audience-icon{ width:40px; height:40px; font-size:18px; }
+.join-request{ margin:0 15px 20px; padding:20px; flex-direction:column; align-items:flex-start; }
+.join-btn{ width:100%; text-align:center; }
+.about-images img{ height:160px; }
+.mission-vision{ grid-template-columns:1fr; }
+.packages-grid{ grid-template-columns:1fr; }
+.testimonial-grid{ grid-template-columns:1fr; }
+.form-row{ grid-template-columns:1fr; gap:15px; }
+.feedback-form-card{ padding:18px; }
+.section{ padding:50px 0; }
+.section-title{ font-size:24px; }
 }
 
 </style>
@@ -1259,1078 +1133,356 @@ font-size:24px;
 
 
 <!-- RUNNING ANNOUNCEMENT -->
-
 <div class="top-announcement">
-
 <div class="marquee-track">
-
 🎓 Welcome to Smart Money! &nbsp;&nbsp; • &nbsp;&nbsp;
 📚 Learn Digital Skills &nbsp;&nbsp; • &nbsp;&nbsp;
 💼 Explore Flexible Work Opportunities &nbsp;&nbsp; • &nbsp;&nbsp;
 🚀 Students, Housewives, Professionals & Beginners Welcome &nbsp;&nbsp; • &nbsp;&nbsp;
 🤝 Join our learning community and start building your skills today!
-
 </div>
-
 </div>
 
 
 <!-- NAVBAR -->
-
 <nav class="navbar">
-
 <a href="#" class="brand">
-
 <div class="logo-circle">SM</div>
-
 <div class="brand-text">
 <h2>Smart Money</h2>
 <span>Earn • Grow • Be Smart</span>
 </div>
-
 </a>
 
 <div class="nav-right-icons">
-
-<a href="dashboard.html"
-class="profile-icon-btn"
-id="navProfileBtn"
-title="My Profile / Dashboard">
-
-<svg width="20"
-height="20"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="2">
-
+<a href="dashboard.html" class="profile-icon-btn" id="navProfileBtn" title="My Profile / Dashboard">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-
-<circle cx="12"
-cy="7"
-r="4"></circle>
-
+<circle cx="12" cy="7" r="4"></circle>
 </svg>
-
 </a>
-
-<div class="hamburger"
-onclick="toggleMenu()">
-
+<div class="hamburger" onclick="toggleMenu()">
 <span></span>
 <span></span>
 <span></span>
-
 </div>
-
 </div>
-
 </nav>
 
 
-<!-- UNIFORM SIDEBAR MENU (BOTH DESKTOP & MOBILE) -->
+<!-- UNIFORM SIDEBAR MENU -->
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
 
-<div class="menu-overlay"
-id="menuOverlay"
-onclick="toggleMenu()"></div>
-
-
-<div class="mobile-menu"
-id="mobileMenu">
-
+<div class="mobile-menu" id="mobileMenu">
 <div class="mobile-menu-top">
-
 <div style="display:flex;align-items:center;gap:10px;">
 <div class="logo-circle" style="width:34px;height:34px;font-size:14px;border-radius:8px;">SM</div>
 <b>Smart Money</b>
 </div>
-
-<button class="close-menu"
-onclick="toggleMenu()">
-
-✕
-</button>
-
+<button class="close-menu" onclick="toggleMenu()">✕</button>
 </div>
 
 <div class="mobile-nav-links">
 <a href="#home" class="m-link" onclick="toggleMenu()">🏠 Home</a>
-
 <a href="#about" class="m-link" onclick="toggleMenu()">ℹ️ About Us</a>
-
 <a href="#packages" class="m-link" onclick="toggleMenu()">👑 Plans & Packages</a>
-
-<!-- Preview Option (Admin Updates from Supabase bucket/storage) -->
 <a href="#" class="m-link" id="previewMenuLink" onclick="openAdminPreviewModal(); toggleMenu();">👁️ Preview (Admin Updates)</a>
-
 <a href="#testimonials" class="m-link" onclick="toggleMenu()">⭐ Feedback</a>
-
 <a href="#support" class="m-link" onclick="toggleMenu()">💬 Contact Support</a>
-
-<a href="dashboard.html"
-class="mobile-dashboard-btn" id="authMenuLink">
-👤 My Dashboard
-</a>
+<a href="dashboard.html" class="mobile-dashboard-btn" id="authMenuLink">👤 My Dashboard</a>
 </div>
-
 </div>
 
 
 <!-- HERO -->
-
-<section class="hero"
-id="home">
-
+<section class="hero" id="home">
 <div class="hero-content">
-
-<div class="hero-badge">
-
-🎓 LEARN • GROW • BUILD YOUR FUTURE
-
-</div>
-
-
-<h1>
-
-Empowering
-<span>Students & Digital Learners</span>
-For A Smarter Future
-
-</h1>
-
-
-<p>
-
-Build practical digital skills, explore flexible opportunities
-and learn from a community focused on personal and
-professional growth.
-
-</p>
-
-
+<div class="hero-badge">🎓 LEARN • GROW • BUILD YOUR FUTURE</div>
+<h1>Empowering <span>Students & Digital Learners</span> For A Smarter Future</h1>
+<p>Build practical digital skills, explore flexible opportunities and learn from a community focused on personal and professional growth.</p>
 <div class="hero-buttons">
-
-<a href="#packages"
-class="hero-btn-primary">
-
-Explore Courses →
-
-</a>
-
-<a href="#join"
-class="hero-btn-secondary">
-
-Join Our Community
-
-</a>
-
+<a href="#packages" class="hero-btn-primary">Explore Courses →</a>
+<a href="#join" class="hero-btn-secondary">Join Our Community</a>
 </div>
-
 </div>
-
 </section>
 
 
 <!-- WELCOME SECTION -->
-
-<section class="welcome-section"
-id="join">
-
+<section class="welcome-section" id="join">
 <div class="container">
-
 <div class="welcome-card">
-
-
 <div class="welcome-top">
-
 <small>WELCOME TO SMART MONEY</small>
-
-<h2>
-Learn Skills. Grow Confidence. Explore Opportunities.
-</h2>
-
-<p>
-
-Whether you're a student, working professional,
-housewife or someone looking to learn something new —
-there is a place for you in our learning community.
-
-</p>
-
+<h2>Learn Skills. Grow Confidence. Explore Opportunities.</h2>
+<p>Whether you're a student, working professional, housewife or someone looking to learn something new — there is a place for you in our learning community.</p>
 <div class="status-live">
-
 <span class="live-dot"></span>
-
 Community Registration Open
-
 </div>
-
 </div>
-
 
 <div class="who-section">
-
 <div class="who-title">
-
-<h3>
-Who Can Join & Explore Opportunities?
-</h3>
-
-<p>
-Flexible learning for different lifestyles and career goals.
-</p>
-
+<h3>Who Can Join & Explore Opportunities?</h3>
+<p>Flexible learning for different lifestyles and career goals.</p>
 </div>
-
 
 <div class="audience-grid">
-
-
 <div class="audience-card">
-
-<div class="audience-icon">
-🎓
-</div>
-
+<div class="audience-icon">🎓</div>
 <div class="audience-info">
-
 <h4>College Students</h4>
-
-<p>
-Learn practical digital skills alongside your studies.
-</p>
-
+<p>Learn practical digital skills alongside your studies.</p>
 </div>
-
 </div>
-
-
 <div class="audience-card">
-
-<div class="audience-icon">
-👩‍💼
-</div>
-
+<div class="audience-icon">👩‍💼</div>
 <div class="audience-info">
-
 <h4>Working Professionals</h4>
-
-<p>
-Build additional skills for personal growth.
-</p>
-
+<p>Build additional skills for personal growth.</p>
 </div>
-
 </div>
-
-
 <div class="audience-card">
-
-<div class="audience-icon">
-🏠
-</div>
-
+<div class="audience-icon">🏠</div>
 <div class="audience-info">
-
 <h4>Housewives</h4>
-
-<p>
-Flexible learning from home at your own pace.
-</p>
-
+<p>Flexible learning from home at your own pace.</p>
 </div>
-
 </div>
-
-
 <div class="audience-card">
-
-<div class="audience-icon">
-⏰
-</div>
-
+<div class="audience-icon">⏰</div>
 <div class="audience-info">
-
 <h4>Part-Time Job Seekers</h4>
-
-<p>
-Explore flexible learning around your schedule.
-</p>
-
+<p>Explore flexible learning around your schedule.</p>
 </div>
-
 </div>
-
-
 <div class="audience-card">
-
-<div class="audience-icon">
-💻
-</div>
-
+<div class="audience-icon">💻</div>
 <div class="audience-info">
-
 <h4>Beginners</h4>
-
-<p>
-Start learning even if you have no prior experience.
-</p>
-
+<p>Start learning even if you have no prior experience.</p>
 </div>
-
 </div>
-
-
 <div class="audience-card">
-
-<div class="audience-icon">
-🚀
-</div>
-
+<div class="audience-icon">🚀</div>
 <div class="audience-info">
-
 <h4>Freelancers & Creators</h4>
-
-<p>
-Upgrade your skills and strengthen your digital presence.
-</p>
-
+<p>Upgrade your skills and strengthen your digital presence.</p>
 </div>
-
 </div>
-
-
 </div>
-
 </div>
-
 
 <div class="join-request">
-
 <div>
-
-<h3>
-Ready To Start Your Learning Journey?
-</h3>
-
-<p>
-
-Join Smart Money and explore courses, skills,
-community learning and new growth opportunities.
-
-</p>
-
+<h3>Ready To Start Your Learning Journey?</h3>
+<p>Join Smart Money and explore courses, skills, community learning and new growth opportunities.</p>
 </div>
-
-<a href="#packages"
-class="join-btn">
-
-Request To Join →
-</a>
-
-</div>
-
-
+<a href="#packages" class="join-btn">Request To Join →</a>
 </div>
 
 </div>
-
+</div>
 </section>
 
 
 <!-- ABOUT -->
-
-<section class="section"
-id="about">
-
+<section class="section" id="about">
 <div class="container">
-
 <div class="about-grid">
-
 <div class="about-text">
-
-<div class="section-tag">
-ABOUT US
-</div>
-
-<h2 class="section-title">
-
-Discover Our
-<span>Journey Of Growth</span>
-
-</h2>
-
-<p>
-
-At Smart Money, we focus on making digital education
-accessible and engaging. Our goal is to help learners
-discover useful skills, build confidence and grow
-through flexible digital learning experiences.
-
-</p>
-
-
+<div class="section-tag">ABOUT US</div>
+<h2 class="section-title">Discover Our <span>Journey Of Growth</span></h2>
+<p>At Smart Money, we focus on making digital education accessible and engaging. Our goal is to help learners discover useful skills, build confidence and grow through flexible digital learning experiences.</p>
 <div class="mission-vision">
-
 <div class="mv-box">
-
-<h5>
-🚀 Our Mission
-</h5>
-
-<p>
-
-To inspire continuous learning through practical,
-flexible and accessible digital education.
-
-</p>
-
+<h5>🚀 Our Mission</h5>
+<p>To inspire continuous learning through practical, flexible and accessible digital education.</p>
 </div>
-
-
 <div class="mv-box">
-
-<h5>
-💡 Our Vision
-</h5>
-
-<p>
-
-To build a positive community of learners,
-creators and digitally skilled individuals.
-
-</p>
-
+<h5>💡 Our Vision</h5>
+<p>To build a positive community of learners, creators and digitally skilled individuals.</p>
 </div>
-
 </div>
-
 </div>
-
 
 <div class="about-images">
-
-<img
-src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=85"
-alt="Students learning together">
-
-<img
-src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=85"
-alt="Students working on laptops">
-
+<img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=85" alt="Students learning together">
+<img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=85" alt="Students working on laptops">
 </div>
-
 </div>
-
 </div>
-
 </section>
 
 
 <!-- PACKAGES -->
-
-<section class="section packages-section"
-id="packages">
-
+<section class="section packages-section" id="packages">
 <div class="container">
-
 <div class="section-center">
-
-<div class="section-tag">
-CHOOSE YOUR PATH
+<div class="section-tag">CHOOSE YOUR PATH</div>
+<h2 class="section-title">Choose The Perfect <span>Course Package</span></h2>
 </div>
-
-<h2 class="section-title">
-
-Choose The Perfect
-<span>Course Package</span>
-
-</h2>
-
-</div>
-
 
 <div class="packages-grid">
-
-
 <!-- STARTER -->
-
 <div class="package-card">
-
 <div class="pkg-banner bg-1">
-
-<div class="pkg-title">
-
-<h3>Starter Package</h3>
-
-<p>Beginner Growth</p>
-
-</div>
-
+<div class="pkg-title"><h3>Starter Package</h3><p>Beginner Growth</p></div>
 <div class="pkg-badge">🚀</div>
-
 </div>
-
-
 <div class="pkg-body">
-
-<p class="pkg-summary-text">
-
-Ideal for beginners starting with fundamental
-digital skill courses.
-
-</p>
-
-<button class="details-btn"
-onclick="openPackageModal(
-'Starter Package',
-'2 Essential Courses',
-'30% Commission',
-'₹100 - ₹800',
-'1 Time / Day',
-'7 Days',
-'2%'
-)">
-
-🔍 View Product Details
-
-</button>
-
+<p class="pkg-summary-text">Ideal for beginners starting with fundamental digital skill courses.</p>
+<button class="details-btn" onclick="openPackageModal('Starter Package', '2 Essential Courses', '30% Commission', '₹100 - ₹800', '1 Time / Day', '7 Days', '2%')">🔍 View Product Details</button>
 </div>
-
-
 <div class="pkg-footer">
-
-<div>
-
-<span class="current-price">
-₹289
-</span>
-
-<span class="old-price">
-₹499
-</span>
-
+<div><span class="current-price">₹289</span><span class="old-price">₹499</span></div>
+<a href="checkout.html?name=Starter%20Package&price=289" class="buy-btn">Buy Now</a>
 </div>
-
-<a href="checkout.html?name=Starter%20Package&price=289"
-class="buy-btn">
-
-Buy Now
-
-</a>
-
 </div>
-
-</div>
-
 
 <!-- INTERMEDIATE -->
-
 <div class="package-card">
-
 <div class="pkg-banner bg-2">
-
-<div class="pkg-title">
-
-<h3>Intermediate</h3>
-
-<p>Skill Advancement</p>
-
-</div>
-
+<div class="pkg-title"><h3>Intermediate</h3><p>Skill Advancement</p></div>
 <div class="pkg-badge">💻</div>
-
 </div>
-
-
 <div class="pkg-body">
-
-<p class="pkg-summary-text">
-
-Includes professional learning content for
-better digital skill development.
-
-</p>
-
-<button class="details-btn"
-onclick="openPackageModal(
-'Intermediate Package',
-'5 Professional Courses',
-'50% Commission',
-'₹100 - ₹1,500',
-'1 Time / Day',
-'7 Days',
-'2%'
-)">
-
-🔍 View Product Details
-
-</button>
-
+<p class="pkg-summary-text">Includes professional learning content for better digital skill development.</p>
+<button class="details-btn" onclick="openPackageModal('Intermediate Package', '5 Professional Courses', '50% Commission', '₹100 - ₹1,500', '1 Time / Day', '7 Days', '2%')">🔍 View Product Details</button>
 </div>
-
-
 <div class="pkg-footer">
-
-<div>
-
-<span class="current-price">
-₹560
-</span>
-
-<span class="old-price">
-₹999
-</span>
-
+<div><span class="current-price">₹560</span><span class="old-price">₹999</span></div>
+<a href="checkout.html?name=Intermediate%20Package&price=560" class="buy-btn">Buy Now</a>
 </div>
-
-<a href="checkout.html?name=Intermediate%20Package&price=560"
-class="buy-btn">
-
-Buy Now
-
-</a>
-
 </div>
-
-</div>
-
 
 <!-- EXPERT -->
-
 <div class="package-card">
-
 <div class="pkg-banner bg-3">
-
-<div class="pkg-title">
-
-<h3>Expert Package</h3>
-
-<p>Professional Tier</p>
-
-</div>
-
+<div class="pkg-title"><h3>Expert Package</h3><p>Professional Tier</p></div>
 <div class="pkg-badge">⚡</div>
-
 </div>
-
-
 <div class="pkg-body">
-
-<p class="pkg-summary-text">
-
-Advanced learning content for learners
-looking to improve their digital knowledge.
-
-</p>
-
-<button class="details-btn"
-onclick="openPackageModal(
-'Expert Package',
-'10 Advanced Courses',
-'70% Commission',
-'₹100 - ₹4,500',
-'2 Times / Day',
-'5 Days',
-'2%'
-)">
-
-🔍 View Product Details
-
-</button>
-
+<p class="pkg-summary-text">Advanced learning content for learners looking to improve their digital knowledge.</p>
+<button class="details-btn" onclick="openPackageModal('Expert Package', '10 Advanced Courses', '70% Commission', '₹100 - ₹4,500', '2 Times / Day', '5 Days', '2%')">🔍 View Product Details</button>
 </div>
-
-
 <div class="pkg-footer">
-
-<div>
-
-<span class="current-price">
-₹1,149
-</span>
-
-<span class="old-price">
-₹2,999
-</span>
-
+<div><span class="current-price">₹1,149</span><span class="old-price">₹2,999</span></div>
+<a href="checkout.html?name=Expert%20Package&price=1149" class="buy-btn">Buy Now</a>
 </div>
-
-<a href="checkout.html?name=Expert%20Package&price=1149"
-class="buy-btn">
-
-Buy Now
-
-</a>
-
 </div>
-
-</div>
-
 
 <!-- MASTER -->
-
 <div class="package-card">
-
 <div class="pkg-banner bg-4">
-
-<div class="pkg-title">
-
-<h3>Master Package</h3>
-
-<p>Advanced Mastery</p>
-
-</div>
-
+<div class="pkg-title"><h3>Master Package</h3><p>Advanced Mastery</p></div>
 <div class="pkg-badge">👑</div>
-
 </div>
-
-
 <div class="pkg-body">
-
-<p class="pkg-summary-text">
-
-Access a larger collection of masterclasses
-and advanced learning material.
-
-</p>
-
-<button class="details-btn"
-onclick="openPackageModal(
-'Master Package',
-'16 Elite Masterclasses',
-'75% Commission',
-'₹100 - ₹10,000',
-'Unlimited',
-'Instant',
-'0%'
-)">
-
-🔍 View Product Details
-
-</button>
-
+<p class="pkg-summary-text">Access a larger collection of masterclasses and advanced learning material.</p>
+<button class="details-btn" onclick="openPackageModal('Master Package', '16 Elite Masterclasses', '75% Commission', '₹100 - ₹10,000', 'Unlimited', 'Instant', '0%')">🔍 View Product Details</button>
 </div>
-
-
 <div class="pkg-footer">
-
-<div>
-
-<span class="current-price">
-₹2,499
-</span>
-
-<span class="old-price">
-₹5,999
-</span>
-
+<div><span class="current-price">₹2,499</span><span class="old-price">₹5,999</span></div>
+<a href="checkout.html?name=Master%20Package&price=2499" class="buy-btn">Buy Now</a>
 </div>
-
-<a href="checkout.html?name=Master%20Package&price=2499"
-class="buy-btn">
-
-Buy Now
-
-</a>
-
 </div>
-
-</div>
-
 
 <!-- BRAHMASTRA -->
-
 <div class="package-card">
-
 <div class="pkg-banner bg-5">
-
-<div class="pkg-title">
-
-<h3>Brahmastra</h3>
-
-<p>Ultimate Growth</p>
-
-</div>
-
+<div class="pkg-title"><h3>Brahmastra</h3><p>Ultimate Growth</p></div>
 <div class="pkg-badge">🔥</div>
-
 </div>
-
-
 <div class="pkg-body">
-
-<p class="pkg-summary-text">
-
-A larger course bundle designed for
-advanced learners and creators.
-
-</p>
-
-<button class="details-btn"
-onclick="openPackageModal(
-'Brahmastra Package',
-'20 Ultimate Courses',
-'85% Commission',
-'₹100 - ₹30,000',
-'Unlimited',
-'Instant',
-'0%'
-)">
-
-🔍 View Product Details
-
-</button>
-
+<p class="pkg-summary-text">A larger course bundle designed for advanced learners and creators.</p>
+<button class="details-btn" onclick="openPackageModal('Brahmastra Package', '20 Ultimate Courses', '85% Commission', '₹100 - ₹30,000', 'Unlimited', 'Instant', '0%')">🔍 View Product Details</button>
 </div>
-
-
 <div class="pkg-footer">
-
-<div>
-
-<span class="current-price">
-₹5,499
-</span>
-
-<span class="old-price">
-₹10,999
-</span>
-
+<div><span class="current-price">₹5,499</span><span class="old-price">₹10,999</span></div>
+<a href="checkout.html?name=Brahmastra%20Package&price=5499" class="buy-btn">Buy Now</a>
 </div>
-
-<a href="checkout.html?name=Brahmastra%20Package&price=5499"
-class="buy-btn">
-
-Buy Now
-
-</a>
-
 </div>
-
-</div>
-
 
 <!-- PREMIUM -->
-
 <div class="package-card">
-
 <div class="pkg-banner bg-6">
-
-<div class="pkg-title">
-
-<h3>Premium Pro</h3>
-
-<p>Top Tier Access</p>
-
-</div>
-
+<div class="pkg-title"><h3>Premium Pro</h3><p>Top Tier Access</p></div>
 <div class="pkg-badge">💎</div>
-
 </div>
-
-
 <div class="pkg-body">
-
-<p class="pkg-summary-text">
-
-Premium learning content and tools for
-serious digital creators and learners.
-
-</p>
-
-<button class="details-btn"
-onclick="openPackageModal(
-'Premium Pro Package',
-'23 Premium Courses',
-'85% Commission',
-'₹100 - ₹50,000',
-'Unlimited',
-'Instant',
-'0%'
-)">
-
-🔍 View Product Details
-
-</button>
-
+<p class="pkg-summary-text">Premium learning content and tools for serious digital creators and learners.</p>
+<button class="details-btn" onclick="openPackageModal('Premium Pro Package', '23 Premium Courses', '85% Commission', '₹100 - ₹50,000', 'Unlimited', 'Instant', '0%')">🔍 View Product Details</button>
 </div>
-
-
 <div class="pkg-footer">
-
-<div>
-
-<span class="current-price">
-₹10,997
-</span>
-
-<span class="old-price">
-₹20,998
-</span>
-
+<div><span class="current-price">₹10,997</span><span class="old-price">₹20,998</span></div>
+<a href="checkout.html?name=Premium%20Pro%20Package&price=10997" class="buy-btn">Buy Now</a>
 </div>
-
-<a href="checkout.html?name=Premium%20Pro%20Package&price=10997"
-class="buy-btn">
-
-Buy Now
-
-</a>
-
 </div>
 
 </div>
-
-
 </div>
-
-</div>
-
 </section>
 
 
 <!-- TESTIMONIAL -->
-
-<section class="section"
-id="testimonials">
-
+<section class="section" id="testimonials">
 <div class="container">
-
 <div class="section-center">
-
-<div class="section-tag">
-COMMUNITY FEEDBACK
+<div class="section-tag">COMMUNITY FEEDBACK</div>
+<h2 class="section-title">Explore Feedback From <span>Our Learners</span></h2>
 </div>
-
-<h2 class="section-title">
-
-Explore Feedback From
-<span>Our Learners</span>
-
-</h2>
-
-</div>
-
 
 <div class="testimonial-grid">
-
+<div class="testimonial-card">
+<div>
+<div class="client-info">
+<img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" alt="Client">
+<div><h4>Vikas Yadav</h4><p>★★★★★</p></div>
+</div>
+<p class="feedback">"Learning digital skills helped me understand new online tools and improve my confidence."</p>
+</div>
+</div>
 
 <div class="testimonial-card">
 <div>
 <div class="client-info">
-
-<img
-src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80"
-alt="Client">
-
-<div>
-
-<h4>Vikas Yadav</h4>
-
-<p>★★★★★</p>
-
+<img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80" alt="Client">
+<div><h4>Pooja Gupta</h4><p>★★★★★</p></div>
 </div>
-
-</div>
-
-<p class="feedback">
-
-"Learning digital skills helped me understand
-new online tools and improve my confidence."
-
-</p>
+<p class="feedback">"The learning experience and guidance helped me explore new digital skills at my own pace."</p>
 </div>
 </div>
-
 
 <div class="testimonial-card">
 <div>
 <div class="client-info">
-
-<img
-src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80"
-alt="Client">
-
-<div>
-
-<h4>Pooja Gupta</h4>
-
-<p>★★★★★</p>
-
+<img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" alt="Client">
+<div><h4>Rohit Singh</h4><p>★★★★★</p></div>
 </div>
-
-</div>
-
-<p class="feedback">
-
-"The learning experience and guidance helped
-me explore new digital skills at my own pace."
-
-</p>
+<p class="feedback">"I found useful learning resources and gained more clarity about developing digital skills."</p>
 </div>
 </div>
-
-
-<div class="testimonial-card">
-<div>
-<div class="client-info">
-
-<img
-src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"
-alt="Client">
-
-<div>
-
-<h4>Rohit Singh</h4>
-
-<p>★★★★★</p>
-
 </div>
-
-</div>
-
-<p class="feedback">
-
-"I found useful learning resources and gained
-more clarity about developing digital skills."
-
-</p>
-</div>
-</div>
-
-
-</div>
-
 
 <!-- FEEDBACK SUBMISSION FORM -->
-
 <div class="feedback-form-card">
-
 <h3>Share Your Feedback</h3>
-
 <p>We value your thoughts! Submit your experience below, and it will be sent directly to our support team.</p>
-
 <form class="feedback-form" onsubmit="sendFeedbackEmail(event)">
-
 <div class="form-row">
-
 <div class="form-group">
 <label for="fbName">Your Name</label>
 <input type="text" id="fbName" placeholder="Enter your full name" required>
 </div>
-
 <div class="form-group">
 <label for="fbId">Your User ID / Email ID</label>
 <input type="text" id="fbId" placeholder="Enter your ID or registered email" required>
 </div>
-
 </div>
 
 <div class="form-row">
-
 <div class="form-group">
 <label for="fbRating">Rating</label>
 <select id="fbRating" required>
@@ -2341,12 +1493,10 @@ more clarity about developing digital skills."
 <option value="1 Star - ★☆☆☆☆">★☆☆☆☆ (1 Star - Very Bad)</option>
 </select>
 </div>
-
 <div class="form-group">
 <label for="fbSubject">Subject / Course Name</label>
 <input type="text" id="fbSubject" placeholder="e.g. Starter Package / General Experience" required>
 </div>
-
 </div>
 
 <div class="form-group">
@@ -2355,259 +1505,93 @@ more clarity about developing digital skills."
 </div>
 
 <button type="submit" class="submit-feedback-btn">Send Feedback Directly →</button>
-
 </form>
-
 </div>
 
 </div>
-
 </section>
 
 
 <!-- SUPPORT -->
-
-<section class="section support-section"
-id="support">
-
+<section class="section support-section" id="support">
 <div class="container">
-
 <div class="section-center">
-
-<div class="section-tag">
-WE ARE HERE TO HELP
+<div class="section-tag">WE ARE HERE TO HELP</div>
+<h2 class="section-title">Customer Support & <span>Help Desk</span></h2>
 </div>
-
-<h2 class="section-title">
-
-Customer Support &
-<span>Help Desk</span>
-
-</h2>
-
-</div>
-
 
 <div class="support-grid">
-
 <div class="support-card">
-
-<h3>
-💳 Payment & Login Support
-</h3>
-
-<p>
-
-<strong>Email:</strong>
-smartmoneysupport1@gmail.com
-
-</p>
-
-<p>
-
-<strong>Mobile:</strong>
-9954851021
-
-</p>
-
+<h3>💳 Payment & Login Support</h3>
+<p><strong>Email:</strong> smartmoneysupport1@gmail.com</p>
+<p><strong>Mobile:</strong> 9954851021</p>
 </div>
-
-
 <div class="support-card">
-
-<h3>
-❓ General Inquiries & Referrals
-</h3>
-
-<p>
-
-<strong>Email:</strong>
-Smsupport7@gmail.com
-
-</p>
-
-<p>
-
-<strong>Mobile:</strong>
-6900986957
-
-</p>
-
+<h3>❓ General Inquiries & Referrals</h3>
+<p><strong>Email:</strong> Smsupport7@gmail.com</p>
+<p><strong>Mobile:</strong> 6900986957</p>
 </div>
-
 </div>
-
 </div>
-
 </section>
 
 
 <!-- FOOTER -->
-
 <footer class="footer">
-
 <div class="container">
-
 <div class="footer-grid">
-
-
 <div>
-
 <h3>Smart Money</h3>
-
-<p style="margin-top:15px;max-width:420px;">
-
-Smart Money is an e-learning platform focused on
-digital learning, skill development and helping
-learners build confidence in the modern digital world.
-
-</p>
-
-<p style="margin-top:12px;">
-
-📍 Assam, India
-
-</p>
-
+<p style="margin-top:15px;max-width:420px;">Smart Money is an e-learning platform focused on digital learning, skill development and helping learners build confidence in the modern digital world.</p>
+<p style="margin-top:12px;">📍 Assam, India</p>
 </div>
-
-
 <div>
-
 <h4>Quick Links</h4>
-
 <a href="#home">Home</a>
-
 <a href="#about">About Us</a>
-
 <a href="#packages">Courses</a>
-
 <a href="#support">Contact Support</a>
-
 </div>
-
-
 <div>
-
 <h4>Useful Links</h4>
-
 <a href="#">Privacy & Policy</a>
-
 <a href="#">Terms & Conditions</a>
-
 <a href="#">Refund Policy</a>
-
 </div>
-
-
 </div>
-
 
 <div class="footer-bottom">
-
 © 2026 Smart Money. All Rights Reserved.
 <br><br>
 Created by <b>Swrang Swargiary</b> • Assam, India
-
 </div>
-
 </div>
-
 </footer>
 
 
 <!-- PACKAGE MODAL -->
-
-<div class="modal-overlay"
-id="packageModal">
-
+<div class="modal-overlay" id="packageModal">
 <div class="modal-box">
-
-<button class="modal-close"
-onclick="closePackageModal()">
-
-✕
-</button>
-
-<h2 id="modalTitle">
-Package Details
-</h2>
-
-
-<div class="detail-row">
-
-<span>Included Content</span>
-
-<span id="modalCourses"></span>
-
+<button class="modal-close" onclick="closePackageModal()">✕</button>
+<h2 id="modalTitle">Package Details</h2>
+<div class="detail-row"><span>Included Content</span><span id="modalCourses"></span></div>
+<div class="detail-row"><span>Commission Rate</span><span id="modalCommission"></span></div>
+<div class="detail-row"><span>Withdrawal Limit</span><span id="modalWithdrawal"></span></div>
+<div class="detail-row"><span>Daily Frequency</span><span id="modalFrequency"></span></div>
+<div class="detail-row"><span>Processing Time</span><span id="modalProcessing"></span></div>
+<div class="detail-row"><span>Transaction Fee</span><span id="modalFee"></span></div>
+<div class="detail-row"><span>Support Level</span><span>24/7 Priority Assistance</span></div>
+</div>
 </div>
 
 
-<div class="detail-row">
-
-<span>Commission Rate</span>
-
-<span id="modalCommission"></span>
-
-</div>
-
-
-<div class="detail-row">
-
-<span>Withdrawal Limit</span>
-
-<span id="modalWithdrawal"></span>
-
-</div>
-
-
-<div class="detail-row">
-
-<span>Daily Frequency</span>
-
-<span id="modalFrequency"></span>
-
-</div>
-
-
-<div class="detail-row">
-
-<span>Processing Time</span>
-
-<span id="modalProcessing"></span>
-
-</div>
-
-
-<div class="detail-row">
-
-<span>Transaction Fee</span>
-
-<span id="modalFee"></span>
-
-</div>
-
-
-<div class="detail-row">
-
-<span>Support Level</span>
-
-<span>24/7 Priority Assistance</span>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- ADMIN PREVIEW MODAL (Loads Supabase / Admin updates photo dynamically to prevent 404) -->
+<!-- ADMIN PREVIEW MODAL -->
 <div class="modal-overlay" id="adminPreviewModal">
 <div class="modal-box" style="text-align:center;">
 <button class="modal-close" onclick="closeAdminPreviewModal()">✕</button>
 <h2 style="margin-bottom:15px;">Admin Update Preview</h2>
 <div id="previewImageContainer" style="min-height:200px; display:flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:12px; overflow:hidden;">
-<p id="noPreviewText" style="color:#64748b; font-size:13px;">No preview image uploaded from admin panel yet or loading from Supabase bucket...</p>
+<p id="noPreviewText" style="color:#64748b; font-size:13px;">Loading preview image from database...</p>
 </div>
 </div>
 </div>
@@ -2615,123 +1599,93 @@ Package Details
 
 <script>
 
+// Initialize Supabase Client (Yahan apni project details daalein agar pehle se nahi hain)
+const SUPABASE_URL = 'YOUR_SUPABASE_URL'; 
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const supabaseClient = (typeof supabase !== 'undefined' && SUPABASE_URL !== 'YOUR_SUPABASE_URL') 
+    ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
+    : null;
 
 function toggleMenu(){
-
-document
-.getElementById("mobileMenu")
-.classList
-.toggle("active");
-
-
-document
-.getElementById("menuOverlay")
-.classList
-.toggle("active");
-
+    document.getElementById("mobileMenu").classList.toggle("active");
+    document.getElementById("menuOverlay").classList.toggle("active");
 }
 
-
-function openPackageModal(
-name,
-courses,
-commission,
-withdrawal,
-frequency,
-processing,
-fee
-){
-
-document
-.getElementById("modalTitle")
-.innerText=name;
-
-
-document
-.getElementById("modalCourses")
-.innerText=courses;
-
-
-document
-.getElementById("modalCommission")
-.innerText=commission;
-
-
-document
-.getElementById("modalWithdrawal")
-.innerText=withdrawal;
-
-
-document
-.getElementById("modalFrequency")
-.innerText=frequency;
-
-
-document
-.getElementById("modalProcessing")
-.innerText=processing;
-
-
-document
-.getElementById("modalFee")
-.innerText=fee;
-
-
-document
-.getElementById("packageModal")
-.style.display="flex";
-
+function openPackageModal(name, courses, commission, withdrawal, frequency, processing, fee){
+    document.getElementById("modalTitle").innerText=name;
+    document.getElementById("modalCourses").innerText=courses;
+    document.getElementById("modalCommission").innerText=commission;
+    document.getElementById("modalWithdrawal").innerText=withdrawal;
+    document.getElementById("modalFrequency").innerText=frequency;
+    document.getElementById("modalProcessing").innerText=processing;
+    document.getElementById("modalFee").innerText=fee;
+    document.getElementById("packageModal").style.display="flex";
 }
-
 
 function closePackageModal(){
-
-document
-.getElementById("packageModal")
-.style.display="none";
-
+    document.getElementById("packageModal").style.display="none";
 }
 
-function openAdminPreviewModal(){
+// Fixed & Robust function to load image from Database table or LocalStorage fallback
+async function openAdminPreviewModal(){
     const modal = document.getElementById("adminPreviewModal");
     const container = document.getElementById("previewImageContainer");
-    
-    // Fetching the uploaded image from localStorage / Supabase admin updates storege
-    const previewImgUrl = localStorage.getItem('index_preview_image') || localStorage.getItem('adminUploadedProfile') || localStorage.getItem('userProfilePic');
-    
-    if(previewImgUrl) {
-        container.innerHTML = `<img src="${previewImgUrl}" alt="Admin Preview" style="width:100%; height:auto; max-height:350px; object-fit:contain;">`;
-    } else {
-        container.innerHTML = `<p style="color:#64748b; font-size:13px; padding:20px;">No preview photo found from admin panel storage (` + `admin_updates` + `). Please upload an image from your admin panel first.</p>`;
-    }
-    
     modal.style.display = "flex";
+    
+    container.innerHTML = `<p style="color:#64748b; font-size:13px; padding:20px;">Loading from admin storage...</p>`;
+
+    let imageUrl = null;
+
+    // 1. Try fetching from Supabase table `admin_updates`
+    if (supabaseClient) {
+        try {
+            const { data, error } = await supabaseClient
+                .from('admin_updates')
+                .select('*')
+                .limit(1);
+            
+            if (data && data.length > 0) {
+                // Aapke table mein column ka naam 'image_' ya 'image' ho sakta hai
+                imageUrl = data[0].image_ || data[0].image || data[0].image_url;
+            }
+        } catch (err) {
+            console.log("Supabase fetch error:", err);
+        }
+    }
+
+    // 2. Fallback to LocalStorage if Supabase didn't return an image
+    if (!imageUrl) {
+        imageUrl = localStorage.getItem('index_preview_image') || 
+                   localStorage.getItem('adminUploadedProfile') || 
+                   localStorage.getItem('userProfilePic');
+    }
+
+    // Render image or error message
+    if(imageUrl) {
+        container.innerHTML = `<img src="${imageUrl}" alt="Admin Preview" style="width:100%; height:auto; max-height:350px; object-fit:contain;">`;
+    } else {
+        container.innerHTML = `<p style="color:#64748b; font-size:13px; padding:20px;">No preview photo found from admin panel storage (admin_updates). Please upload an image from your admin panel first.</p>`;
+    }
 }
 
 function closeAdminPreviewModal(){
     document.getElementById("adminPreviewModal").style.display = "none";
 }
 
-
 window.onclick=function(event){
+    const pkgModal=document.getElementById("packageModal");
+    const adminModal=document.getElementById("adminPreviewModal");
 
-const pkgModal=document.getElementById("packageModal");
-const adminModal=document.getElementById("adminPreviewModal");
-
-if(event.target===pkgModal){
-closePackageModal();
-}
-if(event.target===adminModal){
-closeAdminPreviewModal();
-}
-
+    if(event.target===pkgModal){
+        closePackageModal();
+    }
+    if(event.target===adminModal){
+        closeAdminPreviewModal();
+    }
 }
 
-
-// Function to send feedback directly to smartmoneysupport1@gmail.com
 function sendFeedbackEmail(event) {
     event.preventDefault();
-
     const name = document.getElementById('fbName').value;
     const userId = document.getElementById('fbId').value;
     const rating = document.getElementById('fbRating').value;
@@ -2754,13 +1708,10 @@ function sendFeedbackEmail(event) {
     window.location.href = `mailto:${recipientEmail}?subject=${emailSubject}&body=${emailBody}`;
 }
 
-
-// Dynamic Profile Image & Login/Logout status update script
 window.addEventListener('DOMContentLoaded', () => {
     const authLink = document.getElementById('authMenuLink');
     if (authLink) {
         const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; 
-        
         if (isLoggedIn) {
             authLink.href = "logout.html";
             authLink.innerHTML = "🚪 Logout";
@@ -2770,7 +1721,6 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Always show profile image from localStorage (Admin/User upload) regardless of login state
     const profileBtn = document.getElementById('navProfileBtn');
     if (profileBtn) {
         const savedProfilePic = localStorage.getItem('userProfilePic') || localStorage.getItem('adminUploadedProfile');
