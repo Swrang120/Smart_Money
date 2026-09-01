@@ -185,6 +185,14 @@ color:#7c3aed;
 display:flex;
 align-items:center;
 justify-content:center;
+overflow:hidden;
+border: 1px solid #e2e8f0;
+}
+
+.profile-icon-btn img {
+width: 100%;
+height: 100%;
+object-fit: cover;
 }
 
 .hamburger{
@@ -210,7 +218,7 @@ border-radius:10px;
 
 
 /* ================================
-   MOBILE MENU
+   MOBILE MENU (SIDEBAR)
 ================================ */
 
 .mobile-menu{
@@ -1091,7 +1099,7 @@ color:#64748b;
 
 
 /* ================================
-   MOBILE RESPONSIVENESS FIXES
+   RESPONSIVE MEDIA QUERIES (Force Sidebar on Mobile/Desktop-Site View)
 ================================ */
 
 @media(max-width:992px){
@@ -1313,7 +1321,8 @@ My Dashboard
 
 <a href="dashboard.html"
 class="profile-icon-btn"
-title="My Dashboard">
+id="navProfileBtn"
+title="My Profile / Dashboard">
 
 <svg width="20"
 height="20"
@@ -1378,6 +1387,9 @@ onclick="toggleMenu()">
 <a href="#about" class="m-link" onclick="toggleMenu()">ℹ️ About Us</a>
 
 <a href="#packages" class="m-link" onclick="toggleMenu()">👑 Plans & Packages</a>
+
+<!-- Added Preview Option for Supabase Admin Updates -->
+<a href="preview.html" class="m-link" id="previewMenuLink" onclick="toggleMenu()">👁️ Preview (Admin Updates)</a>
 
 <a href="#testimonials" class="m-link" onclick="toggleMenu()">⭐ Feedback</a>
 
@@ -2734,12 +2746,11 @@ function sendFeedbackEmail(event) {
         `Submitted on Smart Money Platform`
     );
 
-    // Open user's email client directly pre-filled with the support email and feedback details
     window.location.href = `mailto:${recipientEmail}?subject=${emailSubject}&body=${emailBody}`;
 }
 
 
-// Dynamic Login/Logout status update for Mobile Menu
+// Dynamic Profile Image & Login/Logout status update script
 window.addEventListener('DOMContentLoaded', () => {
     const authLink = document.getElementById('authMenuLink');
     if (authLink) {
@@ -2751,6 +2762,15 @@ window.addEventListener('DOMContentLoaded', () => {
         } else {
             authLink.href = "login.html";
             authLink.innerHTML = "👤 Login";
+        }
+    }
+
+    // Always show profile image from localStorage (Admin/User upload) regardless of login state
+    const profileBtn = document.getElementById('navProfileBtn');
+    if (profileBtn) {
+        const savedProfilePic = localStorage.getItem('userProfilePic') || localStorage.getItem('adminUploadedProfile');
+        if (savedProfilePic) {
+            profileBtn.innerHTML = `<img src="${savedProfilePic}" alt="Profile">`;
         }
     }
 });
