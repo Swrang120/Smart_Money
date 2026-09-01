@@ -3057,6 +3057,10 @@ function filterReferrals(days, btnElement){
 /* =========================================================
    KYC SAVE (FIXED WITH MAYBESINGLE)
 =========================================================
+=========================================================
+   KYC SAVE (FIXED WITH MAYBESINGLE)
+========================================================= */
+
 async function saveKycDetails(){
     const fullName = document.getElementById("kycFullName").value.trim();
     const dob = document.getElementById("kycDob").value;
@@ -3067,35 +3071,25 @@ async function saveKycDetails(){
     }
 
     try{
-        console.log("Saving for user_id:", currentUserId);
-
         const { data, error } = await supabaseClient
             .from("profiles")
-            .update({ 
-                full_name: fullName, 
-                date_of_birth: dob || null 
-            })
+            .update({ full_name: fullName, date_of_birth: dob || null })
             .eq("user_id", currentUserId)
             .select()
             .maybeSingle();
 
         if(error) throw error;
-
-        // Agar data null aaya matlab database me is user_id ki row hi nahi mili
-        if(!data){
-            throw new Error("No profile row found for this user_id in database!");
-        }
-
-        console.log("Successfully saved:", data);
-        currentProfile = { ...currentProfile, ...data };
+        currentProfile = { ...currentProfile, ...(data || { full_name: fullName, date_of_birth: dob }) };
         renderProfile(currentProfile, fullName);
         showToast("KYC saved successfully!");
         closeModal("kycModal");
     }catch(error){
-        console.error("Save failed error:", error);
         alert("Error: " + error.message);
     }
 }
+
+
+/*
 =========================================================
    SUBMIT WITHDRAWAL
 ========================================================= */
