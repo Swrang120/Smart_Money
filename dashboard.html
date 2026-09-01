@@ -2141,7 +2141,7 @@ window.supabase.createClient(
         auth:{
             persistSession:true,
             autoRefreshToken:true,
-            detectSessionInUrl:true
+            detectSessionInUrl:false
         }
     }
 );
@@ -3857,36 +3857,35 @@ async function loadDashboardProfile(){
 
     try{
 
-        /*
-           getSession is faster because the local
-           Supabase session is already persisted.
-        */
-
         const {
-            data:sessionData
+            data:sessionData,
+            error:sessionError
         } =
         await supabaseClient
             .auth
             .getSession();
 
+        if (sessionError) {
+            console.warn("Session error:", sessionError);
+        }
 
         let user =
             sessionData?.session?.user
             || null;
 
-
-        /*
-           Only call getUser when no local session.
-        */
-
         if(!user){
 
             const {
-                data:userData
+                data:userData,
+                error:userError
             } =
             await supabaseClient
                 .auth
                 .getUser();
+
+            if (userError) {
+                console.warn("Get user error:", userError);
+            }
 
             user =
                 userData?.user
