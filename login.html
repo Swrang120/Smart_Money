@@ -7,276 +7,75 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- EmailJS Library -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
     body {
       background: #090d16;
       background-image: radial-gradient(circle at 50% 20%, #1e293b 0%, #090d16 100%);
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      overflow-x: hidden;
+      display: flex; justify-content: center; align-items: center; padding: 20px; overflow-x: hidden;
     }
     .auth-card {
       background: rgba(15, 23, 42, 0.75);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      padding: 35px 25px;
-      border-radius: 28px;
-      width: 100%;
-      max-width: 400px;
+      padding: 35px 25px; border-radius: 28px; width: 100%; max-width: 400px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      text-align: center;
-      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.08); text-align: center; position: relative;
     }
-    
-    .husky-container {
-      position: relative;
-      width: 110px;
-      height: 100px;
-      margin: -65px auto 10px auto;
-      z-index: 10;
-    }
+    .husky-container { position: relative; width: 110px; height: 100px; margin: -65px auto 10px auto; z-index: 10; }
     .auth-logo {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      object-fit: cover;
-      background: #1e293b;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      border: 3px solid rgba(255,255,255,0.15);
-      transition: transform 0.3s ease;
+      width: 110px; height: 110px; border-radius: 50%; object-fit: cover; background: #1e293b;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 3px solid rgba(255,255,255,0.15); transition: transform 0.3s ease;
     }
-    .auth-logo:hover {
-      transform: scale(1.05);
-    }
-
-    .auth-header {
-      margin-bottom: 22px;
-    }
-    .auth-header h2 {
-      font-size: 26px;
-      font-weight: 700;
-      color: #f8fafc;
-      margin-bottom: 6px;
-      letter-spacing: -0.5px;
-    }
-    .auth-header p {
-      font-size: 13px;
-      color: #94a3b8;
-    }
-    .input-group {
-      margin-bottom: 16px;
-      text-align: left;
-      position: relative;
-    }
-    .input-group label {
-      display: block;
-      font-size: 12px;
-      font-weight: 500;
-      color: #94a3b8;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+    .auth-logo:hover { transform: scale(1.05); }
+    .auth-header { margin-bottom: 22px; }
+    .auth-header h2 { font-size: 26px; font-weight: 700; color: #f8fafc; margin-bottom: 6px; letter-spacing: -0.5px; }
+    .auth-header p { font-size: 13px; color: #94a3b8; }
+    .input-group { margin-bottom: 16px; text-align: left; position: relative; }
+    .input-group label { display: block; font-size: 12px; font-weight: 500; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
     .input-field {
-      width: 100%;
-      padding: 14px 16px;
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(30, 41, 59, 0.6);
-      color: #f1f5f9;
-      font-size: 14px;
-      outline: none;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(30, 41, 59, 0.6); color: #f1f5f9; font-size: 14px; outline: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .input-field::placeholder {
-      color: #64748b;
-    }
-    .input-field:focus {
-      border-color: #3b82f6;
-      background: rgba(30, 41, 59, 0.9);
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
-    }
-
-    .password-toggle {
-      position: absolute;
-      right: 16px;
-      top: 41px;
-      cursor: pointer;
-      color: #64748b;
-      font-size: 16px;
-      user-select: none;
-      transition: color 0.2s;
-    }
-    .password-toggle:hover {
-      color: #94a3b8;
-    }
-
-    .form-options {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      font-size: 13px;
-    }
-    .remember-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #94a3b8;
-      cursor: pointer;
-    }
-    .remember-wrap input[type="checkbox"] {
-      accent-color: #3b82f6;
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    .forgot-link-wrap a {
-      font-size: 13px;
-      color: #60a5fa;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
+    .input-field::placeholder { color: #64748b; }
+    .input-field:focus { border-color: #3b82f6; background: rgba(30, 41, 59, 0.9); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); }
+    .password-toggle { position: absolute; right: 16px; top: 41px; cursor: pointer; color: #64748b; font-size: 16px; user-select: none; transition: color 0.2s; }
+    .password-toggle:hover { color: #94a3b8; }
+    .form-options { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 13px; }
+    .remember-wrap { display: flex; align-items: center; gap: 8px; color: #94a3b8; cursor: pointer; }
+    .remember-wrap input[type="checkbox"] { accent-color: #3b82f6; width: 16px; height: 16px; cursor: pointer; border-radius: 4px; }
+    .forgot-link-wrap a { font-size: 13px; color: #60a5fa; text-decoration: none; font-weight: 500; transition: color 0.2s; }
     .forgot-link-wrap a:hover { color: #93c5fd; text-decoration: underline; }
-
     .btn-submit {
-      width: 100%;
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      color: #fff;
-      border: none;
-      padding: 15px;
-      border-radius: 14px;
-      font-weight: 600;
-      font-size: 15px;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
-      margin-top: 5px;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
+      width: 100%; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; border: none; padding: 15px;
+      border-radius: 14px; font-weight: 600; font-size: 15px; cursor: pointer; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+      margin-top: 5px; transition: all 0.3s ease; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 10px;
     }
-    .btn-submit:hover { 
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5);
-      transform: translateY(-1px);
-    }
-    .btn-submit:active {
-      transform: translateY(1px);
-    }
-
-    .door-icon-box {
-      width: 20px;
-      height: 20px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .btn-submit.dooropen .door-icon-box {
-      transform: rotateY(70deg) translateX(4px);
-      opacity: 0.8;
-    }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      text-align: center;
-      margin: 20px 0;
-      color: #64748b;
-      font-size: 12px;
-    }
-    .divider::before, .divider::after {
-      content: '';
-      flex: 1;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .divider::before { margin-right: 10px; }
-    .divider::after { margin-left: 10px; }
-
-    .social-btns {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
+    .btn-submit:hover { background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5); transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(1px); }
+    .door-icon-box { width: 20px; height: 20px; background: rgba(255,255,255,0.2); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .btn-submit.dooropen .door-icon-box { transform: rotateY(70deg) translateX(4px); opacity: 0.8; }
+    .divider { display: flex; align-items: center; text-align: center; margin: 20px 0; color: #64748b; font-size: 12px; }
+    .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+    .divider::before { margin-right: 10px; } .divider::after { margin-left: 10px; }
+    .social-btns { display: flex; gap: 12px; margin-bottom: 20px; }
     .social-btn {
-      flex: 1;
-      background: rgba(30, 41, 59, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 11px;
-      border-radius: 12px;
-      color: #e2e8f0;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: background 0.2s, border-color 0.2s;
+      flex: 1; background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); padding: 11px;
+      border-radius: 12px; color: #e2e8f0; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s, border-color 0.2s;
     }
-    .social-btn:hover {
-      background: rgba(51, 65, 85, 0.8);
-      border-color: rgba(255, 255, 255, 0.15);
-    }
-
-    .auth-footer {
-      text-align: center;
-      margin-top: 15px;
-      font-size: 13px;
-      color: #94a3b8;
-    }
-    .auth-footer a {
-      color: #60a5fa;
-      font-weight: 500;
-      text-decoration: none;
-    }
-    .auth-footer a:hover {
-      text-decoration: underline;
-    }
-
+    .social-btn:hover { background: rgba(51, 65, 85, 0.8); border-color: rgba(255, 255, 255, 0.15); }
+    .auth-footer { text-align: center; margin-top: 15px; font-size: 13px; color: #94a3b8; }
+    .auth-footer a { color: #60a5fa; font-weight: 500; text-decoration: none; }
+    .auth-footer a:hover { text-decoration: underline; }
     .modal-overlay {
-      display: none; 
-      position: fixed; 
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(9, 13, 22, 0.8); 
-      z-index: 999; 
-      justify-content: center; 
-      align-items: center; 
-      backdrop-filter: blur(6px); 
-      padding: 15px;
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(9, 13, 22, 0.8);
+      z-index: 999; justify-content: center; align-items: center; backdrop-filter: blur(6px); padding: 15px;
     }
     .modal-box {
-      background: #0f172a; 
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 25px; 
-      border-radius: 20px; 
-      width: 100%; 
-      max-width: 380px; 
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5); 
-      text-align: left;
+      background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); padding: 25px; border-radius: 20px;
+      width: 100%; max-width: 380px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: left;
     }
   </style>
 </head>
@@ -289,16 +88,16 @@
     
     <div class="auth-header">
       <h2>Welcome Back</h2>
-      <p>Your husky's keeping watch. Sign in securely.</p>
+      <p>Sign in securely to your account.</p>
     </div>
 
     <div class="input-group">
-      <label>Email Address / Username</label>
-      <input type="text" id="loginEmail" class="input-field" placeholder="Enter your email">
+      <label for="loginEmail">Email Address</label>
+      <input type="email" id="loginEmail" class="input-field" placeholder="Enter your email">
     </div>
 
     <div class="input-group">
-      <label>Password</label>
+      <label for="loginPassword">Password</label>
       <input type="password" id="loginPassword" class="input-field" placeholder="••••••••">
       <span class="password-toggle" id="togglePasswordBtn" onclick="togglePasswordVisibility()">👁️</span>
     </div>
@@ -339,9 +138,9 @@
   <div id="forgotModal" class="modal-overlay">
     <div class="modal-box">
       <h3 style="margin-top:0; font-size:18px; color:#f8fafc; margin-bottom: 8px;">🔑 Reset Password</h3>
-      <p style="font-size: 12.5px; color: #94a3b8; margin-bottom: 15px;">Apni registered Gmail ID enter karein. Hum aapko password reset karne ka direct link bhejenge.</p>
+      <p style="font-size: 12.5px; color: #94a3b8; margin-bottom: 15px;">Apni registered Email ID enter karein. Hum aapko password reset link bhejenge.</p>
       
-      <label style="font-size:12px; font-weight:500; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px;">Email Address</label>
+      <label for="forgotEmail" style="font-size:12px; font-weight:500; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px;">Email Address</label>
       <input type="email" id="forgotEmail" class="input-field" placeholder="e.g. yourname@gmail.com" style="margin-top: 6px; margin-bottom: 15px;">
       
       <button onclick="sendPasswordResetLink()" class="btn-submit" id="resetBtn" style="margin-top: 0;">Send Reset Link</button>
@@ -351,9 +150,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // EmailJS Initialization with your Public Key
-    emailjs.init("nD7bbMhcvotO19ODK");
-
     const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
     
@@ -366,7 +162,7 @@
           document.getElementById("dynamicLogoImg").src = logoData.setting_value;
         }
       } catch (err) {
-        console.log("Initialization error:", err);
+        console.log("Logo load error:", err);
       }
     });
 
@@ -383,7 +179,7 @@
     }
 
     async function handleLogin() {
-      const emailInput = document.getElementById("loginEmail").value.trim();
+      const emailInput = document.getElementById("loginEmail").value.trim().toLowerCase();
       const password = document.getElementById("loginPassword").value.trim();
       const btn = document.getElementById("loginBtn");
 
@@ -392,19 +188,17 @@
         return;
       }
 
-      // Trigger interactive door-open animation effect & status change
       btn.classList.add("dooropen");
       btn.querySelector("span").innerText = "Checking Access...";
       btn.disabled = true;
 
       try {
-        // Database se payment_requests table se user credentials check karna
         const { data, error } = await supabaseClient
           .from('payment_requests')
           .select('*')
           .eq('email', emailInput)
           .eq('password', password)
-          .single();
+          .maybeSingle();
 
         if (error || !data) {
           alert("⚠️ Invalid Email or Password!");
@@ -414,43 +208,29 @@
           return;
         }
 
-        // Status Verification Check (Pending, Rejected, Approved)
         if (data.status === 'Pending') {
           alert("⏳ Aapka payment abhi Admin verification mein hai. Approve hone ke baad hi aap login kar payenge.");
-          btn.classList.remove("dooropen");
-          btn.querySelector("span").innerText = "Sign in";
-          btn.disabled = false;
-          return;
-        }
-
-        if (data.status === 'Rejected') {
+        } else if (data.status === 'Rejected') {
           alert("❌ Aapka payment request reject kar diya gaya hai. Kripya support se sampark karein.");
-          btn.classList.remove("dooropen");
-          btn.querySelector("span").innerText = "Sign in";
-          btn.disabled = false;
-          return;
-        }
-
-        if (data.status === 'Approved') {
+        } else if (data.status === 'Approved') {
           alert("🎉 Login Successful!");
-          // User session save karke dashboard par bhej dena
           localStorage.setItem('userData', JSON.stringify(data));
-          setTimeout(() => {
-            window.location.href = "dashboard.html";
-          }, 500);
+          window.location.href = "dashboard.html";
+          return;
         }
 
       } catch (err) {
         console.error("Login Error:", err);
         alert("⚠️ Login mein kuch samasya aayi. Dubara koshish karein.");
-        btn.classList.remove("dooropen");
-        btn.querySelector("span").innerText = "Sign in";
-        btn.disabled = false;
       }
+
+      btn.classList.remove("dooropen");
+      btn.querySelector("span").innerText = "Sign in";
+      btn.disabled = false;
     }
 
     function socialLogin(provider) {
-      alert(provider + " login integration can be linked via Supabase OAuth providers easily!");
+      alert(provider + " login integration can be linked via Supabase OAuth providers!");
     }
 
     function openForgotModal() {
@@ -462,7 +242,7 @@
     }
 
     async function sendPasswordResetLink() {
-      const email = document.getElementById("forgotEmail").value.trim();
+      const email = document.getElementById("forgotEmail").value.trim().toLowerCase();
       const btn = document.getElementById("resetBtn");
 
       if (!email) {
@@ -474,24 +254,21 @@
       btn.disabled = true;
 
       try {
-        const currentPath = window.location.pathname;
-        const basePath = currentPath.substring(0, currentPath.lastIndexOf('/'));
-        const updatePageUrl = window.location.origin + basePath + '/update-password.html';
+        const updatePageUrl = window.location.origin + window.location.pathname.replace('login.html', 'update-password.html');
 
-        const templateParams = {
-          to_name: email.split('@')[0],
-          to_email: email,
-          reset_link: updatePageUrl
-        };
+        // Supabase Native Password Reset (Sends email with valid secure token)
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+          redirectTo: updatePageUrl,
+        });
 
-        await emailjs.send("service_a678nhs", "template_eh1e4fr", templateParams);
+        if (error) throw error;
 
         alert("🎉 Password reset link successfully sent to your Gmail inbox!");
         closeModal('forgotModal');
         document.getElementById("forgotEmail").value = "";
       } catch (err) {
         console.error("Reset Error:", err);
-        alert("Error: " + (err.message || JSON.stringify(err)));
+        alert("Error: " + (err.message || "Could not send reset link. Make sure email exists."));
       } finally {
         btn.innerText = "Send Reset Link";
         btn.disabled = false;
