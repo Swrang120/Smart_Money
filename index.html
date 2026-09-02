@@ -1599,9 +1599,9 @@ Created by <b>Swrang Swargiary</b> • Assam, India
 
 <script>
 
-// Initialize Supabase Client (Yahan apni actual Supabase URL aur Anon Key daalein)
-const SUPABASE_URL = 'https://YOUR_SUPABASE_PROJECT_ID.supabase.co'; 
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+// Connected Supabase Project Configuration
+const SUPABASE_URL = 'https://rvprrulkjegvicbnjuft.supabase.co'; 
+const SUPABASE_ANON_KEY = 'sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ';
 
 const supabaseClient = (typeof supabase !== 'undefined' && SUPABASE_URL.includes('supabase.co')) 
     ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
@@ -1646,7 +1646,6 @@ async function openAdminPreviewModal(){
                 .limit(1);
             
             if (data && data.length > 0) {
-                // Aapke table mein column ka naam jo bhi ho, yahan check ho jayega
                 imageUrl = data[0].image_url || data[0].image_ || data[0].image || data[0].url;
             }
         } catch (err) {
