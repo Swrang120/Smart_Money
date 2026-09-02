@@ -173,10 +173,10 @@
     <p>Fill in your account registration details to proceed</p>
   </div>
 
-  <!-- Billing & Details Form -->
-  <div class="card">
-    <h3>👤 1. Billing & Account Details</h3>
-    <form id="checkoutForm" onsubmit="goToPayment(event)">
+  <form id="checkoutForm" onsubmit="goToPayment(event)">
+    <!-- Billing & Details Form -->
+    <div class="card">
+      <h3>👤 1. Billing & Account Details</h3>
       <div class="form-group">
         <label>Affiliate / Referral Code *</label>
         <input type="text" id="refCode" class="form-control" placeholder="e.g. SM-smart12345" required>
@@ -197,28 +197,28 @@
         <label>Create Password *</label>
         <input type="password" id="password" class="form-control" placeholder="Set secure password" required>
       </div>
-    </form>
-  </div>
-
-  <!-- Order Summary & Next Button -->
-  <div class="card">
-    <h3>📦 Order Summary</h3>
-    <div class="order-summary">
-      <span>Package Selected:</span>
-      <b id="summaryPkgName">Starter Package</b>
-    </div>
-    <div class="order-summary" style="font-size: 16px; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px;">
-      <span>Grand Total:</span>
-      <b id="summaryPrice" style="font-size: 18px; color: var(--accent);">₹289</b>
-    </div>
-    
-    <div style="margin: 15px 0; font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px;">
-      <input type="checkbox" id="termsCheck" checked>
-      <span>I agree to the Terms & Privacy Policy</span>
     </div>
 
-    <button type="button" class="btn-next" id="proceedBtn" onclick="goToPayment()">Next ➔ Proceed to Payment</button>
-  </div>
+    <!-- Order Summary & Next Button -->
+    <div class="card">
+      <h3>📦 Order Summary</h3>
+      <div class="order-summary">
+        <span>Package Selected:</span>
+        <b id="summaryPkgName">Starter Package</b>
+      </div>
+      <div class="order-summary" style="font-size: 16px; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px;">
+        <span>Grand Total:</span>
+        <b id="summaryPrice" style="font-size: 18px; color: var(--accent);">₹289</b>
+      </div>
+      
+      <div style="margin: 15px 0; font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px;">
+        <input type="checkbox" id="termsCheck" checked>
+        <span>I agree to the Terms & Privacy Policy</span>
+      </div>
+
+      <button type="submit" class="btn-next" id="proceedBtn">Next ➔ Proceed to Payment</button>
+    </div>
+  </form>
 </div>
 
 <script>
@@ -276,25 +276,20 @@
     btn.disabled = true;
 
     try {
-      // 2. Check Referral ID against Master Code OR Active Database Entry
-      const masterReferralCode = "SM-smart66779";
-      let isValidRef = (refId.toLowerCase() === masterReferralCode.toLowerCase());
+      // 2. Check Referral ID against Active Database Entry or System Admin ID
+      let isValidRef = false;
 
-      if (!isValidRef) {
-        // Query database to check if referral ID exists in payment_requests table
-        const { data: refData, error: refError } = await supabaseClient
-          .from('payment_requests')
-          .select('id, referral_id')
-          .ilike('referral_id', refId)
-          .limit(1);
+      // Database check for Referral ID
+      const { data: refData, error: refError } = await supabaseClient
+        .from('payment_requests')
+        .select('id, referral_id')
+        .ilike('referral_id', refId)
+        .limit(1);
 
-        if (refError) {
-          console.error("Referral check error:", refError);
-        }
+      if (refError) console.error("Referral check error:", refError);
 
-        if (refData && refData.length > 0) {
-          isValidRef = true;
-        }
+      if ((refData && refData.length > 0) || refId.toLowerCase() === "sm-smart66779") {
+        isValidRef = true;
       }
 
       if (!isValidRef) {
@@ -305,7 +300,7 @@
         return;
       }
 
-      // 3. Check if Email already exists in database
+      // 3. Check if Email already exists
       const { data: emailData, error: emailError } = await supabaseClient
         .from('payment_requests')
         .select('email')
@@ -321,7 +316,7 @@
         return;
       }
 
-      // 4. Check if Mobile number already exists in database
+      // 4. Check if Mobile number already exists
       const { data: mobileData, error: mobileError } = await supabaseClient
         .from('payment_requests')
         .select('mobile')
@@ -337,8 +332,8 @@
         return;
       }
 
-      // All validations passed, redirect to payment page with parameters
-      const params = new URLSearchParams({
+      // Save user data securely in sessionStorage instead of exposing sensitive info in URL
+      const checkoutData = {
         name: pkgName,
         price: pkgPrice,
         ref: refId,
@@ -346,9 +341,12 @@
         mobile: mobile,
         email: email,
         password: password
-      });
+      };
 
-      window.location.href = `payment.html?${params.toString()}`;
+      sessionStorage.setItem('checkout_data', JSON.stringify(checkoutData));
+
+      // Clean redirect without sending password in URL query
+      window.location.href = `payment.html?name=${encodeURIComponent(pkgName)}&price=${encodeURIComponent(pkgPrice)}`;
 
     } catch (err) {
       console.error("Validation Error:", err);
