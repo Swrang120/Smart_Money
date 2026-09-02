@@ -156,7 +156,9 @@
       window.location.href = "index.html";
 
     } catch (err) {
-      alert("Error: " + err.message);
+      console.error("Full Error Details:", err);
+      const errorMsg = err.message || err.text || (typeof err === 'string' ? err : JSON.stringify(err)) || "Unknown error occurred";
+      alert("Error: " + errorMsg);
       btn.innerText = "Submit Payment Proof";
       btn.disabled = false;
     }
