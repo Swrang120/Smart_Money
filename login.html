@@ -260,9 +260,14 @@
 <body>
 
 <div class="auth-card">
-
   <div class="husky-container">
-    <img id="dynamicLogoImg" src="1000819130.jpg" alt="Smart Money Logo" class="auth-logo" onerror="this.style.display='none'">
+    <img
+      id="dynamicLogoImg"
+      src="1000819130.jpg"
+      alt="Smart Money Logo"
+      class="auth-logo"
+      onerror="this.style.display='none'"
+    >
   </div>
 
   <div class="auth-header">
@@ -270,54 +275,97 @@
     <p>Sign in securely to your account.</p>
   </div>
 
-  <div class="input-group">
-    <label>Email Address</label>
-    <input type="email" id="loginEmail" class="input-field" placeholder="Enter your email">
-  </div>
-
-  <div class="input-group">
-    <label>Password</label>
-    <input type="password" id="loginPassword" class="input-field" placeholder="••••••••">
-    <span class="password-toggle" id="togglePasswordBtn" onclick="togglePasswordVisibility()">👁️</span>
-  </div>
-
-  <div class="form-options">
-    <label class="remember-wrap">
-      <input type="checkbox" id="rememberMe">
-      Remember me
-    </label>
-    <div class="forgot-link-wrap">
-      <a href="javascript:void(0)" onclick="openForgotModal()">Forgot password?</a>
+  <form id="loginForm" onsubmit="event.preventDefault(); handleLogin();">
+    <div class="input-group">
+      <label for="loginEmail">Email Address</label>
+      <input
+        type="email"
+        id="loginEmail"
+        class="input-field"
+        placeholder="Enter your email"
+        required
+      >
     </div>
-  </div>
 
-  <button onclick="handleLogin()" class="btn-submit" id="loginBtn">
-    <span>Sign in</span>
-    <div class="door-icon-box">🚪</div>
-  </button>
+    <div class="input-group">
+      <label for="loginPassword">Password</label>
+      <input
+        type="password"
+        id="loginPassword"
+        class="input-field"
+        placeholder="••••••••"
+        required
+      >
+      <span
+        class="password-toggle"
+        id="togglePasswordBtn"
+        onclick="togglePasswordVisibility()"
+      >
+        👁️
+      </span>
+    </div>
+
+    <div class="form-options">
+      <label class="remember-wrap">
+        <input type="checkbox" id="rememberMe">
+        Remember me
+      </label>
+
+      <div class="forgot-link-wrap">
+        <a href="javascript:void(0)" onclick="openForgotModal()">
+          Forgot password?
+        </a>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-submit" id="loginBtn">
+      <span>Sign in</span>
+      <div class="door-icon-box">🚪</div>
+    </button>
+  </form>
 
   <div class="divider">or continue with</div>
 
   <div class="social-btns">
-    <button type="button" class="social-btn" onclick="socialLogin('Google')">Google</button>
-    <button type="button" class="social-btn" onclick="socialLogin('Apple')">Apple</button>
+    <button type="button" class="social-btn" onclick="socialLogin('Google')">
+      Google
+    </button>
+    <button type="button" class="social-btn" onclick="socialLogin('Apple')">
+      Apple
+    </button>
   </div>
 
   <div class="auth-footer">
     New to Smart Money?
     <a href="index.html">Create account</a>
   </div>
-
 </div>
 
 <!-- FORGOT PASSWORD MODAL -->
 <div id="forgotModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="color:#f8fafc; margin-bottom:8px;">🔑 Reset Password</h3>
-    <p style="font-size:12px; color:#94a3b8; margin-bottom:15px;">Apni registered Email ID enter karein.</p>
-    <input type="email" id="forgotEmail" class="input-field" placeholder="yourname@gmail.com">
-    <button onclick="sendPasswordResetLink()" class="btn-submit" id="resetBtn">Send Reset Link</button>
-    <button onclick="closeModal('forgotModal')" style="width:100%; background:transparent; border:none; color:#94a3b8; padding:12px; cursor:pointer;">Cancel</button>
+    <p style="font-size:12px; color:#94a3b8; margin-bottom:15px;">
+      Apni registered Email ID enter karein.
+    </p>
+
+    <input
+      type="email"
+      id="forgotEmail"
+      class="input-field"
+      placeholder="yourname@gmail.com"
+    >
+
+    <button onclick="sendPasswordResetLink()" class="btn-submit" id="resetBtn">
+      Send Reset Link
+    </button>
+
+    <button
+      onclick="closeModal('forgotModal')"
+      style="width:100%; background:transparent; border:none; color:#94a3b8; padding:12px; cursor:pointer;"
+    >
+      Cancel
+    </button>
   </div>
 </div>
 
@@ -345,14 +393,13 @@ const supabaseClient = window.supabase.createClient(
 /* PAGE LOAD */
 /* ============================= */
 document.addEventListener("DOMContentLoaded", async function() {
-
   /* CHECK ALREADY LOGGED IN */
-  const loggedIn = localStorage.getItem("isLoggedIn");
-  const userData = localStorage.getItem("userData");
+  const loggedIn = localStorage.getItem("isLoggedIn") || sessionStorage.getItem("isLoggedIn");
+  const userData = localStorage.getItem("userData") || sessionStorage.getItem("userData");
 
   if (loggedIn === "true" && userData) {
     console.log("User already logged in");
-    window.location.href = "dashboard.html";
+    window.location.replace("dashboard.html");
     return;
   }
 
@@ -399,7 +446,7 @@ function togglePasswordVisibility() {
 /* LOGIN */
 /* ============================= */
 async function handleLogin() {
-  const emailInput = document.getElementById("loginEmail").value.trim();
+  const emailInput = document.getElementById("loginEmail").value.trim().toLowerCase();
   const password = document.getElementById("loginPassword").value.trim();
   const btn = document.getElementById("loginBtn");
 
@@ -414,49 +461,29 @@ async function handleLogin() {
   btn.querySelector("span").innerText = "Checking Access...";
 
   try {
-    /* 1. CHECK PAYMENT_REQUESTS TABLE (Case-Insensitive Email) */
-    let { data, error } = await supabaseClient
+    /* ============================= */
+    /* DATABASE LOGIN CHECK          */
+    /* Note: .ilike() for case-insensitive email match */
+    /* ============================= */
+    const { data, error } = await supabaseClient
       .from("payment_requests")
       .select("*")
       .ilike("email", emailInput)
       .eq("password", password)
       .maybeSingle();
 
-    console.log("Payment Requests Query Result:", data, "Error:", error);
-
-    /* 2. FALLBACK TO SUPABASE AUTH IF CUSTOM TABLE RECORD NOT FOUND */
-    if (!data) {
-      const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
-        email: emailInput,
-        password: password
-      });
-
-      if (!authError && authData?.user) {
-        // Fetch request data using auth email
-        const { data: profileData } = await supabaseClient
-          .from("payment_requests")
-          .select("*")
-          .ilike("email", emailInput)
-          .maybeSingle();
-
-        data = profileData || { status: "approved", email: emailInput, id: authData.user.id };
-      } else if (authError) {
-        console.error("Supabase Auth Fallback Error:", authError.message);
-      }
-    }
+    console.log("Database Result:", data);
+    if (error) console.error("Database Error:", error);
 
     /* INVALID CREDENTIALS OR RLS BLOCK */
-    if (!data) {
-      if (error) {
-        console.error("Database query failed:", error);
-      }
-      alert("⚠️ Invalid Email or Password! Please check your credentials.");
+    if (error || !data) {
+      alert("⚠️ Invalid Email or Password! (Please check details or ensure account is registered)");
       resetLoginButton();
       return;
     }
 
     /* STATUS NORMALIZE */
-    const userStatus = String(data.status || "approved").trim().toLowerCase();
+    const userStatus = String(data.status || "").trim().toLowerCase();
 
     /* PENDING */
     if (userStatus === "pending") {
@@ -472,16 +499,23 @@ async function handleLogin() {
       return;
     }
 
+    /* ============================= */
     /* APPROVED LOGIN */
+    /* ============================= */
     if (userStatus === "approved") {
+      /* SAVE SESSION IN BOTH STORAGES */
       localStorage.setItem("isLoggedIn", "true");
       sessionStorage.setItem("isLoggedIn", "true");
+
       localStorage.setItem("userData", JSON.stringify(data));
       sessionStorage.setItem("userData", JSON.stringify(data));
-      localStorage.setItem("userEmail", emailInput.toLowerCase());
-      sessionStorage.setItem("userEmail", emailInput.toLowerCase());
+
+      localStorage.setItem("userEmail", emailInput);
+      sessionStorage.setItem("userEmail", emailInput);
+
       localStorage.setItem("loginTime", Date.now().toString());
 
+      /* REMEMBER EMAIL */
       const rememberMe = document.getElementById("rememberMe").checked;
       if (rememberMe) {
         localStorage.setItem("rememberedEmail", emailInput);
@@ -489,14 +523,15 @@ async function handleLogin() {
         localStorage.removeItem("rememberedEmail");
       }
 
-      console.log("LOGIN SESSION SAVED SUCCESSFULLY");
       alert("🎉 Login Successful!");
+
+      /* REDIRECT */
       window.location.replace("dashboard.html");
       return;
     }
 
     /* UNKNOWN STATUS */
-    alert("⚠️ Your account status is not valid: " + data.status);
+    alert("⚠️ Your account status is not valid: " + (data.status || "Unknown"));
     resetLoginButton();
 
   } catch(err) {
@@ -550,9 +585,12 @@ async function sendPasswordResetLink() {
 
   try {
     const updatePageUrl = window.location.origin + "/update-password.html";
-    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-      redirectTo: updatePageUrl
-    });
+
+    const { error } = await supabaseClient
+      .auth
+      .resetPasswordForEmail(email, {
+        redirectTo: updatePageUrl
+      });
 
     if (error) throw error;
 
