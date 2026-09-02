@@ -319,7 +319,7 @@ button:hover{opacity:.88}
 <main class="container">
 <section class="stats"><div class="stat-card"><h3>Total Requests (Payment + Withdrawal)</h3><p id="statTotal">0</p></div><div class="stat-card"><h3>Approved Requests</h3><p id="statApproved" style="color:#4ade80">0</p></div><div class="stat-card"><h3>Rejected Requests</h3><p id="statRejected" style="color:#f87171">0</p></div></section>
 
-<section class="section"><div class="section-title"><h2>💳 Payment Requests</h2></div><div class="filters"><button class="filter-btn active" onclick="switchPaymentTab('pending',this)">Pending</button><button class="filter-btn" onclick="switchPaymentTab('approved',this)">Approved</button><button class="filter-btn" onclick="switchPaymentTab('rejected',this)">Rejected</button><button class="filter-btn" onclick="switchPaymentTab('all',this)">All</button></div><div class="table-box"><table><thead><tr><th>User</th><th>Package</th><th>Transaction</th><th>Status</th><th>Action</th></tr></thead><tbody id="paymentTableBody"></tbody></table></div></section>
+<section class="section"><div class="section-title"><h2>💳 Payment Requests</h2></div><div class="filters"><button class="filter-btn active" onclick="switchPaymentTab('pending',this)">Pending</button><button class="filter-btn" onclick="switchPaymentTab('approved',this)">Approved</button><button class="filter-btn" onclick="switchPaymentTab('rejected',this)">Rejected</button><button class="filter-btn" onclick="switchPaymentTab('all',this)">All</button></div><div class="table-box"><table><thead><tr><th>User Info & ID</th><th>Package & Amount</th><th>Transaction ID</th><th>Status</th><th>Action</th></tr></thead><tbody id="paymentTableBody"></tbody></table></div></section>
 
 <section class="section"><div class="section-title"><h2>💰 Withdrawal Requests</h2></div><div class="filters"><button class="filter-btn active" onclick="switchWithdrawalTab('pending',this)">Pending</button><button class="filter-btn" onclick="switchWithdrawalTab('approved',this)">Approved</button><button class="filter-btn" onclick="switchWithdrawalTab('rejected',this)">Rejected</button><button class="filter-btn" onclick="switchWithdrawalTab('all',this)">All</button></div><div class="table-box"><table><thead><tr><th>User / Referral ID</th><th>Amount</th><th>Complete Withdrawal Details</th><th>Status</th><th>Action</th></tr></thead><tbody id="withdrawalTableBody"></tbody></table></div></section>
 
@@ -345,15 +345,15 @@ const SUPABASE_URL="https://rvprrulkjegvicbnjuft.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 
-// EmailJS Configuration
-const EMAILJS_PUBLIC_KEY = "FxcimUvl0-ZxAauRx";
+// Updated EmailJS Credentials
+const EMAILJS_PUBLIC_KEY = "nD7bbMhcvotO19ODK";
 const EMAILJS_PAYMENT_SERVICE = "service_4q2gu5k";
 const EMAILJS_PAYMENT_TEMPLATE = "template_5iadm34";
 
 const EMAILJS_WITHDRAWAL_SERVICE = "service_qsy07qr";
 const EMAILJS_WITHDRAWAL_TEMPLATE = "template_mf8enck";
 
-// Initialize EmailJS
+// Initialize EmailJS with updated Public Key
 emailjs.init(EMAILJS_PUBLIC_KEY);
 
 let allPaymentsData=[],allWithdrawalsData=[],allUsersData=[];
@@ -366,7 +366,7 @@ function val(...a){return a.find(x=>x!==undefined&&x!==null&&String(x).trim()!==
 function norm(v){return String(v||"").trim().toLowerCase()}
 function statusOf(v){return norm(v||"pending")}
 
-// Helper to reliably get profile unique key/id and ensure user ID displays properly
+// Helper to reliably get profile unique key/id
 function getUserKey(u) {
     if (!u) return "";
     return val(u.id, u.user_id, u.auth_user_id);
@@ -463,13 +463,11 @@ async function uploadPreviewImage(){
     if(!file){alert("Pehle preview image select karo!");return}
     try{
         const fileName = "preview_" + Date.now() + "_" + file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
-        // FIX: Uploading to 'admin_updates' bucket to resolve the error shown in the screenshot
         let {error} = await supabaseClient.storage.from("admin_updates").upload(fileName, file, {contentType: file.type});
         if(error) throw error;
         const {data:url} = supabaseClient.storage.from("admin_updates").getPublicUrl(fileName);
         const imageUrl = url.publicUrl;
 
-        // Upsert setting_key = 'index_preview_image' in global_settings table
         const {data:existing, error:ee} = await supabaseClient.from("global_settings").select("id").eq("setting_key", "index_preview_image").maybeSingle();
         if(ee) throw ee;
 
@@ -536,31 +534,86 @@ async function deleteStatus(id){if(!confirm("Delete this status?"))return;const 
 
 async function loadPaymentRequests(){const {data,error}=await supabaseClient.from("payment_requests").select("*").order("created_at",{ascending:false});if(error)throw error;allPaymentsData=(data||[]).filter(x=>x.is_deleted!==true);renderPayments();updateGlobalStats()}
 function switchPaymentTab(tab,btn){currentPaymentTab=tab;btn.parentElement.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");renderPayments()}
-function renderPayments(){const tbody=document.getElementById("paymentTableBody");let list=currentPaymentTab==="all"?allPaymentsData:allPaymentsData.filter(x=>statusOf(x.status||"pending")===currentPaymentTab);if(!list.length){tbody.innerHTML='<tr><td colspan="5" class="empty">No records found.</td></tr>';return}tbody.innerHTML=list.map(x=>{const status=x.status||"Pending",lower=statusOf(status);return `<tr><td><b>${escapeHtml(x.full_name||"N/A")}</b><br><span class="small">${escapeHtml(x.email||"")}</span><br><span class="small">User ID: ${escapeHtml(x.user_id||x.profile_id||"N/A")}</span></td><td><b>${escapeHtml(x.package_name||"Package")}</b><br>₹${escapeHtml(x.amount||0)}</td><td>${escapeHtml(x.transaction_id||x.payment_id||"N/A")}</td><td><span class="badge badge-${lower}">${escapeHtml(status)}</span></td><td>${lower==="pending"?`<button class="btn btn-approve" onclick="approvePayment('${x.id}')">Approve</button><button class="btn btn-reject" onclick="rejectPayment('${x.id}')">Reject</button>`:""}<button class="btn btn-delete" onclick="softDeleteRecord('${x.id}','payment_requests')">Delete</button></td></tr>`}).join("")}
 
-async function approvePayment(id){
-    if(!confirm("Approve this payment?"))return;
-    const payment = allPaymentsData.find(p => p.id === id);
+// Render Payments with visible User Details (ID, Email, Mobile, Referral)
+function renderPayments(){
+    const tbody=document.getElementById("paymentTableBody");
+    let list=currentPaymentTab==="all"?allPaymentsData:allPaymentsData.filter(x=>statusOf(x.status||"pending")===currentPaymentTab);
+    if(!list.length){tbody.innerHTML='<tr><td colspan="5" class="empty">No records found.</td></tr>';return}
     
-    const {error}=await supabaseClient.from("payment_requests").update({status:"Approved"}).eq("id",id);
-    if(error){alert("Approval Error: "+error.message);return}
+    tbody.innerHTML=list.map(x=>{
+        const status=x.status||"Pending",lower=statusOf(status);
+        const u = findUserForRequest(x);
+        
+        const displayUserId = val(x.user_id, x.profile_id, u?.id, u?.user_id, "N/A");
+        const displayEmail = val(x.email, u?.email, "N/A");
+        const displayReferral = val(x.referral_id, x.user_referral_id, u?.referral_id, "N/A");
+        const displayMobile = val(x.mobile, x.mobile_number, u?.mobile, u?.phone, "N/A");
 
-    if(payment && payment.email){
+        return `<tr>
+            <td>
+                <b>👤 ${escapeHtml(x.full_name||"User")}</b><br>
+                <span class="small" style="color:#818cf8;">📧 ${escapeHtml(displayEmail)}</span><br>
+                <span class="small">🆔 <b>User ID:</b> ${escapeHtml(displayUserId)}</span><br>
+                <span class="small">🔗 <b>Ref ID:</b> ${escapeHtml(displayReferral)}</span><br>
+                <span class="small">📞 <b>Mobile:</b> ${escapeHtml(displayMobile)}</span>
+            </td>
+            <td><b>${escapeHtml(x.package_name||"Package")}</b><br><span style="color:#22c55e;font-weight:bold;">₹${escapeHtml(x.amount||0)}</span></td>
+            <td><code>${escapeHtml(x.transaction_id||x.payment_id||"N/A")}</code></td>
+            <td><span class="badge badge-${lower}">${escapeHtml(status)}</span></td>
+            <td>
+                ${lower==="pending"?`<button class="btn btn-approve" onclick="approvePayment('${x.id}')">Approve</button><button class="btn btn-reject" onclick="rejectPayment('${x.id}')">Reject</button>`:""}
+                <button class="btn btn-delete" onclick="softDeleteRecord('${x.id}','payment_requests')">Delete</button>
+            </td>
+        </tr>`
+    }).join("");
+}
+
+// Payment Approval with automatic EmailJS & Supabase update
+async function approvePayment(id){
+    if(!confirm("Approve this payment and send email to user?")) return;
+    const payment = allPaymentsData.find(p => p.id === id);
+    if(!payment) { alert("Payment request not found!"); return; }
+
+    // 1. Update Payment Status in Supabase payment_requests
+    const {error}=await supabaseClient.from("payment_requests").update({status:"Approved"}).eq("id",id);
+    if(error){alert("Approval Error in DB: "+error.message); return;}
+
+    // 2. Activate User Profile in Supabase profiles table
+    const u = findUserForRequest(payment);
+    if (u) {
+        const uKey = getUserKey(u);
+        await supabaseClient.from("profiles").update({
+            is_active: true,
+            package_name: payment.package_name || u.package_name
+        }).eq("id", uKey);
+    }
+
+    // 3. Send Automatic Approval Email via EmailJS
+    const targetEmail = val(payment.email, u?.email);
+    const targetName = val(payment.full_name, u?.full_name, "User");
+    const targetUserId = val(payment.user_id, payment.profile_id, u?.id, u?.user_id, payment.referral_id, "N/A");
+
+    if(targetEmail){
         try {
             await emailjs.send(EMAILJS_PAYMENT_SERVICE, EMAILJS_PAYMENT_TEMPLATE, {
-                to_email: payment.email,
-                to_name: payment.full_name || "User",
+                to_email: targetEmail,
+                to_name: targetName,
+                user_id: targetUserId,
                 package_name: payment.package_name || "Package",
                 amount: payment.amount || 0,
                 transaction_id: payment.transaction_id || payment.payment_id || "N/A"
             });
+            alert(`✅ Payment approved!\n- Supabase Status: Updated to Approved\n- User ID: ${targetUserId}\n- Email: ${targetEmail}\n- EmailJS Notification: Sent Successfully!`);
         } catch(mailErr) {
             console.error("Email send failed:", mailErr);
+            alert("⚠️ Payment approved in Supabase, but EmailJS delivery failed: " + (mailErr.text || mailErr.message || JSON.stringify(mailErr)));
         }
+    } else {
+        alert("✅ Payment approved in Supabase! (Email address not found for user)");
     }
 
     await refreshAllData();
-    alert("Payment approved and email sent successfully!");
 }
 
 async function rejectPayment(id){if(!confirm("Reject this payment?"))return;const {error}=await supabaseClient.from("payment_requests").update({status:"Rejected"}).eq("id",id);if(error){alert(error.message);return}await refreshAllData()}
