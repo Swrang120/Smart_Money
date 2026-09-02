@@ -7,6 +7,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Supabase SDK CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     :root {
       --bg-1: #070b1a;
@@ -154,6 +158,7 @@
       box-shadow: 0 10px 28px rgba(99,102,241,0.35); 
       margin-top: 10px;
     }
+    .btn-next:disabled { opacity: 0.7; cursor: not-allowed; }
 
     .order-summary { display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 10px; color: #aab6cc; }
     .order-summary b { color: #5eead4; font-weight: 700; }
@@ -174,7 +179,7 @@
     <form id="checkoutForm" onsubmit="goToPayment(event)">
       <div class="form-group">
         <label>Affiliate / Referral Code *</label>
-        <input type="text" id="refCode" class="form-control" placeholder="Enter Sponsor Referral ID" required>
+        <input type="text" id="refCode" class="form-control" placeholder="e.g. SM-smart66779" required>
       </div>
       <div class="form-group">
         <label>Full Name *</label>
@@ -212,11 +217,16 @@
       <span>I agree to the Terms & Privacy Policy</span>
     </div>
 
-    <button type="button" class="btn-next" onclick="goToPayment()">Next ➔ Proceed to Payment</button>
+    <button type="button" class="btn-next" id="proceedBtn" onclick="goToPayment()">Next ➔ Proceed to Payment</button>
   </div>
 </div>
 
 <script>
+  // Supabase Setup
+  const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
   const urlParams = new URLSearchParams(window.location.search);
   const pkgName = urlParams.get('name') || urlParams.get('package') || 'Starter Package';
   const pkgPrice = urlParams.get('price') || '289';
@@ -224,9 +234,11 @@
 
   document.getElementById('summaryPkgName').innerText = pkgName;
   document.getElementById('summaryPrice').innerText = `₹${pkgPrice}`;
-  document.getElementById('refCode').value = refCodeFromUrl;
+  if (refCodeFromUrl) {
+    document.getElementById('refCode').value = refCodeFromUrl;
+  }
 
-  function goToPayment(e) {
+  async function goToPayment(e) {
     if(e) e.preventDefault();
 
     const refId = document.getElementById('refCode').value.trim();
@@ -235,6 +247,7 @@
     const email = document.getElementById('emailId').value.trim();
     const password = document.getElementById('password').value.trim();
     const terms = document.getElementById('termsCheck').checked;
+    const btn = document.getElementById('proceedBtn');
 
     if (!refId) {
       alert("⚠️ Affiliate / Referral Code is required!");
@@ -250,19 +263,87 @@
       return;
     }
 
-    // Encrypt or pass details via URL parameters to payment.html
-    const params = new URLSearchParams({
-      name: pkgName,
-      price: pkgPrice,
-      ref: refId,
-      fullname: fullName,
-      mobile: mobile,
-      email: email,
-      password: password
-    });
+    btn.innerText = "Verifying Details...";
+    btn.disabled = true;
 
-    // Redirect to payment page
-    window.location.href = `payment.html?${params.toString()}`;
+    try {
+      // 1. Validate Referral ID (Must be master ID 'SM-smart66779' or exist in database as an existing user/referral)
+      const masterReferralCode = "SM-smart66779";
+      let isValidRef = (refId === masterReferralCode);
+
+      if (!isValidRef) {
+        // Check if referral ID exists in database (e.g. matching referral_id or email)
+        const { data: refData, error: refError } = await supabaseClient
+          .from('payment_requests')
+          .select('id')
+          .or(`referral_id.eq.${refId},email.eq.${refId}`)
+          .limit(1);
+
+        if (refError) console.error(refError);
+        if (refData && refData.length > 0) {
+          isValidRef = true;
+        }
+      }
+
+      if (!isValidRef) {
+        alert("⚠️ Invalid Referral ID! Please enter a valid Sponsor Referral ID (e.g., SM-smart66779).");
+        btn.innerText = "Next ➔ Proceed to Payment";
+        btn.disabled = false;
+        document.getElementById('refCode').focus();
+        return;
+      }
+
+      // 2. Check if Email already exists in database
+      const { data: emailData, error: emailError } = await supabaseClient
+        .from('payment_requests')
+        .select('email')
+        .eq('email', email)
+        .limit(1);
+
+      if (emailError) console.error(emailError);
+      if (emailData && emailData.length > 0) {
+        alert("⚠️ This Email ID is already registered! Please use a different email or login.");
+        btn.innerText = "Next ➔ Proceed to Payment";
+        btn.disabled = false;
+        document.getElementById('emailId').focus();
+        return;
+      }
+
+      // 3. Check if Mobile number already exists in database
+      const { data: mobileData, error: mobileError } = await supabaseClient
+        .from('payment_requests')
+        .select('mobile')
+        .eq('mobile', mobile)
+        .limit(1);
+
+      if (mobileError) console.error(mobileError);
+      if (mobileData && mobileData.length > 0) {
+        alert("⚠️ This Mobile Number is already registered! One account is allowed per mobile number.");
+        btn.innerText = "Next ➔ Proceed to Payment";
+        btn.disabled = false;
+        document.getElementById('mobileNumber').focus();
+        return;
+      }
+
+      // All validations passed, redirect to payment page with parameters
+      const params = new URLSearchParams({
+        name: pkgName,
+        price: pkgPrice,
+        ref: refId,
+        fullname: fullName,
+        mobile: mobile,
+        email: email,
+        password: password
+      });
+
+      window.location.href = `payment.html?${params.toString()}`;
+
+    } catch (err) {
+      console.error("Validation Error:", err);
+      alert("⚠️ Error validating details. Please try again.");
+      btn.innerText = "Next ➔ Proceed to Payment";
+      btn.disabled = false;
+    }
   }
 </script>
 </body>
