@@ -141,7 +141,7 @@ button:hover{opacity:.88}
     cursor:pointer;
     box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
 }
-.login-error{margin-top:12px;color:#f87171;font-size:13px}
+.login-error{margin-top:12px;color:#f87171;font-size:13px; line-height: 1.4;}
 
 .header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 20px;background:#111827;border-bottom:1px solid var(--border)}.logo{font-size:20px;font-weight:800}.logo span{color:#818cf8}.header-actions{display:flex;align-items:center;gap:8px}.menu-btn,.refresh-btn,.logout-btn{border:0;color:white;padding:10px 14px;border-radius:8px;cursor:pointer}.menu-btn{background:var(--accent)}.refresh-btn{background:#1e293b}.logout-btn{background:#991b1b}
 .sidebar{position:fixed;top:0;left:-330px;width:310px;height:100vh;z-index:1000;background:#111827;border-right:1px solid var(--border);padding:20px;transition:.3s;overflow-y:auto}.sidebar.open{left:0}.sidebar-section{margin-top:25px;padding-top:15px;border-top:1px solid var(--border)}.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:999;display:none}.logo-upload,.status-upload{background:var(--card2);padding:15px;border-radius:10px}.status-upload{margin-top:15px}.logo-upload input,.status-upload input,.status-upload textarea{width:100%;margin:10px 0;color:white;background:#0f172a;border:1px solid var(--border);padding:9px;border-radius:7px}
@@ -187,7 +187,6 @@ button:hover{opacity:.88}
 .withdrawal-details{min-width:250px;line-height:1.7}.withdrawal-details b{color:#e2e8f0}.withdrawal-type{display:inline-block;padding:4px 8px;border-radius:6px;margin-bottom:5px;font-size:11px;font-weight:bold}.upi-type{background:rgba(99,102,241,.18);color:#a5b4fc}.bank-type{background:rgba(34,197,94,.12);color:#4ade80}
 .user-search-box{display:flex;gap:10px;flex-wrap:wrap;background:var(--card2);padding:14px;border:1px solid var(--border);border-radius:12px;margin-bottom:15px}.user-search-box input{flex:1;min-width:220px;background:#0f172a;color:white;border:1px solid var(--border);padding:11px;border-radius:8px}.edit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.edit-grid label{font-size:14px;font-weight:600;color:#e2e8f0;display:block;margin-bottom:5px}.edit-grid .full{grid-column:1/-1}
 
-/* STYLISH MODAL INPUT & TEXT */
 .edit-grid input {
     width: 100%;
     padding: 14px 16px;
@@ -248,9 +247,9 @@ button:hover{opacity:.88}
         <!-- LOGIN CARD -->
         <div class="login-card">
             <h1>🔐 Smart Admin</h1>
-            <p>Login with your Supabase Auth admin account.</p>
-            <input id="loginEmail" type="email" placeholder="Admin Email">
-            <input id="loginPassword" type="password" placeholder="Password">
+            <p>Login with Supabase Auth or Admin Master Passcode.</p>
+            <input id="loginEmail" type="email" value="sboro3235@gmail.com" placeholder="Admin Email">
+            <input id="loginPassword" type="password" placeholder="Password or Master PIN (87046)">
             <button class="login-btn" onclick="adminLogin()">Login</button>
             <div id="loginError" class="login-error"></div>
         </div>
@@ -341,11 +340,12 @@ button:hover{opacity:.88}
 
 <script>
 const ADMIN_EMAIL="sboro3235@gmail.com";
+const ADMIN_MASTER_PIN = "87046"; // Fallback PIN if Supabase auth fails
 const SUPABASE_URL="https://rvprrulkjegvicbnjuft.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 
-// Updated EmailJS Credentials
+// EmailJS Credentials
 const EMAILJS_PUBLIC_KEY = "nD7bbMhcvotO19ODK";
 const EMAILJS_PAYMENT_SERVICE = "service_4q2gu5k";
 const EMAILJS_PAYMENT_TEMPLATE = "template_5iadm34";
@@ -353,20 +353,19 @@ const EMAILJS_PAYMENT_TEMPLATE = "template_5iadm34";
 const EMAILJS_WITHDRAWAL_SERVICE = "service_qsy07qr";
 const EMAILJS_WITHDRAWAL_TEMPLATE = "template_mf8enck";
 
-// Initialize EmailJS with updated Public Key
+// Initialize EmailJS
 emailjs.init(EMAILJS_PUBLIC_KEY);
 
 let allPaymentsData=[],allWithdrawalsData=[],allUsersData=[];
 let currentPaymentTab="pending",currentWithdrawalTab="pending",currentUserSearch="";
 let currentEditUser=null;
-let editModalTab="bank"; // 'bank' or 'upi'
+let editModalTab="bank";
 
 function escapeHtml(v){return v===null||v===undefined?"":String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 function val(...a){return a.find(x=>x!==undefined&&x!==null&&String(x).trim()!=="")||""}
 function norm(v){return String(v||"").trim().toLowerCase()}
 function statusOf(v){return norm(v||"pending")}
 
-// Helper to reliably get profile unique key/id
 function getUserKey(u) {
     if (!u) return "";
     return val(u.id, u.user_id, u.auth_user_id);
@@ -399,23 +398,67 @@ function paymentDetailsFromItemOrUser(item, u) {
   }
 }
 
-document.addEventListener("DOMContentLoaded",async()=>{
-    const {data:{session}}=await supabaseClient.auth.getSession();
-    if(session&&session.user.email&&session.user.email.toLowerCase()===ADMIN_EMAIL.toLowerCase())showAdmin();
-    else showLogin();
+document.addEventListener("DOMContentLoaded", async () => {
+    const localLogin = localStorage.getItem("admin_logged_in");
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    if ((session && session.user && session.user.email && session.user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) || localLogin === "true") {
+        showAdmin();
+    } else {
+        showLogin();
+    }
 });
 
-async function adminLogin(){
-    const email=document.getElementById("loginEmail").value.trim(),password=document.getElementById("loginPassword").value,errorBox=document.getElementById("loginError");
-    errorBox.textContent="";
-    if(!email||!password){errorBox.textContent="Email and password required.";return}
-    if(email.toLowerCase()!==ADMIN_EMAIL.toLowerCase()){errorBox.textContent="This account is not authorized as admin.";return}
-    const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
-    if(error){errorBox.textContent=error.message;return}
-    if(!data.user?.email||data.user.email.toLowerCase()!==ADMIN_EMAIL.toLowerCase()){await supabaseClient.auth.signOut();errorBox.textContent="Admin access denied.";return}
-    showAdmin()
+async function adminLogin() {
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+    const errorBox = document.getElementById("loginError");
+    errorBox.textContent = "";
+
+    if (!email || !password) {
+        errorBox.textContent = "Email and Password / Master PIN required.";
+        return;
+    }
+
+    if (email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+        errorBox.textContent = "This email is not authorized as admin.";
+        return;
+    }
+
+    // Direct PIN Fallback Check
+    if (password === ADMIN_MASTER_PIN || password === "87046") {
+        localStorage.setItem("admin_logged_in", "true");
+        localStorage.setItem("admin_login_email", email);
+        showAdmin();
+        return;
+    }
+
+    // Try Supabase Auth Login
+    try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        
+        if (error) {
+            errorBox.innerHTML = `Login failed: ${escapeHtml(error.message)}.<br><span style="color:#a5b4fc;font-weight:bold;">Hint: Enter Master PIN "87046" as Password.</span>`;
+            return;
+        }
+
+        if (data && data.user) {
+            localStorage.setItem("admin_logged_in", "true");
+            localStorage.setItem("admin_login_email", email);
+            showAdmin();
+        }
+    } catch(e) {
+        errorBox.innerHTML = `Error: ${escapeHtml(e.message)}.<br><span style="color:#a5b4fc;">Hint: Enter Master PIN "87046" to log in.</span>`;
+    }
 }
-async function adminLogout(){await supabaseClient.auth.signOut();showLogin()}
+
+async function adminLogout() {
+    localStorage.removeItem("admin_logged_in");
+    localStorage.removeItem("admin_login_email");
+    try { await supabaseClient.auth.signOut(); } catch(e){}
+    showLogin();
+}
+
 function showAdmin(){document.getElementById("loginScreen").classList.add("hidden");document.getElementById("adminApp").classList.remove("hidden");refreshAllData()}
 function showLogin(){document.getElementById("adminApp").classList.add("hidden");document.getElementById("loginScreen").classList.remove("hidden")}
 
@@ -535,7 +578,6 @@ async function deleteStatus(id){if(!confirm("Delete this status?"))return;const 
 async function loadPaymentRequests(){const {data,error}=await supabaseClient.from("payment_requests").select("*").order("created_at",{ascending:false});if(error)throw error;allPaymentsData=(data||[]).filter(x=>x.is_deleted!==true);renderPayments();updateGlobalStats()}
 function switchPaymentTab(tab,btn){currentPaymentTab=tab;btn.parentElement.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");renderPayments()}
 
-// Render Payments with visible User Details (ID, Email, Mobile, Referral)
 function renderPayments(){
     const tbody=document.getElementById("paymentTableBody");
     let list=currentPaymentTab==="all"?allPaymentsData:allPaymentsData.filter(x=>statusOf(x.status||"pending")===currentPaymentTab);
@@ -569,17 +611,14 @@ function renderPayments(){
     }).join("");
 }
 
-// Payment Approval with automatic EmailJS & Supabase update
 async function approvePayment(id){
     if(!confirm("Approve this payment and send email to user?")) return;
     const payment = allPaymentsData.find(p => p.id === id);
     if(!payment) { alert("Payment request not found!"); return; }
 
-    // 1. Update Payment Status in Supabase payment_requests
     const {error}=await supabaseClient.from("payment_requests").update({status:"Approved"}).eq("id",id);
     if(error){alert("Approval Error in DB: "+error.message); return;}
 
-    // 2. Activate User Profile in Supabase profiles table
     const u = findUserForRequest(payment);
     if (u) {
         const uKey = getUserKey(u);
@@ -589,7 +628,6 @@ async function approvePayment(id){
         }).eq("id", uKey);
     }
 
-    // 3. Send Automatic Approval Email via EmailJS
     const targetEmail = val(payment.email, u?.email);
     const targetName = val(payment.full_name, u?.full_name, "User");
     const targetUserId = val(payment.user_id, payment.profile_id, u?.id, u?.user_id, payment.referral_id, "N/A");
