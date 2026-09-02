@@ -77,12 +77,15 @@ p{font-size:13px;color:#9ca3af;margin-bottom:25px;text-align:center;line-height:
   <h2>Forgot Password?</h2>
   <p>Enter your registered email address. We will send you a secure password reset link.</p>
 
-  <div class="form-group">
-    <label>Email Address</label>
-    <input type="email" id="forgotEmail" class="input-field" placeholder="name@example.com" autocomplete="email" required>
-  </div>
+  <form id="forgotForm" onsubmit="sendResetLink(event)">
+    <div class="form-group">
+      <label for="forgotEmail">Email Address</label>
+      <input type="email" id="forgotEmail" class="input-field" placeholder="name@example.com" autocomplete="email" required>
+    </div>
 
-  <button onclick="sendResetLink()" class="btn-action" id="resetBtn">Send Reset Link</button>
+    <button type="submit" class="btn-action" id="resetBtn">Send Reset Link</button>
+  </form>
+
   <div id="statusBox" class="status"></div>
   <a href="login.html" class="back-link">← Back to Login</a>
 </div>
@@ -90,72 +93,69 @@ p{font-size:13px;color:#9ca3af;margin-bottom:25px;text-align:center;line-height:
 <!-- Supabase JS SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+  const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-});
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+  });
 
-function showStatus(message, type) {
-  const box = document.getElementById("statusBox");
-  box.innerText = message;
-  box.className = "status " + type;
-}
-
-async function sendResetLink() {
-  const email = document.getElementById("forgotEmail").value.trim().toLowerCase();
-  const btn = document.getElementById("resetBtn");
-
-  if (!email) {
-    showStatus("Please enter your email address.", "error");
-    return;
+  function showStatus(message, type) {
+    const box = document.getElementById("statusBox");
+    box.innerText = message;
+    box.className = "status " + type;
   }
 
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailPattern.test(email)) {
-    showStatus("Please enter a valid email address.", "error");
-    return;
-  }
+  async function sendResetLink(e) {
+    if (e) e.preventDefault();
 
-  btn.disabled = true;
-  btn.innerText = "Sending Reset Link...";
-  document.getElementById("statusBox").className = "status";
+    const emailInput = document.getElementById("forgotEmail");
+    const email = emailInput.value.trim().toLowerCase();
+    const btn = document.getElementById("resetBtn");
 
-  try {
-    // Current Domain URL dynamically detect hoga (Netlify aur GitHub Pages dono ke liye)
-    const currentOrigin = window.location.origin;
-    const redirectUrl = `${currentOrigin}/update-password.html`;
+    if (!email) {
+      showStatus("Please enter your email address.", "error");
+      return;
+    }
 
-    // Purely Supabase Auth Password Reset
-    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { 
-      redirectTo: redirectUrl 
-    });
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      showStatus("Please enter a valid email address.", "error");
+      return;
+    }
 
-    if (error) throw error;
+    btn.disabled = true;
+    btn.innerText = "Sending Reset Link...";
+    document.getElementById("statusBox").className = "status";
 
-    showStatus("✓ A secure password reset link has been sent to your email. Please check your Gmail inbox and spam folder.", "success");
-    btn.innerText = "Reset Link Sent ✓";
+    try {
+      // Dynamic origin detection (Netlify domain automatically target hoga)
+      const currentOrigin = window.location.origin;
+      const redirectUrl = `${currentOrigin}/update-password.html`;
 
-    setTimeout(() => {
+      // Pure Supabase Auth Reset Request
+      const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { 
+        redirectTo: redirectUrl 
+      });
+
+      if (error) throw error;
+
+      showStatus("✓ A secure password reset link has been sent to your email. Please check your Inbox and Spam folder.", "success");
+      btn.innerText = "Reset Link Sent ✓";
+      emailInput.value = "";
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerText = "Send Reset Link";
+      }, 5000);
+
+    } catch (err) {
+      console.error("Password Reset Error:", err);
+      showStatus("Error: " + (err.message || "Unable to send reset link. Please try again."), "error");
       btn.disabled = false;
       btn.innerText = "Send Reset Link";
-    }, 5000);
-
-  } catch (err) {
-    console.error("Password Reset Error:", err);
-    showStatus("Error: " + (err.message || "Unable to send reset link. Please try again."), "error");
-    btn.disabled = false;
-    btn.innerText = "Send Reset Link";
+    }
   }
-}
-
-document.getElementById("forgotEmail").addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    sendResetLink();
-  }
-});
 </script>
 </body>
 </html>
