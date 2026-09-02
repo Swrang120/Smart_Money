@@ -72,15 +72,22 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  // URL se pichle page ka data capture karna (Dynamic for all packages)
-  const urlParams = new URLSearchParams(window.location.search);
-  const pkgName = urlParams.get('name') || 'Starter Package';
-  const pkgPrice = urlParams.get('price') || '289';
-  const refCode = urlParams.get('ref') || '';
-  const fullName = urlParams.get('fullname') || '';
-  const mobile = urlParams.get('mobile') || '';
-  const email = urlParams.get('email') || '';
-  const password = urlParams.get('password') || '';
+  // SessionStorage se checkout data safely get karna
+  const checkoutData = JSON.parse(sessionStorage.getItem('checkout_data') || '{}');
+
+  const pkgName = checkoutData.name || 'Starter Package';
+  const pkgPrice = checkoutData.price || '289';
+  const refCode = checkoutData.ref || '';
+  const fullName = checkoutData.fullname || '';
+  const mobile = checkoutData.mobile || '';
+  const email = checkoutData.email || '';
+  const password = checkoutData.password || '';
+
+  // Validation Check: Agar user bina checkout fill kiye aaya ho ya session expire hua ho
+  if (!email || !mobile) {
+    alert("⚠️ Session expired or invalid access. Please fill details again.");
+    window.location.href = "checkout.html";
+  }
 
   // UI par price aur package name dynamically dikhana
   document.getElementById('displayPackagePrice').innerText = `₹${pkgPrice}`;
@@ -179,6 +186,9 @@
       ]);
 
       if (insertError) throw insertError;
+
+      // Successful insertion ke baad temporary session storage clear karein
+      sessionStorage.removeItem('checkout_data');
 
       // Step 4: Send EmailJS Pending Verification Mail to User
       const emailParams = {
