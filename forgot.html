@@ -87,6 +87,7 @@ p{font-size:13px;color:#9ca3af;margin-bottom:25px;text-align:center;line-height:
   <a href="login.html" class="back-link">← Back to Login</a>
 </div>
 
+<!-- Supabase JS SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
@@ -122,8 +123,14 @@ async function sendResetLink() {
   document.getElementById("statusBox").className = "status";
 
   try {
-    const redirectUrl = "https://swrang120.github.io/Smart_Money/update-password.html";
-    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: redirectUrl });
+    // Current Domain URL dynamically detect hoga (Netlify aur GitHub Pages dono ke liye)
+    const currentOrigin = window.location.origin;
+    const redirectUrl = `${currentOrigin}/update-password.html`;
+
+    // Purely Supabase Auth Password Reset
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { 
+      redirectTo: redirectUrl 
+    });
 
     if (error) throw error;
 
