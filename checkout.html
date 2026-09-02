@@ -187,7 +187,7 @@
       </div>
       <div class="form-group">
         <label>Mobile Number *</label>
-        <input type="tel" id="mobileNumber" class="form-control" placeholder="10-digit mobile number" required>
+        <input type="tel" id="mobileNumber" class="form-control" placeholder="10-digit mobile number" maxlength="10" required>
       </div>
       <div class="form-group">
         <label>Email ID (For Login) *</label>
@@ -239,12 +239,12 @@
   }
 
   async function goToPayment(e) {
-    if(e) e.preventDefault();
+    if (e) e.preventDefault();
 
     const refId = document.getElementById('refCode').value.trim();
     const fullName = document.getElementById('fullName').value.trim();
     const mobile = document.getElementById('mobileNumber').value.trim();
-    const email = document.getElementById('emailId').value.trim();
+    const email = document.getElementById('emailId').value.trim().toLowerCase();
     const password = document.getElementById('password').value.trim();
     const terms = document.getElementById('termsCheck').checked;
     const btn = document.getElementById('proceedBtn');
@@ -267,6 +267,23 @@
       alert("⚠️ Please fill in all required details!");
       return;
     }
+
+    // 2. Strict 10-Digit Mobile Number Check
+    const mobilePattern = /^[0-9]{10}$/;
+    if (!mobilePattern.test(mobile)) {
+      alert("⚠️ Invalid Mobile Number! Kripya 10 अंकों का valid mobile number daalein.");
+      document.getElementById('mobileNumber').focus();
+      return;
+    }
+
+    // 3. Email Format Verification
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      alert("⚠️ Invalid Email Address! Kripya sahi email ID enter karein.");
+      document.getElementById('emailId').focus();
+      return;
+    }
+
     if (!terms) {
       alert("⚠️ Please agree to the Terms & Privacy Policy.");
       return;
@@ -276,10 +293,9 @@
     btn.disabled = true;
 
     try {
-      // 2. Check Referral ID against Active Database Entry or System Admin ID
+      // 4. Check Referral ID against Database or System Master ID
       let isValidRef = false;
 
-      // Database check for Referral ID
       const { data: refData, error: refError } = await supabaseClient
         .from('payment_requests')
         .select('id, referral_id')
@@ -300,14 +316,14 @@
         return;
       }
 
-      // 3. Check if Email already exists
+      // 5. Check if Email already registered
       const { data: emailData, error: emailError } = await supabaseClient
         .from('payment_requests')
         .select('email')
         .eq('email', email)
         .limit(1);
 
-      if (emailError) console.error(emailError);
+      if (emailError) console.error("Email check error:", emailError);
       if (emailData && emailData.length > 0) {
         alert("⚠️ This Email ID is already registered! Please use a different email.");
         btn.innerText = "Next ➔ Proceed to Payment";
@@ -316,14 +332,14 @@
         return;
       }
 
-      // 4. Check if Mobile number already exists
+      // 6. Check if Mobile number already registered
       const { data: mobileData, error: mobileError } = await supabaseClient
         .from('payment_requests')
         .select('mobile')
         .eq('mobile', mobile)
         .limit(1);
 
-      if (mobileError) console.error(mobileError);
+      if (mobileError) console.error("Mobile check error:", mobileError);
       if (mobileData && mobileData.length > 0) {
         alert("⚠️ This Mobile Number is already registered!");
         btn.innerText = "Next ➔ Proceed to Payment";
@@ -332,7 +348,7 @@
         return;
       }
 
-      // Save user data securely in sessionStorage instead of exposing sensitive info in URL
+      // Save user details securely in sessionStorage
       const checkoutData = {
         name: pkgName,
         price: pkgPrice,
@@ -345,7 +361,7 @@
 
       sessionStorage.setItem('checkout_data', JSON.stringify(checkoutData));
 
-      // Clean redirect without sending password in URL query
+      // Clean redirect without sensitive info in URL
       window.location.href = `payment.html?name=${encodeURIComponent(pkgName)}&price=${encodeURIComponent(pkgPrice)}`;
 
     } catch (err) {
