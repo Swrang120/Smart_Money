@@ -14,6 +14,9 @@
     })();
   </script>
 
+  <!-- Tesseract.js CDN for Image OCR Text Extraction -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
   <style>
     * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     body { background: #f1f5f9; color: #1e293b; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
@@ -27,6 +30,7 @@
     .input-field { width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 13px; outline: none; }
     .btn-submit { width: 100%; background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; border: none; padding: 13px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
     .btn-submit:hover { opacity: 0.9; }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
   </style>
 </head>
 <body>
@@ -48,7 +52,7 @@
   <form id="paymentForm" onsubmit="submitPaymentProof(event)">
     <div class="form-group">
       <label>Enter UTR / Transaction ID (12 Digits)</label>
-      <input type="text" id="utrNumber" class="input-field" placeholder="e.g. 435261890123" required>
+      <input type="text" id="utrNumber" class="input-field" placeholder="e.g. 435261890123" maxlength="12" required>
     </div>
 
     <div class="form-group">
@@ -68,7 +72,7 @@
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  // URL se pichle page ka data capture karna
+  // URL se pichle page ka data capture karna (Dynamic for all packages)
   const urlParams = new URLSearchParams(window.location.search);
   const pkgName = urlParams.get('name') || 'Starter Package';
   const pkgPrice = urlParams.get('price') || '289';
@@ -78,7 +82,7 @@
   const email = urlParams.get('email') || '';
   const password = urlParams.get('password') || '';
 
-  // UI par price aur package name dikhana
+  // UI par price aur package name dynamically dikhana
   document.getElementById('displayPackagePrice').innerText = `₹${pkgPrice}`;
   document.getElementById('pkgSubTitle').innerText = `${pkgName} ke liye payment karein`;
 
@@ -98,17 +102,49 @@
       return;
     }
 
+    // UTR 12 digits strict validation
+    if (utr.length !== 12 || isNaN(utr)) {
+      alert("⚠️ Invalid UTR! Transaction ID strictly 12 digits ki honi chahiye.");
+      document.getElementById("utrNumber").focus();
+      return;
+    }
+
     if (!email || !fullName) {
       alert("⚠️ User details missing! Please go back and fill details again.");
       window.location.href = "checkout.html";
       return;
     }
 
-    btn.innerText = "Submitting Order...";
+    btn.innerText = "Scanning Screenshot (AI)...";
     btn.disabled = true;
 
     try {
-      // 1. Upload Screenshot to Supabase Storage bucket 'payment-proofs'
+      // Step 1: AI OCR Text Extraction from Screenshot
+      const { data: { text } } = await Tesseract.recognize(fileInput, 'eng', {
+        logger: m => console.log(m)
+      });
+
+      console.log("OCR Extracted Text:", text);
+
+      // Clean text: remove all spaces, commas, and symbols to safely match the exact price digits
+      const cleanText = text.replace(/[\s,₹Rs\.]/g, '');
+      const rawTargetPrice = pkgPrice.toString().replace(/[\s,₹Rs\.]/g, '');
+
+      console.log("Clean OCR Text:", cleanText);
+      console.log("Looking for Price:", rawTargetPrice);
+
+      const isAmountValid = cleanText.includes(rawTargetPrice);
+
+      if (!isAmountValid) {
+        alert(`⚠️ Amount Mismatch! Is package ka price ₹${pkgPrice} hai, lekin uploaded screenshot mein yeh amount match nahi ho raha hai. Kripya sahi screenshot upload karein.`);
+        btn.innerText = "Submit Payment Proof";
+        btn.disabled = false;
+        return;
+      }
+
+      btn.innerText = "Uploading Proof...";
+
+      // Step 2: Upload Screenshot to Supabase Storage bucket 'payment-proofs'
       const fileName = `${Date.now()}_${fileInput.name}`;
       const { data: uploadData, error: uploadError } = await supabaseClient.storage
         .from('payment-proofs')
@@ -123,7 +159,9 @@
 
       const screenshotUrl = publicURL.publicUrl;
 
-      // 2. Save entry into payment_requests table with all collected details
+      btn.innerText = "Submitting Order...";
+
+      // Step 3: Save entry into payment_requests table with all collected details
       const { error: insertError } = await supabaseClient.from('payment_requests').insert([
         {
           full_name: fullName,
@@ -142,7 +180,7 @@
 
       if (insertError) throw insertError;
 
-      // 3. Send EmailJS Pending Verification Mail to User
+      // Step 4: Send EmailJS Pending Verification Mail to User
       const emailParams = {
         to_name: fullName,
         to_email: email,
