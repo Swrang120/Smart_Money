@@ -179,7 +179,7 @@
     <form id="checkoutForm" onsubmit="goToPayment(event)">
       <div class="form-group">
         <label>Affiliate / Referral Code *</label>
-        <input type="text" id="refCode" class="form-control" placeholder="e.g. SM-smart66779" required>
+        <input type="text" id="refCode" class="form-control" placeholder="Enter Sponsor Referral ID" required>
       </div>
       <div class="form-group">
         <label>Full Name *</label>
@@ -267,26 +267,30 @@
     btn.disabled = true;
 
     try {
-      // 1. Validate Referral ID (Must be master ID 'SM-smart66779' or exist in database as an existing user/referral)
+      // 1. Strict Referral ID Validation against Database & Master ID
       const masterReferralCode = "SM-smart66779";
       let isValidRef = (refId === masterReferralCode);
 
       if (!isValidRef) {
-        // Check if referral ID exists in database (e.g. matching referral_id or email)
+        // Database se check karein ki kya yeh referral_id ya email database mein approved ya existing user ke roop mein maujud hai
         const { data: refData, error: refError } = await supabaseClient
           .from('payment_requests')
-          .select('id')
+          .select('id, status')
           .or(`referral_id.eq.${refId},email.eq.${refId}`)
+          .eq('status', 'Approved')
           .limit(1);
 
-        if (refError) console.error(refError);
+        if (refError) {
+          console.error("Referral check error:", refError);
+        }
+
         if (refData && refData.length > 0) {
           isValidRef = true;
         }
       }
 
       if (!isValidRef) {
-        alert("⚠️ Invalid Referral ID! Please enter a valid Sponsor Referral ID (e.g., SM-smart66779).");
+        alert("⚠️ Invalid Referral ID! Kripya ek valid Sponsor Referral ID (jaise SM-smart66779 ya approved member ki ID) enter karein.");
         btn.innerText = "Next ➔ Proceed to Payment";
         btn.disabled = false;
         document.getElementById('refCode').focus();
