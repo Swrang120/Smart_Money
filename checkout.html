@@ -258,7 +258,7 @@
     // 1. Strict Format Verification: Must start with "SM-smart"
     const refPrefixPattern = /^SM-smart[a-zA-Z0-9_-]+$/i;
     if (!refPrefixPattern.test(refId)) {
-      alert("⚠️ Invalid Referral Code Format! ID must start with 'SM-smart' (e.g., SM-smart12345 or SM-smart66779).");
+      alert("⚠️ Invalid Referral Code Format! ID must start with 'SM-smart' (e.g., SM-smart12345).");
       document.getElementById('refCode').focus();
       return;
     }
@@ -298,7 +298,7 @@
       }
 
       if (!isValidRef) {
-        alert("⚠️ Referral ID does not exist! Please enter a valid Sponsor Referral ID.");
+        alert("⚠️ Invalid Referral ID! Please enter a valid Sponsor Referral ID.");
         btn.innerText = "Next ➔ Proceed to Payment";
         btn.disabled = false;
         document.getElementById('refCode').focus();
