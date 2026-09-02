@@ -153,7 +153,9 @@
     const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
     
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+      auth: { persistSession: true, autoRefreshToken: true }
+    });
 
     document.addEventListener("DOMContentLoaded", async function() {
       try {
@@ -193,6 +195,7 @@
       btn.disabled = true;
 
       try {
+        // 1. Verify user details in payment_requests table
         const { data, error } = await supabaseClient
           .from('payment_requests')
           .select('*')
@@ -210,11 +213,32 @@
 
         if (data.status === 'Pending') {
           alert("⏳ Aapka payment abhi Admin verification mein hai. Approve hone ke baad hi aap login kar payenge.");
+          btn.classList.remove("dooropen");
+          btn.querySelector("span").innerText = "Sign in";
+          btn.disabled = false;
+          return;
         } else if (data.status === 'Rejected') {
           alert("❌ Aapka payment request reject kar diya gaya hai. Kripya support se sampark karein.");
+          btn.classList.remove("dooropen");
+          btn.querySelector("span").innerText = "Sign in";
+          btn.disabled = false;
+          return;
         } else if (data.status === 'Approved') {
-          alert("🎉 Login Successful!");
+          // 2. Save user session data in LocalStorage & SessionStorage
           localStorage.setItem('userData', JSON.stringify(data));
+          sessionStorage.setItem('isLoggedIn', 'true');
+
+          // 3. Authenticate with Supabase Auth to keep session alive
+          try {
+            await supabaseClient.auth.signInWithPassword({
+              email: emailInput,
+              password: password
+            });
+          } catch (authErr) {
+            console.log("Supabase Auth sync bypassed:", authErr);
+          }
+
+          alert("🎉 Login Successful!");
           window.location.href = "dashboard.html";
           return;
         }
@@ -222,11 +246,10 @@
       } catch (err) {
         console.error("Login Error:", err);
         alert("⚠️ Login mein kuch samasya aayi. Dubara koshish karein.");
+        btn.classList.remove("dooropen");
+        btn.querySelector("span").innerText = "Sign in";
+        btn.disabled = false;
       }
-
-      btn.classList.remove("dooropen");
-      btn.querySelector("span").innerText = "Sign in";
-      btn.disabled = false;
     }
 
     function socialLogin(provider) {
@@ -256,7 +279,6 @@
       try {
         const updatePageUrl = window.location.origin + window.location.pathname.replace('login.html', 'update-password.html');
 
-        // Supabase Native Password Reset (Sends email with valid secure token)
         const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
           redirectTo: updatePageUrl,
         });
