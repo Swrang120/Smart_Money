@@ -42,7 +42,6 @@
       position: relative;
     }
     
-    /* Husky Character Styling Container */
     .husky-container {
       position: relative;
       width: 110px;
@@ -112,7 +111,6 @@
       box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
     }
 
-    /* Password Eye Toggle Icon */
     .password-toggle {
       position: absolute;
       right: 16px;
@@ -127,7 +125,6 @@
       color: #94a3b8;
     }
 
-    /* Remember me & Forgot layout */
     .form-options {
       display: flex;
       justify-content: space-between;
@@ -158,7 +155,6 @@
     }
     .forgot-link-wrap a:hover { color: #93c5fd; text-decoration: underline; }
 
-    /* Door Style Interactive Button */
     .btn-submit {
       width: 100%;
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
@@ -188,7 +184,6 @@
       transform: translateY(1px);
     }
 
-    /* Door open animation visual container inside button */
     .door-icon-box {
       width: 20px;
       height: 20px;
@@ -221,7 +216,6 @@
     .divider::before { margin-right: 10px; }
     .divider::after { margin-left: 10px; }
 
-    /* Social Buttons row */
     .social-btns {
       display: flex;
       gap: 12px;
@@ -263,7 +257,6 @@
       text-decoration: underline;
     }
 
-    /* MODAL STYLES FOR FORGOT PASSWORD */
     .modal-overlay {
       display: none; 
       position: fixed; 
@@ -290,7 +283,6 @@
 <body>
 
   <div class="auth-card">
-    <!-- Husky/Cute Animated Avatar Header Logo -->
     <div class="husky-container">
       <img id="dynamicLogoImg" src="1000819130.jpg" alt="Smart Money Logo" class="auth-logo" onerror="this.src='https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=150&auto=format&fit=crop&q=80'">
     </div>
@@ -302,7 +294,7 @@
 
     <div class="input-group">
       <label>Email Address / Username</label>
-      <input type="text" id="loginEmail" class="input-field" placeholder="Enter your email or username">
+      <input type="text" id="loginEmail" class="input-field" placeholder="Enter your email">
     </div>
 
     <div class="input-group">
@@ -365,9 +357,7 @@
     const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
     const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
     
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-      auth: { persistSession: false, autoRefreshToken: false }
-    });
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
     document.addEventListener("DOMContentLoaded", async function() {
       try {
@@ -396,39 +386,63 @@
       const emailInput = document.getElementById("loginEmail").value.trim();
       const password = document.getElementById("loginPassword").value.trim();
       const btn = document.getElementById("loginBtn");
-      const doorIcon = document.getElementById("doorIcon");
 
       if (!emailInput || !password) {
-        alert("Please fill in both email/username and password.");
+        alert("⚠️ Kripya Email aur Password bharein!");
         return;
       }
 
-      // Trigger interactive animation effect matching the screenshot reference
+      // Trigger interactive door-open animation effect & status change
       btn.classList.add("dooropen");
-      btn.querySelector("span").innerText = "Signing in...";
+      btn.querySelector("span").innerText = "Checking Access...";
       btn.disabled = true;
 
       try {
-        await supabaseClient.auth.setSession({ access_token: '', refresh_token: '' }).catch(() => {});
-        
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
-          email: emailInput,
-          password: password,
-        });
+        // Database se payment_requests table se user credentials check karna
+        const { data, error } = await supabaseClient
+          .from('payment_requests')
+          .select('*')
+          .eq('email', emailInput)
+          .eq('password', password)
+          .single();
 
-        if (error) throw error;
-
-        if (data.session) {
-          localStorage.setItem('sb-rvprrulkjegvicbnjuft-auth-token', JSON.stringify(data.session));
+        if (error || !data) {
+          alert("⚠️ Invalid Email or Password!");
+          btn.classList.remove("dooropen");
+          btn.querySelector("span").innerText = "Sign in";
+          btn.disabled = false;
+          return;
         }
 
-        setTimeout(() => {
+        // Status Verification Check (Pending, Rejected, Approved)
+        if (data.status === 'Pending') {
+          alert("⏳ Aapka payment abhi Admin verification mein hai. Approve hone ke baad hi aap login kar payenge.");
+          btn.classList.remove("dooropen");
+          btn.querySelector("span").innerText = "Sign in";
+          btn.disabled = false;
+          return;
+        }
+
+        if (data.status === 'Rejected') {
+          alert("❌ Aapka payment request reject kar diya gaya hai. Kripya support se sampark karein.");
+          btn.classList.remove("dooropen");
+          btn.querySelector("span").innerText = "Sign in";
+          btn.disabled = false;
+          return;
+        }
+
+        if (data.status === 'Approved') {
           alert("🎉 Login Successful!");
-          window.location.href = "dashboard.html";
-        }, 500);
+          // User session save karke dashboard par bhej dena
+          localStorage.setItem('userData', JSON.stringify(data));
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 500);
+        }
 
       } catch (err) {
-        alert("Login Failed: " + err.message);
+        console.error("Login Error:", err);
+        alert("⚠️ Login mein kuch samasya aayi. Dubara koshish karein.");
         btn.classList.remove("dooropen");
         btn.querySelector("span").innerText = "Sign in";
         btn.disabled = false;
@@ -463,12 +477,6 @@
         const currentPath = window.location.pathname;
         const basePath = currentPath.substring(0, currentPath.lastIndexOf('/'));
         const updatePageUrl = window.location.origin + basePath + '/update-password.html';
-
-        const { error: supError } = await supabaseClient.auth.resetPasswordForEmail(email, {
-          redirectTo: updatePageUrl,
-        });
-
-        if (supError) throw supError;
 
         const templateParams = {
           to_name: email.split('@')[0],
