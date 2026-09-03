@@ -3,12 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Smart Money - Checkout Details</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Supabase SDK CDN -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
@@ -16,361 +21,2213 @@
       --bg-1: #070b1a;
       --bg-2: #0d1025;
       --bg-3: #171238;
+
       --card-bg: rgba(23, 31, 55, 0.78);
+
       --border-color: rgba(129, 140, 248, 0.22);
+
       --primary: #6d5dfc;
       --primary-hover: #5546e8;
+
       --accent: #38bdf8;
       --cyan: #22d3ee;
+
+      --success: #34d399;
+      --danger: #fb7185;
+      --warning: #fbbf24;
+
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
     }
 
-    * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-    html { min-height: 100%; background: #070b1a; }
-    body { 
-      color: var(--text-main); 
-      margin: 0; 
-      padding: 16px; 
-      min-height: 100vh; 
-      overflow-x: hidden; 
-      position: relative; 
-      background: radial-gradient(circle at 15% 20%, rgba(99,102,241,0.18), transparent 28%), 
-                  radial-gradient(circle at 85% 10%, rgba(56,189,248,0.12), transparent 25%), 
-                  radial-gradient(circle at 50% 85%, rgba(139,92,246,0.14), transparent 35%), 
-                  linear-gradient(135deg, #070b1a 0%, #0d1025 45%, #151238 100%); 
+    * {
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    html {
+      min-height: 100%;
+      background: #070b1a;
+    }
+
+    body {
+      color: var(--text-main);
+      margin: 0;
+      padding: 16px;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+
+      background:
+        radial-gradient(
+          circle at 15% 20%,
+          rgba(99, 102, 241, 0.18),
+          transparent 28%
+        ),
+        radial-gradient(
+          circle at 85% 10%,
+          rgba(56, 189, 248, 0.12),
+          transparent 25%
+        ),
+        radial-gradient(
+          circle at 50% 85%,
+          rgba(139, 92, 246, 0.14),
+          transparent 35%
+        ),
+        linear-gradient(
+          135deg,
+          #070b1a 0%,
+          #0d1025 45%,
+          #151238 100%
+        );
     }
 
     body::before {
       content: "";
       position: fixed;
+
       width: 420px;
       height: 420px;
+
       top: -150px;
       left: -120px;
-      background: radial-gradient(circle, rgba(99,102,241,0.24) 0%, rgba(99,102,241,0.08) 38%, transparent 70%);
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(99, 102, 241, 0.24) 0%,
+          rgba(99, 102, 241, 0.08) 38%,
+          transparent 70%
+        );
+
       filter: blur(25px);
       pointer-events: none;
       z-index: -1;
+
       animation: floatGlow1 10s ease-in-out infinite alternate;
     }
+
     body::after {
       content: "";
       position: fixed;
+
       width: 500px;
       height: 500px;
+
       right: -180px;
       bottom: -180px;
-      background: radial-gradient(circle, rgba(56,189,248,0.18) 0%, rgba(139,92,246,0.10) 40%, transparent 72%);
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(56, 189, 248, 0.18) 0%,
+          rgba(139, 92, 246, 0.10) 40%,
+          transparent 72%
+        );
+
       filter: blur(30px);
       pointer-events: none;
       z-index: -1;
+
       animation: floatGlow2 12s ease-in-out infinite alternate;
     }
+
     @keyframes floatGlow1 {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(80px, 60px) scale(1.2); }
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      100% {
+        transform: translate(80px, 60px) scale(1.2);
+      }
     }
+
     @keyframes floatGlow2 {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(-70px, -60px) scale(1.15); }
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      100% {
+        transform: translate(-70px, -60px) scale(1.15);
+      }
     }
 
-    .container { max-width: 600px; margin: 0 auto; padding-bottom: 50px; position: relative; z-index: 1; }
-    
-    .header { text-align: center; margin-bottom: 28px; padding-top: 8px; }
-    .header h1 { 
-      font-size: 23px; 
-      font-weight: 800; 
-      margin: 0 0 8px; 
-      background: linear-gradient(90deg, #38bdf8, #818cf8, #a78bfa, #38bdf8); 
-      background-size: 250% auto; 
-      -webkit-background-clip: text; 
-      -webkit-text-fill-color: transparent; 
-      animation: gradientMove 6s linear infinite; 
-      text-shadow: 0 0 30px rgba(99,102,241,0.25); 
-    }
-    @keyframes gradientMove {
-      0% { background-position: 0% center; }
-      100% { background-position: 200% center; }
-    }
-    .header p { font-size: 12px; color: var(--text-muted); margin: 0; }
-
-    .card { 
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding-bottom: 50px;
       position: relative;
-      background: linear-gradient(135deg, rgba(36, 46, 75, 0.82), rgba(17, 24, 45, 0.88)); 
-      border-radius: 20px; 
-      padding: 20px; 
-      margin-bottom: 18px; 
-      border: 1px solid var(--border-color); 
-      backdrop-filter: blur(20px); 
+      z-index: 1;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+      padding-top: 8px;
+    }
+
+    .header-icon {
+      width: 54px;
+      height: 54px;
+
+      margin: 0 auto 12px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 17px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(109, 93, 252, 0.22),
+          rgba(56, 189, 248, 0.12)
+        );
+
+      border: 1px solid rgba(129, 140, 248, 0.24);
+
+      box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+      font-size: 25px;
+    }
+
+    .header h1 {
+      font-size: 23px;
+      font-weight: 800;
+      margin: 0 0 8px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #38bdf8,
+          #818cf8,
+          #a78bfa,
+          #38bdf8
+        );
+
+      background-size: 250% auto;
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+      animation: gradientMove 6s linear infinite;
+
+      text-shadow: 0 0 30px rgba(99, 102, 241, 0.25);
+    }
+
+    @keyframes gradientMove {
+      0% {
+        background-position: 0% center;
+      }
+
+      100% {
+        background-position: 200% center;
+      }
+    }
+
+    .header p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    /* =========================
+       CARD
+    ========================= */
+
+    .card {
+      position: relative;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(36, 46, 75, 0.82),
+          rgba(17, 24, 45, 0.88)
+        );
+
+      border-radius: 20px;
+
+      padding: 20px;
+
+      margin-bottom: 18px;
+
+      border: 1px solid var(--border-color);
+
+      backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.04); 
+
+      box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
       overflow: hidden;
     }
+
     .card::before {
       content: "";
+
       position: absolute;
+
       top: 0;
       left: 10%;
       right: 10%;
+
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(129,140,248,0.7), rgba(56,189,248,0.6), transparent);
-    }
-    .card h3 { 
-      font-size: 14px; 
-      color: #fff; 
-      margin: 0 0 16px; 
-      display: flex; 
-      align-items: center; 
-      gap: 8px; 
-      border-bottom: 1px solid rgba(255,255,255,0.07); 
-      padding-bottom: 12px; 
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(129, 140, 248, 0.7),
+          rgba(56, 189, 248, 0.6),
+          transparent
+        );
     }
 
-    .form-group { margin-bottom: 14px; }
-    .form-group label { display: block; font-size: 10px; font-weight: 700; color: #9ca9c3; text-transform: uppercase; margin-bottom: 7px; letter-spacing: 0.6px; }
-    .form-control { 
-      width: 100%; 
-      background: linear-gradient(135deg, rgba(7,12,28,0.65), rgba(17,24,45,0.72)); 
-      border: 1px solid rgba(129,140,248,0.20); 
-      padding: 12px 14px; 
-      border-radius: 11px; 
-      color: #fff; 
-      font-size: 13px; 
-      outline: none; 
-      transition: all 0.25s ease; 
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.18);
-    }
-    .form-control::placeholder { color: #52617b; }
-    .form-control:focus { border-color: var(--accent); background: rgba(12,20,40,0.85); box-shadow: 0 0 0 3px rgba(56,189,248,0.08), 0 0 18px rgba(56,189,248,0.12); }
+    .card h3 {
+      font-size: 14px;
+      color: #fff;
 
-    .btn-next { 
-      width: 100%; 
-      background: linear-gradient(135deg, #7064ff 0%, #5546e8 45%, #7c3aed 100%); 
-      color: #fff; 
-      border: 1px solid rgba(255,255,255,0.12); 
-      padding: 14px; 
-      border-radius: 13px; 
-      font-size: 13px; 
-      font-weight: 800; 
-      cursor: pointer; 
-      box-shadow: 0 10px 28px rgba(99,102,241,0.35); 
+      margin: 0 0 16px;
+
+      display: flex;
+      align-items: center;
+
+      gap: 8px;
+
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+
+      padding-bottom: 12px;
+    }
+
+    /* =========================
+       FORM
+    ========================= */
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+
+      font-size: 10px;
+      font-weight: 700;
+
+      color: #9ca9c3;
+
+      text-transform: uppercase;
+
+      margin-bottom: 7px;
+
+      letter-spacing: 0.6px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .form-control {
+      width: 100%;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(7, 12, 28, 0.65),
+          rgba(17, 24, 45, 0.72)
+        );
+
+      border: 1px solid rgba(129, 140, 248, 0.20);
+
+      padding: 12px 14px;
+
+      border-radius: 11px;
+
+      color: #fff;
+
+      font-size: 13px;
+
+      outline: none;
+
+      transition: all 0.25s ease;
+
+      box-shadow:
+        inset 0 1px 2px rgba(0, 0, 0, 0.18);
+    }
+
+    .form-control::placeholder {
+      color: #52617b;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent);
+
+      background: rgba(12, 20, 40, 0.85);
+
+      box-shadow:
+        0 0 0 3px rgba(56, 189, 248, 0.08),
+        0 0 18px rgba(56, 189, 248, 0.12);
+    }
+
+    .form-control.valid {
+      border-color: rgba(52, 211, 153, 0.65);
+
+      box-shadow:
+        0 0 0 3px rgba(52, 211, 153, 0.06);
+    }
+
+    .form-control.invalid {
+      border-color: rgba(251, 113, 133, 0.70);
+
+      box-shadow:
+        0 0 0 3px rgba(251, 113, 133, 0.06);
+    }
+
+    .field-status {
+      min-height: 18px;
+
+      margin-top: 6px;
+
+      font-size: 10px;
+      line-height: 1.5;
+
+      display: none;
+    }
+
+    .field-status.show {
+      display: block;
+    }
+
+    .field-status.success {
+      color: var(--success);
+    }
+
+    .field-status.error {
+      color: var(--danger);
+    }
+
+    .field-status.checking {
+      color: var(--warning);
+    }
+
+    /* =========================
+       PASSWORD INFO
+    ========================= */
+
+    .password-note {
+      margin-top: 7px;
+
+      font-size: 9px;
+
+      line-height: 1.5;
+
+      color: #71809a;
+    }
+
+    /* =========================
+       ORDER SUMMARY
+    ========================= */
+
+    .order-summary {
+      display: flex;
+
+      justify-content: space-between;
+      align-items: center;
+
+      font-size: 12px;
+
+      margin-bottom: 10px;
+
+      color: #aab6cc;
+
+      gap: 15px;
+    }
+
+    .order-summary b {
+      color: #5eead4;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .total-row {
+      font-size: 16px !important;
+
+      margin-top: 12px !important;
+
+      border-top:
+        1px solid rgba(255, 255, 255, 0.08);
+
+      padding-top: 12px;
+    }
+
+    .total-price {
+      font-size: 19px !important;
+      color: var(--accent) !important;
+    }
+
+    /* =========================
+       TERMS
+    ========================= */
+
+    .terms-box {
+      margin: 16px 0;
+
+      font-size: 11px;
+
+      color: var(--text-muted);
+
+      display: flex;
+
+      align-items: flex-start;
+
+      gap: 9px;
+
+      line-height: 1.5;
+    }
+
+    #termsCheck {
+      accent-color: #6d5dfc;
+
+      width: 15px;
+      height: 15px;
+
+      margin-top: 1px;
+
+      flex-shrink: 0;
+    }
+
+    /* =========================
+       BUTTON
+    ========================= */
+
+    .btn-next {
+      width: 100%;
+
+      background:
+        linear-gradient(
+          135deg,
+          #7064ff 0%,
+          #5546e8 45%,
+          #7c3aed 100%
+        );
+
+      color: #fff;
+
+      border:
+        1px solid rgba(255, 255, 255, 0.12);
+
+      padding: 14px;
+
+      border-radius: 13px;
+
+      font-size: 13px;
+
+      font-weight: 800;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 10px 28px rgba(99, 102, 241, 0.35);
+
       margin-top: 10px;
-    }
-    .btn-next:disabled { opacity: 0.7; cursor: not-allowed; }
 
-    .order-summary { display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 10px; color: #aab6cc; }
-    .order-summary b { color: #5eead4; font-weight: 700; }
-    #termsCheck { accent-color: #6d5dfc; width: 15px; height: 15px; }
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+    }
+
+    .btn-next:hover:not(:disabled) {
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 14px 34px rgba(99, 102, 241, 0.45);
+    }
+
+    .btn-next:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .btn-next:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* =========================
+       SECURITY INFO
+    ========================= */
+
+    .security-box {
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 7px;
+
+      margin-top: 16px;
+
+      font-size: 9px;
+
+      color: #64748b;
+
+      text-align: center;
+    }
+
+    .security-icon {
+      font-size: 12px;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 480px) {
+
+      body {
+        padding: 12px;
+      }
+
+      .container {
+        max-width: 100%;
+      }
+
+      .header {
+        margin-bottom: 22px;
+      }
+
+      .header h1 {
+        font-size: 21px;
+      }
+
+      .card {
+        padding: 17px;
+
+        border-radius: 17px;
+      }
+
+      .form-control {
+        padding: 13px;
+
+        font-size: 13px;
+      }
+
+      .order-summary {
+        font-size: 11px;
+      }
+    }
   </style>
 </head>
+
 <body>
 
 <div class="container">
+
+  <!-- =========================
+       HEADER
+  ========================= -->
+
   <div class="header">
-    <h1>🚀 Enter Your Details</h1>
-    <p>Fill in your account registration details to proceed</p>
+
+    <div class="header-icon">
+      🧾
+    </div>
+
+    <h1>Enter Your Details</h1>
+
+    <p>
+      Verify your account details before proceeding to payment
+    </p>
+
   </div>
 
-  <form id="checkoutForm" onsubmit="goToPayment(event)">
-    <!-- Billing & Details Form -->
+
+  <!-- =========================
+       MAIN FORM
+  ========================= -->
+
+  <form
+    id="checkoutForm"
+    onsubmit="goToPayment(event)"
+    novalidate
+  >
+
+    <!-- =========================
+         BILLING DETAILS
+    ========================= -->
+
     <div class="card">
-      <h3>👤 1. Billing & Account Details</h3>
+
+      <h3>
+        👤
+        <span>1. Billing & Account Details</span>
+      </h3>
+
+
+      <!-- REFERRAL CODE -->
+
       <div class="form-group">
-        <label>Affiliate / Referral Code *</label>
-        <input type="text" id="refCode" class="form-control" placeholder="e.g. SM-smart12345" required>
+
+        <label for="refCode">
+          Affiliate / Referral Code *
+        </label>
+
+        <div class="input-wrapper">
+
+          <input
+            type="text"
+            id="refCode"
+            class="form-control"
+            placeholder="e.g. SM-smart12345"
+            autocomplete="off"
+            maxlength="30"
+            required
+          >
+
+        </div>
+
+        <div
+          id="refStatus"
+          class="field-status"
+        ></div>
+
       </div>
+
+
+      <!-- FULL NAME -->
+
       <div class="form-group">
-        <label>Full Name *</label>
-        <input type="text" id="fullName" class="form-control" placeholder="Enter your full name" required>
+
+        <label for="fullName">
+          Full Name *
+        </label>
+
+        <input
+          type="text"
+          id="fullName"
+          class="form-control"
+          placeholder="Enter your full name"
+          autocomplete="name"
+          maxlength="80"
+          required
+        >
+
       </div>
+
+
+      <!-- MOBILE -->
+
       <div class="form-group">
-        <label>Mobile Number *</label>
-        <input type="tel" id="mobileNumber" class="form-control" placeholder="10-digit mobile number" maxlength="10" required>
+
+        <label for="mobileNumber">
+          Mobile Number *
+        </label>
+
+        <input
+          type="tel"
+          id="mobileNumber"
+          class="form-control"
+          placeholder="10-digit mobile number"
+          autocomplete="tel"
+          inputmode="numeric"
+          maxlength="10"
+          required
+        >
+
+        <div
+          id="mobileStatus"
+          class="field-status"
+        ></div>
+
       </div>
+
+
+      <!-- EMAIL -->
+
       <div class="form-group">
-        <label>Email ID (For Login) *</label>
-        <input type="email" id="emailId" class="form-control" placeholder="your@email.com" required>
+
+        <label for="emailId">
+          Email ID / Gmail *
+        </label>
+
+        <input
+          type="email"
+          id="emailId"
+          class="form-control"
+          placeholder="your@gmail.com"
+          autocomplete="email"
+          maxlength="120"
+          required
+        >
+
+        <div
+          id="emailStatus"
+          class="field-status"
+        ></div>
+
       </div>
+
+
+      <!-- PASSWORD -->
+
       <div class="form-group">
-        <label>Create Password *</label>
-        <input type="password" id="password" class="form-control" placeholder="Set secure password" required>
+
+        <label for="password">
+          Create Password *
+        </label>
+
+        <input
+          type="password"
+          id="password"
+          class="form-control"
+          placeholder="Create your login password"
+          autocomplete="new-password"
+          minlength="6"
+          maxlength="72"
+          required
+        >
+
+        <div class="password-note">
+          🔒 Your password should be at least 6 characters.
+        </div>
+
       </div>
+
     </div>
 
-    <!-- Order Summary & Next Button -->
+
+    <!-- =========================
+         ORDER SUMMARY
+    ========================= -->
+
     <div class="card">
-      <h3>📦 Order Summary</h3>
+
+      <h3>
+        📦
+        <span>Order Summary</span>
+      </h3>
+
+
       <div class="order-summary">
-        <span>Package Selected:</span>
-        <b id="summaryPkgName">Starter Package</b>
-      </div>
-      <div class="order-summary" style="font-size: 16px; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px;">
-        <span>Grand Total:</span>
-        <b id="summaryPrice" style="font-size: 18px; color: var(--accent);">₹289</b>
-      </div>
-      
-      <div style="margin: 15px 0; font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px;">
-        <input type="checkbox" id="termsCheck" checked>
-        <span>I agree to the Terms & Privacy Policy</span>
+
+        <span>
+          Package Selected:
+        </span>
+
+        <b id="summaryPkgName">
+          Starter Package
+        </b>
+
       </div>
 
-      <button type="submit" class="btn-next" id="proceedBtn">Next ➔ Proceed to Payment</button>
+
+      <div class="order-summary total-row">
+
+        <span>
+          Grand Total:
+        </span>
+
+        <b
+          id="summaryPrice"
+          class="total-price"
+        >
+          ₹289
+        </b>
+
+      </div>
+
+
+      <!-- TERMS -->
+
+      <label class="terms-box">
+
+        <input
+          type="checkbox"
+          id="termsCheck"
+          checked
+        >
+
+        <span>
+          I agree to the Terms & Privacy Policy and confirm
+          that the information provided by me is correct.
+        </span>
+
+      </label>
+
+
+      <!-- BUTTON -->
+
+      <button
+        type="submit"
+        class="btn-next"
+        id="proceedBtn"
+      >
+        Next ➔ Proceed to Payment
+      </button>
+
+
+      <!-- SECURITY -->
+
+      <div class="security-box">
+
+        <span class="security-icon">
+          🔐
+        </span>
+
+        <span>
+          Your account details are checked before continuing.
+        </span>
+
+      </div>
+
     </div>
+
   </form>
+
 </div>
 
+
 <script>
-  // Supabase Setup
-  const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const pkgName = urlParams.get('name') || urlParams.get('package') || 'Starter Package';
-  const pkgPrice = urlParams.get('price') || '289';
-  const refCodeFromUrl = urlParams.get('ref') || '';
+  /* =========================================================
+     SUPABASE CONFIGURATION
+  ========================================================= */
 
-  document.getElementById('summaryPkgName').innerText = pkgName;
-  document.getElementById('summaryPrice').innerText = `₹${pkgPrice}`;
+  const SUPABASE_URL =
+    "https://rvprrulkjegvicbnjuft.supabase.co";
+
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+  /* =========================================================
+     PACKAGE DATA FROM URL
+  ========================================================= */
+
+  const urlParams =
+    new URLSearchParams(window.location.search);
+
+  const pkgName =
+    urlParams.get("name") ||
+    urlParams.get("package") ||
+    "Starter Package";
+
+  const pkgPrice =
+    urlParams.get("price") ||
+    "289";
+
+  const refCodeFromUrl =
+    urlParams.get("ref") ||
+    "";
+
+
+  /* =========================================================
+     ELEMENTS
+  ========================================================= */
+
+  const refCodeInput =
+    document.getElementById("refCode");
+
+  const fullNameInput =
+    document.getElementById("fullName");
+
+  const mobileInput =
+    document.getElementById("mobileNumber");
+
+  const emailInput =
+    document.getElementById("emailId");
+
+  const passwordInput =
+    document.getElementById("password");
+
+  const termsCheck =
+    document.getElementById("termsCheck");
+
+  const proceedBtn =
+    document.getElementById("proceedBtn");
+
+
+  const refStatus =
+    document.getElementById("refStatus");
+
+  const mobileStatus =
+    document.getElementById("mobileStatus");
+
+  const emailStatus =
+    document.getElementById("emailStatus");
+
+
+  /* =========================================================
+     SHOW PACKAGE
+  ========================================================= */
+
+  document.getElementById("summaryPkgName").innerText =
+    pkgName;
+
+  document.getElementById("summaryPrice").innerText =
+    formatPrice(pkgPrice);
+
+
+  /* =========================================================
+     REFERRAL FROM URL
+  ========================================================= */
+
   if (refCodeFromUrl) {
-    document.getElementById('refCode').value = refCodeFromUrl;
+
+    refCodeInput.value =
+      refCodeFromUrl.trim();
+
   }
 
-  async function goToPayment(e) {
-    if (e) e.preventDefault();
 
-    const refId = document.getElementById('refCode').value.trim();
-    const fullName = document.getElementById('fullName').value.trim();
-    const mobile = document.getElementById('mobileNumber').value.trim();
-    const email = document.getElementById('emailId').value.trim().toLowerCase();
-    const password = document.getElementById('password').value.trim();
-    const terms = document.getElementById('termsCheck').checked;
-    const btn = document.getElementById('proceedBtn');
+  /* =========================================================
+     PRICE FORMAT
+  ========================================================= */
 
-    if (!refId) {
-      alert("⚠️ Affiliate / Referral Code is required!");
-      document.getElementById('refCode').focus();
-      return;
+  function formatPrice(price) {
+
+    const numericPrice =
+      Number(
+        String(price)
+          .replace(/[₹,\s]/g, "")
+      );
+
+    if (!Number.isFinite(numericPrice)) {
+      return "₹0";
     }
 
-    // 1. Strict Format Verification: Must start with "SM-smart"
-    const refPrefixPattern = /^SM-smart[a-zA-Z0-9_-]+$/i;
-    if (!refPrefixPattern.test(refId)) {
-      alert("⚠️ Invalid Referral Code Format! ID must start with 'SM-smart' (e.g., SM-smart12345).");
-      document.getElementById('refCode').focus();
-      return;
+    return "₹" +
+      numericPrice.toLocaleString("en-IN");
+
+  }
+
+
+  /* =========================================================
+     STATUS HELPER
+  ========================================================= */
+
+  function setStatus(element, message, type) {
+
+    element.textContent =
+      message;
+
+    element.className =
+      "field-status show " + type;
+
+  }
+
+
+  function clearStatus(element) {
+
+    element.textContent = "";
+
+    element.className =
+      "field-status";
+
+  }
+
+
+  function setInputState(input, state) {
+
+    input.classList.remove(
+      "valid",
+      "invalid"
+    );
+
+    if (state) {
+      input.classList.add(state);
     }
 
-    if (!fullName || !mobile || !email || !password) {
-      alert("⚠️ Please fill in all required details!");
-      return;
-    }
+  }
 
-    // 2. Strict 10-Digit Mobile Number Check
-    const mobilePattern = /^[0-9]{10}$/;
-    if (!mobilePattern.test(mobile)) {
-      alert("⚠️ Invalid Mobile Number! Kripya 10 अंकों का valid mobile number daalein.");
-      document.getElementById('mobileNumber').focus();
-      return;
-    }
 
-    // 3. Email Format Verification
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(email)) {
-      alert("⚠️ Invalid Email Address! Kripya sahi email ID enter karein.");
-      document.getElementById('emailId').focus();
-      return;
-    }
+  /* =========================================================
+     REFERRAL FORMAT
+     
+     Valid:
+     SM-smart12345
+     SM-smartABC123
+     
+     Invalid:
+     smart12345
+     SM12345
+     SM-smart
+     12345
+  ========================================================= */
 
-    if (!terms) {
-      alert("⚠️ Please agree to the Terms & Privacy Policy.");
-      return;
-    }
+  function isValidReferralFormat(refId) {
 
-    btn.innerText = "Verifying Details...";
-    btn.disabled = true;
+    const pattern =
+      /^SM-smart[a-zA-Z0-9]+$/;
 
-    try {
-      // 4. Check Referral ID against Database or System Master ID
-      let isValidRef = false;
+    return pattern.test(refId);
 
-      const { data: refData, error: refError } = await supabaseClient
-        .from('payment_requests')
-        .select('id, referral_id')
-        .ilike('referral_id', refId)
+  }
+
+
+  /* =========================================================
+     EMAIL FORMAT
+  ========================================================= */
+
+  function isValidEmail(email) {
+
+    const pattern =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    return pattern.test(email);
+
+  }
+
+
+  /* =========================================================
+     MOBILE FORMAT
+  ========================================================= */
+
+  function isValidMobile(mobile) {
+
+    return /^[0-9]{10}$/.test(mobile);
+
+  }
+
+
+  /* =========================================================
+     CHECK REFERRAL ID IN PROFILES
+     
+     IMPORTANT:
+     Referral ID must actually exist in profiles table.
+     
+     This checks common column names:
+     referral_code
+     referral_id
+     
+     The first successful query is used.
+  ========================================================= */
+
+  async function checkReferralExists(refId) {
+
+    const cleanRef =
+      refId.trim();
+
+    /* -----------------------------------------------
+       First try referral_code
+    ----------------------------------------------- */
+
+    const firstCheck =
+      await supabaseClient
+        .from("profiles")
+        .select("user_id, referral_code")
+        .ilike(
+          "referral_code",
+          cleanRef
+        )
         .limit(1);
 
-      if (refError) console.error("Referral check error:", refError);
+    if (!firstCheck.error) {
 
-      if ((refData && refData.length > 0) || refId.toLowerCase() === "sm-smart66779") {
-        isValidRef = true;
-      }
+      return {
+        exists:
+          Array.isArray(firstCheck.data) &&
+          firstCheck.data.length > 0,
 
-      if (!isValidRef) {
-        alert("⚠️ Invalid Referral ID! Please enter a valid Sponsor Referral ID.");
-        btn.innerText = "Next ➔ Proceed to Payment";
-        btn.disabled = false;
-        document.getElementById('refCode').focus();
-        return;
-      }
-
-      // 5. Check if Email already registered
-      const { data: emailData, error: emailError } = await supabaseClient
-        .from('payment_requests')
-        .select('email')
-        .eq('email', email)
-        .limit(1);
-
-      if (emailError) console.error("Email check error:", emailError);
-      if (emailData && emailData.length > 0) {
-        alert("⚠️ This Email ID is already registered! Please use a different email.");
-        btn.innerText = "Next ➔ Proceed to Payment";
-        btn.disabled = false;
-        document.getElementById('emailId').focus();
-        return;
-      }
-
-      // 6. Check if Mobile number already registered
-      const { data: mobileData, error: mobileError } = await supabaseClient
-        .from('payment_requests')
-        .select('mobile')
-        .eq('mobile', mobile)
-        .limit(1);
-
-      if (mobileError) console.error("Mobile check error:", mobileError);
-      if (mobileData && mobileData.length > 0) {
-        alert("⚠️ This Mobile Number is already registered!");
-        btn.innerText = "Next ➔ Proceed to Payment";
-        btn.disabled = false;
-        document.getElementById('mobileNumber').focus();
-        return;
-      }
-
-      // Save user details securely in sessionStorage
-      const checkoutData = {
-        name: pkgName,
-        price: pkgPrice,
-        ref: refId,
-        fullname: fullName,
-        mobile: mobile,
-        email: email,
-        password: password
+        error:
+          null
       };
 
-      sessionStorage.setItem('checkout_data', JSON.stringify(checkoutData));
+    }
 
-      // Clean redirect without sensitive info in URL
-      window.location.href = `payment.html?name=${encodeURIComponent(pkgName)}&price=${encodeURIComponent(pkgPrice)}`;
+
+    /* -----------------------------------------------
+       Fallback: referral_id
+    ----------------------------------------------- */
+
+    const secondCheck =
+      await supabaseClient
+        .from("profiles")
+        .select("user_id, referral_id")
+        .ilike(
+          "referral_id",
+          cleanRef
+        )
+        .limit(1);
+
+    if (!secondCheck.error) {
+
+      return {
+        exists:
+          Array.isArray(secondCheck.data) &&
+          secondCheck.data.length > 0,
+
+        error:
+          null
+      };
+
+    }
+
+
+    /* -----------------------------------------------
+       Database problem
+    ----------------------------------------------- */
+
+    console.error(
+      "Referral lookup failed:",
+      firstCheck.error,
+      secondCheck.error
+    );
+
+    return {
+      exists: false,
+
+      error:
+        secondCheck.error ||
+        firstCheck.error
+    };
+
+  }
+
+
+  /* =========================================================
+     CHECK EMAIL IN DATABASE
+     
+     Checks:
+     1. profiles.email
+     2. payment_requests.email
+     
+     NOTE:
+     If your profiles table does not contain email,
+     the second query can still catch old registrations.
+  ========================================================= */
+
+  async function checkEmailExists(email) {
+
+    const cleanEmail =
+      email.trim().toLowerCase();
+
+
+    let found = false;
+
+
+    /* -----------------------------------------------
+       Profiles
+    ----------------------------------------------- */
+
+    const profileResult =
+      await supabaseClient
+        .from("profiles")
+        .select("user_id, email")
+        .ilike(
+          "email",
+          cleanEmail
+        )
+        .limit(1);
+
+
+    if (
+      !profileResult.error &&
+      profileResult.data &&
+      profileResult.data.length > 0
+    ) {
+
+      found = true;
+
+    }
+
+
+    /* -----------------------------------------------
+       Payment Requests
+    ----------------------------------------------- */
+
+    if (!found) {
+
+      const paymentResult =
+        await supabaseClient
+          .from("payment_requests")
+          .select("id, email")
+          .ilike(
+            "email",
+            cleanEmail
+          )
+          .limit(1);
+
+
+      if (
+        !paymentResult.error &&
+        paymentResult.data &&
+        paymentResult.data.length > 0
+      ) {
+
+        found = true;
+
+      }
+
+    }
+
+
+    return {
+      exists: found
+    };
+
+  }
+
+
+  /* =========================================================
+     CHECK MOBILE IN DATABASE
+     
+     Checks:
+     1. profiles.mobile
+     2. payment_requests.mobile
+  ========================================================= */
+
+  async function checkMobileExists(mobile) {
+
+    const cleanMobile =
+      mobile.trim();
+
+
+    let found = false;
+
+
+    /* -----------------------------------------------
+       Profiles
+    ----------------------------------------------- */
+
+    const profileResult =
+      await supabaseClient
+        .from("profiles")
+        .select("user_id, mobile")
+        .eq(
+          "mobile",
+          cleanMobile
+        )
+        .limit(1);
+
+
+    if (
+      !profileResult.error &&
+      profileResult.data &&
+      profileResult.data.length > 0
+    ) {
+
+      found = true;
+
+    }
+
+
+    /* -----------------------------------------------
+       Payment Requests
+    ----------------------------------------------- */
+
+    if (!found) {
+
+      const paymentResult =
+        await supabaseClient
+          .from("payment_requests")
+          .select("id, mobile")
+          .eq(
+            "mobile",
+            cleanMobile
+          )
+          .limit(1);
+
+
+      if (
+        !paymentResult.error &&
+        paymentResult.data &&
+        paymentResult.data.length > 0
+      ) {
+
+        found = true;
+
+      }
+
+    }
+
+
+    return {
+      exists: found
+    };
+
+  }
+
+
+  /* =========================================================
+     CHECK REFERRAL
+  ========================================================= */
+
+  async function validateReferral() {
+
+    const refId =
+      refCodeInput.value.trim();
+
+
+    clearStatus(refStatus);
+
+    setInputState(
+      refCodeInput,
+      null
+    );
+
+
+    /* Format */
+
+    if (!isValidReferralFormat(refId)) {
+
+      setStatus(
+        refStatus,
+        "❌ Invalid format. Example: SM-smart12345",
+        "error"
+      );
+
+      setInputState(
+        refCodeInput,
+        "invalid"
+      );
+
+      return false;
+
+    }
+
+
+    setStatus(
+      refStatus,
+      "⏳ Checking Referral ID...",
+      "checking"
+    );
+
+
+    const result =
+      await checkReferralExists(refId);
+
+
+    if (result.error) {
+
+      setStatus(
+        refStatus,
+        "⚠️ Referral ID could not be verified. Please try again.",
+        "error"
+      );
+
+      setInputState(
+        refCodeInput,
+        "invalid"
+      );
+
+      return false;
+
+    }
+
+
+    if (!result.exists) {
+
+      setStatus(
+        refStatus,
+        "❌ Invalid Referral ID. This ID does not exist.",
+        "error"
+      );
+
+      setInputState(
+        refCodeInput,
+        "invalid"
+      );
+
+      return false;
+
+    }
+
+
+    setStatus(
+      refStatus,
+      "✓ Valid Referral ID",
+      "success"
+    );
+
+    setInputState(
+      refCodeInput,
+      "valid"
+    );
+
+
+    return true;
+
+  }
+
+
+  /* =========================================================
+     CHECK EMAIL
+  ========================================================= */
+
+  async function validateEmailExists() {
+
+    const email =
+      emailInput.value.trim().toLowerCase();
+
+
+    clearStatus(emailStatus);
+
+    setInputState(
+      emailInput,
+      null
+    );
+
+
+    if (!isValidEmail(email)) {
+
+      return false;
+
+    }
+
+
+    setStatus(
+      emailStatus,
+      "⏳ Checking email...",
+      "checking"
+    );
+
+
+    const result =
+      await checkEmailExists(email);
+
+
+    if (result.exists) {
+
+      setStatus(
+        emailStatus,
+        "❌ This Email/Gmail already exists. Please use another email.",
+        "error"
+      );
+
+      setInputState(
+        emailInput,
+        "invalid"
+      );
+
+      return false;
+
+    }
+
+
+    setStatus(
+      emailStatus,
+      "✓ Email is available",
+      "success"
+    );
+
+    setInputState(
+      emailInput,
+      "valid"
+    );
+
+
+    return true;
+
+  }
+
+
+  /* =========================================================
+     CHECK MOBILE
+  ========================================================= */
+
+  async function validateMobileExists() {
+
+    const mobile =
+      mobileInput.value.trim();
+
+
+    clearStatus(mobileStatus);
+
+    setInputState(
+      mobileInput,
+      null
+    );
+
+
+    if (!isValidMobile(mobile)) {
+
+      return false;
+
+    }
+
+
+    setStatus(
+      mobileStatus,
+      "⏳ Checking mobile number...",
+      "checking"
+    );
+
+
+    const result =
+      await checkMobileExists(mobile);
+
+
+    if (result.exists) {
+
+      setStatus(
+        mobileStatus,
+        "❌ This mobile number already exists. Please use another number.",
+        "error"
+      );
+
+      setInputState(
+        mobileInput,
+        "invalid"
+      );
+
+      return false;
+
+    }
+
+
+    setStatus(
+      mobileStatus,
+      "✓ Mobile number is available",
+      "success"
+    );
+
+    setInputState(
+      mobileInput,
+      "valid"
+    );
+
+
+    return true;
+
+  }
+
+
+  /* =========================================================
+     LIVE MOBILE INPUT
+     
+     Only allow numbers.
+  ========================================================= */
+
+  mobileInput.addEventListener(
+    "input",
+    function () {
+
+      this.value =
+        this.value
+          .replace(/\D/g, "")
+          .slice(0, 10);
+
+      clearStatus(mobileStatus);
+
+      setInputState(
+        mobileInput,
+        null
+      );
+
+    }
+  );
+
+
+  /* =========================================================
+     LIVE EMAIL INPUT
+  ========================================================= */
+
+  emailInput.addEventListener(
+    "input",
+    function () {
+
+      this.value =
+        this.value
+          .trim()
+          .toLowerCase();
+
+      clearStatus(emailStatus);
+
+      setInputState(
+        emailInput,
+        null
+      );
+
+    }
+  );
+
+
+  /* =========================================================
+     REFERRAL INPUT
+  ========================================================= */
+
+  refCodeInput.addEventListener(
+    "input",
+    function () {
+
+      this.value =
+        this.value
+          .replace(/\s/g, "");
+
+      clearStatus(refStatus);
+
+      setInputState(
+        refCodeInput,
+        null
+      );
+
+    }
+  );
+
+
+  /* =========================================================
+     CHECK REFERRAL ON BLUR
+  ========================================================= */
+
+  refCodeInput.addEventListener(
+    "blur",
+    async function () {
+
+      if (!this.value.trim()) {
+        return;
+      }
+
+      await validateReferral();
+
+    }
+  );
+
+
+  /* =========================================================
+     CHECK EMAIL ON BLUR
+  ========================================================= */
+
+  emailInput.addEventListener(
+    "blur",
+    async function () {
+
+      const email =
+        this.value.trim();
+
+      if (!email) {
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+
+        setStatus(
+          emailStatus,
+          "❌ Please enter a valid email address.",
+          "error"
+        );
+
+        setInputState(
+          emailInput,
+          "invalid"
+        );
+
+        return;
+
+      }
+
+      await validateEmailExists();
+
+    }
+  );
+
+
+  /* =========================================================
+     CHECK MOBILE ON BLUR
+  ========================================================= */
+
+  mobileInput.addEventListener(
+    "blur",
+    async function () {
+
+      const mobile =
+        this.value.trim();
+
+      if (!mobile) {
+        return;
+      }
+
+      if (!isValidMobile(mobile)) {
+
+        setStatus(
+          mobileStatus,
+          "❌ Enter a valid 10-digit mobile number.",
+          "error"
+        );
+
+        setInputState(
+          mobileInput,
+          "invalid"
+        );
+
+        return;
+
+      }
+
+      await validateMobileExists();
+
+    }
+  );
+
+
+  /* =========================================================
+     MAIN SUBMIT
+  ========================================================= */
+
+  async function goToPayment(e) {
+
+    if (e) {
+      e.preventDefault();
+    }
+
+
+    /* -----------------------------------------------
+       GET VALUES
+    ----------------------------------------------- */
+
+    const refId =
+      refCodeInput.value.trim();
+
+    const fullName =
+      fullNameInput.value.trim();
+
+    const mobile =
+      mobileInput.value.trim();
+
+    const email =
+      emailInput.value.trim().toLowerCase();
+
+    const password =
+      passwordInput.value;
+
+    const terms =
+      termsCheck.checked;
+
+
+    /* -----------------------------------------------
+       BASIC REQUIRED CHECK
+    ----------------------------------------------- */
+
+    if (
+      !refId ||
+      !fullName ||
+      !mobile ||
+      !email ||
+      !password
+    ) {
+
+      alert(
+        "⚠️ Please fill in all required details."
+      );
+
+      return;
+
+    }
+
+
+    /* -----------------------------------------------
+       REFERRAL FORMAT
+    ----------------------------------------------- */
+
+    if (!isValidReferralFormat(refId)) {
+
+      alert(
+        "⚠️ Invalid Referral ID!\n\n" +
+        "Referral ID must be in this format:\n" +
+        "SM-smart12345"
+      );
+
+      refCodeInput.focus();
+
+      return;
+
+    }
+
+
+    /* -----------------------------------------------
+       MOBILE FORMAT
+    ----------------------------------------------- */
+
+    if (!isValidMobile(mobile)) {
+
+      alert(
+        "⚠️ Invalid Mobile Number!\n\n" +
+        "Please enter a valid 10-digit mobile number."
+      );
+
+      mobileInput.focus();
+
+      return;
+
+    }
+
+
+    /* -----------------------------------------------
+       EMAIL FORMAT
+    ----------------------------------------------- */
+
+    if (!isValidEmail(email)) {
+
+      alert(
+        "⚠️ Invalid Email Address!\n\n" +
+        "Please enter a valid email ID."
+      );
+
+      emailInput.focus();
+
+      return;
+
+    }
+
+
+    /* -----------------------------------------------
+       PASSWORD
+    ----------------------------------------------- */
+
+    if (password.length < 6) {
+
+      alert(
+        "⚠️ Password must contain at least 6 characters."
+      );
+
+      passwordInput.focus();
+
+      return;
+
+    }
+
+
+    /* -----------------------------------------------
+       TERMS
+    ----------------------------------------------- */
+
+    if (!terms) {
+
+      alert(
+        "⚠️ Please agree to the Terms & Privacy Policy."
+      );
+
+      return;
+
+    }
+
+
+    /* -----------------------------------------------
+       DISABLE BUTTON
+    ----------------------------------------------- */
+
+    proceedBtn.innerText =
+      "⏳ Verifying Details...";
+
+    proceedBtn.disabled = true;
+
+
+    try {
+
+      /* =============================================
+         STEP 1
+         VERIFY REFERRAL
+      ============================================= */
+
+      proceedBtn.innerText =
+        "⏳ Checking Referral ID...";
+
+
+      const referralResult =
+        await checkReferralExists(refId);
+
+
+      if (referralResult.error) {
+
+        console.error(
+          "Referral database error:",
+          referralResult.error
+        );
+
+        alert(
+          "⚠️ Referral ID verification failed.\n\n" +
+          "Please try again."
+        );
+
+        resetButton();
+
+        return;
+
+      }
+
+
+      if (!referralResult.exists) {
+
+        alert(
+          "❌ Invalid Referral ID!\n\n" +
+          "This Referral ID does not exist in our system."
+        );
+
+        setStatus(
+          refStatus,
+          "❌ Referral ID does not exist.",
+          "error"
+        );
+
+        setInputState(
+          refCodeInput,
+          "invalid"
+        );
+
+        resetButton();
+
+        refCodeInput.focus();
+
+        return;
+
+      }
+
+
+      setStatus(
+        refStatus,
+        "✓ Valid Referral ID",
+        "success"
+      );
+
+      setInputState(
+        refCodeInput,
+        "valid"
+      );
+
+
+      /* =============================================
+         STEP 2
+         CHECK EMAIL
+      ============================================= */
+
+      proceedBtn.innerText =
+        "⏳ Checking Email...";
+
+
+      const emailResult =
+        await checkEmailExists(email);
+
+
+      if (emailResult.exists) {
+
+        alert(
+          "❌ Email Already Exists!\n\n" +
+          "This Email/Gmail is already registered in our system.\n\n" +
+          "Please use another email."
+        );
+
+        setStatus(
+          emailStatus,
+          "❌ This Email/Gmail already exists.",
+          "error"
+        );
+
+        setInputState(
+          emailInput,
+          "invalid"
+        );
+
+        resetButton();
+
+        emailInput.focus();
+
+        return;
+
+      }
+
+
+      setStatus(
+        emailStatus,
+        "✓ Email is available",
+        "success"
+      );
+
+      setInputState(
+        emailInput,
+        "valid"
+      );
+
+
+      /* =============================================
+         STEP 3
+         CHECK MOBILE
+      ============================================= */
+
+      proceedBtn.innerText =
+        "⏳ Checking Mobile Number...";
+
+
+      const mobileResult =
+        await checkMobileExists(mobile);
+
+
+      if (mobileResult.exists) {
+
+        alert(
+          "❌ Mobile Number Already Exists!\n\n" +
+          "This mobile number is already registered in our system.\n\n" +
+          "Please use another mobile number."
+        );
+
+        setStatus(
+          mobileStatus,
+          "❌ This mobile number already exists.",
+          "error"
+        );
+
+        setInputState(
+          mobileInput,
+          "invalid"
+        );
+
+        resetButton();
+
+        mobileInput.focus();
+
+        return;
+
+      }
+
+
+      setStatus(
+        mobileStatus,
+        "✓ Mobile number is available",
+        "success"
+      );
+
+      setInputState(
+        mobileInput,
+        "valid"
+      );
+
+
+      /* =============================================
+         STEP 4
+         SAVE CHECKOUT DATA
+         
+         IMPORTANT:
+         Password is NOT stored in localStorage
+         or sessionStorage here.
+         
+         It will be handled on the payment/account
+         creation flow.
+      ============================================= */
+
+      proceedBtn.innerText =
+        "✓ Details Verified";
+
+
+      const checkoutData = {
+
+        name:
+          pkgName,
+
+        price:
+          pkgPrice,
+
+        ref:
+          refId,
+
+        fullname:
+          fullName,
+
+        mobile:
+          mobile,
+
+        email:
+          email
+
+      };
+
+
+      sessionStorage.setItem(
+        "checkout_data",
+        JSON.stringify(checkoutData)
+      );
+
+
+      /* =============================================
+         STEP 5
+         REDIRECT TO PAYMENT
+      ============================================= */
+
+      setTimeout(
+        function () {
+
+          window.location.href =
+            "payment.html?name=" +
+            encodeURIComponent(pkgName) +
+            "&price=" +
+            encodeURIComponent(pkgPrice);
+
+        },
+        350
+      );
+
 
     } catch (err) {
-      console.error("Validation Error:", err);
-      alert("⚠️ Error validating details. Please try again.");
-      btn.innerText = "Next ➔ Proceed to Payment";
-      btn.disabled = false;
+
+      console.error(
+        "Checkout validation error:",
+        err
+      );
+
+      alert(
+        "⚠️ Unable to verify your details right now.\n\n" +
+        "Please check your internet connection and try again."
+      );
+
+      resetButton();
+
     }
+
   }
+
+
+  /* =========================================================
+     RESET BUTTON
+  ========================================================= */
+
+  function resetButton() {
+
+    proceedBtn.innerText =
+      "Next ➔ Proceed to Payment";
+
+    proceedBtn.disabled =
+      false;
+
+  }
+
+
+  /* =========================================================
+     PREVENT ACCIDENTAL SUBMIT BY ENTER
+     WHEN FIELDS ARE NOT READY
+  ========================================================= */
+
+  document
+    .getElementById("checkoutForm")
+    .addEventListener(
+      "keydown",
+      function (event) {
+
+        if (
+          event.key === "Enter" &&
+          event.target.tagName !== "TEXTAREA"
+        ) {
+
+          event.preventDefault();
+
+        }
+
+      }
+    );
+
+
 </script>
+
 </body>
 </html>
