@@ -3,13 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Login - Smart Money</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -18,99 +24,174 @@
     }
 
     body {
-      background: #090d16;
-      background-image:
-        radial-gradient(circle at 50% 20%, #1e293b 0%, #090d16 100%);
+      background:
+        radial-gradient(
+          circle at 50% 20%,
+          #1e293b 0%,
+          #090d16 100%
+        );
+
       min-height: 100vh;
+
       display: flex;
       justify-content: center;
       align-items: center;
+
       padding: 20px;
+
       overflow-x: hidden;
     }
 
+    /* =====================================================
+       AUTH CARD
+    ===================================================== */
+
     .auth-card {
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+
+      background: rgba(15, 23, 42, 0.78);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
       padding: 35px 25px;
+
       border-radius: 28px;
+
       width: 100%;
       max-width: 400px;
+
       box-shadow:
         0 20px 40px rgba(0,0,0,0.4),
         inset 0 1px 0 rgba(255,255,255,0.1);
+
       border: 1px solid rgba(255,255,255,0.08);
+
       text-align: center;
+
       position: relative;
     }
 
+    /* =====================================================
+       LOGO
+    ===================================================== */
+
     .husky-container {
+
       position: relative;
+
       width: 110px;
       height: 100px;
+
       margin: -65px auto 10px auto;
+
       z-index: 10;
     }
 
     .auth-logo {
+
       width: 110px;
       height: 110px;
+
       border-radius: 50%;
+
       object-fit: cover;
+
       background: #1e293b;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      border: 3px solid rgba(255,255,255,0.15);
-      transition: transform 0.3s ease;
+
+      box-shadow:
+        0 10px 25px rgba(0,0,0,0.5);
+
+      border:
+        3px solid rgba(255,255,255,0.15);
+
+      transition:
+        transform 0.3s ease;
     }
 
     .auth-logo:hover {
       transform: scale(1.05);
     }
 
+    /* =====================================================
+       HEADER
+    ===================================================== */
+
     .auth-header {
       margin-bottom: 22px;
     }
 
     .auth-header h2 {
+
       font-size: 26px;
+
       font-weight: 700;
+
       color: #f8fafc;
+
       margin-bottom: 6px;
+
       letter-spacing: -0.5px;
     }
 
     .auth-header p {
+
       font-size: 13px;
+
       color: #94a3b8;
     }
 
+    /* =====================================================
+       INPUT
+    ===================================================== */
+
     .input-group {
+
       margin-bottom: 16px;
+
       text-align: left;
+
       position: relative;
     }
 
     .input-group label {
+
       display: block;
+
       font-size: 12px;
+
       font-weight: 500;
+
       color: #94a3b8;
+
       margin-bottom: 6px;
+
       text-transform: uppercase;
+
       letter-spacing: 0.5px;
     }
 
     .input-field {
+
       width: 100%;
+
       padding: 14px 16px;
+
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(30,41,59,0.6);
+
+      border:
+        1px solid rgba(255,255,255,0.1);
+
+      background:
+        rgba(30,41,59,0.6);
+
       color: #f1f5f9;
+
       font-size: 14px;
+
       outline: none;
-      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+
+      transition:
+        all 0.3s cubic-bezier(0.4,0,0.2,1);
     }
 
     .input-field::placeholder {
@@ -118,87 +199,167 @@
     }
 
     .input-field:focus {
+
       border-color: #3b82f6;
-      background: rgba(30,41,59,0.9);
-      box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
+
+      background:
+        rgba(30,41,59,0.9);
+
+      box-shadow:
+        0 0 0 4px rgba(59,130,246,0.15);
     }
 
+    /* =====================================================
+       PASSWORD TOGGLE
+    ===================================================== */
+
     .password-toggle {
+
       position: absolute;
+
       right: 16px;
+
       top: 41px;
+
       cursor: pointer;
+
       color: #64748b;
+
       font-size: 16px;
+
       user-select: none;
-      transition: color 0.2s;
+
+      transition:
+        color 0.2s;
     }
 
     .password-toggle:hover {
       color: #94a3b8;
     }
 
+    /* =====================================================
+       OPTIONS
+    ===================================================== */
+
     .form-options {
+
       display: flex;
+
       justify-content: space-between;
+
       align-items: center;
+
       margin-bottom: 20px;
+
       font-size: 13px;
     }
 
     .remember-wrap {
+
       display: flex;
+
       align-items: center;
+
       gap: 8px;
+
       color: #94a3b8;
+
       cursor: pointer;
     }
 
-    .remember-wrap input[type="checkbox"] {
+    .remember-wrap input {
+
       accent-color: #3b82f6;
+
       width: 16px;
       height: 16px;
+
       cursor: pointer;
-      border-radius: 4px;
     }
 
     .forgot-link-wrap a {
+
       font-size: 13px;
+
       color: #60a5fa;
+
       text-decoration: none;
+
       font-weight: 500;
-      transition: color 0.2s;
+
+      transition:
+        color 0.2s;
     }
 
     .forgot-link-wrap a:hover {
+
       color: #93c5fd;
+
       text-decoration: underline;
     }
 
+    /* =====================================================
+       LOGIN BUTTON
+    ===================================================== */
+
     .btn-submit {
+
       width: 100%;
-      background: linear-gradient(135deg,#2563eb,#1d4ed8);
+
+      background:
+        linear-gradient(
+          135deg,
+          #2563eb,
+          #1d4ed8
+        );
+
       color: #fff;
+
       border: none;
+
       padding: 15px;
+
       border-radius: 14px;
+
       font-weight: 600;
+
       font-size: 15px;
+
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(37,99,235,0.35);
+
+      box-shadow:
+        0 8px 20px rgba(37,99,235,0.35);
+
       margin-top: 5px;
-      transition: all 0.3s ease;
+
+      transition:
+        all 0.3s ease;
+
       position: relative;
+
       overflow: hidden;
+
       display: flex;
+
       align-items: center;
+
       justify-content: center;
+
       gap: 10px;
     }
 
     .btn-submit:hover {
-      background: linear-gradient(135deg,#3b82f6,#2563eb);
-      box-shadow: 0 10px 25px rgba(37,99,235,0.5);
+
+      background:
+        linear-gradient(
+          135deg,
+          #3b82f6,
+          #2563eb
+        );
+
+      box-shadow:
+        0 10px 25px rgba(37,99,235,0.5);
+
       transform: translateY(-1px);
     }
 
@@ -207,42 +368,79 @@
     }
 
     .btn-submit:disabled {
+
       opacity: 0.7;
+
       cursor: not-allowed;
+
       transform: none;
     }
 
+    /* =====================================================
+       DOOR ICON
+    ===================================================== */
+
     .door-icon-box {
+
       width: 20px;
       height: 20px;
-      background: rgba(255,255,255,0.2);
+
+      background:
+        rgba(255,255,255,0.2);
+
       border-radius: 4px;
+
       display: flex;
+
       align-items: center;
+
       justify-content: center;
+
       font-size: 11px;
-      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+
+      transition:
+        transform 0.4s
+        cubic-bezier(0.4,0,0.2,1);
     }
 
-    .btn-submit.dooropen .door-icon-box {
-      transform: rotateY(70deg) translateX(4px);
+    .btn-submit.dooropen
+    .door-icon-box {
+
+      transform:
+        rotateY(70deg)
+        translateX(4px);
+
       opacity: 0.8;
     }
 
+    /* =====================================================
+       DIVIDER
+    ===================================================== */
+
     .divider {
+
       display: flex;
+
       align-items: center;
+
       text-align: center;
+
       margin: 20px 0;
+
       color: #64748b;
+
       font-size: 12px;
     }
 
     .divider::before,
     .divider::after {
+
       content: '';
+
       flex: 1;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+
+      border-bottom:
+        1px solid rgba(255,255,255,0.08);
     }
 
     .divider::before {
@@ -253,49 +451,91 @@
       margin-left: 10px;
     }
 
+    /* =====================================================
+       SOCIAL BUTTONS
+    ===================================================== */
+
     .social-btns {
+
       display: flex;
+
       gap: 12px;
+
       margin-bottom: 20px;
     }
 
     .social-btn {
+
       flex: 1;
-      background: rgba(30,41,59,0.5);
-      border: 1px solid rgba(255,255,255,0.08);
+
+      background:
+        rgba(30,41,59,0.5);
+
+      border:
+        1px solid rgba(255,255,255,0.08);
+
       padding: 11px;
+
       border-radius: 12px;
+
       color: #e2e8f0;
+
       font-size: 13px;
+
       font-weight: 500;
+
       cursor: pointer;
+
       display: flex;
+
       align-items: center;
+
       justify-content: center;
+
       gap: 8px;
-      transition: background 0.2s, border-color 0.2s;
+
+      transition:
+        background 0.2s,
+        border-color 0.2s;
     }
 
     .social-btn:hover {
-      background: rgba(51,65,85,0.8);
-      border-color: rgba(255,255,255,0.15);
+
+      background:
+        rgba(51,65,85,0.8);
+
+      border-color:
+        rgba(255,255,255,0.15);
     }
 
     .social-btn:disabled {
+
       opacity: 0.6;
+
       cursor: not-allowed;
     }
 
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+
     .auth-footer {
+
       text-align: center;
+
       margin-top: 15px;
+
       font-size: 13px;
+
       color: #94a3b8;
     }
 
     .auth-footer a {
+
       color: #60a5fa;
+
       font-weight: 500;
+
       text-decoration: none;
     }
 
@@ -303,92 +543,184 @@
       text-decoration: underline;
     }
 
+    /* =====================================================
+       MODAL
+    ===================================================== */
+
     .modal-overlay {
+
       display: none;
+
       position: fixed;
-      top: 0;
-      left: 0;
+
+      inset: 0;
+
       width: 100%;
       height: 100%;
-      background: rgba(9,13,22,0.8);
+
+      background:
+        rgba(9,13,22,0.8);
+
       z-index: 999;
+
       justify-content: center;
+
       align-items: center;
+
       backdrop-filter: blur(6px);
+
       padding: 15px;
     }
 
     .modal-box {
+
       background: #0f172a;
-      border: 1px solid rgba(255,255,255,0.1);
+
+      border:
+        1px solid rgba(255,255,255,0.1);
+
       padding: 25px;
+
       border-radius: 20px;
+
       width: 100%;
+
       max-width: 380px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+
+      box-shadow:
+        0 20px 40px rgba(0,0,0,0.5);
+
       text-align: left;
     }
 
     .modal-box h3 {
+
       margin-top: 0;
+
       font-size: 18px;
+
       color: #f8fafc;
+
       margin-bottom: 8px;
     }
 
     .modal-box p {
+
       font-size: 12.5px;
+
       color: #94a3b8;
+
       margin-bottom: 15px;
     }
 
     .modal-box label {
+
       font-size: 12px;
+
       font-weight: 500;
+
       color: #94a3b8;
+
       text-transform: uppercase;
+
       letter-spacing: 0.5px;
     }
 
     .cancel-btn {
+
       width: 100%;
+
       background: transparent;
+
       color: #94a3b8;
+
       border: none;
+
       padding: 10px;
+
       margin-top: 8px;
+
       cursor: pointer;
+
       font-weight: 500;
     }
 
     .cancel-btn:hover {
       color: #f8fafc;
     }
+
+    /* =====================================================
+       MOBILE
+    ===================================================== */
+
+    @media (max-width: 430px) {
+
+      body {
+        padding: 15px;
+      }
+
+      .auth-card {
+
+        padding:
+          32px 20px;
+
+        border-radius: 24px;
+      }
+
+      .auth-header h2 {
+        font-size: 24px;
+      }
+
+    }
+
   </style>
 </head>
 
 <body>
 
+  <!-- =====================================================
+       LOGIN CARD
+  ===================================================== -->
+
   <div class="auth-card">
 
+    <!-- LOGO -->
+
     <div class="husky-container">
+
       <img
         id="dynamicLogoImg"
         src="1000819130.jpg"
         alt="Smart Money Logo"
         class="auth-logo"
-        onerror="this.src='https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=150&auto=format&fit=crop&q=80'"
+        onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=150&auto=format&fit=crop&q=80';"
       >
+
     </div>
+
+
+    <!-- HEADER -->
 
     <div class="auth-header">
-      <h2>Welcome Back</h2>
-      <p>Sign in securely to your account.</p>
+
+      <h2>
+        Welcome Back
+      </h2>
+
+      <p>
+        Sign in securely to your account.
+      </p>
+
     </div>
 
+
     <!-- EMAIL -->
+
     <div class="input-group">
-      <label for="loginEmail">Email Address</label>
+
+      <label for="loginEmail">
+        Email Address
+      </label>
 
       <input
         type="email"
@@ -397,12 +729,19 @@
         placeholder="Enter your email"
         autocomplete="email"
         inputmode="email"
+        spellcheck="false"
       >
+
     </div>
 
+
     <!-- PASSWORD -->
+
     <div class="input-group">
-      <label for="loginPassword">Password</label>
+
+      <label for="loginPassword">
+        Password
+      </label>
 
       <input
         type="password"
@@ -416,40 +755,84 @@
         class="password-toggle"
         id="togglePasswordBtn"
         onclick="togglePasswordVisibility()"
-      >👁️</span>
+        role="button"
+        tabindex="0"
+        aria-label="Show or hide password"
+      >
+        👁️
+      </span>
+
     </div>
 
+
     <!-- OPTIONS -->
+
     <div class="form-options">
 
       <label class="remember-wrap">
-        <input type="checkbox" id="rememberMe">
-        Remember me
+
+        <input
+          type="checkbox"
+          id="rememberMe"
+          checked
+        >
+
+        <span>
+          Keep me signed in
+        </span>
+
       </label>
 
+
       <div class="forgot-link-wrap">
-        <a href="javascript:void(0)" onclick="openForgotModal()">
+
+        <a
+          href="#"
+          onclick="openForgotModal(); return false;"
+        >
           Forgot password?
         </a>
+
       </div>
 
     </div>
 
+
     <!-- LOGIN BUTTON -->
+
     <button
       type="button"
       onclick="handleLogin()"
       class="btn-submit"
       id="loginBtn"
     >
-      <span>Sign in</span>
-      <div class="door-icon-box" id="doorIcon">🚪</div>
+
+      <span>
+        Sign in
+      </span>
+
+      <div
+        class="door-icon-box"
+        id="doorIcon"
+      >
+        🚪
+      </div>
+
     </button>
 
-    <div class="divider">or continue with</div>
+
+    <!-- DIVIDER -->
+
+    <div class="divider">
+      or continue with
+    </div>
+
 
     <!-- SOCIAL LOGIN -->
+
     <div class="social-btns">
+
+      <!-- GOOGLE -->
 
       <button
         type="button"
@@ -457,14 +840,41 @@
         id="googleBtn"
         onclick="socialLogin('google')"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24">
-          <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.2 9 5 12 5z"/>
-          <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
-          <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15s.7 5.3 1.9 7.7l3.7-2.9c-.8-1-1.3-2.3-1.3-3.7z"/>
-          <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.2-6.4-5.2L1.9 15.9C3.7 19.6 7.5 23 12 23z"/>
+
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+        >
+
+          <path
+            fill="#EA4335"
+            d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.2 9 5 12 5z"
+          />
+
+          <path
+            fill="#4285F4"
+            d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"
+          />
+
+          <path
+            fill="#FBBC05"
+            d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15s.7 5.3 1.9 7.7l3.7-2.9c-.8-1-1.3-2.3-1.3-3.7z"
+          />
+
+          <path
+            fill="#34A853"
+            d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.2-6.4-5.2L1.9 15.9C3.7 19.6 7.5 23 12 23z"
+          />
+
         </svg>
+
         Google
+
       </button>
+
+
+      <!-- APPLE -->
 
       <button
         type="button"
@@ -472,31 +882,56 @@
         id="appleBtn"
         onclick="socialLogin('apple')"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff">
-          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.85 5.75c.57-.69.96-1.64.85-2.6-.84.03-1.87.56-2.45 1.25-.52.6-.98 1.57-.85 2.51.94.07 1.88-.47 2.45-1.16z"/>
+
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="#fff"
+        >
+
+          <path
+            d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.85 5.75c.57-.69.96-1.64.85-2.6-.84.03-1.87.56-2.45 1.25-.52.6-.98 1.57-.85 2.51.94.07 1.88-.47 2.45-1.16z"
+          />
+
         </svg>
+
         Apple
+
       </button>
 
     </div>
 
+
+    <!-- FOOTER -->
+
     <div class="auth-footer">
+
       New to Smart Money?
-      <a href="index.html">Create account</a>
+
+      <a href="index.html">
+        Create account
+      </a>
+
     </div>
 
   </div>
 
 
-  <!-- ==========================================
+  <!-- =====================================================
        FORGOT PASSWORD MODAL
-  =========================================== -->
+  ====================================================== -->
 
-  <div id="forgotModal" class="modal-overlay">
+  <div
+    id="forgotModal"
+    class="modal-overlay"
+  >
 
     <div class="modal-box">
 
-      <h3>🔑 Reset Password</h3>
+      <h3>
+        🔑 Reset Password
+      </h3>
 
       <p>
         Apni registered Email ID enter karein.
@@ -513,19 +948,28 @@
         class="input-field"
         placeholder="e.g. yourname@gmail.com"
         autocomplete="email"
+        spellcheck="false"
         style="margin-top:6px; margin-bottom:15px;"
       >
 
+
       <button
+        type="button"
         onclick="sendPasswordResetLink()"
         class="btn-submit"
         id="resetBtn"
         style="margin-top:0;"
       >
-        <span>Send Reset Link</span>
+
+        <span>
+          Send Reset Link
+        </span>
+
       </button>
 
+
       <button
+        type="button"
         onclick="closeModal('forgotModal')"
         class="cancel-btn"
       >
@@ -537,14 +981,18 @@
   </div>
 
 
-  <!-- SUPABASE -->
+  <!-- =====================================================
+       SUPABASE JS
+  ====================================================== -->
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
   <script>
 
-    /* =========================================================
+    /* =====================================================
        SUPABASE CONFIG
-    ========================================================= */
+    ===================================================== */
 
     const SUPABASE_URL =
       "https://rvprrulkjegvicbnjuft.supabase.co";
@@ -552,122 +1000,212 @@
     const SUPABASE_PUBLISHABLE_KEY =
       "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 
+
     const supabaseClient =
       window.supabase.createClient(
         SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
+        SUPABASE_PUBLISHABLE_KEY,
+        {
+          auth: {
+            autoRefreshToken: true,
+            persistSession: true,
+            detectSessionInUrl: true
+          }
+        }
       );
 
 
-    /* =========================================================
-       LOAD LOGO
-    ========================================================= */
+    /* =====================================================
+       DOM READY
+    ===================================================== */
 
-    document.addEventListener("DOMContentLoaded", async function () {
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
+
+        loadDynamicLogo();
+
+        setupKeyboardEvents();
+
+        checkExistingSession();
+
+      }
+    );
+
+
+    /* =====================================================
+       LOAD ADMIN / GLOBAL LOGO
+    ===================================================== */
+
+    async function loadDynamicLogo() {
 
       try {
 
-        const { data: logoData, error } =
+        const {
+          data,
+          error
+        } =
           await supabaseClient
             .from("global_settings")
             .select("setting_value")
-            .eq("setting_key", "admin_top_logo")
+            .eq(
+              "setting_key",
+              "admin_top_logo"
+            )
             .maybeSingle();
 
-        if (!error && logoData && logoData.setting_value) {
+
+        if (
+          !error &&
+          data &&
+          data.setting_value
+        ) {
 
           const logo =
-            document.getElementById("dynamicLogoImg");
+            document.getElementById(
+              "dynamicLogoImg"
+            );
 
           if (logo) {
-            logo.src = logoData.setting_value;
+            logo.src =
+              data.setting_value;
           }
+
         }
 
-      } catch (err) {
+      } catch (error) {
 
         console.log(
           "Logo load error:",
-          err
+          error
         );
-
-      }
-
-    });
-
-
-    /* =========================================================
-       PASSWORD VISIBILITY
-    ========================================================= */
-
-    function togglePasswordVisibility() {
-
-      const pwdInput =
-        document.getElementById("loginPassword");
-
-      const toggleBtn =
-        document.getElementById("togglePasswordBtn");
-
-      if (!pwdInput || !toggleBtn) return;
-
-      if (pwdInput.type === "password") {
-
-        pwdInput.type = "text";
-        toggleBtn.textContent = "🙈";
-
-      } else {
-
-        pwdInput.type = "password";
-        toggleBtn.textContent = "👁️";
 
       }
 
     }
 
 
-    /* =========================================================
+    /* =====================================================
+       PASSWORD VISIBILITY
+    ===================================================== */
+
+    function togglePasswordVisibility() {
+
+      const input =
+        document.getElementById(
+          "loginPassword"
+        );
+
+      const button =
+        document.getElementById(
+          "togglePasswordBtn"
+        );
+
+
+      if (!input || !button) {
+        return;
+      }
+
+
+      if (
+        input.type === "password"
+      ) {
+
+        input.type = "text";
+
+        button.textContent = "🙈";
+
+      } else {
+
+        input.type = "password";
+
+        button.textContent = "👁️";
+
+      }
+
+    }
+
+
+    /* =====================================================
+       EMAIL VALIDATION
+    ===================================================== */
+
+    function isValidEmail(email) {
+
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        .test(email);
+
+    }
+
+
+    /* =====================================================
        LOGIN
+       
        IMPORTANT:
-       Uses Supabase AUTH.
-       Does NOT read password from payment_requests.
-    ========================================================= */
+       LOGIN IS DONE THROUGH SUPABASE AUTH.
+
+       NEVER compare password with:
+       payment_requests.password
+    ===================================================== */
 
     async function handleLogin() {
 
-      const emailInput =
-        document
-          .getElementById("loginEmail")
-          .value
+      const emailElement =
+        document.getElementById(
+          "loginEmail"
+        );
+
+      const passwordElement =
+        document.getElementById(
+          "loginPassword"
+        );
+
+      const rememberElement =
+        document.getElementById(
+          "rememberMe"
+        );
+
+      const button =
+        document.getElementById(
+          "loginBtn"
+        );
+
+
+      if (
+        !emailElement ||
+        !passwordElement ||
+        !button
+      ) {
+        return;
+      }
+
+
+      const email =
+        emailElement.value
           .trim()
           .toLowerCase();
 
+
       /*
         IMPORTANT:
-        Do NOT trim password.
-        Spaces can technically be part of a password.
+        Password ko trim MAT karo.
       */
+
       const password =
-        document
-          .getElementById("loginPassword")
-          .value;
+        passwordElement.value;
+
 
       const rememberMe =
-        document
-          .getElementById("rememberMe")
-          .checked;
-
-      const btn =
-        document.getElementById("loginBtn");
-
-      const btnText =
-        btn.querySelector("span");
+        rememberElement
+          ? rememberElement.checked
+          : true;
 
 
-      /* ---------------------------------------------
+      /* ===================================================
          VALIDATION
-      --------------------------------------------- */
+      =================================================== */
 
-      if (!emailInput || !password) {
+      if (!email || !password) {
 
         alert(
           "⚠️ Kripya Email aur Password bharein!"
@@ -677,14 +1215,7 @@
       }
 
 
-      /* ---------------------------------------------
-         BASIC EMAIL VALIDATION
-      --------------------------------------------- */
-
-      const emailPattern =
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!emailPattern.test(emailInput)) {
+      if (!isValidEmail(email)) {
 
         alert(
           "⚠️ Please valid email address enter karein."
@@ -694,55 +1225,63 @@
       }
 
 
-      /* ---------------------------------------------
-         LOADING STATE
-      --------------------------------------------- */
+      /* ===================================================
+         BUTTON LOADING
+      =================================================== */
 
-      btn.classList.add("dooropen");
-      btnText.innerText = "Signing in...";
-      btn.disabled = true;
+      setLoginLoading(
+        true,
+        "Signing in..."
+      );
 
 
       try {
 
         /* =================================================
-           STEP 1:
-           SUPABASE AUTH LOGIN
+           STEP 1
+           SUPABASE AUTHENTICATION
         ================================================= */
 
         const {
           data: authData,
           error: authError
         } =
-          await supabaseClient.auth.signInWithPassword({
+          await supabaseClient.auth
+            .signInWithPassword({
 
-            email: emailInput,
+              email: email,
 
-            password: password
+              password: password
 
-          });
+            });
 
 
-        /* ---------------------------------------------
+        /* =================================================
            AUTH ERROR
-        --------------------------------------------- */
+        ================================================= */
 
         if (authError) {
 
           console.error(
-            "Supabase Auth Login Error:",
+            "Supabase Auth Error:",
             authError
           );
 
+
+          const errorMessage =
+            String(
+              authError.message || ""
+            ).toLowerCase();
+
+
           if (
-            authError.message &&
-            authError.message
-              .toLowerCase()
-              .includes("email not confirmed")
+            errorMessage.includes(
+              "email not confirmed"
+            )
           ) {
 
             alert(
-              "📧 Aapka email abhi verify nahi hua hai. " +
+              "📧 Aapka email abhi verify nahi hua hai.\n\n" +
               "Apne email inbox mein verification link check karein."
             );
 
@@ -754,15 +1293,16 @@
 
           }
 
+
           resetLoginButton();
 
           return;
         }
 
 
-        /* ---------------------------------------------
-           GET AUTH USER
-        --------------------------------------------- */
+        /* =================================================
+           AUTH USER
+        ================================================= */
 
         const user =
           authData &&
@@ -779,14 +1319,17 @@
 
 
         console.log(
-          "Authenticated User:",
+          "Authenticated User ID:",
           user.id
         );
 
 
         /* =================================================
-           STEP 2:
-           LOAD PROFILE USING profiles.user_id
+           STEP 2
+           LOAD PROFILE
+           
+           IMPORTANT:
+           profiles.user_id = Supabase Auth user.id
         ================================================= */
 
         const {
@@ -796,48 +1339,59 @@
           await supabaseClient
             .from("profiles")
             .select("*")
-            .eq("user_id", user.id)
+            .eq(
+              "user_id",
+              user.id
+            )
             .maybeSingle();
 
 
-        /* ---------------------------------------------
+        /* =================================================
            PROFILE ERROR
-        --------------------------------------------- */
+        ================================================= */
 
         if (profileError) {
 
           console.error(
-            "Profile Load Error:",
+            "Profile Error:",
             profileError
           );
 
-          await supabaseClient.auth.signOut();
+
+          await supabaseClient.auth
+            .signOut();
+
 
           throw new Error(
-            "Profile load nahi ho pa raha: " +
+            "Profile load nahi ho pa raha:\n" +
             profileError.message
           );
 
         }
 
 
-        /* ---------------------------------------------
+        /* =================================================
            PROFILE NOT FOUND
-        --------------------------------------------- */
+        ================================================= */
 
         if (!profile) {
 
           console.error(
-            "No profile found for Auth User:",
+            "Profile not found for:",
             user.id
           );
 
-          await supabaseClient.auth.signOut();
+
+          await supabaseClient.auth
+            .signOut();
+
 
           alert(
-            "⚠️ Login successful hua, lekin aapka profile database mein nahi mila.\n\n" +
+            "⚠️ Login successful hua,\n" +
+            "lekin aapka profile database mein nahi mila.\n\n" +
             "Please support/admin se contact karein."
           );
+
 
           resetLoginButton();
 
@@ -846,25 +1400,29 @@
 
 
         console.log(
-          "Profile Loaded:",
-          profile
+          "Profile loaded successfully."
         );
 
 
         /* =================================================
-           STEP 3:
-           DELETED ACCOUNT CHECK
+           STEP 3
+           DELETED ACCOUNT
         ================================================= */
 
-        if (profile.is_deleted === true) {
+        if (
+          profile.is_deleted === true
+        ) {
 
-          await supabaseClient.auth.signOut();
+          await supabaseClient.auth
+            .signOut();
+
 
           alert(
             "❌ Aapka account deleted hai.\n\n" +
             "Please support se contact karein."
           );
 
+
           resetLoginButton();
 
           return;
@@ -872,19 +1430,24 @@
 
 
         /* =================================================
-           STEP 4:
-           ACTIVE ACCOUNT CHECK
+           STEP 4
+           ACTIVE ACCOUNT
         ================================================= */
 
-        if (profile.is_active !== true) {
+        if (
+          profile.is_active !== true
+        ) {
 
-          await supabaseClient.auth.signOut();
+          await supabaseClient.auth
+            .signOut();
+
 
           alert(
             "⏳ Aapka account abhi active nahi hai.\n\n" +
             "Admin approval ke baad aap dashboard access kar sakenge."
           );
 
+
           resetLoginButton();
 
           return;
@@ -892,87 +1455,132 @@
 
 
         /* =================================================
-           STEP 5:
-           SAVE SAFE USER PROFILE LOCALLY
+           STEP 5
+           SAFE LOCAL DATA
+           
+           IMPORTANT:
+           Full profile localStorage mein save nahi kar rahe.
+           
+           Bank account / IFSC / payout-sensitive fields
+           browser localStorage mein unnecessary nahi rakhenge.
         ================================================= */
 
-        const userData = {
+        const safeUserData = {
 
-          ...profile,
+          user_id:
+            profile.user_id,
 
-          /*
-            Auth user ID is kept separately
-            so dashboard can identify the real
-            Supabase authenticated user.
-          */
-          auth_user_id: user.id,
+          auth_user_id:
+            user.id,
 
-          /*
-            Keep email from Auth as fallback.
-          */
+          full_name:
+            profile.full_name || "",
+
+          email:
+            profile.email ||
+            user.email ||
+            email,
+
           auth_email:
-            user.email || emailInput
+            user.email ||
+            email,
+
+          referral_id:
+            profile.referral_id || "",
+
+          referred_by:
+            profile.referred_by || "",
+
+          balance:
+            profile.balance ?? 0,
+
+          package_name:
+            profile.package_name || "",
+
+          profile_photo:
+            profile.profile_photo || null,
+
+          profile_pic:
+            profile.profile_pic || null,
+
+          payout_type:
+            profile.payout_type || "",
+
+          date_of_birth:
+            profile.date_of_birth || null,
+
+          is_active:
+            profile.is_active === true,
+
+          is_deleted:
+            profile.is_deleted === true,
+
+          created_at:
+            profile.created_at || null
 
         };
 
 
         localStorage.setItem(
           "userData",
-          JSON.stringify(userData)
+          JSON.stringify(
+            safeUserData
+          )
         );
 
 
         /*
-          Optional remember flag.
-          Supabase itself maintains the session.
+          Keep the checkbox state only as a UI preference.
+          Supabase browser Auth session itself is persistent
+          by default.
         */
-        if (rememberMe) {
 
-          localStorage.setItem(
-            "rememberLogin",
-            "true"
-          );
-
-        } else {
-
-          localStorage.removeItem(
-            "rememberLogin"
-          );
-
-        }
+        localStorage.setItem(
+          "rememberLogin",
+          rememberMe
+            ? "true"
+            : "false"
+        );
 
 
         /* =================================================
            SUCCESS
         ================================================= */
 
-        btnText.innerText =
-          "Login Successful ✓";
+        setLoginLoading(
+          false,
+          "Login Successful ✓"
+        );
 
 
-        /*
-          Small delay so user can see success.
-        */
-        setTimeout(function () {
+        setTimeout(
+          function () {
 
-          window.location.href =
-            "dashboard.html";
+            window.location.href =
+              "dashboard.html";
 
-        }, 300);
+          },
+          350
+        );
 
-
-      } catch (err) {
+      } catch (error) {
 
         console.error(
-          "Login Error:",
-          err
+          "Login Exception:",
+          error
         );
+
 
         alert(
           "⚠️ Login mein problem aayi:\n\n" +
-          (err.message ||
-            "Unknown error")
+          (
+            error &&
+            error.message
+              ? error.message
+              : "Unknown error"
+          )
         );
+
 
         resetLoginButton();
 
@@ -981,78 +1589,150 @@
     }
 
 
-    /* =========================================================
-       RESET LOGIN BUTTON
-    ========================================================= */
+    /* =====================================================
+       LOGIN BUTTON STATE
+    ===================================================== */
 
-    function resetLoginButton() {
+    function setLoginLoading(
+      loading,
+      text
+    ) {
 
-      const btn =
-        document.getElementById("loginBtn");
+      const button =
+        document.getElementById(
+          "loginBtn"
+        );
 
-      if (!btn) return;
+      if (!button) {
+        return;
+      }
 
-      const btnText =
-        btn.querySelector("span");
 
-      btn.classList.remove("dooropen");
+      const textElement =
+        button.querySelector(
+          "span"
+        );
 
-      btnText.innerText =
-        "Sign in";
 
-      btn.disabled = false;
+      button.disabled =
+        loading;
+
+
+      if (loading) {
+
+        button.classList.add(
+          "dooropen"
+        );
+
+      } else {
+
+        button.classList.remove(
+          "dooropen"
+        );
+
+      }
+
+
+      if (textElement) {
+
+        textElement.innerText =
+          text;
+
+      }
 
     }
 
 
-    /* =========================================================
-       SOCIAL LOGIN
-       Supabase OAuth
-    ========================================================= */
+    /* =====================================================
+       RESET LOGIN BUTTON
+    ===================================================== */
 
-    async function socialLogin(provider) {
+    function resetLoginButton() {
 
-      const googleBtn =
-        document.getElementById("googleBtn");
+      setLoginLoading(
+        false,
+        "Sign in"
+      );
 
-      const appleBtn =
-        document.getElementById("appleBtn");
+    }
 
 
-      googleBtn.disabled = true;
-      appleBtn.disabled = true;
+    /* =====================================================
+       GOOGLE / APPLE LOGIN
+    ===================================================== */
+
+    async function socialLogin(
+      provider
+    ) {
+
+      const googleButton =
+        document.getElementById(
+          "googleBtn"
+        );
+
+      const appleButton =
+        document.getElementById(
+          "appleBtn"
+        );
+
+
+      if (
+        !googleButton ||
+        !appleButton
+      ) {
+        return;
+      }
+
+
+      googleButton.disabled =
+        true;
+
+      appleButton.disabled =
+        true;
 
 
       try {
 
-        const { error } =
-          await supabaseClient.auth.signInWithOAuth({
+        /*
+          OAuth ke baad wapas LOGIN page par aayega.
+          Yahan hum profile + active status check karenge.
+        */
 
-            provider: provider,
+        const redirectUrl =
+          window.location.origin +
+          "/login.html?oauth=1";
 
-            options: {
 
-              redirectTo:
-                window.location.origin +
-                "/dashboard.html"
+        const {
+          error
+        } =
+          await supabaseClient.auth
+            .signInWithOAuth({
 
-            }
+              provider:
+                provider,
 
-          });
+              options: {
+
+                redirectTo:
+                  redirectUrl
+
+              }
+
+            });
 
 
         if (error) {
-
           throw error;
-
         }
 
-      } catch (err) {
+      } catch (error) {
 
         console.error(
           "OAuth Error:",
-          err
+          error
         );
+
 
         alert(
           "⚠️ " +
@@ -1062,42 +1742,383 @@
           "Supabase Authentication mein provider enable karein."
         );
 
-        googleBtn.disabled = false;
-        appleBtn.disabled = false;
+
+        googleButton.disabled =
+          false;
+
+        appleButton.disabled =
+          false;
 
       }
 
     }
 
 
-    /* =========================================================
-       FORGOT PASSWORD MODAL
-    ========================================================= */
+    /* =====================================================
+       HANDLE OAUTH CALLBACK
+    ===================================================== */
 
-    function openForgotModal() {
+    async function handleOAuthSession() {
 
-      document
-        .getElementById("forgotModal")
-        .style.display = "flex";
+      try {
 
-      setTimeout(function () {
+        const {
+          data,
+          error
+        } =
+          await supabaseClient.auth
+            .getSession();
 
-        const input =
-          document.getElementById("forgotEmail");
 
-        if (input) {
-          input.focus();
+        if (error) {
+
+          console.error(
+            "OAuth Session Error:",
+            error
+          );
+
+          return false;
         }
 
-      }, 100);
+
+        const session =
+          data &&
+          data.session;
+
+
+        if (
+          !session ||
+          !session.user
+        ) {
+
+          return false;
+
+        }
+
+
+        /*
+          OAuth login successful.
+          Ab same profile validation use karenge.
+        */
+
+        const user =
+          session.user;
+
+
+        const {
+          data: profile,
+          error: profileError
+        } =
+          await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq(
+              "user_id",
+              user.id
+            )
+            .maybeSingle();
+
+
+        if (profileError) {
+
+          throw profileError;
+
+        }
+
+
+        if (!profile) {
+
+          await supabaseClient.auth
+            .signOut();
+
+
+          alert(
+            "⚠️ Login successful hua,\n" +
+            "lekin aapka Smart Money profile nahi mila."
+          );
+
+
+          return true;
+        }
+
+
+        if (
+          profile.is_deleted === true
+        ) {
+
+          await supabaseClient.auth
+            .signOut();
+
+
+          alert(
+            "❌ Aapka account deleted hai."
+          );
+
+
+          return true;
+        }
+
+
+        if (
+          profile.is_active !== true
+        ) {
+
+          await supabaseClient.auth
+            .signOut();
+
+
+          alert(
+            "⏳ Aapka account abhi active nahi hai.\n\n" +
+            "Admin approval ke baad dashboard access milega."
+          );
+
+
+          return true;
+        }
+
+
+        const safeUserData = {
+
+          user_id:
+            profile.user_id,
+
+          auth_user_id:
+            user.id,
+
+          full_name:
+            profile.full_name || "",
+
+          email:
+            profile.email ||
+            user.email ||
+            "",
+
+          auth_email:
+            user.email || "",
+
+          referral_id:
+            profile.referral_id || "",
+
+          referred_by:
+            profile.referred_by || "",
+
+          balance:
+            profile.balance ?? 0,
+
+          package_name:
+            profile.package_name || "",
+
+          profile_photo:
+            profile.profile_photo || null,
+
+          profile_pic:
+            profile.profile_pic || null,
+
+          payout_type:
+            profile.payout_type || "",
+
+          date_of_birth:
+            profile.date_of_birth || null,
+
+          is_active:
+            true,
+
+          is_deleted:
+            false,
+
+          created_at:
+            profile.created_at || null
+
+        };
+
+
+        localStorage.setItem(
+          "userData",
+          JSON.stringify(
+            safeUserData
+          )
+        );
+
+
+        window.location.href =
+          "dashboard.html";
+
+
+        return true;
+
+      } catch (error) {
+
+        console.error(
+          "OAuth profile error:",
+          error
+        );
+
+
+        await supabaseClient.auth
+          .signOut();
+
+
+        alert(
+          "⚠️ Social login ke baad profile verify nahi ho paya.\n\n" +
+          (
+            error.message ||
+            "Please try again."
+          )
+        );
+
+
+        return true;
+
+      }
 
     }
 
 
+    /* =====================================================
+       EXISTING SESSION CHECK
+    ===================================================== */
+
+    async function checkExistingSession() {
+
+      /*
+        OAuth callback hone par pehle usko handle karo.
+      */
+
+      const isOAuth =
+        new URLSearchParams(
+          window.location.search
+        ).get("oauth") === "1";
+
+
+      if (isOAuth) {
+
+        await handleOAuthSession();
+
+        return;
+      }
+
+
+      try {
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient.auth
+            .getSession();
+
+
+        if (error) {
+
+          console.log(
+            "Session check error:",
+            error
+          );
+
+          return;
+        }
+
+
+        if (
+          data &&
+          data.session &&
+          data.session.user
+        ) {
+
+          console.log(
+            "Existing Supabase session found."
+          );
+
+          /*
+            Intentionally auto-redirect nahi kar rahe.
+            User login page par manually login kar sakta hai.
+          */
+
+        }
+
+      } catch (error) {
+
+        console.log(
+          "Session check exception:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =====================================================
+       FORGOT PASSWORD MODAL
+    ===================================================== */
+
+    function openForgotModal() {
+
+      const modal =
+        document.getElementById(
+          "forgotModal"
+        );
+
+
+      if (!modal) {
+        return;
+      }
+
+
+      modal.style.display =
+        "flex";
+
+
+      setTimeout(
+        function () {
+
+          const input =
+            document.getElementById(
+              "forgotEmail"
+            );
+
+
+          if (input) {
+
+            const loginEmail =
+              document.getElementById(
+                "loginEmail"
+              );
+
+
+            if (
+              loginEmail &&
+              loginEmail.value
+            ) {
+
+              input.value =
+                loginEmail.value;
+
+            }
+
+
+            input.focus();
+
+          }
+
+        },
+        100
+      );
+
+    }
+
+
+    /* =====================================================
+       CLOSE MODAL
+    ===================================================== */
+
     function closeModal(id) {
 
       const modal =
-        document.getElementById(id);
+        document.getElementById(
+          id
+        );
+
 
       if (modal) {
 
@@ -1109,26 +2130,37 @@
     }
 
 
-    /* =========================================================
+    /* =====================================================
        PASSWORD RESET
-    ========================================================= */
+    ===================================================== */
 
     async function sendPasswordResetLink() {
 
+      const input =
+        document.getElementById(
+          "forgotEmail"
+        );
+
+      const button =
+        document.getElementById(
+          "resetBtn"
+        );
+
+
+      if (!input || !button) {
+        return;
+      }
+
+
       const email =
-        document
-          .getElementById("forgotEmail")
-          .value
+        input.value
           .trim()
           .toLowerCase();
 
-      const btn =
-        document.getElementById("resetBtn");
 
-
-      /* ---------------------------------------------
+      /* ===================================================
          VALIDATION
-      --------------------------------------------- */
+      =================================================== */
 
       if (!email) {
 
@@ -1140,10 +2172,7 @@
       }
 
 
-      const emailPattern =
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!emailPattern.test(email)) {
+      if (!isValidEmail(email)) {
 
         alert(
           "⚠️ Please valid email address enter karein."
@@ -1153,27 +2182,44 @@
       }
 
 
-      /* ---------------------------------------------
+      /* ===================================================
          LOADING
-      --------------------------------------------- */
+      =================================================== */
 
-      btn.disabled = true;
+      button.disabled =
+        true;
 
-      btn.querySelector("span").innerText =
-        "Sending Link...";
+
+      const buttonText =
+        button.querySelector(
+          "span"
+        );
+
+
+      if (buttonText) {
+
+        buttonText.innerText =
+          "Sending Link...";
+
+      }
 
 
       try {
 
         /*
-          Works with the current website location.
+          IMPORTANT:
+          Ye URL Supabase Authentication
+          Redirect URLs mein allowed hona chahiye.
         */
+
         const updatePageUrl =
           window.location.origin +
           "/update-password.html";
 
 
-        const { error } =
+        const {
+          error
+        } =
           await supabaseClient.auth
             .resetPasswordForEmail(
               email,
@@ -1191,140 +2237,172 @@
         }
 
 
+        /*
+          Security ke liye exact email existence
+          reveal nahi kar rahe.
+        */
+
         alert(
-          "🎉 Password reset link successfully sent!\n\n" +
-          "Apne email inbox aur spam folder ko check karein."
+          "📧 Agar is email se account registered hai,\n" +
+          "to password reset link bhej diya gaya hai.\n\n" +
+          "Inbox aur Spam/Junk folder check karein."
         );
+
+
+        input.value = "";
 
 
         closeModal(
           "forgotModal"
         );
 
-
-        document
-          .getElementById("forgotEmail")
-          .value = "";
-
-
-      } catch (err) {
+      } catch (error) {
 
         console.error(
           "Password Reset Error:",
-          err
+          error
         );
 
+
         alert(
-          "⚠️ Password reset link send nahi hua.\n\n" +
-          (err.message ||
-            "Please try again.")
+          "⚠️ Password reset request mein problem aayi.\n\n" +
+          (
+            error.message ||
+            "Please try again."
+          )
         );
 
       } finally {
 
-        btn.disabled = false;
+        button.disabled =
+          false;
 
-        btn.querySelector("span").innerText =
-          "Send Reset Link";
+
+        if (buttonText) {
+
+          buttonText.innerText =
+            "Send Reset Link";
+
+        }
 
       }
 
     }
 
 
-    /* =========================================================
-       CLOSE MODAL WHEN CLICKING OUTSIDE
-    ========================================================= */
-
-    document
-      .getElementById("forgotModal")
-      .addEventListener(
-        "click",
-        function (event) {
-
-          if (
-            event.target === this
-          ) {
-
-            closeModal(
-              "forgotModal"
-            );
-
-          }
-
-        }
-      );
-
-
-    /* =========================================================
-       ENTER KEY LOGIN
-    ========================================================= */
+    /* =====================================================
+       MODAL OUTSIDE CLICK
+    ===================================================== */
 
     document.addEventListener(
-      "keydown",
+      "click",
       function (event) {
 
+        const modal =
+          document.getElementById(
+            "forgotModal"
+          );
+
+
         if (
-          event.key === "Enter" &&
-          document.activeElement &&
-          (
-            document.activeElement.id ===
-            "loginEmail" ||
-            document.activeElement.id ===
-            "loginPassword"
-          )
+          modal &&
+          event.target === modal
         ) {
 
-          handleLogin();
-
-        }
-
-      }
-    );
-
-
-    /* =========================================================
-       IF ALREADY LOGGED IN
-       Don't automatically redirect if user is on login
-       unless a valid session exists.
-    ========================================================= */
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      async function () {
-
-        try {
-
-          const {
-            data: sessionData
-          } =
-            await supabaseClient.auth
-              .getSession();
-
-
-          if (
-            sessionData &&
-            sessionData.session &&
-            sessionData.session.user
-          ) {
-
-            console.log(
-              "Existing Supabase session found."
-            );
-
-          }
-
-        } catch (err) {
-
-          console.log(
-            "Session check error:",
-            err
+          closeModal(
+            "forgotModal"
           );
 
         }
 
       }
     );
+
+
+    /* =====================================================
+       KEYBOARD EVENTS
+    ===================================================== */
+
+    function setupKeyboardEvents() {
+
+      const passwordToggle =
+        document.getElementById(
+          "togglePasswordBtn"
+        );
+
+
+      if (passwordToggle) {
+
+        passwordToggle.addEventListener(
+          "keydown",
+          function (event) {
+
+            if (
+              event.key === "Enter" ||
+              event.key === " "
+            ) {
+
+              event.preventDefault();
+
+              togglePasswordVisibility();
+
+            }
+
+          }
+        );
+
+      }
+
+
+      document.addEventListener(
+        "keydown",
+        function (event) {
+
+          if (
+            event.key !== "Enter"
+          ) {
+            return;
+          }
+
+
+          const active =
+            document.activeElement;
+
+
+          if (!active) {
+            return;
+          }
+
+
+          if (
+            active.id ===
+              "loginEmail" ||
+            active.id ===
+              "loginPassword"
+          ) {
+
+            event.preventDefault();
+
+            handleLogin();
+
+          }
+
+
+          if (
+            active.id ===
+            "forgotEmail"
+          ) {
+
+            event.preventDefault();
+
+            sendPasswordResetLink();
+
+          }
+
+        }
+      );
+
+    }
 
   </script>
 
