@@ -4,608 +4,276 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Smart Money</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
     body {
       background: #090d16;
       background-image: radial-gradient(circle at 50% 20%, #1e293b 0%, #090d16 100%);
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      overflow-x: hidden;
+      display: flex; justify-content: center; align-items: center; padding: 20px; overflow-x: hidden;
     }
-
     .auth-card {
       background: rgba(15, 23, 42, 0.75);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      padding: 35px 25px;
-      border-radius: 28px;
-      width: 100%;
-      max-width: 400px;
+      padding: 35px 25px; border-radius: 28px; width: 100%; max-width: 400px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.08);
-      text-align: center;
-      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.08); text-align: center; position: relative;
     }
-
-    .husky-container {
-      position: relative;
-      width: 110px;
-      height: 100px;
-      margin: -65px auto 10px auto;
-      z-index: 10;
-    }
-
+    .husky-container { position: relative; width: 110px; height: 100px; margin: -65px auto 10px auto; z-index: 10; }
     .auth-logo {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      object-fit: cover;
-      background: #1e293b;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      border: 3px solid rgba(255,255,255,0.15);
+      width: 110px; height: 110px; border-radius: 50%; object-fit: cover; background: #1e293b;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 3px solid rgba(255,255,255,0.15); transition: transform 0.3s ease;
     }
-
-    .auth-header {
-      margin-bottom: 22px;
-    }
-
-    .auth-header h2 {
-      font-size: 26px;
-      font-weight: 700;
-      color: #f8fafc;
-      margin-bottom: 6px;
-    }
-
-    .auth-header p {
-      font-size: 13px;
-      color: #94a3b8;
-    }
-
-    .input-group {
-      margin-bottom: 16px;
-      text-align: left;
-      position: relative;
-    }
-
-    .input-group label {
-      display: block;
-      font-size: 12px;
-      font-weight: 500;
-      color: #94a3b8;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
+    .auth-logo:hover { transform: scale(1.05); }
+    .auth-header { margin-bottom: 22px; }
+    .auth-header h2 { font-size: 26px; font-weight: 700; color: #f8fafc; margin-bottom: 6px; letter-spacing: -0.5px; }
+    .auth-header p { font-size: 13px; color: #94a3b8; }
+    .input-group { margin-bottom: 16px; text-align: left; position: relative; }
+    .input-group label { display: block; font-size: 12px; font-weight: 500; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
     .input-field {
-      width: 100%;
-      padding: 14px 16px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(30,41,59,0.6);
-      color: #f1f5f9;
-      font-size: 14px;
-      outline: none;
+      width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(30, 41, 59, 0.6); color: #f1f5f9; font-size: 14px; outline: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
-    .input-field::placeholder {
-      color: #64748b;
-    }
-
-    .input-field:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
-    }
-
-    .password-toggle {
-      position: absolute;
-      right: 16px;
-      top: 41px;
-      cursor: pointer;
-      font-size: 16px;
-      user-select: none;
-    }
-
-    .form-options {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      font-size: 13px;
-    }
-
-    .remember-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #94a3b8;
-      cursor: pointer;
-    }
-
-    .remember-wrap input {
-      width: 16px;
-      height: 16px;
-      accent-color: #3b82f6;
-    }
-
-    .forgot-link-wrap a {
-      color: #60a5fa;
-      text-decoration: none;
-    }
-
+    .input-field::placeholder { color: #64748b; }
+    .input-field:focus { border-color: #3b82f6; background: rgba(30, 41, 59, 0.9); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); }
+    .password-toggle { position: absolute; right: 16px; top: 41px; cursor: pointer; color: #64748b; font-size: 16px; user-select: none; transition: color 0.2s; }
+    .password-toggle:hover { color: #94a3b8; }
+    .form-options { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 13px; }
+    .remember-wrap { display: flex; align-items: center; gap: 8px; color: #94a3b8; cursor: pointer; }
+    .remember-wrap input[type="checkbox"] { accent-color: #3b82f6; width: 16px; height: 16px; cursor: pointer; border-radius: 4px; }
+    .forgot-link-wrap a { font-size: 13px; color: #60a5fa; text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .forgot-link-wrap a:hover { color: #93c5fd; text-decoration: underline; }
     .btn-submit {
-      width: 100%;
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      color: white;
-      border: none;
-      padding: 15px;
-      border-radius: 14px;
-      font-weight: 600;
-      font-size: 15px;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(37,99,235,0.35);
-      margin-top: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
+      width: 100%; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; border: none; padding: 15px;
+      border-radius: 14px; font-weight: 600; font-size: 15px; cursor: pointer; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+      margin-top: 5px; transition: all 0.3s ease; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 10px;
     }
-
-    .btn-submit:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-
-    .door-icon-box {
-      width: 20px;
-      height: 20px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      text-align: center;
-      margin: 20px 0;
-      color: #64748b;
-      font-size: 12px;
-    }
-
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .divider::before {
-      margin-right: 10px;
-    }
-
-    .divider::after {
-      margin-left: 10px;
-    }
-
-    .social-btns {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
+    .btn-submit:hover { background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5); transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(1px); }
+    .door-icon-box { width: 20px; height: 20px; background: rgba(255,255,255,0.2); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .btn-submit.dooropen .door-icon-box { transform: rotateY(70deg) translateX(4px); opacity: 0.8; }
+    .divider { display: flex; align-items: center; text-align: center; margin: 20px 0; color: #64748b; font-size: 12px; }
+    .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+    .divider::before { margin-right: 10px; } .divider::after { margin-left: 10px; }
+    .social-btns { display: flex; gap: 12px; margin-bottom: 20px; }
     .social-btn {
-      flex: 1;
-      background: rgba(30,41,59,0.5);
-      border: 1px solid rgba(255,255,255,0.08);
-      padding: 11px;
-      border-radius: 12px;
-      color: #e2e8f0;
-      cursor: pointer;
+      flex: 1; background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); padding: 11px;
+      border-radius: 12px; color: #e2e8f0; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s, border-color 0.2s;
     }
-
-    .auth-footer {
-      font-size: 13px;
-      color: #94a3b8;
-    }
-
-    .auth-footer a {
-      color: #60a5fa;
-      text-decoration: none;
-    }
-
+    .social-btn:hover { background: rgba(51, 65, 85, 0.8); border-color: rgba(255, 255, 255, 0.15); }
+    .auth-footer { text-align: center; margin-top: 15px; font-size: 13px; color: #94a3b8; }
+    .auth-footer a { color: #60a5fa; font-weight: 500; text-decoration: none; }
+    .auth-footer a:hover { text-decoration: underline; }
     .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(9,13,22,0.8);
-      z-index: 999;
-      justify-content: center;
-      align-items: center;
-      padding: 15px;
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(9, 13, 22, 0.8);
+      z-index: 999; justify-content: center; align-items: center; backdrop-filter: blur(6px); padding: 15px;
     }
-
     .modal-box {
-      background: #0f172a;
-      padding: 25px;
-      border-radius: 20px;
-      width: 100%;
-      max-width: 380px;
-      text-align: left;
-      border: 1px solid rgba(255,255,255,0.1);
+      background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); padding: 25px; border-radius: 20px;
+      width: 100%; max-width: 380px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: left;
     }
   </style>
 </head>
-
 <body>
 
-<div class="auth-card">
-  <div class="husky-container">
-    <img
-      id="dynamicLogoImg"
-      src="1000819130.jpg"
-      alt="Smart Money Logo"
-      class="auth-logo"
-      onerror="this.style.display='none'"
-    >
-  </div>
+  <div class="auth-card">
+    <div class="husky-container">
+      <img id="dynamicLogoImg" src="1000819130.jpg" alt="Smart Money Logo" class="auth-logo" onerror="this.src='https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=150&auto=format&fit=crop&q=80'">
+    </div>
+    
+    <div class="auth-header">
+      <h2>Welcome Back</h2>
+      <p>Sign in securely to your account.</p>
+    </div>
 
-  <div class="auth-header">
-    <h2>Welcome Back</h2>
-    <p>Sign in securely to your account.</p>
-  </div>
-
-  <form id="loginForm" onsubmit="event.preventDefault(); handleLogin();">
     <div class="input-group">
       <label for="loginEmail">Email Address</label>
-      <input
-        type="email"
-        id="loginEmail"
-        class="input-field"
-        placeholder="Enter your email"
-        required
-      >
+      <input type="email" id="loginEmail" class="input-field" placeholder="Enter your email">
     </div>
 
     <div class="input-group">
       <label for="loginPassword">Password</label>
-      <input
-        type="password"
-        id="loginPassword"
-        class="input-field"
-        placeholder="••••••••"
-        required
-      >
-      <span
-        class="password-toggle"
-        id="togglePasswordBtn"
-        onclick="togglePasswordVisibility()"
-      >
-        👁️
-      </span>
+      <input type="password" id="loginPassword" class="input-field" placeholder="••••••••">
+      <span class="password-toggle" id="togglePasswordBtn" onclick="togglePasswordVisibility()">👁️</span>
     </div>
 
     <div class="form-options">
       <label class="remember-wrap">
-        <input type="checkbox" id="rememberMe">
-        Remember me
+        <input type="checkbox" id="rememberMe"> Remember me
       </label>
-
       <div class="forgot-link-wrap">
-        <a href="javascript:void(0)" onclick="openForgotModal()">
-          Forgot password?
-        </a>
+        <a href="javascript:void(0)" onclick="openForgotModal()">Forgot password?</a>
       </div>
     </div>
 
-    <button type="submit" class="btn-submit" id="loginBtn">
+    <button onclick="handleLogin()" class="btn-submit" id="loginBtn">
       <span>Sign in</span>
-      <div class="door-icon-box">🚪</div>
+      <div class="door-icon-box" id="doorIcon">🚪</div>
     </button>
-  </form>
 
-  <div class="divider">or continue with</div>
+    <div class="divider">or continue with</div>
 
-  <div class="social-btns">
-    <button type="button" class="social-btn" onclick="socialLogin('Google')">
-      Google
-    </button>
-    <button type="button" class="social-btn" onclick="socialLogin('Apple')">
-      Apple
-    </button>
+    <div class="social-btns">
+      <button type="button" class="social-btn" onclick="socialLogin('Google')">
+        <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.2 9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/><path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15s.7 5.3 1.9 7.7l3.7-2.9c-.8-1-1.3-2.3-1.3-3.7z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.2-6.4-5.2L1.9 15.9C3.7 19.6 7.5 23 12 23z"/></svg>
+        Google
+      </button>
+      <button type="button" class="social-btn" onclick="socialLogin('Apple')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.85 5.75c.57-.69.96-1.64.85-2.6-.84.03-1.87.56-2.45 1.25-.52.6-.98 1.57-.85 2.51.94.07 1.88-.47 2.45-1.16z"/></svg>
+        Apple
+      </button>
+    </div>
+
+    <div class="auth-footer">
+      New to Smart Money? <a href="index.html">Create account</a>
+    </div>
   </div>
 
-  <div class="auth-footer">
-    New to Smart Money?
-    <a href="index.html">Create account</a>
+  <!-- FORGOT PASSWORD MODAL -->
+  <div id="forgotModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3 style="margin-top:0; font-size:18px; color:#f8fafc; margin-bottom: 8px;">🔑 Reset Password</h3>
+      <p style="font-size: 12.5px; color: #94a3b8; margin-bottom: 15px;">Apni registered Email ID enter karein. Hum aapko password reset link bhejenge.</p>
+      
+      <label for="forgotEmail" style="font-size:12px; font-weight:500; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px;">Email Address</label>
+      <input type="email" id="forgotEmail" class="input-field" placeholder="e.g. yourname@gmail.com" style="margin-top: 6px; margin-bottom: 15px;">
+      
+      <button onclick="sendPasswordResetLink()" class="btn-submit" id="resetBtn" style="margin-top: 0;">Send Reset Link</button>
+      <button onclick="closeModal('forgotModal')" style="width:100%; background:transparent; color:#94a3b8; border:none; padding:10px; margin-top:8px; cursor:pointer; font-weight: 500;">Cancel</button>
+    </div>
   </div>
-</div>
 
-<!-- FORGOT PASSWORD MODAL -->
-<div id="forgotModal" class="modal-overlay">
-  <div class="modal-box">
-    <h3 style="color:#f8fafc; margin-bottom:8px;">🔑 Reset Password</h3>
-    <p style="font-size:12px; color:#94a3b8; margin-bottom:15px;">
-      Apni registered Email ID enter karein.
-    </p>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
+    
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-    <input
-      type="email"
-      id="forgotEmail"
-      class="input-field"
-      placeholder="yourname@gmail.com"
-    >
+    document.addEventListener("DOMContentLoaded", async function() {
+      try {
+        const { data: logoData } = await supabaseClient.from('global_settings').select('setting_value').eq('setting_key', 'admin_top_logo').maybeSingle();
+        if (logoData && logoData.setting_value) {
+          document.getElementById("dynamicLogoImg").src = logoData.setting_value;
+        }
+      } catch (err) {
+        console.log("Logo load error:", err);
+      }
+    });
 
-    <button onclick="sendPasswordResetLink()" class="btn-submit" id="resetBtn">
-      Send Reset Link
-    </button>
-
-    <button
-      onclick="closeModal('forgotModal')"
-      style="width:100%; background:transparent; border:none; color:#94a3b8; padding:12px; cursor:pointer;"
-    >
-      Cancel
-    </button>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-/* ============================= */
-/* SUPABASE CONFIG */
-/* ============================= */
-const SUPABASE_URL = "https://rvprrulkjegvicbnjuft.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true
-    }
-  }
-);
-
-/* ============================= */
-/* PAGE LOAD */
-/* ============================= */
-document.addEventListener("DOMContentLoaded", async function() {
-  /* CHECK ALREADY LOGGED IN */
-  const loggedIn = localStorage.getItem("isLoggedIn") || sessionStorage.getItem("isLoggedIn");
-  const userData = localStorage.getItem("userData") || sessionStorage.getItem("userData");
-
-  if (loggedIn === "true" && userData) {
-    console.log("User already logged in");
-    window.location.replace("dashboard.html");
-    return;
-  }
-
-  /* LOAD REMEMBERED EMAIL */
-  const rememberedEmail = localStorage.getItem("rememberedEmail");
-  if (rememberedEmail) {
-    document.getElementById("loginEmail").value = rememberedEmail;
-    document.getElementById("rememberMe").checked = true;
-  }
-
-  /* LOAD LOGO */
-  try {
-    const { data: logoData, error } = await supabaseClient
-      .from("global_settings")
-      .select("setting_value")
-      .eq("setting_key", "admin_top_logo")
-      .maybeSingle();
-
-    if (!error && logoData && logoData.setting_value) {
-      document.getElementById("dynamicLogoImg").src = logoData.setting_value;
-    }
-  } catch(err) {
-    console.log("Logo Error:", err);
-  }
-});
-
-/* ============================= */
-/* PASSWORD SHOW / HIDE */
-/* ============================= */
-function togglePasswordVisibility() {
-  const passwordInput = document.getElementById("loginPassword");
-  const toggleButton = document.getElementById("togglePasswordBtn");
-
-  if (passwordInput.type === "password") {
-    passwordInput.type = "text";
-    toggleButton.textContent = "🙈";
-  } else {
-    passwordInput.type = "password";
-    toggleButton.textContent = "👁️";
-  }
-}
-
-/* ============================= */
-/* LOGIN */
-/* ============================= */
-async function handleLogin() {
-  const emailInput = document.getElementById("loginEmail").value.trim().toLowerCase();
-  const password = document.getElementById("loginPassword").value.trim();
-  const btn = document.getElementById("loginBtn");
-
-  /* EMPTY CHECK */
-  if (!emailInput || !password) {
-    alert("⚠️ Please enter Email and Password!");
-    return;
-  }
-
-  /* BUTTON LOADING */
-  btn.disabled = true;
-  btn.querySelector("span").innerText = "Checking Access...";
-
-  try {
-    /* ============================= */
-    /* DATABASE LOGIN CHECK          */
-    /* Note: .ilike() for case-insensitive email match */
-    /* ============================= */
-    const { data, error } = await supabaseClient
-      .from("payment_requests")
-      .select("*")
-      .ilike("email", emailInput)
-      .eq("password", password)
-      .maybeSingle();
-
-    console.log("Database Result:", data);
-    if (error) console.error("Database Error:", error);
-
-    /* INVALID CREDENTIALS OR RLS BLOCK */
-    if (error || !data) {
-      alert("⚠️ Invalid Email or Password! (Please check details or ensure account is registered)");
-      resetLoginButton();
-      return;
-    }
-
-    /* STATUS NORMALIZE */
-    const userStatus = String(data.status || "").trim().toLowerCase();
-
-    /* PENDING */
-    if (userStatus === "pending") {
-      alert("⏳ Your payment is still pending admin approval.");
-      resetLoginButton();
-      return;
-    }
-
-    /* REJECTED */
-    if (userStatus === "rejected") {
-      alert("❌ Your payment request has been rejected.");
-      resetLoginButton();
-      return;
-    }
-
-    /* ============================= */
-    /* APPROVED LOGIN */
-    /* ============================= */
-    if (userStatus === "approved") {
-      /* SAVE SESSION IN BOTH STORAGES */
-      localStorage.setItem("isLoggedIn", "true");
-      sessionStorage.setItem("isLoggedIn", "true");
-
-      localStorage.setItem("userData", JSON.stringify(data));
-      sessionStorage.setItem("userData", JSON.stringify(data));
-
-      localStorage.setItem("userEmail", emailInput);
-      sessionStorage.setItem("userEmail", emailInput);
-
-      localStorage.setItem("loginTime", Date.now().toString());
-
-      /* REMEMBER EMAIL */
-      const rememberMe = document.getElementById("rememberMe").checked;
-      if (rememberMe) {
-        localStorage.setItem("rememberedEmail", emailInput);
+    function togglePasswordVisibility() {
+      const pwdInput = document.getElementById("loginPassword");
+      const toggleBtn = document.getElementById("togglePasswordBtn");
+      if (pwdInput.type === "password") {
+        pwdInput.type = "text";
+        toggleBtn.textContent = "🙈";
       } else {
-        localStorage.removeItem("rememberedEmail");
+        pwdInput.type = "password";
+        toggleBtn.textContent = "👁️";
+      }
+    }
+
+    async function handleLogin() {
+      const emailInput = document.getElementById("loginEmail").value.trim().toLowerCase();
+      const password = document.getElementById("loginPassword").value.trim();
+      const btn = document.getElementById("loginBtn");
+
+      if (!emailInput || !password) {
+        alert("⚠️ Kripya Email aur Password bharein!");
+        return;
       }
 
-      alert("🎉 Login Successful!");
+      btn.classList.add("dooropen");
+      btn.querySelector("span").innerText = "Checking Access...";
+      btn.disabled = true;
 
-      /* REDIRECT */
-      window.location.replace("dashboard.html");
-      return;
+      try {
+        const { data, error } = await supabaseClient
+          .from('payment_requests')
+          .select('*')
+          .eq('email', emailInput)
+          .eq('password', password)
+          .maybeSingle();
+
+        if (error || !data) {
+          alert("⚠️ Invalid Email or Password!");
+          btn.classList.remove("dooropen");
+          btn.querySelector("span").innerText = "Sign in";
+          btn.disabled = false;
+          return;
+        }
+
+        if (data.status === 'Pending') {
+          alert("⏳ Aapka payment abhi Admin verification mein hai. Approve hone ke baad hi aap login kar payenge.");
+        } else if (data.status === 'Rejected') {
+          alert("❌ Aapka payment request reject kar diya gaya hai. Kripya support se sampark karein.");
+        } else if (data.status === 'Approved') {
+          alert("🎉 Login Successful!");
+          localStorage.setItem('userData', JSON.stringify(data));
+          window.location.href = "dashboard.html";
+          return;
+        }
+
+      } catch (err) {
+        console.error("Login Error:", err);
+        alert("⚠️ Login mein kuch samasya aayi. Dubara koshish karein.");
+      }
+
+      btn.classList.remove("dooropen");
+      btn.querySelector("span").innerText = "Sign in";
+      btn.disabled = false;
     }
 
-    /* UNKNOWN STATUS */
-    alert("⚠️ Your account status is not valid: " + (data.status || "Unknown"));
-    resetLoginButton();
+    function socialLogin(provider) {
+      alert(provider + " login integration can be linked via Supabase OAuth providers!");
+    }
 
-  } catch(err) {
-    console.error("LOGIN ERROR:", err);
-    alert("⚠️ Login Error: " + (err.message || "Please try again."));
-    resetLoginButton();
-  }
-}
+    function openForgotModal() {
+      document.getElementById("forgotModal").style.display = "flex";
+    }
 
-/* ============================= */
-/* RESET BUTTON */
-/* ============================= */
-function resetLoginButton() {
-  const btn = document.getElementById("loginBtn");
-  btn.disabled = false;
-  btn.querySelector("span").innerText = "Sign in";
-}
+    function closeModal(id) {
+      document.getElementById(id).style.display = "none";
+    }
 
-/* ============================= */
-/* SOCIAL LOGIN */
-/* ============================= */
-function socialLogin(provider) {
-  alert(provider + " login will be available soon!");
-}
+    async function sendPasswordResetLink() {
+      const email = document.getElementById("forgotEmail").value.trim().toLowerCase();
+      const btn = document.getElementById("resetBtn");
 
-/* ============================= */
-/* FORGOT PASSWORD MODAL */
-/* ============================= */
-function openForgotModal() {
-  document.getElementById("forgotModal").style.display = "flex";
-}
+      if (!email) {
+        alert("Please enter your registered email address.");
+        return;
+      }
 
-function closeModal(id) {
-  document.getElementById(id).style.display = "none";
-}
+      btn.innerText = "Sending Link...";
+      btn.disabled = true;
 
-/* ============================= */
-/* PASSWORD RESET */
-/* ============================= */
-async function sendPasswordResetLink() {
-  const email = document.getElementById("forgotEmail").value.trim().toLowerCase();
-  const btn = document.getElementById("resetBtn");
+      try {
+        const updatePageUrl = window.location.origin + window.location.pathname.replace('login.html', 'update-password.html');
 
-  if (!email) {
-    alert("Please enter your email address.");
-    return;
-  }
+        // Supabase Native Password Reset (Sends email with valid secure token)
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+          redirectTo: updatePageUrl,
+        });
 
-  btn.disabled = true;
-  btn.innerText = "Sending...";
+        if (error) throw error;
 
-  try {
-    const updatePageUrl = window.location.origin + "/update-password.html";
-
-    const { error } = await supabaseClient
-      .auth
-      .resetPasswordForEmail(email, {
-        redirectTo: updatePageUrl
-      });
-
-    if (error) throw error;
-
-    alert("🎉 Password reset link sent successfully!");
-    closeModal("forgotModal");
-
-  } catch(err) {
-    console.error("Reset Error:", err);
-    alert(err.message || "Could not send reset link.");
-  } finally {
-    btn.disabled = false;
-    btn.innerText = "Send Reset Link";
-  }
-}
-</script>
-
+        alert("🎉 Password reset link successfully sent to your Gmail inbox!");
+        closeModal('forgotModal');
+        document.getElementById("forgotEmail").value = "";
+      } catch (err) {
+        console.error("Reset Error:", err);
+        alert("Error: " + (err.message || "Could not send reset link. Make sure email exists."));
+      } finally {
+        btn.innerText = "Send Reset Link";
+        btn.disabled = false;
+      }
+    }
+  </script>
 </body>
 </html>
