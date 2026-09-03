@@ -3,1127 +3,1487 @@
 <head>
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Smart Money - Online Courses & Skill Development</title>
 
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- Supabase CDN for fetching data directly -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
-/* ================================
+/* =========================================================
    GLOBAL
-================================ */
+========================================================= */
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Plus Jakarta Sans',sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Plus Jakarta Sans',sans-serif;
 }
 
 html{
-scroll-behavior:smooth;
+    scroll-behavior:smooth;
 }
 
 body{
-background:#f5f7fb;
-color:#172033;
-overflow-x:hidden;
+    background:#f5f7fb;
+    color:#172033;
+    overflow-x:hidden;
 }
 
 a{
-text-decoration:none;
+    text-decoration:none;
+}
+
+button{
+    font-family:inherit;
 }
 
 .container{
-width:min(1180px,92%);
-margin:auto;
+    width:min(1180px,92%);
+    margin:auto;
 }
 
 
-/* ================================
-   TOP RUNNING ANNOUNCEMENT
-================================ */
+/* =========================================================
+   TOP ANNOUNCEMENT
+========================================================= */
 
 .top-announcement{
-background:linear-gradient(
-90deg,
-#6d28d9,
-#9333ea,
-#2563eb
-);
-color:#fff;
-height:38px;
-display:flex;
-align-items:center;
-overflow:hidden;
-white-space:nowrap;
+    background:linear-gradient(90deg,#6d28d9,#9333ea,#2563eb);
+    color:#fff;
+    height:38px;
+    display:flex;
+    align-items:center;
+    overflow:hidden;
+    white-space:nowrap;
 }
 
 .marquee-track{
-display:inline-block;
-padding-left:100%;
-animation:marqueeMove 22s linear infinite;
-font-size:12px;
-font-weight:700;
-letter-spacing:.3px;
+    display:inline-block;
+    padding-left:100%;
+    animation:marqueeMove 22s linear infinite;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.3px;
 }
 
 @keyframes marqueeMove{
-
-0%{
-transform:translateX(0);
-}
-
-100%{
-transform:translateX(-100%);
-}
-
+    0%{
+        transform:translateX(0);
+    }
+    100%{
+        transform:translateX(-100%);
+    }
 }
 
 
-/* ================================
+/* =========================================================
    NAVBAR
-================================ */
+========================================================= */
 
 .navbar{
-height:75px;
-background:#fff;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 5%;
-position:sticky;
-top:0;
-z-index:1000;
-box-shadow:0 4px 25px rgba(15,23,42,.07);
+    height:75px;
+    background:rgba(255,255,255,.96);
+    backdrop-filter:blur(15px);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 5%;
+    position:sticky;
+    top:0;
+    z-index:1000;
+    box-shadow:0 4px 25px rgba(15,23,42,.07);
+    border-bottom:1px solid rgba(226,232,240,.7);
 }
 
 .brand{
-display:flex;
-align-items:center;
-gap:11px;
+    display:flex;
+    align-items:center;
+    gap:11px;
 }
 
 .logo-circle{
-width:42px;
-height:42px;
-border-radius:12px;
-background:linear-gradient(
-135deg,
-#7c3aed,
-#2563eb
-);
-display:flex;
-align-items:center;
-justify-content:center;
-color:white;
-font-weight:800;
-font-size:18px;
-box-shadow:
-0 8px 20px rgba(124,58,237,.25);
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#7c3aed,#2563eb);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-weight:800;
+    font-size:18px;
+    box-shadow:0 8px 20px rgba(124,58,237,.25);
 }
 
 .brand-text h2{
-font-size:17px;
-font-weight:800;
-color:#111827;
+    font-size:17px;
+    font-weight:800;
+    color:#111827;
 }
 
 .brand-text span{
-font-size:10px;
-color:#64748b;
-font-weight:600;
-}
-
-.nav-links{
-display:flex;
-gap:22px;
-align-items:center;
-}
-
-.nav-links a{
-font-size:13px;
-font-weight:700;
-color:#475569;
-transition:.2s;
-}
-
-.nav-links a:hover{
-color:#7c3aed;
-}
-
-.dashboard-btn{
-padding:10px 17px;
-border-radius:10px;
-background:#7c3aed;
-color:#fff !important;
+    font-size:10px;
+    color:#64748b;
+    font-weight:600;
 }
 
 .nav-right-icons{
-display:flex;
-align-items:center;
-gap:12px;
+    display:flex;
+    align-items:center;
+    gap:12px;
 }
 
 .profile-icon-btn{
-width:40px;
-height:40px;
-border-radius:10px;
-background:#f1f5f9;
-color:#7c3aed;
-display:flex;
-align-items:center;
-justify-content:center;
-overflow:hidden;
-border: 1px solid #e2e8f0;
+    width:40px;
+    height:40px;
+    border-radius:10px;
+    background:#f1f5f9;
+    color:#7c3aed;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    border:1px solid #e2e8f0;
 }
 
-.profile-icon-btn img {
-width: 100%;
-height: 100%;
-object-fit: cover;
+.profile-icon-btn img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
 }
 
 .hamburger{
-display:flex;
-width:38px;
-height:38px;
-background:#f1f5f9;
-border-radius:10px;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-cursor:pointer;
+    display:flex;
+    width:38px;
+    height:38px;
+    background:#f1f5f9;
+    border-radius:10px;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    cursor:pointer;
 }
 
 .hamburger span{
-height:2.5px;
-width:20px;
-background:#111827;
-display:block;
-margin:3px 0;
-border-radius:10px;
+    height:2.5px;
+    width:20px;
+    background:#111827;
+    display:block;
+    margin:3px 0;
+    border-radius:10px;
 }
 
 
-/* ================================
-   UNIFORM SIDEBAR MENU
-================================ */
+/* =========================================================
+   MOBILE MENU
+========================================================= */
 
 .mobile-menu{
-position:fixed;
-top:0;
-right:-100%;
-width:290px;
-height:100vh;
-background:#fff;
-z-index:3000;
-padding:25px;
-transition:.35s;
-box-shadow:-10px 0 30px rgba(0,0,0,.12);
-display:flex;
-flex-direction:column;
+    position:fixed;
+    top:0;
+    right:-100%;
+    width:290px;
+    height:100vh;
+    background:#fff;
+    z-index:3000;
+    padding:25px;
+    transition:.35s;
+    box-shadow:-10px 0 30px rgba(0,0,0,.12);
+    display:flex;
+    flex-direction:column;
 }
 
 .mobile-menu.active{
-right:0;
+    right:0;
 }
 
 .mobile-menu-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
 }
 
 .close-menu{
-border:none;
-background:#f1f5f9;
-width:38px;
-height:38px;
-border-radius:10px;
-font-size:20px;
-cursor:pointer;
-display:flex;
-align-items:center;
-justify-content:center;
-color:#111827;
+    border:none;
+    background:#f1f5f9;
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    font-size:20px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#111827;
 }
 
 .mobile-menu .mobile-nav-links{
-display:flex;
-flex-direction:column;
-gap:8px;
-overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    overflow-y:auto;
 }
 
 .mobile-menu a.m-link{
-display:block;
-padding:12px 14px;
-border-radius:10px;
-font-weight:700;
-font-size:14px;
-color:#475569;
-background:#f8fafc;
-transition:all .2s;
+    display:block;
+    padding:12px 14px;
+    border-radius:10px;
+    font-weight:700;
+    font-size:14px;
+    color:#475569;
+    background:#f8fafc;
+    transition:all .2s;
 }
 
 .mobile-menu a.m-link:hover{
-background:#f1f5f9;
-color:#7c3aed;
+    background:#f1f5f9;
+    color:#7c3aed;
 }
 
 .mobile-menu a.mobile-dashboard-btn{
-margin-top:10px;
-display:block;
-text-align:center;
-padding:12px;
-border-radius:10px;
-background:#7c3aed;
-color:#fff;
-font-weight:700;
-font-size:14px;
+    margin-top:10px;
+    display:block;
+    text-align:center;
+    padding:12px;
+    border-radius:10px;
+    background:#7c3aed;
+    color:#fff;
+    font-weight:700;
+    font-size:14px;
 }
 
 .menu-overlay{
-position:fixed;
-inset:0;
-background:rgba(15,23,42,.55);
-display:none;
-z-index:2500;
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.55);
+    display:none;
+    z-index:2500;
 }
 
 .menu-overlay.active{
-display:block;
+    display:block;
 }
 
 
-/* ================================
-   HERO SECTION
-================================ */
+/* =========================================================
+   HERO
+========================================================= */
 
 .hero{
-position:relative;
-min-height:560px;
-display:flex;
-align-items:center;
-overflow:hidden;
+    position:relative;
+    min-height:580px;
+    display:flex;
+    align-items:center;
+    overflow:hidden;
 
-background:
-linear-gradient(
-90deg,
-rgba(15,23,42,.92),
-rgba(15,23,42,.65)
-),
-url("https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1800&q=90");
+    background:
+    linear-gradient(
+        90deg,
+        rgba(15,23,42,.94),
+        rgba(15,23,42,.68)
+    ),
+    url("https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1800&q=90");
 
-background-size:cover;
-background-position:center;
+    background-size:cover;
+    background-position:center;
 }
 
 .hero-content{
-width:min(1180px,92%);
-margin:auto;
-color:#fff;
-padding:90px 0;
+    width:min(1180px,92%);
+    margin:auto;
+    color:#fff;
+    padding:100px 0;
 }
 
 .hero-badge{
-display:inline-flex;
-align-items:center;
-gap:8px;
-padding:9px 14px;
-border-radius:30px;
-background:rgba(255,255,255,.12);
-border:1px solid rgba(255,255,255,.2);
-backdrop-filter:blur(10px);
-font-size:11px;
-font-weight:700;
-margin-bottom:20px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:9px 14px;
+    border-radius:30px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.2);
+    backdrop-filter:blur(10px);
+    font-size:11px;
+    font-weight:700;
+    margin-bottom:20px;
 }
 
 .hero h1{
-font-size:clamp(32px,5vw,58px);
-line-height:1.1;
-max-width:700px;
-font-weight:800;
-letter-spacing:-2px;
+    font-size:clamp(32px,5vw,58px);
+    line-height:1.1;
+    max-width:750px;
+    font-weight:800;
+    letter-spacing:-2px;
 }
 
 .hero h1 span{
-background:linear-gradient(
-90deg,
-#c084fc,
-#60a5fa,
-#38bdf8
-);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
+    background:linear-gradient(90deg,#c084fc,#60a5fa,#38bdf8);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
 }
 
 .hero p{
-margin-top:18px;
-max-width:600px;
-font-size:15px;
-line-height:1.8;
-color:#e2e8f0;
+    margin-top:18px;
+    max-width:650px;
+    font-size:15px;
+    line-height:1.8;
+    color:#e2e8f0;
 }
 
 .hero-buttons{
-display:flex;
-gap:12px;
-margin-top:28px;
-flex-wrap:wrap;
+    display:flex;
+    gap:12px;
+    margin-top:28px;
+    flex-wrap:wrap;
 }
 
 .hero-btn-primary{
-padding:14px 22px;
-background:#fff;
-color:#111827;
-font-weight:800;
-border-radius:12px;
-font-size:13px;
+    padding:14px 22px;
+    background:#fff;
+    color:#111827;
+    font-weight:800;
+    border-radius:12px;
+    font-size:13px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
 }
 
 .hero-btn-secondary{
-padding:14px 22px;
-border:1px solid rgba(255,255,255,.35);
-color:#fff;
-font-weight:700;
-border-radius:12px;
-font-size:13px;
+    padding:14px 22px;
+    border:1px solid rgba(255,255,255,.35);
+    color:#fff;
+    font-weight:700;
+    border-radius:12px;
+    font-size:13px;
+    background:rgba(255,255,255,.06);
+    backdrop-filter:blur(10px);
 }
 
 
-/* ================================
-   WELCOME / STATUS SECTION
-================================ */
+/* =========================================================
+   WELCOME
+========================================================= */
 
 .welcome-section{
-margin-top:-65px;
-position:relative;
-z-index:20;
-padding-bottom:60px;
+    margin-top:-65px;
+    position:relative;
+    z-index:20;
+    padding-bottom:60px;
 }
 
 .welcome-card{
-background:#fff;
-border-radius:25px;
-box-shadow:
-0 20px 60px rgba(15,23,42,.12);
-overflow:hidden;
-border:1px solid #e8edf5;
+    background:#fff;
+    border-radius:25px;
+    box-shadow:0 20px 60px rgba(15,23,42,.12);
+    overflow:hidden;
+    border:1px solid #e8edf5;
 }
 
 .welcome-top{
-padding:35px;
-background:
-linear-gradient(
-135deg,
-#111827,
-#172554,
-#312e81
-);
-color:#fff;
-text-align:center;
+    padding:35px;
+    background:linear-gradient(135deg,#111827,#172554,#312e81);
+    color:#fff;
+    text-align:center;
 }
 
 .welcome-top small{
-color:#a5b4fc;
-font-weight:800;
-letter-spacing:1.5px;
-font-size:10px;
+    color:#a5b4fc;
+    font-weight:800;
+    letter-spacing:1.5px;
+    font-size:10px;
 }
 
 .welcome-top h2{
-font-size:30px;
-margin-top:8px;
-font-weight:800;
+    font-size:30px;
+    margin-top:8px;
+    font-weight:800;
 }
 
 .welcome-top p{
-margin-top:10px;
-font-size:13px;
-color:#cbd5e1;
-max-width:600px;
-margin-left:auto;
-margin-right:auto;
-line-height:1.7;
+    margin-top:10px;
+    font-size:13px;
+    color:#cbd5e1;
+    max-width:650px;
+    margin-left:auto;
+    margin-right:auto;
+    line-height:1.7;
 }
 
 .status-live{
-display:inline-flex;
-align-items:center;
-gap:7px;
-margin-top:18px;
-background:rgba(255,255,255,.1);
-padding:8px 14px;
-border-radius:30px;
-font-size:11px;
-font-weight:700;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    margin-top:18px;
+    background:rgba(255,255,255,.1);
+    padding:8px 14px;
+    border-radius:30px;
+    font-size:11px;
+    font-weight:700;
 }
 
 .live-dot{
-width:8px;
-height:8px;
-background:#22c55e;
-border-radius:50%;
-box-shadow:0 0 12px #22c55e;
+    width:8px;
+    height:8px;
+    background:#22c55e;
+    border-radius:50%;
+    box-shadow:0 0 12px #22c55e;
 }
 
 
-/* ================================
+/* =========================================================
    WHO CAN JOIN
-================================ */
+========================================================= */
 
 .who-section{
-padding:30px;
+    padding:30px;
 }
 
 .who-title{
-text-align:center;
-margin-bottom:25px;
+    text-align:center;
+    margin-bottom:25px;
 }
 
 .who-title h3{
-font-size:22px;
-font-weight:800;
-color:#172033;
+    font-size:22px;
+    font-weight:800;
+    color:#172033;
 }
 
 .who-title p{
-font-size:12px;
-color:#64748b;
-margin-top:8px;
+    font-size:12px;
+    color:#64748b;
+    margin-top:8px;
 }
 
 .audience-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:14px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
 }
 
 .audience-card{
-padding:18px;
-border-radius:16px;
-background:#f8fafc;
-border:1px solid #e5eaf2;
-display:flex;
-align-items:center;
-gap:12px;
-transition:.25s;
+    padding:18px;
+    border-radius:16px;
+    background:#f8fafc;
+    border:1px solid #e5eaf2;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    transition:.25s;
 }
 
 .audience-card:hover{
-transform:translateY(-4px);
-background:#fff;
-box-shadow:0 12px 25px rgba(15,23,42,.08);
-border-color:#c4b5fd;
+    transform:translateY(-4px);
+    background:#fff;
+    box-shadow:0 12px 25px rgba(15,23,42,.08);
+    border-color:#c4b5fd;
 }
 
 .audience-icon{
-width:45px;
-height:45px;
-border-radius:13px;
-background:#ede9fe;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:21px;
-flex-shrink:0;
+    width:45px;
+    height:45px;
+    border-radius:13px;
+    background:#ede9fe;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+    flex-shrink:0;
 }
 
 .audience-info h4{
-font-size:13px;
-font-weight:800;
-color:#172033;
+    font-size:13px;
+    font-weight:800;
+    color:#172033;
 }
 
 .audience-info p{
-font-size:10px;
-color:#64748b;
-margin-top:4px;
-line-height:1.4;
+    font-size:10px;
+    color:#64748b;
+    margin-top:4px;
+    line-height:1.4;
 }
 
 
-/* ================================
+/* =========================================================
    JOIN REQUEST
-================================ */
+========================================================= */
 
 .join-request{
-margin:0 30px 30px;
-padding:25px;
-border-radius:18px;
-background:
-linear-gradient(
-135deg,
-#7c3aed,
-#2563eb
-);
-color:#fff;
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:20px;
+    margin:0 30px 30px;
+    padding:25px;
+    border-radius:18px;
+    background:linear-gradient(135deg,#7c3aed,#2563eb);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    box-shadow:0 15px 35px rgba(79,70,229,.18);
 }
 
 .join-request h3{
-font-size:18px;
-font-weight:800;
+    font-size:18px;
+    font-weight:800;
 }
 
 .join-request p{
-font-size:11px;
-margin-top:6px;
-color:#e0e7ff;
+    font-size:11px;
+    margin-top:6px;
+    color:#e0e7ff;
 }
 
 .join-btn{
-background:#fff;
-color:#6d28d9;
-padding:13px 20px;
-border-radius:12px;
-font-size:12px;
-font-weight:800;
-white-space:nowrap;
+    background:#fff;
+    color:#6d28d9;
+    padding:13px 20px;
+    border-radius:12px;
+    font-size:12px;
+    font-weight:800;
+    white-space:nowrap;
 }
 
 
-/* ================================
-   ABOUT
-================================ */
+/* =========================================================
+   SECTION
+========================================================= */
 
 .section{
-padding:75px 0;
+    padding:75px 0;
 }
 
 .section-tag{
-font-size:10px;
-font-weight:800;
-letter-spacing:1.5px;
-color:#7c3aed;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1.5px;
+    color:#7c3aed;
 }
 
 .section-title{
-font-size:32px;
-font-weight:800;
-margin-top:8px;
-color:#172033;
+    font-size:32px;
+    font-weight:800;
+    margin-top:8px;
+    color:#172033;
 }
 
 .section-title span{
-color:#2563eb;
-}
-
-.about-grid{
-display:grid;
-grid-template-columns:1.2fr .8fr;
-gap:40px;
-align-items:center;
-}
-
-.about-text p{
-font-size:13px;
-line-height:1.9;
-color:#64748b;
-margin-top:18px;
-}
-
-.mission-vision{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:14px;
-margin-top:25px;
-}
-
-.mv-box{
-background:#fff;
-border:1px solid #e5eaf2;
-border-radius:16px;
-padding:18px;
-}
-
-.mv-box h5{
-font-size:13px;
-margin-bottom:8px;
-}
-
-.mv-box p{
-font-size:11px;
-margin:0;
-}
-
-.about-images{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:14px;
-}
-
-.about-images img{
-width:100%;
-height:210px;
-object-fit:cover;
-border-radius:18px;
-box-shadow:0 15px 30px rgba(15,23,42,.1);
-}
-
-
-/* ================================
-   PACKAGES
-================================ */
-
-.packages-section{
-background:#fff;
+    color:#2563eb;
 }
 
 .section-center{
-text-align:center;
-margin-bottom:40px;
+    text-align:center;
+    margin-bottom:40px;
+}
+
+
+/* =========================================================
+   ABOUT
+========================================================= */
+
+.about-grid{
+    display:grid;
+    grid-template-columns:1.2fr .8fr;
+    gap:40px;
+    align-items:center;
+}
+
+.about-text p{
+    font-size:13px;
+    line-height:1.9;
+    color:#64748b;
+    margin-top:18px;
+}
+
+.mission-vision{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-top:25px;
+}
+
+.mv-box{
+    background:#fff;
+    border:1px solid #e5eaf2;
+    border-radius:16px;
+    padding:18px;
+}
+
+.mv-box h5{
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.mv-box p{
+    font-size:11px;
+    margin:0;
+}
+
+.about-images{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.about-images img{
+    width:100%;
+    height:210px;
+    object-fit:cover;
+    border-radius:18px;
+    box-shadow:0 15px 30px rgba(15,23,42,.1);
+}
+
+
+/* =========================================================
+   PACKAGES
+========================================================= */
+
+.packages-section{
+    background:
+    radial-gradient(circle at top left,rgba(124,58,237,.05),transparent 35%),
+    #fff;
+}
+
+.package-intro{
+    max-width:700px;
+    margin:10px auto 0;
+    color:#64748b;
+    font-size:12px;
+    line-height:1.8;
 }
 
 .packages-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:20px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
 }
 
 .package-card{
-border:1px solid #e5eaf2;
-border-radius:18px;
-overflow:hidden;
-background:#fff;
-box-shadow:0 8px 25px rgba(15,23,42,.06);
-transition:.25s;
+    border:1px solid #e5eaf2;
+    border-radius:20px;
+    overflow:hidden;
+    background:#fff;
+    box-shadow:0 8px 25px rgba(15,23,42,.06);
+    transition:.25s;
+    position:relative;
 }
 
 .package-card:hover{
-transform:translateY(-6px);
-box-shadow:0 20px 35px rgba(15,23,42,.12);
+    transform:translateY(-7px);
+    box-shadow:0 22px 45px rgba(15,23,42,.13);
 }
 
 .pkg-banner{
-padding:22px;
-color:#fff;
-display:flex;
-align-items:center;
-justify-content:space-between;
+    padding:22px;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:relative;
+    overflow:hidden;
 }
 
-.bg-1{ background:linear-gradient(135deg,#f97316,#ea580c); }
-.bg-2{ background:linear-gradient(135deg,#2563eb,#1d4ed8); }
-.bg-3{ background:linear-gradient(135deg,#7c3aed,#5b21b6); }
-.bg-4{ background:linear-gradient(135deg,#172033,#334155); }
-.bg-5{ background:linear-gradient(135deg,#e11d48,#be123c); }
-.bg-6{ background:linear-gradient(135deg,#0891b2,#0e7490); }
+.pkg-banner:after{
+    content:"";
+    position:absolute;
+    width:130px;
+    height:130px;
+    border-radius:50%;
+    background:rgba(255,255,255,.10);
+    right:-45px;
+    top:-55px;
+}
+
+.bg-1{background:linear-gradient(135deg,#f97316,#ea580c);}
+.bg-2{background:linear-gradient(135deg,#2563eb,#1d4ed8);}
+.bg-3{background:linear-gradient(135deg,#7c3aed,#5b21b6);}
+.bg-4{background:linear-gradient(135deg,#172033,#334155);}
+.bg-5{background:linear-gradient(135deg,#e11d48,#be123c);}
+.bg-6{background:linear-gradient(135deg,#0891b2,#0e7490);}
+
+.pkg-title{
+    position:relative;
+    z-index:2;
+}
 
 .pkg-title h3{
-font-size:17px;
+    font-size:17px;
 }
 
 .pkg-title p{
-font-size:10px;
-margin-top:5px;
-opacity:.8;
+    font-size:10px;
+    margin-top:5px;
+    opacity:.8;
 }
 
 .pkg-badge{
-font-size:26px;
+    font-size:26px;
+    position:relative;
+    z-index:2;
 }
 
 .pkg-body{
-padding:20px;
+    padding:20px;
 }
 
 .pkg-summary-text{
-font-size:11px;
-line-height:1.7;
-color:#64748b;
-min-height:55px;
+    font-size:11px;
+    line-height:1.7;
+    color:#64748b;
+    min-height:55px;
+}
+
+.course-count-box{
+    margin-top:15px;
+    padding:12px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#f8fafc,#eef2ff);
+    border:1px solid #e0e7ff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.course-count-main{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.course-count-icon{
+    width:34px;
+    height:34px;
+    border-radius:9px;
+    background:#ede9fe;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.course-count-text strong{
+    display:block;
+    font-size:12px;
+    color:#172033;
+}
+
+.course-count-text span{
+    display:block;
+    font-size:9px;
+    color:#64748b;
+    margin-top:3px;
+}
+
+.coming-badge{
+    font-size:9px;
+    font-weight:800;
+    color:#b45309;
+    background:#fef3c7;
+    border:1px solid #fde68a;
+    padding:5px 8px;
+    border-radius:20px;
+    white-space:nowrap;
+}
+
+.course-preview{
+    margin-top:12px;
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.course-preview-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:10px;
+    color:#475569;
+}
+
+.course-preview-item .course-icon{
+    width:24px;
+    height:24px;
+    border-radius:7px;
+    background:#f1f5f9;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
 }
 
 .details-btn{
-width:100%;
-margin-top:15px;
-padding:10px;
-background:#f8fafc;
-border:1px solid #dbe2ea;
-border-radius:9px;
-font-size:11px;
-font-weight:700;
-cursor:pointer;
+    width:100%;
+    margin-top:15px;
+    padding:11px;
+    background:#f8fafc;
+    border:1px solid #dbe2ea;
+    border-radius:10px;
+    font-size:11px;
+    font-weight:700;
+    cursor:pointer;
+    color:#334155;
+    transition:.2s;
+}
+
+.details-btn:hover{
+    background:#f1f5f9;
+    border-color:#c4b5fd;
+    color:#6d28d9;
 }
 
 .pkg-footer{
-padding:15px 20px;
-border-top:1px solid #eef2f7;
-display:flex;
-align-items:center;
-justify-content:space-between;
+    padding:15px 20px;
+    border-top:1px solid #eef2f7;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
 }
 
 .current-price{
-font-size:17px;
-font-weight:800;
+    font-size:17px;
+    font-weight:800;
 }
 
 .old-price{
-font-size:10px;
-color:#94a3b8;
-text-decoration:line-through;
-margin-left:5px;
+    font-size:10px;
+    color:#94a3b8;
+    text-decoration:line-through;
+    margin-left:5px;
 }
 
 .buy-btn{
-padding:10px 16px;
-border-radius:9px;
-background:#2563eb;
-color:#fff;
-font-size:11px;
-font-weight:800;
+    padding:10px 16px;
+    border-radius:9px;
+    background:#2563eb;
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+    transition:.2s;
+}
+
+.buy-btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 8px 18px rgba(37,99,235,.2);
 }
 
 
-/* ================================
-   MODAL
-================================ */
+/* =========================================================
+   COURSE INFORMATION STRIP
+========================================================= */
+
+.learning-info{
+    margin-top:35px;
+    padding:25px;
+    border-radius:20px;
+    background:linear-gradient(135deg,#111827,#1e293b);
+    color:#fff;
+    display:grid;
+    grid-template-columns:1.2fr 2fr;
+    gap:25px;
+    align-items:center;
+}
+
+.learning-info h3{
+    font-size:20px;
+    font-weight:800;
+}
+
+.learning-info p{
+    margin-top:8px;
+    font-size:11px;
+    color:#cbd5e1;
+    line-height:1.7;
+}
+
+.learning-points{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.learning-point{
+    padding:12px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:12px;
+    font-size:10px;
+    color:#e2e8f0;
+}
+
+
+/* =========================================================
+   COURSE MODAL
+========================================================= */
 
 .modal-overlay{
-position:fixed;
-inset:0;
-background:rgba(15,23,42,.65);
-display:none;
-align-items:center;
-justify-content:center;
-padding:20px;
-z-index:5000;
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.72);
+    backdrop-filter:blur(6px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:5000;
 }
 
 .modal-box{
-background:#fff;
-width:min(440px,100%);
-border-radius:20px;
-padding:25px;
-position:relative;
+    background:#fff;
+    width:min(560px,100%);
+    max-height:88vh;
+    overflow-y:auto;
+    border-radius:22px;
+    padding:25px;
+    position:relative;
+    box-shadow:0 30px 80px rgba(0,0,0,.25);
 }
 
 .modal-close{
-position:absolute;
-right:18px;
-top:15px;
-border:none;
-background:#f1f5f9;
-width:35px;
-height:35px;
-border-radius:9px;
-cursor:pointer;
+    position:absolute;
+    right:18px;
+    top:15px;
+    border:none;
+    background:#f1f5f9;
+    width:35px;
+    height:35px;
+    border-radius:9px;
+    cursor:pointer;
+    color:#334155;
+    font-size:15px;
 }
 
 .modal-box h2{
-font-size:21px;
-margin-bottom:20px;
+    font-size:21px;
+    margin-bottom:6px;
+    padding-right:45px;
+}
+
+.modal-subtitle{
+    font-size:11px;
+    color:#64748b;
+    line-height:1.6;
+    margin-bottom:18px;
+}
+
+.modal-course-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.modal-course-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:13px;
+    border:1px solid #e5e7eb;
+    border-radius:13px;
+    background:#f8fafc;
+}
+
+.modal-course-icon{
+    width:40px;
+    height:40px;
+    border-radius:11px;
+    background:#ede9fe;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:19px;
+    flex-shrink:0;
+}
+
+.modal-course-info{
+    flex:1;
+}
+
+.modal-course-info strong{
+    display:block;
+    font-size:12px;
+    color:#172033;
+}
+
+.modal-course-info span{
+    display:block;
+    font-size:9px;
+    color:#64748b;
+    margin-top:3px;
+    line-height:1.4;
+}
+
+.status-badge{
+    font-size:8px;
+    font-weight:800;
+    padding:5px 8px;
+    border-radius:20px;
+    white-space:nowrap;
+}
+
+.status-coming{
+    color:#92400e;
+    background:#fef3c7;
+    border:1px solid #fde68a;
+}
+
+.status-available{
+    color:#166534;
+    background:#dcfce7;
+    border:1px solid #bbf7d0;
+}
+
+.package-detail-section{
+    margin-top:22px;
+    border-top:1px solid #eef2f7;
+    padding-top:15px;
+}
+
+.package-detail-section h4{
+    font-size:13px;
+    margin-bottom:8px;
 }
 
 .detail-row{
-display:flex;
-justify-content:space-between;
-gap:20px;
-padding:12px 0;
-border-bottom:1px solid #eef2f7;
-font-size:12px;
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    padding:11px 0;
+    border-bottom:1px solid #eef2f7;
+    font-size:11px;
 }
 
 .detail-row span:first-child{
-color:#64748b;
+    color:#64748b;
 }
 
 .detail-row span:last-child{
-font-weight:700;
-text-align:right;
+    font-weight:700;
+    text-align:right;
+    color:#172033;
 }
 
 
-/* ================================
+/* =========================================================
    TESTIMONIALS
-================================ */
+========================================================= */
 
 .testimonial-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:18px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
 }
 
 .testimonial-card{
-background:#fff;
-border:1px solid #e5eaf2;
-padding:22px;
-border-radius:18px;
-display:flex;
-flex-direction:column;
-justify-content:space-between;
+    background:#fff;
+    border:1px solid #e5eaf2;
+    padding:22px;
+    border-radius:18px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
 }
 
 .client-info{
-display:flex;
-align-items:center;
-gap:12px;
+    display:flex;
+    align-items:center;
+    gap:12px;
 }
 
 .client-info img{
-width:48px;
-height:48px;
-object-fit:cover;
-border-radius:50%;
+    width:48px;
+    height:48px;
+    object-fit:cover;
+    border-radius:50%;
 }
 
 .client-info h4{
-font-size:13px;
+    font-size:13px;
 }
 
 .client-info p{
-font-size:11px;
-color:#f59e0b;
-margin-top:4px;
+    font-size:11px;
+    color:#f59e0b;
+    margin-top:4px;
 }
 
 .feedback{
-font-size:12px;
-line-height:1.8;
-color:#64748b;
-margin-top:18px;
+    font-size:12px;
+    line-height:1.8;
+    color:#64748b;
+    margin-top:18px;
 }
 
 
-/* ================================
-   FEEDBACK SUBMISSION FORM
-================================ */
+/* =========================================================
+   FEEDBACK FORM
+========================================================= */
 
 .feedback-form-card{
-background:#fff;
-border:1px solid #e5eaf2;
-padding:24px;
-border-radius:18px;
-margin-top:30px;
-box-shadow:0 10px 30px rgba(15,23,42,.04);
+    background:#fff;
+    border:1px solid #e5eaf2;
+    padding:24px;
+    border-radius:18px;
+    margin-top:30px;
+    box-shadow:0 10px 30px rgba(15,23,42,.04);
 }
 
 .feedback-form-card h3{
-font-size:18px;
-font-weight:800;
-margin-bottom:6px;
-color:#172033;
+    font-size:18px;
+    font-weight:800;
+    margin-bottom:6px;
+    color:#172033;
 }
 
 .feedback-form-card p{
-font-size:12px;
-color:#64748b;
-margin-bottom:20px;
+    font-size:12px;
+    color:#64748b;
+    margin-bottom:20px;
 }
 
 .feedback-form{
-display:flex;
-flex-direction:column;
-gap:15px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
 }
 
 .form-row{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
 }
 
 .form-group{
-display:flex;
-flex-direction:column;
-gap:6px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
 }
 
 .form-group label{
-font-size:11px;
-font-weight:700;
-color:#475569;
+    font-size:11px;
+    font-weight:700;
+    color:#475569;
 }
 
 .form-group input,
 .form-group textarea,
 .form-group select{
-width:100%;
-padding:12px 14px;
-border-radius:10px;
-border:1px solid #cbd5e1;
-font-size:12px;
-outline:none;
-background:#f8fafc;
-color:#172033;
-transition:.2s;
+    width:100%;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid #cbd5e1;
+    font-size:12px;
+    outline:none;
+    background:#f8fafc;
+    color:#172033;
+    transition:.2s;
 }
 
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus{
-border-color:#7c3aed;
-background:#fff;
-box-shadow:0 0 0 3px rgba(124,58,237,.1);
+    border-color:#7c3aed;
+    background:#fff;
+    box-shadow:0 0 0 3px rgba(124,58,237,.1);
 }
 
 .form-group textarea{
-resize:vertical;
-height:90px;
+    resize:vertical;
+    height:90px;
 }
 
 .submit-feedback-btn{
-padding:13px 20px;
-background:linear-gradient(135deg, #7c3aed, #2563eb);
-color:#fff;
-border:none;
-border-radius:10px;
-font-size:13px;
-font-weight:800;
-cursor:pointer;
-transition:.2s;
-margin-top:5px;
+    padding:13px 20px;
+    background:linear-gradient(135deg,#7c3aed,#2563eb);
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    font-size:13px;
+    font-weight:800;
+    cursor:pointer;
+    transition:.2s;
+    margin-top:5px;
 }
 
 .submit-feedback-btn:hover{
-opacity:.95;
-transform:translateY(-1px);
+    opacity:.95;
+    transform:translateY(-1px);
 }
 
 
-/* ================================
+/* =========================================================
    SUPPORT
-================================ */
+========================================================= */
 
 .support-section{
-background:#fff;
+    background:#fff;
 }
 
 .support-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
 }
 
 .support-card{
-padding:25px;
-border-radius:18px;
-background:#f8fafc;
-border:1px solid #e5eaf2;
+    padding:25px;
+    border-radius:18px;
+    background:#f8fafc;
+    border:1px solid #e5eaf2;
 }
 
 .support-card h3{
-font-size:16px;
-margin-bottom:15px;
+    font-size:16px;
+    margin-bottom:15px;
 }
 
 .support-card p{
-font-size:12px;
-color:#64748b;
-line-height:2;
+    font-size:12px;
+    color:#64748b;
+    line-height:2;
 }
 
 
-/* ================================
+/* =========================================================
    FOOTER
-================================ */
+========================================================= */
 
 .footer{
-background:#111827;
-color:#fff;
-padding:55px 0 25px;
+    background:#111827;
+    color:#fff;
+    padding:55px 0 25px;
 }
 
 .footer-grid{
-display:grid;
-grid-template-columns:2fr 1fr 1fr;
-gap:35px;
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr;
+    gap:35px;
 }
 
 .footer h3{
-font-size:18px;
+    font-size:18px;
 }
 
 .footer h4{
-font-size:13px;
-margin-bottom:15px;
+    font-size:13px;
+    margin-bottom:15px;
 }
 
 .footer p,
 .footer a{
-font-size:11px;
-line-height:1.8;
-color:#94a3b8;
+    font-size:11px;
+    line-height:1.8;
+    color:#94a3b8;
 }
 
 .footer a{
-display:block;
-margin-bottom:7px;
+    display:block;
+    margin-bottom:7px;
+}
+
+.footer a:hover{
+    color:#fff;
 }
 
 .footer-bottom{
-border-top:1px solid #293548;
-margin-top:35px;
-padding-top:20px;
-text-align:center;
-font-size:10px;
-color:#64748b;
+    border-top:1px solid #293548;
+    margin-top:35px;
+    padding-top:20px;
+    text-align:center;
+    font-size:10px;
+    color:#64748b;
 }
 
 
-/* ================================
-   RESPONSIVE MEDIA QUERIES
-================================ */
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
 @media(max-width:992px){
-.packages-grid{ grid-template-columns:repeat(2,1fr); }
-.audience-grid{ grid-template-columns:repeat(2,1fr); }
-.testimonial-grid{ grid-template-columns:repeat(2,1fr); }
-.support-grid{ grid-template-columns:1fr; }
-.footer-grid{ grid-template-columns:1fr; gap:25px; }
-.about-grid{ grid-template-columns:1fr; }
-.mission-vision{ grid-template-columns:1fr 1fr; }
+
+    .packages-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .audience-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .testimonial-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .support-grid{
+        grid-template-columns:1fr;
+    }
+
+    .footer-grid{
+        grid-template-columns:1fr;
+        gap:25px;
+    }
+
+    .about-grid{
+        grid-template-columns:1fr;
+    }
+
+    .mission-vision{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .learning-info{
+        grid-template-columns:1fr;
+    }
 }
 
+
 @media(max-width:650px){
-.navbar{ height:68px; padding:0 4%; }
-.brand-text h2{ font-size:15px; }
-.brand-text span{ font-size:9px; }
-.logo-circle{ width:36px; height:36px; font-size:15px; border-radius:10px; }
-.hero{ min-height:500px; }
-.hero-content{ padding:70px 0 90px; }
-.hero h1{ font-size:30px; letter-spacing:-1px; }
-.hero p{ font-size:13px; }
-.welcome-section{ margin-top:-45px; }
-.welcome-top{ padding:28px 18px; }
-.welcome-top h2{ font-size:22px; }
-.who-section{ padding:22px 15px; }
-.audience-grid{ grid-template-columns:1fr; gap:10px; }
-.audience-card{ padding:14px; }
-.audience-icon{ width:40px; height:40px; font-size:18px; }
-.join-request{ margin:0 15px 20px; padding:20px; flex-direction:column; align-items:flex-start; }
-.join-btn{ width:100%; text-align:center; }
-.about-images img{ height:160px; }
-.mission-vision{ grid-template-columns:1fr; }
-.packages-grid{ grid-template-columns:1fr; }
-.testimonial-grid{ grid-template-columns:1fr; }
-.form-row{ grid-template-columns:1fr; gap:15px; }
-.feedback-form-card{ padding:18px; }
-.section{ padding:50px 0; }
-.section-title{ font-size:24px; }
+
+    .navbar{
+        height:68px;
+        padding:0 4%;
+    }
+
+    .brand-text h2{
+        font-size:15px;
+    }
+
+    .brand-text span{
+        font-size:9px;
+    }
+
+    .logo-circle{
+        width:36px;
+        height:36px;
+        font-size:15px;
+        border-radius:10px;
+    }
+
+    .hero{
+        min-height:520px;
+    }
+
+    .hero-content{
+        padding:70px 0 90px;
+    }
+
+    .hero h1{
+        font-size:30px;
+        letter-spacing:-1px;
+    }
+
+    .hero p{
+        font-size:13px;
+    }
+
+    .welcome-section{
+        margin-top:-45px;
+    }
+
+    .welcome-top{
+        padding:28px 18px;
+    }
+
+    .welcome-top h2{
+        font-size:22px;
+    }
+
+    .who-section{
+        padding:22px 15px;
+    }
+
+    .audience-grid{
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+
+    .audience-card{
+        padding:14px;
+    }
+
+    .audience-icon{
+        width:40px;
+        height:40px;
+        font-size:18px;
+    }
+
+    .join-request{
+        margin:0 15px 20px;
+        padding:20px;
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .join-btn{
+        width:100%;
+        text-align:center;
+    }
+
+    .about-images img{
+        height:160px;
+    }
+
+    .mission-vision{
+        grid-template-columns:1fr;
+    }
+
+    .packages-grid{
+        grid-template-columns:1fr;
+    }
+
+    .testimonial-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-row{
+        grid-template-columns:1fr;
+        gap:15px;
+    }
+
+    .feedback-form-card{
+        padding:18px;
+    }
+
+    .section{
+        padding:50px 0;
+    }
+
+    .section-title{
+        font-size:24px;
+    }
+
+    .learning-points{
+        grid-template-columns:1fr;
+    }
+
+    .pkg-footer{
+        flex-wrap:wrap;
+    }
+
+    .buy-btn{
+        flex:1;
+        text-align:center;
+    }
+
+    .modal-box{
+        padding:20px;
+        border-radius:18px;
+    }
+
+    .modal-course-item{
+        align-items:flex-start;
+    }
+
+    .status-badge{
+        margin-left:auto;
+    }
 }
 
 </style>
@@ -1132,603 +1492,2759 @@ color:#64748b;
 <body>
 
 
-<!-- RUNNING ANNOUNCEMENT -->
+<!-- =========================================================
+     RUNNING ANNOUNCEMENT
+========================================================= -->
+
 <div class="top-announcement">
-<div class="marquee-track">
-🎓 Welcome to Smart Money! &nbsp;&nbsp; • &nbsp;&nbsp;
-📚 Learn Digital Skills &nbsp;&nbsp; • &nbsp;&nbsp;
-💼 Explore Flexible Work Opportunities &nbsp;&nbsp; • &nbsp;&nbsp;
-🚀 Students, Housewives, Professionals & Beginners Welcome &nbsp;&nbsp; • &nbsp;&nbsp;
-🤝 Join our learning community and start building your skills today!
-</div>
+    <div class="marquee-track">
+        🎓 Welcome to Smart Money! &nbsp;&nbsp; • &nbsp;&nbsp;
+        📚 Learn Digital Skills &nbsp;&nbsp; • &nbsp;&nbsp;
+        💼 Explore Flexible Opportunities &nbsp;&nbsp; • &nbsp;&nbsp;
+        🚀 Students, Professionals & Beginners Welcome &nbsp;&nbsp; • &nbsp;&nbsp;
+        🔜 New Courses Coming Soon &nbsp;&nbsp; • &nbsp;&nbsp;
+        🤝 Build Skills. Build Confidence.
+    </div>
 </div>
 
 
-<!-- NAVBAR -->
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
 <nav class="navbar">
-<a href="#" class="brand">
-<div class="logo-circle">SM</div>
-<div class="brand-text">
-<h2>Smart Money</h2>
-<span>Earn • Grow • Be Smart</span>
-</div>
-</a>
 
-<div class="nav-right-icons">
-<a href="dashboard.html" class="profile-icon-btn" id="navProfileBtn" title="My Profile / Dashboard">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-<circle cx="12" cy="7" r="4"></circle>
-</svg>
-</a>
-<div class="hamburger" onclick="toggleMenu()">
-<span></span>
-<span></span>
-<span></span>
-</div>
-</div>
+    <a href="#" class="brand">
+
+        <div class="logo-circle">
+            SM
+        </div>
+
+        <div class="brand-text">
+            <h2>Smart Money</h2>
+            <span>Learn • Grow • Be Smart</span>
+        </div>
+
+    </a>
+
+    <div class="nav-right-icons">
+
+        <a href="dashboard.html"
+           class="profile-icon-btn"
+           id="navProfileBtn"
+           title="My Dashboard">
+
+            <svg width="20"
+                 height="20"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2">
+
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+
+                <circle cx="12"
+                        cy="7"
+                        r="4"></circle>
+
+            </svg>
+
+        </a>
+
+        <div class="hamburger"
+             onclick="toggleMenu()">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </div>
+
+    </div>
+
 </nav>
 
 
-<!-- UNIFORM SIDEBAR MENU -->
-<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+<!-- =========================================================
+     MOBILE MENU
+========================================================= -->
 
-<div class="mobile-menu" id="mobileMenu">
-<div class="mobile-menu-top">
-<div style="display:flex;align-items:center;gap:10px;">
-<div class="logo-circle" style="width:34px;height:34px;font-size:14px;border-radius:8px;">SM</div>
-<b>Smart Money</b>
-</div>
-<button class="close-menu" onclick="toggleMenu()">✕</button>
+<div class="menu-overlay"
+     id="menuOverlay"
+     onclick="toggleMenu()">
 </div>
 
-<div class="mobile-nav-links">
-<a href="#home" class="m-link" onclick="toggleMenu()">🏠 Home</a>
-<a href="#about" class="m-link" onclick="toggleMenu()">ℹ️ About Us</a>
-<a href="#packages" class="m-link" onclick="toggleMenu()">👑 Plans & Packages</a>
-<a href="#" class="m-link" id="previewMenuLink" onclick="openAdminPreviewModal(); toggleMenu();">👁️ Preview (Admin Updates)</a>
-<a href="#testimonials" class="m-link" onclick="toggleMenu()">⭐ Feedback</a>
-<a href="#support" class="m-link" onclick="toggleMenu()">💬 Contact Support</a>
-<a href="dashboard.html" class="mobile-dashboard-btn" id="authMenuLink">👤 My Dashboard</a>
-</div>
+<div class="mobile-menu"
+     id="mobileMenu">
+
+    <div class="mobile-menu-top">
+
+        <div style="display:flex;align-items:center;gap:10px;">
+
+            <div class="logo-circle"
+                 style="width:34px;height:34px;font-size:14px;border-radius:8px;">
+                SM
+            </div>
+
+            <b>Smart Money</b>
+
+        </div>
+
+        <button class="close-menu"
+                onclick="toggleMenu()">
+            ✕
+        </button>
+
+    </div>
+
+    <div class="mobile-nav-links">
+
+        <a href="#home"
+           class="m-link"
+           onclick="toggleMenu()">
+            🏠 Home
+        </a>
+
+        <a href="#about"
+           class="m-link"
+           onclick="toggleMenu()">
+            ℹ️ About Us
+        </a>
+
+        <a href="#packages"
+           class="m-link"
+           onclick="toggleMenu()">
+            🎓 Courses & Packages
+        </a>
+
+        <a href="#learning"
+           class="m-link"
+           onclick="toggleMenu()">
+            📚 Learning System
+        </a>
+
+        <a href="#testimonials"
+           class="m-link"
+           onclick="toggleMenu()">
+            ⭐ Feedback
+        </a>
+
+        <a href="#support"
+           class="m-link"
+           onclick="toggleMenu()">
+            💬 Contact Support
+        </a>
+
+        <a href="#"
+           class="m-link"
+           id="previewMenuLink"
+           onclick="openAdminPreviewModal(); toggleMenu();">
+            👁️ Updates Preview
+        </a>
+
+        <a href="dashboard.html"
+           class="mobile-dashboard-btn"
+           id="authMenuLink">
+            👤 My Dashboard
+        </a>
+
+    </div>
+
 </div>
 
 
-<!-- HERO -->
-<section class="hero" id="home">
-<div class="hero-content">
-<div class="hero-badge">🎓 LEARN • GROW • BUILD YOUR FUTURE</div>
-<h1>Empowering <span>Students & Digital Learners</span> For A Smarter Future</h1>
-<p>Build practical digital skills, explore flexible opportunities and learn from a community focused on personal and professional growth.</p>
-<div class="hero-buttons">
-<a href="#packages" class="hero-btn-primary">Explore Courses →</a>
-<a href="#join" class="hero-btn-secondary">Join Our Community</a>
-</div>
-</div>
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="hero"
+         id="home">
+
+    <div class="hero-content">
+
+        <div class="hero-badge">
+            🎓 LEARN • GROW • BUILD YOUR FUTURE
+        </div>
+
+        <h1>
+            Empowering
+            <span>Digital Learners</span>
+            For A Smarter Future
+        </h1>
+
+        <p>
+            Learn practical digital skills through structured courses,
+            projects and guided learning experiences designed for beginners,
+            creators and modern digital learners.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#packages"
+               class="hero-btn-primary">
+                Explore Courses →
+            </a>
+
+            <a href="#learning"
+               class="hero-btn-secondary">
+                How Learning Works
+            </a>
+
+        </div>
+
+    </div>
+
 </section>
 
 
-<!-- WELCOME SECTION -->
-<section class="welcome-section" id="join">
-<div class="container">
-<div class="welcome-card">
-<div class="welcome-top">
-<small>WELCOME TO SMART MONEY</small>
-<h2>Learn Skills. Grow Confidence. Explore Opportunities.</h2>
-<p>Whether you're a student, working professional, housewife or someone looking to learn something new — there is a place for you in our learning community.</p>
-<div class="status-live">
-<span class="live-dot"></span>
-Community Registration Open
-</div>
-</div>
+<!-- =========================================================
+     WELCOME
+========================================================= -->
 
-<div class="who-section">
-<div class="who-title">
-<h3>Who Can Join & Explore Opportunities?</h3>
-<p>Flexible learning for different lifestyles and career goals.</p>
-</div>
+<section class="welcome-section"
+         id="join">
 
-<div class="audience-grid">
-<div class="audience-card">
-<div class="audience-icon">🎓</div>
-<div class="audience-info">
-<h4>College Students</h4>
-<p>Learn practical digital skills alongside your studies.</p>
-</div>
-</div>
-<div class="audience-card">
-<div class="audience-icon">👩‍💼</div>
-<div class="audience-info">
-<h4>Working Professionals</h4>
-<p>Build additional skills for personal growth.</p>
-</div>
-</div>
-<div class="audience-card">
-<div class="audience-icon">🏠</div>
-<div class="audience-info">
-<h4>Housewives</h4>
-<p>Flexible learning from home at your own pace.</p>
-</div>
-</div>
-<div class="audience-card">
-<div class="audience-icon">⏰</div>
-<div class="audience-info">
-<h4>Part-Time Job Seekers</h4>
-<p>Explore flexible learning around your schedule.</p>
-</div>
-</div>
-<div class="audience-card">
-<div class="audience-icon">💻</div>
-<div class="audience-info">
-<h4>Beginners</h4>
-<p>Start learning even if you have no prior experience.</p>
-</div>
-</div>
-<div class="audience-card">
-<div class="audience-icon">🚀</div>
-<div class="audience-info">
-<h4>Freelancers & Creators</h4>
-<p>Upgrade your skills and strengthen your digital presence.</p>
-</div>
-</div>
-</div>
-</div>
+    <div class="container">
 
-<div class="join-request">
-<div>
-<h3>Ready To Start Your Learning Journey?</h3>
-<p>Join Smart Money and explore courses, skills, community learning and new growth opportunities.</p>
-</div>
-<a href="#packages" class="join-btn">Request To Join →</a>
-</div>
+        <div class="welcome-card">
 
-</div>
-</div>
+            <div class="welcome-top">
+
+                <small>
+                    WELCOME TO SMART MONEY
+                </small>
+
+                <h2>
+                    Learn Skills. Grow Confidence.
+                </h2>
+
+                <p>
+                    Smart Money is focused on digital learning,
+                    practical skill development and helping learners
+                    build useful knowledge for the modern digital world.
+                </p>
+
+                <div class="status-live">
+
+                    <span class="live-dot"></span>
+
+                    Learning Community
+
+                </div>
+
+            </div>
+
+
+            <div class="who-section">
+
+                <div class="who-title">
+
+                    <h3>
+                        Who Can Learn With Us?
+                    </h3>
+
+                    <p>
+                        Flexible digital learning for different backgrounds
+                        and experience levels.
+                    </p>
+
+                </div>
+
+
+                <div class="audience-grid">
+
+                    <div class="audience-card">
+
+                        <div class="audience-icon">
+                            🎓
+                        </div>
+
+                        <div class="audience-info">
+
+                            <h4>
+                                College Students
+                            </h4>
+
+                            <p>
+                                Learn practical digital skills alongside studies.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="audience-card">
+
+                        <div class="audience-icon">
+                            👩‍💼
+                        </div>
+
+                        <div class="audience-info">
+
+                            <h4>
+                                Working Professionals
+                            </h4>
+
+                            <p>
+                                Develop additional digital knowledge.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="audience-card">
+
+                        <div class="audience-icon">
+                            🏠
+                        </div>
+
+                        <div class="audience-info">
+
+                            <h4>
+                                Homemakers
+                            </h4>
+
+                            <p>
+                                Learn from home at a flexible pace.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="audience-card">
+
+                        <div class="audience-icon">
+                            ⏰
+                        </div>
+
+                        <div class="audience-info">
+
+                            <h4>
+                                Beginners
+                            </h4>
+
+                            <p>
+                                Start learning without previous experience.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="audience-card">
+
+                        <div class="audience-icon">
+                            💻
+                        </div>
+
+                        <div class="audience-info">
+
+                            <h4>
+                                Freelancers
+                            </h4>
+
+                            <p>
+                                Improve useful digital and creative skills.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="audience-card">
+
+                        <div class="audience-icon">
+                            🚀
+                        </div>
+
+                        <div class="audience-info">
+
+                            <h4>
+                                Creators
+                            </h4>
+
+                            <p>
+                                Learn editing, design and digital workflows.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="join-request">
+
+                <div>
+
+                    <h3>
+                        Ready To Start Learning?
+                    </h3>
+
+                    <p>
+                        Explore our course roadmap and see what's coming to Smart Money.
+                    </p>
+
+                </div>
+
+                <a href="#packages"
+                   class="join-btn">
+                    Explore Courses →
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
 
 
-<!-- ABOUT -->
-<section class="section" id="about">
-<div class="container">
-<div class="about-grid">
-<div class="about-text">
-<div class="section-tag">ABOUT US</div>
-<h2 class="section-title">Discover Our <span>Journey Of Growth</span></h2>
-<p>At Smart Money, we focus on making digital education accessible and engaging. Our goal is to help learners discover useful skills, build confidence and grow through flexible digital learning experiences.</p>
-<div class="mission-vision">
-<div class="mv-box">
-<h5>🚀 Our Mission</h5>
-<p>To inspire continuous learning through practical, flexible and accessible digital education.</p>
-</div>
-<div class="mv-box">
-<h5>💡 Our Vision</h5>
-<p>To build a positive community of learners, creators and digitally skilled individuals.</p>
-</div>
-</div>
-</div>
+<!-- =========================================================
+     ABOUT
+========================================================= -->
 
-<div class="about-images">
-<img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=85" alt="Students learning together">
-<img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=85" alt="Students working on laptops">
-</div>
-</div>
-</div>
+<section class="section"
+         id="about">
+
+    <div class="container">
+
+        <div class="about-grid">
+
+            <div class="about-text">
+
+                <div class="section-tag">
+                    ABOUT SMART MONEY
+                </div>
+
+                <h2 class="section-title">
+                    Learning For A
+                    <span>Digital Future</span>
+                </h2>
+
+                <p>
+                    Smart Money focuses on practical digital education.
+                    Our goal is to help learners understand useful tools,
+                    develop creative skills and gain confidence through
+                    structured learning and practice.
+                </p>
+
+                <div class="mission-vision">
+
+                    <div class="mv-box">
+
+                        <h5>
+                            🚀 Our Mission
+                        </h5>
+
+                        <p>
+                            Make practical digital learning easier,
+                            accessible and engaging.
+                        </p>
+
+                    </div>
+
+                    <div class="mv-box">
+
+                        <h5>
+                            💡 Our Vision
+                        </h5>
+
+                        <p>
+                            Build a community of learners and creators
+                            who continuously develop useful skills.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="about-images">
+
+                <img
+                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=85"
+                    alt="Students learning together">
+
+                <img
+                    src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=85"
+                    alt="Students working on laptops">
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
 
 
-<!-- PACKAGES -->
-<section class="section packages-section" id="packages">
-<div class="container">
-<div class="section-center">
-<div class="section-tag">CHOOSE YOUR PATH</div>
-<h2 class="section-title">Choose The Perfect <span>Course Package</span></h2>
-</div>
+<!-- =========================================================
+     PACKAGES + COURSES
+========================================================= -->
 
-<div class="packages-grid">
-<!-- STARTER -->
-<div class="package-card">
-<div class="pkg-banner bg-1">
-<div class="pkg-title"><h3>Starter Package</h3><p>Beginner Growth</p></div>
-<div class="pkg-badge">🚀</div>
-</div>
-<div class="pkg-body">
-<p class="pkg-summary-text">Ideal for beginners starting with fundamental digital skill courses.</p>
-<button class="details-btn" onclick="openPackageModal('Starter Package', '2 Essential Courses', '30% Commission', '₹100 - ₹800', '1 Time / Day', '7 Days', '2%')">🔍 View Product Details</button>
-</div>
-<div class="pkg-footer">
-<div><span class="current-price">₹289</span><span class="old-price">₹499</span></div>
-<a href="checkout.html?name=Starter%20Package&price=289" class="buy-btn">Buy Now</a>
-</div>
-</div>
+<section class="section packages-section"
+         id="packages">
 
-<!-- INTERMEDIATE -->
-<div class="package-card">
-<div class="pkg-banner bg-2">
-<div class="pkg-title"><h3>Intermediate</h3><p>Skill Advancement</p></div>
-<div class="pkg-badge">💻</div>
-</div>
-<div class="pkg-body">
-<p class="pkg-summary-text">Includes professional learning content for better digital skill development.</p>
-<button class="details-btn" onclick="openPackageModal('Intermediate Package', '5 Professional Courses', '50% Commission', '₹100 - ₹1,500', '1 Time / Day', '7 Days', '2%')">🔍 View Product Details</button>
-</div>
-<div class="pkg-footer">
-<div><span class="current-price">₹560</span><span class="old-price">₹999</span></div>
-<a href="checkout.html?name=Intermediate%20Package&price=560" class="buy-btn">Buy Now</a>
-</div>
-</div>
+    <div class="container">
 
-<!-- EXPERT -->
-<div class="package-card">
-<div class="pkg-banner bg-3">
-<div class="pkg-title"><h3>Expert Package</h3><p>Professional Tier</p></div>
-<div class="pkg-badge">⚡</div>
-</div>
-<div class="pkg-body">
-<p class="pkg-summary-text">Advanced learning content for learners looking to improve their digital knowledge.</p>
-<button class="details-btn" onclick="openPackageModal('Expert Package', '10 Advanced Courses', '70% Commission', '₹100 - ₹4,500', '2 Times / Day', '5 Days', '2%')">🔍 View Product Details</button>
-</div>
-<div class="pkg-footer">
-<div><span class="current-price">₹1,149</span><span class="old-price">₹2,999</span></div>
-<a href="checkout.html?name=Expert%20Package&price=1149" class="buy-btn">Buy Now</a>
-</div>
-</div>
+        <div class="section-center">
 
-<!-- MASTER -->
-<div class="package-card">
-<div class="pkg-banner bg-4">
-<div class="pkg-title"><h3>Master Package</h3><p>Advanced Mastery</p></div>
-<div class="pkg-badge">👑</div>
-</div>
-<div class="pkg-body">
-<p class="pkg-summary-text">Access a larger collection of masterclasses and advanced learning material.</p>
-<button class="details-btn" onclick="openPackageModal('Master Package', '16 Elite Masterclasses', '75% Commission', '₹100 - ₹10,000', 'Unlimited', 'Instant', '0%')">🔍 View Product Details</button>
-</div>
-<div class="pkg-footer">
-<div><span class="current-price">₹2,499</span><span class="old-price">₹5,999</span></div>
-<a href="checkout.html?name=Master%20Package&price=2499" class="buy-btn">Buy Now</a>
-</div>
-</div>
+            <div class="section-tag">
+                LEARNING PLANS
+            </div>
 
-<!-- BRAHMASTRA -->
-<div class="package-card">
-<div class="pkg-banner bg-5">
-<div class="pkg-title"><h3>Brahmastra</h3><p>Ultimate Growth</p></div>
-<div class="pkg-badge">🔥</div>
-</div>
-<div class="pkg-body">
-<p class="pkg-summary-text">A larger course bundle designed for advanced learners and creators.</p>
-<button class="details-btn" onclick="openPackageModal('Brahmastra Package', '20 Ultimate Courses', '85% Commission', '₹100 - ₹30,000', 'Unlimited', 'Instant', '0%')">🔍 View Product Details</button>
-</div>
-<div class="pkg-footer">
-<div><span class="current-price">₹5,499</span><span class="old-price">₹10,999</span></div>
-<a href="checkout.html?name=Brahmastra%20Package&price=5499" class="buy-btn">Buy Now</a>
-</div>
-</div>
+            <h2 class="section-title">
+                Choose Your
+                <span>Learning Path</span>
+            </h2>
 
-<!-- PREMIUM -->
-<div class="package-card">
-<div class="pkg-banner bg-6">
-<div class="pkg-title"><h3>Premium Pro</h3><p>Top Tier Access</p></div>
-<div class="pkg-badge">💎</div>
-</div>
-<div class="pkg-body">
-<p class="pkg-summary-text">Premium learning content and tools for serious digital creators and learners.</p>
-<button class="details-btn" onclick="openPackageModal('Premium Pro Package', '23 Premium Courses', '85% Commission', '₹100 - ₹50,000', 'Unlimited', 'Instant', '0%')">🔍 View Product Details</button>
-</div>
-<div class="pkg-footer">
-<div><span class="current-price">₹10,997</span><span class="old-price">₹20,998</span></div>
-<a href="checkout.html?name=Premium%20Pro%20Package&price=10997" class="buy-btn">Buy Now</a>
-</div>
-</div>
+            <p class="package-intro">
+                Each package represents a different learning level.
+                Course availability will be updated as new learning
+                content is completed and published.
+            </p>
 
-</div>
-</div>
+        </div>
+
+
+        <div class="packages-grid">
+
+
+            <!-- =================================================
+                 STARTER
+            ================================================= -->
+
+            <div class="package-card">
+
+                <div class="pkg-banner bg-1">
+
+                    <div class="pkg-title">
+
+                        <h3>
+                            Starter Package
+                        </h3>
+
+                        <p>
+                            Beginner Growth
+                        </p>
+
+                    </div>
+
+                    <div class="pkg-badge">
+                        🚀
+                    </div>
+
+                </div>
+
+
+                <div class="pkg-body">
+
+                    <p class="pkg-summary-text">
+                        A beginner-friendly learning path covering
+                        essential digital and creative skills.
+                    </p>
+
+
+                    <div class="course-count-box">
+
+                        <div class="course-count-main">
+
+                            <div class="course-count-icon">
+                                🎓
+                            </div>
+
+                            <div class="course-count-text">
+
+                                <strong>
+                                    2 Courses
+                                </strong>
+
+                                <span>
+                                    Course roadmap
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <span class="coming-badge">
+                            COMING SOON
+                        </span>
+
+                    </div>
+
+
+                    <div class="course-preview">
+
+                        <div class="course-preview-item">
+
+                            <span class="course-icon">
+                                🎬
+                            </span>
+
+                            Mobile Video Editing
+
+                        </div>
+
+                        <div class="course-preview-item">
+
+                            <span class="course-icon">
+                                🎨
+                            </span>
+
+                            Graphic Design
+
+                        </div>
+
+                    </div>
+
+
+                    <button class="details-btn"
+                            onclick="openCourseModal('Starter Package')">
+
+                        📚 View 2 Courses
+
+                    </button>
+
+                </div>
+
+
+                <div class="pkg-footer">
+
+                    <div>
+
+                        <span class="current-price">
+                            ₹289
+                        </span>
+
+                        <span class="old-price">
+                            ₹499
+                        </span>
+
+                    </div>
+
+                    <a href="checkout.html?name=Starter%20Package&price=289"
+                       class="buy-btn">
+
+                        Buy Now
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 INTERMEDIATE
+            ================================================= -->
+
+            <div class="package-card">
+
+                <div class="pkg-banner bg-2">
+
+                    <div class="pkg-title">
+
+                        <h3>
+                            Intermediate
+                        </h3>
+
+                        <p>
+                            Skill Advancement
+                        </p>
+
+                    </div>
+
+                    <div class="pkg-badge">
+                        💻
+                    </div>
+
+                </div>
+
+
+                <div class="pkg-body">
+
+                    <p class="pkg-summary-text">
+                        A broader learning path for learners who want
+                        to develop multiple practical digital skills.
+                    </p>
+
+
+                    <div class="course-count-box">
+
+                        <div class="course-count-main">
+
+                            <div class="course-count-icon">
+                                🎓
+                            </div>
+
+                            <div class="course-count-text">
+
+                                <strong>
+                                    5 Courses
+                                </strong>
+
+                                <span>
+                                    Course roadmap
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <span class="coming-badge">
+                            COMING SOON
+                        </span>
+
+                    </div>
+
+
+                    <div class="course-preview">
+
+                        <div class="course-preview-item">
+                            <span class="course-icon">🎬</span>
+                            Mobile Video Editing
+                        </div>
+
+                        <div class="course-preview-item">
+                            <span class="course-icon">🎨</span>
+                            Graphic Design
+                        </div>
+
+                        <div class="course-preview-item">
+                            <span class="course-icon">📱</span>
+                            Social Media
+                        </div>
+
+                    </div>
+
+
+                    <button class="details-btn"
+                            onclick="openCourseModal('Intermediate Package')">
+
+                        📚 View 5 Courses
+
+                    </button>
+
+                </div>
+
+
+                <div class="pkg-footer">
+
+                    <div>
+
+                        <span class="current-price">
+                            ₹560
+                        </span>
+
+                        <span class="old-price">
+                            ₹999
+                        </span>
+
+                    </div>
+
+                    <a href="checkout.html?name=Intermediate%20Package&price=560"
+                       class="buy-btn">
+
+                        Buy Now
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 EXPERT
+            ================================================= -->
+
+            <div class="package-card">
+
+                <div class="pkg-banner bg-3">
+
+                    <div class="pkg-title">
+
+                        <h3>
+                            Expert Package
+                        </h3>
+
+                        <p>
+                            Professional Tier
+                        </p>
+
+                    </div>
+
+                    <div class="pkg-badge">
+                        ⚡
+                    </div>
+
+                </div>
+
+
+                <div class="pkg-body">
+
+                    <p class="pkg-summary-text">
+                        An advanced learning roadmap covering creative,
+                        technical and digital skills.
+                    </p>
+
+
+                    <div class="course-count-box">
+
+                        <div class="course-count-main">
+
+                            <div class="course-count-icon">
+                                🎓
+                            </div>
+
+                            <div class="course-count-text">
+
+                                <strong>
+                                    10 Courses
+                                </strong>
+
+                                <span>
+                                    Course roadmap
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <span class="coming-badge">
+                            COMING SOON
+                        </span>
+
+                    </div>
+
+
+                    <div class="course-preview">
+
+                        <div class="course-preview-item">
+                            <span class="course-icon">🎬</span>
+                            Video Editing
+                        </div>
+
+                        <div class="course-preview-item">
+                            <span class="course-icon">🎨</span>
+                            Graphic Design
+                        </div>
+
+                        <div class="course-preview-item">
+                            <span class="course-icon">📱</span>
+                            Social Media
+                        </div>
+
+                    </div>
+
+
+                    <button class="details-btn"
+                            onclick="openCourseModal('Expert Package')">
+
+                        📚 View 10 Courses
+
+                    </button>
+
+                </div>
+
+
+                <div class="pkg-footer">
+
+                    <div>
+
+                        <span class="current-price">
+                            ₹1,149
+                        </span>
+
+                        <span class="old-price">
+                            ₹2,999
+                        </span>
+
+                    </div>
+
+                    <a href="checkout.html?name=Expert%20Package&price=1149"
+                       class="buy-btn">
+
+                        Buy Now
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 MASTER
+            ================================================= -->
+
+            <div class="package-card">
+
+                <div class="pkg-banner bg-4">
+
+                    <div class="pkg-title">
+
+                        <h3>
+                            Master Package
+                        </h3>
+
+                        <p>
+                            Advanced Mastery
+                        </p>
+
+                    </div>
+
+                    <div class="pkg-badge">
+                        👑
+                    </div>
+
+                </div>
+
+
+                <div class="pkg-body">
+
+                    <p class="pkg-summary-text">
+                        A larger learning roadmap designed for learners
+                        who want broader digital knowledge.
+                    </p>
+
+
+                    <div class="course-count-box">
+
+                        <div class="course-count-main">
+
+                            <div class="course-count-icon">
+                                👑
+                            </div>
+
+                            <div class="course-count-text">
+
+                                <strong>
+                                    16 Courses
+                                </strong>
+
+                                <span>
+                                    Course roadmap
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <span class="coming-badge">
+                            COMING SOON
+                        </span>
+
+                    </div>
+
+
+                    <div class="course-preview">
+
+                        <div class="course-preview-item">
+                            <span class="course-icon">🎬</span>
+                            Video Editing
+                        </div>
+
+                        <div class="course-preview-item">
+                            <span class="course-icon">🎨</span>
+                            Graphic Design
+                        </div>
+
+                        <div class="course-preview-item">
+                            <span class="course-icon">💻</span>
+                            Web Development
+                        </div>
+
+                    </div>
+
+
+                    <button class="details-btn"
+                            onclick="openCourseModal('Master Package')">
+
+                        📚 View 16 Courses
+
+                    </button>
+
+                </div>
+
+
+                <div class="pkg-footer">
+
+                    <div>
+
+                        <span class="current-price">
+                            ₹2,499
+                        </span>
+
+                        <span class="old-price">
+                            ₹5,999
+                        </span>
+
+                    </div>
+
+                    <a href="checkout.html?name=Master%20Package&price=2499"
+                       class="buy-btn">
+
+                        Buy Now
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 BRAHMASTRA
+            ================================================= -->
+
+            <div class="package-card">
+
+                <div class="pkg-banner bg-5">
+
+                    <div class="pkg-title">
+
+                        <h3>
+                            Brahmastra
+                        </h3>
+
+                        <p>
+                            Ultimate Growth
+                        </p>
+
+                    </div>
+
+                    <div class="pkg-badge">
+                        🔥
+                    </div>
+
+                </div>
+
+
+                <div class="pkg-body">
+
+                    <p class="pkg-summary-text">
+                        A broad learning roadmap intended for learners
+                        seeking advanced digital and creative knowledge.
+                    </p>
+
+
+                    <div class="course-count-box">
+
+                        <div class="course-count-main">
+
+                            <div class="course-count-icon">
+                                🔥
+                            </div>
+
+                            <div class="course-count-text">
+
+                                <strong>
+                                    20 Courses
+                                </strong>
+
+                                <span>
+                                    Course roadmap
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <span class="coming-badge">
+                            COMING SOON
+                        </span>
+
+                    </div>
+
+
+                    <div class="course-preview">
+
+                        <div class="course-preview-item">
+                            <span class="course-icon">🎬</span>
+                            Creative Skills
+                        </div>
+
+                        <div class="course-preview-item">
+                            <span class="course-icon">📱</span>
+                            Digital Skills
+                        </div>
+
+                        <div class="course-preview-item">
+                            <span class="course-icon">💻</span>
+                            Technical Skills
+                        </div>
+
+                    </div>
+
+
+                    <button class="details-btn"
+                            onclick="openCourseModal('Brahmastra Package')">
+
+                        📚 View 20 Courses
+
+                    </button>
+
+                </div>
+
+
+                <div class="pkg-footer">
+
+                    <div>
+
+                        <span class="current-price">
+                            ₹5,499
+                        </span>
+
+                        <span class="old-price">
+                            ₹10,999
+                        </span>
+
+                    </div>
+
+                    <a href="checkout.html?name=Brahmastra%20Package&price=5499"
+                       class="buy-btn">
+
+                        Buy Now
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PREMIUM PRO
+            ================================================= -->
+
+            <div class="package-card">
+
+                <div class="pkg-banner bg-6">
+
+                    <div class="pkg-title">
+
+                        <h3>
+                            Premium Pro
+                        </h3>
+
+                        <p>
+                            Top Tier Access
+                        </p>
+
+                    </div>
+
+                    <div class="pkg-badge">
+                        💎
+                    </div>
+
+                </div>
+
+
+                <div class="pkg-body">
+
+                    <p class="pkg-summary-text">
+                        The largest planned learning roadmap for
+                        serious digital learners and creators.
+                    </p>
+
+
+                    <div class="course-count-box">
+
+                        <div class="course-count-main">
+
+                            <div class="course-count-icon">
+                                💎
+                            </div>
+
+                            <div class="course-count-text">
+
+                                <strong>
+                                    23 Courses
+                                </strong>
+
+                                <span>
+                                    Course roadmap
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <span class="coming-badge">
+                            COMING SOON
+                        </span>
+
+                    </div>
+
+
+                    <div class="course-preview">
+
+                        <div class="course-preview-item">
+                            <span class="course-icon">🎬</span>
+                            Video & Creative Skills
+                        </div>
+
+                        <div class="course-preview-item">
+                            <span class="course-icon">🎵</span>
+                            Music & Media
+                        </div>
+
+                        <div class="course-preview-item">
+                            <span class="course-icon">💻</span>
+                            Web & Digital Skills
+                        </div>
+
+                    </div>
+
+
+                    <button class="details-btn"
+                            onclick="openCourseModal('Premium Pro Package')">
+
+                        📚 View 23 Courses
+
+                    </button>
+
+                </div>
+
+
+                <div class="pkg-footer">
+
+                    <div>
+
+                        <span class="current-price">
+                            ₹10,997
+                        </span>
+
+                        <span class="old-price">
+                            ₹20,998
+                        </span>
+
+                    </div>
+
+                    <a href="checkout.html?name=Premium%20Pro%20Package&price=10997"
+                       class="buy-btn">
+
+                        Buy Now
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =====================================================
+             LEARNING INFORMATION
+        ===================================================== -->
+
+        <div class="learning-info"
+             id="learning">
+
+            <div>
+
+                <div class="section-tag"
+                     style="color:#a78bfa;">
+                    LEARNING EXPERIENCE
+                </div>
+
+                <h3>
+                    Learn More Than Just Videos
+                </h3>
+
+                <p>
+                    Our planned courses are designed around lessons,
+                    practice and real projects. New courses will be
+                    published as they are completed.
+                </p>
+
+            </div>
+
+
+            <div class="learning-points">
+
+                <div class="learning-point">
+                    🎥 Structured Lessons
+                </div>
+
+                <div class="learning-point">
+                    📝 Practice Assignments
+                </div>
+
+                <div class="learning-point">
+                    ❓ Quizzes & Assessments
+                </div>
+
+                <div class="learning-point">
+                    🧑‍🏫 Instructor Guidance
+                </div>
+
+                <div class="learning-point">
+                    💻 Practical Projects
+                </div>
+
+                <div class="learning-point">
+                    🏆 Completion Recognition
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
 
 
-<!-- TESTIMONIAL -->
-<section class="section" id="testimonials">
-<div class="container">
-<div class="section-center">
-<div class="section-tag">COMMUNITY FEEDBACK</div>
-<h2 class="section-title">Explore Feedback From <span>Our Learners</span></h2>
-</div>
+<!-- =========================================================
+     TESTIMONIALS
+========================================================= -->
 
-<div class="testimonial-grid">
-<div class="testimonial-card">
-<div>
-<div class="client-info">
-<img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" alt="Client">
-<div><h4>Vikas Yadav</h4><p>★★★★★</p></div>
-</div>
-<p class="feedback">"Learning digital skills helped me understand new online tools and improve my confidence."</p>
-</div>
-</div>
+<section class="section"
+         id="testimonials">
 
-<div class="testimonial-card">
-<div>
-<div class="client-info">
-<img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80" alt="Client">
-<div><h4>Pooja Gupta</h4><p>★★★★★</p></div>
-</div>
-<p class="feedback">"The learning experience and guidance helped me explore new digital skills at my own pace."</p>
-</div>
-</div>
+    <div class="container">
 
-<div class="testimonial-card">
-<div>
-<div class="client-info">
-<img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" alt="Client">
-<div><h4>Rohit Singh</h4><p>★★★★★</p></div>
-</div>
-<p class="feedback">"I found useful learning resources and gained more clarity about developing digital skills."</p>
-</div>
-</div>
-</div>
+        <div class="section-center">
 
-<!-- FEEDBACK SUBMISSION FORM -->
-<div class="feedback-form-card">
-<h3>Share Your Feedback</h3>
-<p>We value your thoughts! Submit your experience below, and it will be sent directly to our support team.</p>
-<form class="feedback-form" onsubmit="sendFeedbackEmail(event)">
-<div class="form-row">
-<div class="form-group">
-<label for="fbName">Your Name</label>
-<input type="text" id="fbName" placeholder="Enter your full name" required>
-</div>
-<div class="form-group">
-<label for="fbId">Your User ID / Email ID</label>
-<input type="text" id="fbId" placeholder="Enter your ID or registered email" required>
-</div>
-</div>
+            <div class="section-tag">
+                COMMUNITY FEEDBACK
+            </div>
 
-<div class="form-row">
-<div class="form-group">
-<label for="fbRating">Rating</label>
-<select id="fbRating" required>
-<option value="5 Stars - ★★★★★">★★★★★ (5 Stars - Excellent)</option>
-<option value="4 Stars - ★★★★☆">★★★★☆ (4 Stars - Good)</option>
-<option value="3 Stars - ★★★☆☆">★★★☆☆ (3 Stars - Average)</option>
-<option value="2 Stars - ★★☆☆☆">★★☆☆☆ (2 Stars - Poor)</option>
-<option value="1 Star - ★☆☆☆☆">★☆☆☆☆ (1 Star - Very Bad)</option>
-</select>
-</div>
-<div class="form-group">
-<label for="fbSubject">Subject / Course Name</label>
-<input type="text" id="fbSubject" placeholder="e.g. Starter Package / General Experience" required>
-</div>
-</div>
+            <h2 class="section-title">
+                Learner
+                <span>Feedback</span>
+            </h2>
 
-<div class="form-group">
-<label for="fbMessage">Your Feedback Message</label>
-<textarea id="fbMessage" placeholder="Write your feedback here..." required></textarea>
-</div>
+        </div>
 
-<button type="submit" class="submit-feedback-btn">Send Feedback Directly →</button>
-</form>
-</div>
 
-</div>
+        <div class="testimonial-grid">
+
+
+            <div class="testimonial-card">
+
+                <div>
+
+                    <div class="client-info">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80"
+                            alt="Learner">
+
+                        <div>
+
+                            <h4>
+                                Vikas Yadav
+                            </h4>
+
+                            <p>
+                                ★★★★★
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <p class="feedback">
+                        "Learning digital skills helped me understand
+                        new online tools and improve my confidence."
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="testimonial-card">
+
+                <div>
+
+                    <div class="client-info">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80"
+                            alt="Learner">
+
+                        <div>
+
+                            <h4>
+                                Pooja Gupta
+                            </h4>
+
+                            <p>
+                                ★★★★★
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <p class="feedback">
+                        "The learning experience and guidance helped me
+                        explore new digital skills at my own pace."
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="testimonial-card">
+
+                <div>
+
+                    <div class="client-info">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"
+                            alt="Learner">
+
+                        <div>
+
+                            <h4>
+                                Rohit Singh
+                            </h4>
+
+                            <p>
+                                ★★★★★
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <p class="feedback">
+                        "I found useful learning resources and gained
+                        more clarity about developing digital skills."
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- FEEDBACK FORM -->
+
+        <div class="feedback-form-card">
+
+            <h3>
+                Share Your Feedback
+            </h3>
+
+            <p>
+                We value your thoughts. Submit your experience
+                directly to our support team.
+            </p>
+
+
+            <form class="feedback-form"
+                  onsubmit="sendFeedbackEmail(event)">
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="fbName">
+                            Your Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="fbName"
+                            placeholder="Enter your full name"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="fbId">
+                            User ID / Email ID
+                        </label>
+
+                        <input
+                            type="text"
+                            id="fbId"
+                            placeholder="Enter your ID or registered email"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="fbRating">
+                            Rating
+                        </label>
+
+                        <select id="fbRating"
+                                required>
+
+                            <option value="5 Stars - ★★★★★">
+                                ★★★★★ (5 Stars - Excellent)
+                            </option>
+
+                            <option value="4 Stars - ★★★★☆">
+                                ★★★★☆ (4 Stars - Good)
+                            </option>
+
+                            <option value="3 Stars - ★★★☆☆">
+                                ★★★☆☆ (3 Stars - Average)
+                            </option>
+
+                            <option value="2 Stars - ★★☆☆☆">
+                                ★★☆☆☆ (2 Stars - Poor)
+                            </option>
+
+                            <option value="1 Star - ★☆☆☆☆">
+                                ★☆☆☆☆ (1 Star - Very Bad)
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="fbSubject">
+                            Subject / Course
+                        </label>
+
+                        <input
+                            type="text"
+                            id="fbSubject"
+                            placeholder="e.g. Course Experience"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="fbMessage">
+                        Your Feedback Message
+                    </label>
+
+                    <textarea
+                        id="fbMessage"
+                        placeholder="Write your feedback here..."
+                        required>
+                    </textarea>
+
+                </div>
+
+
+                <button type="submit"
+                        class="submit-feedback-btn">
+
+                    Send Feedback Directly →
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
 </section>
 
 
-<!-- SUPPORT -->
-<section class="section support-section" id="support">
-<div class="container">
-<div class="section-center">
-<div class="section-tag">WE ARE HERE TO HELP</div>
-<h2 class="section-title">Customer Support & <span>Help Desk</span></h2>
-</div>
+<!-- =========================================================
+     SUPPORT
+========================================================= -->
 
-<div class="support-grid">
-<div class="support-card">
-<h3>💳 Payment & Login Support</h3>
-<p><strong>Email:</strong> smartmoneysupport1@gmail.com</p>
-<p><strong>Mobile:</strong> 9954851021</p>
-</div>
-<div class="support-card">
-<h3>❓ General Inquiries & Referrals</h3>
-<p><strong>Email:</strong> Smsupport7@gmail.com</p>
-<p><strong>Mobile:</strong> 6900986957</p>
-</div>
-</div>
-</div>
+<section class="section support-section"
+         id="support">
+
+    <div class="container">
+
+        <div class="section-center">
+
+            <div class="section-tag">
+                WE ARE HERE TO HELP
+            </div>
+
+            <h2 class="section-title">
+                Customer Support &
+                <span>Help Desk</span>
+            </h2>
+
+        </div>
+
+
+        <div class="support-grid">
+
+
+            <div class="support-card">
+
+                <h3>
+                    💳 Payment & Login Support
+                </h3>
+
+                <p>
+                    <strong>Email:</strong>
+                    smartmoneysupport1@gmail.com
+                </p>
+
+                <p>
+                    <strong>Mobile:</strong>
+                    9954851021
+                </p>
+
+            </div>
+
+
+            <div class="support-card">
+
+                <h3>
+                    ❓ General Inquiries
+                </h3>
+
+                <p>
+                    <strong>Email:</strong>
+                    Smsupport7@gmail.com
+                </p>
+
+                <p>
+                    <strong>Mobile:</strong>
+                    6900986957
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
 </section>
 
 
-<!-- FOOTER -->
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
 <footer class="footer">
-<div class="container">
-<div class="footer-grid">
-<div>
-<h3>Smart Money</h3>
-<p style="margin-top:15px;max-width:420px;">Smart Money is an e-learning platform focused on digital learning, skill development and helping learners build confidence in the modern digital world.</p>
-<p style="margin-top:12px;">📍 Assam, India</p>
-</div>
-<div>
-<h4>Quick Links</h4>
-<a href="#home">Home</a>
-<a href="#about">About Us</a>
-<a href="#packages">Courses</a>
-<a href="#support">Contact Support</a>
-</div>
-<div>
-<h4>Useful Links</h4>
-<a href="#">Privacy & Policy</a>
-<a href="#">Terms & Conditions</a>
-<a href="#">Refund Policy</a>
-</div>
-</div>
 
-<div class="footer-bottom">
-© 2026 Smart Money. All Rights Reserved.
-<br><br>
-Created by <b>Swrang Swargiary</b> • Assam, India
-</div>
-</div>
+    <div class="container">
+
+        <div class="footer-grid">
+
+
+            <div>
+
+                <h3>
+                    Smart Money
+                </h3>
+
+                <p style="margin-top:15px;max-width:420px;">
+                    Smart Money is an e-learning platform focused on
+                    digital learning, skill development and helping
+                    learners build confidence in the modern digital world.
+                </p>
+
+                <p style="margin-top:12px;">
+                    📍 Assam, India
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h4>
+                    Quick Links
+                </h4>
+
+                <a href="#home">
+                    Home
+                </a>
+
+                <a href="#about">
+                    About Us
+                </a>
+
+                <a href="#packages">
+                    Courses
+                </a>
+
+                <a href="#learning">
+                    Learning System
+                </a>
+
+                <a href="#support">
+                    Contact Support
+                </a>
+
+            </div>
+
+
+            <div>
+
+                <h4>
+                    Useful Links
+                </h4>
+
+                <a href="#">
+                    Privacy & Policy
+                </a>
+
+                <a href="#">
+                    Terms & Conditions
+                </a>
+
+                <a href="#">
+                    Refund Policy
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            © 2026 Smart Money. All Rights Reserved.
+
+            <br><br>
+
+            Created by
+            <b>Swrang Swargiary</b>
+            • Assam, India
+
+        </div>
+
+    </div>
+
 </footer>
 
 
-<!-- PACKAGE MODAL -->
-<div class="modal-overlay" id="packageModal">
-<div class="modal-box">
-<button class="modal-close" onclick="closePackageModal()">✕</button>
-<h2 id="modalTitle">Package Details</h2>
-<div class="detail-row"><span>Included Content</span><span id="modalCourses"></span></div>
-<div class="detail-row"><span>Commission Rate</span><span id="modalCommission"></span></div>
-<div class="detail-row"><span>Withdrawal Limit</span><span id="modalWithdrawal"></span></div>
-<div class="detail-row"><span>Daily Frequency</span><span id="modalFrequency"></span></div>
-<div class="detail-row"><span>Processing Time</span><span id="modalProcessing"></span></div>
-<div class="detail-row"><span>Transaction Fee</span><span id="modalFee"></span></div>
-<div class="detail-row"><span>Support Level</span><span>24/7 Priority Assistance</span></div>
-</div>
+<!-- =========================================================
+     COURSE MODAL
+========================================================= -->
+
+<div class="modal-overlay"
+     id="courseModal">
+
+    <div class="modal-box">
+
+        <button class="modal-close"
+                onclick="closeCourseModal()">
+            ✕
+        </button>
+
+        <h2 id="courseModalTitle">
+            Courses Included
+        </h2>
+
+        <p class="modal-subtitle"
+           id="courseModalSubtitle">
+            Explore the planned learning roadmap for this package.
+        </p>
+
+        <div class="modal-course-list"
+             id="courseModalList">
+        </div>
+
+
+        <div class="package-detail-section">
+
+            <h4>
+                📦 Package Information
+            </h4>
+
+            <div class="detail-row">
+                <span>
+                    Included Courses
+                </span>
+
+                <span id="courseModalCount">
+                    -
+                </span>
+            </div>
+
+            <div class="detail-row">
+                <span>
+                    Course Status
+                </span>
+
+                <span>
+                    New courses are being developed
+                </span>
+            </div>
+
+            <div class="detail-row">
+                <span>
+                    Learning Format
+                </span>
+
+                <span>
+                    Lessons + Practice + Projects
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 
-<!-- ADMIN PREVIEW MODAL -->
-<div class="modal-overlay" id="adminPreviewModal">
-<div class="modal-box" style="text-align:center;">
-<button class="modal-close" onclick="closeAdminPreviewModal()">✕</button>
-<h2 style="margin-bottom:15px;">Admin Update Preview</h2>
-<div id="previewImageContainer" style="min-height:200px; display:flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:12px; overflow:hidden;">
-<p id="noPreviewText" style="color:#64748b; font-size:13px;">Loading preview image from database...</p>
-</div>
-</div>
+<!-- =========================================================
+     ADMIN PREVIEW MODAL
+========================================================= -->
+
+<div class="modal-overlay"
+     id="adminPreviewModal">
+
+    <div class="modal-box"
+         style="text-align:center;">
+
+        <button class="modal-close"
+                onclick="closeAdminPreviewModal()">
+            ✕
+        </button>
+
+        <h2 style="margin-bottom:15px;">
+            Admin Update Preview
+        </h2>
+
+        <div id="previewImageContainer"
+             style="
+                min-height:200px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                background:#f1f5f9;
+                border-radius:12px;
+                overflow:hidden;
+             ">
+
+            <p id="noPreviewText"
+               style="
+                    color:#64748b;
+                    font-size:13px;
+               ">
+                Loading preview image from database...
+            </p>
+
+        </div>
+
+    </div>
+
 </div>
 
 
 <script>
 
-// Connected Supabase Project Configuration
-const SUPABASE_URL = 'https://rvprrulkjegvicbnjuft.supabase.co'; 
-const SUPABASE_ANON_KEY = 'sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ';
+/* =========================================================
+   SUPABASE
+========================================================= */
 
-const supabaseClient = (typeof supabase !== 'undefined' && SUPABASE_URL.includes('supabase.co')) 
-    ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
-    : null;
+const SUPABASE_URL =
+    'https://rvprrulkjegvicbnjuft.supabase.co';
+
+const SUPABASE_ANON_KEY =
+    'sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ';
+
+const supabaseClient =
+    (typeof supabase !== 'undefined' &&
+     SUPABASE_URL.includes('supabase.co'))
+        ? supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        )
+        : null;
+
+
+/* =========================================================
+   COURSE DATABASE
+   ---------------------------------------------------------
+   IMPORTANT:
+   available:false = Coming Soon
+   available:true  = Available
+========================================================= */
+
+const courseCatalog = {
+
+    "Mobile Video Editing": {
+        icon:"🎬",
+        description:"Learn mobile video editing from basic timeline editing to practical short-form projects.",
+        available:false
+    },
+
+    "Graphic Design & Thumbnail Design": {
+        icon:"🎨",
+        description:"Learn design fundamentals, Canva workflows and thumbnail creation.",
+        available:false
+    },
+
+    "Social Media & Content Creation": {
+        icon:"📱",
+        description:"Learn content planning, short-form content, branding and analytics basics.",
+        available:false
+    },
+
+    "Music Production & Digital Music": {
+        icon:"🎵",
+        description:"Learn music production fundamentals, recording, mixing and digital music workflows.",
+        available:false
+    },
+
+    "Website Development Fundamentals": {
+        icon:"💻",
+        description:"Learn HTML, CSS, JavaScript, responsive design and basic deployment concepts.",
+        available:false
+    },
+
+    "Digital Marketing Fundamentals": {
+        icon:"📈",
+        description:"Learn the fundamentals of digital marketing, audience research and content promotion.",
+        available:false
+    },
+
+    "Freelancing Fundamentals": {
+        icon:"💼",
+        description:"Learn basic freelancing concepts, portfolio building and professional workflows.",
+        available:false
+    },
+
+    "Personal Branding": {
+        icon:"🌟",
+        description:"Learn how to build a consistent and professional digital identity.",
+        available:false
+    },
+
+    "Photography Basics": {
+        icon:"📷",
+        description:"Learn photography fundamentals, composition and basic editing concepts.",
+        available:false
+    },
+
+    "Lightroom Editing": {
+        icon:"🌈",
+        description:"Learn photo enhancement and basic color correction workflows.",
+        available:false
+    },
+
+    "CapCut Advanced Editing": {
+        icon:"✂️",
+        description:"Advanced mobile editing concepts including keyframes, masking and effects.",
+        available:false
+    },
+
+    "YouTube Content Creation": {
+        icon:"▶️",
+        description:"Learn channel planning, content structure, thumbnails and basic analytics.",
+        available:false
+    },
+
+    "Instagram Reels Creation": {
+        icon:"📲",
+        description:"Learn short-form video concepts, hooks, editing and responsible growth strategies.",
+        available:false
+    },
+
+    "AI Tools for Creators": {
+        icon:"🤖",
+        description:"Learn responsible use of AI tools for creative and productivity workflows.",
+        available:false
+    },
+
+    "Audio Editing Basics": {
+        icon:"🎧",
+        description:"Learn basic audio editing, cleanup and sound balancing.",
+        available:false
+    },
+
+    "Presentation Design": {
+        icon:"📊",
+        description:"Learn how to create clear and professional presentations.",
+        available:false
+    },
+
+    "Communication Skills": {
+        icon:"🗣️",
+        description:"Learn practical communication and presentation fundamentals.",
+        available:false
+    },
+
+    "Productivity & Digital Tools": {
+        icon:"⚙️",
+        description:"Learn practical workflows using common digital productivity tools.",
+        available:false
+    },
+
+    "Online Safety & Digital Awareness": {
+        icon:"🔐",
+        description:"Learn basic account security, privacy and responsible digital practices.",
+        available:false
+    },
+
+    "Portfolio Building": {
+        icon:"📁",
+        description:"Learn how to organize your work and create a useful digital portfolio.",
+        available:false
+    },
+
+    "Client Communication Basics": {
+        icon:"🤝",
+        description:"Learn professional client communication and project workflow basics.",
+        available:false
+    },
+
+    "Basic Computer Skills": {
+        icon:"🖥️",
+        description:"Learn essential computer concepts for beginners.",
+        available:false
+    },
+
+    "Digital Entrepreneurship Basics": {
+        icon:"🚀",
+        description:"Learn fundamental concepts of building and managing a digital project.",
+        available:false
+    }
+
+};
+
+
+/* =========================================================
+   PACKAGE COURSE MAPPING
+========================================================= */
+
+const packageCourses = {
+
+    "Starter Package": [
+
+        "Mobile Video Editing",
+
+        "Graphic Design & Thumbnail Design"
+
+    ],
+
+
+    "Intermediate Package": [
+
+        "Mobile Video Editing",
+
+        "Graphic Design & Thumbnail Design",
+
+        "Social Media & Content Creation",
+
+        "Music Production & Digital Music",
+
+        "Website Development Fundamentals"
+
+    ],
+
+
+    "Expert Package": [
+
+        "Mobile Video Editing",
+
+        "Graphic Design & Thumbnail Design",
+
+        "Social Media & Content Creation",
+
+        "Music Production & Digital Music",
+
+        "Website Development Fundamentals",
+
+        "Digital Marketing Fundamentals",
+
+        "Freelancing Fundamentals",
+
+        "Personal Branding",
+
+        "Photography Basics",
+
+        "Lightroom Editing"
+
+    ],
+
+
+    "Master Package": [
+
+        "Mobile Video Editing",
+
+        "Graphic Design & Thumbnail Design",
+
+        "Social Media & Content Creation",
+
+        "Music Production & Digital Music",
+
+        "Website Development Fundamentals",
+
+        "Digital Marketing Fundamentals",
+
+        "Freelancing Fundamentals",
+
+        "Personal Branding",
+
+        "Photography Basics",
+
+        "Lightroom Editing",
+
+        "CapCut Advanced Editing",
+
+        "YouTube Content Creation",
+
+        "Instagram Reels Creation",
+
+        "AI Tools for Creators",
+
+        "Audio Editing Basics",
+
+        "Presentation Design"
+
+    ],
+
+
+    "Brahmastra Package": [
+
+        "Mobile Video Editing",
+
+        "Graphic Design & Thumbnail Design",
+
+        "Social Media & Content Creation",
+
+        "Music Production & Digital Music",
+
+        "Website Development Fundamentals",
+
+        "Digital Marketing Fundamentals",
+
+        "Freelancing Fundamentals",
+
+        "Personal Branding",
+
+        "Photography Basics",
+
+        "Lightroom Editing",
+
+        "CapCut Advanced Editing",
+
+        "YouTube Content Creation",
+
+        "Instagram Reels Creation",
+
+        "AI Tools for Creators",
+
+        "Audio Editing Basics",
+
+        "Presentation Design",
+
+        "Communication Skills",
+
+        "Productivity & Digital Tools",
+
+        "Online Safety & Digital Awareness",
+
+        "Portfolio Building"
+
+    ],
+
+
+    "Premium Pro Package": [
+
+        "Mobile Video Editing",
+
+        "Graphic Design & Thumbnail Design",
+
+        "Social Media & Content Creation",
+
+        "Music Production & Digital Music",
+
+        "Website Development Fundamentals",
+
+        "Digital Marketing Fundamentals",
+
+        "Freelancing Fundamentals",
+
+        "Personal Branding",
+
+        "Photography Basics",
+
+        "Lightroom Editing",
+
+        "CapCut Advanced Editing",
+
+        "YouTube Content Creation",
+
+        "Instagram Reels Creation",
+
+        "AI Tools for Creators",
+
+        "Audio Editing Basics",
+
+        "Presentation Design",
+
+        "Communication Skills",
+
+        "Productivity & Digital Tools",
+
+        "Online Safety & Digital Awareness",
+
+        "Portfolio Building",
+
+        "Client Communication Basics",
+
+        "Basic Computer Skills",
+
+        "Digital Entrepreneurship Basics"
+
+    ]
+
+};
+
+
+/* =========================================================
+   MENU
+========================================================= */
 
 function toggleMenu(){
-    document.getElementById("mobileMenu").classList.toggle("active");
-    document.getElementById("menuOverlay").classList.toggle("active");
+
+    document
+        .getElementById("mobileMenu")
+        .classList.toggle("active");
+
+    document
+        .getElementById("menuOverlay")
+        .classList.toggle("active");
+
 }
 
-function openPackageModal(name, courses, commission, withdrawal, frequency, processing, fee){
-    document.getElementById("modalTitle").innerText=name;
-    document.getElementById("modalCourses").innerText=courses;
-    document.getElementById("modalCommission").innerText=commission;
-    document.getElementById("modalWithdrawal").innerText=withdrawal;
-    document.getElementById("modalFrequency").innerText=frequency;
-    document.getElementById("modalProcessing").innerText=processing;
-    document.getElementById("modalFee").innerText=fee;
-    document.getElementById("packageModal").style.display="flex";
+
+/* =========================================================
+   COURSE MODAL
+========================================================= */
+
+function openCourseModal(packageName){
+
+    const modal =
+        document.getElementById("courseModal");
+
+    const title =
+        document.getElementById("courseModalTitle");
+
+    const subtitle =
+        document.getElementById("courseModalSubtitle");
+
+    const list =
+        document.getElementById("courseModalList");
+
+    const count =
+        document.getElementById("courseModalCount");
+
+
+    const courses =
+        packageCourses[packageName] || [];
+
+
+    title.innerText =
+        packageName + " — Courses";
+
+
+    subtitle.innerText =
+        "Below is the planned course roadmap for this package. Courses will be marked available only after the learning content is completed and published.";
+
+
+    count.innerText =
+        courses.length + " Courses";
+
+
+    list.innerHTML = "";
+
+
+    courses.forEach(courseName => {
+
+        const course =
+            courseCatalog[courseName] || {
+
+                icon:"📚",
+
+                description:
+                    "Course information will be published soon.",
+
+                available:false
+
+            };
+
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "modal-course-item";
+
+
+        const statusClass =
+            course.available
+                ? "status-available"
+                : "status-coming";
+
+
+        const statusText =
+            course.available
+                ? "AVAILABLE"
+                : "COMING SOON";
+
+
+        item.innerHTML = `
+
+            <div class="modal-course-icon">
+                ${course.icon}
+            </div>
+
+            <div class="modal-course-info">
+
+                <strong>
+                    ${escapeHTML(courseName)}
+                </strong>
+
+                <span>
+                    ${escapeHTML(course.description)}
+                </span>
+
+            </div>
+
+            <span class="status-badge ${statusClass}">
+                ${statusText}
+            </span>
+
+        `;
+
+
+        list.appendChild(item);
+
+    });
+
+
+    modal.style.display =
+        "flex";
+
+    document.body.style.overflow =
+        "hidden";
+
 }
 
-function closePackageModal(){
-    document.getElementById("packageModal").style.display="none";
+
+function closeCourseModal(){
+
+    document
+        .getElementById("courseModal")
+        .style.display = "none";
+
+    document.body.style.overflow =
+        "";
+
 }
 
-// Fixed & Robust function to load image from Database table or LocalStorage fallback
+
+/* =========================================================
+   SAFE HTML TEXT
+========================================================= */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================================
+   ADMIN PREVIEW
+========================================================= */
+
 async function openAdminPreviewModal(){
-    const modal = document.getElementById("adminPreviewModal");
-    const container = document.getElementById("previewImageContainer");
-    modal.style.display = "flex";
-    
-    container.innerHTML = `<p style="color:#64748b; font-size:13px; padding:20px;">Loading from admin storage...</p>`;
+
+    const modal =
+        document.getElementById("adminPreviewModal");
+
+    const container =
+        document.getElementById("previewImageContainer");
+
+
+    modal.style.display =
+        "flex";
+
+
+    container.innerHTML = `
+        <p style="
+            color:#64748b;
+            font-size:13px;
+            padding:20px;
+        ">
+            Loading from admin storage...
+        </p>
+    `;
+
 
     let imageUrl = null;
 
-    // 1. Try fetching from Supabase table `admin_updates`
-    if (supabaseClient) {
-        try {
-            const { data, error } = await supabaseClient
-                .from('admin_updates')
-                .select('*')
+
+    if(supabaseClient){
+
+        try{
+
+            const { data, error } =
+                await supabaseClient
+                .from("admin_updates")
+                .select("*")
                 .limit(1);
-            
-            if (data && data.length > 0) {
-                imageUrl = data[0].image_url || data[0].image_ || data[0].image || data[0].url;
+
+
+            if(error){
+
+                console.log(
+                    "Admin update fetch error:",
+                    error
+                );
+
             }
-        } catch (err) {
-            console.log("Supabase fetch error:", err);
+
+
+            if(data && data.length > 0){
+
+                imageUrl =
+                    data[0].image_url ||
+                    data[0].image_ ||
+                    data[0].image ||
+                    data[0].url;
+
+            }
+
+        }catch(err){
+
+            console.log(
+                "Supabase fetch error:",
+                err
+            );
+
         }
+
     }
 
-    // 2. Fallback to LocalStorage if Supabase didn't return an image
-    if (!imageUrl) {
-        imageUrl = localStorage.getItem('index_preview_image') || 
-                   localStorage.getItem('adminUploadedProfile') || 
-                   localStorage.getItem('userProfilePic');
+
+    if(!imageUrl){
+
+        imageUrl =
+            localStorage.getItem(
+                "index_preview_image"
+            ) ||
+
+            localStorage.getItem(
+                "adminUploadedProfile"
+            ) ||
+
+            localStorage.getItem(
+                "userProfilePic"
+            );
+
     }
 
-    // Render image or error message
-    if(imageUrl) {
-        container.innerHTML = `<img src="${imageUrl}" alt="Admin Preview" style="width:100%; height:auto; max-height:350px; object-fit:contain;">`;
-    } else {
-        container.innerHTML = `<p style="color:#64748b; font-size:13px; padding:20px;">No preview photo found from admin panel storage (admin_updates). Please upload an image from your admin panel first.</p>`;
+
+    if(imageUrl){
+
+        const img =
+            document.createElement("img");
+
+        img.src =
+            imageUrl;
+
+        img.alt =
+            "Admin Preview";
+
+        img.style.width =
+            "100%";
+
+        img.style.height =
+            "auto";
+
+        img.style.maxHeight =
+            "350px";
+
+        img.style.objectFit =
+            "contain";
+
+
+        container.innerHTML = "";
+
+        container.appendChild(img);
+
+    }else{
+
+        container.innerHTML = `
+
+            <p style="
+                color:#64748b;
+                font-size:13px;
+                padding:20px;
+            ">
+
+                No preview photo found from
+                admin panel storage.
+
+            </p>
+
+        `;
+
     }
+
 }
+
 
 function closeAdminPreviewModal(){
-    document.getElementById("adminPreviewModal").style.display = "none";
+
+    document
+        .getElementById("adminPreviewModal")
+        .style.display =
+        "none";
+
 }
 
-window.onclick=function(event){
-    const pkgModal=document.getElementById("packageModal");
-    const adminModal=document.getElementById("adminPreviewModal");
 
-    if(event.target===pkgModal){
-        closePackageModal();
+/* =========================================================
+   CLOSE MODALS ON BACKDROP
+========================================================= */
+
+window.addEventListener("click",function(event){
+
+    const courseModal =
+        document.getElementById("courseModal");
+
+    const adminModal =
+        document.getElementById("adminPreviewModal");
+
+
+    if(event.target === courseModal){
+
+        closeCourseModal();
+
     }
-    if(event.target===adminModal){
+
+
+    if(event.target === adminModal){
+
         closeAdminPreviewModal();
-    }
-}
 
-function sendFeedbackEmail(event) {
-    event.preventDefault();
-    const name = document.getElementById('fbName').value;
-    const userId = document.getElementById('fbId').value;
-    const rating = document.getElementById('fbRating').value;
-    const subject = document.getElementById('fbSubject').value;
-    const message = document.getElementById('fbMessage').value;
-
-    const recipientEmail = "smartmoneysupport1@gmail.com";
-    const emailSubject = encodeURIComponent(`New User Feedback: ${subject} (${name})`);
-    const emailBody = encodeURIComponent(
-        `Hello Smart Money Support,\n\nYou have received new feedback from your website:\n\n` +
-        `• Name: ${name}\n` +
-        `• User ID / Email: ${userId}\n` +
-        `• Rating: ${rating}\n` +
-        `• Subject: ${subject}\n\n` +
-        `Feedback Message:\n${message}\n\n` +
-        `-----------------------------------------\n` +
-        `Submitted on Smart Money Platform`
-    );
-
-    window.location.href = `mailto:${recipientEmail}?subject=${emailSubject}&body=${emailBody}`;
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-    const authLink = document.getElementById('authMenuLink');
-    if (authLink) {
-        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; 
-        if (isLoggedIn) {
-            authLink.href = "logout.html";
-            authLink.innerHTML = "🚪 Logout";
-        } else {
-            authLink.href = "login.html";
-            authLink.innerHTML = "👤 Login";
-        }
     }
 
-    const profileBtn = document.getElementById('navProfileBtn');
-    if (profileBtn) {
-        const savedProfilePic = localStorage.getItem('userProfilePic') || localStorage.getItem('adminUploadedProfile');
-        if (savedProfilePic) {
-            profileBtn.innerHTML = `<img src="${savedProfilePic}" alt="Profile">`;
-        }
-    }
 });
+
+
+/* =========================================================
+   ESC KEY
+========================================================= */
+
+window.addEventListener("keydown",function(event){
+
+    if(event.key === "Escape"){
+
+        closeCourseModal();
+
+        closeAdminPreviewModal();
+
+    }
+
+});
+
+
+/* =========================================================
+   FEEDBACK
+========================================================= */
+
+function sendFeedbackEmail(event){
+
+    event.preventDefault();
+
+
+    const name =
+        document.getElementById("fbName")
+        .value.trim();
+
+
+    const userId =
+        document.getElementById("fbId")
+        .value.trim();
+
+
+    const rating =
+        document.getElementById("fbRating")
+        .value;
+
+
+    const subject =
+        document.getElementById("fbSubject")
+        .value.trim();
+
+
+    const message =
+        document.getElementById("fbMessage")
+        .value.trim();
+
+
+    const recipientEmail =
+        "smartmoneysupport1@gmail.com";
+
+
+    const emailSubject =
+        encodeURIComponent(
+            `New User Feedback: ${subject} (${name})`
+        );
+
+
+    const emailBody =
+        encodeURIComponent(
+
+            `Hello Smart Money Support,\n\n` +
+
+            `You have received new feedback from your website:\n\n` +
+
+            `• Name: ${name}\n` +
+
+            `• User ID / Email: ${userId}\n` +
+
+            `• Rating: ${rating}\n` +
+
+            `• Subject: ${subject}\n\n` +
+
+            `Feedback Message:\n${message}\n\n` +
+
+            `-----------------------------------------\n` +
+
+            `Submitted on Smart Money Platform`
+
+        );
+
+
+    window.location.href =
+        `mailto:${recipientEmail}?subject=${emailSubject}&body=${emailBody}`;
+
+}
+
+
+/* =========================================================
+   AUTH UI
+========================================================= */
+
+window.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const authLink =
+            document.getElementById(
+                "authMenuLink"
+            );
+
+
+        if(authLink){
+
+            const isLoggedIn =
+                localStorage.getItem(
+                    "isLoggedIn"
+                ) === "true";
+
+
+            if(isLoggedIn){
+
+                authLink.href =
+                    "logout.html";
+
+                authLink.innerHTML =
+                    "🚪 Logout";
+
+            }else{
+
+                authLink.href =
+                    "login.html";
+
+                authLink.innerHTML =
+                    "👤 Login";
+
+            }
+
+        }
+
+
+        const profileBtn =
+            document.getElementById(
+                "navProfileBtn"
+            );
+
+
+        if(profileBtn){
+
+            const savedProfilePic =
+                localStorage.getItem(
+                    "userProfilePic"
+                ) ||
+
+                localStorage.getItem(
+                    "adminUploadedProfile"
+                );
+
+
+            if(savedProfilePic){
+
+                const img =
+                    document.createElement("img");
+
+                img.src =
+                    savedProfilePic;
+
+                img.alt =
+                    "Profile";
+
+
+                profileBtn.innerHTML = "";
+
+                profileBtn.appendChild(img);
+
+            }
+
+        }
+
+    }
+);
 
 </script>
 
