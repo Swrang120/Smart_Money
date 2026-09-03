@@ -3,16 +3,20 @@
 <head>
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>Smart Money - Online Courses & Skill Development</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
 rel="stylesheet">
 
+<!-- Supabase CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -42,7 +46,10 @@ a{
     text-decoration:none;
 }
 
-button{
+button,
+input,
+textarea,
+select{
     font-family:inherit;
 }
 
@@ -57,7 +64,13 @@ button{
 ========================================================= */
 
 .top-announcement{
-    background:linear-gradient(90deg,#6d28d9,#9333ea,#2563eb);
+    background:linear-gradient(
+        90deg,
+        #6d28d9,
+        #9333ea,
+        #2563eb,
+        #0891b2
+    );
     color:#fff;
     height:38px;
     display:flex;
@@ -79,6 +92,7 @@ button{
     0%{
         transform:translateX(0);
     }
+
     100%{
         transform:translateX(-100%);
     }
@@ -101,7 +115,6 @@ button{
     top:0;
     z-index:1000;
     box-shadow:0 4px 25px rgba(15,23,42,.07);
-    border-bottom:1px solid rgba(226,232,240,.7);
 }
 
 .brand{
@@ -114,14 +127,19 @@ button{
     width:42px;
     height:42px;
     border-radius:12px;
-    background:linear-gradient(135deg,#7c3aed,#2563eb);
+    background:linear-gradient(
+        135deg,
+        #7c3aed,
+        #2563eb
+    );
     display:flex;
     align-items:center;
     justify-content:center;
     color:white;
     font-weight:800;
     font-size:18px;
-    box-shadow:0 8px 20px rgba(124,58,237,.25);
+    box-shadow:
+        0 8px 20px rgba(124,58,237,.25);
 }
 
 .brand-text h2{
@@ -184,7 +202,7 @@ button{
 
 
 /* =========================================================
-   MOBILE MENU
+   SIDEBAR
 ========================================================= */
 
 .mobile-menu{
@@ -281,7 +299,7 @@ button{
 
 .hero{
     position:relative;
-    min-height:580px;
+    min-height:560px;
     display:flex;
     align-items:center;
     overflow:hidden;
@@ -290,7 +308,7 @@ button{
     linear-gradient(
         90deg,
         rgba(15,23,42,.94),
-        rgba(15,23,42,.68)
+        rgba(15,23,42,.66)
     ),
     url("https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1800&q=90");
 
@@ -302,7 +320,7 @@ button{
     width:min(1180px,92%);
     margin:auto;
     color:#fff;
-    padding:100px 0;
+    padding:90px 0;
 }
 
 .hero-badge{
@@ -322,20 +340,25 @@ button{
 .hero h1{
     font-size:clamp(32px,5vw,58px);
     line-height:1.1;
-    max-width:750px;
+    max-width:760px;
     font-weight:800;
     letter-spacing:-2px;
 }
 
 .hero h1 span{
-    background:linear-gradient(90deg,#c084fc,#60a5fa,#38bdf8);
+    background:linear-gradient(
+        90deg,
+        #c084fc,
+        #60a5fa,
+        #38bdf8
+    );
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
 }
 
 .hero p{
     margin-top:18px;
-    max-width:650px;
+    max-width:630px;
     font-size:15px;
     line-height:1.8;
     color:#e2e8f0;
@@ -355,7 +378,6 @@ button{
     font-weight:800;
     border-radius:12px;
     font-size:13px;
-    box-shadow:0 10px 30px rgba(0,0,0,.15);
 }
 
 .hero-btn-secondary{
@@ -365,8 +387,6 @@ button{
     font-weight:700;
     border-radius:12px;
     font-size:13px;
-    background:rgba(255,255,255,.06);
-    backdrop-filter:blur(10px);
 }
 
 
@@ -384,14 +404,21 @@ button{
 .welcome-card{
     background:#fff;
     border-radius:25px;
-    box-shadow:0 20px 60px rgba(15,23,42,.12);
+    box-shadow:
+        0 20px 60px rgba(15,23,42,.12);
     overflow:hidden;
     border:1px solid #e8edf5;
 }
 
 .welcome-top{
     padding:35px;
-    background:linear-gradient(135deg,#111827,#172554,#312e81);
+    background:
+        linear-gradient(
+            135deg,
+            #111827,
+            #172554,
+            #312e81
+        );
     color:#fff;
     text-align:center;
 }
@@ -523,13 +550,17 @@ button{
     margin:0 30px 30px;
     padding:25px;
     border-radius:18px;
-    background:linear-gradient(135deg,#7c3aed,#2563eb);
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #2563eb
+        );
     color:#fff;
     display:flex;
     align-items:center;
     justify-content:space-between;
     gap:20px;
-    box-shadow:0 15px 35px rgba(79,70,229,.18);
 }
 
 .join-request h3{
@@ -644,37 +675,53 @@ button{
 
 
 /* =========================================================
-   PACKAGES
+   PACKAGE SECTION
 ========================================================= */
 
 .packages-section{
     background:
-    radial-gradient(circle at top left,rgba(124,58,237,.05),transparent 35%),
-    #fff;
+        linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #f8faff 100%
+        );
 }
 
-.package-intro{
-    max-width:700px;
-    margin:10px auto 0;
-    color:#64748b;
-    font-size:12px;
-    line-height:1.8;
+.package-notice{
+    max-width:850px;
+    margin:-15px auto 35px;
+    padding:15px 18px;
+    border-radius:14px;
+    background:linear-gradient(
+        135deg,
+        #eef2ff,
+        #eff6ff
+    );
+    border:1px solid #dbeafe;
+    color:#334155;
+    font-size:11px;
+    line-height:1.7;
+    text-align:center;
+}
+
+.package-notice strong{
+    color:#4338ca;
 }
 
 .packages-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:20px;
+    gap:22px;
 }
 
 .package-card{
+    position:relative;
     border:1px solid #e5eaf2;
     border-radius:20px;
     overflow:hidden;
     background:#fff;
     box-shadow:0 8px 25px rgba(15,23,42,.06);
     transition:.25s;
-    position:relative;
 }
 
 .package-card:hover{
@@ -688,31 +735,30 @@ button{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    position:relative;
-    overflow:hidden;
 }
 
-.pkg-banner:after{
-    content:"";
-    position:absolute;
-    width:130px;
-    height:130px;
-    border-radius:50%;
-    background:rgba(255,255,255,.10);
-    right:-45px;
-    top:-55px;
+.bg-1{
+    background:linear-gradient(135deg,#f97316,#ea580c);
 }
 
-.bg-1{background:linear-gradient(135deg,#f97316,#ea580c);}
-.bg-2{background:linear-gradient(135deg,#2563eb,#1d4ed8);}
-.bg-3{background:linear-gradient(135deg,#7c3aed,#5b21b6);}
-.bg-4{background:linear-gradient(135deg,#172033,#334155);}
-.bg-5{background:linear-gradient(135deg,#e11d48,#be123c);}
-.bg-6{background:linear-gradient(135deg,#0891b2,#0e7490);}
+.bg-2{
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+}
 
-.pkg-title{
-    position:relative;
-    z-index:2;
+.bg-3{
+    background:linear-gradient(135deg,#7c3aed,#5b21b6);
+}
+
+.bg-4{
+    background:linear-gradient(135deg,#172033,#334155);
+}
+
+.bg-5{
+    background:linear-gradient(135deg,#e11d48,#be123c);
+}
+
+.bg-6{
+    background:linear-gradient(135deg,#0891b2,#0e7490);
 }
 
 .pkg-title h3{
@@ -726,9 +772,7 @@ button{
 }
 
 .pkg-badge{
-    font-size:26px;
-    position:relative;
-    z-index:2;
+    font-size:27px;
 }
 
 .pkg-body{
@@ -742,87 +786,182 @@ button{
     min-height:55px;
 }
 
-.course-count-box{
-    margin-top:15px;
-    padding:12px;
-    border-radius:12px;
-    background:linear-gradient(135deg,#f8fafc,#eef2ff);
-    border:1px solid #e0e7ff;
+
+/* =========================================================
+   COMMISSION BOX
+========================================================= */
+
+.commission-box{
+    margin-top:17px;
+    padding:15px;
+    border-radius:15px;
+    background:
+        linear-gradient(
+            135deg,
+            #f5f3ff,
+            #eff6ff
+        );
+    border:1px solid #ddd6fe;
+}
+
+.commission-label{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:9px;
+}
+
+.commission-label span:first-child{
+    font-size:10px;
+    font-weight:800;
+    color:#475569;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+}
+
+.commission-rate{
+    font-size:18px;
+    font-weight:800;
+    color:#6d28d9;
+}
+
+.commission-amount{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-top:9px;
+    border-top:1px dashed #cbd5e1;
+}
+
+.commission-amount span:first-child{
+    font-size:10px;
+    color:#64748b;
+}
+
+.commission-amount strong{
+    font-size:15px;
+    color:#166534;
+}
+
+.commission-note{
+    font-size:9px;
+    color:#64748b;
+    line-height:1.5;
+    margin-top:7px;
+}
+
+
+/* =========================================================
+   COURSE BOX
+========================================================= */
+
+.course-box{
+    margin-top:14px;
+    border:1px solid #e2e8f0;
+    border-radius:15px;
+    overflow:hidden;
+    background:#fff;
+}
+
+.course-box-header{
+    padding:12px 14px;
     display:flex;
     align-items:center;
     justify-content:space-between;
     gap:10px;
+    background:#f8fafc;
+    border-bottom:1px solid #e2e8f0;
 }
 
-.course-count-main{
-    display:flex;
-    align-items:center;
-    gap:9px;
-}
-
-.course-count-icon{
-    width:34px;
-    height:34px;
-    border-radius:9px;
-    background:#ede9fe;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.course-count-text strong{
-    display:block;
-    font-size:12px;
+.course-box-title{
+    font-size:11px;
+    font-weight:800;
     color:#172033;
 }
 
-.course-count-text span{
-    display:block;
-    font-size:9px;
-    color:#64748b;
-    margin-top:3px;
-}
-
-.coming-badge{
+.course-count{
     font-size:9px;
     font-weight:800;
-    color:#b45309;
-    background:#fef3c7;
-    border:1px solid #fde68a;
+    color:#6366f1;
+    background:#eef2ff;
     padding:5px 8px;
     border-radius:20px;
-    white-space:nowrap;
 }
 
-.course-preview{
-    margin-top:12px;
-    display:flex;
-    flex-direction:column;
-    gap:7px;
+.course-preview-list{
+    padding:10px 12px;
 }
 
 .course-preview-item{
     display:flex;
-    align-items:center;
+    align-items:flex-start;
     gap:8px;
-    font-size:10px;
-    color:#475569;
+    padding:7px 0;
+    border-bottom:1px solid #f1f5f9;
 }
 
-.course-preview-item .course-icon{
-    width:24px;
-    height:24px;
-    border-radius:7px;
-    background:#f1f5f9;
+.course-preview-item:last-child{
+    border-bottom:none;
+}
+
+.course-check{
+    width:18px;
+    height:18px;
+    border-radius:6px;
+    background:#f3f4f6;
     display:flex;
     align-items:center;
     justify-content:center;
+    font-size:9px;
     flex-shrink:0;
+}
+
+.course-name{
+    flex:1;
+    font-size:10px;
+    line-height:1.4;
+    color:#475569;
+}
+
+.coming-soon{
+    display:inline-block;
+    margin-left:4px;
+    padding:2px 5px;
+    border-radius:5px;
+    background:#fff7ed;
+    color:#c2410c;
+    font-size:7px;
+    font-weight:800;
+    vertical-align:middle;
+}
+
+.more-courses{
+    padding:9px 12px 12px;
+    font-size:9px;
+    color:#64748b;
+    font-weight:600;
+}
+
+.view-courses-btn{
+    width:100%;
+    border:none;
+    border-top:1px solid #eef2f7;
+    background:#fff;
+    padding:10px;
+    color:#4f46e5;
+    font-size:10px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.view-courses-btn:hover{
+    background:#f8fafc;
 }
 
 .details-btn{
     width:100%;
-    margin-top:15px;
+    margin-top:14px;
     padding:11px;
     background:#f8fafc;
     border:1px solid #dbe2ea;
@@ -830,15 +969,19 @@ button{
     font-size:11px;
     font-weight:700;
     cursor:pointer;
-    color:#334155;
     transition:.2s;
 }
 
 .details-btn:hover{
-    background:#f1f5f9;
+    background:#eef2ff;
     border-color:#c4b5fd;
     color:#6d28d9;
 }
+
+
+/* =========================================================
+   PACKAGE FOOTER
+========================================================= */
 
 .pkg-footer{
     padding:15px 20px;
@@ -873,63 +1016,19 @@ button{
 
 .buy-btn:hover{
     transform:translateY(-1px);
-    box-shadow:0 8px 18px rgba(37,99,235,.2);
+    box-shadow:0 8px 18px rgba(37,99,235,.25);
 }
 
 
 /* =========================================================
-   COURSE INFORMATION STRIP
-========================================================= */
-
-.learning-info{
-    margin-top:35px;
-    padding:25px;
-    border-radius:20px;
-    background:linear-gradient(135deg,#111827,#1e293b);
-    color:#fff;
-    display:grid;
-    grid-template-columns:1.2fr 2fr;
-    gap:25px;
-    align-items:center;
-}
-
-.learning-info h3{
-    font-size:20px;
-    font-weight:800;
-}
-
-.learning-info p{
-    margin-top:8px;
-    font-size:11px;
-    color:#cbd5e1;
-    line-height:1.7;
-}
-
-.learning-points{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
-}
-
-.learning-point{
-    padding:12px;
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.1);
-    border-radius:12px;
-    font-size:10px;
-    color:#e2e8f0;
-}
-
-
-/* =========================================================
-   COURSE MODAL
+   GENERAL MODAL
 ========================================================= */
 
 .modal-overlay{
     position:fixed;
     inset:0;
-    background:rgba(15,23,42,.72);
-    backdrop-filter:blur(6px);
+    background:rgba(15,23,42,.70);
+    backdrop-filter:blur(5px);
     display:none;
     align-items:center;
     justify-content:center;
@@ -939,8 +1038,8 @@ button{
 
 .modal-box{
     background:#fff;
-    width:min(560px,100%);
-    max-height:88vh;
+    width:min(470px,100%);
+    max-height:90vh;
     overflow-y:auto;
     border-radius:22px;
     padding:25px;
@@ -958,107 +1057,21 @@ button{
     height:35px;
     border-radius:9px;
     cursor:pointer;
-    color:#334155;
-    font-size:15px;
 }
 
 .modal-box h2{
     font-size:21px;
-    margin-bottom:6px;
+    margin-bottom:20px;
     padding-right:45px;
-}
-
-.modal-subtitle{
-    font-size:11px;
-    color:#64748b;
-    line-height:1.6;
-    margin-bottom:18px;
-}
-
-.modal-course-list{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-}
-
-.modal-course-item{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:13px;
-    border:1px solid #e5e7eb;
-    border-radius:13px;
-    background:#f8fafc;
-}
-
-.modal-course-icon{
-    width:40px;
-    height:40px;
-    border-radius:11px;
-    background:#ede9fe;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:19px;
-    flex-shrink:0;
-}
-
-.modal-course-info{
-    flex:1;
-}
-
-.modal-course-info strong{
-    display:block;
-    font-size:12px;
-    color:#172033;
-}
-
-.modal-course-info span{
-    display:block;
-    font-size:9px;
-    color:#64748b;
-    margin-top:3px;
-    line-height:1.4;
-}
-
-.status-badge{
-    font-size:8px;
-    font-weight:800;
-    padding:5px 8px;
-    border-radius:20px;
-    white-space:nowrap;
-}
-
-.status-coming{
-    color:#92400e;
-    background:#fef3c7;
-    border:1px solid #fde68a;
-}
-
-.status-available{
-    color:#166534;
-    background:#dcfce7;
-    border:1px solid #bbf7d0;
-}
-
-.package-detail-section{
-    margin-top:22px;
-    border-top:1px solid #eef2f7;
-    padding-top:15px;
-}
-
-.package-detail-section h4{
-    font-size:13px;
-    margin-bottom:8px;
 }
 
 .detail-row{
     display:flex;
     justify-content:space-between;
     gap:20px;
-    padding:11px 0;
+    padding:12px 0;
     border-bottom:1px solid #eef2f7;
-    font-size:11px;
+    font-size:12px;
 }
 
 .detail-row span:first-child{
@@ -1068,7 +1081,75 @@ button{
 .detail-row span:last-child{
     font-weight:700;
     text-align:right;
-    color:#172033;
+}
+
+
+/* =========================================================
+   COURSE MODAL
+========================================================= */
+
+.course-modal-box{
+    width:min(600px,100%);
+}
+
+.course-modal-top{
+    padding-bottom:15px;
+    border-bottom:1px solid #eef2f7;
+    margin-bottom:10px;
+}
+
+.course-modal-top p{
+    font-size:11px;
+    color:#64748b;
+    line-height:1.7;
+}
+
+.course-modal-list{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-top:15px;
+}
+
+.course-modal-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px;
+    background:#f8fafc;
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+}
+
+.course-number{
+    width:30px;
+    height:30px;
+    border-radius:9px;
+    background:#ede9fe;
+    color:#6d28d9;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:10px;
+    font-weight:800;
+    flex-shrink:0;
+}
+
+.course-modal-name{
+    flex:1;
+    font-size:11px;
+    font-weight:700;
+    color:#334155;
+}
+
+.course-status{
+    font-size:8px;
+    font-weight:800;
+    color:#c2410c;
+    background:#ffedd5;
+    padding:5px 7px;
+    border-radius:6px;
+    white-space:nowrap;
 }
 
 
@@ -1202,7 +1283,11 @@ button{
 
 .submit-feedback-btn{
     padding:13px 20px;
-    background:linear-gradient(135deg,#7c3aed,#2563eb);
+    background:linear-gradient(
+        135deg,
+        #7c3aed,
+        #2563eb
+    );
     color:#fff;
     border:none;
     border-radius:10px;
@@ -1289,10 +1374,6 @@ button{
     margin-bottom:7px;
 }
 
-.footer a:hover{
-    color:#fff;
-}
-
 .footer-bottom{
     border-top:1px solid #293548;
     margin-top:35px;
@@ -1337,10 +1418,6 @@ button{
     .mission-vision{
         grid-template-columns:1fr 1fr;
     }
-
-    .learning-info{
-        grid-template-columns:1fr;
-    }
 }
 
 
@@ -1367,7 +1444,7 @@ button{
     }
 
     .hero{
-        min-height:520px;
+        min-height:500px;
     }
 
     .hero-content{
@@ -1459,30 +1536,20 @@ button{
         font-size:24px;
     }
 
-    .learning-points{
-        grid-template-columns:1fr;
-    }
-
     .pkg-footer{
-        flex-wrap:wrap;
+        padding:15px;
     }
 
-    .buy-btn{
-        flex:1;
-        text-align:center;
-    }
-
-    .modal-box{
+    .course-modal-box{
         padding:20px;
-        border-radius:18px;
     }
 
-    .modal-course-item{
+    .course-modal-item{
         align-items:flex-start;
     }
 
-    .status-badge{
-        margin-left:auto;
+    .course-status{
+        font-size:7px;
     }
 }
 
@@ -1497,14 +1564,25 @@ button{
 ========================================================= -->
 
 <div class="top-announcement">
-    <div class="marquee-track">
-        🎓 Welcome to Smart Money! &nbsp;&nbsp; • &nbsp;&nbsp;
-        📚 Learn Digital Skills &nbsp;&nbsp; • &nbsp;&nbsp;
-        💼 Explore Flexible Opportunities &nbsp;&nbsp; • &nbsp;&nbsp;
-        🚀 Students, Professionals & Beginners Welcome &nbsp;&nbsp; • &nbsp;&nbsp;
-        🔜 New Courses Coming Soon &nbsp;&nbsp; • &nbsp;&nbsp;
-        🤝 Build Skills. Build Confidence.
-    </div>
+
+<div class="marquee-track">
+
+🎓 Welcome to Smart Money!
+&nbsp;&nbsp; • &nbsp;&nbsp;
+
+📚 Digital Courses & Skill Development
+&nbsp;&nbsp; • &nbsp;&nbsp;
+
+🚧 Course Library Launching Soon
+&nbsp;&nbsp; • &nbsp;&nbsp;
+
+💼 Explore Learning & Growth Opportunities
+&nbsp;&nbsp; • &nbsp;&nbsp;
+
+🤝 Build Skills. Build Confidence. Build Your Future.
+
+</div>
+
 </div>
 
 
@@ -1514,141 +1592,148 @@ button{
 
 <nav class="navbar">
 
-    <a href="#" class="brand">
+<a href="#" class="brand">
 
-        <div class="logo-circle">
-            SM
-        </div>
+<div class="logo-circle">
+SM
+</div>
 
-        <div class="brand-text">
-            <h2>Smart Money</h2>
-            <span>Learn • Grow • Be Smart</span>
-        </div>
+<div class="brand-text">
 
-    </a>
+<h2>Smart Money</h2>
 
-    <div class="nav-right-icons">
+<span>Learn • Grow • Be Smart</span>
 
-        <a href="dashboard.html"
-           class="profile-icon-btn"
-           id="navProfileBtn"
-           title="My Dashboard">
+</div>
 
-            <svg width="20"
-                 height="20"
-                 viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="2">
+</a>
 
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
 
-                <circle cx="12"
-                        cy="7"
-                        r="4"></circle>
+<div class="nav-right-icons">
 
-            </svg>
+<a href="dashboard.html"
+class="profile-icon-btn"
+id="navProfileBtn"
+title="My Profile / Dashboard">
 
-        </a>
+<svg width="20"
+height="20"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="2">
 
-        <div class="hamburger"
-             onclick="toggleMenu()">
+<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
 
-            <span></span>
-            <span></span>
-            <span></span>
+<circle cx="12"
+cy="7"
+r="4"></circle>
 
-        </div>
+</svg>
 
-    </div>
+</a>
+
+
+<div class="hamburger"
+onclick="toggleMenu()">
+
+<span></span>
+<span></span>
+<span></span>
+
+</div>
+
+</div>
 
 </nav>
 
 
 <!-- =========================================================
-     MOBILE MENU
+     MOBILE SIDEBAR
 ========================================================= -->
 
 <div class="menu-overlay"
-     id="menuOverlay"
-     onclick="toggleMenu()">
+id="menuOverlay"
+onclick="toggleMenu()">
 </div>
 
+
 <div class="mobile-menu"
-     id="mobileMenu">
+id="mobileMenu">
 
-    <div class="mobile-menu-top">
+<div class="mobile-menu-top">
 
-        <div style="display:flex;align-items:center;gap:10px;">
+<div style="display:flex;align-items:center;gap:10px;">
 
-            <div class="logo-circle"
-                 style="width:34px;height:34px;font-size:14px;border-radius:8px;">
-                SM
-            </div>
+<div class="logo-circle"
+style="width:34px;height:34px;font-size:14px;border-radius:8px;">
+SM
+</div>
 
-            <b>Smart Money</b>
+<b>Smart Money</b>
 
-        </div>
+</div>
 
-        <button class="close-menu"
-                onclick="toggleMenu()">
-            ✕
-        </button>
+<button class="close-menu"
+onclick="toggleMenu()">
+✕
+</button>
 
-    </div>
+</div>
 
-    <div class="mobile-nav-links">
 
-        <a href="#home"
-           class="m-link"
-           onclick="toggleMenu()">
-            🏠 Home
-        </a>
+<div class="mobile-nav-links">
 
-        <a href="#about"
-           class="m-link"
-           onclick="toggleMenu()">
-            ℹ️ About Us
-        </a>
+<a href="#home"
+class="m-link"
+onclick="toggleMenu()">
+🏠 Home
+</a>
 
-        <a href="#packages"
-           class="m-link"
-           onclick="toggleMenu()">
-            🎓 Courses & Packages
-        </a>
+<a href="#about"
+class="m-link"
+onclick="toggleMenu()">
+ℹ️ About Us
+</a>
 
-        <a href="#learning"
-           class="m-link"
-           onclick="toggleMenu()">
-            📚 Learning System
-        </a>
+<a href="#packages"
+class="m-link"
+onclick="toggleMenu()">
+👑 Plans & Packages
+</a>
 
-        <a href="#testimonials"
-           class="m-link"
-           onclick="toggleMenu()">
-            ⭐ Feedback
-        </a>
+<a href="#packages"
+class="m-link"
+onclick="toggleMenu()">
+📚 Course Library
+</a>
 
-        <a href="#support"
-           class="m-link"
-           onclick="toggleMenu()">
-            💬 Contact Support
-        </a>
+<a href="#testimonials"
+class="m-link"
+onclick="toggleMenu()">
+⭐ Feedback
+</a>
 
-        <a href="#"
-           class="m-link"
-           id="previewMenuLink"
-           onclick="openAdminPreviewModal(); toggleMenu();">
-            👁️ Updates Preview
-        </a>
+<a href="#support"
+class="m-link"
+onclick="toggleMenu()">
+💬 Contact Support
+</a>
 
-        <a href="dashboard.html"
-           class="mobile-dashboard-btn"
-           id="authMenuLink">
-            👤 My Dashboard
-        </a>
+<a href="#"
+class="m-link"
+id="previewMenuLink"
+onclick="openAdminPreviewModal(); toggleMenu();">
+👁️ Preview (Admin Updates)
+</a>
 
-    </div>
+<a href="dashboard.html"
+class="mobile-dashboard-btn"
+id="authMenuLink">
+👤 My Dashboard
+</a>
+
+</div>
 
 </div>
 
@@ -1658,41 +1743,55 @@ button{
 ========================================================= -->
 
 <section class="hero"
-         id="home">
+id="home">
 
-    <div class="hero-content">
+<div class="hero-content">
 
-        <div class="hero-badge">
-            🎓 LEARN • GROW • BUILD YOUR FUTURE
-        </div>
+<div class="hero-badge">
+🎓 LEARN • GROW • BUILD YOUR FUTURE
+</div>
 
-        <h1>
-            Empowering
-            <span>Digital Learners</span>
-            For A Smarter Future
-        </h1>
 
-        <p>
-            Learn practical digital skills through structured courses,
-            projects and guided learning experiences designed for beginners,
-            creators and modern digital learners.
-        </p>
+<h1>
 
-        <div class="hero-buttons">
+Learn Practical
+<span>
+Digital Skills
+</span>
+For A Smarter Future
 
-            <a href="#packages"
-               class="hero-btn-primary">
-                Explore Courses →
-            </a>
+</h1>
 
-            <a href="#learning"
-               class="hero-btn-secondary">
-                How Learning Works
-            </a>
 
-        </div>
+<p>
 
-    </div>
+Explore structured learning packages designed to help
+students, beginners, creators and professionals develop
+useful digital skills at their own pace.
+
+</p>
+
+
+<div class="hero-buttons">
+
+<a href="#packages"
+class="hero-btn-primary">
+
+Explore Packages →
+
+</a>
+
+
+<a href="#join"
+class="hero-btn-secondary">
+
+Join Our Community
+
+</a>
+
+</div>
+
+</div>
 
 </section>
 
@@ -1702,211 +1801,223 @@ button{
 ========================================================= -->
 
 <section class="welcome-section"
-         id="join">
+id="join">
 
-    <div class="container">
+<div class="container">
 
-        <div class="welcome-card">
+<div class="welcome-card">
 
-            <div class="welcome-top">
 
-                <small>
-                    WELCOME TO SMART MONEY
-                </small>
+<div class="welcome-top">
 
-                <h2>
-                    Learn Skills. Grow Confidence.
-                </h2>
+<small>
+WELCOME TO SMART MONEY
+</small>
 
-                <p>
-                    Smart Money is focused on digital learning,
-                    practical skill development and helping learners
-                    build useful knowledge for the modern digital world.
-                </p>
 
-                <div class="status-live">
+<h2>
+Learn Skills. Grow Confidence.
+</h2>
 
-                    <span class="live-dot"></span>
 
-                    Learning Community
+<p>
 
-                </div>
+Smart Money focuses on practical digital learning,
+skill development and a supportive online community
+for learners at different stages.
 
-            </div>
+</p>
 
 
-            <div class="who-section">
+<div class="status-live">
 
-                <div class="who-title">
+<span class="live-dot"></span>
 
-                    <h3>
-                        Who Can Learn With Us?
-                    </h3>
+Community Registration Open
 
-                    <p>
-                        Flexible digital learning for different backgrounds
-                        and experience levels.
-                    </p>
+</div>
 
-                </div>
+</div>
 
 
-                <div class="audience-grid">
+<div class="who-section">
 
-                    <div class="audience-card">
 
-                        <div class="audience-icon">
-                            🎓
-                        </div>
+<div class="who-title">
 
-                        <div class="audience-info">
+<h3>
+Who Can Join & Explore Opportunities?
+</h3>
 
-                            <h4>
-                                College Students
-                            </h4>
+<p>
+Flexible learning for different lifestyles and goals.
+</p>
 
-                            <p>
-                                Learn practical digital skills alongside studies.
-                            </p>
+</div>
 
-                        </div>
 
-                    </div>
+<div class="audience-grid">
 
 
-                    <div class="audience-card">
+<div class="audience-card">
 
-                        <div class="audience-icon">
-                            👩‍💼
-                        </div>
+<div class="audience-icon">
+🎓
+</div>
 
-                        <div class="audience-info">
+<div class="audience-info">
 
-                            <h4>
-                                Working Professionals
-                            </h4>
+<h4>
+College Students
+</h4>
 
-                            <p>
-                                Develop additional digital knowledge.
-                            </p>
+<p>
+Learn practical digital skills alongside your studies.
+</p>
 
-                        </div>
+</div>
 
-                    </div>
+</div>
 
 
-                    <div class="audience-card">
+<div class="audience-card">
 
-                        <div class="audience-icon">
-                            🏠
-                        </div>
+<div class="audience-icon">
+👩‍💼
+</div>
 
-                        <div class="audience-info">
+<div class="audience-info">
 
-                            <h4>
-                                Homemakers
-                            </h4>
+<h4>
+Working Professionals
+</h4>
 
-                            <p>
-                                Learn from home at a flexible pace.
-                            </p>
+<p>
+Build additional skills for personal growth.
+</p>
 
-                        </div>
+</div>
 
-                    </div>
+</div>
 
 
-                    <div class="audience-card">
+<div class="audience-card">
 
-                        <div class="audience-icon">
-                            ⏰
-                        </div>
+<div class="audience-icon">
+🏠
+</div>
 
-                        <div class="audience-info">
+<div class="audience-info">
 
-                            <h4>
-                                Beginners
-                            </h4>
+<h4>
+Homemakers
+</h4>
 
-                            <p>
-                                Start learning without previous experience.
-                            </p>
+<p>
+Explore flexible digital learning from home.
+</p>
 
-                        </div>
+</div>
 
-                    </div>
+</div>
 
 
-                    <div class="audience-card">
+<div class="audience-card">
 
-                        <div class="audience-icon">
-                            💻
-                        </div>
+<div class="audience-icon">
+⏰
+</div>
 
-                        <div class="audience-info">
+<div class="audience-info">
 
-                            <h4>
-                                Freelancers
-                            </h4>
+<h4>
+Part-Time Learners
+</h4>
 
-                            <p>
-                                Improve useful digital and creative skills.
-                            </p>
+<p>
+Learn around your existing schedule.
+</p>
 
-                        </div>
+</div>
 
-                    </div>
+</div>
 
 
-                    <div class="audience-card">
+<div class="audience-card">
 
-                        <div class="audience-icon">
-                            🚀
-                        </div>
+<div class="audience-icon">
+💻
+</div>
 
-                        <div class="audience-info">
+<div class="audience-info">
 
-                            <h4>
-                                Creators
-                            </h4>
+<h4>
+Beginners
+</h4>
 
-                            <p>
-                                Learn editing, design and digital workflows.
-                            </p>
+<p>
+Start learning even without prior experience.
+</p>
 
-                        </div>
+</div>
 
-                    </div>
+</div>
 
-                </div>
 
-            </div>
+<div class="audience-card">
 
+<div class="audience-icon">
+🚀
+</div>
 
-            <div class="join-request">
+<div class="audience-info">
 
-                <div>
+<h4>
+Freelancers & Creators
+</h4>
 
-                    <h3>
-                        Ready To Start Learning?
-                    </h3>
+<p>
+Upgrade your digital knowledge and creative skills.
+</p>
 
-                    <p>
-                        Explore our course roadmap and see what's coming to Smart Money.
-                    </p>
+</div>
 
-                </div>
+</div>
 
-                <a href="#packages"
-                   class="join-btn">
-                    Explore Courses →
-                </a>
 
-            </div>
+</div>
 
-        </div>
+</div>
 
-    </div>
+
+<div class="join-request">
+
+<div>
+
+<h3>
+Ready To Start Your Learning Journey?
+</h3>
+
+<p>
+Explore packages, planned courses and community learning.
+</p>
+
+</div>
+
+
+<a href="#packages"
+class="join-btn">
+
+Explore Packages →
+
+</a>
+
+</div>
+
+
+</div>
+
+</div>
 
 </section>
 
@@ -1916,1167 +2027,1587 @@ button{
 ========================================================= -->
 
 <section class="section"
-         id="about">
+id="about">
 
-    <div class="container">
+<div class="container">
 
-        <div class="about-grid">
-
-            <div class="about-text">
-
-                <div class="section-tag">
-                    ABOUT SMART MONEY
-                </div>
-
-                <h2 class="section-title">
-                    Learning For A
-                    <span>Digital Future</span>
-                </h2>
-
-                <p>
-                    Smart Money focuses on practical digital education.
-                    Our goal is to help learners understand useful tools,
-                    develop creative skills and gain confidence through
-                    structured learning and practice.
-                </p>
-
-                <div class="mission-vision">
-
-                    <div class="mv-box">
-
-                        <h5>
-                            🚀 Our Mission
-                        </h5>
-
-                        <p>
-                            Make practical digital learning easier,
-                            accessible and engaging.
-                        </p>
-
-                    </div>
-
-                    <div class="mv-box">
-
-                        <h5>
-                            💡 Our Vision
-                        </h5>
-
-                        <p>
-                            Build a community of learners and creators
-                            who continuously develop useful skills.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
+<div class="about-grid">
 
 
-            <div class="about-images">
+<div class="about-text">
 
-                <img
-                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=85"
-                    alt="Students learning together">
+<div class="section-tag">
+ABOUT US
+</div>
 
-                <img
-                    src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=85"
-                    alt="Students working on laptops">
 
-            </div>
+<h2 class="section-title">
 
-        </div>
+Discover Our
+<span>
+Journey Of Growth
+</span>
 
-    </div>
+</h2>
+
+
+<p>
+
+At Smart Money, we focus on making digital education
+accessible and engaging. Our goal is to help learners
+discover useful skills, build confidence and grow through
+flexible digital learning experiences.
+
+</p>
+
+
+<div class="mission-vision">
+
+
+<div class="mv-box">
+
+<h5>
+🚀 Our Mission
+</h5>
+
+<p>
+To inspire continuous learning through practical,
+flexible and accessible digital education.
+</p>
+
+</div>
+
+
+<div class="mv-box">
+
+<h5>
+💡 Our Vision
+</h5>
+
+<p>
+To build a positive community of learners, creators
+and digitally skilled individuals.
+</p>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<div class="about-images">
+
+<img
+src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=85"
+alt="Students learning together"
+loading="lazy"
+>
+
+
+<img
+src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=85"
+alt="Students working on laptops"
+loading="lazy"
+>
+
+</div>
+
+</div>
+
+</div>
 
 </section>
 
 
 <!-- =========================================================
-     PACKAGES + COURSES
+     PACKAGES
 ========================================================= -->
 
 <section class="section packages-section"
-         id="packages">
+id="packages">
 
-    <div class="container">
+<div class="container">
 
-        <div class="section-center">
 
-            <div class="section-tag">
-                LEARNING PLANS
-            </div>
+<div class="section-center">
 
-            <h2 class="section-title">
-                Choose Your
-                <span>Learning Path</span>
-            </h2>
+<div class="section-tag">
+CHOOSE YOUR PATH
+</div>
 
-            <p class="package-intro">
-                Each package represents a different learning level.
-                Course availability will be updated as new learning
-                content is completed and published.
-            </p>
 
-        </div>
+<h2 class="section-title">
 
+Choose Your
+<span>
+Learning Package
+</span>
 
-        <div class="packages-grid">
+</h2>
 
+</div>
 
-            <!-- =================================================
-                 STARTER
-            ================================================= -->
 
-            <div class="package-card">
+<div class="package-notice">
 
-                <div class="pkg-banner bg-1">
+📚 <strong>Course Library Update:</strong>
+The course names shown below represent the planned learning
+roadmap. Courses currently marked <strong>Coming Soon</strong>
+will become available after their official content launch.
 
-                    <div class="pkg-title">
+</div>
 
-                        <h3>
-                            Starter Package
-                        </h3>
 
-                        <p>
-                            Beginner Growth
-                        </p>
+<div class="packages-grid">
 
-                    </div>
 
-                    <div class="pkg-badge">
-                        🚀
-                    </div>
+<!-- =====================================================
+     STARTER
+===================================================== -->
 
-                </div>
+<div class="package-card">
 
+<div class="pkg-banner bg-1">
 
-                <div class="pkg-body">
+<div class="pkg-title">
 
-                    <p class="pkg-summary-text">
-                        A beginner-friendly learning path covering
-                        essential digital and creative skills.
-                    </p>
+<h3>
+Starter Package
+</h3>
 
+<p>
+Beginner Growth
+</p>
 
-                    <div class="course-count-box">
+</div>
 
-                        <div class="course-count-main">
+<div class="pkg-badge">
+🚀
+</div>
 
-                            <div class="course-count-icon">
-                                🎓
-                            </div>
+</div>
 
-                            <div class="course-count-text">
 
-                                <strong>
-                                    2 Courses
-                                </strong>
+<div class="pkg-body">
 
-                                <span>
-                                    Course roadmap
-                                </span>
 
-                            </div>
+<p class="pkg-summary-text">
 
-                        </div>
+A beginner-friendly package focused on fundamental
+digital learning and practical online skills.
 
-                        <span class="coming-badge">
-                            COMING SOON
-                        </span>
+</p>
 
-                    </div>
 
+<!-- COMMISSION -->
 
-                    <div class="course-preview">
+<div class="commission-box">
 
-                        <div class="course-preview-item">
+<div class="commission-label">
 
-                            <span class="course-icon">
-                                🎬
-                            </span>
+<span>
+💰 Direct Referral Commission
+</span>
 
-                            Mobile Video Editing
+<span class="commission-rate">
+30%
+</span>
 
-                        </div>
+</div>
 
-                        <div class="course-preview-item">
 
-                            <span class="course-icon">
-                                🎨
-                            </span>
+<div class="commission-amount">
 
-                            Graphic Design
+<span>
+Potential commission
+</span>
 
-                        </div>
+<strong>
+₹86.70
+</strong>
 
-                    </div>
+</div>
 
 
-                    <button class="details-btn"
-                            onclick="openCourseModal('Starter Package')">
+<div class="commission-note">
 
-                        📚 View 2 Courses
+Calculated as 30% of ₹289 package price.
+Subject to applicable eligibility, completed sale
+and refund terms.
 
-                    </button>
+</div>
 
-                </div>
+</div>
 
 
-                <div class="pkg-footer">
+<!-- COURSES -->
 
-                    <div>
+<div class="course-box">
 
-                        <span class="current-price">
-                            ₹289
-                        </span>
+<div class="course-box-header">
 
-                        <span class="old-price">
-                            ₹499
-                        </span>
+<span class="course-box-title">
+📚 Included Courses
+</span>
 
-                    </div>
+<span class="course-count">
+2 COURSES
+</span>
 
-                    <a href="checkout.html?name=Starter%20Package&price=289"
-                       class="buy-btn">
+</div>
 
-                        Buy Now
 
-                    </a>
+<div class="course-preview-list">
 
-                </div>
+<div class="course-preview-item">
 
-            </div>
+<div class="course-check">
+✓
+</div>
 
+<div class="course-name">
 
-            <!-- =================================================
-                 INTERMEDIATE
-            ================================================= -->
+Digital Skills & Internet Basics
 
-            <div class="package-card">
+<span class="coming-soon">
+COMING SOON
+</span>
 
-                <div class="pkg-banner bg-2">
+</div>
 
-                    <div class="pkg-title">
+</div>
 
-                        <h3>
-                            Intermediate
-                        </h3>
 
-                        <p>
-                            Skill Advancement
-                        </p>
+<div class="course-preview-item">
 
-                    </div>
+<div class="course-check">
+✓
+</div>
 
-                    <div class="pkg-badge">
-                        💻
-                    </div>
+<div class="course-name">
 
-                </div>
+Canva & Graphic Design Basics
 
+<span class="coming-soon">
+COMING SOON
+</span>
 
-                <div class="pkg-body">
+</div>
 
-                    <p class="pkg-summary-text">
-                        A broader learning path for learners who want
-                        to develop multiple practical digital skills.
-                    </p>
+</div>
 
+</div>
 
-                    <div class="course-count-box">
 
-                        <div class="course-count-main">
+<button
+class="view-courses-btn"
+onclick="openCourseModal('Starter Package')">
 
-                            <div class="course-count-icon">
-                                🎓
-                            </div>
+View All Courses →
 
-                            <div class="course-count-text">
+</button>
 
-                                <strong>
-                                    5 Courses
-                                </strong>
+</div>
 
-                                <span>
-                                    Course roadmap
-                                </span>
 
-                            </div>
+<button
+class="details-btn"
+onclick="openPackageModal('Starter Package','2 Essential Courses','30% Commission','₹86.70','₹100 - ₹800','1 Time / Day','7 Days','2%')">
 
-                        </div>
+🔍 View Package Details
 
-                        <span class="coming-badge">
-                            COMING SOON
-                        </span>
+</button>
 
-                    </div>
+</div>
 
 
-                    <div class="course-preview">
+<div class="pkg-footer">
 
-                        <div class="course-preview-item">
-                            <span class="course-icon">🎬</span>
-                            Mobile Video Editing
-                        </div>
+<div>
 
-                        <div class="course-preview-item">
-                            <span class="course-icon">🎨</span>
-                            Graphic Design
-                        </div>
+<span class="current-price">
+₹289
+</span>
 
-                        <div class="course-preview-item">
-                            <span class="course-icon">📱</span>
-                            Social Media
-                        </div>
+<span class="old-price">
+₹499
+</span>
 
-                    </div>
+</div>
 
 
-                    <button class="details-btn"
-                            onclick="openCourseModal('Intermediate Package')">
+<a
+href="checkout.html?name=Starter%20Package&price=289"
+class="buy-btn">
 
-                        📚 View 5 Courses
+Buy Now
 
-                    </button>
+</a>
 
-                </div>
+</div>
 
+</div>
 
-                <div class="pkg-footer">
 
-                    <div>
+<!-- =====================================================
+     INTERMEDIATE
+===================================================== -->
 
-                        <span class="current-price">
-                            ₹560
-                        </span>
+<div class="package-card">
 
-                        <span class="old-price">
-                            ₹999
-                        </span>
+<div class="pkg-banner bg-2">
 
-                    </div>
+<div class="pkg-title">
 
-                    <a href="checkout.html?name=Intermediate%20Package&price=560"
-                       class="buy-btn">
+<h3>
+Intermediate
+</h3>
 
-                        Buy Now
+<p>
+Skill Advancement
+</p>
 
-                    </a>
+</div>
 
-                </div>
+<div class="pkg-badge">
+💻
+</div>
 
-            </div>
+</div>
 
 
-            <!-- =================================================
-                 EXPERT
-            ================================================= -->
+<div class="pkg-body">
 
-            <div class="package-card">
 
-                <div class="pkg-banner bg-3">
+<p class="pkg-summary-text">
 
-                    <div class="pkg-title">
+A broader learning package planned for learners
+who want to develop multiple practical digital skills.
 
-                        <h3>
-                            Expert Package
-                        </h3>
+</p>
 
-                        <p>
-                            Professional Tier
-                        </p>
 
-                    </div>
+<!-- COMMISSION -->
 
-                    <div class="pkg-badge">
-                        ⚡
-                    </div>
+<div class="commission-box">
 
-                </div>
+<div class="commission-label">
 
+<span>
+💰 Direct Referral Commission
+</span>
 
-                <div class="pkg-body">
+<span class="commission-rate">
+50%
+</span>
 
-                    <p class="pkg-summary-text">
-                        An advanced learning roadmap covering creative,
-                        technical and digital skills.
-                    </p>
+</div>
 
 
-                    <div class="course-count-box">
+<div class="commission-amount">
 
-                        <div class="course-count-main">
+<span>
+Potential commission
+</span>
 
-                            <div class="course-count-icon">
-                                🎓
-                            </div>
+<strong>
+₹280
+</strong>
 
-                            <div class="course-count-text">
+</div>
 
-                                <strong>
-                                    10 Courses
-                                </strong>
 
-                                <span>
-                                    Course roadmap
-                                </span>
+<div class="commission-note">
 
-                            </div>
+Calculated as 50% of ₹560 package price.
+Subject to applicable eligibility, completed sale
+and refund terms.
 
-                        </div>
+</div>
 
-                        <span class="coming-badge">
-                            COMING SOON
-                        </span>
+</div>
 
-                    </div>
 
+<!-- COURSES -->
 
-                    <div class="course-preview">
+<div class="course-box">
 
-                        <div class="course-preview-item">
-                            <span class="course-icon">🎬</span>
-                            Video Editing
-                        </div>
+<div class="course-box-header">
 
-                        <div class="course-preview-item">
-                            <span class="course-icon">🎨</span>
-                            Graphic Design
-                        </div>
+<span class="course-box-title">
+📚 Included Courses
+</span>
 
-                        <div class="course-preview-item">
-                            <span class="course-icon">📱</span>
-                            Social Media
-                        </div>
+<span class="course-count">
+5 COURSES
+</span>
 
-                    </div>
+</div>
 
 
-                    <button class="details-btn"
-                            onclick="openCourseModal('Expert Package')">
+<div class="course-preview-list">
 
-                        📚 View 10 Courses
+<div class="course-preview-item">
 
-                    </button>
+<div class="course-check">✓</div>
 
-                </div>
+<div class="course-name">
+Digital Skills & Internet Basics
+<span class="coming-soon">COMING SOON</span>
+</div>
 
+</div>
 
-                <div class="pkg-footer">
 
-                    <div>
+<div class="course-preview-item">
 
-                        <span class="current-price">
-                            ₹1,149
-                        </span>
+<div class="course-check">✓</div>
 
-                        <span class="old-price">
-                            ₹2,999
-                        </span>
+<div class="course-name">
+Canva & Graphic Design Basics
+<span class="coming-soon">COMING SOON</span>
+</div>
 
-                    </div>
+</div>
 
-                    <a href="checkout.html?name=Expert%20Package&price=1149"
-                       class="buy-btn">
 
-                        Buy Now
+<div class="course-preview-item">
 
-                    </a>
+<div class="course-check">✓</div>
 
-                </div>
+<div class="course-name">
+Social Media & Content Creation
+<span class="coming-soon">COMING SOON</span>
+</div>
 
-            </div>
+</div>
 
+</div>
 
-            <!-- =================================================
-                 MASTER
-            ================================================= -->
 
-            <div class="package-card">
+<div class="more-courses">
++ 2 more planned courses
+</div>
 
-                <div class="pkg-banner bg-4">
 
-                    <div class="pkg-title">
+<button
+class="view-courses-btn"
+onclick="openCourseModal('Intermediate Package')">
 
-                        <h3>
-                            Master Package
-                        </h3>
+View All 5 Courses →
 
-                        <p>
-                            Advanced Mastery
-                        </p>
+</button>
 
-                    </div>
+</div>
 
-                    <div class="pkg-badge">
-                        👑
-                    </div>
 
-                </div>
+<button
+class="details-btn"
+onclick="openPackageModal('Intermediate Package','5 Professional Courses','50% Commission','₹280','₹100 - ₹1,500','1 Time / Day','7 Days','2%')">
 
+🔍 View Package Details
 
-                <div class="pkg-body">
+</button>
 
-                    <p class="pkg-summary-text">
-                        A larger learning roadmap designed for learners
-                        who want broader digital knowledge.
-                    </p>
+</div>
 
 
-                    <div class="course-count-box">
+<div class="pkg-footer">
 
-                        <div class="course-count-main">
+<div>
 
-                            <div class="course-count-icon">
-                                👑
-                            </div>
+<span class="current-price">
+₹560
+</span>
 
-                            <div class="course-count-text">
+<span class="old-price">
+₹999
+</span>
 
-                                <strong>
-                                    16 Courses
-                                </strong>
+</div>
 
-                                <span>
-                                    Course roadmap
-                                </span>
 
-                            </div>
+<a
+href="checkout.html?name=Intermediate%20Package&price=560"
+class="buy-btn">
 
-                        </div>
+Buy Now
 
-                        <span class="coming-badge">
-                            COMING SOON
-                        </span>
+</a>
 
-                    </div>
+</div>
 
+</div>
 
-                    <div class="course-preview">
 
-                        <div class="course-preview-item">
-                            <span class="course-icon">🎬</span>
-                            Video Editing
-                        </div>
+<!-- =====================================================
+     EXPERT
+===================================================== -->
 
-                        <div class="course-preview-item">
-                            <span class="course-icon">🎨</span>
-                            Graphic Design
-                        </div>
+<div class="package-card">
 
-                        <div class="course-preview-item">
-                            <span class="course-icon">💻</span>
-                            Web Development
-                        </div>
+<div class="pkg-banner bg-3">
 
-                    </div>
+<div class="pkg-title">
 
+<h3>
+Expert Package
+</h3>
 
-                    <button class="details-btn"
-                            onclick="openCourseModal('Master Package')">
+<p>
+Professional Tier
+</p>
 
-                        📚 View 16 Courses
+</div>
 
-                    </button>
+<div class="pkg-badge">
+⚡
+</div>
 
-                </div>
+</div>
 
 
-                <div class="pkg-footer">
+<div class="pkg-body">
 
-                    <div>
 
-                        <span class="current-price">
-                            ₹2,499
-                        </span>
+<p class="pkg-summary-text">
 
-                        <span class="old-price">
-                            ₹5,999
-                        </span>
+A larger roadmap covering advanced digital,
+creative and online-work related skills.
 
-                    </div>
+</p>
 
-                    <a href="checkout.html?name=Master%20Package&price=2499"
-                       class="buy-btn">
 
-                        Buy Now
+<!-- COMMISSION -->
 
-                    </a>
+<div class="commission-box">
 
-                </div>
+<div class="commission-label">
 
-            </div>
+<span>
+💰 Direct Referral Commission
+</span>
 
+<span class="commission-rate">
+70%
+</span>
 
-            <!-- =================================================
-                 BRAHMASTRA
-            ================================================= -->
+</div>
 
-            <div class="package-card">
 
-                <div class="pkg-banner bg-5">
+<div class="commission-amount">
 
-                    <div class="pkg-title">
+<span>
+Potential commission
+</span>
 
-                        <h3>
-                            Brahmastra
-                        </h3>
+<strong>
+₹804.30
+</strong>
 
-                        <p>
-                            Ultimate Growth
-                        </p>
+</div>
 
-                    </div>
 
-                    <div class="pkg-badge">
-                        🔥
-                    </div>
+<div class="commission-note">
 
-                </div>
+Calculated as 70% of ₹1,149 package price.
+Subject to applicable eligibility, completed sale
+and refund terms.
 
+</div>
 
-                <div class="pkg-body">
+</div>
 
-                    <p class="pkg-summary-text">
-                        A broad learning roadmap intended for learners
-                        seeking advanced digital and creative knowledge.
-                    </p>
 
+<!-- COURSES -->
 
-                    <div class="course-count-box">
+<div class="course-box">
 
-                        <div class="course-count-main">
+<div class="course-box-header">
 
-                            <div class="course-count-icon">
-                                🔥
-                            </div>
+<span class="course-box-title">
+📚 Included Courses
+</span>
 
-                            <div class="course-count-text">
+<span class="course-count">
+10 COURSES
+</span>
 
-                                <strong>
-                                    20 Courses
-                                </strong>
+</div>
 
-                                <span>
-                                    Course roadmap
-                                </span>
 
-                            </div>
+<div class="course-preview-list">
 
-                        </div>
+<div class="course-preview-item">
 
-                        <span class="coming-badge">
-                            COMING SOON
-                        </span>
+<div class="course-check">✓</div>
 
-                    </div>
+<div class="course-name">
+Digital Skills & Internet Basics
+<span class="coming-soon">COMING SOON</span>
+</div>
 
+</div>
 
-                    <div class="course-preview">
 
-                        <div class="course-preview-item">
-                            <span class="course-icon">🎬</span>
-                            Creative Skills
-                        </div>
+<div class="course-preview-item">
 
-                        <div class="course-preview-item">
-                            <span class="course-icon">📱</span>
-                            Digital Skills
-                        </div>
+<div class="course-check">✓</div>
 
-                        <div class="course-preview-item">
-                            <span class="course-icon">💻</span>
-                            Technical Skills
-                        </div>
+<div class="course-name">
+Canva & Graphic Design Basics
+<span class="coming-soon">COMING SOON</span>
+</div>
 
-                    </div>
+</div>
 
 
-                    <button class="details-btn"
-                            onclick="openCourseModal('Brahmastra Package')">
+<div class="course-preview-item">
 
-                        📚 View 20 Courses
+<div class="course-check">✓</div>
 
-                    </button>
+<div class="course-name">
+Social Media & Content Creation
+<span class="coming-soon">COMING SOON</span>
+</div>
 
-                </div>
+</div>
 
+</div>
 
-                <div class="pkg-footer">
 
-                    <div>
+<div class="more-courses">
++ 7 more planned courses
+</div>
 
-                        <span class="current-price">
-                            ₹5,499
-                        </span>
 
-                        <span class="old-price">
-                            ₹10,999
-                        </span>
+<button
+class="view-courses-btn"
+onclick="openCourseModal('Expert Package')">
 
-                    </div>
+View All 10 Courses →
 
-                    <a href="checkout.html?name=Brahmastra%20Package&price=5499"
-                       class="buy-btn">
+</button>
 
-                        Buy Now
+</div>
 
-                    </a>
 
-                </div>
+<button
+class="details-btn"
+onclick="openPackageModal('Expert Package','10 Advanced Courses','70% Commission','₹804.30','₹100 - ₹4,500','2 Times / Day','5 Days','2%')">
 
-            </div>
+🔍 View Package Details
 
+</button>
 
-            <!-- =================================================
-                 PREMIUM PRO
-            ================================================= -->
+</div>
 
-            <div class="package-card">
 
-                <div class="pkg-banner bg-6">
+<div class="pkg-footer">
 
-                    <div class="pkg-title">
+<div>
 
-                        <h3>
-                            Premium Pro
-                        </h3>
+<span class="current-price">
+₹1,149
+</span>
 
-                        <p>
-                            Top Tier Access
-                        </p>
+<span class="old-price">
+₹2,999
+</span>
 
-                    </div>
+</div>
 
-                    <div class="pkg-badge">
-                        💎
-                    </div>
 
-                </div>
+<a
+href="checkout.html?name=Expert%20Package&price=1149"
+class="buy-btn">
 
+Buy Now
 
-                <div class="pkg-body">
+</a>
 
-                    <p class="pkg-summary-text">
-                        The largest planned learning roadmap for
-                        serious digital learners and creators.
-                    </p>
+</div>
 
+</div>
 
-                    <div class="course-count-box">
 
-                        <div class="course-count-main">
+<!-- =====================================================
+     MASTER
+===================================================== -->
 
-                            <div class="course-count-icon">
-                                💎
-                            </div>
+<div class="package-card">
 
-                            <div class="course-count-text">
+<div class="pkg-banner bg-4">
 
-                                <strong>
-                                    23 Courses
-                                </strong>
+<div class="pkg-title">
 
-                                <span>
-                                    Course roadmap
-                                </span>
+<h3>
+Master Package
+</h3>
 
-                            </div>
+<p>
+Advanced Mastery
+</p>
 
-                        </div>
+</div>
 
-                        <span class="coming-badge">
-                            COMING SOON
-                        </span>
+<div class="pkg-badge">
+👑
+</div>
 
-                    </div>
+</div>
 
 
-                    <div class="course-preview">
+<div class="pkg-body">
 
-                        <div class="course-preview-item">
-                            <span class="course-icon">🎬</span>
-                            Video & Creative Skills
-                        </div>
 
-                        <div class="course-preview-item">
-                            <span class="course-icon">🎵</span>
-                            Music & Media
-                        </div>
+<p class="pkg-summary-text">
 
-                        <div class="course-preview-item">
-                            <span class="course-icon">💻</span>
-                            Web & Digital Skills
-                        </div>
+A comprehensive planned learning bundle for learners
+looking for a wider range of advanced subjects.
 
-                    </div>
+</p>
 
 
-                    <button class="details-btn"
-                            onclick="openCourseModal('Premium Pro Package')">
+<!-- COMMISSION -->
 
-                        📚 View 23 Courses
+<div class="commission-box">
 
-                    </button>
+<div class="commission-label">
 
-                </div>
+<span>
+💰 Direct Referral Commission
+</span>
 
+<span class="commission-rate">
+75%
+</span>
 
-                <div class="pkg-footer">
+</div>
 
-                    <div>
 
-                        <span class="current-price">
-                            ₹10,997
-                        </span>
+<div class="commission-amount">
 
-                        <span class="old-price">
-                            ₹20,998
-                        </span>
+<span>
+Potential commission
+</span>
 
-                    </div>
+<strong>
+₹1,874.25
+</strong>
 
-                    <a href="checkout.html?name=Premium%20Pro%20Package&price=10997"
-                       class="buy-btn">
+</div>
 
-                        Buy Now
 
-                    </a>
+<div class="commission-note">
 
-                </div>
+Calculated as 75% of ₹2,499 package price.
+Subject to applicable eligibility, completed sale
+and refund terms.
 
-            </div>
+</div>
 
+</div>
 
-        </div>
 
+<!-- COURSES -->
 
-        <!-- =====================================================
-             LEARNING INFORMATION
-        ===================================================== -->
+<div class="course-box">
 
-        <div class="learning-info"
-             id="learning">
+<div class="course-box-header">
 
-            <div>
+<span class="course-box-title">
+📚 Included Courses
+</span>
 
-                <div class="section-tag"
-                     style="color:#a78bfa;">
-                    LEARNING EXPERIENCE
-                </div>
+<span class="course-count">
+16 COURSES
+</span>
 
-                <h3>
-                    Learn More Than Just Videos
-                </h3>
+</div>
 
-                <p>
-                    Our planned courses are designed around lessons,
-                    practice and real projects. New courses will be
-                    published as they are completed.
-                </p>
 
-            </div>
+<div class="course-preview-list">
 
+<div class="course-preview-item">
 
-            <div class="learning-points">
+<div class="course-check">✓</div>
 
-                <div class="learning-point">
-                    🎥 Structured Lessons
-                </div>
+<div class="course-name">
+Digital Skills & Internet Basics
+<span class="coming-soon">COMING SOON</span>
+</div>
 
-                <div class="learning-point">
-                    📝 Practice Assignments
-                </div>
+</div>
 
-                <div class="learning-point">
-                    ❓ Quizzes & Assessments
-                </div>
 
-                <div class="learning-point">
-                    🧑‍🏫 Instructor Guidance
-                </div>
+<div class="course-preview-item">
 
-                <div class="learning-point">
-                    💻 Practical Projects
-                </div>
+<div class="course-check">✓</div>
 
-                <div class="learning-point">
-                    🏆 Completion Recognition
-                </div>
+<div class="course-name">
+Canva & Graphic Design Basics
+<span class="coming-soon">COMING SOON</span>
+</div>
 
-            </div>
+</div>
 
-        </div>
 
-    </div>
+<div class="course-preview-item">
+
+<div class="course-check">✓</div>
+
+<div class="course-name">
+Social Media & Content Creation
+<span class="coming-soon">COMING SOON</span>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="more-courses">
++ 13 more planned courses
+</div>
+
+
+<button
+class="view-courses-btn"
+onclick="openCourseModal('Master Package')">
+
+View All 16 Courses →
+
+</button>
+
+</div>
+
+
+<button
+class="details-btn"
+onclick="openPackageModal('Master Package','16 Elite Masterclasses','75% Commission','₹1,874.25','₹100 - ₹10,000','Unlimited','Instant','0%')">
+
+🔍 View Package Details
+
+</button>
+
+</div>
+
+
+<div class="pkg-footer">
+
+<div>
+
+<span class="current-price">
+₹2,499
+</span>
+
+<span class="old-price">
+₹5,999
+</span>
+
+</div>
+
+
+<a
+href="checkout.html?name=Master%20Package&price=2499"
+class="buy-btn">
+
+Buy Now
+
+</a>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     BRAHMASTRA
+===================================================== -->
+
+<div class="package-card">
+
+<div class="pkg-banner bg-5">
+
+<div class="pkg-title">
+
+<h3>
+Brahmastra
+</h3>
+
+<p>
+Ultimate Growth
+</p>
+
+</div>
+
+<div class="pkg-badge">
+🔥
+</div>
+
+</div>
+
+
+<div class="pkg-body">
+
+
+<p class="pkg-summary-text">
+
+An extensive planned course bundle for advanced
+learners, creators and digital skill enthusiasts.
+
+</p>
+
+
+<!-- COMMISSION -->
+
+<div class="commission-box">
+
+<div class="commission-label">
+
+<span>
+💰 Direct Referral Commission
+</span>
+
+<span class="commission-rate">
+85%
+</span>
+
+</div>
+
+
+<div class="commission-amount">
+
+<span>
+Potential commission
+</span>
+
+<strong>
+₹4,674.15
+</strong>
+
+</div>
+
+
+<div class="commission-note">
+
+Calculated as 85% of ₹5,499 package price.
+Subject to applicable eligibility, completed sale
+and refund terms.
+
+</div>
+
+</div>
+
+
+<!-- COURSES -->
+
+<div class="course-box">
+
+<div class="course-box-header">
+
+<span class="course-box-title">
+📚 Included Courses
+</span>
+
+<span class="course-count">
+20 COURSES
+</span>
+
+</div>
+
+
+<div class="course-preview-list">
+
+<div class="course-preview-item">
+
+<div class="course-check">✓</div>
+
+<div class="course-name">
+Digital Skills & Internet Basics
+<span class="coming-soon">COMING SOON</span>
+</div>
+
+</div>
+
+
+<div class="course-preview-item">
+
+<div class="course-check">✓</div>
+
+<div class="course-name">
+Canva & Graphic Design Basics
+<span class="coming-soon">COMING SOON</span>
+</div>
+
+</div>
+
+
+<div class="course-preview-item">
+
+<div class="course-check">✓</div>
+
+<div class="course-name">
+Social Media & Content Creation
+<span class="coming-soon">COMING SOON</span>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="more-courses">
++ 17 more planned courses
+</div>
+
+
+<button
+class="view-courses-btn"
+onclick="openCourseModal('Brahmastra Package')">
+
+View All 20 Courses →
+
+</button>
+
+</div>
+
+
+<button
+class="details-btn"
+onclick="openPackageModal('Brahmastra Package','20 Ultimate Courses','85% Commission','₹4,674.15','₹100 - ₹30,000','Unlimited','Instant','0%')">
+
+🔍 View Package Details
+
+</button>
+
+</div>
+
+
+<div class="pkg-footer">
+
+<div>
+
+<span class="current-price">
+₹5,499
+</span>
+
+<span class="old-price">
+₹10,999
+</span>
+
+</div>
+
+
+<a
+href="checkout.html?name=Brahmastra%20Package&price=5499"
+class="buy-btn">
+
+Buy Now
+
+</a>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     PREMIUM PRO
+===================================================== -->
+
+<div class="package-card">
+
+<div class="pkg-banner bg-6">
+
+<div class="pkg-title">
+
+<h3>
+Premium Pro
+</h3>
+
+<p>
+Top Tier Access
+</p>
+
+</div>
+
+<div class="pkg-badge">
+💎
+</div>
+
+</div>
+
+
+<div class="pkg-body">
+
+
+<p class="pkg-summary-text">
+
+The largest planned learning roadmap for serious
+digital learners, creators and professionals.
+
+</p>
+
+
+<!-- COMMISSION -->
+
+<div class="commission-box">
+
+<div class="commission-label">
+
+<span>
+💰 Direct Referral Commission
+</span>
+
+<span class="commission-rate">
+85%
+</span>
+
+</div>
+
+
+<div class="commission-amount">
+
+<span>
+Potential commission
+</span>
+
+<strong>
+₹9,347.45
+</strong>
+
+</div>
+
+
+<div class="commission-note">
+
+Calculated as 85% of ₹10,997 package price.
+Subject to applicable eligibility, completed sale
+and refund terms.
+
+</div>
+
+</div>
+
+
+<!-- COURSES -->
+
+<div class="course-box">
+
+<div class="course-box-header">
+
+<span class="course-box-title">
+📚 Included Courses
+</span>
+
+<span class="course-count">
+23 COURSES
+</span>
+
+</div>
+
+
+<div class="course-preview-list">
+
+<div class="course-preview-item">
+
+<div class="course-check">✓</div>
+
+<div class="course-name">
+Digital Skills & Internet Basics
+<span class="coming-soon">COMING SOON</span>
+</div>
+
+</div>
+
+
+<div class="course-preview-item">
+
+<div class="course-check">✓</div>
+
+<div class="course-name">
+Canva & Graphic Design Basics
+<span class="coming-soon">COMING SOON</span>
+</div>
+
+</div>
+
+
+<div class="course-preview-item">
+
+<div class="course-check">✓</div>
+
+<div class="course-name">
+Social Media & Content Creation
+<span class="coming-soon">COMING SOON</span>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="more-courses">
++ 20 more planned courses
+</div>
+
+
+<button
+class="view-courses-btn"
+onclick="openCourseModal('Premium Pro Package')">
+
+View All 23 Courses →
+
+</button>
+
+</div>
+
+
+<button
+class="details-btn"
+onclick="openPackageModal('Premium Pro Package','23 Premium Courses','85% Commission','₹9,347.45','₹100 - ₹50,000','Unlimited','Instant','0%')">
+
+🔍 View Package Details
+
+</button>
+
+</div>
+
+
+<div class="pkg-footer">
+
+<div>
+
+<span class="current-price">
+₹10,997
+</span>
+
+<span class="old-price">
+₹20,998
+</span>
+
+</div>
+
+
+<a
+href="checkout.html?name=Premium%20Pro%20Package&price=10997"
+class="buy-btn">
+
+Buy Now
+
+</a>
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
 
 </section>
 
 
 <!-- =========================================================
-     TESTIMONIALS
+     COMMUNITY FEEDBACK
 ========================================================= -->
 
 <section class="section"
-         id="testimonials">
+id="testimonials">
 
-    <div class="container">
+<div class="container">
 
-        <div class="section-center">
 
-            <div class="section-tag">
-                COMMUNITY FEEDBACK
-            </div>
+<div class="section-center">
 
-            <h2 class="section-title">
-                Learner
-                <span>Feedback</span>
-            </h2>
+<div class="section-tag">
+COMMUNITY FEEDBACK
+</div>
 
-        </div>
 
+<h2 class="section-title">
 
-        <div class="testimonial-grid">
+Explore Feedback From
+<span>
+Our Learners
+</span>
 
+</h2>
 
-            <div class="testimonial-card">
+</div>
 
-                <div>
 
-                    <div class="client-info">
+<div class="testimonial-grid">
 
-                        <img
-                            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80"
-                            alt="Learner">
 
-                        <div>
+<div class="testimonial-card">
 
-                            <h4>
-                                Vikas Yadav
-                            </h4>
+<div>
 
-                            <p>
-                                ★★★★★
-                            </p>
+<div class="client-info">
 
-                        </div>
+<img
+src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80"
+alt="Learner"
+loading="lazy"
+>
 
-                    </div>
+<div>
 
-                    <p class="feedback">
-                        "Learning digital skills helped me understand
-                        new online tools and improve my confidence."
-                    </p>
+<h4>
+Vikas Yadav
+</h4>
 
-                </div>
+<p>
+★★★★★
+</p>
 
-            </div>
+</div>
 
+</div>
 
-            <div class="testimonial-card">
 
-                <div>
+<p class="feedback">
 
-                    <div class="client-info">
+"Learning digital skills helped me understand new
+online tools and improve my confidence."
 
-                        <img
-                            src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80"
-                            alt="Learner">
+</p>
 
-                        <div>
+</div>
 
-                            <h4>
-                                Pooja Gupta
-                            </h4>
+</div>
 
-                            <p>
-                                ★★★★★
-                            </p>
 
-                        </div>
+<div class="testimonial-card">
 
-                    </div>
+<div>
 
-                    <p class="feedback">
-                        "The learning experience and guidance helped me
-                        explore new digital skills at my own pace."
-                    </p>
+<div class="client-info">
 
-                </div>
+<img
+src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80"
+alt="Learner"
+loading="lazy"
+>
 
-            </div>
+<div>
 
+<h4>
+Pooja Gupta
+</h4>
 
-            <div class="testimonial-card">
+<p>
+★★★★★
+</p>
 
-                <div>
+</div>
 
-                    <div class="client-info">
+</div>
 
-                        <img
-                            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"
-                            alt="Learner">
 
-                        <div>
+<p class="feedback">
 
-                            <h4>
-                                Rohit Singh
-                            </h4>
+"The learning experience and guidance helped me
+explore new digital skills at my own pace."
 
-                            <p>
-                                ★★★★★
-                            </p>
+</p>
 
-                        </div>
+</div>
 
-                    </div>
+</div>
 
-                    <p class="feedback">
-                        "I found useful learning resources and gained
-                        more clarity about developing digital skills."
-                    </p>
 
-                </div>
+<div class="testimonial-card">
 
-            </div>
+<div>
 
+<div class="client-info">
 
-        </div>
+<img
+src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"
+alt="Learner"
+loading="lazy"
+>
 
+<div>
 
-        <!-- FEEDBACK FORM -->
+<h4>
+Rohit Singh
+</h4>
 
-        <div class="feedback-form-card">
+<p>
+★★★★★
+</p>
 
-            <h3>
-                Share Your Feedback
-            </h3>
+</div>
 
-            <p>
-                We value your thoughts. Submit your experience
-                directly to our support team.
-            </p>
+</div>
 
 
-            <form class="feedback-form"
-                  onsubmit="sendFeedbackEmail(event)">
+<p class="feedback">
 
+"I found useful learning resources and gained more
+clarity about developing digital skills."
 
-                <div class="form-row">
+</p>
 
-                    <div class="form-group">
+</div>
 
-                        <label for="fbName">
-                            Your Name
-                        </label>
+</div>
 
-                        <input
-                            type="text"
-                            id="fbName"
-                            placeholder="Enter your full name"
-                            required>
 
-                    </div>
+</div>
 
 
-                    <div class="form-group">
+<!-- FEEDBACK FORM -->
 
-                        <label for="fbId">
-                            User ID / Email ID
-                        </label>
+<div class="feedback-form-card">
 
-                        <input
-                            type="text"
-                            id="fbId"
-                            placeholder="Enter your ID or registered email"
-                            required>
+<h3>
+Share Your Feedback
+</h3>
 
-                    </div>
 
-                </div>
+<p>
+We value your thoughts! Submit your experience below,
+and it will be sent directly to our support team.
+</p>
 
 
-                <div class="form-row">
+<form
+class="feedback-form"
+onsubmit="sendFeedbackEmail(event)">
 
-                    <div class="form-group">
 
-                        <label for="fbRating">
-                            Rating
-                        </label>
+<div class="form-row">
 
-                        <select id="fbRating"
-                                required>
 
-                            <option value="5 Stars - ★★★★★">
-                                ★★★★★ (5 Stars - Excellent)
-                            </option>
+<div class="form-group">
 
-                            <option value="4 Stars - ★★★★☆">
-                                ★★★★☆ (4 Stars - Good)
-                            </option>
+<label for="fbName">
+Your Name
+</label>
 
-                            <option value="3 Stars - ★★★☆☆">
-                                ★★★☆☆ (3 Stars - Average)
-                            </option>
+<input
+type="text"
+id="fbName"
+placeholder="Enter your full name"
+required
+>
 
-                            <option value="2 Stars - ★★☆☆☆">
-                                ★★☆☆☆ (2 Stars - Poor)
-                            </option>
+</div>
 
-                            <option value="1 Star - ★☆☆☆☆">
-                                ★☆☆☆☆ (1 Star - Very Bad)
-                            </option>
 
-                        </select>
+<div class="form-group">
 
-                    </div>
+<label for="fbId">
+Your User ID / Email ID
+</label>
 
+<input
+type="text"
+id="fbId"
+placeholder="Enter your ID or registered email"
+required
+>
 
-                    <div class="form-group">
+</div>
 
-                        <label for="fbSubject">
-                            Subject / Course
-                        </label>
 
-                        <input
-                            type="text"
-                            id="fbSubject"
-                            placeholder="e.g. Course Experience"
-                            required>
+</div>
 
-                    </div>
 
-                </div>
+<div class="form-row">
 
 
-                <div class="form-group">
+<div class="form-group">
 
-                    <label for="fbMessage">
-                        Your Feedback Message
-                    </label>
+<label for="fbRating">
+Rating
+</label>
 
-                    <textarea
-                        id="fbMessage"
-                        placeholder="Write your feedback here..."
-                        required>
-                    </textarea>
+<select
+id="fbRating"
+required>
 
-                </div>
+<option value="5 Stars - ★★★★★">
+★★★★★ (5 Stars - Excellent)
+</option>
 
+<option value="4 Stars - ★★★★☆">
+★★★★☆ (4 Stars - Good)
+</option>
 
-                <button type="submit"
-                        class="submit-feedback-btn">
+<option value="3 Stars - ★★★☆☆">
+★★★☆☆ (3 Stars - Average)
+</option>
 
-                    Send Feedback Directly →
+<option value="2 Stars - ★★☆☆☆">
+★★☆☆☆ (2 Stars - Poor)
+</option>
 
-                </button>
+<option value="1 Star - ★☆☆☆☆">
+★☆☆☆☆ (1 Star - Very Bad)
+</option>
 
-            </form>
+</select>
 
-        </div>
+</div>
 
-    </div>
+
+<div class="form-group">
+
+<label for="fbSubject">
+Subject / Course Name
+</label>
+
+<input
+type="text"
+id="fbSubject"
+placeholder="e.g. Starter Package / General Experience"
+required
+>
+
+</div>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="fbMessage">
+Your Feedback Message
+</label>
+
+<textarea
+id="fbMessage"
+placeholder="Write your feedback here..."
+required>
+</textarea>
+
+</div>
+
+
+<button
+type="submit"
+class="submit-feedback-btn">
+
+Send Feedback Directly →
+
+</button>
+
+</form>
+
+</div>
+
+
+</div>
 
 </section>
 
@@ -3086,68 +3617,74 @@ button{
 ========================================================= -->
 
 <section class="section support-section"
-         id="support">
+id="support">
 
-    <div class="container">
-
-        <div class="section-center">
-
-            <div class="section-tag">
-                WE ARE HERE TO HELP
-            </div>
-
-            <h2 class="section-title">
-                Customer Support &
-                <span>Help Desk</span>
-            </h2>
-
-        </div>
+<div class="container">
 
 
-        <div class="support-grid">
+<div class="section-center">
+
+<div class="section-tag">
+WE ARE HERE TO HELP
+</div>
 
 
-            <div class="support-card">
+<h2 class="section-title">
 
-                <h3>
-                    💳 Payment & Login Support
-                </h3>
+Customer Support &
+<span>
+Help Desk
+</span>
 
-                <p>
-                    <strong>Email:</strong>
-                    smartmoneysupport1@gmail.com
-                </p>
+</h2>
 
-                <p>
-                    <strong>Mobile:</strong>
-                    9954851021
-                </p>
-
-            </div>
+</div>
 
 
-            <div class="support-card">
-
-                <h3>
-                    ❓ General Inquiries
-                </h3>
-
-                <p>
-                    <strong>Email:</strong>
-                    Smsupport7@gmail.com
-                </p>
-
-                <p>
-                    <strong>Mobile:</strong>
-                    6900986957
-                </p>
-
-            </div>
+<div class="support-grid">
 
 
-        </div>
+<div class="support-card">
 
-    </div>
+<h3>
+💳 Payment & Login Support
+</h3>
+
+<p>
+<strong>Email:</strong>
+smartmoneysupport1@gmail.com
+</p>
+
+<p>
+<strong>Mobile:</strong>
+9954851021
+</p>
+
+</div>
+
+
+<div class="support-card">
+
+<h3>
+❓ General Inquiries & Referrals
+</h3>
+
+<p>
+<strong>Email:</strong>
+Smsupport7@gmail.com
+</p>
+
+<p>
+<strong>Mobile:</strong>
+6900986957
+</p>
+
+</div>
+
+
+</div>
+
+</div>
 
 </section>
 
@@ -3158,167 +3695,293 @@ button{
 
 <footer class="footer">
 
-    <div class="container">
-
-        <div class="footer-grid">
+<div class="container">
 
 
-            <div>
-
-                <h3>
-                    Smart Money
-                </h3>
-
-                <p style="margin-top:15px;max-width:420px;">
-                    Smart Money is an e-learning platform focused on
-                    digital learning, skill development and helping
-                    learners build confidence in the modern digital world.
-                </p>
-
-                <p style="margin-top:12px;">
-                    📍 Assam, India
-                </p>
-
-            </div>
+<div class="footer-grid">
 
 
-            <div>
+<div>
 
-                <h4>
-                    Quick Links
-                </h4>
-
-                <a href="#home">
-                    Home
-                </a>
-
-                <a href="#about">
-                    About Us
-                </a>
-
-                <a href="#packages">
-                    Courses
-                </a>
-
-                <a href="#learning">
-                    Learning System
-                </a>
-
-                <a href="#support">
-                    Contact Support
-                </a>
-
-            </div>
+<h3>
+Smart Money
+</h3>
 
 
-            <div>
+<p style="margin-top:15px;max-width:420px;">
 
-                <h4>
-                    Useful Links
-                </h4>
+Smart Money is an e-learning platform focused on
+digital learning, skill development and helping
+learners build confidence in the modern digital world.
 
-                <a href="#">
-                    Privacy & Policy
-                </a>
-
-                <a href="#">
-                    Terms & Conditions
-                </a>
-
-                <a href="#">
-                    Refund Policy
-                </a>
-
-            </div>
+</p>
 
 
-        </div>
+<p style="margin-top:12px;">
+📍 Assam, India
+</p>
+
+</div>
 
 
-        <div class="footer-bottom">
+<div>
 
-            © 2026 Smart Money. All Rights Reserved.
+<h4>
+Quick Links
+</h4>
 
-            <br><br>
+<a href="#home">
+Home
+</a>
 
-            Created by
-            <b>Swrang Swargiary</b>
-            • Assam, India
+<a href="#about">
+About Us
+</a>
 
-        </div>
+<a href="#packages">
+Courses & Packages
+</a>
 
-    </div>
+<a href="#support">
+Contact Support
+</a>
+
+</div>
+
+
+<div>
+
+<h4>
+Useful Links
+</h4>
+
+<a href="#">
+Privacy & Policy
+</a>
+
+<a href="#">
+Terms & Conditions
+</a>
+
+<a href="#">
+Refund Policy
+</a>
+
+</div>
+
+
+</div>
+
+
+<div class="footer-bottom">
+
+© 2026 Smart Money. All Rights Reserved.
+
+<br><br>
+
+Created by
+<b>Swrang Swargiary</b>
+• Assam, India
+
+</div>
+
+</div>
 
 </footer>
 
 
 <!-- =========================================================
-     COURSE MODAL
+     PACKAGE DETAILS MODAL
 ========================================================= -->
 
 <div class="modal-overlay"
-     id="courseModal">
+id="packageModal">
 
-    <div class="modal-box">
+<div class="modal-box">
 
-        <button class="modal-close"
-                onclick="closeCourseModal()">
-            ✕
-        </button>
-
-        <h2 id="courseModalTitle">
-            Courses Included
-        </h2>
-
-        <p class="modal-subtitle"
-           id="courseModalSubtitle">
-            Explore the planned learning roadmap for this package.
-        </p>
-
-        <div class="modal-course-list"
-             id="courseModalList">
-        </div>
+<button
+class="modal-close"
+onclick="closePackageModal()">
+✕
+</button>
 
 
-        <div class="package-detail-section">
+<h2 id="modalTitle">
+Package Details
+</h2>
 
-            <h4>
-                📦 Package Information
-            </h4>
 
-            <div class="detail-row">
-                <span>
-                    Included Courses
-                </span>
+<div class="detail-row">
 
-                <span id="courseModalCount">
-                    -
-                </span>
-            </div>
+<span>
+Package Courses
+</span>
 
-            <div class="detail-row">
-                <span>
-                    Course Status
-                </span>
+<span id="modalCourses">
+</span>
 
-                <span>
-                    New courses are being developed
-                </span>
-            </div>
+</div>
 
-            <div class="detail-row">
-                <span>
-                    Learning Format
-                </span>
 
-                <span>
-                    Lessons + Practice + Projects
-                </span>
-            </div>
+<div class="detail-row">
 
-        </div>
+<span>
+Commission Rate
+</span>
 
-    </div>
+<span id="modalCommission">
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span>
+Potential Commission
+</span>
+
+<span id="modalCommissionAmount">
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span>
+Withdrawal Limit
+</span>
+
+<span id="modalWithdrawal">
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span>
+Daily Frequency
+</span>
+
+<span id="modalFrequency">
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span>
+Processing Time
+</span>
+
+<span id="modalProcessing">
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span>
+Transaction Fee
+</span>
+
+<span id="modalFee">
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span>
+Learning Content
+</span>
+
+<span>
+Coming Soon
+</span>
+
+</div>
+
+
+<div class="detail-row">
+
+<span>
+Support Level
+</span>
+
+<span>
+Priority Assistance
+</span>
+
+</div>
+
+
+<p style="
+font-size:9px;
+color:#64748b;
+line-height:1.6;
+margin-top:15px;
+">
+
+Commission figures shown are package-price calculations
+for information. Actual commission eligibility and
+payout should follow the platform's applicable terms,
+completed-sale status and refund rules.
+
+</p>
+
+
+</div>
+
+</div>
+
+
+<!-- =========================================================
+     COURSE LIST MODAL
+========================================================= -->
+
+<div class="modal-overlay"
+id="courseModal">
+
+<div class="modal-box course-modal-box">
+
+<button
+class="modal-close"
+onclick="closeCourseModal()">
+✕
+</button>
+
+
+<div class="course-modal-top">
+
+<h2 id="courseModalTitle">
+Course Roadmap
+</h2>
+
+
+<p>
+
+These are planned courses for this package.
+Courses marked <strong>Coming Soon</strong> are
+not currently available until their official launch.
+
+</p>
+
+</div>
+
+
+<div
+class="course-modal-list"
+id="courseModalList">
+</div>
+
+
+</div>
 
 </div>
 
@@ -3328,42 +3991,49 @@ button{
 ========================================================= -->
 
 <div class="modal-overlay"
-     id="adminPreviewModal">
+id="adminPreviewModal">
 
-    <div class="modal-box"
-         style="text-align:center;">
+<div class="modal-box"
+style="text-align:center;">
 
-        <button class="modal-close"
-                onclick="closeAdminPreviewModal()">
-            ✕
-        </button>
+<button
+class="modal-close"
+onclick="closeAdminPreviewModal()">
+✕
+</button>
 
-        <h2 style="margin-bottom:15px;">
-            Admin Update Preview
-        </h2>
 
-        <div id="previewImageContainer"
-             style="
-                min-height:200px;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                background:#f1f5f9;
-                border-radius:12px;
-                overflow:hidden;
-             ">
+<h2 style="margin-bottom:15px;">
+Admin Update Preview
+</h2>
 
-            <p id="noPreviewText"
-               style="
-                    color:#64748b;
-                    font-size:13px;
-               ">
-                Loading preview image from database...
-            </p>
 
-        </div>
+<div
+id="previewImageContainer"
+style="
+min-height:200px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#f1f5f9;
+border-radius:12px;
+overflow:hidden;
+">
 
-    </div>
+<p
+id="noPreviewText"
+style="
+color:#64748b;
+font-size:13px;
+">
+
+Loading preview image from database...
+
+</p>
+
+</div>
+
+</div>
 
 </div>
 
@@ -3371,362 +4041,274 @@ button{
 <script>
 
 /* =========================================================
-   SUPABASE
+   SUPABASE CONFIGURATION
 ========================================================= */
 
 const SUPABASE_URL =
-    'https://rvprrulkjegvicbnjuft.supabase.co';
+'https://rvprrulkjegvicbnjuft.supabase.co';
 
 const SUPABASE_ANON_KEY =
-    'sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ';
+'sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ';
+
 
 const supabaseClient =
-    (typeof supabase !== 'undefined' &&
-     SUPABASE_URL.includes('supabase.co'))
-        ? supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_ANON_KEY
-        )
-        : null;
+(typeof supabase !== 'undefined' &&
+ SUPABASE_URL.includes('supabase.co'))
+?
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+)
+:
+null;
 
 
 /* =========================================================
-   COURSE DATABASE
-   ---------------------------------------------------------
-   IMPORTANT:
-   available:false = Coming Soon
-   available:true  = Available
+   PACKAGE DATA
 ========================================================= */
 
-const courseCatalog = {
-
-    "Mobile Video Editing": {
-        icon:"🎬",
-        description:"Learn mobile video editing from basic timeline editing to practical short-form projects.",
-        available:false
-    },
-
-    "Graphic Design & Thumbnail Design": {
-        icon:"🎨",
-        description:"Learn design fundamentals, Canva workflows and thumbnail creation.",
-        available:false
-    },
-
-    "Social Media & Content Creation": {
-        icon:"📱",
-        description:"Learn content planning, short-form content, branding and analytics basics.",
-        available:false
-    },
-
-    "Music Production & Digital Music": {
-        icon:"🎵",
-        description:"Learn music production fundamentals, recording, mixing and digital music workflows.",
-        available:false
-    },
-
-    "Website Development Fundamentals": {
-        icon:"💻",
-        description:"Learn HTML, CSS, JavaScript, responsive design and basic deployment concepts.",
-        available:false
-    },
-
-    "Digital Marketing Fundamentals": {
-        icon:"📈",
-        description:"Learn the fundamentals of digital marketing, audience research and content promotion.",
-        available:false
-    },
-
-    "Freelancing Fundamentals": {
-        icon:"💼",
-        description:"Learn basic freelancing concepts, portfolio building and professional workflows.",
-        available:false
-    },
-
-    "Personal Branding": {
-        icon:"🌟",
-        description:"Learn how to build a consistent and professional digital identity.",
-        available:false
-    },
-
-    "Photography Basics": {
-        icon:"📷",
-        description:"Learn photography fundamentals, composition and basic editing concepts.",
-        available:false
-    },
-
-    "Lightroom Editing": {
-        icon:"🌈",
-        description:"Learn photo enhancement and basic color correction workflows.",
-        available:false
-    },
-
-    "CapCut Advanced Editing": {
-        icon:"✂️",
-        description:"Advanced mobile editing concepts including keyframes, masking and effects.",
-        available:false
-    },
-
-    "YouTube Content Creation": {
-        icon:"▶️",
-        description:"Learn channel planning, content structure, thumbnails and basic analytics.",
-        available:false
-    },
-
-    "Instagram Reels Creation": {
-        icon:"📲",
-        description:"Learn short-form video concepts, hooks, editing and responsible growth strategies.",
-        available:false
-    },
-
-    "AI Tools for Creators": {
-        icon:"🤖",
-        description:"Learn responsible use of AI tools for creative and productivity workflows.",
-        available:false
-    },
+const packageData = {
 
-    "Audio Editing Basics": {
-        icon:"🎧",
-        description:"Learn basic audio editing, cleanup and sound balancing.",
-        available:false
-    },
+"Starter Package": {
 
-    "Presentation Design": {
-        icon:"📊",
-        description:"Learn how to create clear and professional presentations.",
-        available:false
-    },
+price:289,
 
-    "Communication Skills": {
-        icon:"🗣️",
-        description:"Learn practical communication and presentation fundamentals.",
-        available:false
-    },
+commission:"30%",
 
-    "Productivity & Digital Tools": {
-        icon:"⚙️",
-        description:"Learn practical workflows using common digital productivity tools.",
-        available:false
-    },
+commissionAmount:"₹86.70",
 
-    "Online Safety & Digital Awareness": {
-        icon:"🔐",
-        description:"Learn basic account security, privacy and responsible digital practices.",
-        available:false
-    },
+courses:[
 
-    "Portfolio Building": {
-        icon:"📁",
-        description:"Learn how to organize your work and create a useful digital portfolio.",
-        available:false
-    },
+"Digital Skills & Internet Basics",
 
-    "Client Communication Basics": {
-        icon:"🤝",
-        description:"Learn professional client communication and project workflow basics.",
-        available:false
-    },
+"Canva & Graphic Design Basics"
 
-    "Basic Computer Skills": {
-        icon:"🖥️",
-        description:"Learn essential computer concepts for beginners.",
-        available:false
-    },
+]
 
-    "Digital Entrepreneurship Basics": {
-        icon:"🚀",
-        description:"Learn fundamental concepts of building and managing a digital project.",
-        available:false
-    }
+},
 
-};
 
+"Intermediate Package": {
 
-/* =========================================================
-   PACKAGE COURSE MAPPING
-========================================================= */
+price:560,
 
-const packageCourses = {
+commission:"50%",
 
-    "Starter Package": [
+commissionAmount:"₹280",
 
-        "Mobile Video Editing",
+courses:[
 
-        "Graphic Design & Thumbnail Design"
+"Digital Skills & Internet Basics",
 
-    ],
+"Canva & Graphic Design Basics",
 
+"Social Media & Content Creation",
 
-    "Intermediate Package": [
+"Freelancing Fundamentals",
 
-        "Mobile Video Editing",
+"Digital Marketing Basics"
 
-        "Graphic Design & Thumbnail Design",
+]
 
-        "Social Media & Content Creation",
+},
 
-        "Music Production & Digital Music",
 
-        "Website Development Fundamentals"
+"Expert Package": {
 
-    ],
+price:1149,
 
+commission:"70%",
 
-    "Expert Package": [
+commissionAmount:"₹804.30",
 
-        "Mobile Video Editing",
+courses:[
 
-        "Graphic Design & Thumbnail Design",
+"Digital Skills & Internet Basics",
 
-        "Social Media & Content Creation",
+"Canva & Graphic Design Basics",
 
-        "Music Production & Digital Music",
+"Social Media & Content Creation",
 
-        "Website Development Fundamentals",
+"Freelancing Fundamentals",
 
-        "Digital Marketing Fundamentals",
+"Digital Marketing Basics",
 
-        "Freelancing Fundamentals",
+"Video Editing Fundamentals",
 
-        "Personal Branding",
+"Personal Branding Basics",
 
-        "Photography Basics",
+"Content Strategy",
 
-        "Lightroom Editing"
+"AI Tools & Productivity",
 
-    ],
+"Online Portfolio Building"
 
+]
 
-    "Master Package": [
+},
 
-        "Mobile Video Editing",
 
-        "Graphic Design & Thumbnail Design",
+"Master Package": {
 
-        "Social Media & Content Creation",
+price:2499,
 
-        "Music Production & Digital Music",
+commission:"75%",
 
-        "Website Development Fundamentals",
+commissionAmount:"₹1,874.25",
 
-        "Digital Marketing Fundamentals",
+courses:[
 
-        "Freelancing Fundamentals",
+"Digital Skills & Internet Basics",
 
-        "Personal Branding",
+"Canva & Graphic Design Basics",
 
-        "Photography Basics",
+"Social Media & Content Creation",
 
-        "Lightroom Editing",
+"Freelancing Fundamentals",
 
-        "CapCut Advanced Editing",
+"Digital Marketing Basics",
 
-        "YouTube Content Creation",
+"Video Editing Fundamentals",
 
-        "Instagram Reels Creation",
+"Personal Branding Basics",
 
-        "AI Tools for Creators",
+"Content Strategy",
 
-        "Audio Editing Basics",
+"AI Tools & Productivity",
 
-        "Presentation Design"
+"Online Portfolio Building",
 
-    ],
+"Instagram Growth Fundamentals",
 
+"YouTube Channel Basics",
 
-    "Brahmastra Package": [
+"Basic Copywriting",
 
-        "Mobile Video Editing",
+"Client Communication Skills",
 
-        "Graphic Design & Thumbnail Design",
+"Portfolio & Resume Building",
 
-        "Social Media & Content Creation",
+"Digital Work Management"
 
-        "Music Production & Digital Music",
+]
 
-        "Website Development Fundamentals",
+},
 
-        "Digital Marketing Fundamentals",
 
-        "Freelancing Fundamentals",
+"Brahmastra Package": {
 
-        "Personal Branding",
+price:5499,
 
-        "Photography Basics",
+commission:"85%",
 
-        "Lightroom Editing",
+commissionAmount:"₹4,674.15",
 
-        "CapCut Advanced Editing",
+courses:[
 
-        "YouTube Content Creation",
+"Digital Skills & Internet Basics",
 
-        "Instagram Reels Creation",
+"Canva & Graphic Design Basics",
 
-        "AI Tools for Creators",
+"Social Media & Content Creation",
 
-        "Audio Editing Basics",
+"Freelancing Fundamentals",
 
-        "Presentation Design",
+"Digital Marketing Basics",
 
-        "Communication Skills",
+"Video Editing Fundamentals",
 
-        "Productivity & Digital Tools",
+"Personal Branding Basics",
 
-        "Online Safety & Digital Awareness",
+"Content Strategy",
 
-        "Portfolio Building"
+"AI Tools & Productivity",
 
-    ],
+"Online Portfolio Building",
 
+"Instagram Growth Fundamentals",
 
-    "Premium Pro Package": [
+"YouTube Channel Basics",
 
-        "Mobile Video Editing",
+"Basic Copywriting",
 
-        "Graphic Design & Thumbnail Design",
+"Client Communication Skills",
 
-        "Social Media & Content Creation",
+"Portfolio & Resume Building",
 
-        "Music Production & Digital Music",
+"Digital Work Management",
 
-        "Website Development Fundamentals",
+"Advanced Canva Design",
 
-        "Digital Marketing Fundamentals",
+"Advanced Video Editing",
 
-        "Freelancing Fundamentals",
+"Creator Branding",
 
-        "Personal Branding",
+"Digital Campaign Planning"
 
-        "Photography Basics",
+]
 
-        "Lightroom Editing",
+},
 
-        "CapCut Advanced Editing",
 
-        "YouTube Content Creation",
+"Premium Pro Package": {
 
-        "Instagram Reels Creation",
+price:10997,
 
-        "AI Tools for Creators",
+commission:"85%",
 
-        "Audio Editing Basics",
+commissionAmount:"₹9,347.45",
 
-        "Presentation Design",
+courses:[
 
-        "Communication Skills",
+"Digital Skills & Internet Basics",
 
-        "Productivity & Digital Tools",
+"Canva & Graphic Design Basics",
 
-        "Online Safety & Digital Awareness",
+"Social Media & Content Creation",
 
-        "Portfolio Building",
+"Freelancing Fundamentals",
 
-        "Client Communication Basics",
+"Digital Marketing Basics",
 
-        "Basic Computer Skills",
+"Video Editing Fundamentals",
 
-        "Digital Entrepreneurship Basics"
+"Personal Branding Basics",
 
-    ]
+"Content Strategy",
+
+"AI Tools & Productivity",
+
+"Online Portfolio Building",
+
+"Instagram Growth Fundamentals",
+
+"YouTube Channel Basics",
+
+"Basic Copywriting",
+
+"Client Communication Skills",
+
+"Portfolio & Resume Building",
+
+"Digital Work Management",
+
+"Advanced Canva Design",
+
+"Advanced Video Editing",
+
+"Creator Branding",
+
+"Digital Campaign Planning",
+
+"Advanced Digital Marketing",
+
+"Professional Content Strategy",
+
+"Digital Business Fundamentals"
+
+]
+
+}
 
 };
 
@@ -3737,13 +4319,68 @@ const packageCourses = {
 
 function toggleMenu(){
 
-    document
-        .getElementById("mobileMenu")
-        .classList.toggle("active");
+    const menu =
+    document.getElementById("mobileMenu");
 
-    document
-        .getElementById("menuOverlay")
-        .classList.toggle("active");
+    const overlay =
+    document.getElementById("menuOverlay");
+
+    menu.classList.toggle("active");
+
+    overlay.classList.toggle("active");
+
+}
+
+
+/* =========================================================
+   PACKAGE MODAL
+========================================================= */
+
+function openPackageModal(
+    name,
+    courses,
+    commission,
+    commissionAmount,
+    withdrawal,
+    frequency,
+    processing,
+    fee
+){
+
+    document.getElementById("modalTitle")
+    .innerText=name;
+
+    document.getElementById("modalCourses")
+    .innerText=courses;
+
+    document.getElementById("modalCommission")
+    .innerText=commission;
+
+    document.getElementById("modalCommissionAmount")
+    .innerText=commissionAmount;
+
+    document.getElementById("modalWithdrawal")
+    .innerText=withdrawal;
+
+    document.getElementById("modalFrequency")
+    .innerText=frequency;
+
+    document.getElementById("modalProcessing")
+    .innerText=processing;
+
+    document.getElementById("modalFee")
+    .innerText=fee;
+
+    document.getElementById("packageModal")
+    .style.display="flex";
+
+}
+
+
+function closePackageModal(){
+
+    document.getElementById("packageModal")
+    .style.display="none";
 
 }
 
@@ -3755,137 +4392,89 @@ function toggleMenu(){
 function openCourseModal(packageName){
 
     const modal =
-        document.getElementById("courseModal");
+    document.getElementById("courseModal");
 
     const title =
-        document.getElementById("courseModalTitle");
-
-    const subtitle =
-        document.getElementById("courseModalSubtitle");
+    document.getElementById("courseModalTitle");
 
     const list =
-        document.getElementById("courseModalList");
+    document.getElementById("courseModalList");
 
-    const count =
-        document.getElementById("courseModalCount");
+    const data =
+    packageData[packageName];
 
-
-    const courses =
-        packageCourses[packageName] || [];
-
+    if(!data){
+        return;
+    }
 
     title.innerText =
-        packageName + " — Courses";
+    packageName + " — Course Roadmap";
 
 
-    subtitle.innerText =
-        "Below is the planned course roadmap for this package. Courses will be marked available only after the learning content is completed and published.";
+    list.innerHTML="";
 
 
-    count.innerText =
-        courses.length + " Courses";
+    data.courses.forEach(
+        function(course,index){
 
-
-    list.innerHTML = "";
-
-
-    courses.forEach(courseName => {
-
-        const course =
-            courseCatalog[courseName] || {
-
-                icon:"📚",
-
-                description:
-                    "Course information will be published soon.",
-
-                available:false
-
-            };
-
-
-        const item =
+            const item =
             document.createElement("div");
 
-        item.className =
-            "modal-course-item";
+            item.className =
+            "course-modal-item";
+
+            item.innerHTML = `
+
+                <div class="course-number">
+                    ${index + 1}
+                </div>
+
+                <div class="course-modal-name">
+                    ${escapeHtml(course)}
+                </div>
+
+                <div class="course-status">
+                    COMING SOON
+                </div>
+
+            `;
+
+            list.appendChild(item);
+
+        }
+    );
 
 
-        const statusClass =
-            course.available
-                ? "status-available"
-                : "status-coming";
-
-
-        const statusText =
-            course.available
-                ? "AVAILABLE"
-                : "COMING SOON";
-
-
-        item.innerHTML = `
-
-            <div class="modal-course-icon">
-                ${course.icon}
-            </div>
-
-            <div class="modal-course-info">
-
-                <strong>
-                    ${escapeHTML(courseName)}
-                </strong>
-
-                <span>
-                    ${escapeHTML(course.description)}
-                </span>
-
-            </div>
-
-            <span class="status-badge ${statusClass}">
-                ${statusText}
-            </span>
-
-        `;
-
-
-        list.appendChild(item);
-
-    });
-
-
-    modal.style.display =
-        "flex";
-
-    document.body.style.overflow =
-        "hidden";
+    modal.style.display="flex";
 
 }
 
 
 function closeCourseModal(){
 
-    document
-        .getElementById("courseModal")
-        .style.display = "none";
-
-    document.body.style.overflow =
-        "";
+    document.getElementById("courseModal")
+    .style.display="none";
 
 }
 
 
 /* =========================================================
-   SAFE HTML TEXT
+   BASIC HTML ESCAPE
 ========================================================= */
 
-function escapeHTML(value){
+function escapeHtml(value){
 
     return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+
+    .replace(/&/g,"&amp;")
+
+    .replace(/</g,"&lt;")
+
+    .replace(/>/g,"&gt;")
+
+    .replace(/"/g,"&quot;")
+
+    .replace(/'/g,"&#039;");
 
 }
 
@@ -3897,52 +4486,53 @@ function escapeHTML(value){
 async function openAdminPreviewModal(){
 
     const modal =
-        document.getElementById("adminPreviewModal");
+    document.getElementById("adminPreviewModal");
 
     const container =
-        document.getElementById("previewImageContainer");
+    document.getElementById("previewImageContainer");
 
-
-    modal.style.display =
-        "flex";
+    modal.style.display="flex";
 
 
     container.innerHTML = `
+
         <p style="
-            color:#64748b;
-            font-size:13px;
-            padding:20px;
+        color:#64748b;
+        font-size:13px;
+        padding:20px;
         ">
-            Loading from admin storage...
+
+        Loading from admin storage...
+
         </p>
+
     `;
 
 
-    let imageUrl = null;
+    let imageUrl=null;
 
+
+    /* ---------------------------------------------
+       SUPABASE
+    --------------------------------------------- */
 
     if(supabaseClient){
 
         try{
 
-            const { data, error } =
-                await supabaseClient
-                .from("admin_updates")
-                .select("*")
+            const {
+                data,
+                error
+            } = await supabaseClient
+
+                .from('admin_updates')
+
+                .select('*')
+
                 .limit(1);
 
 
-            if(error){
-
-                console.log(
-                    "Admin update fetch error:",
-                    error
-                );
-
-            }
-
-
-            if(data && data.length > 0){
+            if(data && data.length>0){
 
                 imageUrl =
                     data[0].image_url ||
@@ -3952,10 +4542,22 @@ async function openAdminPreviewModal(){
 
             }
 
-        }catch(err){
+
+            if(error){
+
+                console.log(
+                    "Supabase fetch error:",
+                    error
+                );
+
+            }
+
+        }
+
+        catch(err){
 
             console.log(
-                "Supabase fetch error:",
+                "Supabase error:",
                 err
             );
 
@@ -3964,64 +4566,67 @@ async function openAdminPreviewModal(){
     }
 
 
+    /* ---------------------------------------------
+       LOCAL STORAGE FALLBACK
+    --------------------------------------------- */
+
     if(!imageUrl){
 
         imageUrl =
             localStorage.getItem(
-                "index_preview_image"
-            ) ||
-
+                'index_preview_image'
+            )
+            ||
             localStorage.getItem(
-                "adminUploadedProfile"
-            ) ||
-
+                'adminUploadedProfile'
+            )
+            ||
             localStorage.getItem(
-                "userProfilePic"
+                'userProfilePic'
             );
 
     }
 
 
+    /* ---------------------------------------------
+       DISPLAY
+    --------------------------------------------- */
+
     if(imageUrl){
 
-        const img =
-            document.createElement("img");
+        const safeUrl =
+        escapeHtml(imageUrl);
 
-        img.src =
-            imageUrl;
+        container.innerHTML = `
 
-        img.alt =
-            "Admin Preview";
+            <img
+            src="${safeUrl}"
+            alt="Admin Preview"
+            style="
+            width:100%;
+            height:auto;
+            max-height:350px;
+            object-fit:contain;
+            "
+            >
 
-        img.style.width =
-            "100%";
+        `;
 
-        img.style.height =
-            "auto";
+    }
 
-        img.style.maxHeight =
-            "350px";
-
-        img.style.objectFit =
-            "contain";
-
-
-        container.innerHTML = "";
-
-        container.appendChild(img);
-
-    }else{
+    else{
 
         container.innerHTML = `
 
             <p style="
-                color:#64748b;
-                font-size:13px;
-                padding:20px;
+            color:#64748b;
+            font-size:13px;
+            padding:20px;
+            line-height:1.7;
             ">
 
-                No preview photo found from
-                admin panel storage.
+            No preview photo found from admin
+            panel storage (admin_updates).
 
             </p>
 
@@ -4034,62 +4639,85 @@ async function openAdminPreviewModal(){
 
 function closeAdminPreviewModal(){
 
-    document
-        .getElementById("adminPreviewModal")
-        .style.display =
-        "none";
+    document.getElementById(
+        "adminPreviewModal"
+    ).style.display="none";
 
 }
 
 
 /* =========================================================
-   CLOSE MODALS ON BACKDROP
+   CLOSE MODALS BY BACKDROP
 ========================================================= */
 
-window.addEventListener("click",function(event){
+window.addEventListener(
+    "click",
+    function(event){
 
-    const courseModal =
-        document.getElementById("courseModal");
+        const pkgModal =
+        document.getElementById(
+            "packageModal"
+        );
 
-    const adminModal =
-        document.getElementById("adminPreviewModal");
+        const courseModal =
+        document.getElementById(
+            "courseModal"
+        );
+
+        const adminModal =
+        document.getElementById(
+            "adminPreviewModal"
+        );
 
 
-    if(event.target === courseModal){
+        if(event.target===pkgModal){
 
-        closeCourseModal();
+            closePackageModal();
+
+        }
+
+
+        if(event.target===courseModal){
+
+            closeCourseModal();
+
+        }
+
+
+        if(event.target===adminModal){
+
+            closeAdminPreviewModal();
+
+        }
 
     }
-
-
-    if(event.target === adminModal){
-
-        closeAdminPreviewModal();
-
-    }
-
-});
+);
 
 
 /* =========================================================
-   ESC KEY
+   ESC KEY CLOSE
 ========================================================= */
 
-window.addEventListener("keydown",function(event){
+window.addEventListener(
+    "keydown",
+    function(event){
 
-    if(event.key === "Escape"){
+        if(event.key==="Escape"){
 
-        closeCourseModal();
+            closePackageModal();
 
-        closeAdminPreviewModal();
+            closeCourseModal();
+
+            closeAdminPreviewModal();
+
+        }
 
     }
-
-});
+);
 
 
 /* =========================================================
-   FEEDBACK
+   FEEDBACK EMAIL
 ========================================================= */
 
 function sendFeedbackEmail(event){
@@ -4098,146 +4726,155 @@ function sendFeedbackEmail(event){
 
 
     const name =
-        document.getElementById("fbName")
-        .value.trim();
+    document.getElementById(
+        'fbName'
+    ).value;
 
 
     const userId =
-        document.getElementById("fbId")
-        .value.trim();
+    document.getElementById(
+        'fbId'
+    ).value;
 
 
     const rating =
-        document.getElementById("fbRating")
-        .value;
+    document.getElementById(
+        'fbRating'
+    ).value;
 
 
     const subject =
-        document.getElementById("fbSubject")
-        .value.trim();
+    document.getElementById(
+        'fbSubject'
+    ).value;
 
 
     const message =
-        document.getElementById("fbMessage")
-        .value.trim();
+    document.getElementById(
+        'fbMessage'
+    ).value;
 
 
     const recipientEmail =
-        "smartmoneysupport1@gmail.com";
+    "smartmoneysupport1@gmail.com";
 
 
     const emailSubject =
-        encodeURIComponent(
-            `New User Feedback: ${subject} (${name})`
-        );
+    encodeURIComponent(
+        `New User Feedback: ${subject} (${name})`
+    );
 
 
     const emailBody =
-        encodeURIComponent(
+    encodeURIComponent(
 
-            `Hello Smart Money Support,\n\n` +
+        `Hello Smart Money Support,\n\n` +
 
-            `You have received new feedback from your website:\n\n` +
+        `You have received new feedback from your website:\n\n` +
 
-            `• Name: ${name}\n` +
+        `• Name: ${name}\n` +
 
-            `• User ID / Email: ${userId}\n` +
+        `• User ID / Email: ${userId}\n` +
 
-            `• Rating: ${rating}\n` +
+        `• Rating: ${rating}\n` +
 
-            `• Subject: ${subject}\n\n` +
+        `• Subject: ${subject}\n\n` +
 
-            `Feedback Message:\n${message}\n\n` +
+        `Feedback Message:\n${message}\n\n` +
 
-            `-----------------------------------------\n` +
+        `-----------------------------------------\n` +
 
-            `Submitted on Smart Money Platform`
+        `Submitted on Smart Money Platform`
 
-        );
+    );
 
 
     window.location.href =
-        `mailto:${recipientEmail}?subject=${emailSubject}&body=${emailBody}`;
+    `mailto:${recipientEmail}?subject=${emailSubject}&body=${emailBody}`;
 
 }
 
 
 /* =========================================================
-   AUTH UI
+   AUTH / PROFILE
 ========================================================= */
 
 window.addEventListener(
-    "DOMContentLoaded",
-    () => {
+    'DOMContentLoaded',
+    function(){
 
         const authLink =
-            document.getElementById(
-                "authMenuLink"
-            );
+        document.getElementById(
+            'authMenuLink'
+        );
 
 
         if(authLink){
 
             const isLoggedIn =
-                localStorage.getItem(
-                    "isLoggedIn"
-                ) === "true";
+            localStorage.getItem(
+                'isLoggedIn'
+            ) === 'true';
 
 
             if(isLoggedIn){
 
                 authLink.href =
-                    "logout.html";
+                "logout.html";
 
                 authLink.innerHTML =
-                    "🚪 Logout";
+                "🚪 Logout";
 
-            }else{
+            }
+
+            else{
 
                 authLink.href =
-                    "login.html";
+                "login.html";
 
                 authLink.innerHTML =
-                    "👤 Login";
+                "👤 Login";
 
             }
 
         }
 
 
+        /* ---------------------------------------------
+           PROFILE IMAGE
+        --------------------------------------------- */
+
         const profileBtn =
-            document.getElementById(
-                "navProfileBtn"
-            );
+        document.getElementById(
+            'navProfileBtn'
+        );
 
 
         if(profileBtn){
 
             const savedProfilePic =
-                localStorage.getItem(
-                    "userProfilePic"
-                ) ||
 
                 localStorage.getItem(
-                    "adminUploadedProfile"
+                    'userProfilePic'
+                )
+
+                ||
+
+                localStorage.getItem(
+                    'adminUploadedProfile'
                 );
 
 
             if(savedProfilePic){
 
-                const img =
-                    document.createElement("img");
+                profileBtn.innerHTML = `
 
-                img.src =
-                    savedProfilePic;
+                    <img
+                    src="${escapeHtml(savedProfilePic)}"
+                    alt="Profile"
+                    >
 
-                img.alt =
-                    "Profile";
-
-
-                profileBtn.innerHTML = "";
-
-                profileBtn.appendChild(img);
+                `;
 
             }
 
