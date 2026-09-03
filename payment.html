@@ -31,17 +31,17 @@
       justify-content: center;
       align-items: center;
       background:
-        radial-gradient(circle at top left, rgba(124,58,237,.12), transparent 35%),
-        radial-gradient(circle at bottom right, rgba(16,185,129,.10), transparent 35%),
+        radial-gradient(circle at top left, rgba(124,58,237,.14), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(16,185,129,.12), transparent 35%),
         #f1f5f9;
       color: #1e293b;
     }
 
     .pay-card {
       width: 100%;
-      max-width: 440px;
+      max-width: 460px;
       padding: 26px;
-      background: rgba(255,255,255,.96);
+      background: rgba(255,255,255,.97);
       border: 1px solid rgba(226,232,240,.9);
       border-radius: 24px;
       box-shadow:
@@ -86,6 +86,94 @@
       border: 1px solid #a7f3d0;
     }
 
+    /* ======================================================
+       PAYMENT METHOD SELECTOR
+    ====================================================== */
+
+    .method-heading {
+      font-size: 13px;
+      font-weight: 800;
+      color: #334155;
+      margin: 0 0 10px;
+    }
+
+    .payment-methods {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .method-btn {
+      position: relative;
+      border: 1.5px solid #e2e8f0;
+      background: #fff;
+      border-radius: 14px;
+      padding: 13px 9px;
+      cursor: pointer;
+      text-align: center;
+      transition: .2s ease;
+      color: #334155;
+    }
+
+    .method-btn:hover {
+      transform: translateY(-1px);
+      border-color: #a78bfa;
+      box-shadow: 0 5px 16px rgba(124,58,237,.08);
+    }
+
+    .method-btn.active {
+      border-color: #7c3aed;
+      background: linear-gradient(
+        135deg,
+        #faf5ff,
+        #f5f3ff
+      );
+      box-shadow:
+        0 5px 18px rgba(124,58,237,.12),
+        inset 0 0 0 1px rgba(124,58,237,.08);
+    }
+
+    .method-icon {
+      display: block;
+      font-size: 23px;
+      margin-bottom: 4px;
+    }
+
+    .method-name {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .method-upi-small {
+      display: block;
+      margin-top: 3px;
+      font-size: 8px;
+      color: #94a3b8;
+      word-break: break-all;
+    }
+
+    .selected-badge {
+      position: absolute;
+      top: 6px;
+      right: 7px;
+      width: 18px;
+      height: 18px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #7c3aed;
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .method-btn.active .selected-badge {
+      display: flex;
+    }
+
     .payment-box {
       padding: 16px;
       border-radius: 18px;
@@ -102,6 +190,13 @@
       margin-bottom: 4px;
     }
 
+    .selected-method-title {
+      margin: 4px 0 8px;
+      font-size: 17px;
+      font-weight: 800;
+      color: #111827;
+    }
+
     .qr-img {
       display: block;
       width: 220px;
@@ -112,6 +207,13 @@
       padding: 6px;
       margin: 12px auto;
       background: #fff;
+    }
+
+    .upi-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #94a3b8;
+      margin-bottom: 4px;
     }
 
     .upi-box {
@@ -141,7 +243,10 @@
       background: #ddd6fe;
     }
 
-    /* Premium warning */
+    /* ======================================================
+       WARNING
+    ====================================================== */
+
     .warning-box {
       position: relative;
       margin: 18px 0;
@@ -185,6 +290,10 @@
       line-height: 1.6;
       color: #78350f;
     }
+
+    /* ======================================================
+       FORM
+    ====================================================== */
 
     .form-group {
       margin-bottom: 17px;
@@ -268,6 +377,10 @@
       border: 1px solid #bfdbfe;
     }
 
+    /* ======================================================
+       VERIFICATION
+    ====================================================== */
+
     .verification-box {
       display: none;
       margin: 14px 0;
@@ -320,6 +433,10 @@
       background: #fee2e2;
       color: #b91c1c;
     }
+
+    /* ======================================================
+       BUTTON
+    ====================================================== */
 
     .btn-submit {
       width: 100%;
@@ -385,6 +502,14 @@
         width: 200px;
         height: 200px;
       }
+
+      .payment-methods {
+        gap: 8px;
+      }
+
+      .method-btn {
+        padding: 11px 6px;
+      }
     }
   </style>
 </head>
@@ -405,21 +530,112 @@
     ₹289
   </div>
 
+
+  <!-- =====================================================
+       PAYMENT METHOD SELECTOR
+  ====================================================== -->
+
+  <p class="method-heading">
+    1. Choose your payment method
+  </p>
+
+  <div class="payment-methods">
+
+    <button
+      type="button"
+      class="method-btn active"
+      data-method="Super Money"
+      onclick="selectPaymentMethod('Super Money')"
+    >
+      <span class="selected-badge">✓</span>
+      <span class="method-icon">🟠</span>
+      <span class="method-name">Super Money</span>
+      <span class="method-upi-small">
+        smartmoney7@nyes
+      </span>
+    </button>
+
+
+    <button
+      type="button"
+      class="method-btn"
+      data-method="PhonePe"
+      onclick="selectPaymentMethod('PhonePe')"
+    >
+      <span class="selected-badge">✓</span>
+      <span class="method-icon">🔵</span>
+      <span class="method-name">PhonePe</span>
+      <span class="method-upi-small">
+        smartmoney7@nyes
+      </span>
+    </button>
+
+
+    <button
+      type="button"
+      class="method-btn"
+      data-method="Google Pay"
+      onclick="selectPaymentMethod('Google Pay')"
+    >
+      <span class="selected-badge">✓</span>
+      <span class="method-icon">🟢</span>
+      <span class="method-name">Google Pay</span>
+      <span class="method-upi-small">
+        andw7642-4@okhdfcbank
+      </span>
+    </button>
+
+
+    <button
+      type="button"
+      class="method-btn"
+      data-method="BharatPe"
+      onclick="selectPaymentMethod('BharatPe')"
+    >
+      <span class="selected-badge">✓</span>
+      <span class="method-icon">🟣</span>
+      <span class="method-name">BharatPe</span>
+      <span class="method-upi-small">
+        BHARATPE2U0V0S7G2D90659@unitype
+      </span>
+    </button>
+
+  </div>
+
+
+  <!-- =====================================================
+       SELECTED PAYMENT DETAILS
+  ====================================================== -->
+
   <div class="payment-box">
 
     <div class="payment-box-title">
-      Pay the exact package amount
+      2. Pay the exact package amount using
+    </div>
+
+    <div
+      class="selected-method-title"
+      id="selectedMethodTitle"
+    >
+      🟠 Super Money
     </div>
 
     <img
-      src="IMG_20260826_034524.jpg"
-      alt="Smart Money Payment QR Code"
+      src="IMG_20260826_034558.png"
+      alt="Super Money Payment QR Code"
       class="qr-img"
       id="qrImageElement"
     >
 
-    <div class="upi-box" id="upiIdText">
-      BHARATPE2U0V0S7G2D90659@unitype
+    <div class="upi-label">
+      UPI ID
+    </div>
+
+    <div
+      class="upi-box"
+      id="upiIdText"
+    >
+      smartmoney7@nyes
     </div>
 
     <button
@@ -432,7 +648,11 @@
 
   </div>
 
-  <!-- Premium Warning -->
+
+  <!-- =====================================================
+       WARNING
+  ====================================================== -->
+
   <div class="warning-box">
 
     <div class="warning-icon">!</div>
@@ -442,22 +662,32 @@
     </p>
 
     <p class="warning-text">
-      Sirf wahi payment screenshot submit karein jisme actual successful
-      transaction clearly visible ho. Edited, fake, reused ya incorrect
-      screenshot/UTR submit karne par payment request reject ki ja sakti hai.
-      Screenshot OCR sirf preliminary checking karta hai; final verification
-      payment records ke basis par hogi.
+      Sirf wahi payment screenshot submit karein jisme actual
+      successful transaction clearly visible ho. Edited, fake,
+      reused ya incorrect screenshot/UTR submit karne par payment
+      request reject ki ja sakti hai. Screenshot OCR sirf
+      preliminary checking karta hai; final verification payment
+      records ke basis par hogi.
     </p>
 
   </div>
 
-  <form id="paymentForm" onsubmit="submitPaymentProof(event)">
+
+  <!-- =====================================================
+       PAYMENT FORM
+  ====================================================== -->
+
+  <form
+    id="paymentForm"
+    onsubmit="submitPaymentProof(event)"
+  >
 
     <!-- UTR -->
+
     <div class="form-group">
 
       <label for="utrNumber">
-        UTR / Transaction ID
+        3. UTR / Transaction ID
       </label>
 
       <input
@@ -483,11 +713,13 @@
 
     </div>
 
+
     <!-- Screenshot -->
+
     <div class="form-group">
 
       <label for="paymentScreenshot">
-        Upload Payment Screenshot
+        4. Upload Payment Screenshot
       </label>
 
       <input
@@ -509,7 +741,9 @@
 
     </div>
 
-    <!-- Verification progress -->
+
+    <!-- Verification -->
+
     <div
       id="verificationBox"
       class="verification-box"
@@ -520,26 +754,39 @@
       </div>
 
       <div class="verification-item">
-        <span id="checkUtr" class="check-circle">•</span>
+        <span
+          id="checkUtr"
+          class="check-circle"
+        >•</span>
         <span>UTR format check</span>
       </div>
 
       <div class="verification-item">
-        <span id="checkDuplicate" class="check-circle">•</span>
+        <span
+          id="checkDuplicate"
+          class="check-circle"
+        >•</span>
         <span>Duplicate UTR check</span>
       </div>
 
       <div class="verification-item">
-        <span id="checkAmount" class="check-circle">•</span>
+        <span
+          id="checkAmount"
+          class="check-circle"
+        >•</span>
         <span>Screenshot amount check</span>
       </div>
 
       <div class="verification-item">
-        <span id="checkImage" class="check-circle">•</span>
+        <span
+          id="checkImage"
+          class="check-circle"
+        >•</span>
         <span>Screenshot readability check</span>
       </div>
 
     </div>
+
 
     <button
       type="submit"
@@ -551,10 +798,12 @@
 
   </form>
 
+
   <div
     id="successBox"
     class="success-box"
   ></div>
+
 
   <div class="security-note">
     🔒 Your payment proof is submitted for verification.
@@ -563,16 +812,25 @@
 
 </div>
 
-<!-- Supabase -->
+
+<!-- =======================================================
+     SUPABASE
+======================================================= -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+
   /* =========================================================
      EMAILJS
   ========================================================= */
 
   (function () {
-    emailjs.init("FxcimUvl0-ZxAauRx");
+
+    emailjs.init(
+      "FxcimUvl0-ZxAauRx"
+    );
+
   })();
 
 
@@ -594,54 +852,166 @@
 
 
   /* =========================================================
+     PAYMENT METHODS
+  ========================================================= */
+
+  const PAYMENT_METHODS = {
+
+    "Super Money": {
+
+      name: "Super Money",
+
+      icon: "🟠",
+
+      upi:
+        "smartmoney7@nyes",
+
+      qr:
+        "IMG_20260826_034558.png"
+
+    },
+
+
+    "PhonePe": {
+
+      name: "PhonePe",
+
+      icon: "🔵",
+
+      upi:
+        "smartmoney7@nyes",
+
+      qr:
+        "Screenshot_2026-09-04-01-43-38-47_96b26121e545231a3c569311a54cda96.jpg"
+
+    },
+
+
+    "Google Pay": {
+
+      name: "Google Pay",
+
+      icon: "🟢",
+
+      upi:
+        "andw7642-4@okhdfcbank",
+
+      qr:
+        "IMG_20260904_015405.png"
+
+    },
+
+
+    "BharatPe": {
+
+      name: "BharatPe",
+
+      icon: "🟣",
+
+      upi:
+        "BHARATPE2U0V0S7G2D90659@unitype",
+
+      qr:
+        "IMG_20260826_034524.jpg"
+
+    }
+
+  };
+
+
+  let selectedPaymentMethod =
+    "Super Money";
+
+
+  /* =========================================================
      CHECKOUT DATA
-     
-     IMPORTANT:
-     Password is intentionally NOT read or saved here.
-     Supabase Auth should handle passwords securely.
+
+     PASSWORD IS NEVER READ OR SAVED.
   ========================================================= */
 
   let checkoutData = {};
 
   try {
-    checkoutData = JSON.parse(
-      sessionStorage.getItem("checkout_data") || "{}"
-    );
+
+    checkoutData =
+      JSON.parse(
+        sessionStorage.getItem(
+          "checkout_data"
+        ) || "{}"
+      );
+
   } catch (error) {
-    console.error("Invalid checkout session.");
+
+    console.error(
+      "Invalid checkout session."
+    );
+
     checkoutData = {};
+
   }
 
+
   const pkgName =
-    String(checkoutData.name || "Starter Package").trim();
+    String(
+      checkoutData.name ||
+      "Starter Package"
+    ).trim();
+
 
   const pkgPrice =
-    String(checkoutData.price || "289").trim();
+    String(
+      checkoutData.price ||
+      "289"
+    ).trim();
+
 
   const refCode =
-    String(checkoutData.ref || "").trim();
+    String(
+      checkoutData.ref ||
+      ""
+    ).trim();
+
 
   const fullName =
-    String(checkoutData.fullname || "").trim();
+    String(
+      checkoutData.fullname ||
+      ""
+    ).trim();
+
 
   const mobile =
-    String(checkoutData.mobile || "").trim();
+    String(
+      checkoutData.mobile ||
+      ""
+    ).trim();
+
 
   const email =
-    String(checkoutData.email || "").trim().toLowerCase();
+    String(
+      checkoutData.email ||
+      ""
+    ).trim()
+    .toLowerCase();
 
 
   /* =========================================================
      BASIC SESSION VALIDATION
   ========================================================= */
 
-  if (!email || !mobile || !fullName || !refCode) {
+  if (
+    !email ||
+    !mobile ||
+    !fullName ||
+    !refCode
+  ) {
 
     alert(
       "Your checkout session is incomplete or expired. Please enter your details again."
     );
 
-    window.location.href = "checkout.html";
+    window.location.href =
+      "checkout.html";
+
   }
 
 
@@ -649,96 +1019,251 @@
      UI DATA
   ========================================================= */
 
-  document.getElementById("displayPackagePrice").innerText =
+  document.getElementById(
+    "displayPackagePrice"
+  ).innerText =
     `₹${pkgPrice}`;
 
-  document.getElementById("pkgSubTitle").innerText =
+
+  document.getElementById(
+    "pkgSubTitle"
+  ).innerText =
     `${pkgName} ke liye payment karein`;
+
+
+  /* =========================================================
+     SELECT PAYMENT METHOD
+  ========================================================= */
+
+  function selectPaymentMethod(method) {
+
+    if (
+      !PAYMENT_METHODS[method]
+    ) {
+      return;
+    }
+
+    selectedPaymentMethod =
+      method;
+
+    const payment =
+      PAYMENT_METHODS[method];
+
+
+    /* Update active button */
+
+    document
+      .querySelectorAll(
+        ".method-btn"
+      )
+      .forEach(
+        button => {
+
+          button.classList.toggle(
+            "active",
+            button.dataset.method === method
+          );
+
+        }
+      );
+
+
+    /* Update selected title */
+
+    document.getElementById(
+      "selectedMethodTitle"
+    ).innerText =
+      `${payment.icon} ${payment.name}`;
+
+
+    /* Update QR */
+
+    const qrImage =
+      document.getElementById(
+        "qrImageElement"
+      );
+
+    qrImage.src =
+      payment.qr;
+
+    qrImage.alt =
+      `${payment.name} Payment QR Code`;
+
+
+    /* Update UPI */
+
+    document.getElementById(
+      "upiIdText"
+    ).innerText =
+      payment.upi;
+
+  }
 
 
   /* =========================================================
      HELPERS
   ========================================================= */
 
-  function setStatus(elementId, message, type) {
+  function setStatus(
+    elementId,
+    message,
+    type
+  ) {
 
     const element =
-      document.getElementById(elementId);
+      document.getElementById(
+        elementId
+      );
 
-    if (!element) return;
+    if (!element) {
+      return;
+    }
 
-    element.textContent = message;
+    element.textContent =
+      message;
 
     element.className =
       `status-message show status-${type}`;
+
   }
 
 
-  function clearStatus(elementId) {
+  function clearStatus(
+    elementId
+  ) {
 
     const element =
-      document.getElementById(elementId);
+      document.getElementById(
+        elementId
+      );
 
-    if (!element) return;
+    if (!element) {
+      return;
+    }
 
-    element.textContent = "";
+    element.textContent =
+      "";
 
     element.className =
       "status-message";
+
   }
 
 
-  function setCheck(elementId, state) {
+  function setCheck(
+    elementId,
+    state
+  ) {
 
     const element =
-      document.getElementById(elementId);
+      document.getElementById(
+        elementId
+      );
 
-    if (!element) return;
+    if (!element) {
+      return;
+    }
 
     element.classList.remove(
       "done",
       "failed"
     );
 
-    if (state === "done") {
-      element.classList.add("done");
-      element.textContent = "✓";
+
+    if (
+      state === "done"
+    ) {
+
+      element.classList.add(
+        "done"
+      );
+
+      element.textContent =
+        "✓";
+
     }
 
-    else if (state === "failed") {
-      element.classList.add("failed");
-      element.textContent = "×";
+    else if (
+      state === "failed"
+    ) {
+
+      element.classList.add(
+        "failed"
+      );
+
+      element.textContent =
+        "×";
+
     }
 
     else {
-      element.textContent = "•";
+
+      element.textContent =
+        "•";
+
     }
+
   }
 
 
-  function normalizeDigits(value) {
+  function normalizeDigits(
+    value
+  ) {
 
-    return String(value || "")
-      .replace(/\D/g, "");
+    return String(
+      value || ""
+    )
+      .replace(
+        /\D/g,
+        ""
+      );
+
   }
 
 
-  function normalizeAmount(value) {
+  function normalizeAmount(
+    value
+  ) {
 
-    return String(value || "")
-      .replace(/₹/g, "")
-      .replace(/rs\.?/gi, "")
-      .replace(/inr/gi, "")
-      .replace(/,/g, "")
-      .replace(/\s/g, "")
+    return String(
+      value || ""
+    )
+      .replace(
+        /₹/g,
+        ""
+      )
+      .replace(
+        /rs\.?/gi,
+        ""
+      )
+      .replace(
+        /inr/gi,
+        ""
+      )
+      .replace(
+        /,/g,
+        ""
+      )
+      .replace(
+        /\s/g,
+        ""
+      )
       .trim();
+
   }
 
 
-  function escapeRegExp(value) {
+  function escapeRegExp(
+    value
+  ) {
 
-    return String(value)
-      .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return String(
+      value
+    ).replace(
+      /[.*+?^${}()|[\]\\]/g,
+      "\\$&"
+    );
+
   }
 
 
@@ -749,56 +1274,83 @@
   async function copyUpi() {
 
     const upi =
-      document.getElementById("upiIdText")
-        .innerText.trim();
+      document.getElementById(
+        "upiIdText"
+      ).innerText.trim();
+
 
     try {
 
-      await navigator.clipboard.writeText(upi);
+      await navigator
+        .clipboard
+        .writeText(upi);
 
-      alert("UPI ID copied successfully.");
+      alert(
+        `${selectedPaymentMethod} UPI ID copied successfully.`
+      );
 
     } catch (error) {
 
       alert(
         "Unable to copy automatically. Please copy the UPI ID manually."
       );
+
     }
+
   }
 
 
   /* =========================================================
-     UTR FORMAT VALIDATION
+     UTR FORMAT
   ========================================================= */
 
-  function validateUtrFormat(utr) {
+  function validateUtrFormat(
+    utr
+  ) {
 
     const cleanUtr =
-      normalizeDigits(utr);
+      normalizeDigits(
+        utr
+      );
 
-    return /^[0-9]{12}$/.test(cleanUtr);
+    return /^[0-9]{12}$/.test(
+      cleanUtr
+    );
+
   }
 
 
   /* =========================================================
-     CHECK DUPLICATE UTR
-     
-     This checks existing payment_requests records.
+     DUPLICATE UTR CHECK
   ========================================================= */
 
-  async function checkDuplicateUtr(utr) {
+  async function checkDuplicateUtr(
+    utr
+  ) {
 
     const cleanUtr =
-      normalizeDigits(utr);
+      normalizeDigits(
+        utr
+      );
+
 
     const {
       data,
       error
-    } = await supabaseClient
-      .from("payment_requests")
-      .select("id, transaction_id")
-      .eq("transaction_id", cleanUtr)
-      .limit(1);
+    } =
+      await supabaseClient
+        .from(
+          "payment_requests"
+        )
+        .select(
+          "id, transaction_id"
+        )
+        .eq(
+          "transaction_id",
+          cleanUtr
+        )
+        .limit(1);
+
 
     if (error) {
 
@@ -810,9 +1362,15 @@
       throw new Error(
         "We could not verify this transaction ID right now. Please try again."
       );
+
     }
 
-    return Array.isArray(data) && data.length > 0;
+
+    return (
+      Array.isArray(data) &&
+      data.length > 0
+    );
+
   }
 
 
@@ -820,181 +1378,268 @@
      FILE VALIDATION
   ========================================================= */
 
-  function validateScreenshotFile(file) {
+  function validateScreenshotFile(
+    file
+  ) {
 
     if (!file) {
 
       return {
+
         valid: false,
-        message: "Please upload your payment screenshot."
+
+        message:
+          "Please upload your payment screenshot."
+
       };
+
     }
 
+
     const allowedTypes = [
+
       "image/jpeg",
       "image/png",
       "image/webp"
+
     ];
 
-    if (!allowedTypes.includes(file.type)) {
+
+    if (
+      !allowedTypes.includes(
+        file.type
+      )
+    ) {
 
       return {
+
         valid: false,
+
         message:
           "Unsupported image format. Please upload JPG, PNG or WEBP."
+
       };
+
     }
+
 
     const maxSize =
       5 * 1024 * 1024;
 
-    if (file.size > maxSize) {
+
+    if (
+      file.size >
+      maxSize
+    ) {
 
       return {
+
         valid: false,
+
         message:
           "Screenshot is too large. Maximum allowed size is 5 MB."
+
       };
+
     }
 
-    if (file.size < 10 * 1024) {
+
+    if (
+      file.size <
+      10 * 1024
+    ) {
 
       return {
+
         valid: false,
+
         message:
           "The uploaded image appears too small or invalid. Please upload the original payment screenshot."
+
       };
+
     }
+
 
     return {
       valid: true
     };
+
   }
 
 
   /* =========================================================
-     IMAGE READABILITY CHECK
+     IMAGE READABILITY
   ========================================================= */
 
-  function checkImageReadable(file) {
+  function checkImageReadable(
+    file
+  ) {
 
-    return new Promise((resolve) => {
+    return new Promise(
+      resolve => {
 
-      const image =
-        new Image();
+        const image =
+          new Image();
 
-      const objectUrl =
-        URL.createObjectURL(file);
 
-      image.onload = function () {
+        const objectUrl =
+          URL.createObjectURL(
+            file
+          );
 
-        URL.revokeObjectURL(objectUrl);
 
-        const width =
-          image.naturalWidth;
+        image.onload =
+          function () {
 
-        const height =
-          image.naturalHeight;
+            URL.revokeObjectURL(
+              objectUrl
+            );
 
-        if (
-          width < 300 ||
-          height < 300
-        ) {
 
-          resolve({
-            valid: false,
-            message:
-              "Screenshot resolution is too low. Please upload a clearer original screenshot."
-          });
+            const width =
+              image.naturalWidth;
 
-          return;
-        }
 
-        resolve({
-          valid: true
-        });
-      };
+            const height =
+              image.naturalHeight;
 
-      image.onerror = function () {
 
-        URL.revokeObjectURL(objectUrl);
+            if (
+              width < 300 ||
+              height < 300
+            ) {
 
-        resolve({
-          valid: false,
-          message:
-            "The uploaded image could not be read. Please upload a valid screenshot."
-        });
-      };
+              resolve({
 
-      image.src = objectUrl;
-    });
+                valid: false,
+
+                message:
+                  "Screenshot resolution is too low. Please upload a clearer original screenshot."
+
+              });
+
+              return;
+
+            }
+
+
+            resolve({
+              valid: true
+            });
+
+          };
+
+
+        image.onerror =
+          function () {
+
+            URL.revokeObjectURL(
+              objectUrl
+            );
+
+
+            resolve({
+
+              valid: false,
+
+              message:
+                "The uploaded image could not be read. Please upload a valid screenshot."
+
+            });
+
+          };
+
+
+        image.src =
+          objectUrl;
+
+      }
+    );
+
   }
 
 
   /* =========================================================
      OCR AMOUNT CHECK
-     
-     OCR DOES NOT PROVE PAYMENT.
-     It only checks whether expected amount appears
-     in the uploaded screenshot.
   ========================================================= */
 
-  async function verifyScreenshotAmount(file, expectedAmount) {
+  async function verifyScreenshotAmount(
+    file,
+    expectedAmount
+  ) {
 
     const {
       data: {
         text
       }
-    } = await Tesseract.recognize(
-      file,
-      "eng",
-      {
-        logger: function (message) {
+    } =
+      await Tesseract.recognize(
+        file,
+        "eng",
+        {
 
-          if (
-            message &&
-            typeof message.progress === "number"
-          ) {
+          logger:
+            function (message) {
 
-            console.log(
-              "OCR:",
-              message.status,
-              Math.round(
-                message.progress * 100
-              ) + "%"
-            );
-          }
+              if (
+                message &&
+                typeof message.progress ===
+                  "number"
+              ) {
+
+                console.log(
+                  "OCR:",
+                  message.status,
+                  Math.round(
+                    message.progress * 100
+                  ) + "%"
+                );
+
+              }
+
+            }
+
         }
-      }
-    );
+      );
+
 
     console.log(
       "OCR extracted text:",
       text
     );
 
+
     const normalizedText =
-      String(text || "")
-        .replace(/\u00a0/g, " ")
-        .replace(/,/g, "")
-        .replace(/\s+/g, " ")
+      String(
+        text || ""
+      )
+        .replace(
+          /\u00a0/g,
+          " "
+        )
+        .replace(
+          /,/g,
+          ""
+        )
+        .replace(
+          /\s+/g,
+          " "
+        )
         .trim();
 
+
     const target =
-      normalizeAmount(expectedAmount);
+      normalizeAmount(
+        expectedAmount
+      );
 
-    /*
-      Different common representations:
-
-      ₹289
-      Rs 289
-      Rs. 289
-      INR 289
-      Amount 289
-    */
 
     const escapedTarget =
-      escapeRegExp(target);
+      escapeRegExp(
+        target
+      );
+
 
     const amountPatterns = [
 
@@ -1022,18 +1667,29 @@
         `\\b${escapedTarget}\\b`,
         "i"
       )
+
     ];
+
 
     const amountMatched =
       amountPatterns.some(
         pattern =>
-          pattern.test(normalizedText)
+          pattern.test(
+            normalizedText
+          )
       );
 
+
     return {
-      valid: amountMatched,
-      text: normalizedText
+
+      valid:
+        amountMatched,
+
+      text:
+        normalizedText
+
     };
+
   }
 
 
@@ -1041,53 +1697,120 @@
      SUBMIT PAYMENT PROOF
   ========================================================= */
 
-  async function submitPaymentProof(event) {
+  async function submitPaymentProof(
+    event
+  ) {
 
     event.preventDefault();
 
+
     const btn =
-      document.getElementById("submitBtn");
+      document.getElementById(
+        "submitBtn"
+      );
+
 
     const utrInput =
-      document.getElementById("utrNumber");
+      document.getElementById(
+        "utrNumber"
+      );
+
 
     const screenshotInput =
-      document.getElementById("paymentScreenshot");
+      document.getElementById(
+        "paymentScreenshot"
+      );
+
 
     const verificationBox =
-      document.getElementById("verificationBox");
+      document.getElementById(
+        "verificationBox"
+      );
+
 
     const utr =
       normalizeDigits(
         utrInput.value
       );
 
+
     const file =
       screenshotInput.files[0];
 
 
-    /* -------------------------------------------------------
+    /* =====================================================
+       PAYMENT METHOD
+    ===================================================== */
+
+    if (
+      !PAYMENT_METHODS[
+        selectedPaymentMethod
+      ]
+    ) {
+
+      alert(
+        "Please select a payment method."
+      );
+
+      return;
+
+    }
+
+
+    /* =====================================================
        RESET
-    ------------------------------------------------------- */
+    ===================================================== */
 
-    clearStatus("utrStatus");
-    clearStatus("screenshotStatus");
+    clearStatus(
+      "utrStatus"
+    );
 
-    verificationBox.classList.add("show");
-
-    setCheck("checkUtr", null);
-    setCheck("checkDuplicate", null);
-    setCheck("checkAmount", null);
-    setCheck("checkImage", null);
+    clearStatus(
+      "screenshotStatus"
+    );
 
 
-    /* -------------------------------------------------------
+    verificationBox
+      .classList
+      .add("show");
+
+
+    setCheck(
+      "checkUtr",
+      null
+    );
+
+    setCheck(
+      "checkDuplicate",
+      null
+    );
+
+    setCheck(
+      "checkAmount",
+      null
+    );
+
+    setCheck(
+      "checkImage",
+      null
+    );
+
+
+    /* =====================================================
        UTR FORMAT
-    ------------------------------------------------------- */
+    ===================================================== */
 
-    if (!validateUtrFormat(utr)) {
+    if (
+      !validateUtrFormat(
+        utr
+      )
+    ) {
 
-      setCheck("checkUtr", "failed");
+      setCheck(
+        "checkUtr",
+        "failed"
+      );
+
 
       setStatus(
         "utrStatus",
@@ -1095,28 +1818,53 @@
         "error"
       );
 
-      utrInput.classList.add("invalid");
+
+      utrInput.classList.add(
+        "invalid"
+      );
+
+
       utrInput.focus();
 
       return;
+
     }
 
-    utrInput.classList.remove("invalid");
-    utrInput.classList.add("valid");
 
-    setCheck("checkUtr", "done");
+    utrInput.classList.remove(
+      "invalid"
+    );
+
+    utrInput.classList.add(
+      "valid"
+    );
 
 
-    /* -------------------------------------------------------
+    setCheck(
+      "checkUtr",
+      "done"
+    );
+
+
+    /* =====================================================
        SCREENSHOT FILE
-    ------------------------------------------------------- */
+    ===================================================== */
 
     const fileValidation =
-      validateScreenshotFile(file);
+      validateScreenshotFile(
+        file
+      );
 
-    if (!fileValidation.valid) {
 
-      setCheck("checkImage", "failed");
+    if (
+      !fileValidation.valid
+    ) {
+
+      setCheck(
+        "checkImage",
+        "failed"
+      );
+
 
       setStatus(
         "screenshotStatus",
@@ -1124,27 +1872,35 @@
         "error"
       );
 
+
       return;
+
     }
 
 
-    /* -------------------------------------------------------
-       DISABLE BUTTON
-    ------------------------------------------------------- */
+    /* =====================================================
+       DISABLE
+    ===================================================== */
 
-    btn.disabled = true;
+    btn.disabled =
+      true;
+
 
     try {
 
-      /* =====================================================
+      /* ===================================================
          STEP 1 — DUPLICATE UTR
-      ===================================================== */
+      =================================================== */
 
       btn.innerText =
         "Checking Transaction ID...";
 
+
       const duplicate =
-        await checkDuplicateUtr(utr);
+        await checkDuplicateUtr(
+          utr
+        );
+
 
       if (duplicate) {
 
@@ -1153,18 +1909,26 @@
           "failed"
         );
 
+
         setStatus(
           "utrStatus",
           "This UTR has already been submitted. Please check your transaction ID.",
           "error"
         );
 
-        btn.disabled = false;
+
+        btn.disabled =
+          false;
+
+
         btn.innerText =
           "Submit Payment Proof";
 
+
         return;
+
       }
+
 
       setCheck(
         "checkDuplicate",
@@ -1172,22 +1936,29 @@
       );
 
 
-      /* =====================================================
-         STEP 2 — IMAGE VALIDATION
-      ===================================================== */
+      /* ===================================================
+         STEP 2 — IMAGE
+      =================================================== */
 
       btn.innerText =
         "Checking Screenshot...";
 
-      const imageCheck =
-        await checkImageReadable(file);
 
-      if (!imageCheck.valid) {
+      const imageCheck =
+        await checkImageReadable(
+          file
+        );
+
+
+      if (
+        !imageCheck.valid
+      ) {
 
         setCheck(
           "checkImage",
           "failed"
         );
+
 
         setStatus(
           "screenshotStatus",
@@ -1195,12 +1966,19 @@
           "error"
         );
 
-        btn.disabled = false;
+
+        btn.disabled =
+          false;
+
+
         btn.innerText =
           "Submit Payment Proof";
 
+
         return;
+
       }
+
 
       setCheck(
         "checkImage",
@@ -1208,12 +1986,13 @@
       );
 
 
-      /* =====================================================
+      /* ===================================================
          STEP 3 — OCR
-      ===================================================== */
+      =================================================== */
 
       btn.innerText =
         "Verifying Screenshot...";
+
 
       setStatus(
         "screenshotStatus",
@@ -1221,11 +2000,13 @@
         "info"
       );
 
+
       const ocrResult =
         await verifyScreenshotAmount(
           file,
           pkgPrice
         );
+
 
       console.log(
         "OCR Result:",
@@ -1233,12 +2014,15 @@
       );
 
 
-      if (!ocrResult.valid) {
+      if (
+        !ocrResult.valid
+      ) {
 
         setCheck(
           "checkAmount",
           "failed"
         );
+
 
         setStatus(
           "screenshotStatus",
@@ -1246,17 +2030,25 @@
           "error"
         );
 
-        btn.disabled = false;
+
+        btn.disabled =
+          false;
+
+
         btn.innerText =
           "Submit Payment Proof";
 
+
         return;
+
       }
+
 
       setCheck(
         "checkAmount",
         "done"
       );
+
 
       setStatus(
         "screenshotStatus",
@@ -1265,16 +2057,47 @@
       );
 
 
-      /* =====================================================
-         STEP 4 — UPLOAD SCREENSHOT
-      ===================================================== */
+      /* ===================================================
+         STEP 4 — GET AUTH USER
+         
+         IMPORTANT:
+         RLS requires auth.uid() = user_id.
+      =================================================== */
+
+      btn.innerText =
+        "Checking Account...";
+
+
+      const {
+        data: {
+          user
+        },
+        error: authError
+      } =
+        await supabaseClient
+          .auth
+          .getUser();
+
+
+      if (
+        authError ||
+        !user
+      ) {
+
+        throw new Error(
+          "Your login session has expired. Please log in again before submitting payment."
+        );
+
+      }
+
+
+      /* ===================================================
+         STEP 5 — UPLOAD SCREENSHOT
+      =================================================== */
 
       btn.innerText =
         "Uploading Securely...";
 
-      /*
-        Random filename prevents simple filename collisions.
-      */
 
       const randomPart =
         crypto.randomUUID
@@ -1283,11 +2106,13 @@
               .toString(36)
               .slice(2)}`;
 
+
       const extension =
         file.name
           .split(".")
           .pop()
           .toLowerCase();
+
 
       const fileName =
         `${Date.now()}_${randomPart}.${extension}`;
@@ -1299,56 +2124,71 @@
       } =
         await supabaseClient
           .storage
-          .from("payment-proofs")
+          .from(
+            "payment-proofs"
+          )
           .upload(
             fileName,
             file,
             {
-              cacheControl: "3600",
-              upsert: false,
-              contentType: file.type
+              cacheControl:
+                "3600",
+
+              upsert:
+                false,
+
+              contentType:
+                file.type
+
             }
           );
 
-      if (uploadError) {
+
+      if (
+        uploadError
+      ) {
 
         console.error(
           "Screenshot upload error:",
           uploadError
         );
 
+
         throw new Error(
           "We could not upload your screenshot. Please try again."
         );
+
       }
 
 
-      /* =====================================================
-         STEP 5 — PUBLIC URL
-         
-         NOTE:
-         For a production system, a PRIVATE bucket with
-         signed URLs is safer than a public bucket.
-      ===================================================== */
+      /* ===================================================
+         STEP 6 — PUBLIC URL
+      =================================================== */
 
       const {
         data: publicURL
       } =
         supabaseClient
           .storage
-          .from("payment-proofs")
-          .getPublicUrl(fileName);
+          .from(
+            "payment-proofs"
+          )
+          .getPublicUrl(
+            fileName
+          );
+
 
       const screenshotUrl =
         publicURL.publicUrl;
 
 
-      /* =====================================================
-         STEP 6 — DATABASE INSERT
+      /* ===================================================
+         STEP 7 — DATABASE INSERT
          
-         IMPORTANT:
-         PASSWORD IS NOT INCLUDED.
-      ===================================================== */
+         NO PASSWORD
+         USER ID INCLUDED
+         PAYMENT METHOD INCLUDED
+      =================================================== */
 
       btn.innerText =
         "Submitting Payment Request...";
@@ -1356,56 +2196,78 @@
 
       const paymentRecord = {
 
-        full_name: fullName,
+        user_id:
+          user.id,
 
-        email: email,
+        full_name:
+          fullName,
 
-        mobile: mobile,
+        email:
+          email,
 
-        package_name: pkgName,
+        mobile:
+          mobile,
 
-        amount: Number(pkgPrice),
+        package_name:
+          pkgName,
 
-        transaction_id: utr,
+        amount:
+          Number(pkgPrice),
 
-        referral_id: refCode,
+        transaction_id:
+          utr,
 
-        screenshot_name: screenshotUrl,
+        referral_id:
+          refCode,
 
-        status: "Pending",
+        screenshot_name:
+          screenshotUrl,
 
-        is_deleted: false
+        status:
+          "Pending",
+
+        is_deleted:
+          false,
+
+        payment_method:
+          selectedPaymentMethod
 
       };
 
 
       const {
-        data: insertedData,
-        error: insertError
+        data:
+          insertedData,
+
+        error:
+          insertError
       } =
         await supabaseClient
-          .from("payment_requests")
+          .from(
+            "payment_requests"
+          )
           .insert([
             paymentRecord
           ])
-          .select("id")
+          .select(
+            "id"
+          )
           .single();
 
 
-      if (insertError) {
+      if (
+        insertError
+      ) {
 
         console.error(
           "Payment request insert error:",
           insertError
         );
 
-        /*
-          If a database UNIQUE constraint has already
-          blocked the UTR, don't expose internal DB details.
-        */
 
         if (
-          insertError.code === "23505" ||
+          insertError.code ===
+            "23505" ||
           /duplicate|unique/i.test(
             insertError.message || ""
           )
@@ -1414,42 +2276,51 @@
           throw new Error(
             "This transaction ID has already been submitted."
           );
+
         }
+
 
         throw new Error(
           "We could not submit your payment request. Please try again."
         );
+
       }
 
 
-      /* =====================================================
-         STEP 7 — CLEAR CHECKOUT SESSION
-         
-         Password was never stored by this page.
-      ===================================================== */
+      /* ===================================================
+         STEP 8 — CLEAR CHECKOUT
+      =================================================== */
 
       sessionStorage.removeItem(
         "checkout_data"
       );
 
 
-      /* =====================================================
-         STEP 8 — EMAIL NOTIFICATION
-      ===================================================== */
+      /* ===================================================
+         STEP 9 — EMAIL
+      =================================================== */
 
       try {
 
         const emailParams = {
 
-          to_name: fullName,
+          to_name:
+            fullName,
 
-          to_email: email,
+          to_email:
+            email,
 
-          utr_code: utr,
+          utr_code:
+            utr,
 
-          package_name: pkgName
+          package_name:
+            pkgName,
+
+          payment_method:
+            selectedPaymentMethod
 
         };
+
 
         await emailjs.send(
           "service_qsy07qr",
@@ -1457,73 +2328,75 @@
           emailParams
         );
 
-      } catch (emailError) {
 
-        /*
-          Don't fail a successful payment submission
-          just because email notification failed.
-        */
+      } catch (
+        emailError
+      ) {
 
         console.warn(
           "Email notification failed:",
           emailError
         );
+
       }
 
 
-      /* =====================================================
+      /* ===================================================
          SUCCESS
-      ===================================================== */
+      =================================================== */
 
       btn.innerText =
         "Payment Proof Submitted";
+
 
       const successBox =
         document.getElementById(
           "successBox"
         );
 
+
       successBox.innerHTML =
         `
           <strong>✓ Payment proof submitted successfully.</strong><br>
-          Your request is now <strong>Pending Verification</strong>.
-          Please wait for admin/payment verification before your
-          account is activated.
+          Payment Method:
+          <strong>${selectedPaymentMethod}</strong><br>
+          Your request is now
+          <strong>Pending Verification</strong>.<br>
+          Please wait for payment verification before your account is activated.
         `;
+
 
       successBox.classList.add(
         "show"
       );
 
+
       document.getElementById(
         "paymentForm"
-      ).style.display = "none";
+      ).style.display =
+        "none";
 
 
-      /*
-        Redirect after a short delay.
-      */
+      setTimeout(
+        () => {
 
-      setTimeout(() => {
+          window.location.href =
+            "index.html";
 
-        window.location.href =
-          "index.html";
+        },
+        3500
+      );
 
-      }, 3500);
 
-
-    } catch (error) {
+    } catch (
+      error
+    ) {
 
       console.error(
         "Payment submission error:",
         error
       );
 
-      /*
-        SECURITY:
-        Don't expose raw Supabase/database errors
-        to the user.
-      */
 
       const safeMessage =
         error &&
@@ -1531,58 +2404,82 @@
           ? error.message
           : "We could not process your payment proof. Please try again.";
 
+
       alert(
         safeMessage
       );
 
-      btn.disabled = false;
+
+      btn.disabled =
+        false;
+
 
       btn.innerText =
         "Submit Payment Proof";
+
     }
+
   }
 
 
   /* =========================================================
-     UTR INPUT — NUMBERS ONLY
+     UTR INPUT
   ========================================================= */
 
   document
-    .getElementById("utrNumber")
+    .getElementById(
+      "utrNumber"
+    )
     .addEventListener(
       "input",
       function () {
 
         this.value =
           this.value
-            .replace(/\D/g, "")
-            .slice(0, 12);
+            .replace(
+              /\D/g,
+              ""
+            )
+            .slice(
+              0,
+              12
+            );
 
-        clearStatus("utrStatus");
+
+        clearStatus(
+          "utrStatus"
+        );
+
 
         this.classList.remove(
           "invalid",
           "valid"
         );
 
+
         if (
-          this.value.length === 12
+          this.value.length ===
+          12
         ) {
 
           this.classList.add(
             "valid"
           );
+
         }
+
       }
     );
 
 
   /* =========================================================
-     SCREENSHOT INPUT — IMMEDIATE FILE CHECK
+     SCREENSHOT INPUT
   ========================================================= */
 
   document
-    .getElementById("paymentScreenshot")
+    .getElementById(
+      "paymentScreenshot"
+    )
     .addEventListener(
       "change",
       function () {
@@ -1591,28 +2488,36 @@
           "screenshotStatus"
         );
 
+
         this.classList.remove(
           "invalid",
           "valid"
         );
 
+
         const file =
           this.files[0];
+
 
         if (!file) {
           return;
         }
+
 
         const validation =
           validateScreenshotFile(
             file
           );
 
-        if (!validation.valid) {
+
+        if (
+          !validation.valid
+        ) {
 
           this.classList.add(
             "invalid"
           );
+
 
           setStatus(
             "screenshotStatus",
@@ -1620,22 +2525,39 @@
             "error"
           );
 
-          this.value = "";
+
+          this.value =
+            "";
+
 
           return;
+
         }
+
 
         this.classList.add(
           "valid"
         );
+
 
         setStatus(
           "screenshotStatus",
           "Screenshot selected. It will be checked before submission.",
           "success"
         );
+
       }
     );
+
+
+  /* =========================================================
+     DEFAULT PAYMENT METHOD
+  ========================================================= */
+
+  selectPaymentMethod(
+    "Super Money"
+  );
+
 </script>
 
 </body>
