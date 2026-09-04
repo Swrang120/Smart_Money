@@ -10,7 +10,7 @@ content="width=device-width, initial-scale=1.0">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect"
-href="https://fonts.gstatic.com"
+href="https://fonts.googleapis.com"
 crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
@@ -40,6 +40,10 @@ body{
     background:#f5f7fb;
     color:#172033;
     overflow-x:hidden;
+}
+
+body.modal-open{
+    overflow:hidden;
 }
 
 a{
@@ -266,6 +270,49 @@ select{
 .mobile-menu a.m-link:hover{
     background:#f1f5f9;
     color:#7c3aed;
+}
+
+/* NEW APPLY NOW SIDEBAR LINK */
+
+.mobile-menu a.apply-now-link{
+    position:relative;
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #2563eb,
+            #0891b2
+        );
+    color:#fff;
+    box-shadow:
+        0 10px 25px rgba(79,70,229,.22);
+    overflow:hidden;
+}
+
+.mobile-menu a.apply-now-link::after{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:70%;
+    height:100%;
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.28),
+        transparent
+    );
+    transform:skewX(-20deg);
+    animation:applyShine 3.5s infinite;
+}
+
+@keyframes applyShine{
+    0%{
+        left:-100%;
+    }
+    45%,100%{
+        left:140%;
+    }
 }
 
 .mobile-menu a.mobile-dashboard-btn{
@@ -1385,6 +1432,635 @@ select{
 
 
 /* =========================================================
+   =========================================================
+   APPLY NOW SYSTEM
+   =========================================================
+========================================================= */
+
+/* Main Apply Modal */
+
+.apply-modal-box{
+    width:min(720px,100%);
+    max-height:92vh;
+    padding:0;
+    overflow:hidden;
+    background:#f8fafc;
+}
+
+.apply-modal-header{
+    position:relative;
+    padding:28px 28px 24px;
+    color:#fff;
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(255,255,255,.16),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 90% 90%,
+            rgba(56,189,248,.20),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #111827,
+            #312e81,
+            #2563eb
+        );
+}
+
+.apply-modal-header::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+        linear-gradient(
+            120deg,
+            transparent 20%,
+            rgba(255,255,255,.06) 50%,
+            transparent 80%
+        );
+    pointer-events:none;
+}
+
+.apply-modal-header .modal-close{
+    z-index:3;
+    background:rgba(255,255,255,.12);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.18);
+}
+
+.apply-modal-header small{
+    position:relative;
+    font-size:10px;
+    letter-spacing:1.8px;
+    font-weight:800;
+    color:#c4b5fd;
+}
+
+.apply-modal-header h2{
+    position:relative;
+    font-size:26px;
+    margin:7px 0 0;
+    color:#fff;
+}
+
+.apply-modal-header p{
+    position:relative;
+    margin-top:8px;
+    font-size:11px;
+    line-height:1.7;
+    color:#dbeafe;
+    max-width:580px;
+}
+
+.apply-choice-grid{
+    padding:24px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.apply-choice-card{
+    position:relative;
+    border:1px solid #e2e8f0;
+    border-radius:18px;
+    padding:20px 16px;
+    background:#fff;
+    cursor:pointer;
+    transition:.25s;
+    overflow:hidden;
+}
+
+.apply-choice-card:hover{
+    transform:translateY(-5px);
+    border-color:#a78bfa;
+    box-shadow:
+        0 18px 35px rgba(15,23,42,.10);
+}
+
+.apply-choice-card::after{
+    content:"";
+    position:absolute;
+    width:90px;
+    height:90px;
+    right:-35px;
+    top:-35px;
+    border-radius:50%;
+    background:#eef2ff;
+    z-index:0;
+}
+
+.apply-choice-icon{
+    position:relative;
+    z-index:1;
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:23px;
+    background:linear-gradient(
+        135deg,
+        #ede9fe,
+        #dbeafe
+    );
+    margin-bottom:14px;
+}
+
+.apply-choice-card h3{
+    position:relative;
+    z-index:1;
+    font-size:14px;
+    font-weight:800;
+    color:#172033;
+}
+
+.apply-choice-card p{
+    position:relative;
+    z-index:1;
+    font-size:10px;
+    line-height:1.6;
+    color:#64748b;
+    margin-top:7px;
+}
+
+.apply-choice-arrow{
+    position:relative;
+    z-index:1;
+    display:block;
+    margin-top:15px;
+    font-size:10px;
+    font-weight:800;
+    color:#6366f1;
+}
+
+
+/* Application Form Container */
+
+.application-form-wrap{
+    display:none;
+    background:#fff;
+    height:100%;
+    overflow-y:auto;
+}
+
+.application-form-wrap.active{
+    display:block;
+}
+
+.application-form-header{
+    position:sticky;
+    top:0;
+    z-index:5;
+    padding:20px 25px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:#fff;
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #2563eb
+        );
+    box-shadow:0 8px 20px rgba(15,23,42,.12);
+}
+
+.application-back{
+    width:36px;
+    height:36px;
+    border:1px solid rgba(255,255,255,.22);
+    background:rgba(255,255,255,.12);
+    color:#fff;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.application-form-header-icon{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(255,255,255,.15);
+    font-size:20px;
+}
+
+.application-form-header-text h3{
+    font-size:15px;
+    font-weight:800;
+}
+
+.application-form-header-text p{
+    font-size:9px;
+    margin-top:3px;
+    color:#e0e7ff;
+}
+
+.application-form{
+    padding:25px;
+    display:flex;
+    flex-direction:column;
+    gap:17px;
+}
+
+.application-section-card{
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f8fafc
+        );
+    border:1px solid #e5e7eb;
+    border-radius:17px;
+    padding:18px;
+}
+
+.application-section-title{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin-bottom:15px;
+}
+
+.application-section-title span{
+    width:30px;
+    height:30px;
+    border-radius:9px;
+    background:#ede9fe;
+    color:#6d28d9;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:13px;
+}
+
+.application-section-title h4{
+    font-size:12px;
+    color:#172033;
+    font-weight:800;
+}
+
+.application-section-title p{
+    font-size:9px;
+    color:#94a3b8;
+    margin-top:2px;
+}
+
+.application-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.application-group{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.application-group.full{
+    grid-column:1/-1;
+}
+
+.application-group label{
+    font-size:10px;
+    font-weight:800;
+    color:#475569;
+}
+
+.application-group label .required{
+    color:#ef4444;
+}
+
+.application-group input,
+.application-group textarea,
+.application-group select{
+    width:100%;
+    border:1px solid #dbe2ea;
+    background:#f8fafc;
+    border-radius:11px;
+    padding:12px 13px;
+    font-size:11px;
+    color:#172033;
+    outline:none;
+    transition:.2s;
+}
+
+.application-group input:focus,
+.application-group textarea:focus,
+.application-group select:focus{
+    border-color:#8b5cf6;
+    background:#fff;
+    box-shadow:0 0 0 3px rgba(124,58,237,.09);
+}
+
+.application-group textarea{
+    min-height:105px;
+    resize:vertical;
+    line-height:1.6;
+}
+
+.application-hint{
+    font-size:9px;
+    color:#94a3b8;
+    line-height:1.5;
+}
+
+.checkbox-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+}
+
+.check-option{
+    position:relative;
+}
+
+.check-option input{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+}
+
+.check-option label{
+    min-height:42px;
+    padding:9px 10px;
+    border:1px solid #e2e8f0;
+    background:#f8fafc;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:10px;
+    font-weight:700;
+    color:#475569;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.check-option label::before{
+    content:"";
+    width:16px;
+    height:16px;
+    border-radius:5px;
+    border:1px solid #cbd5e1;
+    background:#fff;
+    flex-shrink:0;
+    transition:.2s;
+}
+
+.check-option input:checked + label{
+    border-color:#a78bfa;
+    background:#f5f3ff;
+    color:#5b21b6;
+}
+
+.check-option input:checked + label::before{
+    content:"✓";
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#7c3aed;
+    color:#fff;
+    border-color:#7c3aed;
+    font-size:10px;
+    font-weight:800;
+}
+
+.radio-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:9px;
+}
+
+.radio-option{
+    position:relative;
+}
+
+.radio-option input{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+}
+
+.radio-option label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:11px;
+    border:1px solid #e2e8f0;
+    border-radius:10px;
+    background:#f8fafc;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:700;
+    color:#475569;
+}
+
+.radio-option label::before{
+    content:"";
+    width:16px;
+    height:16px;
+    border:1px solid #cbd5e1;
+    border-radius:50%;
+    background:#fff;
+    flex-shrink:0;
+}
+
+.radio-option input:checked + label{
+    border-color:#8b5cf6;
+    background:#f5f3ff;
+    color:#5b21b6;
+}
+
+.radio-option input:checked + label::before{
+    box-shadow:
+        inset 0 0 0 4px #fff;
+    background:#7c3aed;
+    border-color:#7c3aed;
+}
+
+.conditional-box{
+    display:none;
+    margin-top:12px;
+    padding:14px;
+    border-radius:12px;
+    background:#f5f3ff;
+    border:1px dashed #c4b5fd;
+}
+
+.conditional-box.active{
+    display:block;
+}
+
+.file-drop{
+    border:1.5px dashed #c4b5fd;
+    background:
+        linear-gradient(
+            135deg,
+            #faf5ff,
+            #eff6ff
+        );
+    border-radius:14px;
+    padding:18px;
+    text-align:center;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.file-drop:hover{
+    border-color:#7c3aed;
+    background:#f5f3ff;
+}
+
+.file-drop-icon{
+    width:42px;
+    height:42px;
+    margin:0 auto 8px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#ede9fe;
+    font-size:19px;
+}
+
+.file-drop strong{
+    display:block;
+    font-size:11px;
+    color:#334155;
+}
+
+.file-drop small{
+    display:block;
+    font-size:8px;
+    color:#94a3b8;
+    margin-top:5px;
+    line-height:1.5;
+}
+
+.file-drop input{
+    display:none;
+}
+
+.selected-file{
+    display:none;
+    margin-top:9px;
+    padding:8px 10px;
+    background:#ecfdf5;
+    border:1px solid #bbf7d0;
+    border-radius:9px;
+    font-size:9px;
+    color:#166534;
+    word-break:break-word;
+}
+
+.application-submit{
+    width:100%;
+    padding:14px 18px;
+    border:none;
+    border-radius:12px;
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #2563eb,
+            #0891b2
+        );
+    color:#fff;
+    font-size:12px;
+    font-weight:800;
+    cursor:pointer;
+    box-shadow:
+        0 12px 25px rgba(79,70,229,.22);
+    transition:.2s;
+}
+
+.application-submit:hover{
+    transform:translateY(-2px);
+    box-shadow:
+        0 16px 30px rgba(79,70,229,.28);
+}
+
+.application-submit:disabled{
+    opacity:.65;
+    cursor:not-allowed;
+    transform:none;
+}
+
+.application-note{
+    text-align:center;
+    font-size:8px;
+    color:#94a3b8;
+    line-height:1.6;
+    padding:0 5px 5px;
+}
+
+
+/* =========================================================
+   SUCCESS MODAL
+========================================================= */
+
+.apply-success{
+    display:none;
+    text-align:center;
+    padding:35px 25px;
+}
+
+.apply-success.active{
+    display:block;
+}
+
+.success-icon{
+    width:70px;
+    height:70px;
+    margin:0 auto 17px;
+    border-radius:22px;
+    background:
+        linear-gradient(
+            135deg,
+            #dcfce7,
+            #dbeafe
+        );
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
+}
+
+.apply-success h3{
+    font-size:21px;
+    font-weight:800;
+    color:#172033;
+}
+
+.apply-success p{
+    font-size:11px;
+    color:#64748b;
+    line-height:1.7;
+    margin-top:8px;
+}
+
+.success-close-btn{
+    margin-top:20px;
+    border:none;
+    border-radius:11px;
+    padding:12px 22px;
+    background:#172033;
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+
+/* =========================================================
    RESPONSIVE
 ========================================================= */
 
@@ -1416,6 +2092,10 @@ select{
     }
 
     .mission-vision{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .apply-choice-grid{
         grid-template-columns:1fr 1fr;
     }
 }
@@ -1550,6 +2230,78 @@ select{
 
     .course-status{
         font-size:7px;
+    }
+
+    /* APPLY MOBILE */
+
+    .apply-modal-box{
+        width:100%;
+        max-height:94vh;
+        border-radius:18px;
+    }
+
+    .apply-modal-header{
+        padding:24px 20px;
+    }
+
+    .apply-modal-header h2{
+        font-size:22px;
+    }
+
+    .apply-choice-grid{
+        grid-template-columns:1fr;
+        padding:16px;
+    }
+
+    .apply-choice-card{
+        display:grid;
+        grid-template-columns:52px 1fr;
+        column-gap:13px;
+        align-items:center;
+        padding:15px;
+    }
+
+    .apply-choice-icon{
+        grid-row:span 2;
+        margin:0;
+    }
+
+    .apply-choice-card h3{
+        align-self:end;
+    }
+
+    .apply-choice-card p{
+        align-self:start;
+        margin-top:4px;
+    }
+
+    .apply-choice-arrow{
+        display:none;
+    }
+
+    .application-form{
+        padding:16px;
+    }
+
+    .application-form-header{
+        padding:15px 16px;
+    }
+
+    .application-grid{
+        grid-template-columns:1fr;
+    }
+
+    .application-group.full{
+        grid-column:auto;
+    }
+
+    .checkbox-grid,
+    .radio-grid{
+        grid-template-columns:1fr;
+    }
+
+    .application-section-card{
+        padding:15px;
     }
 }
 
@@ -1706,6 +2458,14 @@ onclick="toggleMenu()">
 class="m-link"
 onclick="toggleMenu()">
 📚 Course Library
+</a>
+
+<!-- NEW APPLY NOW -->
+
+<a href="javascript:void(0)"
+class="m-link apply-now-link"
+onclick="openApplyModal(); toggleMenu();">
+🚀 Apply Now
 </a>
 
 <a href="#testimonials"
@@ -2163,9 +2923,7 @@ will become available after their official content launch.
 <div class="packages-grid">
 
 
-<!-- =====================================================
-     STARTER
-===================================================== -->
+<!-- STARTER -->
 
 <div class="package-card">
 
@@ -2200,8 +2958,6 @@ digital learning and practical online skills.
 
 </p>
 
-
-<!-- COMMISSION -->
 
 <div class="commission-box">
 
@@ -2241,8 +2997,6 @@ and refund terms.
 
 </div>
 
-
-<!-- COURSES -->
 
 <div class="course-box">
 
@@ -2351,9 +3105,7 @@ Buy Now
 </div>
 
 
-<!-- =====================================================
-     INTERMEDIATE
-===================================================== -->
+<!-- INTERMEDIATE -->
 
 <div class="package-card">
 
@@ -2380,7 +3132,6 @@ Skill Advancement
 
 <div class="pkg-body">
 
-
 <p class="pkg-summary-text">
 
 A broader learning package planned for learners
@@ -2388,8 +3139,6 @@ who want to develop multiple practical digital skills.
 
 </p>
 
-
-<!-- COMMISSION -->
 
 <div class="commission-box">
 
@@ -2429,8 +3178,6 @@ and refund terms.
 
 </div>
 
-
-<!-- COURSES -->
 
 <div class="course-box">
 
@@ -2542,9 +3289,7 @@ Buy Now
 </div>
 
 
-<!-- =====================================================
-     EXPERT
-===================================================== -->
+<!-- EXPERT -->
 
 <div class="package-card">
 
@@ -2571,7 +3316,6 @@ Professional Tier
 
 <div class="pkg-body">
 
-
 <p class="pkg-summary-text">
 
 A larger roadmap covering advanced digital,
@@ -2579,8 +3323,6 @@ creative and online-work related skills.
 
 </p>
 
-
-<!-- COMMISSION -->
 
 <div class="commission-box">
 
@@ -2620,8 +3362,6 @@ and refund terms.
 
 </div>
 
-
-<!-- COURSES -->
 
 <div class="course-box">
 
@@ -2733,9 +3473,7 @@ Buy Now
 </div>
 
 
-<!-- =====================================================
-     MASTER
-===================================================== -->
+<!-- MASTER -->
 
 <div class="package-card">
 
@@ -2762,7 +3500,6 @@ Advanced Mastery
 
 <div class="pkg-body">
 
-
 <p class="pkg-summary-text">
 
 A comprehensive planned learning bundle for learners
@@ -2770,8 +3507,6 @@ looking for a wider range of advanced subjects.
 
 </p>
 
-
-<!-- COMMISSION -->
 
 <div class="commission-box">
 
@@ -2811,8 +3546,6 @@ and refund terms.
 
 </div>
 
-
-<!-- COURSES -->
 
 <div class="course-box">
 
@@ -2924,9 +3657,7 @@ Buy Now
 </div>
 
 
-<!-- =====================================================
-     BRAHMASTRA
-===================================================== -->
+<!-- BRAHMASTRA -->
 
 <div class="package-card">
 
@@ -2953,7 +3684,6 @@ Ultimate Growth
 
 <div class="pkg-body">
 
-
 <p class="pkg-summary-text">
 
 An extensive planned course bundle for advanced
@@ -2961,8 +3691,6 @@ learners, creators and digital skill enthusiasts.
 
 </p>
 
-
-<!-- COMMISSION -->
 
 <div class="commission-box">
 
@@ -3002,8 +3730,6 @@ and refund terms.
 
 </div>
 
-
-<!-- COURSES -->
 
 <div class="course-box">
 
@@ -3115,9 +3841,7 @@ Buy Now
 </div>
 
 
-<!-- =====================================================
-     PREMIUM PRO
-===================================================== -->
+<!-- PREMIUM PRO -->
 
 <div class="package-card">
 
@@ -3144,7 +3868,6 @@ Top Tier Access
 
 <div class="pkg-body">
 
-
 <p class="pkg-summary-text">
 
 The largest planned learning roadmap for serious
@@ -3152,8 +3875,6 @@ digital learners, creators and professionals.
 
 </p>
 
-
-<!-- COMMISSION -->
 
 <div class="commission-box">
 
@@ -3193,8 +3914,6 @@ and refund terms.
 
 </div>
 
-
-<!-- COURSES -->
 
 <div class="course-box">
 
@@ -3518,7 +4237,6 @@ required
 >
 
 </div>
-
 
 </div>
 
@@ -4038,6 +4756,1435 @@ Loading preview image from database...
 </div>
 
 
+<!-- =========================================================
+     APPLY NOW MODAL
+========================================================= -->
+
+<div class="modal-overlay"
+id="applyModal">
+
+<div class="modal-box apply-modal-box">
+
+<!-- CHOICE SCREEN -->
+
+<div id="applyChoiceScreen">
+
+<div class="apply-modal-header">
+
+<button
+class="modal-close"
+onclick="closeApplyModal()">
+✕
+</button>
+
+<small>
+SMART MONEY OPPORTUNITIES
+</small>
+
+<h2>
+Apply Now 🚀
+</h2>
+
+<p>
+Choose how you would like to connect with Smart Money.
+Our team will review your application and contact you
+using the information you provide.
+</p>
+
+</div>
+
+
+<div class="apply-choice-grid">
+
+<div
+class="apply-choice-card"
+onclick="showApplicationForm('editor')">
+
+<div class="apply-choice-icon">
+🎬
+</div>
+
+<div>
+
+<h3>
+Join as Editor
+</h3>
+
+<p>
+Show us your editing skills and portfolio.
+</p>
+
+<span class="apply-choice-arrow">
+Apply as Editor →
+</span>
+
+</div>
+
+</div>
+
+
+<div
+class="apply-choice-card"
+onclick="showApplicationForm('hire')">
+
+<div class="apply-choice-icon">
+💼
+</div>
+
+<div>
+
+<h3>
+Hire an Editor
+</h3>
+
+<p>
+Tell us about your project and editing needs.
+</p>
+
+<span class="apply-choice-arrow">
+Hire an Editor →
+</span>
+
+</div>
+
+</div>
+
+
+<div
+class="apply-choice-card"
+onclick="showApplicationForm('team')">
+
+<div class="apply-choice-icon">
+🤝
+</div>
+
+<div>
+
+<h3>
+Join Our Team
+</h3>
+
+<p>
+Explore opportunities to work with our team.
+</p>
+
+<span class="apply-choice-arrow">
+Join Team →
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     EDITOR APPLICATION
+===================================================== -->
+
+<div
+class="application-form-wrap"
+id="editorApplication">
+
+<div class="application-form-header">
+
+<button
+class="application-back"
+onclick="backToApplyChoices()">
+←
+</button>
+
+<div class="application-form-header-icon">
+🎬
+</div>
+
+<div class="application-form-header-text">
+
+<h3>
+Join as Editor
+</h3>
+
+<p>
+Share your skills & editing portfolio
+</p>
+
+</div>
+
+<button
+class="modal-close"
+onclick="closeApplyModal()">
+✕
+</button>
+
+</div>
+
+
+<form
+class="application-form"
+id="editorForm"
+onsubmit="submitEditorApplication(event)">
+
+
+<div class="application-section-card">
+
+<div class="application-section-title">
+
+<span>
+👤
+</span>
+
+<div>
+
+<h4>
+Basic Information
+</h4>
+
+<p>
+Tell us how we can contact you.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="application-grid">
+
+<div class="application-group">
+
+<label for="editorName">
+Full Name <span class="required">*</span>
+</label>
+
+<input
+type="text"
+id="editorName"
+placeholder="Enter your full name"
+required
+maxlength="100">
+
+</div>
+
+
+<div class="application-group">
+
+<label for="editorEmail">
+Gmail <span class="required">*</span>
+</label>
+
+<input
+type="email"
+id="editorEmail"
+placeholder="yourname@gmail.com"
+required
+maxlength="150">
+
+</div>
+
+
+<div class="application-group">
+
+<label for="editorWhatsApp">
+WhatsApp Number <span class="required">*</span>
+</label>
+
+<input
+type="tel"
+id="editorWhatsApp"
+placeholder="+91 XXXXX XXXXX"
+required
+maxlength="20"
+inputmode="tel">
+
+</div>
+
+
+<div class="application-group">
+
+<label for="editorExperience">
+Editing Experience <span class="required">*</span>
+</label>
+
+<select
+id="editorExperience"
+required>
+
+<option value="">
+Select experience
+</option>
+
+<option value="Less than 1 year">
+Less than 1 year
+</option>
+
+<option value="1 year">
+1 year
+</option>
+
+<option value="2 years">
+2 years
+</option>
+
+<option value="3 years">
+3 years
+</option>
+
+<option value="4 years">
+4 years
+</option>
+
+<option value="5+ years">
+5+ years
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="application-section-card">
+
+<div class="application-section-title">
+
+<span>
+🛠️
+</span>
+
+<div>
+
+<h4>
+Editing Tools You Know
+</h4>
+
+<p>
+Select all tools you can work with.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="checkbox-grid">
+
+<div class="check-option">
+
+<input
+type="checkbox"
+id="toolCapCut"
+name="editorTools"
+value="CapCut">
+
+<label for="toolCapCut">
+CapCut
+</label>
+
+</div>
+
+
+<div class="check-option">
+
+<input
+type="checkbox"
+id="toolAlight"
+name="editorTools"
+value="Alight Motion">
+
+<label for="toolAlight">
+Alight Motion
+</label>
+
+</div>
+
+
+<div class="check-option">
+
+<input
+type="checkbox"
+id="toolPremiere"
+name="editorTools"
+value="Adobe Premiere Pro">
+
+<label for="toolPremiere">
+Adobe Premiere Pro
+</label>
+
+</div>
+
+
+<div class="check-option">
+
+<input
+type="checkbox"
+id="toolAfter"
+name="editorTools"
+value="Adobe After Effects">
+
+<label for="toolAfter">
+Adobe After Effects
+</label>
+
+</div>
+
+
+<div class="check-option">
+
+<input
+type="checkbox"
+id="toolVN"
+name="editorTools"
+value="VN Editor">
+
+<label for="toolVN">
+VN Editor
+</label>
+
+</div>
+
+
+<div class="check-option">
+
+<input
+type="checkbox"
+id="toolKine"
+name="editorTools"
+value="KineMaster">
+
+<label for="toolKine">
+KineMaster
+</label>
+
+</div>
+
+
+<div class="check-option">
+
+<input
+type="checkbox"
+id="toolDaVinci"
+name="editorTools"
+value="DaVinci Resolve">
+
+<label for="toolDaVinci">
+DaVinci Resolve
+</label>
+
+</div>
+
+
+<div class="check-option">
+
+<input
+type="checkbox"
+id="toolOther"
+name="editorTools"
+value="Other">
+
+<label for="toolOther">
+Other
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="application-section-card">
+
+<div class="application-section-title">
+
+<span>
+🎥
+</span>
+
+<div>
+
+<h4>
+Editing Portfolio
+</h4>
+
+<p>
+Provide at least one way for us to review your work.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="application-group">
+
+<label for="editorPortfolioLink">
+Portfolio / Video Link
+</label>
+
+<input
+type="url"
+id="editorPortfolioLink"
+placeholder="https://youtube.com/... / drive.google.com/...">
+
+<div class="application-hint">
+You can provide a YouTube, Google Drive, Instagram or other
+portfolio link.
+</div>
+
+</div>
+
+
+<div style="
+text-align:center;
+font-size:9px;
+color:#94a3b8;
+padding:10px 0;
+">
+— OR —
+</div>
+
+
+<label
+class="file-drop"
+for="editorPortfolioFile">
+
+<div class="file-drop-icon">
+📤
+</div>
+
+<strong>
+Upload Editing Video
+</strong>
+
+<small>
+MP4, MOV, WEBM • Maximum 25MB<br>
+For larger videos, please use a portfolio link.
+</small>
+
+<input
+type="file"
+id="editorPortfolioFile"
+accept="video/mp4,video/quicktime,video/webm"
+onchange="handlePortfolioFile(this)">
+
+</label>
+
+
+<div
+class="selected-file"
+id="selectedPortfolioFile">
+</div>
+
+
+<div class="application-hint"
+style="margin-top:9px;">
+
+<strong>Required:</strong>
+Provide either a portfolio link or upload a video.
+
+</div>
+
+</div>
+
+
+<div class="application-section-card">
+
+<div class="application-section-title">
+
+<span>
+💡
+</span>
+
+<div>
+
+<h4>
+Additional Information
+</h4>
+
+<p>
+Anything else you want our team to know.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="application-group">
+
+<label for="editorDetails">
+Tell Us About Your Editing Skills
+</label>
+
+<textarea
+id="editorDetails"
+placeholder="Example: What type of videos do you edit? Reels, YouTube videos, music videos, thumbnails, etc."></textarea>
+
+</div>
+
+</div>
+
+
+<button
+type="submit"
+class="application-submit"
+id="editorSubmitBtn">
+
+📩 Submit Editor Application →
+
+</button>
+
+
+<div class="application-note">
+
+By submitting, you are requesting contact from Smart Money
+regarding your application. Please provide accurate contact
+information and only portfolio work that you have permission
+to share.
+
+</div>
+
+</form>
+
+</div>
+
+
+<!-- =====================================================
+     HIRE EDITOR APPLICATION
+===================================================== -->
+
+<div
+class="application-form-wrap"
+id="hireApplication">
+
+<div class="application-form-header">
+
+<button
+class="application-back"
+onclick="backToApplyChoices()">
+←
+</button>
+
+<div class="application-form-header-icon">
+💼
+</div>
+
+<div class="application-form-header-text">
+
+<h3>
+Hire an Editor
+</h3>
+
+<p>
+Tell us about your project
+</p>
+
+</div>
+
+<button
+class="modal-close"
+onclick="closeApplyModal()">
+✕
+</button>
+
+</div>
+
+
+<form
+class="application-form"
+id="hireForm"
+onsubmit="submitHireApplication(event)">
+
+
+<div class="application-section-card">
+
+<div class="application-section-title">
+
+<span>
+👤
+</span>
+
+<div>
+
+<h4>
+Contact Information
+</h4>
+
+<p>
+How should our team reach you?
+</p>
+
+</div>
+
+</div>
+
+
+<div class="application-grid">
+
+<div class="application-group">
+
+<label for="hireName">
+Full Name <span class="required">*</span>
+</label>
+
+<input
+type="text"
+id="hireName"
+placeholder="Enter your full name"
+required
+maxlength="100">
+
+</div>
+
+
+<div class="application-group">
+
+<label for="hireEmail">
+Gmail <span class="required">*</span>
+</label>
+
+<input
+type="email"
+id="hireEmail"
+placeholder="yourname@gmail.com"
+required
+maxlength="150">
+
+</div>
+
+
+<div class="application-group">
+
+<label for="hireWhatsApp">
+WhatsApp Number <span class="required">*</span>
+</label>
+
+<input
+type="tel"
+id="hireWhatsApp"
+placeholder="+91 XXXXX XXXXX"
+required
+maxlength="20"
+inputmode="tel">
+
+</div>
+
+
+<div class="application-group">
+
+<label for="hirePlatform">
+Main Platform <span class="required">*</span>
+</label>
+
+<select
+id="hirePlatform"
+required>
+
+<option value="">
+Select platform
+</option>
+
+<option value="Instagram">
+Instagram
+</option>
+
+<option value="YouTube">
+YouTube
+</option>
+
+<option value="Facebook">
+Facebook
+</option>
+
+<option value="TikTok">
+TikTok
+</option>
+
+<option value="Website">
+Website
+</option>
+
+<option value="Other">
+Other
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="application-section-card">
+
+<div class="application-section-title">
+
+<span>
+🎞️
+</span>
+
+<div>
+
+<h4>
+Project Type
+</h4>
+
+<p>
+Choose the type of video you need.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="radio-grid">
+
+<div class="radio-option">
+
+<input
+type="radio"
+id="hireLong"
+name="hireVideoType"
+value="Long Video"
+required>
+
+<label for="hireLong">
+🎬 Long Video
+</label>
+
+</div>
+
+
+<div class="radio-option">
+
+<input
+type="radio"
+id="hireShort"
+name="hireVideoType"
+value="Short Video / Reel">
+
+<label for="hireShort">
+📱 Short Video / Reel
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="application-section-card">
+
+<div class="application-section-title">
+
+<span>
+🎨
+</span>
+
+<div>
+
+<h4>
+Services Required
+</h4>
+
+<p>
+Select everything you need.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="checkbox-grid">
+
+<div class="check-option">
+
+<input
+type="checkbox"
+id="serviceVideo"
+name="hireServices"
+value="Video Editing">
+
+<label for="serviceVideo">
+🎬 Video Editing
+</label>
+
+</div>
+
+
+<div class="check-option">
+
+<input
+type="checkbox"
+id="servicePhoto"
+name="hireServices"
+value="Photo Editing">
+
+<label for="servicePhoto">
+📷 Photo Editing
+</label>
+
+</div>
+
+
+<div class="check-option">
+
+<input
+type="checkbox"
+id="serviceThumbnail"
+name="hireServices"
+value="Thumbnail Design">
+
+<label for="serviceThumbnail">
+🖼️ Thumbnail Design
+</label>
+
+</div>
+
+
+<div class="check-option">
+
+<input
+type="checkbox"
+id="serviceLogo"
+name="hireServices"
+value="Logo Design">
+
+<label for="serviceLogo">
+✨ Logo Design
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="application-section-card">
+
+<div class="application-section-title">
+
+<span>
+📝
+</span>
+
+<div>
+
+<h4>
+Project Details
+</h4>
+
+<p>
+Give us enough information to understand your requirement.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="application-group">
+
+<label for="hireProjectDetails">
+Project Details <span class="required">*</span>
+</label>
+
+<textarea
+id="hireProjectDetails"
+placeholder="Tell us about your project, approximate duration, style, deadline, references, required platform, etc."
+required></textarea>
+
+</div>
+
+</div>
+
+
+<button
+type="submit"
+class="application-submit"
+id="hireSubmitBtn">
+
+📩 Send Project Request →
+
+</button>
+
+
+<div class="application-note">
+
+Our team will review your project information and contact
+you using the Gmail or WhatsApp number provided.
+
+</div>
+
+</form>
+
+</div>
+
+
+<!-- =====================================================
+     JOIN OUR TEAM APPLICATION
+===================================================== -->
+
+<div
+class="application-form-wrap"
+id="teamApplication">
+
+<div class="application-form-header">
+
+<button
+class="application-back"
+onclick="backToApplyChoices()">
+←
+</button>
+
+<div class="application-form-header-icon">
+🤝
+</div>
+
+<div class="application-form-header-text">
+
+<h3>
+Join Our Team
+</h3>
+
+<p>
+Tell us about yourself and your experience
+</p>
+
+</div>
+
+<button
+class="modal-close"
+onclick="closeApplyModal()">
+✕
+</button>
+
+</div>
+
+
+<form
+class="application-form"
+id="teamForm"
+onsubmit="submitTeamApplication(event)">
+
+
+<div class="application-section-card">
+
+<div class="application-section-title">
+
+<span>
+👤
+</span>
+
+<div>
+
+<h4>
+Basic Information
+</h4>
+
+<p>
+Contact information for our team.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="application-grid">
+
+<div class="application-group">
+
+<label for="teamName">
+Full Name <span class="required">*</span>
+</label>
+
+<input
+type="text"
+id="teamName"
+placeholder="Enter your full name"
+required
+maxlength="100">
+
+</div>
+
+
+<div class="application-group">
+
+<label for="teamEmail">
+Gmail <span class="required">*</span>
+</label>
+
+<input
+type="email"
+id="teamEmail"
+placeholder="yourname@gmail.com"
+required
+maxlength="150">
+
+</div>
+
+
+<div class="application-group">
+
+<label for="teamWhatsApp">
+WhatsApp Number <span class="required">*</span>
+</label>
+
+<input
+type="tel"
+id="teamWhatsApp"
+placeholder="+91 XXXXX XXXXX"
+required
+maxlength="20"
+inputmode="tel">
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="application-section-card">
+
+<div class="application-section-title">
+
+<span>
+🌐
+</span>
+
+<div>
+
+<h4>
+Languages
+</h4>
+
+<p>
+Select at least one language you can work with.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="checkbox-grid">
+
+<div class="check-option">
+
+<input
+type="checkbox"
+id="langBodo"
+name="teamLanguages"
+value="Bodo">
+
+<label for="langBodo">
+Bodo
+</label>
+
+</div>
+
+
+<div class="check-option">
+
+<input
+type="checkbox"
+id="langHindi"
+name="teamLanguages"
+value="Hindi">
+
+<label for="langHindi">
+Hindi
+</label>
+
+</div>
+
+
+<div class="check-option">
+
+<input
+type="checkbox"
+id="langAssamese"
+name="teamLanguages"
+value="Assamese">
+
+<label for="langAssamese">
+Assamese
+</label>
+
+</div>
+
+
+<div class="check-option">
+
+<input
+type="checkbox"
+id="langEnglish"
+name="teamLanguages"
+value="English">
+
+<label for="langEnglish">
+English
+</label>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="application-section-card">
+
+<div class="application-section-title">
+
+<span>
+💻
+</span>
+
+<div>
+
+<h4>
+Online Work Experience
+</h4>
+
+<p>
+Have you worked online before?
+</p>
+
+</div>
+
+</div>
+
+
+<div class="radio-grid">
+
+<div class="radio-option">
+
+<input
+type="radio"
+id="teamExpYes"
+name="teamOnlineExperience"
+value="Yes"
+required
+onchange="toggleTeamExperience(true)">
+
+<label for="teamExpYes">
+✅ Yes
+</label>
+
+</div>
+
+
+<div class="radio-option">
+
+<input
+type="radio"
+id="teamExpNo"
+name="teamOnlineExperience"
+value="No"
+onchange="toggleTeamExperience(false)">
+
+<label for="teamExpNo">
+❌ No
+</label>
+
+</div>
+
+</div>
+
+
+<div
+class="conditional-box"
+id="teamExperienceDetails">
+
+<div class="application-grid">
+
+<div class="application-group">
+
+<label for="teamWhere">
+Where Did You Work?
+</label>
+
+<input
+type="text"
+id="teamWhere"
+placeholder="Company, platform, freelance, etc.">
+
+</div>
+
+
+<div class="application-group">
+
+<label for="teamYears">
+Years of Experience
+</label>
+
+<select id="teamYears">
+
+<option value="">
+Select experience
+</option>
+
+<option value="Less than 1 year">
+Less than 1 year
+</option>
+
+<option value="1 year">
+1 year
+</option>
+
+<option value="2 years">
+2 years
+</option>
+
+<option value="3 years">
+3 years
+</option>
+
+<option value="4 years">
+4 years
+</option>
+
+<option value="5+ years">
+5+ years
+</option>
+
+</select>
+
+</div>
+
+
+<div class="application-group full">
+
+<label for="teamWork">
+What Work Did You Do?
+</label>
+
+<textarea
+id="teamWork"
+placeholder="Tell us what type of online work you have done and what your responsibilities were."></textarea>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="application-section-card">
+
+<div class="application-section-title">
+
+<span>
+💡
+</span>
+
+<div>
+
+<h4>
+Additional Details
+</h4>
+
+<p>
+Anything else you want our team to know.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="application-group">
+
+<label for="teamDetails">
+About You
+</label>
+
+<textarea
+id="teamDetails"
+placeholder="Tell us about your skills, interests, availability and how you would like to contribute to Smart Money."></textarea>
+
+</div>
+
+</div>
+
+
+<button
+type="submit"
+class="application-submit"
+id="teamSubmitBtn">
+
+📩 Submit Team Application →
+
+</button>
+
+
+<div class="application-note">
+
+Applications are reviewed by the Smart Money team.
+Submitting this form does not guarantee selection.
+
+</div>
+
+</form>
+
+</div>
+
+
+<!-- =====================================================
+     APPLICATION SUCCESS
+===================================================== -->
+
+<div
+class="apply-success"
+id="applySuccess">
+
+<div class="success-icon">
+✓
+</div>
+
+<h3>
+Application Ready!
+</h3>
+
+<p id="applySuccessText">
+Your application information has been prepared.
+Your email application will now open.
+Please review it and press Send.
+</p>
+
+<button
+class="success-close-btn"
+onclick="closeApplyModal()">
+
+Close
+
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+
 <script>
 
 /* =========================================================
@@ -4061,6 +6208,14 @@ supabase.createClient(
 )
 :
 null;
+
+
+/* =========================================================
+   SUPPORT EMAIL
+========================================================= */
+
+const SMART_MONEY_SUPPORT_EMAIL =
+"smartmoneysupport1@gmail.com";
 
 
 /* =========================================================
@@ -4374,6 +6529,8 @@ function openPackageModal(
     document.getElementById("packageModal")
     .style.display="flex";
 
+    document.body.classList.add("modal-open");
+
 }
 
 
@@ -4381,6 +6538,8 @@ function closePackageModal(){
 
     document.getElementById("packageModal")
     .style.display="none";
+
+    document.body.classList.remove("modal-open");
 
 }
 
@@ -4447,6 +6606,8 @@ function openCourseModal(packageName){
 
     modal.style.display="flex";
 
+    document.body.classList.add("modal-open");
+
 }
 
 
@@ -4454,6 +6615,8 @@ function closeCourseModal(){
 
     document.getElementById("courseModal")
     .style.display="none";
+
+    document.body.classList.remove("modal-open");
 
 }
 
@@ -4493,6 +6656,8 @@ async function openAdminPreviewModal(){
 
     modal.style.display="flex";
 
+    document.body.classList.add("modal-open");
+
 
     container.innerHTML = `
 
@@ -4511,10 +6676,6 @@ async function openAdminPreviewModal(){
 
     let imageUrl=null;
 
-
-    /* ---------------------------------------------
-       SUPABASE
-    --------------------------------------------- */
 
     if(supabaseClient){
 
@@ -4566,10 +6727,6 @@ async function openAdminPreviewModal(){
     }
 
 
-    /* ---------------------------------------------
-       LOCAL STORAGE FALLBACK
-    --------------------------------------------- */
-
     if(!imageUrl){
 
         imageUrl =
@@ -4587,10 +6744,6 @@ async function openAdminPreviewModal(){
 
     }
 
-
-    /* ---------------------------------------------
-       DISPLAY
-    --------------------------------------------- */
 
     if(imageUrl){
 
@@ -4643,6 +6796,980 @@ function closeAdminPreviewModal(){
         "adminPreviewModal"
     ).style.display="none";
 
+    document.body.classList.remove("modal-open");
+
+}
+
+
+/* =========================================================
+   =========================================================
+   APPLY NOW FUNCTIONS
+   =========================================================
+========================================================= */
+
+function openApplyModal(){
+
+    const modal =
+    document.getElementById("applyModal");
+
+    if(!modal){
+        return;
+    }
+
+    modal.style.display="flex";
+
+    document.body.classList.add("modal-open");
+
+    showApplyChoiceScreen();
+
+}
+
+
+function closeApplyModal(){
+
+    const modal =
+    document.getElementById("applyModal");
+
+    if(!modal){
+        return;
+    }
+
+    modal.style.display="none";
+
+    document.body.classList.remove("modal-open");
+
+    showApplyChoiceScreen();
+
+}
+
+
+function showApplyChoiceScreen(){
+
+    document.getElementById(
+        "applyChoiceScreen"
+    ).style.display="block";
+
+
+    document.getElementById(
+        "editorApplication"
+    ).classList.remove("active");
+
+
+    document.getElementById(
+        "hireApplication"
+    ).classList.remove("active");
+
+
+    document.getElementById(
+        "teamApplication"
+    ).classList.remove("active");
+
+
+    document.getElementById(
+        "applySuccess"
+    ).classList.remove("active");
+
+}
+
+
+function showApplicationForm(type){
+
+    document.getElementById(
+        "applyChoiceScreen"
+    ).style.display="none";
+
+
+    document.getElementById(
+        "editorApplication"
+    ).classList.remove("active");
+
+
+    document.getElementById(
+        "hireApplication"
+    ).classList.remove("active");
+
+
+    document.getElementById(
+        "teamApplication"
+    ).classList.remove("active");
+
+
+    document.getElementById(
+        "applySuccess"
+    ).classList.remove("active");
+
+
+    if(type==="editor"){
+
+        document.getElementById(
+            "editorApplication"
+        ).classList.add("active");
+
+    }
+
+
+    if(type==="hire"){
+
+        document.getElementById(
+            "hireApplication"
+        ).classList.add("active");
+
+    }
+
+
+    if(type==="team"){
+
+        document.getElementById(
+            "teamApplication"
+        ).classList.add("active");
+
+    }
+
+}
+
+
+function backToApplyChoices(){
+
+    showApplyChoiceScreen();
+
+}
+
+
+/* =========================================================
+   APPLICATION HELPERS
+========================================================= */
+
+function getCheckedValues(name){
+
+    return Array.from(
+        document.querySelectorAll(
+            `input[name="${name}"]:checked`
+        )
+    ).map(
+        function(input){
+            return input.value;
+        }
+    );
+
+}
+
+
+function cleanText(value){
+
+    return String(value || "")
+        .trim()
+        .replace(/\r/g,"");
+
+}
+
+
+function isValidWhatsApp(value){
+
+    const cleaned =
+        String(value || "")
+        .replace(/[^\d+]/g,"");
+
+    const digits =
+        cleaned.replace(/\D/g,"");
+
+    return digits.length >= 10 &&
+           digits.length <= 15;
+
+}
+
+
+function openEmailDraft(subject,body){
+
+    const encodedSubject =
+        encodeURIComponent(subject);
+
+    const encodedBody =
+        encodeURIComponent(body);
+
+    window.location.href =
+        `mailto:${SMART_MONEY_SUPPORT_EMAIL}` +
+        `?subject=${encodedSubject}` +
+        `&body=${encodedBody}`;
+
+}
+
+
+/* =========================================================
+   PORTFOLIO FILE
+========================================================= */
+
+function handlePortfolioFile(input){
+
+    const file =
+        input.files && input.files[0];
+
+    const display =
+        document.getElementById(
+            "selectedPortfolioFile"
+        );
+
+    if(!file){
+
+        display.style.display="none";
+
+        display.textContent="";
+
+        return;
+
+    }
+
+
+    const maxSize =
+        25 * 1024 * 1024;
+
+
+    const allowedTypes = [
+
+        "video/mp4",
+        "video/quicktime",
+        "video/webm"
+
+    ];
+
+
+    if(!allowedTypes.includes(file.type)){
+
+        alert(
+            "Please select an MP4, MOV or WEBM video."
+        );
+
+        input.value="";
+
+        display.style.display="none";
+
+        return;
+
+    }
+
+
+    if(file.size > maxSize){
+
+        alert(
+            "Video is larger than 25MB. " +
+            "Please use a portfolio/Google Drive/YouTube link instead."
+        );
+
+        input.value="";
+
+        display.style.display="none";
+
+        return;
+
+    }
+
+
+    const sizeMB =
+        (file.size / (1024 * 1024))
+        .toFixed(2);
+
+
+    display.innerHTML =
+        `✓ Selected: <strong>${escapeHtml(file.name)}</strong> (${sizeMB} MB)`;
+
+    display.style.display="block";
+
+}
+
+
+/* =========================================================
+   EDITOR APPLICATION
+========================================================= */
+
+function submitEditorApplication(event){
+
+    event.preventDefault();
+
+
+    const name =
+        cleanText(
+            document.getElementById(
+                "editorName"
+            ).value
+        );
+
+
+    const email =
+        cleanText(
+            document.getElementById(
+                "editorEmail"
+            ).value
+        );
+
+
+    const whatsapp =
+        cleanText(
+            document.getElementById(
+                "editorWhatsApp"
+            ).value
+        );
+
+
+    const experience =
+        cleanText(
+            document.getElementById(
+                "editorExperience"
+            ).value
+        );
+
+
+    const tools =
+        getCheckedValues(
+            "editorTools"
+        );
+
+
+    const portfolioLink =
+        cleanText(
+            document.getElementById(
+                "editorPortfolioLink"
+            ).value
+        );
+
+
+    const portfolioFileInput =
+        document.getElementById(
+            "editorPortfolioFile"
+        );
+
+
+    const portfolioFile =
+        portfolioFileInput.files &&
+        portfolioFileInput.files[0]
+        ?
+        portfolioFileInput.files[0]
+        :
+        null;
+
+
+    const details =
+        cleanText(
+            document.getElementById(
+                "editorDetails"
+            ).value
+        );
+
+
+    if(!isValidWhatsApp(whatsapp)){
+
+        alert(
+            "Please enter a valid WhatsApp number."
+        );
+
+        return;
+
+    }
+
+
+    if(tools.length===0){
+
+        alert(
+            "Please select at least one editing tool."
+        );
+
+        return;
+
+    }
+
+
+    if(!portfolioLink && !portfolioFile){
+
+        alert(
+            "Please provide a portfolio/video link OR upload a video."
+        );
+
+        return;
+
+    }
+
+
+    const submitBtn =
+        document.getElementById(
+            "editorSubmitBtn"
+        );
+
+
+    submitBtn.disabled=true;
+
+    submitBtn.textContent=
+        "Preparing Application...";
+
+
+    const portfolioInfo =
+        portfolioFile
+        ?
+        `Uploaded Video File: ${portfolioFile.name}\n` +
+        `File Size: ${(portfolioFile.size/(1024*1024)).toFixed(2)} MB`
+        :
+        "No video file uploaded";
+
+
+    const linkInfo =
+        portfolioLink
+        ?
+        `Portfolio / Video Link: ${portfolioLink}`
+        :
+        "No portfolio link provided";
+
+
+    const body =
+
+`Hello Smart Money Support,
+
+A new EDITOR APPLICATION has been submitted from the Smart Money website.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EDITOR APPLICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Name:
+${name}
+
+Gmail:
+${email}
+
+WhatsApp:
+${whatsapp}
+
+Editing Experience:
+${experience}
+
+Editing Tools:
+${tools.join(", ")}
+
+${linkInfo}
+
+${portfolioInfo}
+
+Additional Editing Details:
+${details || "Not provided"}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Important:
+If a video file was selected, the website email draft can include
+the file name but cannot automatically attach the local file through
+mailto. The applicant should attach the video manually if needed.
+
+Submitted From:
+Smart Money Website
+
+Thank you.`;
+
+
+    const subject =
+        `New Editor Application - ${name}`;
+
+
+    try{
+
+        showApplicationSuccess(
+            "Editor application prepared. Your email app will open so you can review the information and press Send."
+        );
+
+
+        setTimeout(
+            function(){
+
+                openEmailDraft(
+                    subject,
+                    body
+                );
+
+                submitBtn.disabled=false;
+
+                submitBtn.textContent=
+                    "📩 Submit Editor Application →";
+
+            },
+            500
+        );
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        submitBtn.disabled=false;
+
+        submitBtn.textContent=
+            "📩 Submit Editor Application →";
+
+        alert(
+            "Unable to open the email application. Please email smartmoneysupport1@gmail.com manually."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   HIRE APPLICATION
+========================================================= */
+
+function submitHireApplication(event){
+
+    event.preventDefault();
+
+
+    const name =
+        cleanText(
+            document.getElementById(
+                "hireName"
+            ).value
+        );
+
+
+    const email =
+        cleanText(
+            document.getElementById(
+                "hireEmail"
+            ).value
+        );
+
+
+    const whatsapp =
+        cleanText(
+            document.getElementById(
+                "hireWhatsApp"
+            ).value
+        );
+
+
+    const platform =
+        cleanText(
+            document.getElementById(
+                "hirePlatform"
+            ).value
+        );
+
+
+    const videoTypeElement =
+        document.querySelector(
+            'input[name="hireVideoType"]:checked'
+        );
+
+
+    const videoType =
+        videoTypeElement
+        ?
+        videoTypeElement.value
+        :
+        "";
+
+
+    const services =
+        getCheckedValues(
+            "hireServices"
+        );
+
+
+    const projectDetails =
+        cleanText(
+            document.getElementById(
+                "hireProjectDetails"
+            ).value
+        );
+
+
+    if(!isValidWhatsApp(whatsapp)){
+
+        alert(
+            "Please enter a valid WhatsApp number."
+        );
+
+        return;
+
+    }
+
+
+    if(services.length===0){
+
+        alert(
+            "Please select at least one service."
+        );
+
+        return;
+
+    }
+
+
+    const submitBtn =
+        document.getElementById(
+            "hireSubmitBtn"
+        );
+
+
+    submitBtn.disabled=true;
+
+    submitBtn.textContent=
+        "Preparing Request...";
+
+
+    const body =
+
+`Hello Smart Money Support,
+
+A new HIRE AN EDITOR request has been submitted from the Smart Money website.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HIRE AN EDITOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Name:
+${name}
+
+Gmail:
+${email}
+
+WhatsApp:
+${whatsapp}
+
+Platform:
+${platform}
+
+Video Type:
+${videoType}
+
+Services Required:
+${services.join(", ")}
+
+Project Details:
+${projectDetails}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Please review the project requirements and contact the requester.
+
+Submitted From:
+Smart Money Website
+
+Thank you.`;
+
+
+    const subject =
+        `New Editor Hiring Request - ${name}`;
+
+
+    showApplicationSuccess(
+        "Your project request has been prepared. Your email app will open so you can review the details and press Send."
+    );
+
+
+    setTimeout(
+        function(){
+
+            openEmailDraft(
+                subject,
+                body
+            );
+
+            submitBtn.disabled=false;
+
+            submitBtn.textContent=
+                "📩 Send Project Request →";
+
+        },
+        500
+    );
+
+}
+
+
+/* =========================================================
+   TEAM EXPERIENCE
+========================================================= */
+
+function toggleTeamExperience(show){
+
+    const box =
+        document.getElementById(
+            "teamExperienceDetails"
+        );
+
+
+    if(show){
+
+        box.classList.add("active");
+
+    }
+
+    else{
+
+        box.classList.remove("active");
+
+    }
+
+}
+
+
+/* =========================================================
+   TEAM APPLICATION
+========================================================= */
+
+function submitTeamApplication(event){
+
+    event.preventDefault();
+
+
+    const name =
+        cleanText(
+            document.getElementById(
+                "teamName"
+            ).value
+        );
+
+
+    const email =
+        cleanText(
+            document.getElementById(
+                "teamEmail"
+            ).value
+        );
+
+
+    const whatsapp =
+        cleanText(
+            document.getElementById(
+                "teamWhatsApp"
+            ).value
+        );
+
+
+    const languages =
+        getCheckedValues(
+            "teamLanguages"
+        );
+
+
+    const experienceElement =
+        document.querySelector(
+            'input[name="teamOnlineExperience"]:checked'
+        );
+
+
+    const onlineExperience =
+        experienceElement
+        ?
+        experienceElement.value
+        :
+        "";
+
+
+    const where =
+        cleanText(
+            document.getElementById(
+                "teamWhere"
+            ).value
+        );
+
+
+    const years =
+        cleanText(
+            document.getElementById(
+                "teamYears"
+            ).value
+        );
+
+
+    const work =
+        cleanText(
+            document.getElementById(
+                "teamWork"
+            ).value
+        );
+
+
+    const details =
+        cleanText(
+            document.getElementById(
+                "teamDetails"
+            ).value
+        );
+
+
+    if(!isValidWhatsApp(whatsapp)){
+
+        alert(
+            "Please enter a valid WhatsApp number."
+        );
+
+        return;
+
+    }
+
+
+    if(languages.length===0){
+
+        alert(
+            "Please select at least one language."
+        );
+
+        return;
+
+    }
+
+
+    if(!onlineExperience){
+
+        alert(
+            "Please select whether you have online work experience."
+        );
+
+        return;
+
+    }
+
+
+    const submitBtn =
+        document.getElementById(
+            "teamSubmitBtn"
+        );
+
+
+    submitBtn.disabled=true;
+
+    submitBtn.textContent=
+        "Preparing Application...";
+
+
+    let experienceBlock = "";
+
+
+    if(onlineExperience==="Yes"){
+
+        experienceBlock =
+
+`Online Work Experience:
+Yes
+
+Where:
+${where || "Not provided"}
+
+Years:
+${years || "Not provided"}
+
+What Work:
+${work || "Not provided"}`;
+
+    }
+
+    else{
+
+        experienceBlock =
+`Online Work Experience:
+No`;
+
+    }
+
+
+    const body =
+
+`Hello Smart Money Support,
+
+A new JOIN OUR TEAM APPLICATION has been submitted from the Smart Money website.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+JOIN OUR TEAM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Name:
+${name}
+
+Gmail:
+${email}
+
+WhatsApp:
+${whatsapp}
+
+Languages:
+${languages.join(", ")}
+
+${experienceBlock}
+
+Additional Details:
+${details || "Not provided"}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Please review the application and contact the applicant if suitable.
+
+Submitted From:
+Smart Money Website
+
+Thank you.`;
+
+
+    const subject =
+        `New Team Application - ${name}`;
+
+
+    showApplicationSuccess(
+        "Your team application has been prepared. Your email app will open so you can review the details and press Send."
+    );
+
+
+    setTimeout(
+        function(){
+
+            openEmailDraft(
+                subject,
+                body
+            );
+
+            submitBtn.disabled=false;
+
+            submitBtn.textContent=
+                "📩 Submit Team Application →";
+
+        },
+        500
+    );
+
+}
+
+
+/* =========================================================
+   APPLICATION SUCCESS
+========================================================= */
+
+function showApplicationSuccess(message){
+
+    document.getElementById(
+        "applyChoiceScreen"
+    ).style.display="none";
+
+
+    document.getElementById(
+        "editorApplication"
+    ).classList.remove("active");
+
+
+    document.getElementById(
+        "hireApplication"
+    ).classList.remove("active");
+
+
+    document.getElementById(
+        "teamApplication"
+    ).classList.remove("active");
+
+
+    document.getElementById(
+        "applySuccessText"
+    ).innerText=message;
+
+
+    document.getElementById(
+        "applySuccess"
+    ).classList.add("active");
+
 }
 
 
@@ -4669,6 +7796,11 @@ window.addEventListener(
             "adminPreviewModal"
         );
 
+        const applyModal =
+        document.getElementById(
+            "applyModal"
+        );
+
 
         if(event.target===pkgModal){
 
@@ -4687,6 +7819,13 @@ window.addEventListener(
         if(event.target===adminModal){
 
             closeAdminPreviewModal();
+
+        }
+
+
+        if(event.target===applyModal){
+
+            closeApplyModal();
 
         }
 
@@ -4709,6 +7848,8 @@ window.addEventListener(
             closeCourseModal();
 
             closeAdminPreviewModal();
+
+            closeApplyModal();
 
         }
 
@@ -4840,9 +7981,7 @@ window.addEventListener(
         }
 
 
-        /* ---------------------------------------------
-           PROFILE IMAGE
-        --------------------------------------------- */
+        /* PROFILE IMAGE */
 
         const profileBtn =
         document.getElementById(
