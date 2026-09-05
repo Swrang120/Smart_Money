@@ -1,50 +1,34 @@
-<!DOCTYPE html>
+<DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<meta name="google-site-verification"
-content="cLPrMMPIJkcU4s0Pf-A3jCyDuyrePu07ZZGSu87d0-4" />
+<meta name="google-site-verification" content="cLPrMMPIJkcU4s0Pf-A3jCyDuyrePu07ZZGSu87d0-4" />
 
 <title>Smart Money - Online Courses & Skill Development</title>
+<meta property="og:title" content="Smart Money - Online Courses & Skill Development">
+<meta property="og:description" content="Learn practical digital skills for a smarter future.">
+<meta property="og:image" content=https://raw.githubusercontent.com/Swrang120/Smart_Money/refs/heads/main/file_00000000875481fa8bcb4a309bf332eb.png
+<meta property="og:url" content="https://smart-money-navy.vercel.app/index.html">
 
-<meta property="og:title"
-content="Smart Money - Online Courses & Skill Development">
-
-<meta property="og:description"
-content="Learn practical digital skills for a smarter future.">
-
-<meta property="og:image"
-content="https://raw.githubusercontent.com/Swrang120/Smart_Money/refs/heads/main/file_00000000875481fa8bcb4a309bf332eb.png">
-
-<meta property="og:url"
-content="https://smart-money-navy.vercel.app/index.html">
-
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
+href="https://fonts.googleapis.com"
 crossorigin>
 
-<link
-href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-
 <!-- Supabase CDN -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 
 <style>
 
-/* =========================================================
+/*
+=========================================================
    GLOBAL
 ========================================================= */
 
@@ -55,11 +39,9 @@ rel="stylesheet">
     font-family:'Plus Jakarta Sans',sans-serif;
 }
 
-
 html{
     scroll-behavior:smooth;
 }
-
 
 body{
     background:#f5f7fb;
@@ -67,16 +49,13 @@ body{
     overflow-x:hidden;
 }
 
-
 body.modal-open{
     overflow:hidden;
 }
 
-
 a{
     text-decoration:none;
 }
-
 
 button,
 input,
@@ -84,7 +63,6 @@ textarea,
 select{
     font-family:inherit;
 }
-
 
 .container{
     width:min(1180px,92%);
@@ -97,7 +75,6 @@ select{
 ========================================================= */
 
 .top-announcement{
-
     background:linear-gradient(
         90deg,
         #6d28d9,
@@ -105,39 +82,24 @@ select{
         #2563eb,
         #0891b2
     );
-
     color:#fff;
-
     height:38px;
-
     display:flex;
-
     align-items:center;
-
     overflow:hidden;
-
     white-space:nowrap;
 }
 
-
 .marquee-track{
-
     display:inline-block;
-
     padding-left:100%;
-
     animation:marqueeMove 22s linear infinite;
-
     font-size:12px;
-
     font-weight:700;
-
     letter-spacing:.3px;
 }
 
-
 @keyframes marqueeMove{
-
     0%{
         transform:translateX(0);
     }
@@ -145,690 +107,356 @@ select{
     100%{
         transform:translateX(-100%);
     }
-
 }
 
 
-/* =========================================================
+/*
+=========================================================
    NAVBAR
 ========================================================= */
 
 .navbar{
-
     height:75px;
-
     background:rgba(255,255,255,.96);
-
     backdrop-filter:blur(15px);
-
     display:flex;
-
     align-items:center;
-
     justify-content:space-between;
-
     padding:0 5%;
-
     position:sticky;
-
     top:0;
-
     z-index:1000;
-
     box-shadow:0 4px 25px rgba(15,23,42,.07);
-
 }
-
 
 .brand{
-
     display:flex;
-
     align-items:center;
-
     gap:11px;
-
 }
 
-
 .logo-circle{
-
     width:42px;
-
     height:42px;
-
     border-radius:12px;
-
     background:linear-gradient(
         135deg,
         #7c3aed,
         #2563eb
     );
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
     color:white;
-
     font-weight:800;
-
     font-size:18px;
-
     box-shadow:
-    0 8px 20px rgba(124,58,237,.25);
-
+        0 8px 20px rgba(124,58,237,.25);
 }
-
 
 .brand-text h2{
-
     font-size:17px;
-
     font-weight:800;
-
     color:#111827;
-
 }
-
 
 .brand-text span{
-
     font-size:10px;
-
     color:#64748b;
-
     font-weight:600;
-
 }
-
 
 .nav-right-icons{
-
     display:flex;
-
     align-items:center;
-
     gap:12px;
-
 }
-
 
 .profile-icon-btn{
-
     width:40px;
-
     height:40px;
-
     border-radius:10px;
-
     background:#f1f5f9;
-
     color:#7c3aed;
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
     overflow:hidden;
-
     border:1px solid #e2e8f0;
-
 }
-
 
 .profile-icon-btn img{
-
     width:100%;
-
     height:100%;
-
     object-fit:cover;
-
 }
-
 
 .hamburger{
-
     display:flex;
-
     width:38px;
-
     height:38px;
-
     background:#f1f5f9;
-
     border-radius:10px;
-
     align-items:center;
-
     justify-content:center;
-
     flex-direction:column;
-
     cursor:pointer;
-
-    border:none;
-
 }
 
-
 .hamburger span{
-
     height:2.5px;
-
     width:20px;
-
     background:#111827;
-
     display:block;
-
     margin:3px 0;
-
     border-radius:10px;
-
 }
 
 
 /* =========================================================
-   SIDEBAR / MOBILE MENU
+   SIDEBAR
 ========================================================= */
 
 .mobile-menu{
-
     position:fixed;
-
     top:0;
-
     right:-100%;
-
     width:290px;
-
     height:100vh;
-
     background:#fff;
-
     z-index:3000;
-
     padding:25px;
-
-    transition:.35s ease;
-
-    box-shadow:
-    -10px 0 30px rgba(0,0,0,.12);
-
+    transition:.35s;
+    box-shadow:-10px 0 30px rgba(0,0,0,.12);
     display:flex;
-
     flex-direction:column;
-
 }
-
 
 .mobile-menu.active{
-
     right:0;
-
 }
-
 
 .mobile-menu-top{
-
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
     margin-bottom:20px;
-
-    flex-shrink:0;
-
 }
-
 
 .close-menu{
-
     border:none;
-
     background:#f1f5f9;
-
     width:38px;
-
     height:38px;
-
     border-radius:10px;
-
-    font-size:24px;
-
+    font-size:20px;
     cursor:pointer;
-
     display:flex;
-
     align-items:center;
-
     justify-content:center;
-
     color:#111827;
-
 }
-
 
 .mobile-menu .mobile-nav-links{
-
     display:flex;
-
     flex-direction:column;
-
-    gap:10px;
-
+    gap:8px;
     overflow-y:auto;
-
-    flex-grow:1;
-
-    padding-bottom:30px;
-
-    scrollbar-width:thin;
-
 }
-
 
 .mobile-menu a.m-link{
-
     display:block;
-
     padding:12px 14px;
-
     border-radius:10px;
-
     font-weight:700;
-
     font-size:14px;
-
     color:#475569;
-
     background:#f8fafc;
-
-    transition:all .2s ease;
-
+    transition:all .2s;
 }
-
 
 .mobile-menu a.m-link:hover{
-
     background:#f1f5f9;
-
     color:#7c3aed;
-
 }
 
-
-/* =========================================================
-   APPLY NOW
-========================================================= */
+/* NEW APPLY NOW SIDEBAR LINK */
 
 .mobile-menu a.apply-now-link{
-
     position:relative;
-
     background:
-    linear-gradient(
-        135deg,
-        #7c3aed,
-        #2563eb,
-        #0891b2
-    );
-
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #2563eb,
+            #0891b2
+        );
     color:#fff;
-
     box-shadow:
-    0 10px 25px rgba(79,70,229,.22);
-
+        0 10px 25px rgba(79,70,229,.22);
     overflow:hidden;
-
 }
 
-
 .mobile-menu a.apply-now-link::after{
-
     content:"";
-
     position:absolute;
-
     top:0;
-
     left:-100%;
-
     width:70%;
-
     height:100%;
-
-    background:
-    linear-gradient(
+    background:linear-gradient(
         90deg,
         transparent,
         rgba(255,255,255,.28),
         transparent
     );
-
     transform:skewX(-20deg);
-
     animation:applyShine 3.5s infinite;
-
 }
 
-
 @keyframes applyShine{
-
     0%{
         left:-100%;
     }
-
-    45%,
-    100%{
+    45%,100%{
         left:140%;
     }
-
 }
-
-
-/* =========================================================
-   APP MANAGEMENT
-========================================================= */
-
-.app-management-group{
-
-    margin-top:10px;
-
-    padding-top:12px;
-
-    border-top:
-    1px solid #e2e8f0;
-
-}
-
-
-.section-title{
-
-    font-size:11px;
-
-    font-weight:800;
-
-    text-transform:uppercase;
-
-    color:#94a3b8;
-
-    letter-spacing:.5px;
-
-    margin-bottom:8px;
-
-    display:block;
-
-    padding-left:4px;
-
-}
-
-
-.mobile-menu a.install-link{
-
-    background:#ecfdf5;
-
-    color:#059669;
-
-    border:1px solid #d1fae5;
-
-}
-
-
-.mobile-menu a.install-link:hover{
-
-    background:#d1fae5;
-
-    color:#047857;
-
-}
-
-
-.mobile-menu a.uninstall-link{
-
-    background:#fef2f2;
-
-    color:#dc2626;
-
-    border:1px solid #fee2e2;
-
-}
-
-
-.mobile-menu a.uninstall-link:hover{
-
-    background:#fee2e2;
-
-    color:#b91c1c;
-
-}
-
 
 .mobile-menu a.mobile-dashboard-btn{
-
     margin-top:10px;
-
     display:block;
-
     text-align:center;
-
     padding:12px;
-
     border-radius:10px;
-
     background:#7c3aed;
-
     color:#fff;
-
     font-weight:700;
-
     font-size:14px;
-
 }
-
 
 .menu-overlay{
-
     position:fixed;
-
     inset:0;
-
-    background:
-    rgba(15,23,42,.55);
-
+    background:rgba(15,23,42,.55);
     display:none;
-
     z-index:2500;
-
 }
-
 
 .menu-overlay.active{
-
     display:block;
-
 }
-
+<div class="sidebar">
+    <!-- Main Navigation Links -->
+    <a href="#" class="nav-link">Home</a>
+    <a href="#" class="nav-link">Dashboard</a>
+    
+    <!-- Scrollable Container for Apply & Management Sections -->
+    <div class="sidebar-scroll-area">
+        <a href="#apply" class="nav-link apply-option">Apply Now</a>
+        
+        <div class="app-management-section">
+            <span class="section-title">App Management</span>
+            <a href="#install" class="nav-link">Install Apps</a>
+            <a href="#uninstall" class="nav-link">Uninstall Apps</a>
+        </div>
+    </div>
+</div>
 
 /* =========================================================
    HERO
 ========================================================= */
 
 .hero{
-
     position:relative;
-
     min-height:560px;
-
     display:flex;
-
     align-items:center;
-
     overflow:hidden;
 
     background:
-
     linear-gradient(
         90deg,
         rgba(15,23,42,.94),
         rgba(15,23,42,.66)
     ),
-
-    url(
-        "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1800&q=90"
-    );
+    url("https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1800&q=90");
 
     background-size:cover;
-
     background-position:center;
-
 }
-
 
 .hero-content{
-
     width:min(1180px,92%);
-
     margin:auto;
-
     color:#fff;
-
     padding:90px 0;
-
 }
-
 
 .hero-badge{
-
     display:inline-flex;
-
     align-items:center;
-
     gap:8px;
-
     padding:9px 14px;
-
     border-radius:30px;
-
-    background:
-    rgba(255,255,255,.12);
-
-    border:
-    1px solid rgba(255,255,255,.2);
-
-    backdrop-filter:
-    blur(10px);
-
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.2);
+    backdrop-filter:blur(10px);
     font-size:11px;
-
     font-weight:700;
-
     margin-bottom:20px;
-
 }
-
 
 .hero h1{
-
-    font-size:
-    clamp(32px,5vw,58px);
-
+    font-size:clamp(32px,5vw,58px);
     line-height:1.1;
-
     max-width:760px;
-
     font-weight:800;
-
     letter-spacing:-2px;
-
 }
 
-
 .hero h1 span{
-
-    background:
-    linear-gradient(
+    background:linear-gradient(
         90deg,
         #c084fc,
         #60a5fa,
         #38bdf8
     );
-
     -webkit-background-clip:text;
-
     -webkit-text-fill-color:transparent;
-
 }
-
 
 .hero p{
-
     margin-top:18px;
-
     max-width:630px;
-
     font-size:15px;
-
     line-height:1.8;
-
     color:#e2e8f0;
-
 }
-
 
 .hero-buttons{
-
     display:flex;
-
     gap:12px;
-
     margin-top:28px;
-
     flex-wrap:wrap;
-
 }
-
 
 .hero-btn-primary{
-
     padding:14px 22px;
-
     background:#fff;
-
     color:#111827;
-
     font-weight:800;
-
     border-radius:12px;
-
     font-size:13px;
-
 }
 
-
 .hero-btn-secondary{
-
     padding:14px 22px;
-
-    border:
-    1px solid rgba(255,255,255,.35);
-
+    border:1px solid rgba(255,255,255,.35);
     color:#fff;
-
     font-weight:700;
-
     border-radius:12px;
-
     font-size:13px;
-
 }
 
 
