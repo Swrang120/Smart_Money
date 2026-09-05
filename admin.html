@@ -147,7 +147,7 @@ button:hover{opacity:.88}
 .login-error{margin-top:12px;color:#f87171;font-size:13px; line-height: 1.4;}  
   
 .header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 20px;background:#111827;border-bottom:1px solid var(--border)}.logo{font-size:20px;font-weight:800}.logo span{color:#818cf8}.header-actions{display:flex;align-items:center;gap:8px}.menu-btn,.refresh-btn,.logout-btn{border:0;color:white;padding:10px 14px;border-radius:8px;cursor:pointer}.menu-btn{background:var(--accent)}.refresh-btn{background:#1e293b}.logout-btn{background:#991b1b}  
-.sidebar{position:fixed;top:0;left:-330px;width:310px;height:100vh;z-index:1000;background:#111827;border-right:1px solid var(--border);padding:20px;transition:.3s;overflow-y:auto}.sidebar.open{left:0}.sidebar-section{margin-top:25px;padding-top:15px;border-top:1px solid var(--border)}.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:999;display:none}.logo-upload,.status-upload{background:var(--card2);padding:15px;border-radius:10px}.status-upload{margin-top:15px}.logo-upload input,.status-upload input,.status-upload textarea{width:100%;margin:10px 0;color:white;background:#0f172a;border:1px solid var(--border);padding:9px;border-radius:7px}  
+.sidebar{position:fixed;top:0;left:-330px;width:310px;height:100vh;z-index:1000;background:#111827;border-right:1px solid var(--border);padding:20px;transition:.3s;overflow-y:auto}.sidebar.open{left:0}.sidebar-section{margin-top:25px;padding-top:15px;border-top:1px solid var(--border)}.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:999;display:none}.logo-upload,.status-upload{background:var(--card2);padding:15px;border-radius:10px}.status-upload{margin-top:15px}.logo-upload input,.status-upload input,.status-upload textarea{width:100%;margin:8px 0;color:white;background:#0f172a;border:1px solid var(--border);padding:9px;border-radius:7px}  
   
 /* ACCORDION COLLAPSIBLE SIDEBAR STYLES */  
 .sidebar-section h3 {  
@@ -367,12 +367,21 @@ button:hover{opacity:.88}
 <aside id="adminSidebar" class="sidebar">  
 <h2>⚙️ Admin Panel</h2>  
 <div class="logo-upload"><b>Global Logo</b><input type="file" id="adminLogoFileInput" accept="image/*"><button class="btn btn-primary" onclick="uploadAndSaveAdminLogo()">Upload Logo</button></div>  
-<div class="status-upload"><b>📱 Upload 24 Hour Status</b><p class="small">Photo ya video upload karo. 24 hours ke baad automatically hide ho jayega.</p><input type="file" id="statusFileInput" accept="image/*,video/*"><textarea id="statusCaption" placeholder="Status caption (optional)"></textarea><button class="btn btn-primary" onclick="uploadStatus()">Upload Status</button></div>  
-  
+
+<div class="status-upload">
+    <b>📱 Upload 24 Hour Status</b>
+    <p class="small">File upload karo ya direct Image/Video URL dalo (Jaise Imgur link).</p>
+    <input type="file" id="statusFileInput" accept="image/*,video/*">
+    <input type="text" id="statusUrlInput" placeholder="Or paste Image/Video URL (e.g. https://i.imgur.com/...)">
+    <textarea id="statusCaption" placeholder="Status caption (optional)"></textarea>
+    <button class="btn btn-primary" onclick="uploadStatus()">Upload Status</button>
+</div>  
+
 <div class="status-upload" style="margin-top: 15px;">  
-    <b>🖼️ Upload Preview Photo</b>  
-    <p class="small">Yeh photo index page ke preview option par tab tak dikhegi jab tak aap ise delete nahi karte.</p>  
+    <b>🖼️ Upload Preview Image</b>  
+    <p class="small">File upload karo ya direct URL dalo. Yeh photo index page ke preview par dikhegi.</p>  
     <input type="file" id="previewImageFileInput" accept="image/*">  
+    <input type="text" id="previewUrlInput" placeholder="Or paste Image URL (e.g. https://i.imgur.com/Yavexh3.jpeg)">
     <button class="btn btn-primary" onclick="uploadPreviewImage()">Upload Preview</button>  
 </div>  
 
@@ -726,20 +735,39 @@ async function uploadAndSaveAdminLogo(){
 }  
   
 async function uploadStatus(){  
-    const input=document.getElementById("statusFileInput"),caption=document.getElementById("statusCaption").value.trim(),file=input.files[0];  
-    if(!file){alert("Photo ya video select karo!");return}  
-    let mediaType=file.type.startsWith("image/")?"image":file.type.startsWith("video/")?"video":"";  
-    if(!mediaType){alert("Sirf image ya video allowed hai.");return}  
-    try{  
+    const input = document.getElementById("statusFileInput");  
+    const urlInput = document.getElementById("statusUrlInput");  
+    const caption = document.getElementById("statusCaption").value.trim();  
+    const file = input.files[0];  
+    const directUrl = urlInput.value.trim();  
+
+    let mediaUrl = "";  
+    let mediaType = "image";  
+
+    if(directUrl) {  
+        mediaUrl = directUrl;  
+        if(directUrl.match(/\.(mp4|webm|ogg)$/i)) {  
+            mediaType = "video";  
+        }  
+    } else if(file) {  
+        mediaType = file.type.startsWith("image/") ? "image" : file.type.startsWith("video/") ? "video" : "";  
+        if(!mediaType){alert("Sirf image ya video allowed hai.");return}  
         const fileName="status_"+Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");  
         let {error}=await supabaseClient.storage.from("status").upload(fileName,file,{contentType:file.type});  
         if(error)throw error;  
         const {data:urlData}=supabaseClient.storage.from("status").getPublicUrl(fileName);  
-        const mediaUrl = urlData ? urlData.publicUrl : "";  
-        const expires_at=new Date(Date.now()+86400000).toISOString();  
-        let r=await supabaseClient.from("status_posts").insert([{media_url:mediaUrl,media_type:mediaType,caption,expires_at,is_deleted:false}]);  
+        mediaUrl = urlData ? urlData.publicUrl : "";  
+    } else {  
+        alert("Pehle photo/video select karo ya direct URL dalo!");  
+        return;  
+    }  
+
+    try{  
+        const expires_at = new Date(Date.now()+86400000).toISOString();  
+        let r = await supabaseClient.from("status_posts").insert([{media_url: mediaUrl, media_type: mediaType, caption, expires_at, is_deleted: false}]);  
         if(r.error)throw r.error;  
         input.value="";  
+        urlInput.value="";  
         document.getElementById("statusCaption").value="";  
         alert("Status uploaded successfully!");  
         loadActiveStatuses();  
@@ -749,24 +777,37 @@ async function uploadStatus(){
 }  
   
 async function uploadPreviewImage(){  
-    const input = document.getElementById("previewImageFileInput"), file = input.files[0];  
-    if(!file){alert("Pehle preview image select karo!");return}  
-    try{  
+    const input = document.getElementById("previewImageFileInput");  
+    const urlInput = document.getElementById("previewUrlInput");  
+    const file = input.files[0];  
+    const directUrl = urlInput.value.trim();  
+
+    let imageUrl = "";  
+
+    if(directUrl) {  
+        imageUrl = directUrl;  
+    } else if(file) {  
         const fileName = "preview_" + Date.now() + "_" + file.name.replace(/[^a-zA-Z0-9._-]/g,"_");  
         let {error} = await supabaseClient.storage.from("admin_updates").upload(fileName, file, {contentType: file.type});  
         if(error) throw error;  
         const {data:urlData} = supabaseClient.storage.from("admin_updates").getPublicUrl(fileName);  
-        const imageUrl = urlData ? urlData.publicUrl : "";  
-  
+        imageUrl = urlData ? urlData.publicUrl : "";  
+    } else {  
+        alert("Pehle preview image select karo ya direct URL dalo!");  
+        return;  
+    }  
+
+    try{  
         const {data:existing, error:ee} = await supabaseClient.from("global_settings").select("id").eq("setting_key", "index_preview_image").maybeSingle();  
         if(ee) throw ee;  
-  
+
         const r = existing   
             ? await supabaseClient.from("global_settings").update({setting_value: imageUrl}).eq("setting_key", "index_preview_image")  
             : await supabaseClient.from("global_settings").insert([{setting_key: "index_preview_image", setting_value: imageUrl}]);  
-  
+
         if(r.error) throw r.error;  
         input.value = "";  
+        urlInput.value = "";  
         alert("Preview image uploaded successfully!");  
         loadActivePreviewImage();  
     } catch(e) {  
@@ -1519,4 +1560,4 @@ Draggable.create(hitArea, {
 });  
 </script>  
 </body>  
-</html>  
+</html>
