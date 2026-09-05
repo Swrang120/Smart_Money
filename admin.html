@@ -663,16 +663,42 @@ async function adminLogout() {
     showLogin();  
 }  
   
-function showAdmin(){document.getElementById("loginScreen").classList.add("hidden");document.getElementById("adminApp").classList.remove("hidden");refreshAllData()}  
-function showLogin(){document.getElementById("adminApp").classList.add("hidden");document.getElementById("loginScreen").classList.remove("hidden")}  
+function showAdmin(){  
+    document.getElementById("loginScreen").classList.add("hidden");  
+    document.getElementById("adminApp").classList.remove("hidden");  
+    refreshAllData();  
+}  
+
+function showLogin(){  
+    document.getElementById("adminApp").classList.add("hidden");  
+    document.getElementById("loginScreen").classList.remove("hidden");  
+}  
   
-function toggleSidebar(){const s=document.getElementById("adminSidebar"),o=document.getElementById("sidebarOverlay");s.classList.toggle("open");o.style.display=s.classList.contains("open")?"block":"none";if(s.classList.contains("open")){loadTrashAndHistoryData();loadActiveStatuses();loadActivePreviewImage()}}  
+function toggleSidebar(){  
+    const s=document.getElementById("adminSidebar"),o=document.getElementById("sidebarOverlay");  
+    s.classList.toggle("open");  
+    o.style.display=s.classList.contains("open")?"block":"none";  
+    if(s.classList.contains("open")){  
+        loadTrashAndHistoryData();  
+        loadActiveStatuses();  
+        loadActivePreviewImage();  
+    }  
+}  
   
 function toggleAccordion(element) {  
     element.classList.toggle('collapsed');  
 }  
   
-async function refreshAllData(){try{await Promise.all([loadUsers(),loadPaymentRequests(),loadWithdrawals()]);updateGlobalStats()}catch(e){console.error(e);alert("Refresh failed: "+(e.message||"Unknown error"))}}  
+async function refreshAllData(){  
+    try{  
+        await Promise.all([loadUsers(),loadPaymentRequests(),loadWithdrawals(),loadActiveStatuses(),loadActivePreviewImage()]);  
+        updateGlobalStats();  
+    }catch(e){  
+        console.error(e);  
+        alert("Refresh failed: "+(e.message||"Unknown error"));  
+    }  
+}  
+
 function updateGlobalStats(){  
  const payments=allPaymentsData.filter(x=>x.is_deleted!==true),withdrawals=allWithdrawalsData.filter(x=>x.is_deleted!==true);  
  const all=[...payments,...withdrawals];  
@@ -681,7 +707,23 @@ function updateGlobalStats(){
  document.getElementById("statRejected").innerText=all.filter(x=>statusOf(x.status)==="rejected").length;  
 }  
   
-async function uploadAndSaveAdminLogo(){const input=document.getElementById("adminLogoFileInput"),file=input.files[0];if(!file){alert("Pehle image select karo!");return}try{const fileName="global_logo_"+Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");let {error}=await supabaseClient.storage.from("avatars").upload(fileName,file,{contentType:file.type});if(error)throw error;const {data:url}=supabaseClient.storage.from("avatars").getPublicUrl(fileName);const imageUrl=url.publicUrl;const {data:existing,error:ee}=await supabaseClient.from("global_settings").select("id").eq("setting_key","admin_top_logo").maybeSingle();if(ee)throw ee;const r=existing?await supabaseClient.from("global_settings").update({setting_value:imageUrl}).eq("setting_key","admin_top_logo"):await supabaseClient.from("global_settings").insert([{setting_key:"admin_top_logo",setting_value:imageUrl}]);if(r.error)throw r.error;input.value="";alert("Logo successfully updated!")}catch(e){alert("Logo upload failed: "+e.message)}}  
+async function uploadAndSaveAdminLogo(){  
+    const input=document.getElementById("adminLogoFileInput"),file=input.files[0];  
+    if(!file){alert("Pehle image select karo!");return}  
+    try{  
+        const fileName="global_logo_"+Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");  
+        let {error}=await supabaseClient.storage.from("avatars").upload(fileName,file,{contentType:file.type});  
+        if(error)throw error;  
+        const {data:urlData}=supabaseClient.storage.from("avatars").getPublicUrl(fileName);  
+        const imageUrl=urlData?urlData.publicUrl:"";  
+        const {data:existing,error:ee}=await supabaseClient.from("global_settings").select("id").eq("setting_key","admin_top_logo").maybeSingle();  
+        if(ee)throw ee;  
+        const r=existing?await supabaseClient.from("global_settings").update({setting_value:imageUrl}).eq("setting_key","admin_top_logo"):await supabaseClient.from("global_settings").insert([{setting_key:"admin_top_logo",setting_value:imageUrl}]);  
+        if(r.error)throw r.error;  
+        input.value="";  
+        alert("Logo successfully updated!");  
+    }catch(e){alert("Logo upload failed: "+e.message)}  
+}  
   
 async function uploadStatus(){  
     const input=document.getElementById("statusFileInput"),caption=document.getElementById("statusCaption").value.trim(),file=input.files[0];  
@@ -692,9 +734,10 @@ async function uploadStatus(){
         const fileName="status_"+Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");  
         let {error}=await supabaseClient.storage.from("status").upload(fileName,file,{contentType:file.type});  
         if(error)throw error;  
-        const {data:url}=supabaseClient.storage.from("status").getPublicUrl(fileName);  
+        const {data:urlData}=supabaseClient.storage.from("status").getPublicUrl(fileName);  
+        const mediaUrl = urlData ? urlData.publicUrl : "";  
         const expires_at=new Date(Date.now()+86400000).toISOString();  
-        let r=await supabaseClient.from("status_posts").insert([{media_url:url.publicUrl,media_type:mediaType,caption,expires_at,is_deleted:false}]);  
+        let r=await supabaseClient.from("status_posts").insert([{media_url:mediaUrl,media_type:mediaType,caption,expires_at,is_deleted:false}]);  
         if(r.error)throw r.error;  
         input.value="";  
         document.getElementById("statusCaption").value="";  
@@ -712,8 +755,8 @@ async function uploadPreviewImage(){
         const fileName = "preview_" + Date.now() + "_" + file.name.replace(/[^a-zA-Z0-9._-]/g,"_");  
         let {error} = await supabaseClient.storage.from("admin_updates").upload(fileName, file, {contentType: file.type});  
         if(error) throw error;  
-        const {data:url} = supabaseClient.storage.from("admin_updates").getPublicUrl(fileName);  
-        const imageUrl = url.publicUrl;  
+        const {data:urlData} = supabaseClient.storage.from("admin_updates").getPublicUrl(fileName);  
+        const imageUrl = urlData ? urlData.publicUrl : "";  
   
         const {data:existing, error:ee} = await supabaseClient.from("global_settings").select("id").eq("setting_key", "index_preview_image").maybeSingle();  
         if(ee) throw ee;  
@@ -1476,4 +1519,4 @@ Draggable.create(hitArea, {
 });  
 </script>  
 </body>  
-</html>
+</html>  
