@@ -134,10 +134,13 @@
         inset 0 0 0 1px rgba(124,58,237,.08);
     }
 
-    .method-icon {
+    .method-icon-img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin: 0 auto 4px;
       display: block;
-      font-size: 23px;
-      margin-bottom: 4px;
     }
 
     .method-name {
@@ -191,10 +194,21 @@
     }
 
     .selected-method-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
       margin: 4px 0 8px;
       font-size: 17px;
       font-weight: 800;
       color: #111827;
+    }
+
+    .selected-method-img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      border-radius: 6px;
     }
 
     .qr-img {
@@ -548,7 +562,7 @@
       onclick="selectPaymentMethod('Super Money')"
     >
       <span class="selected-badge">✓</span>
-      <span class="method-icon">🟠</span>
+      <img src="images.png" alt="Super Money" class="method-icon-img">
       <span class="method-name">Super Money</span>
       <span class="method-upi-small">
         smartmoney7@nyes
@@ -563,7 +577,7 @@
       onclick="selectPaymentMethod('PhonePe')"
     >
       <span class="selected-badge">✓</span>
-      <span class="method-icon">🔵</span>
+      <img src="08be068f3e4fb0c701ff73760b6f83f8.jpg" alt="PhonePe" class="method-icon-img">
       <span class="method-name">PhonePe</span>
       <span class="method-upi-small">
         smartmoney7@nyes
@@ -578,7 +592,7 @@
       onclick="selectPaymentMethod('Google Pay')"
     >
       <span class="selected-badge">✓</span>
-      <span class="method-icon">🟢</span>
+      <img src="76a81707455d435794782797a7fedf67.jpg" alt="Google Pay" class="method-icon-img">
       <span class="method-name">Google Pay</span>
       <span class="method-upi-small">
         andw7642-4@okhdfcbank
@@ -593,7 +607,7 @@
       onclick="selectPaymentMethod('BharatPe')"
     >
       <span class="selected-badge">✓</span>
-      <span class="method-icon">🟣</span>
+      <img src="596cfa48c5780411439b0569e44b59ee.jpg" alt="BharatPe" class="method-icon-img">
       <span class="method-name">BharatPe</span>
       <span class="method-upi-small">
         BHARATPE2U0V0S7G2D90659@unitype
@@ -617,7 +631,8 @@
       class="selected-method-title"
       id="selectedMethodTitle"
     >
-      🟠 Super Money
+      <img src="images.png" id="selectedMethodImg" class="selected-method-img" alt="">
+      <span id="selectedMethodText">Super Money</span>
     </div>
 
     <img
@@ -852,7 +867,7 @@
 
 
   /* =========================================================
-     PAYMENT METHODS
+     PAYMENT METHODS (WITH LOGOS)
   ========================================================= */
 
   const PAYMENT_METHODS = {
@@ -861,7 +876,7 @@
 
       name: "Super Money",
 
-      icon: "🟠",
+      iconImg: "images.png",
 
       upi:
         "smartmoney7@nyes",
@@ -876,7 +891,7 @@
 
       name: "PhonePe",
 
-      icon: "🔵",
+      iconImg: "08be068f3e4fb0c701ff73760b6f83f8.jpg",
 
       upi:
         "smartmoney7@nyes",
@@ -891,7 +906,7 @@
 
       name: "Google Pay",
 
-      icon: "🟢",
+      iconImg: "76a81707455d435794782797a7fedf67.jpg",
 
       upi:
         "andw7642-4@okhdfcbank",
@@ -906,7 +921,7 @@
 
       name: "BharatPe",
 
-      icon: "🟣",
+      iconImg: "596cfa48c5780411439b0569e44b59ee.jpg",
 
       upi:
         "BHARATPE2U0V0S7G2D90659@unitype",
@@ -925,8 +940,6 @@
 
   /* =========================================================
      CHECKOUT DATA
-
-     PASSWORD IS NEVER READ OR SAVED.
   ========================================================= */
 
   let checkoutData = {};
@@ -1068,12 +1081,15 @@
       );
 
 
-    /* Update selected title */
+    /* Update selected title & logo */
 
     document.getElementById(
-      "selectedMethodTitle"
-    ).innerText =
-      `${payment.icon} ${payment.name}`;
+      "selectedMethodText"
+    ).innerText = payment.name;
+
+    document.getElementById(
+      "selectedMethodImg"
+    ).src = payment.iconImg;
 
 
     /* Update QR */
@@ -1097,6 +1113,40 @@
     ).innerText =
       payment.upi;
 
+  }
+
+
+  /* =========================================================
+     SUCCESS SOUND & VOICE ALERT
+  ========================================================= */
+
+  function playSuccessAlert() {
+    try {
+      // Audio Chime (Web Audio API)
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.6);
+    } catch (e) {
+      console.warn("Audio Context blocked or unsupported", e);
+    }
+
+    // Voice Announcement (Speech Synthesis)
+    if ('speechSynthesis' in window) {
+      const msg = "Congratulations! Aapka payment success ho gaya hai. Aapko hamari team jaldi hi dashboard provide kar degi.";
+      const utterance = new SpeechSynthesisUtterance(msg);
+      utterance.lang = 'hi-IN';
+      utterance.rate = 1.0;
+      window.speechSynthesis.speak(utterance);
+    }
   }
 
 
@@ -2059,9 +2109,6 @@
 
       /* ===================================================
          STEP 4 — GET AUTH USER
-         
-         IMPORTANT:
-         RLS requires auth.uid() = user_id.
       =================================================== */
 
       btn.innerText =
@@ -2184,10 +2231,6 @@
 
       /* ===================================================
          STEP 7 — DATABASE INSERT
-         
-         NO PASSWORD
-         USER ID INCLUDED
-         PAYMENT METHOD INCLUDED
       =================================================== */
 
       btn.innerText =
@@ -2342,11 +2385,13 @@
 
 
       /* ===================================================
-         SUCCESS
+         SUCCESS & PLAY SOUND / VOICE ALERT
       =================================================== */
 
       btn.innerText =
         "Payment Proof Submitted";
+
+      playSuccessAlert();
 
 
       const successBox =
@@ -2357,12 +2402,12 @@
 
       successBox.innerHTML =
         `
-          <strong>✓ Payment proof submitted successfully.</strong><br>
+          <strong>✓ Congratulations! Aapka payment success ho gaya hai.</strong><br>
           Payment Method:
           <strong>${selectedPaymentMethod}</strong><br>
+          Aapko hamari team jaldi hi dashboard provide kar degi.<br>
           Your request is now
-          <strong>Pending Verification</strong>.<br>
-          Please wait for payment verification before your account is activated.
+          <strong>Pending Verification</strong>.
         `;
 
 
@@ -2384,7 +2429,7 @@
             "index.html";
 
         },
-        3500
+        4500
       );
 
 
