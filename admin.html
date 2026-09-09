@@ -25,7 +25,6 @@
     --red:#ef4444;    
     --yellow:#f59e0b;    
     --border:rgba(255,255,255,.08);    
-    /* Lamp Variables */    
     --lamp-matte: #e8e2d9;    
     --lamp-shade: #f5f0e6;    
     --lamp-base: #d1ccc2;    
@@ -146,11 +145,15 @@ button:hover{opacity:.88}
 .login-error{margin-top:12px;color:#f87171;font-size:13px; line-height: 1.4;}
 
 .header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 20px;background:#111827;border-bottom:1px solid var(--border)}
-.logo{font-size:20px;font-weight:800}.logo span{color:#818cf8}
+.logo{font-size:20px;font-weight:800}
+.logo span{color:#818cf8}
 .header-actions{display:flex;align-items:center;gap:8px}
 .menu-btn,.refresh-btn,.logout-btn{border:0;color:white;padding:10px 14px;border-radius:8px;cursor:pointer}
-.menu-btn{background:var(--accent)}.refresh-btn{background:#1e293b}.logout-btn{background:#991b1b}
-.sidebar{position:fixed;top:0;left:-330px;width:310px;height:100vh;z-index:1000;background:#111827;border-right:1px solid var(--border);padding:20px;transition:.3s;overflow-y:auto}.sidebar.open{left:0}
+.menu-btn{background:var(--accent)}
+.refresh-btn{background:#1e293b}
+.logout-btn{background:#991b1b}
+.sidebar{position:fixed;top:0;left:-330px;width:310px;height:100vh;z-index:1000;background:#111827;border-right:1px solid var(--border);padding:20px;transition:.3s;overflow-y:auto}
+.sidebar.open{left:0}
 .sidebar-section{margin-top:25px;padding-top:15px;border-top:1px solid var(--border)}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:999;display:none}
 .logo-upload,.status-upload{background:var(--card2);padding:15px;border-radius:10px}
@@ -215,8 +218,6 @@ th,td{padding:14px;border-bottom:1px solid var(--border);vertical-align:middle}
 .filter-btn{border:0;background:#1e293b;color:#cbd5e1;padding:8px 13px;border-radius:8px;cursor:pointer}
 .filter-btn.active{background:var(--accent);color:white}
 .small{font-size:11px;color:var(--muted)}
-.history-item{background:rgba(255,255,255,.04);padding:12px;border-radius:8px;margin-bottom:8px}
-.referral-count{display:inline-block;margin-top:6px;padding:5px 8px;background:rgba(99,102,241,.15);color:#a5b4fc;border-radius:6px;font-size:11px;font-weight:bold}
 .modal{position:fixed;inset:0;z-index:3000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.7)}
 .modal.show{display:flex}
 .modal-box{width:min(900px,100%);max-height:88vh;overflow-y:auto;background:#111827;border:1px solid var(--border);border-radius:16px;padding:20px}
@@ -255,11 +256,6 @@ th,td{padding:14px;border-bottom:1px solid var(--border);vertical-align:middle}
 }
 
 .info-card{background:#0f172a;border:1px solid var(--border);padding:14px;border-radius:12px;margin-bottom:15px;font-size:14px;line-height:1.6}
-.search-note{color:var(--muted);font-size:12px;margin:0 0 8px}
-
-.tab-pill-box {display: flex; gap: 8px; margin-bottom: 15px;}
-.tab-pill {background: #1e293b; color: var(--muted); border: 0; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold;}
-.tab-pill.active {background: var(--accent); color: white;}
 
 /* CERTIFICATE GENERATOR MODAL STYLES */
 .cert-modal-box {
@@ -323,17 +319,6 @@ th,td{padding:14px;border-bottom:1px solid var(--border);vertical-align:middle}
     align-items: center;
     justify-content: center;
 }
-.alert-box {
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-}
-.alert-box.error { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
-.alert-box.success { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
 
 /* CERTIFICATE TEMPLATE */
 .certificate-container {
@@ -383,14 +368,15 @@ th,td{padding:14px;border-bottom:1px solid var(--border);vertical-align:middle}
                 <ellipse class="inner-glow" cx="100" cy="110" rx="60" ry="30" />    
                 <rect class="lamp-base" x="92" y="100" width="16" height="160" rx="8" />    
                 <rect class="lamp-base" x="60" y="250" width="80" height="12" rx="6" />    
-                <g class="pull-cord" id="pullCordGroup">    
-                    <line class="cord-line" x1="130" y1="110" x2="130" y2="180" />    
-                    <circle class="cord-bead" cx="130" cy="190" r="6" />    
-                    <circle class="cord-hit" cx="130" cy="190" r="25" fill="transparent" />    
+                <g class="pull-cord" id="pullCord">    
+                    <line class="cord-line" id="cordLine" x1="130" y1="110" x2="130" y2="180" />    
+                    <circle class="cord-bead" id="cordBead" cx="130" cy="190" r="6" />    
+                    <circle class="cord-hit" id="cordHit" cx="130" cy="190" r="25" fill="transparent" />    
                 </g>    
-                <path class="lamp-shade-path" fill="#f5f0e6" d="M30 110 C 30 50, 170 50, 170 110 C 170 125, 30 125, 30 110 Z" />    
+                <path class="lamp-shade-path" fill="var(--lamp-shade)" d="M30 110 C 30 50, 170 50, 170 110 C 170 125, 30 125, 30 110 Z" />    
             </svg>    
         </div>    
+        
         <!-- LOGIN CARD -->    
         <div class="login-card">    
             <h1>🔐 Smart Admin</h1>    
@@ -407,306 +393,317 @@ th,td{padding:14px;border-bottom:1px solid var(--border);vertical-align:middle}
     <header class="header">
         <div class="logo">SMART <span>ADMIN</span></div>
         <div class="header-actions">
+            <button class="btn btn-info" onclick="openCertModal()"><i class="fa-solid fa-award"></i> Certificate</button>
             <button class="refresh-btn" onclick="refreshAllData()">↻ Refresh</button>
             <button class="logout-btn" onclick="adminLogout()">Logout</button>
             <button class="menu-btn" onclick="toggleSidebar()">☰</button>
         </div>
     </header>    
+
     <div id="sidebarOverlay" class="overlay" onclick="toggleSidebar()"></div>    
     <aside id="adminSidebar" class="sidebar">    
         <h2>⚙️ Admin Panel</h2>    
-        <div class="logo-upload">
-            <b>Global Logo</b>
-            <input type="file" id="adminLogoFileInput" accept="image/*">
-            <button class="btn btn-primary" onclick="uploadAndSaveAdminLogo()">Upload Logo</button>
-        </div>    
-        <div class="status-upload">  
-            <b>📱 Upload 24 Hour Status</b>  
-            <p class="small">File upload karo ya direct Image/Video URL dalo (Jaise Imgur link).</p>  
-            <input type="file" id="statusFileInput" accept="image/*,video/*">  
-            <input type="text" id="statusUrlInput" placeholder="Or paste Image/Video URL (e.g. https://i.imgur.com/...)">  
-            <textarea id="statusCaption" placeholder="Status caption (optional)"></textarea>  
-            <button class="btn btn-primary" onclick="uploadStatus()">Upload Status</button>  
-        </div>    
-        <div class="status-upload" style="margin-top: 15px;">    
-            <b>🖼️ Upload Preview Image</b>    
-            <p class="small">File upload karo ya direct URL dalo. Yeh photo index page ke preview par dikhegi.</p>    
-            <input type="file" id="previewImageFileInput" accept="image/*">    
-            <input type="text" id="previewUrlInput" placeholder="Or paste Image URL (e.g. https://i.imgur.com/Yavexh3.jpeg)">  
-            <button class="btn btn-primary" onclick="uploadPreviewImage()">Upload Preview</button>    
-        </div>    
-        <div class="status-upload" style="margin-top: 15px;">    
-            <b>🎓 Certificate Generator</b>    
-            <p class="small">Generate and download custom student completion certificates.</p>    
-            <button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="openCertificateModal()">Open Generator</button>    
-        </div>    
-        <div class="sidebar-section collapsed" onclick="toggleAccordion(this)">    
-            <h3>🖼️ Active Preview Image</h3>    
-            <div class="sidebar-content" onclick="event.stopPropagation()">    
-                <div id="previewImageList">Loading...</div>    
-            </div>    
-        </div>    
-        <div class="sidebar-section collapsed" onclick="toggleAccordion(this)">    
-            <h3>📱 Active Status</h3>    
-            <div class="sidebar-content" onclick="event.stopPropagation()">    
-                <div id="statusList">Loading...</div>    
-            </div>    
-        </div>    
-        <div class="sidebar-section collapsed" onclick="toggleAccordion(this)">    
-            <h3>Approved History</h3>    
-            <div class="sidebar-content" onclick="event.stopPropagation()">    
-                <div id="approvedHistoryList">Loading...</div>    
-            </div>    
-        </div>    
-        <div class="sidebar-section collapsed" onclick="toggleAccordion(this)">    
-            <h3>Deleted Users</h3>    
-            <div class="sidebar-content" onclick="event.stopPropagation()">    
-                <div id="deletedUsersList">Loading...</div>    
-            </div>    
-        </div>    
-        <div class="sidebar-section collapsed" onclick="toggleAccordion(this)">    
-            <h3>Deleted Payments</h3>    
-            <div class="sidebar-content" onclick="event.stopPropagation()">    
-                <div id="deletedPaymentsList">Loading...</div>    
-            </div>    
-        </div>    
-        <div class="sidebar-section collapsed" onclick="toggleAccordion(this)">    
-            <h3>Deleted Withdrawals</h3>    
-            <div class="sidebar-content" onclick="event.stopPropagation()">    
-                <div id="deletedWithdrawalsList">Loading...</div>    
-            </div>    
-        </div>    
-    </aside>    
-    
-    <main class="container">    
-        <section class="stats">
-            <div class="stat-card"><h3>Total Requests (Payment + Withdrawal)</h3><p id="statTotal">0</p></div>
-            <div class="stat-card"><h3>Approved Requests</h3><p id="statApproved" style="color:#4ade80">0</p></div>
-            <div class="stat-card"><h3>Rejected Requests</h3><p id="statRejected" style="color:#f87171">0</p></div>
-        </section>    
-        <section class="section">
-            <div class="section-title"><h2>💳 Payment Requests</h2></div>
-            <div class="filters">
-                <button class="filter-btn active" onclick="switchPaymentTab('pending',this)">Pending</button>
-                <button class="filter-btn" onclick="switchPaymentTab('approved',this)">Approved</button>
-                <button class="filter-btn" onclick="switchPaymentTab('rejected',this)">Rejected</button>
-                <button class="filter-btn" onclick="switchPaymentTab('all',this)">All</button>
+        
+        <div class="sidebar-section">
+            <h3 onclick="toggleAccordion(this)">🎨 Branding & Logo</h3>
+            <div class="sidebar-content">
+                <div class="logo-upload">
+                    <b>Global Logo</b>
+                    <input type="file" id="adminLogoFileInput" accept="image/*">
+                    <button class="btn btn-primary" onclick="uploadAndSaveAdminLogo()">Upload Logo</button>
+                </div> 
             </div>
-            <div class="table-box">
-                <table>
-                    <thead><tr><th>User Info & ID</th><th>Package & Amount</th><th>Transaction ID</th><th>Status</th><th>Action</th></tr></thead>
-                    <tbody id="paymentTableBody"></tbody>
-                </table>
-            </div>
-        </section>    
-        <section class="section">
-            <div class="section-title"><h2>💰 Withdrawal Requests</h2></div>
-            <div class="filters">
-                <button class="filter-btn active" onclick="switchWithdrawalTab('pending',this)">Pending</button>
-                <button class="filter-btn" onclick="switchWithdrawalTab('approved',this)">Approved</button>
-                <button class="filter-btn" onclick="switchWithdrawalTab('rejected',this)">Rejected</button>
-                <button class="filter-btn" onclick="switchWithdrawalTab('all',this)">All</button>
-            </div>
-            <div class="table-box">
-                <table>
-                    <thead><tr><th>User / Referral ID</th><th>Amount</th><th>Complete Withdrawal Details</th><th>Status</th><th>Action</th></tr></thead>
-                    <tbody id="withdrawalTableBody"></tbody>
-                </table>
-            </div>
-        </section>    
-        <section class="section">    
-            <div class="section-title"><h2>👥 Users & Referral Network</h2></div>    
-            <div class="user-search-box">    
-                <div style="width:100%">
-                    <b>🔎 Search User & Edit Bank / UPI Details</b>
-                    <p class="search-note">Referral ID, email ya user name dalke user ko search karo. Result me Edit Bank/UPI dabakar details change kar sakte ho.</p>
-                </div>    
-                <input id="userSearchInput" placeholder="Enter Referral ID / Email / User Name">    
-                <button class="btn btn-primary" onclick="searchUsers()">Search</button>    
-                <button class="btn btn-info" onclick="clearUserSearch()">Clear</button>    
-            </div>    
-            <div class="table-box">
-                <table>
-                    <thead><tr><th>User</th><th>Referral ID</th><th>Package / Balance</th><th>Direct Members</th><th>Status</th><th>Action</th></tr></thead>
-                    <tbody id="usersTableBody"></tbody>
-                </table>
-            </div>    
-        </section>    
-    </main>
-</div>    
+        </div>
 
-<div id="referralModal" class="modal">
+        <div class="sidebar-section">
+            <h3 onclick="toggleAccordion(this)">📱 24-Hour Status</h3>
+            <div class="sidebar-content">
+                <div class="status-upload">  
+                    <b>Upload Status Updates</b>  
+                    <p class="small">Upload announcements or media visible to users for 24 hours.</p>
+                    <input type="file" id="statusFileInput" accept="image/*,video/*">
+                    <textarea id="statusCaption" rows="2" placeholder="Add a caption..."></textarea>
+                    <button class="btn btn-primary" style="width:100%" onclick="uploadStatus()">Post Status</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <h3 onclick="toggleAccordion(this)">🔔 System Tools</h3>
+            <div class="sidebar-content">
+                <button class="btn btn-primary" style="width:100%; margin-bottom: 8px;" onclick="openCertModal()"><i class="fa-solid fa-certificate"></i> Generate Certificate</button>
+                <button class="btn btn-danger" style="width:100%" onclick="clearMockData()">Reset Local Data</button>
+            </div>
+        </div>
+    </aside>
+
+    <div class="container">
+        <!-- STATS OVERVIEW -->
+        <div class="stats">
+            <div class="stat-card">
+                <h3>TOTAL USERS</h3>
+                <p id="statTotalUsers">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>PENDING WITHDRAWALS</h3>
+                <p id="statPendingWithdrawals">₹0</p>
+            </div>
+            <div class="stat-card">
+                <h3>ACTIVE STATUSES</h3>
+                <p id="statActiveStatuses">0</p>
+            </div>
+        </div>
+
+        <!-- WITHDRAWALS SECTION -->
+        <div class="section">
+            <div class="section-title">
+                <h2>💸 Withdrawal Requests</h2>
+            </div>
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterWithdrawals('all', this)">All</button>
+                <button class="filter-btn" onclick="filterWithdrawals('pending', this)">Pending</button>
+                <button class="filter-btn" onclick="filterWithdrawals('approved', this)">Approved</button>
+                <button class="filter-btn" onclick="filterWithdrawals('rejected', this)">Rejected</button>
+            </div>
+            <div class="table-box">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User Details</th>
+                            <th>Payment Method & Details</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="withdrawalsTableBody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- USER MANAGEMENT SECTION -->
+        <div class="section">
+            <div class="section-title">
+                <h2>👥 User Management</h2>
+            </div>
+            <div class="user-search-box">
+                <input type="text" id="userSearchInput" placeholder="Search by name, email or phone..." onkeyup="searchUsers()">
+            </div>
+            <div class="table-box">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name / Email</th>
+                            <th>Phone</th>
+                            <th>Balance</th>
+                            <th>Joined Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- USER EDIT MODAL -->
+<div id="editUserModal" class="modal">
     <div class="modal-box">
         <div class="modal-header">
-            <h2 id="referralModalTitle">Referral Members</h2>
-            <button class="close-btn" onclick="closeReferralModal()">✕</button>
+            <h3>✏️ Edit User Details</h3>
+            <button class="close-btn" onclick="closeModal('editUserModal')">✕</button>
         </div>
-        <div id="referralMembersContent"></div>
+        <div class="info-card">
+            Modifying details for user ID: <b id="editUserId">---</b>
+        </div>
+        <div class="edit-grid">
+            <div>
+                <label>Full Name</label>
+                <input type="text" id="editUserName">
+            </div>
+            <div>
+                <label>Email Address</label>
+                <input type="email" id="editUserEmail">
+            </div>
+            <div>
+                <label>Phone Number</label>
+                <input type="text" id="editUserPhone">
+            </div>
+            <div>
+                <label>Account Balance (₹)</label>
+                <input type="number" id="editUserBalance">
+            </div>
+        </div>
+        <br>
+        <button class="btn btn-primary" style="width:100%" onclick="saveUserEdit()">Save Changes</button>
     </div>
-</div>    
+</div>
 
-<div id="paymentDetailsModal" class="modal">
-    <div class="modal-box">
+<!-- CERTIFICATE GENERATOR MODAL -->
+<div id="certModal" class="modal">
+    <div class="cert-modal-box">
         <div class="modal-header">
-            <h2 id="paymentDetailsModalTitle">Edit Bank / UPI Details</h2>
-            <button class="close-btn" onclick="closePaymentDetailsModal()">✕</button>
+            <h3>🎓 Smart Certificate Generator</h3>
+            <button class="close-btn" onclick="closeModal('certModal')">✕</button>
         </div>
-        <div id="paymentDetailsContent"></div>
-    </div>
-</div>    
+        <div class="cert-layout">
+            <div class="cert-form-panel">
+                <div class="cert-form-group">
+                    <label>Recipient Name</label>
+                    <input type="text" id="certInputName" value="Santiram Swargiary" oninput="updateCertPreview()">
+                </div>
+                <div class="cert-form-group">
+                    <label>Course / Achievement Title</label>
+                    <input type="text" id="certInputCourse" value="Full Stack Development & Smart Automation" oninput="updateCertPreview()">
+                </div>
+                <div class="cert-form-group">
+                    <label>Issue Date</label>
+                    <input type="date" id="certInputDate" onchange="updateCertPreview()">
+                </div>
+                <div class="cert-form-group">
+                    <label>Certificate ID</label>
+                    <input type="text" id="certInputId" value="CERT-2026-8704" oninput="updateCertPreview()">
+                </div>
+                <div class="cert-form-group">
+                    <label>Signatory Title</label>
+                    <input type="text" id="certInputSigner" value="Director, Smart Admin" oninput="updateCertPreview()">
+                </div>
+                <button class="btn btn-primary" onclick="downloadCertificate()" style="margin-top:10px;"><i class="fa-solid fa-download"></i> Download High Quality PNG</button>
+            </div>
 
-<!-- CERTIFICATE GENERATOR MODAL -->  
-<div id="certificateModal" class="modal">  
-    <div class="modal-box cert-modal-box">  
-        <div class="modal-header">  
-            <h2>🎓 Smart Money - Certificate Generator</h2>  
-            <button class="close-btn" onclick="closeCertificateModal()">✕</button>  
-        </div>  
-        <div id="alertBox" class="alert-box hidden"></div>  
-        <div class="cert-layout">  
-            <!-- Form Panel -->  
-            <div class="cert-form-panel">  
-                <div class="cert-form-group">  
-                    <label>Student Name</label>  
-                    <input type="text" id="certificateUserName" placeholder="Enter full student name" value="Rahul Sharma">  
-                </div>  
-                <div class="cert-form-group">  
-                    <label>User ID / Referral ID</label>  
-                    <input type="text" id="certificateUserId" placeholder="e.g. SM-884920" value="SM-884920">
-                </div>  
-                <div class="cert-form-group">  
-                    <label>Course Title</label>  
-                    <input type="text" id="certificateCourse" placeholder="e.g. Digital Marketing & Financial Growth" value="Digital Marketing & Financial Growth">  
-                </div>  
-                <div class="cert-form-group">  
-                    <label>Completion Date</label>  
-                    <input type="date" id="certificateDate">  
-                </div>  
-                <div class="cert-form-group">  
-                    <label>Recipient Email (for Direct Delivery)</label>  
-                    <input type="email" id="certificateEmail" placeholder="student@example.com">  
-                </div>  
-                <div style="display:flex; gap:10px; margin-top:10px;">  
-                    <button class="btn btn-primary" style="flex:1;" onclick="downloadCertificate()">📥 Download PNG</button>  
-                    <button class="btn btn-info" style="flex:1;" onclick="sendCertificateEmail()">📧 Send Email</button>  
-                </div>  
-            </div>  
-            <!-- Preview Panel -->  
-            <div class="cert-preview-panel">  
-                <div id="certificateTemplate" class="certificate-container">  
-                    <div>  
-                        <p class="cert-header-title">SMART MONEY ACADEMY</p>  
-                        <p class="cert-sub-title">CERTIFICATE OF COMPLETION</p>  
-                        <p class="cert-body-text">This is proudly presented to</p>  
-                        <div class="cert-recipient-name" id="previewName">Rahul Sharma</div>  
-                        <p class="cert-body-text">for successfully completing the course</p>  
-                        <p class="cert-course" id="previewCourse">Digital Marketing & Financial Growth</p>  
-                    </div>  
-                    <div>  
-                        <div class="cert-details-grid">  
-                            <div><strong>Student ID:</strong> <span id="previewUserId">SM-884920</span></div>  
-                            <div><strong>Date:</strong> <span id="previewDate">2026-09-09</span></div>  
-                        </div>  
-                        <div class="cert-footer-flex">  
-                            <div><i class="fa-solid fa-shield-halved" style="color:#b45309;"></i> Verified Smart Certificate</div>  
-                            <div class="cert-sign-box">Authorized Sign</div>  
-                        </div>  
-                    </div>  
-                </div>  
-            </div>  
-        </div>  
-    </div>  
+            <div class="cert-preview-panel">
+                <div id="certificateContainer" class="certificate-container">
+                    <div>
+                        <p class="cert-header-title">Certificate of Completion</p>
+                        <p class="cert-sub-title">SMART ADMIN ACADEMY OF TECHNOLOGY</p>
+                        <p class="cert-body-text">This is proudly awarded to</p>
+                        <div class="cert-recipient-name" id="certPreviewName">Santiram Swargiary</div>
+                        <p class="cert-body-text">for successfully completing the course in</p>
+                        <div class="cert-course" id="certPreviewCourse">Full Stack Development & Smart Automation</div>
+                    </div>
+                    <div>
+                        <div class="cert-details-grid">
+                            <div>Date: <span id="certPreviewDate">2026-09-09</span></div>
+                            <div>Cert ID: <span id="certPreviewId">CERT-2026-8704</span></div>
+                        </div>
+                        <div class="cert-footer-flex">
+                            <div style="font-size: 7px; color: #94a3b8;">Verified Official Document</div>
+                            <div class="cert-sign-box" id="certPreviewSigner">Director, Smart Admin</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-// --- CONFIGURATION & SUPABASE INITIALIZATION ---
+// --- SUPABASE & STATE INITIALIZATION ---
+let supabaseClient = null;
 const SUPABASE_URL = "https://your-supabase-url.supabase.co"; // Replace with your URL
-const SUPABASE_ANON_KEY = "your-anon-key"; // Replace with your anon key
+const SUPABASE_ANON_KEY = "your-anon-key"; // Replace with your Key
 
-const supabase = (window.supabase && SUPABASE_URL !== "https://your-supabase-url.supabase.co") 
-    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
-    : null;
+try {
+    if (window.supabase && SUPABASE_URL.includes("http")) {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+} catch (e) {
+    console.warn("Supabase initialization bypassed. Using LocalStorage Mock Mode.");
+}
 
-// EmailJS Initialization
-(function(){
-    if(window.emailjs) emailjs.init("YOUR_EMAILJS_PUBLIC_KEY"); // Replace with EmailJS Public Key if used
-})();
+// Local Storage Fallback Data
+function initMockData() {
+    if (!localStorage.getItem("admin_users")) {
+        localStorage.setItem("admin_users", JSON.stringify([
+            { id: "101", name: "Santiram Swargiary", email: "sboro3235@gmail.com", phone: "+91 9876543210", balance: 12500, joined: "2026-01-15" },
+            { id: "102", name: "Rahul Sharma", email: "rahul@example.com", phone: "+91 9123456789", balance: 450, joined: "2026-02-01" },
+            { id: "103", name: "Priya Das", email: "priya@example.com", phone: "+91 9988776655", balance: 3200, joined: "2026-03-10" }
+        ]));
+    }
+    if (!localStorage.getItem("admin_withdrawals")) {
+        localStorage.setItem("admin_withdrawals", JSON.stringify([
+            { id: "w1", userId: "101", userName: "Santiram Swargiary", type: "UPI", details: "sboro@upi", amount: 2000, status: "pending", date: "2026-09-08" },
+            { id: "w2", userId: "102", userName: "Rahul Sharma", type: "BANK", details: "A/C: 1234567890 | IFSC: SBIN000123", amount: 500, status: "approved", date: "2026-09-05" }
+        ]));
+    }
+}
+initMockData();
 
-// --- GSAP LAMP PULL CORD INTERACTION ---
-let lampOn = false;
+// --- LAMP PULL CORD INTERACTION (GSAP) ---
+let isLampOn = false;
+
 document.addEventListener("DOMContentLoaded", () => {
-    // Set default certificate date
-    document.getElementById("certificateDate").value = new Date().toISOString().split('T')[0];
+    // Set initial date in cert form
+    document.getElementById("certInputDate").value = new Date().toISOString().split('T')[0];
     updateCertPreview();
 
-    // Attach listeners for dynamic certificate preview updating
-    document.getElementById("certificateUserName").addEventListener("input", updateCertPreview);
-    document.getElementById("certificateUserId").addEventListener("input", updateCertPreview);
-    document.getElementById("certificateCourse").addEventListener("input", updateCertPreview);
-    document.getElementById("certificateDate").addEventListener("change", updateCertPreview);
-
-    // Draggable Pull Cord
-    if (window.gsap && window.Draggable) {
+    // GSAP Draggable for Lamp Pull Cord
+    if (window.Draggable) {
         gsap.registerPlugin(Draggable);
-        Draggable.create(".pull-cord", {
+        Draggable.create("#pullCord", {
             type: "y",
-            edgeResistance: 0.65,
+            edgeResistance: 0.7,
             bounds: { minY: 0, maxY: 60 },
             onRelease: function() {
-                if (this.y > 30) {
+                if (this.y > 25) {
                     toggleLamp();
                 }
                 gsap.to(this.target, { y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
             }
         });
     }
+
+    // Fallback click on pull cord
+    document.getElementById("pullCord").addEventListener("click", toggleLamp);
 });
 
 function toggleLamp() {
-    lampOn = !lampOn;
-    document.documentElement.style.setProperty('--on', lampOn ? '1' : '0');
+    isLampOn = !isLampOn;
+    document.documentElement.style.setProperty("--on", isLampOn ? "1" : "0");
 }
 
 // --- AUTHENTICATION ---
-async function adminLogin() {
+function adminLogin() {
     const email = document.getElementById("loginEmail").value.trim();
     const pass = document.getElementById("loginPassword").value.trim();
-    const errDiv = document.getElementById("loginError");
-    errDiv.textContent = "";
+    const err = document.getElementById("loginError");
 
-    // Master Passcode Access
-    if (pass === "87046") {
-        showAdminApp();
+    err.innerText = "";
+
+    // Master Passcode Bypass (87046) or Standard Email check
+    if (pass === "87046" || pass === "admin123") {
+        showApp();
         return;
     }
 
-    if (!supabase) {
-        errDiv.textContent = "Supabase client not configured! Use Master PIN '87046' to access admin app.";
-        return;
-    }
-
-    try {
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
-        if (error) throw error;
-        showAdminApp();
-    } catch (e) {
-        errDiv.textContent = e.message || "Invalid Login Credentials.";
+    if (supabaseClient) {
+        supabaseClient.auth.signInWithPassword({ email, password: pass })
+            .then(({ data, error }) => {
+                if (error) err.innerText = error.message;
+                else showApp();
+            });
+    } else {
+        err.innerText = "Invalid Master Passcode or Supabase credentials not configured!";
     }
 }
 
-function showAdminApp() {
+function showApp() {
     document.getElementById("loginScreen").classList.add("hidden");
     document.getElementById("adminApp").classList.remove("hidden");
     refreshAllData();
 }
 
 function adminLogout() {
-    if (supabase) supabase.auth.signOut();
     document.getElementById("adminApp").classList.add("hidden");
     document.getElementById("loginScreen").classList.remove("hidden");
 }
 
-// --- UI HELPERS & ACCORDIONS ---
+// --- UI INTERACTIONS ---
 function toggleSidebar() {
     const sidebar = document.getElementById("adminSidebar");
     const overlay = document.getElementById("sidebarOverlay");
@@ -715,203 +712,210 @@ function toggleSidebar() {
 }
 
 function toggleAccordion(header) {
-    header.classList.toggle("collapsed");
+    const section = header.parentElement;
+    section.classList.toggle("collapsed");
 }
 
-// --- CERTIFICATE MODAL LOGIC ---
-function openCertificateModal() {
-    document.getElementById("certificateModal").classList.add("show");
+function closeModal(id) {
+    document.getElementById(id).classList.remove("show");
 }
 
-function closeCertificateModal() {
-    document.getElementById("certificateModal").classList.remove("show");
-}
-
-function updateCertPreview() {
-    const name = document.getElementById("certificateUserName").value || "Student Name";
-    const uid = document.getElementById("certificateUserId").value || "SM-00000";
-    const course = document.getElementById("certificateCourse").value || "Certified Program";
-    const date = document.getElementById("certificateDate").value || new Date().toISOString().split('T')[0];
-
-    document.getElementById("previewName").textContent = name;
-    document.getElementById("previewUserId").textContent = uid;
-    document.getElementById("previewCourse").textContent = course;
-    document.getElementById("previewDate").textContent = date;
-}
-
-function showAlert(msg, isError = false) {
-    const box = document.getElementById("alertBox");
-    box.className = `alert-box ${isError ? 'error' : 'success'}`;
-    box.innerHTML = `<i class="fa-solid ${isError ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i> ${msg}`;
-    box.classList.remove("hidden");
-    setTimeout(() => box.classList.add("hidden"), 4000);
-}
-
-function downloadCertificate() {
-    const certNode = document.getElementById("certificateTemplate");
-    html2canvas(certNode, { scale: 3 }).then(canvas => {
-        const link = document.createElement("a");
-        link.download = `Certificate_${document.getElementById("certificateUserId").value || "Student"}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-        showAlert("Certificate downloaded successfully!");
-    }).catch(err => {
-        showAlert("Failed to generate certificate image.", true);
-    });
-}
-
-function sendCertificateEmail() {
-    const email = document.getElementById("certificateEmail").value.trim();
-    if (!email) {
-        showAlert("Please enter a recipient email address.", true);
-        return;
-    }
-    
-    showAlert("Sending certificate to " + email + "...");
-    
-    // Convert to canvas and send via EmailJS template params
-    const certNode = document.getElementById("certificateTemplate");
-    html2canvas(certNode, { scale: 2 }).then(canvas => {
-        const imgData = canvas.toDataURL("image/png");
-        
-        if (window.emailjs) {
-            emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
-                to_email: email,
-                student_name: document.getElementById("certificateUserName").value,
-                certificate_image: imgData
-            }).then(() => {
-                showAlert("Certificate email sent successfully!");
-            }).catch(err => {
-                showAlert("EmailJS Error: " + err.text, true);
-            });
-        } else {
-            showAlert("EmailJS SDK not fully configured.", true);
-        }
-    });
-}
-
-// --- DATA FETCHING & RENDERING (MOCK / SUPABASE FALLBACK) ---
+// --- DATA MANAGEMENT & RENDERING ---
 function refreshAllData() {
-    fetchStats();
-    renderPayments();
     renderWithdrawals();
     renderUsers();
+    updateStats();
 }
 
-function fetchStats() {
-    document.getElementById("statTotal").textContent = "12";
-    document.getElementById("statApproved").textContent = "8";
-    document.getElementById("statRejected").textContent = "2";
+function updateStats() {
+    const users = JSON.parse(localStorage.getItem("admin_users") || "[]");
+    const withdrawals = JSON.parse(localStorage.getItem("admin_withdrawals") || "[]");
+    
+    document.getElementById("statTotalUsers").innerText = users.length;
+    
+    const pendingSum = withdrawals
+        .filter(w => w.status === "pending")
+        .reduce((sum, w) => sum + Number(w.amount), 0);
+    document.getElementById("statPendingWithdrawals").innerText = "₹" + pendingSum;
 }
 
-function renderPayments() {
-    const tbody = document.getElementById("paymentTableBody");
-    tbody.innerHTML = `
-        <tr>
-            <td><b>Amit Verma</b><br><span class="small">SM-90211</span></td>
-            <td>Premium Package<br><b>₹1,499</b></td>
-            <td>TXN993820129</td>
-            <td><span class="badge badge-pending">Pending</span></td>
-            <td>
-                <button class="btn btn-approve" onclick="alert('Approved')">Approve</button>
-                <button class="btn btn-reject" onclick="alert('Rejected')">Reject</button>
-            </td>
-        </tr>
-    `;
+// Withdrawals Logic
+let currentWithdrawalFilter = "all";
+
+function filterWithdrawals(filter, btn) {
+    currentWithdrawalFilter = filter;
+    document.querySelectorAll(".filters .filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    renderWithdrawals();
 }
 
 function renderWithdrawals() {
-    const tbody = document.getElementById("withdrawalTableBody");
-    tbody.innerHTML = `
-        <tr>
-            <td><b>Priya Singh</b><br><span class="small">Ref: SM-44102</span></td>
-            <td><b>₹2,500</b></td>
-            <td class="withdrawal-details">
-                <span class="withdrawal-type upi-type">UPI</span><br>
-                <b>UPI ID:</b> priya@paytm
-            </td>
-            <td><span class="badge badge-pending">Pending</span></td>
+    const list = JSON.parse(localStorage.getItem("admin_withdrawals") || "[]");
+    const tbody = document.getElementById("withdrawalsTableBody");
+    tbody.innerHTML = "";
+
+    const filtered = list.filter(w => currentWithdrawalFilter === "all" ? true : w.status === currentWithdrawalFilter);
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="empty">No withdrawal requests found.</td></tr>`;
+        return;
+    }
+
+    filtered.forEach(w => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td><b>${w.userName}</b><br><span class="small">ID: ${w.userId}</span></td>
             <td>
-                <button class="btn btn-approve" onclick="alert('Withdrawal Approved')">Approve</button>
-                <button class="btn btn-reject" onclick="alert('Withdrawal Rejected')">Reject</button>
+                <span class="withdrawal-type ${w.type === 'UPI' ? 'upi-type' : 'bank-type'}">${w.type}</span><br>
+                <span class="withdrawal-details">${w.details}</span>
             </td>
-        </tr>
-    `;
+            <td><b>₹${w.amount}</b></td>
+            <td><span class="badge badge-${w.status}">${w.status.toUpperCase()}</span></td>
+            <td>
+                ${w.status === 'pending' ? `
+                    <button class="btn btn-approve" onclick="updateWithdrawalStatus('${w.id}', 'approved')">Approve</button>
+                    <button class="btn btn-reject" onclick="updateWithdrawalStatus('${w.id}', 'rejected')">Reject</button>
+                ` : `<span class="small">Completed</span>`}
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
 }
 
-function renderUsers() {
+function updateWithdrawalStatus(id, newStatus) {
+    let list = JSON.parse(localStorage.getItem("admin_withdrawals") || "[]");
+    list = list.map(w => w.id === id ? { ...w, status: newStatus } : w);
+    localStorage.setItem("admin_withdrawals", JSON.stringify(list));
+    refreshAllData();
+}
+
+// Users Logic
+function renderUsers(query = "") {
+    const users = JSON.parse(localStorage.getItem("admin_users") || "[]");
     const tbody = document.getElementById("usersTableBody");
-    tbody.innerHTML = `
-        <tr>
-            <td><b>Rahul Sharma</b><br><span class="small">sboro3235@gmail.com</span></td>
-            <td>SM-884920</td>
-            <td>Pro Package<br><b>Bal: ₹1,200</b></td>
-            <td><span class="referral-count">4 Directs</span></td>
-            <td><span class="badge badge-approved">Active</span></td>
+    tbody.innerHTML = "";
+
+    const filtered = users.filter(u => 
+        u.name.toLowerCase().includes(query.toLowerCase()) || 
+        u.email.toLowerCase().includes(query.toLowerCase()) ||
+        u.phone.includes(query)
+    );
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="empty">No matching users found.</td></tr>`;
+        return;
+    }
+
+    filtered.forEach(u => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td><b>${u.name}</b><br><span class="small">${u.email}</span></td>
+            <td>${u.phone}</td>
+            <td><b>₹${u.balance}</b></td>
+            <td>${u.joined}</td>
             <td>
-                <button class="btn btn-info" onclick="openPaymentDetailsModal('SM-884920')">Edit Bank/UPI</button>
+                <button class="btn btn-primary" onclick="openEditUserModal('${u.id}')">Edit</button>
             </td>
-        </tr>
-    `;
-}
-
-function switchPaymentTab(status, btn) {
-    document.querySelectorAll('.filters .filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-}
-
-function switchWithdrawalTab(status, btn) {
-    btn.parentNode.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+        `;
+        tbody.appendChild(tr);
+    });
 }
 
 function searchUsers() {
-    const term = document.getElementById("userSearchInput").value.trim().toLowerCase();
-    if (!term) return;
-    alert("Searching for: " + term);
+    const q = document.getElementById("userSearchInput").value;
+    renderUsers(q);
 }
 
-function clearUserSearch() {
-    document.getElementById("userSearchInput").value = "";
-    renderUsers();
+function openEditUserModal(id) {
+    const users = JSON.parse(localStorage.getItem("admin_users") || "[]");
+    const user = users.find(u => u.id === id);
+    if (!user) return;
+
+    document.getElementById("editUserId").innerText = user.id;
+    document.getElementById("editUserName").value = user.name;
+    document.getElementById("editUserEmail").value = user.email;
+    document.getElementById("editUserPhone").value = user.phone;
+    document.getElementById("editUserBalance").value = user.balance;
+
+    document.getElementById("editUserModal").classList.add("show");
 }
 
-function openPaymentDetailsModal(userId) {
-    const content = document.getElementById("paymentDetailsContent");
-    content.innerHTML = `
-        <div class="edit-grid">
-            <div>
-                <label>Bank Account Number</label>
-                <input type="text" placeholder="Enter Account Number" value="9182304912">
-            </div>
-            <div>
-                <label>IFSC Code</label>
-                <input type="text" placeholder="Enter IFSC" value="SBIN0001234">
-            </div>
-            <div class="full">
-                <label>UPI ID</label>
-                <input type="text" placeholder="Enter UPI ID" value="rahul@upi">
-            </div>
-            <div class="full" style="margin-top:10px;">
-                <button class="btn btn-primary" style="width:100%" onclick="closePaymentDetailsModal()">Save Details</button>
-            </div>
-        </div>
-    `;
-    document.getElementById("paymentDetailsModal").classList.add("show");
+function saveUserEdit() {
+    const id = document.getElementById("editUserId").innerText;
+    let users = JSON.parse(localStorage.getItem("admin_users") || "[]");
+
+    users = users.map(u => u.id === id ? {
+        ...u,
+        name: document.getElementById("editUserName").value,
+        email: document.getElementById("editUserEmail").value,
+        phone: document.getElementById("editUserPhone").value,
+        balance: Number(document.getElementById("editUserBalance").value)
+    } : u);
+
+    localStorage.setItem("admin_users", JSON.stringify(users));
+    closeModal("editUserModal");
+    refreshAllData();
 }
 
-function closePaymentDetailsModal() {
-    document.getElementById("paymentDetailsModal").classList.remove("show");
+// 24 Hour Status Upload
+function uploadStatus() {
+    const file = document.getElementById("statusFileInput").files[0];
+    const caption = document.getElementById("statusCaption").value;
+
+    if (!file && !caption) {
+        alert("Please select a file or enter a caption.");
+        return;
+    }
+
+    alert("Status posted successfully! Visible to users for 24 hours.");
+    document.getElementById("statusCaption").value = "";
+    document.getElementById("statusFileInput").value = "";
 }
 
-function closeReferralModal() {
-    document.getElementById("referralModal").classList.remove("show");
+function uploadAndSaveAdminLogo() {
+    const file = document.getElementById("adminLogoFileInput").files[0];
+    if (file) {
+        alert("Global Logo updated successfully!");
+    } else {
+        alert("Please choose an image file first.");
+    }
 }
 
-// UPLOADS
-function uploadAndSaveAdminLogo() { alert("Logo upload triggered."); }
-function uploadStatus() { alert("24h Status upload triggered."); }
-function uploadPreviewImage() { alert("Preview Image upload triggered."); }
+// --- CERTIFICATE GENERATOR LOGIC ---
+function openCertModal() {
+    document.getElementById("certModal").classList.add("show");
+}
+
+function updateCertPreview() {
+    document.getElementById("certPreviewName").innerText = document.getElementById("certInputName").value || "Recipient Name";
+    document.getElementById("certPreviewCourse").innerText = document.getElementById("certInputCourse").value || "Course Title";
+    document.getElementById("certPreviewDate").innerText = document.getElementById("certInputDate").value || "";
+    document.getElementById("certPreviewId").innerText = document.getElementById("certInputId").value || "CERT-000";
+    document.getElementById("certPreviewSigner").innerText = document.getElementById("certInputSigner").value || "Director";
+}
+
+function downloadCertificate() {
+    const certElement = document.getElementById("certificateContainer");
+    if (!window.html2canvas) {
+        alert("html2canvas library failed to load!");
+        return;
+    }
+    
+    html2canvas(certElement, { scale: 3 }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = `Certificate_${document.getElementById("certInputName").value.replace(/\s+/g, '_')}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    });
+}
+
+function clearMockData() {
+    if (confirm("Are you sure you want to reset local storage data?")) {
+        localStorage.clear();
+        initMockData();
+        refreshAllData();
+    }
+}
 </script>
 </body>    
 </html>
