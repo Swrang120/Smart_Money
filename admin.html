@@ -2412,7 +2412,101 @@ function getUserKey(user){
   
 /* =========================================================  
    USER MATCHING  
-========================================================= */  
+========================================================= */
+
+/* =========================================================
+   PAYMENT IDENTIFIER / STATUS HELPERS
+========================================================= */
+
+function normalizePaymentIdentifier(value){
+    return String(value ?? "").trim();
+}
+
+function paymentMatchesIdentifier(payment, identifier){
+    const target = normalizePaymentIdentifier(identifier);
+    if(!target || !payment) return false;
+    return [payment.id, payment.payment_id, payment.transaction_id].some(value =>
+        normalizePaymentIdentifier(value) === target
+    );
+}
+
+function getPaymentRecordKey(payment){
+    if(!payment) return null;
+    const candidates = [
+        ["id", payment.id],
+        ["payment_id", payment.payment_id],
+        ["transaction_id", payment.transaction_id]
+    ];
+    for(const [field, value] of candidates){
+        if(normalizePaymentIdentifier(value)){
+            return { field, value };
+        }
+    }
+    return null;
+}
+
+async function getPaymentRequestByIdentifier(identifier){
+    const requestId = normalizePaymentIdentifier(identifier);
+    if(!requestId) return null;
+
+    const cachedPayment = allPaymentsData.find(payment =>
+        paymentMatchesIdentifier(payment, requestId)
+    );
+    if(cachedPayment) return cachedPayment;
+
+    for(const field of ["id", "payment_id", "transaction_id"]){
+        try{
+            const { data, error } = await supabaseClient
+                .from("payment_requests")
+                .select("*")
+                .eq(field, requestId)
+                .maybeSingle();
+
+            if(error){
+                console.warn(`Payment lookup by ${field} failed:`, error);
+                continue;
+            }
+            if(data) return data;
+        }catch(error){
+            console.warn(`Payment lookup by ${field} threw an error:`, error);
+        }
+    }
+    return null;
+}
+
+async function getPaymentRequestById(id){
+    return getPaymentRequestByIdentifier(id);
+}
+
+async function updatePaymentRequestStatus(payment, newStatus){
+    const record = getPaymentRecordKey(payment);
+    if(!record){
+        throw new Error("This payment request has no usable database identifier.");
+    }
+
+    const { data, error } = await supabaseClient
+        .from("payment_requests")
+        .update({
+            status: newStatus,
+            payment_status: newStatus
+        })
+        .eq(record.field, record.value)
+        .select("*")
+        .maybeSingle();
+
+    if(error) throw error;
+
+    if(data) return data;
+
+    const verified = await getPaymentRequestByIdentifier(record.value);
+    if(!verified){
+        throw new Error("Payment record was not found after the status update. Check the payment_requests UPDATE policy in Supabase.");
+    }
+    return verified;
+}
+
+
+  
   
 function findUserForRequest(item){  
   
@@ -3398,14 +3492,14 @@ function renderPayments(){
   
                         <button  
                         class="btn btn-approve"  
-                        onclick="approvePayment('${payment.id}')"  
+                        onclick='approvePayment(${JSON.stringify(String(payment.id ?? payment.payment_id ?? payment.transaction_id ?? ""))})'  
                         >  
                             Approve  
                         </button>  
   
                         <button  
                         class="btn btn-reject"  
-                        onclick="rejectPayment('${payment.id}')"  
+                        onclick='rejectPayment(${JSON.stringify(String(payment.id ?? payment.payment_id ?? payment.transaction_id ?? ""))})'  
                         >  
                             Reject  
                         </button>  
@@ -3441,304 +3535,140 @@ function renderPayments(){
 }  
   
   
-async function approvePayment(id){  
-  
-    if(  
-  
-        !confirm(  
-            "Approve this payment?"  
-        )  
-  
-    ){  
-  
-        return;  
-  
-    }  
-  
-  
-    const payment =  
-    allPaymentsData  
-    .find(  
-        item =>  
-        item.id === id  
-    );  
-  
-  
-    if(!payment){  
-  
-        alert(  
-            "Payment request not found."  
-        );  
-  
-        return;  
-  
-    }  
-  
-  
-    try{  
-  
-        const {  
-  
-            error  
-  
-        } =  
-        await supabaseClient  
-  
-        .from(  
-            "payment_requests"  
-        )  
-  
-        .update({  
-  
-            status:  
-            "Approved",  
-  
-            payment_status:  
-            "Approved"  
-  
-        })  
-  
-        .eq(  
-            "id",  
-            id  
-        );  
-  
-  
-        if(error){  
-  
-            throw error;  
-  
-        }  
-  
-  
-        const user =  
-        findUserForRequest(  
-            payment  
-        );  
-  
-  
-        if(user){  
-  
-            const userKey =  
-            getUserKey(  
-                user  
-            );  
-  
-  
-            if(userKey){  
-  
-                await supabaseClient  
-  
-                .from(  
-                    "profiles"  
-                )  
-  
-                .update({  
-  
-                    is_active:  
-                    true,  
-  
-                    package_name:  
-  
-                    payment.package_name ||  
-  
-                    user.package_name  
-  
-                })  
-  
-                .eq(  
-                    "id",  
-                    userKey  
-                );  
-  
-            }  
-  
-        }  
-  
-  
-        const targetEmail =  
-        val(  
-  
-            payment.email,  
-  
-            user?.email  
-  
-        );  
-  
-  
-        if(targetEmail){  
-  
-            try{  
-  
-                await emailjs.send(  
-  
-                    EMAILJS_PAYMENT_SERVICE,  
-  
-                    EMAILJS_PAYMENT_TEMPLATE,  
-  
-                    {  
-  
-                        to_email:  
-                        targetEmail,  
-  
-                        to_name:  
-  
-                        val(  
-  
-                            payment.full_name,  
-  
-                            user?.full_name,  
-  
-                            "User"  
-  
-                        ),  
-  
-                        user_id:  
-  
-                        val(  
-  
-                            payment.user_id,  
-  
-                            payment.profile_id,  
-  
-                            getUserKey(user),  
-  
-                            "N/A"  
-  
-                        ),  
-  
-                        package_name:  
-  
-                        payment.package_name ||  
-  
-                        "Package",  
-  
-                        amount:  
-  
-                        payment.amount ||  
-  
-                        0,  
-  
-                        transaction_id:  
-  
-                        payment.transaction_id ||  
-  
-                        payment.payment_id ||  
-  
-                        "N/A"  
-  
-                    }  
-  
-                );  
-  
-            }  
-  
-            catch(mailError){  
-  
-                console.warn(  
-                    "Payment email error:",  
-                    mailError  
-                );  
-  
-            }  
-  
-        }  
-  
-  
-        alert(  
-            "Payment approved successfully!"  
-        );  
-  
-  
-        await refreshAllData();  
-  
-    }  
-  
-    catch(error){  
-  
-        console.error(error);  
-  
-        alert(  
-            "Approval failed: " +  
-            error.message  
-        );  
-  
-    }  
-  
-}  
-  
-  
-async function rejectPayment(id){  
-  
-    if(  
-  
-        !confirm(  
-            "Reject this payment?"  
-        )  
-  
-    ){  
-  
-        return;  
-  
-    }  
-  
-  
-    try{  
-  
-        const {  
-  
-            error  
-  
-        } =  
-        await supabaseClient  
-  
-        .from(  
-            "payment_requests"  
-        )  
-  
-        .update({  
-  
-            status:  
-            "Rejected",  
-  
-            payment_status:  
-            "Rejected"  
-  
-        })  
-  
-        .eq(  
-            "id",  
-            id  
-        );  
-  
-  
-        if(error){  
-  
-            throw error;  
-  
-        }  
-  
-  
-        alert(  
-            "Payment rejected."  
-        );  
-  
-  
-        await refreshAllData();  
-  
-    }  
-  
-    catch(error){  
-  
-        alert(  
-            error.message  
-        );  
-  
-    }  
-  
-}  
-  
-  
+async function approvePayment(id){
+
+    if(!confirm("Approve this payment?")) return;
+
+    const requestId = normalizePaymentIdentifier(id);
+    if(!requestId){
+        alert("Invalid payment request ID.");
+        return;
+    }
+
+    try{
+        const payment = await getPaymentRequestByIdentifier(requestId);
+
+        if(!payment){
+            alert("Payment request not found. Please refresh the admin panel and try again.");
+            return;
+        }
+
+        const updatedPayment = await updatePaymentRequestStatus(payment, "Approved");
+
+        allPaymentsData = allPaymentsData.map(item =>
+            paymentMatchesIdentifier(
+                item,
+                payment.id ?? payment.payment_id ?? payment.transaction_id
+            )
+            ? { ...item, ...updatedPayment }
+            : item
+        );
+
+        const user = findUserForRequest(payment);
+
+        if(user){
+            const userKey = getUserKey(user);
+            if(userKey){
+                const profilePayload = {
+                    is_active: true,
+                    package_name: payment.package_name || user.package_name || null
+                };
+
+                const byId = await supabaseClient
+                    .from("profiles")
+                    .update(profilePayload)
+                    .eq("id", userKey);
+
+                if(byId.error){
+                    const byUserId = await supabaseClient
+                        .from("profiles")
+                        .update(profilePayload)
+                        .eq("user_id", userKey);
+
+                    if(byUserId.error){
+                        console.warn("Profile activation update failed:", byUserId.error);
+                    }
+                }
+            }
+        }
+
+        const targetEmail = val(payment.email, user?.email);
+
+        if(targetEmail){
+            try{
+                await emailjs.send(
+                    EMAILJS_PAYMENT_SERVICE,
+                    EMAILJS_PAYMENT_TEMPLATE,
+                    {
+                        to_email: targetEmail,
+                        to_name: val(payment.full_name, user?.full_name, "User"),
+                        user_id: val(
+                            payment.user_id,
+                            payment.profile_id,
+                            payment.user_uuid,
+                            payment.auth_user_id,
+                            getUserKey(user),
+                            "N/A"
+                        ),
+                        package_name: payment.package_name || "Package",
+                        amount: payment.amount || 0,
+                        transaction_id: payment.transaction_id || payment.payment_id || payment.id || "N/A"
+                    }
+                );
+            }catch(mailError){
+                console.warn("Payment email error:", mailError);
+            }
+        }
+
+        alert("Payment approved successfully!");
+        await refreshAllData();
+
+    }catch(error){
+        console.error("Approval error:", error);
+        alert("Approval failed: " + (error?.message || "Unknown error"));
+    }
+}
+
+
+async function rejectPayment(id){
+
+    if(!confirm("Reject this payment?")) return;
+
+    const requestId = normalizePaymentIdentifier(id);
+    if(!requestId){
+        alert("Invalid payment request ID.");
+        return;
+    }
+
+    try{
+        const payment = await getPaymentRequestByIdentifier(requestId);
+
+        if(!payment){
+            alert("Payment request not found. Please refresh the admin panel and try again.");
+            return;
+        }
+
+        const updatedPayment = await updatePaymentRequestStatus(payment, "Rejected");
+
+        allPaymentsData = allPaymentsData.map(item =>
+            paymentMatchesIdentifier(
+                item,
+                payment.id ?? payment.payment_id ?? payment.transaction_id
+            )
+            ? { ...item, ...updatedPayment }
+            : item
+        );
+
+        alert("Payment rejected successfully.");
+        await refreshAllData();
+
+    }catch(error){
+        console.error("Reject payment error:", error);
+        alert("Rejection failed: " + (error?.message || "Unknown error"));
+    }
+}
+
+
 /* =========================================================  
    WITHDRAWALS  
 ========================================================= */  
@@ -7736,195 +7666,3 @@ function initializeCertificate(){
   
             catch(error){  
   
-                console.error(  
-                    error  
-                );  
-  
-  
-                alert(  
-                    "Certificate generation failed."  
-                );  
-  
-            }  
-  
-        }  
-    );  
-  
-}  
-  
-  
-/* =========================================================  
-   LAMP  
-========================================================= */  
-  
-function initializeLamp(){  
-  
-    if(  
-  
-        typeof gsap ===  
-        "undefined"  
-  
-        ||  
-  
-        typeof Draggable ===  
-        "undefined"  
-  
-    ){  
-  
-        return;  
-  
-    }  
-  
-  
-    gsap.registerPlugin(  
-        Draggable  
-    );  
-  
-  
-    const root =  
-    document.documentElement;  
-  
-  
-    const bead =  
-    document.querySelector(  
-        ".cord-bead"  
-    );  
-  
-  
-    const line =  
-    document.querySelector(  
-        ".cord-line"  
-    );  
-  
-  
-    const hit =  
-    document.querySelector(  
-        ".cord-hit"  
-    );  
-  
-  
-    if(  
-  
-        !bead ||  
-  
-        !line ||  
-  
-        !hit  
-  
-    ){  
-  
-        return;  
-  
-    }  
-  
-  
-    let isOn =  
-    false;  
-  
-  
-    Draggable.create(  
-        hit,  
-        {  
-  
-            type:"y",  
-  
-            bounds:{  
-  
-                minY:0,  
-  
-                maxY:60  
-  
-            },  
-  
-  
-            onDrag:function(){  
-  
-                gsap.set(  
-                    bead,  
-                    {  
-                        y:this.y  
-                    }  
-                );  
-  
-  
-                gsap.set(  
-                    line,  
-                    {  
-                        attr:{  
-                            y2:  
-                            180 +  
-                            this.y  
-                        }  
-                    }  
-                );  
-  
-            },  
-  
-  
-            onRelease:function(){  
-  
-                isOn =  
-                !isOn;  
-  
-  
-                root.style.setProperty(  
-  
-                    "--on",  
-  
-                    isOn  
-                    ?  
-                    1  
-                    :  
-                    0  
-  
-                );  
-  
-  
-                gsap.to(  
-                    bead,  
-                    {  
-  
-                        y:0,  
-  
-                        duration:.4  
-  
-                    }  
-                );  
-  
-  
-                gsap.to(  
-                    line,  
-                    {  
-  
-                        attr:{  
-                            y2:180  
-                        },  
-  
-                        duration:.4  
-  
-                    }  
-                );  
-  
-  
-                gsap.to(  
-                    hit,  
-                    {  
-  
-                        y:0,  
-  
-                        duration:.4  
-  
-                    }  
-                );  
-  
-            }  
-  
-        }  
-    );  
-  
-}  
-  
-</script>  
-  
-</body>  
-</html>
