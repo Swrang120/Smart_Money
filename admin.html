@@ -2595,264 +2595,456 @@ function findUserForRequest(item){
 }  
   
   
-/* =========================================================  
-   AUTH CHECK  
-========================================================= */  
-  
-document.addEventListener(  
-"DOMContentLoaded",  
-async () => {  
-  
-    try{  
-  
-        const {  
-  
-            data:{  
-                session  
-            }  
-  
-        } =  
-        await supabaseClient  
-        .auth  
-        .getSession();  
-  
-  
-        if(  
-  
-            session &&  
-  
-            session.user &&  
-  
-            session.user.email &&  
-  
-            norm(  
-                session.user.email  
-            )  
-  
-            ===  
-  
-            norm(  
-                ADMIN_EMAIL  
-            )  
-  
-        ){  
-  
-            showAdmin();  
-  
-        }  
-  
-        else{  
-  
-            await supabaseClient  
-            .auth  
-            .signOut();  
-  
-            showLogin();  
-  
-        }  
-  
-    }  
-  
-    catch(error){  
-  
-        console.error(  
-            error  
-        );  
-  
-        showLogin();  
-  
-    }  
-  
-  
-    initializeCertificate();  
-  
-    initializeLamp();  
-  
-});  
-  
-  
-/* =========================================================  
-   ADMIN LOGIN  
-========================================================= */  
-  
-async function adminLogin(){  
-  
-    const email =  
-    document  
-    .getElementById(  
-        "loginEmail"  
-    )  
-    .value  
-    .trim()  
-    .toLowerCase();  
-  
-  
-    const password =  
-    document  
-    .getElementById(  
-        "loginPassword"  
-    )  
-    .value;  
-  
-  
-    const errorBox =  
-    document  
-    .getElementById(  
-        "loginError"  
-    );  
-  
-  
-    const button =  
-    document  
-    .getElementById(  
-        "loginButton"  
-    );  
-  
-  
-    errorBox.textContent =  
-    "";  
-  
-  
-    if(!email){  
-  
-        errorBox.textContent =  
-        "Please enter admin email.";  
-  
-        return;  
-  
-    }  
-  
-  
-    if(!password){  
-  
-        errorBox.textContent =  
-        "Please enter password.";  
-  
-        return;  
-  
-    }  
-  
-  
-    if(  
-        email !==  
-        ADMIN_EMAIL.toLowerCase()  
-    ){  
-  
-        errorBox.textContent =  
-        "This email is not authorized as admin.";  
-  
-        return;  
-  
-    }  
-  
-  
-    try{  
-  
-        button.disabled =  
-        true;  
-  
-        button.textContent =  
-        "Logging in...";  
-  
-  
-        const {  
-  
-            data,  
-  
-            error  
-  
-        } =  
-        await supabaseClient  
-        .auth  
-        .signInWithPassword({  
-  
-            email,  
-  
-            password  
-  
-        });  
-  
-  
-        if(error){  
-  
-            throw error;  
-  
-        }  
-  
-  
-        if(  
-            !data ||  
-            !data.user  
-        ){  
-  
-            throw new Error(  
-                "Authentication failed."  
-            );  
-  
-        }  
-  
-  
-        if(  
-  
-            norm(  
-                data.user.email  
-            )  
-  
-            !==  
-  
-            norm(  
-                ADMIN_EMAIL  
-            )  
-  
-        ){  
-  
-            await supabaseClient  
-            .auth  
-            .signOut();  
-  
-  
-            throw new Error(  
-                "This account is not authorized."  
-            );  
-  
-        }  
-  
-  
-        showAdmin();  
-  
-    }  
-  
-    catch(error){  
-  
-        console.error(  
-            "Admin login error:",  
-            error  
-        );  
-  
-  
-        errorBox.textContent =  
-        "Login failed: " +  
-  
-        (  
-            error.message ||  
-            "Invalid email or password."  
-        );  
-  
-    }  
-  
-    finally{  
-  
-        button.disabled =  
-        false;  
-  
-        button.textContent =  
-        "Login";  
-  
-    }  
-  
-}  
-  
-  
+/* =========================================================
+   AUTH CHECK — ROBUST SUPABASE ADMIN AUTH
+========================================================= */
+
+let adminAuthBusy = false;
+
+function getLoginElements(){
+
+    return {
+        email: document.getElementById("loginEmail"),
+        password: document.getElementById("loginPassword"),
+        button: document.getElementById("loginButton"),
+        error: document.getElementById("loginError")
+    };
+
+}
+
+function setLoginError(message){
+
+    const { error } = getLoginElements();
+
+    if(error){
+
+        error.textContent =
+        String(message || "");
+
+    }
+
+}
+
+function setLoginLoading(loading){
+
+    const { button } =
+    getLoginElements();
+
+    if(!button) return;
+
+    button.disabled =
+    Boolean(loading);
+
+    button.textContent =
+    loading
+    ? "Logging in..."
+    : "Login";
+
+}
+
+function isAdminUser(user){
+
+    if(!user || !user.email){
+
+        return false;
+
+    }
+
+    return (
+        norm(user.email) ===
+        norm(ADMIN_EMAIL)
+    );
+
+}
+
+async function checkAdminSession(){
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+        .auth
+        .getSession();
+
+        if(error){
+
+            console.error(
+                "Supabase session check error:",
+                error
+            );
+
+            showLogin();
+
+            return;
+
+        }
+
+        const session =
+        data?.session;
+
+        if(
+            session?.user &&
+            isAdminUser(session.user)
+        ){
+
+            showAdmin();
+
+            return;
+
+        }
+
+        // A different account must never get access to the admin panel.
+        if(session){
+
+            try{
+
+                await supabaseClient
+                .auth
+                .signOut();
+
+            }catch(signOutError){
+
+                console.warn(
+                    "Session cleanup error:",
+                    signOutError
+                );
+
+            }
+
+        }
+
+        showLogin();
+
+    }
+    catch(error){
+
+        console.error(
+            "Admin session check error:",
+            error
+        );
+
+        showLogin();
+
+    }
+
+}
+
+
+document.addEventListener(
+"DOMContentLoaded",
+async () => {
+
+    initializeCertificate();
+
+    initializeLamp();
+
+    await checkAdminSession();
+
+});
+
+
+/* =========================================================
+   ADMIN LOGIN
+========================================================= */
+document.addEventListener("keydown", event => {
+
+    if(
+        event.key === "Enter" &&
+        document.activeElement &&
+        (
+            document.activeElement.id === "loginEmail" ||
+            document.activeElement.id === "loginPassword"
+        )
+    ){
+
+        const loginScreen = document.getElementById("loginScreen");
+
+        if(
+            loginScreen &&
+            !loginScreen.classList.contains("hidden")
+        ){
+
+            event.preventDefault();
+            adminLogin();
+
+        }
+
+    }
+
+});
+
+
+
+async function adminLogin(){
+
+    if(adminAuthBusy){
+
+        return;
+
+    }
+
+    const {
+        email:emailInput,
+        password:passwordInput,
+        button,
+        error:errorBox
+    } =
+    getLoginElements();
+
+
+    if(
+        !emailInput ||
+        !passwordInput ||
+        !button ||
+        !errorBox
+    ){
+
+        console.error(
+            "Admin login elements are missing."
+        );
+
+        return;
+
+    }
+
+
+    const email =
+    String(
+        emailInput.value || ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+    const password =
+    String(
+        passwordInput.value || ""
+    );
+
+
+    errorBox.textContent = "";
+
+
+    if(!email){
+
+        errorBox.textContent =
+        "Please enter admin email.";
+
+        return;
+
+    }
+
+
+    if(!password){
+
+        errorBox.textContent =
+        "Please enter password.";
+
+        return;
+
+    }
+
+
+    if(
+        email !==
+        norm(ADMIN_EMAIL)
+    ){
+
+        errorBox.textContent =
+        "This email is not authorized as admin.";
+
+        return;
+
+    }
+
+
+    adminAuthBusy = true;
+
+    setLoginLoading(true);
+
+
+    try{
+
+        // Always clear an old/incorrect browser session first.
+        // This prevents another Supabase account from blocking admin access.
+        try{
+
+            const {
+                data:sessionData
+            } =
+            await supabaseClient
+            .auth
+            .getSession();
+
+            if(
+                sessionData?.session &&
+                !isAdminUser(
+                    sessionData.session.user
+                )
+            ){
+
+                await supabaseClient
+                .auth
+                .signOut();
+
+            }
+
+        }
+        catch(sessionError){
+
+            console.warn(
+                "Old session check failed:",
+                sessionError
+            );
+
+        }
+
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient
+        .auth
+        .signInWithPassword({
+
+            email:email,
+
+            password:password
+
+        });
+
+
+        if(error){
+
+            console.error(
+                "Supabase signInWithPassword error:",
+                error
+            );
+
+            let message =
+            error.message ||
+            "Invalid email or password.";
+
+
+            if(
+                /invalid login credentials/i
+                .test(message)
+            ){
+
+                message =
+                "Invalid Supabase email/password. " +
+                "This admin login uses the password of the Supabase Auth user, " +
+                "not your Gmail account password unless both passwords are the same.";
+
+            }
+            else if(
+                /email not confirmed/i
+                .test(message)
+            ){
+
+                message =
+                "This Supabase Auth email is not confirmed. " +
+                "Confirm the admin email in Supabase Authentication.";
+
+            }
+
+
+            throw new Error(
+                message
+            );
+
+        }
+
+
+        const user =
+        data?.user;
+
+
+        if(!user){
+
+            throw new Error(
+                "Supabase login succeeded but no user session was returned."
+            );
+
+        }
+
+
+        if(!isAdminUser(user)){
+
+            await supabaseClient
+            .auth
+            .signOut();
+
+            throw new Error(
+                "This Supabase account is not authorized as admin."
+            );
+
+        }
+
+
+        // Confirm the session really exists before opening the panel.
+        const {
+            data:verifyData,
+            error:verifyError
+        } =
+        await supabaseClient
+        .auth
+        .getSession();
+
+
+        if(
+            verifyError ||
+            !verifyData?.session ||
+            !isAdminUser(
+                verifyData.session.user
+            )
+        ){
+
+            throw new Error(
+                "Login completed but the admin session could not be verified."
+            );
+
+        }
+
+
+        errorBox.textContent = "";
+
+        showAdmin();
+
+
+    }
+    catch(error){
+
+        console.error(
+            "Admin login error:",
+            error
+        );
+
+
+        errorBox.textContent =
+        "Login failed: " +
+        (
+            error?.message ||
+            "Invalid email or password."
+        );
+
+
+    }
+    finally{
+
+        adminAuthBusy = false;
+
+        setLoginLoading(false);
+
+    }
+
+}
+
+
 /* =========================================================  
    LOGOUT  
 ========================================================= */  
@@ -7472,197 +7664,4 @@ function initializeCertificate(){
                 user =>  
   
                 norm(  
-                    user.referral_id  
-                )  
-  
-                ===  
-  
-                norm(  
-                    inputId  
-                )  
-  
-                ||  
-  
-                String(  
-                    getUserKey(user)  
-                )  
-  
-                ===  
-  
-                inputId  
-            );  
-  
-  
-            if(!userExists){  
-  
-                alert(  
-                    "User ID not found in Smart Money users."  
-                );  
-  
-                return;  
-  
-            }  
-  
-  
-            if(  
-  
-                new Date(  
-                    completion.value  
-                )  
-  
-                <  
-  
-                new Date(  
-                    start.value  
-                )  
-  
-            ){  
-  
-                alert(  
-                    "Completion date cannot be before start date."  
-                );  
-  
-                return;  
-  
-            }  
-  
-  
-            downloadButton.disabled =  
-            false;  
-  
-  
-            alert(  
-                "Certificate validated successfully."  
-            );  
-  
-        }  
-    );  
-  
-  
-    resetButton.addEventListener(  
-        "click",  
-        () => {  
-  
-            userName.value =  
-            "";  
-  
-            userId.value =  
-            "";  
-  
-            course.value =  
-            "";  
-  
-            start.value =  
-            "";  
-  
-            completion.value =  
-            "";  
-  
-            duration.value =  
-            "";  
-  
-            issueDate.value =  
-            "";  
-  
-  
-            const newId =  
-            generateCertId();  
-  
-  
-            certId.value =  
-            newId;  
-  
-  
-            previewName.textContent =  
-            "STUDENT NAME";  
-  
-            previewUser.textContent =  
-            "N/A";  
-  
-            previewCourse.textContent =  
-            "COURSE NAME";  
-  
-            previewDuration.textContent =  
-            "0 Months";  
-  
-            previewStart.textContent =  
-            "--";  
-  
-            previewCompletion.textContent =  
-            "--";  
-  
-            previewIssue.textContent =  
-            "--";  
-  
-            previewCert.textContent =  
-            newId;  
-  
-  
-            downloadButton.disabled =  
-            true;  
-  
-        }  
-    );  
-  
-  
-    downloadButton.addEventListener(  
-        "click",  
-        async () => {  
-  
-            try{  
-  
-                const certificate =  
-                document  
-                .getElementById(  
-                    "certificateTemplate"  
-                );  
-  
-  
-                const canvas =  
-                await html2canvas(  
-                    certificate,  
-                    {  
-  
-                        scale:3,  
-  
-                        useCORS:true,  
-  
-                        backgroundColor:  
-                        "#fffdf9"  
-  
-                    }  
-                );  
-  
-  
-                const link =  
-                document.createElement(  
-                    "a"  
-                );  
-  
-  
-                link.download =  
-  
-                `Certificate_${  
-                    userName.value  
-                    .trim()  
-                    .replace(  
-                        /[^a-z0-9]/gi,  
-                        "_"  
-                    )  
-                }_${  
-                    certId.value  
-                }.png`;  
-  
-  
-                link.href =  
-                canvas.toDataURL(  
-                    "image/png"  
-                );  
-  
-  
-                link.click();  
-  
-            }  
-  
-            catch(error){  
-  
+                    user.referr
