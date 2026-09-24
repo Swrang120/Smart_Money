@@ -2221,11 +2221,29 @@ const SUPABASE_PUBLISHABLE_KEY =
 "sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";  
   
   
-const supabaseClient =  
-window.supabase.createClient(  
-    SUPABASE_URL,  
-    SUPABASE_PUBLISHABLE_KEY  
-);  
+let supabaseClient = null;
+
+function initializeSupabaseClient(){
+
+    if(!window.supabase || typeof window.supabase.createClient !== "function"){
+        throw new Error(
+            "Supabase JavaScript library did not load. Check internet/CDN access and refresh the page."
+        );
+    }
+
+    supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+    return supabaseClient;
+}
+
+try{
+    initializeSupabaseClient();
+}catch(error){
+    console.error("Supabase initialization failed:", error);
+}  
   
   
 /* =========================================================  
@@ -2661,6 +2679,12 @@ async function checkAdminSession(){
 
     try{
 
+        if(!supabaseClient){
+            throw new Error(
+                "Supabase is not initialized. Refresh the page or check whether the Supabase CDN is loading."
+            );
+        }
+
         const {
             data,
             error
@@ -2784,6 +2808,15 @@ async function adminLogin(){
 
         return;
 
+    }
+
+    if(!supabaseClient){
+        const errorBox = document.getElementById("loginError");
+        if(errorBox){
+            errorBox.textContent =
+                "Login failed: Supabase did not load. Please refresh and try again.";
+        }
+        return;
     }
 
     const {
@@ -3043,6 +3076,9 @@ async function adminLogin(){
     }
 
 }
+
+// Make the login function explicitly available to the safety click bridge.
+window.adminLogin = adminLogin;
 
 
 /* =========================================================  
@@ -7607,62 +7643,4 @@ function initializeCertificate(){
         () => {  
   
             previewIssue.textContent =  
-            formatDate(  
-                issueDate.value  
-            );  
-  
-        }  
-    );  
-  
-  
-    const initialCertId =  
-    generateCertId();  
-  
-  
-    certId.value =  
-    initialCertId;  
-  
-  
-    previewCert.textContent =  
-    initialCertId;  
-  
-  
-    generateButton.addEventListener(  
-        "click",  
-        async () => {  
-  
-            if(  
-  
-                !userName.value.trim() ||  
-  
-                !userId.value.trim() ||  
-  
-                !course.value.trim() ||  
-  
-                !start.value ||  
-  
-                !completion.value  
-  
-            ){  
-  
-                alert(  
-                    "Please fill all required fields."  
-                );  
-  
-                return;  
-  
-            }  
-  
-  
-            const inputId =  
-            userId.value  
-            .trim();  
-  
-  
-            const userExists =  
-            allUsersData.some(  
-                user =>  
-  
-                norm(  
-                    user.referral_id  
-              
+            forma
