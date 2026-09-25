@@ -3252,50 +3252,58 @@ function toggleAccordion(element){
    REFRESH  
 ========================================================= */  
   
+async function repairApprovedBuyerAccounts(){
+    try{
+        const approved = (allPaymentsData || []).filter(item =>
+            String(item.status || item.payment_status || "").toLowerCase() === "approved" &&
+            !item.is_deleted
+        );
+
+        for(const payment of approved){
+            const paymentId = Number(payment.id || payment.payment_id || 0);
+            if(!Number.isInteger(paymentId) || paymentId <= 0) continue;
+
+            const { data, error } = await supabaseClient.functions.invoke(
+                "ensure-buyer-auth",
+                { body: { payment_id: paymentId } }
+            );
+
+            if(error){
+                console.warn("Buyer account repair skipped:", paymentId, error);
+                continue;
+            }
+
+            if(data?.user_id){
+                payment.user_id = data.user_id;
+            }
+        }
+    }catch(error){
+        console.warn("Approved buyer account repair warning:", error);
+    }
+}
+
+
 async function refreshAllData(){  
-  
     try{  
-  
         await loadUsers();  
-  
+
         await Promise.all([  
-  
             loadPaymentRequests(),  
-  
             loadWithdrawals(),  
-  
             loadActiveStatuses(),  
-  
             loadActivePreviewImage()  
-  
         ]);  
-  
-  
+
+        await repairApprovedBuyerAccounts();
+        await loadUsers();
+        await loadPaymentRequests();
+
         updateGlobalStats();  
-  
     }  
-  
     catch(error){  
-  
-        console.error(  
-            "Refresh error:",  
-            error  
-        );  
-  
-  
-        alert(  
-  
-            "Refresh failed: " +  
-  
-            (  
-                error.message ||  
-                "Unknown error"  
-            )  
-  
-        );  
-  
+        console.error("Refresh error:", error);  
+        alert("Refresh failed: " + (error.message || "Unknown error"));
     }  
-  
 }  
   
   
@@ -4001,6 +4009,27 @@ async function approvePayment(id){
         if(!payment){
             alert("Payment request not found. Please refresh the admin panel and try again.");
             return;
+        }
+
+        /*
+         * Create/link the buyer's real Supabase Auth account before
+         * final activation. This prevents an old admin session from
+         * being reused as the buyer's user_id during checkout.
+         */
+        const { data: accountData, error: accountError } =
+            await supabaseClient.functions.invoke(
+                "ensure-buyer-auth",
+                { body: { payment_id: Number(payment.id) } }
+            );
+
+        if(accountError){
+            console.error("Buyer Auth activation error:", accountError);
+            alert("Approval stopped: buyer account could not be created/linked. Please try again.");
+            return;
+        }
+
+        if(accountData?.user_id){
+            payment.user_id = accountData.user_id;
         }
 
         const updatedPayment = await updatePaymentRequestStatus(payment, "Approved");
