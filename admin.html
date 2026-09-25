@@ -5049,7 +5049,7 @@ function renderUsers(){
                 &&  
   
                 member.referred_by ===  
-                user.referral_id  
+                user.referral_code  
             );  
   
   
@@ -5555,7 +5555,7 @@ function renderPaymentDetailsModal(){
   
         <b>Referral ID:</b>  
         ${escapeHtml(  
-            user.referral_id ||  
+            user.referral_code ||  
             "N/A"  
         )}  
   
