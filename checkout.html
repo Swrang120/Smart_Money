@@ -316,9 +316,23 @@ async function createSmartMoneyAccount(fullName,mobile,email,password,referrer){
   let session=current.data.session;
   let user=session?.user||null;
 
+  /*
+     Never reuse a different logged-in account for a new buyer.
+     This was the source of the previous bug: an admin session could
+     accidentally become the buyer's profiles.user_id.
+  */
+  const requestedEmail = email.trim().toLowerCase();
+  const sessionEmail = String(user?.email || "").trim().toLowerCase();
+
+  if(user && sessionEmail !== requestedEmail){
+    await supabaseClient.auth.signOut();
+    session=null;
+    user=null;
+  }
+
   if(!user){
     const signUp=await supabaseClient.auth.signUp({
-      email,
+      email:requestedEmail,
       password,
       options:{
         data:{
@@ -339,6 +353,10 @@ async function createSmartMoneyAccount(fullName,mobile,email,password,referrer){
   }
 
   if(!user)throw new Error("Unable to create your Smart Money account.");
+
+  if(String(user.email || "").trim().toLowerCase() !== requestedEmail){
+    throw new Error("Account email mismatch. Please restart checkout.");
+  }
 
   if(!session)throw new Error("ACCOUNT_CONFIRMATION_REQUIRED");
 
