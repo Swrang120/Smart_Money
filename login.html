@@ -2167,245 +2167,65 @@
 
 
     async function sendEmailOtp() {
-
       const input = document.getElementById("forgotEmail");
-
       if (!input) return;
-
       const email = input.value.trim().toLowerCase();
-
       if (!email || !isValidEmail(email)) {
-
         alert("⚠️ Please registered Gmail address enter karein.");
-
         return;
-
       }
-
       setOtpButtonLoading("resetBtn", true, "Sending Code...");
-
       try {
-
-        const { error } =
-          await supabaseClient.auth.signInWithOtp({
-
-            email: email,
-
-            options: {
-              shouldCreateUser: false
-            }
-
-          });
-
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin + "/update-password.html"
+        });
         if (error) throw error;
-
         otpEmail = email;
-
         document.getElementById("otpInputWrap").style.display = "block";
         document.getElementById("verifyOtpBtn").style.display = "flex";
-
         const help = document.getElementById("otpHelpText");
-
-        if (help) {
-          help.innerText =
-            "Aapke Gmail par 6-digit login code bheja gaya hai. Code enter karke login karein.";
-        }
-
-        const otp = document.getElementById("emailOtp");
-
-        if (otp) otp.focus();
-
-        alert("📧 Gmail par login code bheja gaya hai. Inbox/Spam check karein.");
-
+        if (help) help.innerText = "Aapke Gmail par password recovery code bheja gaya hai. Code enter karke password reset karein.";
+        document.getElementById("emailOtp")?.focus();
+        alert("📧 Gmail par recovery code bheja gaya hai. Inbox/Spam check karein.");
       } catch (error) {
-
-        console.error("Email OTP Error:", error);
-
-        alert(
-          "⚠️ Code bhejne mein problem aayi.\n\n" +
-          (error.message || "Please try again.")
-        );
-
+        console.error("Password Recovery Error:", error);
+        alert("⚠️ Code bhejne mein problem aayi.\n\n" + (error?.message || "Please try again."));
       } finally {
-
         setOtpButtonLoading("resetBtn", false, "Send Code Again");
-
       }
-
     }
-
 
     async function verifyEmailOtp() {
-
-      const email =
-        otpEmail ||
-        (document.getElementById("forgotEmail")?.value || "")
-          .trim()
-          .toLowerCase();
-
-      const token =
-        (document.getElementById("emailOtp")?.value || "")
-          .trim();
-
+      const email = otpEmail || (document.getElementById("forgotEmail")?.value || "").trim().toLowerCase();
+      const token = (document.getElementById("emailOtp")?.value || "").trim();
       if (!email || !isValidEmail(email)) {
-
         alert("⚠️ Email address missing hai.");
-
         return;
-
       }
-
       if (!/^\d{6,8}$/.test(token)) {
-
-        alert("⚠️ Gmail se mila verification code enter karein.");
-
+        alert("⚠️ Gmail se mila recovery code enter karein.");
         return;
-
       }
-
       setOtpButtonLoading("verifyOtpBtn", true, "Verifying...");
-
       try {
-
-        const { data, error } =
-          await supabaseClient.auth.verifyOtp({
-
-            email: email,
-            token: token,
-            type: "email"
-
-          });
-
+        const { data, error } = await supabaseClient.auth.verifyOtp({
+          email: email,
+          token: token,
+          type: "recovery"
+        });
         if (error) throw error;
-
-        const user = data && data.user;
-
-        if (!user) {
-          throw new Error("Verification ke baad session create nahi hui.");
-        }
-
-        const {
-          data: profile,
-          error: profileError
-        } =
-          await supabaseClient
-            .from("profiles")
-            .select("*")
-            .eq("user_id", user.id)
-            .maybeSingle();
-
-        if (profileError) throw profileError;
-
-        if (!profile) {
-
-          await supabaseClient.auth.signOut();
-
-          throw new Error(
-            "Login verify hua, lekin Smart Money profile nahi mila."
-          );
-
-        }
-
-        if (profile.is_deleted === true) {
-
-          await supabaseClient.auth.signOut();
-
-          throw new Error("Aapka account deleted hai.");
-
-        }
-
-        if (profile.is_active !== true) {
-
-          await supabaseClient.auth.signOut();
-
-          throw new Error(
-            "Aapka account abhi active nahi hai. Admin approval ke baad dashboard access milega."
-          );
-
-        }
-
-        const safeUserData = {
-
-          user_id: profile.user_id,
-          auth_user_id: user.id,
-
-          full_name: profile.full_name || "",
-
-          email:
-            profile.email ||
-            user.email ||
-            email,
-
-          auth_email:
-            user.email ||
-            email,
-
-          referral_id:
-            profile.referral_id || "",
-
-          referred_by:
-            profile.referred_by || "",
-
-          balance:
-            profile.balance ?? 0,
-
-          package_name:
-            profile.package_name || "",
-
-          profile_photo:
-            profile.profile_photo || null,
-
-          profile_pic:
-            profile.profile_pic || null,
-
-          payout_type:
-            profile.payout_type || "",
-
-          date_of_birth:
-            profile.date_of_birth || null,
-
-          is_active: true,
-          is_deleted: false,
-
-          created_at:
-            profile.created_at || null
-
-        };
-
-        localStorage.setItem(
-          "userData",
-          JSON.stringify(safeUserData)
-        );
-
-        localStorage.setItem("rememberLogin", "true");
-
+        if (!data?.user) throw new Error("Recovery code verify hua, lekin recovery session create nahi hui.");
+        localStorage.setItem("passwordRecoveryEmail", data.user.email || email);
         closeModal("forgotModal");
-
-        alert("✅ Gmail code verified. Login successful!");
-
-        window.location.href = "dashboard.html";
-
+        alert("✅ Recovery code verified. Ab naya password set karein.");
+        window.location.href = "update-password.html";
       } catch (error) {
-
-        console.error("OTP Verification Error:", error);
-
-        alert(
-          "⚠️ Verification failed.\n\n" +
-          (error.message || "Invalid or expired code.")
-        );
-
+        console.error("Password Recovery OTP Verification Error:", error);
+        alert("⚠️ Verification failed.\n\n" + (error?.message || "Invalid or expired recovery code."));
       } finally {
-
-        setOtpButtonLoading(
-          "verifyOtpBtn",
-          false,
-          "Verify Code & Login"
-        );
-
+        setOtpButtonLoading("verifyOtpBtn", false, "Verify Code & Continue");
       }
-
     }
-
 
     /* =====================================================
        MODAL OUTSIDE CLICK
