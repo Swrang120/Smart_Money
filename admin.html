@@ -7643,4 +7643,337 @@ function initializeCertificate(){
         () => {  
   
             previewIssue.textContent =  
-            forma
+            formatDate(  
+                issueDate.value  
+            );  
+  
+        }  
+    );  
+  
+  
+    const initialCertId =  
+    generateCertId();  
+  
+  
+    certId.value =  
+    initialCertId;  
+  
+  
+    previewCert.textContent =  
+    initialCertId;  
+  
+  
+    generateButton.addEventListener(  
+        "click",  
+        async () => {  
+  
+            if(  
+  
+                !userName.value.trim() ||  
+  
+                !userId.value.trim() ||  
+  
+                !course.value.trim() ||  
+  
+                !start.value ||  
+  
+                !completion.value  
+  
+            ){  
+  
+                alert(  
+                    "Please fill all required fields."  
+                );  
+  
+                return;  
+  
+            }  
+  
+  
+            const inputId =  
+            userId.value  
+            .trim();  
+  
+  
+            const userExists =  
+            allUsersData.some(  
+                user =>  
+  
+                norm(  
+                    user.referral_id  
+                )  
+  
+                ===  
+  
+                norm(  
+                    inputId  
+                )  
+  
+                ||  
+  
+                String(  
+                    getUserKey(user)  
+                )  
+  
+                ===  
+  
+                inputId  
+            );  
+  
+  
+            if(!userExists){  
+  
+                alert(  
+                    "User ID not found in Smart Money users."  
+                );  
+  
+                return;  
+  
+            }  
+  
+  
+            if(  
+  
+                new Date(  
+                    completion.value  
+                )  
+  
+                <  
+  
+                new Date(  
+                    start.value  
+                )  
+  
+            ){  
+  
+                alert(  
+                    "Completion date cannot be before start date."  
+                );  
+  
+                return;  
+  
+            }  
+  
+  
+            downloadButton.disabled =  
+            false;  
+  
+  
+            alert(  
+                "Certificate validated successfully."  
+            );  
+  
+        }  
+    );  
+  
+  
+    resetButton.addEventListener(  
+        "click",  
+        () => {  
+  
+            userName.value =  
+            "";  
+  
+            userId.value =  
+            "";  
+  
+            course.value =  
+            "";  
+  
+            start.value =  
+            "";  
+  
+            completion.value =  
+            "";  
+  
+            duration.value =  
+            "";  
+  
+            issueDate.value =  
+            "";  
+  
+  
+            const newId =  
+            generateCertId();  
+  
+  
+            certId.value =  
+            newId;  
+  
+  
+            previewName.textContent =  
+            "STUDENT NAME";  
+  
+            previewUser.textContent =  
+            "N/A";  
+  
+            previewCourse.textContent =  
+            "COURSE NAME";  
+  
+            previewDuration.textContent =  
+            "0 Months";  
+  
+            previewStart.textContent =  
+            "--";  
+  
+            previewCompletion.textContent =  
+            "--";  
+  
+            previewIssue.textContent =  
+            "--";  
+  
+            previewCert.textContent =  
+            newId;  
+  
+  
+            downloadButton.disabled =  
+            true;  
+  
+        }  
+    );  
+  
+  
+    downloadButton.addEventListener(  
+        "click",  
+        async () => {  
+  
+            try{  
+  
+                const certificate =  
+                document  
+                .getElementById(  
+                    "certificateTemplate"  
+                );  
+  
+  
+                const canvas =  
+                await html2canvas(  
+                    certificate,  
+                    {  
+  
+                        scale:3,  
+  
+                        useCORS:true,  
+  
+                        backgroundColor:  
+                        "#fffdf9"  
+  
+                    }  
+                );  
+  
+  
+                const link =  
+                document.createElement(  
+                    "a"  
+                );  
+  
+  
+                link.download =  
+  
+                `Certificate_${  
+                    userName.value  
+                    .trim()  
+                    .replace(  
+                        /[^a-z0-9]/gi,  
+                        "_"  
+                    )  
+                }_${  
+                    certId.value  
+                }.png`;  
+  
+  
+                link.href =  
+                canvas.toDataURL(  
+                    "image/png"  
+                );  
+  
+  
+                link.click();  
+  
+            }  
+  
+            catch(error){  
+  
+                console.error("Certificate download error:", error);
+
+                alert(
+                    "Certificate download failed: " +
+                    (error?.message || "Unknown error")
+                );
+
+            }
+        }
+    );
+
+
+}
+
+</script>
+
+<script>
+/* =========================================================
+   LOGIN BUTTON SAFETY BRIDGE
+   Ensures the Login button always responds even if another
+   script has an initialization error.
+========================================================= */
+(function(){
+    function showBridgeError(message){
+        const box = document.getElementById("loginError");
+        if(box){
+            box.textContent = message;
+        }
+        console.error(message);
+    }
+
+    function attachLoginBridge(){
+        const button = document.getElementById("loginButton");
+        const email = document.getElementById("loginEmail");
+        const password = document.getElementById("loginPassword");
+
+        if(!button || !email || !password){
+            showBridgeError("Login interface failed to initialize. Please refresh the page.");
+            return;
+        }
+
+        if(button.dataset.loginBridgeAttached === "1") return;
+        button.dataset.loginBridgeAttached = "1";
+
+        button.addEventListener("click", async function(event){
+            event.preventDefault();
+            event.stopPropagation();
+
+            try{
+                if(typeof window.adminLogin === "function"){
+                    await window.adminLogin();
+                }else if(!window.supabase){
+                    showBridgeError("Login system could not start because Supabase JavaScript did not load. Refresh the page and try again.");
+                }else{
+                    showBridgeError("Admin login script did not initialize. Please refresh the page and try again.");
+                }
+            }catch(error){
+                showBridgeError(
+                    "Login error: " + (error && error.message ? error.message : String(error))
+                );
+            }
+        }, true);
+
+        [email,password].forEach(function(input){
+            input.addEventListener("keydown", function(event){
+                if(event.key === "Enter"){
+                    event.preventDefault();
+                    button.click();
+                }
+            });
+        });
+    }
+
+    if(document.readyState === "loading")
+        document.addEventListener("DOMContentLoaded", attachLoginBridge);
+    else
+        attachLoginBridge();
+})();
+</script>
+
+</body>
+</html>
+
