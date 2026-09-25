@@ -919,28 +919,21 @@
 
 
   <!-- =====================================================
-       FORGOT PASSWORD MODAL
+       EMAIL OTP LOGIN MODAL
   ====================================================== -->
 
-  <div
-    id="forgotModal"
-    class="modal-overlay"
-  >
+  <div id="forgotModal" class="modal-overlay">
 
     <div class="modal-box">
 
-      <h3>
-        🔑 Reset Password
-      </h3>
+      <h3>📧 Login with Gmail Code</h3>
 
-      <p>
-        Apni registered Email ID enter karein.
-        Hum aapko secure password reset link bhejenge.
+      <p id="otpHelpText">
+        Apni registered Gmail enter karein.
+        Hum aapko 6-digit login code bhejenge.
       </p>
 
-      <label for="forgotEmail">
-        Email Address
-      </label>
+      <label for="forgotEmail">Gmail Address</label>
 
       <input
         type="email"
@@ -948,25 +941,47 @@
         class="input-field"
         placeholder="e.g. yourname@gmail.com"
         autocomplete="email"
+        inputmode="email"
         spellcheck="false"
         style="margin-top:6px; margin-bottom:15px;"
       >
 
+      <div id="otpInputWrap" style="display:none;">
+
+        <label for="emailOtp">Gmail Verification Code</label>
+
+        <input
+          type="text"
+          id="emailOtp"
+          class="input-field"
+          placeholder="Enter 6-digit code"
+          inputmode="numeric"
+          autocomplete="one-time-code"
+          maxlength="8"
+          style="margin-top:6px; margin-bottom:15px; text-align:center; letter-spacing:5px; font-size:20px; font-weight:700;"
+        >
+
+      </div>
 
       <button
         type="button"
-        onclick="sendPasswordResetLink()"
+        onclick="sendEmailOtp()"
         class="btn-submit"
         id="resetBtn"
         style="margin-top:0;"
       >
-
-        <span>
-          Send Reset Link
-        </span>
-
+        <span>Send Login Code</span>
       </button>
 
+      <button
+        type="button"
+        onclick="verifyEmailOtp()"
+        class="btn-submit"
+        id="verifyOtpBtn"
+        style="margin-top:10px; display:none;"
+      >
+        <span>Verify Code & Login</span>
+      </button>
 
       <button
         type="button"
@@ -2131,158 +2146,261 @@
 
 
     /* =====================================================
-       PASSWORD RESET
+       EMAIL OTP LOGIN
     ===================================================== */
 
-    async function sendPasswordResetLink() {
+    let otpEmail = "";
 
-      const input =
-        document.getElementById(
-          "forgotEmail"
-        );
+    function setOtpButtonLoading(buttonId, loading, text) {
 
-      const button =
-        document.getElementById(
-          "resetBtn"
-        );
+      const button = document.getElementById(buttonId);
 
+      if (!button) return;
 
-      if (!input || !button) {
-        return;
-      }
+      button.disabled = loading;
 
+      const span = button.querySelector("span");
 
-      const email =
-        input.value
-          .trim()
-          .toLowerCase();
+      if (span) span.innerText = text;
+
+    }
 
 
-      /* ===================================================
-         VALIDATION
-      =================================================== */
+    async function sendEmailOtp() {
 
-      if (!email) {
+      const input = document.getElementById("forgotEmail");
 
-        alert(
-          "⚠️ Please enter your registered email address."
-        );
+      if (!input) return;
+
+      const email = input.value.trim().toLowerCase();
+
+      if (!email || !isValidEmail(email)) {
+
+        alert("⚠️ Please registered Gmail address enter karein.");
 
         return;
-      }
-
-
-      if (!isValidEmail(email)) {
-
-        alert(
-          "⚠️ Please valid email address enter karein."
-        );
-
-        return;
-      }
-
-
-      /* ===================================================
-         LOADING
-      =================================================== */
-
-      button.disabled =
-        true;
-
-
-      const buttonText =
-        button.querySelector(
-          "span"
-        );
-
-
-      if (buttonText) {
-
-        buttonText.innerText =
-          "Sending Link...";
 
       }
 
+      setOtpButtonLoading("resetBtn", true, "Sending Code...");
 
       try {
 
-        /*
-          IMPORTANT:
-          Ye URL Supabase Authentication
-          Redirect URLs mein allowed hona chahiye.
-        */
+        const { error } =
+          await supabaseClient.auth.signInWithOtp({
 
-        const updatePageUrl =
-          "https://smart-money-navy.vercel.app/update-password.html";
+            email: email,
 
+            options: {
+              shouldCreateUser: false
+            }
 
-        const {
-          error
-        } =
-          await supabaseClient.auth
-            .resetPasswordForEmail(
-              email,
-              {
-                redirectTo:
-                  updatePageUrl
-              }
-            );
+          });
 
+        if (error) throw error;
 
-        if (error) {
+        otpEmail = email;
 
-          throw error;
+        document.getElementById("otpInputWrap").style.display = "block";
+        document.getElementById("verifyOtpBtn").style.display = "flex";
 
+        const help = document.getElementById("otpHelpText");
+
+        if (help) {
+          help.innerText =
+            "Aapke Gmail par 6-digit login code bheja gaya hai. Code enter karke login karein.";
         }
 
+        const otp = document.getElementById("emailOtp");
 
-        /*
-          Security ke liye exact email existence
-          reveal nahi kar rahe.
-        */
+        if (otp) otp.focus();
 
-        alert(
-          "📧 Agar is email se account registered hai,\n" +
-          "to password reset link bhej diya gaya hai.\n\n" +
-          "Inbox aur Spam/Junk folder check karein."
-        );
-
-
-        input.value = "";
-
-
-        closeModal(
-          "forgotModal"
-        );
+        alert("📧 Gmail par login code bheja gaya hai. Inbox/Spam check karein.");
 
       } catch (error) {
 
-        console.error(
-          "Password Reset Error:",
-          error
-        );
-
+        console.error("Email OTP Error:", error);
 
         alert(
-          "⚠️ Password reset request mein problem aayi.\n\n" +
-          (
-            error.message ||
-            "Please try again."
-          )
+          "⚠️ Code bhejne mein problem aayi.\n\n" +
+          (error.message || "Please try again.")
         );
 
       } finally {
 
-        button.disabled =
-          false;
+        setOtpButtonLoading("resetBtn", false, "Send Code Again");
+
+      }
+
+    }
 
 
-        if (buttonText) {
+    async function verifyEmailOtp() {
 
-          buttonText.innerText =
-            "Send Reset Link";
+      const email =
+        otpEmail ||
+        (document.getElementById("forgotEmail")?.value || "")
+          .trim()
+          .toLowerCase();
+
+      const token =
+        (document.getElementById("emailOtp")?.value || "")
+          .trim();
+
+      if (!email || !isValidEmail(email)) {
+
+        alert("⚠️ Email address missing hai.");
+
+        return;
+
+      }
+
+      if (!/^\d{6,8}$/.test(token)) {
+
+        alert("⚠️ Gmail se mila verification code enter karein.");
+
+        return;
+
+      }
+
+      setOtpButtonLoading("verifyOtpBtn", true, "Verifying...");
+
+      try {
+
+        const { data, error } =
+          await supabaseClient.auth.verifyOtp({
+
+            email: email,
+            token: token,
+            type: "email"
+
+          });
+
+        if (error) throw error;
+
+        const user = data && data.user;
+
+        if (!user) {
+          throw new Error("Verification ke baad session create nahi hui.");
+        }
+
+        const {
+          data: profile,
+          error: profileError
+        } =
+          await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq("user_id", user.id)
+            .maybeSingle();
+
+        if (profileError) throw profileError;
+
+        if (!profile) {
+
+          await supabaseClient.auth.signOut();
+
+          throw new Error(
+            "Login verify hua, lekin Smart Money profile nahi mila."
+          );
 
         }
+
+        if (profile.is_deleted === true) {
+
+          await supabaseClient.auth.signOut();
+
+          throw new Error("Aapka account deleted hai.");
+
+        }
+
+        if (profile.is_active !== true) {
+
+          await supabaseClient.auth.signOut();
+
+          throw new Error(
+            "Aapka account abhi active nahi hai. Admin approval ke baad dashboard access milega."
+          );
+
+        }
+
+        const safeUserData = {
+
+          user_id: profile.user_id,
+          auth_user_id: user.id,
+
+          full_name: profile.full_name || "",
+
+          email:
+            profile.email ||
+            user.email ||
+            email,
+
+          auth_email:
+            user.email ||
+            email,
+
+          referral_id:
+            profile.referral_id || "",
+
+          referred_by:
+            profile.referred_by || "",
+
+          balance:
+            profile.balance ?? 0,
+
+          package_name:
+            profile.package_name || "",
+
+          profile_photo:
+            profile.profile_photo || null,
+
+          profile_pic:
+            profile.profile_pic || null,
+
+          payout_type:
+            profile.payout_type || "",
+
+          date_of_birth:
+            profile.date_of_birth || null,
+
+          is_active: true,
+          is_deleted: false,
+
+          created_at:
+            profile.created_at || null
+
+        };
+
+        localStorage.setItem(
+          "userData",
+          JSON.stringify(safeUserData)
+        );
+
+        localStorage.setItem("rememberLogin", "true");
+
+        closeModal("forgotModal");
+
+        alert("✅ Gmail code verified. Login successful!");
+
+        window.location.href = "dashboard.html";
+
+      } catch (error) {
+
+        console.error("OTP Verification Error:", error);
+
+        alert(
+          "⚠️ Verification failed.\n\n" +
+          (error.message || "Invalid or expired code.")
+        );
+
+      } finally {
+
+        setOtpButtonLoading(
+          "verifyOtpBtn",
+          false,
+          "Verify Code & Login"
+        );
 
       }
 
@@ -2394,7 +2512,18 @@
 
             event.preventDefault();
 
-            sendPasswordResetLink();
+            sendEmailOtp();
+
+          }
+
+          if (
+            active.id ===
+            "emailOtp"
+          ) {
+
+            event.preventDefault();
+
+            verifyEmailOtp();
 
           }
 
