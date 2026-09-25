@@ -3763,6 +3763,228 @@ function renderPayments(){
 }  
   
   
+async function processApprovedPaymentCommission(payment, buyerUser){
+    /*
+     * Commission is processed only once for an approved payment.
+     * The existing Smart Money package commission rules are preserved:
+     * Starter 30%, Intermediate 50%, Expert 70%, Master 80%, Brahmastra 85%.
+     */
+    try{
+        if(!payment || String(payment.status || payment.payment_status || "").toLowerCase() !== "approved"){
+            return {
+                processed:false,
+                message:"Payment is not approved."
+            };
+        }
+
+        if(payment.commission_processed_at){
+            return {
+                processed:true,
+                alreadyProcessed:true,
+                message:"Commission was already processed for this payment."
+            };
+        }
+
+        const buyerId = val(
+            payment.user_id,
+            buyerUser ? getUserKey(buyerUser) : null
+        );
+
+        if(!buyerId){
+            return {
+                processed:false,
+                message:"Buyer user ID could not be resolved."
+            };
+        }
+
+        const { data: buyerProfile, error: buyerError } =
+            await supabaseClient
+                .from("profiles")
+                .select("user_id, referral_code, referral_id, referred_by")
+                .eq("user_id", buyerId)
+                .maybeSingle();
+
+        if(buyerError) throw buyerError;
+
+        if(!buyerProfile){
+            return {
+                processed:false,
+                message:"Buyer profile could not be found."
+            };
+        }
+
+        /*
+         * referred_by is the real sponsor relationship.
+         * payment.referral_id is kept as a compatibility fallback for
+         * older payment records, because older checkout versions stored
+         * the sponsor ID there.
+         */
+        const sponsorRef =
+            String(
+                buyerProfile.referred_by ||
+                payment.referral_id ||
+                ""
+            ).trim();
+
+        if(!sponsorRef){
+            return {
+                processed:false,
+                message:"No sponsor/referrer is attached to this buyer."
+            };
+        }
+
+        /*
+         * Never pay a commission to the buyer's own account.
+         * This also protects against the old self-referral data bug.
+         */
+        const buyerCodes = [
+            String(buyerProfile.user_id || ""),
+            String(buyerProfile.referral_code || ""),
+            String(buyerProfile.referral_id || "")
+        ].map(v => v.trim().toLowerCase()).filter(Boolean);
+
+        if(buyerCodes.includes(sponsorRef.toLowerCase())){
+            return {
+                processed:false,
+                selfReferral:true,
+                message:"This payment has a self-referral relationship, so no commission was created."
+            };
+        }
+
+        let sponsor = null;
+
+        const byCode = await supabaseClient
+            .from("profiles")
+            .select("user_id, balance, referral_code, referral_id")
+            .eq("referral_code", sponsorRef)
+            .maybeSingle();
+
+        if(byCode.error){
+            console.warn("Sponsor lookup by referral_code failed:", byCode.error);
+        }else{
+            sponsor = byCode.data;
+        }
+
+        if(!sponsor){
+            const byReferralId = await supabaseClient
+                .from("profiles")
+                .select("user_id, balance, referral_code, referral_id")
+                .eq("referral_id", sponsorRef)
+                .maybeSingle();
+
+            if(byReferralId.error){
+                console.warn("Sponsor lookup by referral_id failed:", byReferralId.error);
+            }else{
+                sponsor = byReferralId.data;
+            }
+        }
+
+        if(!sponsor){
+            return {
+                processed:false,
+                message:"The sponsor/referrer account was not found."
+            };
+        }
+
+        if(String(sponsor.user_id) === String(buyerId)){
+            return {
+                processed:false,
+                selfReferral:true,
+                message:"Buyer and sponsor are the same account; no commission was created."
+            };
+        }
+
+        const packageName = String(
+            payment.package_name || buyerProfile.package_name || "Package"
+        );
+
+        const pkgLower = packageName.toLowerCase();
+        let commissionRate = 0.30;
+
+        if(pkgLower.includes("brahmastra")){
+            commissionRate = 0.85;
+        }else if(pkgLower.includes("master")){
+            commissionRate = 0.80;
+        }else if(pkgLower.includes("expert")){
+            commissionRate = 0.70;
+        }else if(pkgLower.includes("intermediate")){
+            commissionRate = 0.50;
+        }else if(pkgLower.includes("starter")){
+            commissionRate = 0.30;
+        }
+
+        const baseAmount = Number(
+            payment.package_price ?? payment.amount ?? 0
+        );
+
+        if(!Number.isFinite(baseAmount) || baseAmount <= 0){
+            return {
+                processed:false,
+                message:"Payment amount is invalid."
+            };
+        }
+
+        const commissionAmount =
+            Number((baseAmount * commissionRate).toFixed(2));
+
+        /*
+         * earnings has no payment_request_id column, so the payment's
+         * commission_processed_at flag is the idempotency guard.
+         */
+        const { error: earningError } = await supabaseClient
+            .from("earnings")
+            .insert({
+                user_id: sponsor.user_id,
+                amount: commissionAmount,
+                earning_type: `Referral Commission (${packageName})`,
+                created_at: new Date().toISOString()
+            });
+
+        if(earningError){
+            throw earningError;
+        }
+
+        const currentBalance = Number(sponsor.balance || 0);
+        const newBalance =
+            Number((currentBalance + commissionAmount).toFixed(2));
+
+        const { error: balanceError } = await supabaseClient
+            .from("profiles")
+            .update({ balance: newBalance })
+            .eq("user_id", sponsor.user_id);
+
+        if(balanceError){
+            throw balanceError;
+        }
+
+        const { error: markError } = await supabaseClient
+            .from("payment_requests")
+            .update({
+                commission_processed_at: new Date().toISOString()
+            })
+            .eq("id", payment.id);
+
+        if(markError){
+            throw markError;
+        }
+
+        return {
+            processed:true,
+            amount:commissionAmount,
+            rate:commissionRate,
+            sponsorUserId:sponsor.user_id
+        };
+
+    }catch(error){
+        console.error("Approved payment commission error:", error);
+        return {
+            processed:false,
+            message:error?.message || "Commission processing failed."
+        };
+    }
+}
+
+
 async function approvePayment(id){
 
     if(!confirm("Approve this payment?")) return;
@@ -3794,31 +4016,57 @@ async function approvePayment(id){
 
         const user = findUserForRequest(payment);
 
+        let activationWarning = "";
+
         if(user){
             const userKey = getUserKey(user);
+
             if(userKey){
+                /*
+                 * IMPORTANT:
+                 * public.profiles is keyed by user_id, not id.
+                 * The old code first updated .eq("id", userKey).
+                 * That can return zero rows without an error, leaving
+                 * the approved user inactive.
+                 */
                 const profilePayload = {
                     is_active: true,
+                    status: "ACTIVE",
                     package_name: payment.package_name || user.package_name || null
                 };
 
-                const byId = await supabaseClient
-                    .from("profiles")
-                    .update(profilePayload)
-                    .eq("id", userKey);
-
-                if(byId.error){
-                    const byUserId = await supabaseClient
+                const { data: activatedProfile, error: activationError } =
+                    await supabaseClient
                         .from("profiles")
                         .update(profilePayload)
-                        .eq("user_id", userKey);
+                        .eq("user_id", userKey)
+                        .select("*")
+                        .maybeSingle();
 
-                    if(byUserId.error){
-                        console.warn("Profile activation update failed:", byUserId.error);
-                    }
+                if(activationError){
+                    activationWarning =
+                        " Payment approved, but profile activation failed: " +
+                        activationError.message;
+                    console.warn("Profile activation update failed:", activationError);
+                }else if(!activatedProfile){
+                    activationWarning =
+                        " Payment approved, but the user's profile row could not be activated.";
+                    console.warn("Profile activation returned no row.", userKey);
                 }
+            }else{
+                activationWarning =
+                    " Payment approved, but the user's profile ID could not be resolved.";
             }
+        }else{
+            activationWarning =
+                " Payment approved, but the matching user profile could not be resolved.";
         }
+
+        const commissionResult =
+            await processApprovedPaymentCommission(
+                payment,
+                user
+            );
 
         const targetEmail = val(payment.email, user?.email);
 
@@ -3848,7 +4096,23 @@ async function approvePayment(id){
             }
         }
 
-        alert("Payment approved successfully!");
+        let approvalMessage = "Payment approved successfully!";
+
+        if(commissionResult?.processed){
+            approvalMessage +=
+                "\nCommission credited: ₹" +
+                Number(commissionResult.amount || 0).toFixed(2);
+        }else if(commissionResult?.message){
+            approvalMessage +=
+                "\nCommission: " +
+                commissionResult.message;
+        }
+
+        if(activationWarning){
+            approvalMessage += activationWarning;
+        }
+
+        alert(approvalMessage);
         await refreshAllData();
 
     }catch(error){
