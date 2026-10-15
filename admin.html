@@ -3774,8 +3774,9 @@ function renderPayments(){
 async function processApprovedPaymentCommission(payment, buyerUser){
     /*
      * Commission is processed only once for an approved payment.
-     * The existing Smart Money package commission rules are preserved:
-     * Starter 30%, Intermediate 50%, Expert 70%, Master 80%, Brahmastra 85%.
+     * Direct package referral commission rates (per package cards):
+     * Starter 30%, Intermediate 50%, Expert 70%, Master 75%,
+     * Brahmastra 85%, Premium Pro 85%.
      */
     try{
         if(!payment || String(payment.status || payment.payment_status || "").toLowerCase() !== "approved"){
@@ -3906,19 +3907,27 @@ async function processApprovedPaymentCommission(payment, buyerUser){
             payment.package_name || buyerProfile.package_name || "Package"
         );
 
-        const pkgLower = packageName.toLowerCase();
-        let commissionRate = 0.30;
+        const pkgLower = packageName.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+        let commissionRate;
 
-        if(pkgLower.includes("brahmastra")){
+        // Match the six published package cards exactly.
+        if(pkgLower.includes("premium pro")){
+            commissionRate = 0.85;
+        }else if(pkgLower.includes("brahmastra")){
             commissionRate = 0.85;
         }else if(pkgLower.includes("master")){
-            commissionRate = 0.80;
+            commissionRate = 0.75;
         }else if(pkgLower.includes("expert")){
             commissionRate = 0.70;
         }else if(pkgLower.includes("intermediate")){
             commissionRate = 0.50;
         }else if(pkgLower.includes("starter")){
             commissionRate = 0.30;
+        }else{
+            return {
+                processed:false,
+                message:"Package commission rate is not configured for: " + packageName
+            };
         }
 
         const baseAmount = Number(
