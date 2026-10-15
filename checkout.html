@@ -369,9 +369,12 @@ async function createSmartMoneyAccount(fullName,mobile,email,password,referrer){
     full_name:fullName,
     email,
     mobile,
+    // Every buyer gets their own unique ID. The entered sponsor code
+    // belongs ONLY in referred_by; copying it into referral_id caused
+    // profiles_referral_id_key duplicate-key failures during checkout.
     referral_code:buyerCode,
+    referral_id:buyerCode,
     referred_by:actualReferral,
-    referral_id:actualReferral,
     status:"PENDING",
     balance:0,
     is_active:false
