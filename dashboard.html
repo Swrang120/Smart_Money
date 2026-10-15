@@ -2224,60 +2224,103 @@ function filterReferrals(days, btnElement){
 /* AUTOMATIC PACKAGE BUY REFERRAL & COMMISSION SYSTEM */
 async function processReferralCommissionOnPackageBuy(buyerUserId, buyerPackageName, buyerPackagePrice){
     try{
-        const { data: buyer } = await supabaseClient
+        const packagePrice = Number(buyerPackagePrice);
+        if(!Number.isFinite(packagePrice) || packagePrice <= 0) return;
+
+        const { data: buyer, error: buyerError } = await supabaseClient
             .from("profiles")
             .select("referred_by")
             .eq("user_id", buyerUserId)
             .maybeSingle();
 
+        if(buyerError) throw buyerError;
         if(!buyer || !buyer.referred_by) return;
 
-        const { data: sponsor } = await supabaseClient
+        // A = direct referrer, B = A's referrer, C = B's referrer.
+        const { data: sponsorA, error: sponsorAError } = await supabaseClient
             .from("profiles")
-            .select("user_id, balance")
+            .select("user_id, balance, referred_by")
             .eq("referral_code", buyer.referred_by)
             .maybeSingle();
 
-        if(!sponsor) return;
+        if(sponsorAError) throw sponsorAError;
+        if(!sponsorA) return;
 
         const pkgLower = String(buyerPackageName || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-        let commissionRate;
+        let directRate;
 
-        // Package-purchase direct commission is separate from A/B/C bet commission.
-        if(pkgLower.includes("premium pro")){
-            commissionRate = 0.85;
-        }else if(pkgLower.includes("brahmastra")){
-            commissionRate = 0.85;
+        // A-tier package commission follows the six published package rates.
+        if(pkgLower.includes("premium pro") || pkgLower.includes("brahmastra")){
+            directRate = 0.85;
         }else if(pkgLower.includes("master")){
-            commissionRate = 0.75;
+            directRate = 0.75;
         }else if(pkgLower.includes("expert")){
-            commissionRate = 0.70;
+            directRate = 0.70;
         }else if(pkgLower.includes("intermediate")){
-            commissionRate = 0.50;
+            directRate = 0.50;
         }else if(pkgLower.includes("starter")){
-            commissionRate = 0.30;
+            directRate = 0.30;
         }else{
             console.warn("Package commission rate not configured:", buyerPackageName);
             return;
         }
 
-        const commissionAmount = Number(buyerPackagePrice) * commissionRate;
+        const commissionTiers = [
+            { profile: sponsorA, tier: "A", rate: directRate },
+        ];
 
-        await supabaseClient.from("earnings").insert({
-            user_id: sponsor.user_id,
-            amount: commissionAmount,
-            earning_type: `Referral Commission (${buyerPackageName})`,
-            created_at: new Date().toISOString()
-        });
+        // B receives 8% of the purchased package price.
+        if(sponsorA.referred_by){
+            const { data: sponsorB, error: sponsorBError } = await supabaseClient
+                .from("profiles")
+                .select("user_id, balance, referred_by")
+                .eq("referral_code", sponsorA.referred_by)
+                .maybeSingle();
 
-        const newSponsorBal = Number(sponsor.balance || 0) + commissionAmount;
-        await supabaseClient
-            .from("profiles")
-            .update({ balance: newSponsorBal })
-            .eq("user_id", sponsor.user_id);
+            if(sponsorBError) throw sponsorBError;
+            if(sponsorB && sponsorB.user_id !== sponsorA.user_id){
+                commissionTiers.push({ profile: sponsorB, tier: "B", rate: 0.08 });
 
+                // C receives 5% of the purchased package price.
+                if(sponsorB.referred_by){
+                    const { data: sponsorC, error: sponsorCError } = await supabaseClient
+                        .from("profiles")
+                        .select("user_id, balance")
+                        .eq("referral_code", sponsorB.referred_by)
+                        .maybeSingle();
+
+                    if(sponsorCError) throw sponsorCError;
+                    if(sponsorC &&
+                       sponsorC.user_id !== sponsorA.user_id &&
+                       sponsorC.user_id !== sponsorB.user_id){
+                        commissionTiers.push({ profile: sponsorC, tier: "C", rate: 0.05 });
+                    }
+                }
+            }
+        }
+
+        // Record and credit each eligible tier separately.
+        for(const item of commissionTiers){
+            const commissionAmount = Math.round(packagePrice * item.rate * 100) / 100;
+            if(commissionAmount <= 0) continue;
+
+            const { error: earningError } = await supabaseClient.from("earnings").insert({
+                user_id: item.profile.user_id,
+                amount: commissionAmount,
+                earning_type: `Package Referral Commission - ${item.tier} (${buyerPackageName}, ${(item.rate * 100).toFixed(2)}%)`,
+                created_at: new Date().toISOString()
+            });
+            if(earningError) throw earningError;
+
+            const newBalance = Number(item.profile.balance || 0) + commissionAmount;
+            const { error: balanceError } = await supabaseClient
+                .from("profiles")
+                .update({ balance: newBalance })
+                .eq("user_id", item.profile.user_id);
+            if(balanceError) throw balanceError;
+        }
     }catch(e){
-        console.error("Commission calculation error:", e);
+        console.error("Package referral commission calculation error:", e);
     }
 }
 
