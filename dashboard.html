@@ -2240,19 +2240,25 @@ async function processReferralCommissionOnPackageBuy(buyerUserId, buyerPackageNa
 
         if(!sponsor) return;
 
-        let commissionRate = 0.30;
-        const pkgLower = String(buyerPackageName).toLowerCase();
+        const pkgLower = String(buyerPackageName || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+        let commissionRate;
 
-        if(pkgLower.includes("brahmastra")){
+        // Package-purchase direct commission is separate from A/B/C bet commission.
+        if(pkgLower.includes("premium pro")){
+            commissionRate = 0.85;
+        }else if(pkgLower.includes("brahmastra")){
             commissionRate = 0.85;
         }else if(pkgLower.includes("master")){
-            commissionRate = 0.80;
+            commissionRate = 0.75;
         }else if(pkgLower.includes("expert")){
             commissionRate = 0.70;
         }else if(pkgLower.includes("intermediate")){
             commissionRate = 0.50;
         }else if(pkgLower.includes("starter")){
             commissionRate = 0.30;
+        }else{
+            console.warn("Package commission rate not configured:", buyerPackageName);
+            return;
         }
 
         const commissionAmount = Number(buyerPackagePrice) * commissionRate;
