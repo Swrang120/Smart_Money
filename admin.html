@@ -1345,7 +1345,15 @@ class="sidebar"
   
     <div class="status-upload">  
   
-        <b>📱 Upload 24 Hour Status</b>  
+         <div class="status-upload" id="adminApkUploadCard">
+        <b>📲 Install APK — App Download</b>
+        <p style="font-size:12px;line-height:1.5;color:#cbd5e1;margin:8px 0">Yahan upload kiya gaya latest APK website ke Install APK menu mein sabhi visitors ko milega.</p>
+        <input type="file" id="adminApkFileInput" accept=".apk,application/vnd.android.package-archive,application/octet-stream">
+        <button class="btn btn-primary" id="adminApkUploadBtn" style="width:100%;margin-top:8px" onclick="uploadSmartMoneyApk()">Upload / Update APK</button>
+        <div id="adminApkUploadStatus" style="font-size:12px;line-height:1.5;margin-top:10px;color:#cbd5e1" aria-live="polite">Checking current APK…</div>
+    </div>
+
+<b>📱 Upload 24 Hour Status</b>  
   
         <input  
         type="file"  
@@ -6534,6 +6542,61 @@ async function uploadAndSaveAdminLogo(){
    GLOBAL SETTINGS  
 ========================================================= */  
   
+/* ADMIN APK UPLOAD — only the signed-in admin may upload. */
+async function loadSmartMoneyApkAdminStatus(){
+  const status = document.getElementById("adminApkUploadStatus");
+  if(!status || !supabaseClient) return;
+  try{
+    const {data,error} = await supabaseClient.from("global_settings").select("setting_value").eq("setting_key","app_apk_url").maybeSingle();
+    if(error) throw error;
+    const url = String(data?.setting_value || "").trim();
+    if(url && /^https:\/\/rvprrulkjegvicbnjuft\.supabase\.co\/storage\/v1\/object\/public\/app-apk\//i.test(url)){
+      status.innerHTML = '✅ Current APK is live for all visitors. <a href="' + url.replace(/&/g,"&amp;").replace(/"/g,"&quot;") + '" target="_blank" rel="noopener" style="color:#a7f3d0;text-decoration:underline">Open current APK</a>';
+    }else{
+      status.textContent = "No APK uploaded yet.";
+    }
+  }catch(error){
+    status.textContent = "Could not load APK status: " + (error?.message || "Unknown error");
+  }
+}
+async function uploadSmartMoneyApk(){
+  const input = document.getElementById("adminApkFileInput");
+  const button = document.getElementById("adminApkUploadBtn");
+  const status = document.getElementById("adminApkUploadStatus");
+  const file = input?.files?.[0];
+  if(!file){ alert("Pehle .apk file select karo."); return; }
+  if(!/\.apk$/i.test(file.name)){ alert("Sirf Android .apk file upload kar sakte ho."); return; }
+  if(file.size > 200 * 1024 * 1024){ alert("APK file 200 MB se chhoti honi chahiye."); return; }
+  try{
+    if(!supabaseClient) throw new Error("Supabase connection available nahi hai.");
+    const {data:sessionData,error:sessionError} = await supabaseClient.auth.getSession();
+    if(sessionError) throw sessionError;
+    const user = sessionData?.session?.user;
+    const allowed = ["sboro3235@gmail.com","phwilawswargiary6900@gmail.com"];
+    if(!user?.email || !allowed.includes(String(user.email).toLowerCase())) throw new Error("Sirf authorized admin APK upload kar sakta hai. Admin account se login karo.");
+    button.disabled = true;
+    button.textContent = "Uploading APK…";
+    status.textContent = "APK upload ho raha hai…";
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g,"_").replace(/\.apk$/i,"");
+    const objectPath = "smart-money-" + Date.now() + "-" + safeName + ".apk";
+    const {error:uploadError} = await supabaseClient.storage.from("app-apk").upload(objectPath,file,{contentType:"application/vnd.android.package-archive",upsert:false,cacheControl:"3600"});
+    if(uploadError) throw uploadError;
+    const {data:urlData} = supabaseClient.storage.from("app-apk").getPublicUrl(objectPath);
+    const publicUrl = urlData?.publicUrl;
+    if(!publicUrl) throw new Error("Upload ho gaya, lekin public download URL nahi mila.");
+    await saveGlobalSetting("app_apk_url",publicUrl);
+    input.value = "";
+    status.textContent = "✅ APK upload successful. Latest APK ab website ke Install APK menu mein sabko milega.";
+    alert("APK upload successful! Website par Install APK link update ho gaya.");
+  }catch(error){
+    console.error("APK upload failed:",error);
+    if(status) status.textContent = "❌ APK upload failed: " + (error?.message || "Unknown error");
+    alert("APK upload failed: " + (error?.message || "Unknown error"));
+  }finally{
+    if(button){button.disabled=false;button.textContent="Upload / Update APK";}
+  }
+}
+
 async function saveGlobalSetting(  
 key,  
 value  
@@ -8087,6 +8150,13 @@ function initializeCertificate(){
     else
         attachLoginBridge();
 })();
+
+if(document.readyState === "loading"){
+  document.addEventListener("DOMContentLoaded",loadSmartMoneyApkAdminStatus);
+}else{
+  loadSmartMoneyApkAdminStatus();
+}
+
 </script>
 
 </body>
