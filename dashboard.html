@@ -2299,23 +2299,18 @@ async function submitWithdrawal(){
     submitBtn.innerText = "Processing...";
 
     try{
-        const { error: insertError } = await supabaseClient
-            .from("withdrawal_requests")
-            .insert({ user_id: currentUserId, amount: amount, status: "pending" });
+        // The database RPC creates the pending request and deducts the
+        // balance atomically. Never write wallet balances from the browser.
+        const { data: withdrawalResult, error: withdrawalError } =
+            await supabaseClient.rpc("request_withdrawal", { p_amount: amount });
 
-        if(insertError) throw insertError;
+        if(withdrawalError) throw withdrawalError;
 
-        const newBalance = Number(userCurrentBalance) - amount;
-        const { data: updatedProfile } = await supabaseClient
-            .from("profiles")
-            .update({ balance: newBalance })
-            .eq("user_id", currentUserId)
-            .select()
-            .maybeSingle();
-
-        currentProfile = { ...currentProfile, ...(updatedProfile || { balance: newBalance }) };
-        userCurrentBalance = Number(currentProfile.balance || 0);
-        renderProfile(currentProfile);
+        if(withdrawalResult?.balance !== undefined){
+            currentProfile = { ...currentProfile, balance: Number(withdrawalResult.balance) };
+            userCurrentBalance = Number(currentProfile.balance || 0);
+            renderProfile(currentProfile);
+        }
         showToast("Withdrawal request submitted successfully!");
         closeModal("withdrawModal");
         await loadWithdrawalHistory();
@@ -2353,30 +2348,19 @@ function setupRealtimeListener(){
                 }
 
                 if((newStatus === "rejected" || newStatus === "failed") && oldStatus !== "rejected" && oldStatus !== "failed"){
-                    const refundAmount = Number(newData.amount || 0);
-
+                    // The admin-only database RPC refunds exactly once when
+                    // rejecting the request; the client only refreshes UI.
                     const { data: freshProfile } = await supabaseClient
                         .from("profiles")
-                        .select("balance")
+                        .select("*")
                         .eq("user_id", currentUserId)
                         .maybeSingle();
-
-                    const currentBal = Number(freshProfile?.balance ?? currentProfile.balance ?? 0);
-                    const newBalance = currentBal + refundAmount;
-
-                    const { data: updatedProfile } = await supabaseClient
-                        .from("profiles")
-                        .update({ balance: newBalance })
-                        .eq("user_id", currentUserId)
-                        .select()
-                        .maybeSingle();
-
-                    if(updatedProfile){
-                        currentProfile.balance = updatedProfile.balance;
-                        userCurrentBalance = Number(updatedProfile.balance || 0);
+                    if(freshProfile){
+                        currentProfile = { ...currentProfile, ...freshProfile };
+                        userCurrentBalance = Number(currentProfile.balance || 0);
                         renderProfile(currentProfile);
                     }
-                    showToast(`Withdrawal Rejected — ₹${refundAmount.toFixed(2)} refunded to your balance!`);
+                    showToast("Withdrawal rejected. Any eligible refund is reflected in your balance.");
                 }
             })
             .subscribe();
