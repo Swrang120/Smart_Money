@@ -300,57 +300,13 @@
     // =====================================================
 
     async function generateUniqueReferralCode() {
-
-      for (let attempt = 0; attempt < 20; attempt++) {
-
-        const randomDigits =
-          Math.floor(
-            10000 +
-            Math.random() * 90000
-          );
-
-
-        const referralCode =
-          "SM-smart" + randomDigits;
-
-
-        const {
-          data,
-          error
-        } =
-        await supabaseClient
-          .from("profiles")
-          .select("id")
-          .eq(
-            "referral_code",
-            referralCode
-          )
-          .maybeSingle();
-
-
-        if (error) {
-          console.log(
-            "Referral check error:",
-            error
-          );
-        }
-
-
-        // Agar code database me nahi hai
-        // to use kar sakte hain
-        if (!data) {
-          return referralCode;
-        }
-
+      const { data, error } = await supabaseClient.rpc("generate_unique_referral_code");
+      if(error) throw new Error("Unique ID generation failed: " + error.message);
+      if(typeof data !== "string" || !/^SM-smart\d{5}$/.test(data)) {
+        throw new Error("Unique referral ID could not be generated. Please try again.");
       }
-
-
-      throw new Error(
-        "Unable to generate unique referral code. Please try again."
-      );
-
+      return data;
     }
-
 
     // =====================================================
     // REGISTER USER
