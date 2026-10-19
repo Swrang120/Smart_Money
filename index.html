@@ -2495,6 +2495,8 @@ onclick="openAdminPreviewModal(); toggleMenu();">
 👁️ Preview (Admin Updates)
 </a>
 
+<a href="#" class="m-link" id="installApkMenuLink" style="display:none" onclick="downloadSmartMoneyApk(event); toggleMenu();">📲 Install APK</a>
+
 <a href="dashboard.html"
 class="mobile-dashboard-btn"
 id="authMenuLink">
@@ -8043,6 +8045,45 @@ window.addEventListener(
       }
       v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
   })(document, 'script');
+
+/* Public Smart Money APK link: the admin-selected APK is shared with all visitors. */
+async function loadSmartMoneyApkLink(){
+  const link = document.getElementById("installApkMenuLink");
+  if(!link || !supabaseClient) return;
+  try{
+    const {data,error} = await supabaseClient
+      .from("global_settings")
+      .select("setting_value")
+      .eq("setting_key","app_apk_url")
+      .maybeSingle();
+    if(error) throw error;
+    const url = String(data?.setting_value || "").trim();
+    if(url && /^https:\/\/rvprrulkjegvicbnjuft\.supabase\.co\/storage\/v1\/object\/public\/app-apk\//i.test(url)){
+      link.href = url;
+      link.setAttribute("download","Smart-Money.apk");
+      link.style.display = "flex";
+      link.setAttribute("aria-label","Download the latest Smart Money APK");
+    }else{
+      link.style.display = "none";
+    }
+  }catch(error){
+    console.warn("Smart Money APK link could not be loaded:",error);
+    link.style.display = "none";
+  }
+}
+function downloadSmartMoneyApk(event){
+  const link = document.getElementById("installApkMenuLink");
+  if(!link || link.style.display === "none" || !link.href || link.href === location.href+"#"){
+    if(event) event.preventDefault();
+    alert("Smart Money APK abhi admin ne upload nahi kiya hai.");
+  }
+}
+if(document.readyState === "loading"){
+  document.addEventListener("DOMContentLoaded",loadSmartMoneyApkLink);
+}else{
+  loadSmartMoneyApkLink();
+}
+
 </script>
 </body>
 </html>
