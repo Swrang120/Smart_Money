@@ -101,7 +101,7 @@
     </div>
     <div class="feature-row">
       <span class="feature-label">Direct Commission</span>
-      <span class="feature-value" style="color:#10b981;">85% (₹2,500.15 / Sale)</span>
+      <span class="feature-value" style="color:#10b981;">85% (₹3,824.15 / Sale)</span>
     </div>
     <div class="feature-row">
       <span class="feature-label">Minimum Withdrawal</span>
@@ -141,30 +141,9 @@
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
   async function buyMaxProPackage() {
-    try {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (!session || !session.user) {
-        alert("Pehle login karna zaroori hai!");
-        window.location.href = "login.html";
-        return;
-      }
-
-      const { error } = await supabaseClient
-        .from('profiles')
-        .update({ package_name: 'Max Pro Package' })
-        .eq('user_id', session.user.id);
-
-      if (error) {
-        alert("Activation Error: " + error.message);
-        return;
-      }
-
-      alert("🎉 Congratulation! Max Pro VIP Package successfully activated!");
-      window.location.href = "dashboard.html";
-    } catch (err) {
-      console.error(err);
-      alert("Kuch error aa gaya. Dobara try karein.");
-    }
+    // Package pages must never activate a paid package directly.
+    // The checkout/payment approval flow is the only activation path.
+    window.location.href = "checkout.html?name=Max%20Pro%20Package&price=4499";
   }
 </script>
 
