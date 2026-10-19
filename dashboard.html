@@ -1241,16 +1241,31 @@ button{
 <!-- PACKAGE MODAL -->
 <div id="packageModal" class="modal-overlay">
     <div class="modal-box">
-        <h3 style="color:#7c3aed;margin-top:0">👑 My Package</h3>
+        <h3 style="color:#7c3aed;margin-top:0">👑 My Package & Course Details</h3>
         <div style="background:#f8fafc;padding:18px;border-radius:14px;border:1px solid #e2e8f0">
-            <div style="font-size:12px;color:#64748b;margin-bottom:5px">CURRENT PACKAGE</div>
+            <div style="font-size:12px;color:#64748b;margin-bottom:5px">YOUR ACTIVE PACKAGE / COURSE</div>
             <h2 id="modalPkgName" style="margin:0;color:#0f172a;font-size:24px">No Package Active</h2>
-            <div style="margin-top:18px;border-top:1px solid #e2e8f0;padding-top:15px">
+            <div id="modalPkgPrice" style="font-size:18px;font-weight:800;color:#7c3aed;margin-top:8px">Package price: —</div>
+            <div style="margin-top:14px;border-top:1px solid #e2e8f0;padding-top:12px">
                 <p style="font-size:13px;color:#475569"><b>Package Status:</b> <span id="modalPkgStatus">No Active Package</span></p>
-                <p style="font-size:13px;color:#475569"><b>Commission:</b> <span id="modalPkgCommission">Not Available</span></p>
-                <p style="font-size:13px;color:#475569"><b>Withdrawal Limit:</b> <span id="modalPkgWithdraw">₹200 Minimum</span></p>
+                <p style="font-size:13px;color:#475569"><b>Withdrawal Minimum:</b> <span id="modalPkgWithdraw">₹200 Minimum</span></p>
             </div>
         </div>
+        <h4 style="margin:18px 0 8px;color:#0f172a">💰 Referral Commission Details</h4>
+        <div style="border:1px solid #e2e8f0;border-radius:12px;overflow:hidden">
+            <div style="display:flex;justify-content:space-between;padding:11px 12px;background:#f8fafc;font-size:12px"><b>Level</b><b>Rate / example per sale</b></div>
+            <div style="display:flex;justify-content:space-between;padding:11px 12px;border-top:1px solid #e2e8f0;font-size:12px"><span>Level A — Direct</span><b id="modalPkgL1">—</b></div>
+            <div style="display:flex;justify-content:space-between;padding:11px 12px;border-top:1px solid #e2e8f0;font-size:12px"><span>Level B — 2nd level</span><b id="modalPkgL2">—</b></div>
+            <div style="display:flex;justify-content:space-between;padding:11px 12px;border-top:1px solid #e2e8f0;font-size:12px"><span>Level C — 3rd level</span><b id="modalPkgL3">—</b></div>
+        </div>
+        <h4 style="margin:18px 0 8px;color:#0f172a">✅ What you can do</h4>
+        <ul style="padding-left:20px;margin:0;color:#475569;font-size:12px;line-height:1.8">
+            <li>Share your referral code and invite people.</li>
+            <li>Earn Level A, B and C commissions when eligible package payments are approved.</li>
+            <li>View your earnings history and transaction dates.</li>
+            <li>Request a withdrawal when your available balance meets the minimum limit.</li>
+        </ul>
+        <p id="modalPkgNote" style="font-size:11px;color:#64748b;line-height:1.5;margin:12px 0 0">Commission is credited only after valid payment approval and referral validation. Rates are based on the package purchased by the referred user.</p>
         <button onclick="closeModal('packageModal')" class="btn-action" style="margin-top:15px">Close</button>
     </div>
 </div>
@@ -2057,23 +2072,44 @@ function copyUserReferralCode(){
 }
 
 function updatePackageModal(){
-    const packageName = String(currentProfile?.package_name || "").trim().toLowerCase();
-    const hasPackage = packageName && packageName !== "none";
+    const rawName = String(currentProfile?.package_name || "").trim();
+    const packageName = rawName.toLowerCase();
+    const hasPackage = Boolean(packageName && packageName !== "none");
+    const packages = {
+        "starter package": {name:"Starter Package", price:289, l1:0.30},
+        "starter": {name:"Starter Package", price:289, l1:0.30},
+        "intermediate package": {name:"Intermediate Package", price:560, l1:0.50},
+        "intermediate": {name:"Intermediate Package", price:560, l1:0.50},
+        "expert package": {name:"Expert Package", price:1149, l1:0.70},
+        "expert": {name:"Expert Package", price:1149, l1:0.70},
+        "master package": {name:"Master Package", price:2499, l1:0.75},
+        "master": {name:"Master Package", price:2499, l1:0.75},
+        "brahmastra package": {name:"Brahmastra Package", price:5499, l1:0.85},
+        "brahmastra": {name:"Brahmastra Package", price:5499, l1:0.85},
+        "premium pro package": {name:"Premium Pro Package", price:10997, l1:0.85},
+        "premium pro": {name:"Premium Pro Package", price:10997, l1:0.85}
+    };
+    const pkg = packages[packageName] || null;
+    const displayName = hasPackage ? (pkg?.name || rawName) : "No Package Active";
+    const money = value => new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",minimumFractionDigits:2,maximumFractionDigits:2}).format(value);
+    const setText = (id,value) => { const el=document.getElementById(id); if(el) el.textContent=value; };
 
-    let commissionText = "Not Available";
-    let withdrawLimitText = "₹200 Minimum";
-    let pkgDisplayName = "No Package Active";
+    setText("modalPkgName", displayName);
+    setText("modalPkgStatus", hasPackage ? "Active" : "No Active Package");
+    setText("modalPkgWithdraw", hasPackage ? "₹100 Minimum" : "₹200 Minimum");
+    setText("modalPkgPrice", pkg ? "Package price: " + money(pkg.price) : (hasPackage ? "Package price: Please contact support to confirm" : "No package purchased"));
 
-    if(hasPackage){
-        pkgDisplayName = currentProfile.package_name.toUpperCase();
-        withdrawLimitText = "₹100 Minimum";
-        commissionText = "Automatic Referral Commission Active";
+    if(pkg){
+        setText("modalPkgL1", Math.round(pkg.l1*100) + "% / " + money(pkg.price*pkg.l1));
+        setText("modalPkgL2", "8% / " + money(pkg.price*0.08));
+        setText("modalPkgL3", "5% / " + money(pkg.price*0.05));
+        setText("modalPkgNote", "These are illustrative rates for a referral buying this package. Actual commission depends on the referred user's package, valid referral chain, and admin-approved payment. No commission is guaranteed.");
+    } else {
+        setText("modalPkgL1", "Package-specific rate");
+        setText("modalPkgL2", "8% if eligible");
+        setText("modalPkgL3", "5% if eligible");
+        setText("modalPkgNote", hasPackage ? "We could not match this package name to the configured rate table. Please contact support to confirm the correct price and rates." : "Buy/activate a package to see its package-specific details. Commission is credited only after valid payment approval and referral validation.");
     }
-
-    document.getElementById("modalPkgName").innerText = pkgDisplayName;
-    document.getElementById("modalPkgStatus").innerText = hasPackage ? "Active" : "No Active Package";
-    document.getElementById("modalPkgCommission").innerText = commissionText;
-    document.getElementById("modalPkgWithdraw").innerText = withdrawLimitText;
 }
 
 /* EMAILJS APPROVED TRIGGER (FIXED) */
