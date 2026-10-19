@@ -1809,13 +1809,15 @@ async function getOrCreatePermanentReferralCode(dbExistingCode){
 
 /* LOAD DASHBOARD & PERMANENT USER DATA WITH FULL REFRESH PROTECTION */
 async function loadDashboardProfile(){
+    // Prevent an unresolved network/auth request from leaving the dashboard on permanent Loading labels.
+    const withTimeout = (promise, label, ms = 12000) => Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error(label + " timed out. Please check your connection and refresh.")), ms))]);
     let user = null;
 
     try{
-        const { data: sessionData } = await supabaseClient.auth.getSession();
+        const { data: sessionData } = await withTimeout(supabaseClient.auth.getSession(), "Authentication check");
         user = sessionData?.session?.user || null;
         if(!user){
-            const { data: userData } = await supabaseClient.auth.getUser();
+            const { data: userData } = await withTimeout(supabaseClient.auth.getUser(), "User verification");
             user = userData?.user || null;
         }
     }catch(e){
@@ -1831,13 +1833,14 @@ async function loadDashboardProfile(){
     currentUserEmail = user.email || "";
 
     try{
-        let { data: profile } = await supabaseClient
+        let { data: profile, error: profileError } = await withTimeout(supabaseClient
             .from("profiles")
             .select("*")
             .eq("user_id", currentUserId)
-            .maybeSingle();
+            .maybeSingle(), "Profile loading");
+        if(profileError) throw profileError;
 
-        const permanentCode = await getOrCreatePermanentReferralCode(profile?.referral_code);
+        const permanentCode = profile?.referral_code || await withTimeout(getOrCreatePermanentReferralCode(null), "Referral ID setup");
 
         let localKyc = null;
         let localPayout = null;
@@ -1929,6 +1932,13 @@ async function loadDashboardProfile(){
 
     }catch(error){
         console.error("Dashboard profile load error:", error);
+        const userNameEl = document.getElementById("userName");
+        const userIdEl = document.getElementById("topUserId");
+        if(userNameEl) userNameEl.textContent = "Unable to load profile";
+        if(userIdEl) userIdEl.textContent = "Refresh or sign in again";
+        const statusEl = document.getElementById("statusList");
+        if(statusEl) statusEl.innerHTML = `<p style="color:#b45309;margin:0;font-size:13px">Dashboard data load nahi hua. Internet check karke refresh karein. ${escapeHtml(error?.message || "Please sign in again.")}</p>`;
+        showToast("Dashboard load failed. Please refresh.");
         return false;
     }
 }
