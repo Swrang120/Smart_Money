@@ -1653,7 +1653,7 @@ function connectCustomerCare(){
     window.location.href = "mailto:smartmoneysupport1@gmail.com?subject=" + subject + "&body=" + body;
 }
 /* WITHDRAWAL PROCESS */
-function openWithdrawModal(){
+async function openWithdrawModal(){
     closeSidebar();
     if(!hasSavedPaymentDetails()){
         alert("⚠️ Please save your bank account details before requesting withdrawal!");
@@ -1663,7 +1663,6 @@ function openWithdrawModal(){
 
     const preview = document.getElementById("withdrawPaymentDetailsContent");
     const savedType = String(currentProfile?.payout_type || "").trim().toLowerCase();
-
     if(savedType === "bank"){
         const accName = currentProfile?.account_holder_name || "N/A";
         const accNo = currentProfile?.bank_account_number || "N/A";
@@ -1674,13 +1673,39 @@ function openWithdrawModal(){
         preview.innerHTML = `⚡ <b>UPI ID:</b> <span style="color:#7c3aed">${escapeHtml(upi)}</span>`;
     }
 
-    document.getElementById("withdrawAmount").value = "";
-    document.getElementById("withdrawModalBalanceText").innerText = "Available Balance: ₹" + Number(userCurrentBalance).toFixed(2);
+    const balanceText = document.getElementById("withdrawModalBalanceText");
+    if(balanceText) balanceText.textContent = "Loading available balance…";
+    const amountInput = document.getElementById("withdrawAmount");
+    if(amountInput) amountInput.value = "";
     openModal("withdrawModal");
-}
 
+    // Read the authoritative wallet balance fresh from the database before
+    // showing MAX/available amounts; never infer it from commission totals.
+    try{
+        const {data: freshProfile, error} = await supabaseClient
+            .from("profiles").select("balance").eq("user_id",currentUserId).single();
+        if(error) throw error;
+        userCurrentBalance = Math.max(0, Number(freshProfile?.balance) || 0);
+        currentProfile = {...currentProfile, ...freshProfile};
+        renderProfile(currentProfile);
+        if(balanceText) balanceText.textContent = "Available Balance: " + formatEarningsMoney(userCurrentBalance);
+        const maxChip = Array.from(document.querySelectorAll("#withdrawModal .chip")).find(el=>/MAX/i.test(el.textContent));
+        if(maxChip) maxChip.textContent = "MAX (" + formatEarningsMoney(userCurrentBalance) + ")";
+    }catch(error){
+        console.error("Could not refresh withdrawal balance:",error);
+        if(balanceText) balanceText.textContent = "Balance could not be verified. Close and retry.";
+        const submit = document.getElementById("submitWithdrawBtn");
+        if(submit) submit.disabled = true;
+        return;
+    }
+    const submit = document.getElementById("submitWithdrawBtn");
+    if(submit) submit.disabled = false;
+}
 function setWithdrawAmount(amount){
-    document.getElementById("withdrawAmount").value = Number(amount || 0).toFixed(2);
+    const input = document.getElementById("withdrawAmount");
+    if(!input) return;
+    const requested = Number(amount || 0);
+    input.value = Math.min(Math.max(0, requested), Math.max(0, Number(userCurrentBalance)||0)).toFixed(2);
 }
 
 /* PROFILE IMAGE HANDLERS */
@@ -2371,6 +2396,10 @@ async function submitWithdrawal(){
 
     const amount = Number(document.getElementById("withdrawAmount").value);
     const submitBtn = document.getElementById("submitWithdrawBtn");
+    if(!Number.isFinite(userCurrentBalance) || userCurrentBalance < 0){
+        alert("Available balance could not be verified. Close and reopen withdrawal.");
+        return;
+    }
     const packageName = String(currentProfile?.package_name || "").toLowerCase();
     const minLimit = packageName && packageName !== "none" ? 100 : 200;
 
