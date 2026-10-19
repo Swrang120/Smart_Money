@@ -4541,39 +4541,33 @@ status
     }  
   
   
-    try{  
-  
-        const {  
-  
-            error  
-  
-        } =  
-        await supabaseClient  
-  
-        .from(  
-            "withdrawal_requests"  
-        )  
-  
-        .update({  
-  
-            status  
-  
-        })  
-  
-        .eq(  
-            "id",  
-            id  
-        );  
-  
-  
-        if(error){  
-  
-            throw error;  
-  
-        }  
-  
-  
-        if(  
+        try{
+        const withdrawalId = Number(id);
+        if(!Number.isInteger(withdrawalId) || withdrawalId <= 0){
+            throw new Error("Invalid withdrawal request ID.");
+        }
+
+        // Database RPC enforces admin-only status transitions and refunds
+        // rejected requests exactly once.
+        const { data: result, error } = await supabaseClient.rpc(
+            "process_withdrawal_admin",
+            {
+                p_withdrawal_id: withdrawalId,
+                p_status: String(status || "").toLowerCase()
+            }
+        );
+
+        if(error) throw error;
+        if(result?.already_processed){
+            alert(result.message || "This withdrawal was already processed.");
+            await refreshAllData();
+            return;
+        }
+        if(!result?.processed){
+            throw new Error("Withdrawal status was not changed.");
+        }
+
+if(  
   
             status ===  
             "Approved"  
@@ -4653,7 +4647,7 @@ status
   
   
         alert(  
-            `Withdrawal ${status} successfully.`  
+            `Withdrawal ${String(status).toLowerCase()} successfully.`  
         );  
   
   
