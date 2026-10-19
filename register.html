@@ -440,19 +440,12 @@
         // =====================================================
 
         const {
-          data: refCheck,
+          data: refRows,
           error: refError
-        } =
-        await supabaseClient
-          .from("profiles")
-          .select(
-            "id, user_id, referral_code"
-          )
-          .eq(
-            "referral_code",
-            referral
-          )
-          .maybeSingle();
+        } = await supabaseClient.rpc("get_referrer_profile", {
+          p_ref_code: referral
+        });
+        const refCheck = Array.isArray(refRows) ? refRows[0] : refRows;
 
 
         if (refError) {
