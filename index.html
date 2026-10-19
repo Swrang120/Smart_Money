@@ -2495,6 +2495,8 @@ onclick="openAdminPreviewModal(); toggleMenu();">
 👁️ Preview (Admin Updates)
 </a>
 
+<a href="#" class="m-link" id="statusMenuLink" onclick="openPublicStatus(); toggleMenu();">📱 24 Hour Status</a>
+
 <a href="#" class="m-link" id="installApkMenuLink" onclick="downloadSmartMoneyApk(event); toggleMenu();">📲 Install APK</a>
 
 <a href="dashboard.html"
@@ -4763,6 +4765,17 @@ Loading preview image from database...
 
 </div>
 
+
+<!-- Public 24-hour status modal -->
+<div class="modal-overlay" id="publicStatusModal">
+  <div class="modal-box" style="max-width:620px;text-align:left">
+    <button class="modal-close" onclick="closePublicStatus()">✕</button>
+    <h2 style="margin-bottom:12px">📱 24 Hour Status</h2>
+    <div id="publicStatusContent" style="display:grid;gap:12px">
+      <p style="color:#64748b">Loading latest status…</p>
+    </div>
+  </div>
+</div>
 
 <!-- =========================================================
      APPLY NOW MODAL
@@ -8045,6 +8058,39 @@ window.addEventListener(
       }
       v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
   })(document, 'script');
+
+/* Load admin-published 24-hour statuses on the public homepage. */
+async function openPublicStatus(){
+  const modal=document.getElementById("publicStatusModal");
+  const box=document.getElementById("publicStatusContent");
+  if(modal) modal.classList.add("active");
+  if(!box) return;
+  box.innerHTML='<p style="color:#64748b">Loading latest status…</p>';
+  try{
+    if(!supabaseClient) throw new Error("Connection unavailable.");
+    const {data,error}=await supabaseClient.from("status_posts").select("id,media_url,media_type,caption,created_at,expires_at").or("is_deleted.eq.false,is_deleted.is.null").gt("expires_at",new Date().toISOString()).order("created_at",{ascending:false}).limit(20);
+    if(error) throw error;
+    if(!data || !data.length){
+      box.innerHTML='<p style="color:#64748b">Abhi koi active status nahi hai.</p>';
+      return;
+    }
+    box.innerHTML=data.map(item=>{
+      const url=String(item.media_url||"");
+      const caption=String(item.caption||"");
+      const media=item.media_type==="video"
+        ? '<video controls playsinline style="width:100%;max-height:360px;border-radius:12px;background:#111" src="'+escapeHtml(url)+'"></video>'
+        : '<img loading="lazy" alt="Status" style="width:100%;max-height:360px;object-fit:contain;border-radius:12px;background:#f1f5f9" src="'+escapeHtml(url)+'">';
+      return '<article style="padding:12px;border:1px solid #e2e8f0;border-radius:14px">'+media+(caption?'<p style="margin-top:8px;line-height:1.5">'+escapeHtml(caption)+'</p>':'')+'</article>';
+    }).join("");
+  }catch(err){
+    box.innerHTML='<p style="color:#b91c1c">Status load nahi ho paya. Page reload karke dobara try karein.</p>';
+    console.warn("Public status load failed:",err);
+  }
+}
+function closePublicStatus(){
+  const modal=document.getElementById("publicStatusModal");
+  if(modal) modal.classList.remove("active");
+}
 
 /* Public Smart Money APK link: the admin-selected APK is shared with all visitors. */
 async function loadSmartMoneyApkLink(){
