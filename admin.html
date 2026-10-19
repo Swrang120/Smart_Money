@@ -3847,7 +3847,7 @@ async function approvePayment(id){
         const { data: accountData, error: accountError } =
             await supabaseClient.functions.invoke(
                 "ensure-buyer-auth",
-                { body: { payment_id: Number(payment.id) } }
+                { body: { payment_id: Number(payment.id), approve: true } }
             );
 
         if(accountError){
