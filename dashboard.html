@@ -1596,33 +1596,34 @@ function connectCustomerCare(){
     const userName = currentProfile?.full_name || "Smart Money User";
     const userEmail = currentProfile?.email || currentUserEmail || "";
     const userId = userRefCode || "Not Available";
-    
-    const savedType = String(currentProfile?.payout_type || "").trim().toLowerCase();
-    let oldDetails = savedType === "bank" 
-        ? `Bank: ${currentProfile?.bank_name || "N/A"} | Account No: ${currentProfile?.bank_account_number || "N/A"} | Holder: ${currentProfile?.account_holder_name || "N/A"} | IFSC: ${currentProfile?.ifsc_code || "N/A"}`;
+    const oldDetails = String(currentProfile?.payout_type || "").toLowerCase() === "bank"
+        ? "Bank: " + (currentProfile?.bank_name || "N/A") +
+          " | Account No: " + (currentProfile?.bank_account_number || "N/A") +
+          " | Holder: " + (currentProfile?.account_holder_name || "N/A") +
+          " | IFSC: " + (currentProfile?.ifsc_code || "N/A")
+        : "No saved bank details";
 
     const subject = encodeURIComponent("Payment Details Change Request");
-    const body = encodeURIComponent(
-`Hello Support Team,
+    const body = encodeURIComponent([
+        "Hello Support Team,",
+        "",
+        "I request to update my saved payout details.",
+        "",
+        "Name: " + userName,
+        "Email: " + userEmail,
+        "User ID: " + userId,
+        "",
+        "--- CURRENT DETAILS ---",
+        oldDetails,
+        "",
+        "--- NEW DETAILS TO UPDATE ---",
+        "[Enter your new bank account details here]",
+        "",
+        "Thank you."
+    ].join("\n"));
 
-I request to update my saved payout details.
-
-Name: ${userName}
-Email: ${userEmail}
-User ID: ${userId}
-
---- CURRENT DETAILS ---
-${oldDetails}
-
---- NEW DETAILS TO UPDATE ---
-[Enter your new bank account details here]
-
-Thank you.`
-    );
-
-    window.location.href = `mailto:smartmoneysupport1@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = "mailto:smartmoneysupport1@gmail.com?subject=" + subject + "&body=" + body;
 }
-
 /* WITHDRAWAL PROCESS */
 function openWithdrawModal(){
     closeSidebar();
