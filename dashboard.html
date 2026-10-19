@@ -2058,7 +2058,7 @@ async function loadWithdrawalHistory(){
             let statusClass = "status-pending";
             let statusText = "Pending";
 
-            if(status === "approved" || status === "success" || status === "paid"){
+            if(status === "approved" || status === "successful" || status === "success" || status === "paid"){
                 statusClass = "status-approved";
                 statusText = "Successful";
             }else if(status === "rejected" || status === "failed"){
