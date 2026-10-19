@@ -2439,17 +2439,38 @@ async function loadAdminStatus(){
     }
 }
 
-/* APP INIT */
+/* APP INIT — initialize every panel independently so one profile/auth failure
+   cannot leave the rest of the dashboard permanently showing Loading. */
 window.addEventListener("DOMContentLoaded", async ()=>{
-    const ok = await loadDashboardProfile();
-    if(ok){
+    const initTasks = [
+        ["profile", () => loadDashboardProfile()],
+        ["admin updates", () => loadAdminStatus()]
+    ];
+    const profileResult = await Promise.race([
+        loadDashboardProfile(),
+        new Promise(resolve => setTimeout(() => resolve(false), 15000))
+    ]).catch(error => {
+        console.error("Dashboard initialization error:", error);
+        return false;
+    });
+
+    // Panels that do not need profile data should never depend on profile success.
+    loadGlobalTopLogo().catch?.(error => console.warn("Logo loading skipped:", error));
+    loadAdminStatus().catch?.(error => console.warn("Admin updates loading skipped:", error));
+
+    if (currentUserId) {
         setupLogout();
         setupRealtimeListener();
-        loadEarningsData();
-        loadReferralsData();
-        loadWithdrawalHistory();
-        loadGlobalTopLogo();
-        loadAdminStatus();
+        loadEarningsData().catch?.(error => console.warn("Earnings loading skipped:", error));
+        loadReferralsData().catch?.(error => console.warn("Referrals loading skipped:", error));
+        loadWithdrawalHistory().catch?.(error => console.warn("Withdrawal history loading skipped:", error));
+    }
+
+    if (!profileResult) {
+        const statusEl = document.getElementById("statusList");
+        if (statusEl && /Loading updates/i.test(statusEl.textContent)) {
+            statusEl.innerHTML = '<p style="color:#b45309;margin:0;font-size:13px">Profile load nahi hua. Please refresh karein ya dobara sign in karein.</p>';
+        }
     }
 });
 </script>
