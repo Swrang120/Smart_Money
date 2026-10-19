@@ -2439,15 +2439,40 @@ async function loadAdminStatus(){
     }
 }
 
-/* APP INIT — robust startup; a failure in one panel must not freeze the rest. */
+/* APP INIT — bounded startup and explicit errors instead of endless Loading labels. */
 window.addEventListener("DOMContentLoaded", async () => {
-    const safeRun = (label, fn) => {
-        Promise.resolve().then(fn).catch(error => {
-            console.error(label + " failed:", error);
-        });
+    const timeout = (ms, label) => new Promise((_, reject) =>
+        setTimeout(() => reject(new Error(label + " timed out")), ms)
+    );
+    const safeRun = (label, fn, ms = 12000) => {
+        Promise.race([Promise.resolve().then(fn), timeout(ms, label)])
+            .catch(error => {
+                console.error(label + " failed:", error);
+                if (label === "Admin updates") {
+                    const el = document.getElementById("statusList");
+                    if (el && /Loading updates/i.test(el.textContent)) {
+                        el.innerHTML = '<p style="color:#b45309;margin:0;font-size:12px">Admin updates are temporarily unavailable. Please refresh.</p>';
+                    }
+                } else if (label === "Referrals") {
+                    const el = document.getElementById("referralsListContainer");
+                    if (el && /Loading referrals/i.test(el.textContent)) {
+                        el.innerHTML = '<p style="color:#b45309;font-size:13px">Referral data is temporarily unavailable. Please refresh.</p>';
+                    }
+                } else if (label === "Earnings") {
+                    ["todayRevenue","sevenDaysRevenue","thirtyDaysRevenue","allTimeRevenueText","passiveIncome"].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el && el.textContent.trim() === "₹0.00") el.title = "Data could not be verified; refresh to retry.";
+                    });
+                } else if (label === "Withdrawal history") {
+                    const el = document.getElementById("withdrawalHistoryList");
+                    if (el && /Loading/i.test(el.textContent)) {
+                        el.textContent = "Withdrawal history is temporarily unavailable. Please refresh.";
+                    }
+                }
+            });
     };
 
-    // Start independent UI sections immediately; profile loading must not gate them.
+    // Keep public/admin panels independent from user profile loading.
     safeRun("Admin updates", loadAdminStatus);
     safeRun("Global logo", loadGlobalTopLogo);
 
@@ -2455,7 +2480,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     try {
         profileLoaded = await Promise.race([
             loadDashboardProfile(),
-            new Promise(resolve => setTimeout(() => resolve(false), 15000))
+            timeout(15000, "Dashboard profile")
         ]);
     } catch (error) {
         console.error("Dashboard startup failed:", error);
@@ -2476,7 +2501,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         if (userId && userId.textContent.trim() === "Loading...") userId.textContent = "Please refresh / sign in";
         const referrals = document.getElementById("referralsListContainer");
         if (referrals && /Loading referrals/i.test(referrals.textContent)) {
-            referrals.innerHTML = '<p style="color:#b45309;font-size:13px">Referral details could not load. Please refresh.</p>';
+            referrals.innerHTML = '<p style="color:#b45309;font-size:13px">Referral data could not load. Please refresh or sign in again.</p>';
         }
         const status = document.getElementById("statusList");
         if (status && /Loading updates/i.test(status.textContent)) {
