@@ -3491,32 +3491,20 @@ function renderPayments(){
     );  
   
   
-    const list =  
-  
-    currentPaymentTab ===  
-    "all"  
-  
-    ?  
-  
-    allPaymentsData  
-  
-    :  
-  
-    allPaymentsData  
-    .filter(  
-        item =>  
-  
-        statusOf(  
-            item.status ||  
-            item.payment_status ||  
-            "pending"  
-        )  
-  
-        ===  
-  
-        currentPaymentTab  
-    );  
-  
+    const list =
+    currentPaymentTab === "all"
+        ? allPaymentsData
+        : allPaymentsData.filter(item => {
+            const primary = statusOf(item.status);
+            const secondary = statusOf(item.payment_status);
+            const effective = primary === "approved" || secondary === "approved"
+                ? "approved"
+                : primary === "rejected" || secondary === "rejected"
+                    ? "rejected"
+                    : "pending";
+            return effective === currentPaymentTab;
+        });
+
   
     if(!list.length){  
   
@@ -3549,25 +3537,17 @@ function renderPayments(){
             );  
   
   
-            const status =  
-            val(  
-  
-                payment.status,  
-  
-                payment.payment_status,  
-  
-                "Pending"  
-  
-            );  
-  
-  
-            const lower =  
-            statusOf(  
-                status  
-            );  
-  
-  
-            const userId =  
+            const status =
+                (statusOf(payment.status) === "approved" || statusOf(payment.payment_status) === "approved")
+                    ? "Approved"
+                    : (statusOf(payment.status) === "rejected" || statusOf(payment.payment_status) === "rejected")
+                        ? "Rejected"
+                        : "Pending";
+
+            const lower = statusOf(status);
+
+
+                        const userId =  
             val(  
   
                 payment.user_id,  
