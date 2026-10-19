@@ -125,31 +125,9 @@
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
   async function buyBasicPackage() {
-    try {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (!session || !session.user) {
-        alert("Pehle login karna zaroori hai!");
-        window.location.href = "login.html";
-        return;
-      }
-
-      // Update user profile active package to Basic Package
-      const { error } = await supabaseClient
-        .from('profiles')
-        .update({ package_name: 'Basic Package' })
-        .eq('user_id', session.user.id);
-
-      if (error) {
-        alert("Activation Error: " + error.message);
-        return;
-      }
-
-      alert("🎉 Basic Package successfully activated!");
-      window.location.href = "dashboard.html";
-    } catch (err) {
-      console.error(err);
-      alert("Kuch error aa gaya. Dobara try karein.");
-    }
+    // Package pages must never activate a paid package directly.
+    // The checkout/payment approval flow is the only activation path.
+    window.location.href = "checkout.html?name=Basic%20Package&price=299";
   }
 </script>
 
