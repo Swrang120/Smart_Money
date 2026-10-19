@@ -2495,7 +2495,7 @@ onclick="openAdminPreviewModal(); toggleMenu();">
 👁️ Preview (Admin Updates)
 </a>
 
-<a href="#" class="m-link" id="installApkMenuLink" style="display:none" onclick="downloadSmartMoneyApk(event); toggleMenu();">📲 Install APK</a>
+<a href="#" class="m-link" id="installApkMenuLink" onclick="downloadSmartMoneyApk(event); toggleMenu();">📲 Install APK</a>
 
 <a href="dashboard.html"
 class="mobile-dashboard-btn"
@@ -8063,8 +8063,10 @@ async function loadSmartMoneyApkLink(){
       link.setAttribute("download","Smart-Money.apk");
       link.style.display = "flex";
       link.setAttribute("aria-label","Download the latest Smart Money APK");
+      link.dataset.apkReady = "true";
     }else{
-      link.style.display = "none";
+      link.style.display = "flex";
+      link.dataset.apkReady = "false";
     }
   }catch(error){
     console.warn("Smart Money APK link could not be loaded:",error);
@@ -8073,7 +8075,7 @@ async function loadSmartMoneyApkLink(){
 }
 function downloadSmartMoneyApk(event){
   const link = document.getElementById("installApkMenuLink");
-  if(!link || link.style.display === "none" || !link.href || link.href === location.href+"#"){
+  if(!link || link.dataset.apkReady !== "true" || !link.href || link.href === location.href+"#"){
     if(event) event.preventDefault();
     alert("Smart Money APK abhi admin ne upload nahi kiya hai.");
   }
