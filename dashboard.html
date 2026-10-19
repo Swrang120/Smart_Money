@@ -2455,15 +2455,15 @@ window.addEventListener("DOMContentLoaded", async ()=>{
     });
 
     // Panels that do not need profile data should never depend on profile success.
-    loadGlobalTopLogo().catch?.(error => console.warn("Logo loading skipped:", error));
-    loadAdminStatus().catch?.(error => console.warn("Admin updates loading skipped:", error));
+    Promise.resolve().then(() => loadGlobalTopLogo()).catch(error => console.warn("Logo loading skipped:", error));
+    Promise.resolve().then(() => loadAdminStatus()).catch(error => console.warn("Admin updates loading skipped:", error));
 
     if (currentUserId) {
         setupLogout();
         setupRealtimeListener();
-        loadEarningsData().catch?.(error => console.warn("Earnings loading skipped:", error));
-        loadReferralsData().catch?.(error => console.warn("Referrals loading skipped:", error));
-        loadWithdrawalHistory().catch?.(error => console.warn("Withdrawal history loading skipped:", error));
+        Promise.resolve().then(() => loadEarningsData()).catch(error => console.warn("Earnings loading skipped:", error));
+        Promise.resolve().then(() => loadReferralsData()).catch(error => console.warn("Referrals loading skipped:", error));
+        Promise.resolve().then(() => loadWithdrawalHistory()).catch(error => console.warn("Withdrawal history loading skipped:", error));
     }
 
     if (!profileResult) {
