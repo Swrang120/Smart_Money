@@ -3913,7 +3913,7 @@ async function approvePayment(id){
 
         const commissionResult =
             await processApprovedPaymentCommission(
-                payment,
+                { ...payment, ...updatedPayment },
                 user
             );
 
