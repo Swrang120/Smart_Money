@@ -1166,7 +1166,35 @@ button{
     </div>
 
     <!-- REFERRALS -->
-    <div class="section-box">
+    
+<!-- QUICK REFERRAL COMMISSION CALCULATOR -->
+<div id="quickCommissionCalculator" class="section-box" style="border:1px solid #ddd6fe;background:linear-gradient(145deg,#fff,#faf5ff)">
+  <h3 style="margin:0 0 6px;color:#6d28d9">🧮 Quick Commission Calculator</h3>
+  <p style="margin:0 0 16px;font-size:12px;line-height:1.6;color:#64748b">Estimate possible referral commission by package and team sales. This is an estimate only; actual credit happens after admin approves a valid package payment.</p>
+  <label for="qcPackage" style="display:block;font-size:12px;font-weight:800;margin-bottom:6px">Select Package</label>
+  <select id="qcPackage" onchange="calculateQuickCommission()" style="width:100%;padding:12px;border:1px solid #c4b5fd;border-radius:10px;background:#fff;color:#0f172a;margin-bottom:12px">
+    <option value="289|0.30|0.08|0.05">Starter — ₹289</option>
+    <option value="560|0.50|0.08|0.05">Intermediate — ₹560</option>
+    <option value="1149|0.70|0.08|0.05">Expert — ₹1,149</option>
+    <option value="2499|0.75|0.08|0.05">Master — ₹2,499</option>
+    <option value="5499|0.85|0.08|0.05">Brahmastra — ₹5,499</option>
+    <option value="10997|0.85|0.08|0.05">Premium Pro — ₹10,997</option>
+  </select>
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px">
+    <div><label for="qcDirect" style="display:block;font-size:11px;font-weight:800;margin-bottom:5px">Direct sales (L1)</label><input id="qcDirect" type="number" min="0" max="100000" step="1" value="1" oninput="calculateQuickCommission()" style="width:100%;padding:11px 7px;border:1px solid #e2e8f0;border-radius:9px"></div>
+    <div><label for="qcSecond" style="display:block;font-size:11px;font-weight:800;margin-bottom:5px">Level 2 sales</label><input id="qcSecond" type="number" min="0" max="100000" step="1" value="0" oninput="calculateQuickCommission()" style="width:100%;padding:11px 7px;border:1px solid #e2e8f0;border-radius:9px"></div>
+    <div><label for="qcThird" style="display:block;font-size:11px;font-weight:800;margin-bottom:5px">Level 3 sales</label><input id="qcThird" type="number" min="0" max="100000" step="1" value="0" oninput="calculateQuickCommission()" style="width:100%;padding:11px 7px;border:1px solid #e2e8f0;border-radius:9px"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px">
+    <div style="padding:13px;border-radius:12px;background:#f3e8ff"><div style="font-size:11px;color:#6d28d9;font-weight:800">DIRECT (L1)</div><div id="qcDirectAmount" style="font-size:19px;font-weight:800;color:#4c1d95;margin-top:5px">₹86.70</div></div>
+    <div style="padding:13px;border-radius:12px;background:#eef2ff"><div style="font-size:11px;color:#4338ca;font-weight:800">LEVEL 2</div><div id="qcSecondAmount" style="font-size:19px;font-weight:800;color:#312e81;margin-top:5px">₹0.00</div></div>
+    <div style="padding:13px;border-radius:12px;background:#ecfdf5"><div style="font-size:11px;color:#047857;font-weight:800">LEVEL 3</div><div id="qcThirdAmount" style="font-size:19px;font-weight:800;color:#065f46;margin-top:5px">₹0.00</div></div>
+    <div style="padding:13px;border-radius:12px;background:#0f172a"><div style="font-size:11px;color:#cbd5e1;font-weight:800">ESTIMATED TOTAL</div><div id="qcTotalAmount" style="font-size:21px;font-weight:800;color:#fff;margin-top:5px">₹86.70</div></div>
+  </div>
+  <p id="qcCalculatorNote" aria-live="polite" style="font-size:11px;line-height:1.5;color:#64748b;margin:12px 0 0">Estimate only—not guaranteed earnings. Levels 2 and 3 require eligible sponsors in your referral chain.</p>
+</div>
+
+<div class="section-box">
         <h3>👥 My Referrals & Joins</h3>
         <div class="referral-tabs">
             <button class="ref-tab active" onclick="filterReferrals(1,this)">1 Day (Today)</button>
@@ -2510,6 +2538,32 @@ window.addEventListener("DOMContentLoaded", async () => {
         }
     }
 });
+
+/* Quick commission estimate only; it never writes to wallet or database. */
+function calculateQuickCommission(){
+  const packageSelect = document.getElementById("qcPackage");
+  if(!packageSelect) return;
+  const parts = String(packageSelect.value || "289|0.30|0.08|0.05").split("|").map(Number);
+  const base = Number(parts[0]) || 0;
+  const rates = [Number(parts[1])||0, Number(parts[2])||0, Number(parts[3])||0];
+  const readCount = id => {
+    const el = document.getElementById(id);
+    const n = el ? Math.floor(Number(el.value)||0) : 0;
+    const safe = Math.max(0, Math.min(100000, n));
+    if(el && String(safe)!==el.value) el.value = String(safe);
+    return safe;
+  };
+  const counts = [readCount("qcDirect"),readCount("qcSecond"),readCount("qcThird")];
+  const amounts = counts.map((count,i)=>Math.round(base*rates[i]*count*100)/100);
+  const money = n => new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",minimumFractionDigits:2,maximumFractionDigits:2}).format(n);
+  document.getElementById("qcDirectAmount").textContent = money(amounts[0]);
+  document.getElementById("qcSecondAmount").textContent = money(amounts[1]);
+  document.getElementById("qcThirdAmount").textContent = money(amounts[2]);
+  document.getElementById("qcTotalAmount").textContent = money(amounts.reduce((a,b)=>a+b,0));
+  const note = document.getElementById("qcCalculatorNote");
+  if(note) note.textContent = "Estimate only. L1 rate depends on selected package; L2 is 8% and L3 is 5%. Actual commissions are credited only after admin approval, valid package amount, and a valid referral chain. Self-referrals are not eligible.";
+}
+
 </script>
 </body>
 </html>
