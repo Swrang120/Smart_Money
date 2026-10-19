@@ -1840,7 +1840,9 @@ async function loadDashboardProfile(){
             .maybeSingle(), "Profile loading");
         if(profileError) throw profileError;
 
-        const permanentCode = profile?.referral_code || await withTimeout(getOrCreatePermanentReferralCode(null), "Referral ID setup");
+        // Do not block the entire dashboard on optional referral-code lookups.
+        // Existing codes are used immediately; missing codes are repaired in the background.
+        let permanentCode = profile?.referral_code || localStorage.getItem(`permanent_ref_code_${currentUserId}`) || "";
 
         let localKyc = null;
         let localPayout = null;
@@ -1892,16 +1894,30 @@ async function loadDashboardProfile(){
                 }
             }
 
-            if(!profile.referral_code || profile.referral_code !== permanentCode){
-                profile.referral_code = permanentCode;
-                updatesNeeded.referral_code = permanentCode;
+            if(!profile.referral_code){
+                // Referral ID is not required to render the dashboard. Create it asynchronously.
+                getOrCreatePermanentReferralCode(null).then(async code=>{
+                    if(!code) return;
+                    userRefCode = code;
+                    currentProfile = { ...currentProfile, referral_code: code };
+                    const idEl = document.getElementById("topUserId");
+                    if(idEl) idEl.textContent = code;
+                    const { error: referralUpdateError } = await supabaseClient
+                        .from("profiles").update({ referral_code: code }).eq("user_id", currentUserId);
+                    if(referralUpdateError) console.warn("Referral code save failed:", referralUpdateError);
+                }).catch(err=>console.warn("Referral code setup skipped:", err));
             }
 
             if(Object.keys(updatesNeeded).length > 0){
-                await supabaseClient
-                    .from("profiles")
-                    .update(updatesNeeded)
-                    .eq("user_id", currentUserId);
+                // Optional profile repairs must not hold the dashboard open forever.
+                try{
+                    await withTimeout(supabaseClient
+                        .from("profiles")
+                        .update(updatesNeeded)
+                        .eq("user_id", currentUserId), "Profile update", 8000);
+                }catch(updateError){
+                    console.warn("Non-blocking profile update skipped:", updateError);
+                }
             }
         }
 
