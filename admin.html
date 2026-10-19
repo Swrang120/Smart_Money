@@ -3771,6 +3771,19 @@ function renderPayments(){
 }  
   
   
+function getExpectedPackagePrice(packageName){
+    const name = String(packageName || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    if(name.includes("premium pro")) return 10997;
+    if(name.includes("brahmastra")) return 5499;
+    if(name.includes("master")) return 2499;
+    if(name.includes("expert")) return 1149;
+    if(name.includes("intermediate")) return 560;
+    if(name.includes("starter")) return 289;
+    if(name.includes("basic")) return 299;
+    if(name.includes("max pro")) return 4499;
+    return null;
+}
+
 async function processApprovedPaymentCommission(payment, buyerUser){
     try{
         if(!payment || String(payment.status || payment.payment_status || "").toLowerCase() !== "approved"){
@@ -3828,6 +3841,21 @@ async function approvePayment(id){
 
         if(!payment){
             alert("Payment request not found. Please refresh the admin panel and try again.");
+            return;
+        }
+
+        /*
+         * Validate the package name and canonical amount before changing
+         * payment status or activating the buyer's package.
+         */
+        const expectedPackagePrice = getExpectedPackagePrice(payment.package_name || payment.package_type);
+        const submittedPackagePrice = Number(payment.package_price ?? payment.amount ?? 0);
+        if(expectedPackagePrice === null){
+            alert("Approval stopped: no approved price/commission rule exists for this package.");
+            return;
+        }
+        if(!Number.isFinite(submittedPackagePrice) || Math.abs(submittedPackagePrice - expectedPackagePrice) > 0.01){
+            alert("Approval stopped: package amount mismatch. Expected ₹" + expectedPackagePrice + ", submitted ₹" + submittedPackagePrice + ". Please verify the payment request.");
             return;
         }
 
