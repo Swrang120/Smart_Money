@@ -1848,25 +1848,13 @@ async function loadDashboardProfile(){
         try { localPayout = JSON.parse(localStorage.getItem(`payout_details_${currentUserId}`)); } catch(e){}
 
         if(!profile){
-            const defaultName = localKyc?.full_name || user.user_metadata?.full_name || user.user_metadata?.name || currentUserEmail.split("@")[0];
-            const newProfile = {
-                user_id: currentUserId,
-                email: currentUserEmail,
-                full_name: defaultName,
-                date_of_birth: localKyc?.date_of_birth || null,
-                balance: 0,
-                package_name: null,
-                referral_code: permanentCode,
-                ...(localPayout || {})
-            };
-
-            const { data: created } = await supabaseClient
-                .from("profiles")
-                .upsert(newProfile, { onConflict: "user_id" })
-                .select()
-                .maybeSingle();
-
-            profile = created || newProfile;
+            // Do not silently create a dashboard profile for an Auth-only
+            // account. Profiles must be created by the verified signup flow.
+            console.error("Dashboard blocked: authenticated user has no profiles row.", currentUserId);
+            alert("Aapka Smart Money profile database mein nahi mila. Security ke liye naya profile yahan auto-create nahi kiya gaya. Please original joining link se support/admin se account verify karwayein.");
+            await supabaseClient.auth.signOut();
+            window.location.href = "login.html";
+            return false;
         } else {
             let updatesNeeded = {};
 
