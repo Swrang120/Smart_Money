@@ -1385,11 +1385,77 @@
         }
 
 
+        /*
+         * RECOVERY FOR ALREADY-APPROVED BUYERS:
+         * If the profile is missing/inactive, only recover it when an
+         * Approved payment request matches the authenticated email.
+         * The paid package is read from the verified payment row, not browser data.
+         */
+        let resolvedProfile = profile;
+        const signedInEmail = String(user.email || email || "").trim().toLowerCase();
+
+        if (signedInEmail && (!resolvedProfile || resolvedProfile.is_active !== true)) {
+          try {
+            const { data: approvedPayments, error: paymentLookupError } = await supabaseClient
+              .from("payment_requests")
+              .select("id,user_id,email,full_name,package_name,package_type,status,payment_status")
+              .ilike("email", signedInEmail)
+              .limit(20);
+
+            if (!paymentLookupError && Array.isArray(approvedPayments)) {
+              const approvedPayment = approvedPayments.find(item => {
+                const statusA = String(item.status || "").trim().toLowerCase();
+                const statusB = String(item.payment_status || "").trim().toLowerCase();
+                return ["approved","successful","success","paid"].includes(statusA) ||
+                       ["approved","successful","success","paid"].includes(statusB);
+              });
+
+              if (approvedPayment && (!resolvedProfile || resolvedProfile.is_deleted !== true)) {
+                const recoveredPackage = String(
+                  approvedPayment.package_name || approvedPayment.package_type ||
+                  resolvedProfile?.package_name || "Free"
+                ).trim() || "Free";
+
+                const recoveryPayload = {
+                  user_id: user.id,
+                  email: signedInEmail,
+                  full_name: resolvedProfile?.full_name || approvedPayment.full_name || "",
+                  package_name: recoveredPackage,
+                  is_active: true,
+                  is_deleted: false,
+                  status: "ACTIVE",
+                  balance: resolvedProfile?.balance ?? 0,
+                  referral_code: resolvedProfile?.referral_code || null,
+                  referral_id: resolvedProfile?.referral_id || null,
+                  referred_by: resolvedProfile?.referred_by || null
+                };
+
+                const { data: savedProfile, error: recoveryError } = await supabaseClient
+                  .from("profiles")
+                  .upsert(recoveryPayload, { onConflict: "user_id" })
+                  .select("*")
+                  .single();
+
+                if (!recoveryError && savedProfile) {
+                  resolvedProfile = savedProfile;
+                  console.info("Approved buyer profile recovery succeeded.");
+                } else {
+                  console.error("Approved buyer profile recovery failed:", recoveryError);
+                }
+              }
+            } else if (paymentLookupError) {
+              console.warn("Approved payment lookup unavailable:", paymentLookupError);
+            }
+          } catch (recoveryError) {
+            console.warn("Approved buyer recovery skipped:", recoveryError);
+          }
+        }
+
         /* =================================================
            PROFILE NOT FOUND
         ================================================= */
 
-        if (!profile) {
+        if (!resolvedProfile) {
 
           console.error(
             "Profile not found for:",
@@ -1413,6 +1479,9 @@
           return;
         }
 
+
+        // Use the profile restored from a matching approved payment when applicable.
+        const profile = resolvedProfile;
 
         console.log(
           "Profile loaded successfully."
