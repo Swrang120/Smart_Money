@@ -2158,11 +2158,8 @@ async function loadEarningsHistory(){
 async function loadReferralsData(){
     if(!currentUserId || !userRefCode) return;
     try{
-        const { data } = await supabaseClient
-            .from("profiles")
-            .select("full_name,referral_code,created_at,referred_by,package_name")
-            .eq("referred_by", userRefCode)
-            .order("created_at", { ascending: false });
+        const { data, error } = await supabaseClient.rpc("get_my_referrals");
+        if(error) throw error;
 
         allReferralsData = data || [];
         filterReferrals(1, document.querySelector(".ref-tab"));
