@@ -2048,7 +2048,7 @@ async function loadWithdrawalHistory(){
         // Automatic Email Trigger Check for Approved Withdrawals
         data.forEach(item => {
             const st = String(item.status || "").toLowerCase();
-            if(st === "approved" || st === "success" || st === "paid"){
+            if(st === "approved" || st === "successful" || st === "success" || st === "paid"){
                 sendWithdrawalApprovedEmail(item);
             }
         });
@@ -2060,7 +2060,7 @@ async function loadWithdrawalHistory(){
 
             if(status === "approved" || status === "success" || status === "paid"){
                 statusClass = "status-approved";
-                statusText = "Approved";
+                statusText = "Successful";
             }else if(status === "rejected" || status === "failed"){
                 statusClass = "status-rejected";
                 statusText = "Rejected";
@@ -2342,7 +2342,7 @@ function setupRealtimeListener(){
                 const newStatus = String(newData.status || "").toLowerCase();
                 const oldStatus = String(oldData.status || "").toLowerCase();
 
-                if(newStatus === "approved" || newStatus === "success" || newStatus === "paid"){
+                if(newStatus === "approved" || newStatus === "successful" || newStatus === "success" || newStatus === "paid"){
                     await sendWithdrawalApprovedEmail(newData);
                     showToast("Your withdrawal request has been approved!");
                 }
