@@ -2382,7 +2382,7 @@ function statusOf(value){
   
   
     if(  
-        status === "approved"  
+        ["approved","successful","success","paid"].includes(status)  
     ){  
   
         return "approved";  
