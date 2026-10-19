@@ -1250,24 +1250,28 @@ button{
         <p id="payoutInfoText" style="font-size:13px;color:#64748b;line-height:1.6">Choose one payment method.</p>
         
         <div class="payout-tabs">
-            <div class="payout-tab active" id="tabUpi" onclick="switchPayoutMode('upi')">UPI ID</div>
-            <div class="payout-tab" id="tabBank" onclick="switchPayoutMode('bank')">Bank Account</div>
+            <div class="payout-tab active" id="tabBank" style="flex:1">🏦 Bank Account (Withdrawal)</div>
         </div>
 
-        <div id="upiSection">
-            <label style="font-size:13px;font-weight:700;color:#334155">UPI ID</label>
-            <input type="text" id="editUpiId" class="input-field" placeholder="yourname@upi" autocomplete="off">
-        </div>
+        <div id="bankSection">
+            <label style="font-size:13px;font-weight:700;color:#334155">Holder Name</label>
+            <input type="text" id="editAccName" class="input-field" placeholder="Account holder name as per bank" autocomplete="name" maxlength="100">
 
-        <div id="bankSection" style="display:none">
-            <label style="font-size:13px;font-weight:700;color:#334155">Account Holder Name</label>
-            <input type="text" id="editAccName" class="input-field" placeholder="Enter account holder name" autocomplete="off">
+            <label style="font-size:13px;font-weight:700;color:#334155">Select Bank (search by typing bank name)</label>
+            <input type="text" id="editBankName" class="input-field" list="indiaBankOptions" placeholder="Type to search/select bank" autocomplete="off" maxlength="100">
+            <datalist id="indiaBankOptions">
+                <option value="State Bank of India"></option><option value="HDFC Bank"></option><option value="ICICI Bank"></option><option value="Axis Bank"></option><option value="Kotak Mahindra Bank"></option><option value="Punjab National Bank"></option><option value="Bank of Baroda"></option><option value="Canara Bank"></option><option value="Union Bank of India"></option><option value="Indian Bank"></option><option value="Bank of India"></option><option value="Central Bank of India"></option><option value="Indian Overseas Bank"></option><option value="UCO Bank"></option><option value="Bank of Maharashtra"></option><option value="Punjab & Sind Bank"></option><option value="IDBI Bank"></option><option value="Yes Bank"></option><option value="IndusInd Bank"></option><option value="Federal Bank"></option><option value="South Indian Bank"></option><option value="Karnataka Bank"></option><option value="Karur Vysya Bank"></option><option value="City Union Bank"></option><option value="Tamilnad Mercantile Bank"></option><option value="RBL Bank"></option><option value="Bandhan Bank"></option><option value="IDFC FIRST Bank"></option><option value="AU Small Finance Bank"></option><option value="Ujjivan Small Finance Bank"></option><option value="Equitas Small Finance Bank"></option><option value="Jana Small Finance Bank"></option><option value="ESAF Small Finance Bank"></option><option value="Suryoday Small Finance Bank"></option><option value="Unity Small Finance Bank"></option><option value="Capital Small Finance Bank"></option><option value="North East Small Finance Bank"></option><option value="Airtel Payments Bank"></option><option value="India Post Payments Bank"></option><option value="Fino Payments Bank"></option><option value="Jio Payments Bank"></option><option value="Paytm Payments Bank"></option><option value="Assam Gramin Vikash Bank"></option><option value="Arunachal Pradesh Rural Bank"></option><option value="Tripura Gramin Bank"></option><option value="Baroda UP Bank"></option><option value="Kerala Gramin Bank"></option><option value="Karnataka Gramin Bank"></option><option value="Odisha Gramya Bank"></option><option value="Madhya Pradesh Gramin Bank"></option><option value="Rajasthan Marudhara Gramin Bank"></option><option value="Uttar Bihar Gramin Bank"></option><option value="Dakshin Bihar Gramin Bank"></option><option value="Other Indian Bank"></option>
+            </datalist>
 
-            <label style="font-size:13px;font-weight:700;color:#334155">Bank Account Number</label>
-            <input type="text" id="editAccNo" class="input-field" placeholder="Enter bank account number" autocomplete="off">
+            <label style="font-size:13px;font-weight:700;color:#334155">Account No. (9–11 digits)</label>
+            <input type="text" id="editAccNo" class="input-field" placeholder="Enter 9 to 11 digit account number" inputmode="numeric" autocomplete="off" maxlength="11" pattern="[0-9]{9,11}">
+
+            <label style="font-size:13px;font-weight:700;color:#334155">Confirm Account No.</label>
+            <input type="text" id="editConfirmAccNo" class="input-field" placeholder="Re-enter account number" inputmode="numeric" autocomplete="off" maxlength="11" pattern="[0-9]{9,11}">
 
             <label style="font-size:13px;font-weight:700;color:#334155">IFSC Code</label>
-            <input type="text" id="editIfsc" class="input-field" placeholder="Example: SBIN0001234" autocomplete="off">
+            <input type="text" id="editIfsc" class="input-field" placeholder="Example: SBIN1234567" autocomplete="off" maxlength="11" style="text-transform:uppercase">
+            <small style="display:block;color:#64748b;margin:-5px 0 12px">IFSC format: 4 letters, 0, then 6 alphanumeric characters.</small>
         </div>
 
         <div id="paymentLockedMessage" style="display:none;margin-top:15px;padding:15px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa">
@@ -1439,14 +1443,12 @@ function openKycModal(){
 
 /* PAYMENT & BANK DETAILS LOCK SYSTEM */
 function hasSavedPaymentDetails(){
-    const type = String(currentProfile?.payout_type || "").trim().toLowerCase();
-    if(type === "upi"){
-        return Boolean(String(currentProfile?.upi_id || "").trim());
-    }
-    if(type === "bank"){
-        return Boolean(String(currentProfile?.bank_account_number || "").trim());
-    }
-    return false;
+    const account = String(currentProfile?.bank_account_number || "").trim();
+    const holder = String(currentProfile?.account_holder_name || "").trim();
+    const bank = String(currentProfile?.bank_name || "").trim();
+    const ifsc = String(currentProfile?.ifsc_code || "").trim();
+    return String(currentProfile?.payout_type || "").trim().toLowerCase() === "bank" &&
+           Boolean(account && holder && bank && ifsc);
 }
 
 function openUpiModal(){
@@ -1454,52 +1456,52 @@ function openUpiModal(){
     const locked = hasSavedPaymentDetails();
     const savedType = String(currentProfile?.payout_type || "").trim().toLowerCase();
 
-    const upiInput = document.getElementById("editUpiId");
     const accNameInput = document.getElementById("editAccName");
+    const bankNameInput = document.getElementById("editBankName");
     const accNoInput = document.getElementById("editAccNo");
+    const confirmAccNoInput = document.getElementById("editConfirmAccNo");
     const ifscInput = document.getElementById("editIfsc");
     const saveBtn = document.getElementById("saveProfileBtn");
     const careBtn = document.getElementById("customerCareBtn");
     const lockedMessage = document.getElementById("paymentLockedMessage");
     const infoText = document.getElementById("payoutInfoText");
 
-    upiInput.value = currentProfile?.upi_id || "";
     accNameInput.value = currentProfile?.account_holder_name || "";
+    bankNameInput.value = currentProfile?.bank_name || "";
     accNoInput.value = currentProfile?.bank_account_number || "";
+    confirmAccNoInput.value = currentProfile?.bank_account_number || "";
     ifscInput.value = currentProfile?.ifsc_code || "";
 
     if(locked){
         switchPayoutMode(savedType === "bank" ? "bank" : "upi", true);
-        upiInput.disabled = true;
+        bankNameInput.disabled = true;
+        confirmAccNoInput.disabled = true;
         accNameInput.disabled = true;
         accNoInput.disabled = true;
         ifscInput.disabled = true;
 
-        document.getElementById("tabUpi").style.pointerEvents = "none";
         document.getElementById("tabBank").style.pointerEvents = "none";
-        document.getElementById("tabUpi").style.opacity = savedType === "upi" ? "1" : ".4";
-        document.getElementById("tabBank").style.opacity = savedType === "bank" ? "1" : ".4";
+        document.getElementById("tabBank").style.opacity = "1";
 
         saveBtn.style.display = "none";
         careBtn.style.display = "block";
         lockedMessage.style.display = "block";
         infoText.innerHTML = `<b style="color:#dc2626">🔒 Payment Details Locked</b><br>Your ${savedType === "bank" ? "Bank Account" : "UPI ID"} is permanently saved.`;
     }else{
-        upiInput.disabled = false;
+        bankNameInput.disabled = false;
+        confirmAccNoInput.disabled = false;
         accNameInput.disabled = false;
         accNoInput.disabled = false;
         ifscInput.disabled = false;
 
-        document.getElementById("tabUpi").style.pointerEvents = "auto";
         document.getElementById("tabBank").style.pointerEvents = "auto";
-        document.getElementById("tabUpi").style.opacity = "1";
         document.getElementById("tabBank").style.opacity = "1";
 
         saveBtn.style.display = "block";
         careBtn.style.display = "none";
         lockedMessage.style.display = "none";
-        infoText.innerHTML = `Choose <b>UPI ID</b> or <b>Bank Account</b>. Once saved, details are locked permanently.`;
-        switchPayoutMode(savedType === "bank" ? "bank" : "upi");
+        infoText.innerHTML = `Bank account details are required for every withdrawal. Choose your bank and enter matching account details. Once saved, details are locked permanently.`;
+        switchPayoutMode("bank");
     }
 
     openModal("profileSettingsModal");
@@ -1507,15 +1509,14 @@ function openUpiModal(){
 
 function switchPayoutMode(mode, force = false){
     if(hasSavedPaymentDetails() && !force){
-        showToast("Payment method is permanently locked.");
+        showToast("Saved bank details are locked.");
         return;
     }
-    if(mode !== "upi" && mode !== "bank") mode = "upi";
-    payoutMode = mode;
-    document.getElementById("upiSection").style.display = mode === "upi" ? "block" : "none";
-    document.getElementById("bankSection").style.display = mode === "bank" ? "block" : "none";
-    document.getElementById("tabUpi").className = mode === "upi" ? "payout-tab active" : "payout-tab";
-    document.getElementById("tabBank").className = mode === "bank" ? "payout-tab active" : "payout-tab";
+    payoutMode = "bank";
+    const bankSection = document.getElementById("bankSection");
+    if(bankSection) bankSection.style.display = "block";
+    const bankTab = document.getElementById("tabBank");
+    if(bankTab) bankTab.className = "payout-tab active";
 }
 
 /* PERMANENT BANK/UPI SAVE WITH SUPABASE UPSERT & LOCAL CACHE */
@@ -1526,64 +1527,61 @@ async function updateUserPayoutDetails(){
     }
 
     const saveBtn = document.getElementById("saveProfileBtn");
-    let updateData = { payout_type: payoutMode };
+    const accountHolder = document.getElementById("editAccName").value.trim();
+    const bankName = document.getElementById("editBankName").value.trim();
+    const accountNumber = document.getElementById("editAccNo").value.trim();
+    const confirmAccountNumber = document.getElementById("editConfirmAccNo").value.trim();
+    const ifscCode = document.getElementById("editIfsc").value.trim().toUpperCase();
 
-    if(payoutMode === "upi"){
-        const upiId = document.getElementById("editUpiId").value.trim();
-        if(!upiId || !upiId.includes("@")){
-            alert("Please enter a valid UPI ID.");
-            return;
-        }
-        updateData.upi_id = upiId;
-        updateData.account_holder_name = null;
-        updateData.bank_account_number = null;
-        updateData.ifsc_code = null;
+    if(!accountHolder || !bankName){
+        alert("Please enter account holder name and select a bank.");
+        return;
+    }
+    if(!/^[0-9]{9,11}$/.test(accountNumber)){
+        alert("Account number must contain 9 to 11 digits.");
+        return;
+    }
+    if(accountNumber !== confirmAccountNumber){
+        alert("Account number and confirm account number do not match.");
+        return;
+    }
+    if(!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(ifscCode)){
+        alert("Please enter a valid 11-character IFSC code, e.g. SBIN1234567.");
+        return;
     }
 
-    if(payoutMode === "bank"){
-        const accountHolder = document.getElementById("editAccName").value.trim();
-        const accountNumber = document.getElementById("editAccNo").value.trim();
-        const ifscCode = document.getElementById("editIfsc").value.trim().toUpperCase();
-
-        if(!accountHolder || !accountNumber || !ifscCode){
-            alert("Please fill all bank details completely.");
-            return;
-        }
-        updateData.account_holder_name = accountHolder;
-        updateData.bank_account_number = accountNumber;
-        updateData.ifsc_code = ifscCode;
-        updateData.upi_id = null;
-    }
+    const updateData = {
+        payout_type: "bank",
+        bank_name: bankName,
+        account_holder_name: accountHolder,
+        bank_account_number: accountNumber,
+        ifsc_code: ifscCode,
+        upi_id: null
+    };
 
     saveBtn.disabled = true;
     saveBtn.innerText = "Saving to Database...";
 
     try{
-        localStorage.setItem(`payout_details_${currentUserId}`, JSON.stringify(updateData));
-
-        const payoutPayload = {
-            user_id: currentUserId,
-            ...updateData
-        };
-
         const { data, error } = await supabaseClient
             .from("profiles")
-            .upsert(payoutPayload, { onConflict: "user_id" })
+            .update(updateData)
+            .eq("user_id", currentUserId)
             .select()
             .maybeSingle();
 
-        if(error){
-            console.warn("Supabase Bank Save warning (using LocalCache):", error);
-        }
+        if(error) throw error;
+        if(!data) throw new Error("Bank details were not saved. Please refresh and try again.");
 
-        currentProfile = { ...currentProfile, ...updateData, ...(data || {}) };
-        showToast("Bank / UPI details saved permanently!");
+        currentProfile = { ...currentProfile, ...data };
+        localStorage.setItem(`payout_details_${currentUserId}`, JSON.stringify(updateData));
+        showToast("Bank account details saved successfully!");
         closeModal("profileSettingsModal");
     }catch(error){
-        alert("Error saving payment details: " + error.message);
+        alert("Error saving bank details: " + error.message);
     }finally{
         saveBtn.disabled = false;
-        saveBtn.innerText = "Save Payment Details";
+        saveBtn.innerText = "Save Bank Details";
     }
 }
 
@@ -1601,8 +1599,7 @@ function connectCustomerCare(){
     
     const savedType = String(currentProfile?.payout_type || "").trim().toLowerCase();
     let oldDetails = savedType === "bank" 
-        ? `Bank Account No: ${currentProfile?.bank_account_number || "N/A"} | Holder: ${currentProfile?.account_holder_name || "N/A"} | IFSC: ${currentProfile?.ifsc_code || "N/A"}`
-        : `UPI ID: ${currentProfile?.upi_id || "N/A"}`;
+        ? `Bank: ${currentProfile?.bank_name || "N/A"} | Account No: ${currentProfile?.bank_account_number || "N/A"} | Holder: ${currentProfile?.account_holder_name || "N/A"} | IFSC: ${currentProfile?.ifsc_code || "N/A"}`;
 
     const subject = encodeURIComponent("Payment Details Change Request");
     const body = encodeURIComponent(
@@ -1618,7 +1615,7 @@ User ID: ${userId}
 ${oldDetails}
 
 --- NEW DETAILS TO UPDATE ---
-[Enter your new Bank Account / UPI details here]
+[Enter your new bank account details here]
 
 Thank you.`
     );
@@ -1630,7 +1627,7 @@ Thank you.`
 function openWithdrawModal(){
     closeSidebar();
     if(!hasSavedPaymentDetails()){
-        alert("⚠️ Please save your Bank Account or UPI ID before requesting withdrawal!");
+        alert("⚠️ Please save your bank account details before requesting withdrawal!");
         openUpiModal();
         return;
     }
@@ -2269,7 +2266,7 @@ async function saveKycDetails(){
 /* SUBMIT WITHDRAWAL REQUEST */
 async function submitWithdrawal(){
     if(!hasSavedPaymentDetails()){
-        alert("⚠️ Please save bank or UPI details first.");
+        alert("⚠️ Please save bank account details first.");
         closeModal("withdrawModal");
         openUpiModal();
         return;
