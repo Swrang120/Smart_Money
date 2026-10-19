@@ -2137,47 +2137,86 @@ async function loadWithdrawalHistory(){
     }
 }
 
-/* EARNINGS DATA & CALCULATION */
+/* EARNINGS DATA & CALCULATION
+   All totals are derived from persisted earnings rows; this page never creates
+   commission entries or changes wallet balances. Date ranges use India/local
+   calendar boundaries rather than rolling 24-hour windows. */
+let earningsLoadError = null;
+
 async function loadEarningsData(){
     if(!currentUserId) return;
     try{
-        const { data } = await supabaseClient
-            .from("earnings")
-            .select("*")
-            .eq("user_id", currentUserId)
-            .order("created_at", { ascending: false });
-
-        allEarningsData = data || [];
+        const collected = [];
+        const pageSize = 1000;
+        for(let from = 0; ; from += pageSize){
+            const { data, error } = await supabaseClient
+                .from("earnings")
+                .select("*")
+                .eq("user_id", currentUserId)
+                .order("created_at", { ascending: false })
+                .range(from, from + pageSize - 1);
+            if(error) throw error;
+            const page = data || [];
+            collected.push(...page);
+            if(page.length < pageSize) break;
+            if(from >= 100000) break;
+        }
+        allEarningsData = collected;
+        earningsLoadError = null;
         updateEarningsCards();
     }catch(error){
-        allEarningsData = [];
-        updateEarningsCards();
+        earningsLoadError = error;
+        console.error("Could not load earnings records:", error);
+        // Do not replace real values with misleading zeros on a failed request.
+        const note = document.getElementById("earningsDataNotice");
+        if(note) note.textContent = "Earnings could not be refreshed. Please try again.";
     }
 }
 
 function getEarningsForDays(days){
     const now = new Date();
+    const start = new Date(now);
+    start.setHours(0,0,0,0);
+    if(days === "today"){
+        return allEarningsData.filter(item=>{
+            if(!item.created_at) return false;
+            const created = new Date(item.created_at);
+            return Number.isFinite(created.getTime()) && created >= start && created <= now;
+        }).reduce((sum,item)=>sum + (Number(item.amount) || 0),0);
+    }
+    start.setDate(start.getDate() - (Number(days) - 1));
     return allEarningsData.filter(item=>{
         if(!item.created_at) return false;
         const created = new Date(item.created_at);
-        if(days === "today") return created.toDateString() === now.toDateString();
-        const diff = (now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24);
-        return diff >= 0 && diff <= days;
-    }).reduce((sum, item)=> sum + Number(item.amount || 0), 0);
+        return Number.isFinite(created.getTime()) && created >= start && created <= now;
+    }).reduce((sum,item)=>sum + (Number(item.amount) || 0),0);
+}
+
+function formatEarningsMoney(value){
+    return new Intl.NumberFormat("en-IN",{
+        style:"currency",currency:"INR",minimumFractionDigits:2,maximumFractionDigits:2
+    }).format(Number(value) || 0);
 }
 
 function updateEarningsCards(){
+    const sum = rows => rows.reduce((total,item)=>total + (Number(item.amount) || 0),0);
     const today = getEarningsForDays("today");
     const sevenDays = getEarningsForDays(7);
     const thirtyDays = getEarningsForDays(30);
-    const allTime = allEarningsData.reduce((sum, item)=> sum + Number(item.amount || 0), 0);
-    const passive = allEarningsData.filter(item=> String(item.earning_type || "").toLowerCase().includes("passive")).reduce((sum, item)=> sum + Number(item.amount || 0), 0);
+    const allTime = sum(allEarningsData);
+    const passive = sum(allEarningsData.filter(item=>String(item.earning_type || item.type || "").toLowerCase().includes("passive")));
 
-    document.getElementById("todayRevenue").innerText = "₹" + today.toFixed(2);
-    document.getElementById("sevenDaysRevenue").innerText = "₹" + sevenDays.toFixed(2);
-    document.getElementById("thirtyDaysRevenue").innerText = "₹" + thirtyDays.toFixed(2);
-    document.getElementById("allTimeRevenueText").innerText = "₹" + allTime.toFixed(2);
-    document.getElementById("passiveIncome").innerText = "₹" + passive.toFixed(2);
+    const values = {
+        todayRevenue:today,
+        sevenDaysRevenue:sevenDays,
+        thirtyDaysRevenue:thirtyDays,
+        allTimeRevenueText:allTime,
+        passiveIncome:passive
+    };
+    Object.entries(values).forEach(([id,value])=>{
+        const el = document.getElementById(id);
+        if(el) el.textContent = formatEarningsMoney(value);
+    });
 }
 
 async function loadEarningsHistory(){
@@ -2185,21 +2224,24 @@ async function loadEarningsHistory(){
     if(!container) return;
     await loadEarningsData();
 
+    if(earningsLoadError){
+        container.innerHTML = `<div style="text-align:center;color:#b45309;font-size:13px;padding:20px">Earnings could not be loaded. Please refresh and try again.</div>`;
+        return;
+    }
     if(!allEarningsData.length){
-        container.innerHTML = `<div style="text-align:center;color:#64748b;font-size:13px;padding:20px">No earnings yet.</div>`;
+        container.innerHTML = `<div style="text-align:center;color:#64748b;font-size:13px;padding:20px">No earnings records found.</div>`;
         return;
     }
 
     container.innerHTML = allEarningsData.map(item=>{
         const type = escapeHtml(item.earning_type || item.type || "Commission");
         const amount = Number(item.amount || 0);
-        const date = item.created_at ? new Date(item.created_at).toLocaleDateString("en-IN", { day:"numeric", month:"short", year:"numeric" }) : "-";
-
+        const date = item.created_at ? new Date(item.created_at).toLocaleString("en-IN",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}) : "-";
         return `
         <div class="earning-item">
             <div class="earning-top">
                 <div class="earning-title">${type}</div>
-                <div class="earning-amount">+₹${amount.toFixed(2)}</div>
+                <div class="earning-amount">+${formatEarningsMoney(amount)}</div>
             </div>
             <div class="earning-date">${date}</div>
         </div>`;
@@ -2381,6 +2423,7 @@ function setupRealtimeListener(){
     try{
         realtimeChannel = supabaseClient
             .channel(`dashboard-${currentUserId}`)
+            .on("postgres_changes", { event:"*", schema:"public", table:"earnings", filter:`user_id=eq.${currentUserId}` }, async ()=>{ await loadEarningsData(); })
             .on("postgres_changes", { event:"UPDATE", schema:"public", table:"profiles", filter:`user_id=eq.${currentUserId}` }, payload=>{
                 if(!payload.new) return;
                 currentProfile = { ...currentProfile, ...payload.new };
