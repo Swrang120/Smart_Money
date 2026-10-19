@@ -291,17 +291,12 @@ async function validateMobileExists(){
    UNIQUE BUYER REFERRAL CODE
 --------------------------------------------------------- */
 async function generateUniqueReferralCode(){
-  for(let i=0;i<20;i++){
-    const code="SM-smart"+Math.random().toString(36).substring(2,10);
-    const r=await supabaseClient.from("profiles").select("user_id").eq("referral_code",code).limit(1);
-    if(r.error){
-      /* Collision is extremely unlikely. Let the DB insert decide if
-         SELECT is blocked by RLS; return the generated code. */
-      return code;
-    }
-    if(!r.data?.length)return code;
+  const { data, error } = await supabaseClient.rpc("generate_unique_referral_code");
+  if(error) throw new Error("Unique ID generation failed: " + error.message);
+  if(typeof data !== "string" || !/^SM-smart\d{5}$/.test(data)){
+    throw new Error("Unique referral ID could not be generated. Please try again.");
   }
-  throw new Error("Unable to generate a unique referral code.");
+  return data;
 }
 
 /* ---------------------------------------------------------
