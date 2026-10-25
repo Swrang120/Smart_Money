@@ -1140,6 +1140,11 @@ td{
   
 }  
   
+/* Package image preview/status must remain clearly visible in admin */
+#packageImageManager{display:block!important;visibility:visible!important;opacity:1!important;position:relative}
+#packageImageCurrentPreview{width:100%;max-height:260px;min-height:90px;object-fit:contain;background:#080f27;border:1px solid var(--border);border-radius:10px;margin-top:10px}
+#packageImageUploadStatus{display:block!important;visibility:visible;white-space:normal;overflow-wrap:anywhere}
+
 </style>  
   
 </head>  
@@ -8176,47 +8181,64 @@ if(document.readyState === "loading"){
 
 <script>
 (function(){
-  const BUCKET="package-images", ADMIN_EMAIL="sboro3235@gmail.com", $=id=>document.getElementById(id);
-  let savedUrls={};
-  function status(msg,bad){const el=$("packageImageUploadStatus");if(el){el.textContent=msg;el.style.color=bad?"#fca5a5":"#86efac";}}
-  async function loadSaved(){
-    if(!supabaseClient)return;
-    const {data,error}=await supabaseClient.from("package_images").select("package_key,image_url");
-    if(error){status("Could not load current images: "+error.message,true);return;}
-    savedUrls={};(data||[]).forEach(r=>savedUrls[r.package_key]=r.image_url);
-    showSavedPreview();status("Ready. Choose a package and upload its poster.");
+  const BUCKET="package-images", ADMIN_EMAIL="sboro3235@gmail.com";
+  const $=id=>document.getElementById(id);
+  let savedUrls={}, loading=false;
+  function status(msg,bad){
+    const el=$("packageImageUploadStatus");if(!el)return;
+    el.textContent=msg;el.style.display="block";el.style.padding="10px";el.style.borderRadius="8px";
+    el.style.background=bad?"rgba(127,29,29,.25)":"rgba(20,83,45,.22)";
+    el.style.border="1px solid "+(bad?"#ef4444":"#22c55e");el.style.color=bad?"#fecaca":"#bbf7d0";
   }
   function showSavedPreview(){
-    const img=$("packageImageCurrentPreview"),url=savedUrls[$("packageImageKey")?.value];
-    if(img&&url){img.src=url;img.style.display="block";}else if(img){img.removeAttribute("src");img.style.display="none";}
+    const img=$("packageImageCurrentPreview"),key=$("packageImageKey")?.value,url=savedUrls[key];if(!img)return;
+    img.onerror=()=>{img.style.display="none";status("Saved image URL could not load. Upload the image again or check Storage permissions.",true);};
+    if(url){img.onload=()=>{img.style.display="block";};img.src=url;img.style.display="block";img.alt=(key||"Package")+" saved image preview";}
+    else{img.removeAttribute("src");img.style.display="none";}
+  }
+  async function loadSaved(){
+    if(loading)return;loading=true;status("Checking saved package images…");
+    try{
+      if(!window.supabase||!supabaseClient)throw new Error("Supabase did not initialize. Refresh the admin page and try again.");
+      const {data:sessionData,error:sessionError}=await supabaseClient.auth.getSession();if(sessionError)throw sessionError;
+      if(!sessionData?.session?.user){status("Please sign in as the admin to view and upload package images.",true);return;}
+      if(String(sessionData.session.user.email||"").toLowerCase()!==ADMIN_EMAIL){status("This account is not authorized to manage package images.",true);return;}
+      const {data,error}=await supabaseClient.from("package_images").select("package_key,image_url");if(error)throw error;
+      savedUrls={};(data||[]).forEach(row=>{if(row.package_key&&row.image_url)savedUrls[row.package_key]=row.image_url;});
+      showSavedPreview();status("✅ Connected. "+Object.keys(savedUrls).length+" saved package image(s) found. Select a package to preview or replace its image.");
+    }catch(e){console.error("Package image manager load failed:",e);status("Could not load package images: "+(e?.message||String(e)),true);}
+    finally{loading=false;}
   }
   window.uploadPackageImage=async function(){
     const btn=$("packageImageUploadBtn"),file=$("packageImageFile")?.files?.[0],key=$("packageImageKey")?.value;
     if(!supabaseClient){status("Supabase is not ready. Refresh and try again.",true);return;}
-    if(!file){status("Choose a JPG, PNG or WebP image first.",true);return;}
+    if(!file){status("Choose a JPG, PNG or WebP image first. The saved image preview is shown above when available.",true);return;}
     if(!["image/jpeg","image/png","image/webp"].includes(file.type)){status("Only JPG, PNG or WebP images are supported.",true);return;}
     if(file.size>10*1024*1024){status("Image must be 10 MB or smaller.",true);return;}
-    btn.disabled=true;btn.textContent="Uploading…";
+    btn.disabled=true;btn.textContent="Uploading…";status("Uploading image and saving it for the Home Page…");
     try{
       const {data:sd,error:se}=await supabaseClient.auth.getSession();if(se)throw se;
-      const user=sd?.session?.user;
-      if(!user||String(user.email||"").toLowerCase()!==ADMIN_EMAIL)throw new Error("Please sign in with the authorized admin account.");
-      const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
-      const path=key+"/"+Date.now()+"-"+crypto.randomUUID()+"."+ext;
+      const user=sd?.session?.user;if(!user||String(user.email||"").toLowerCase()!==ADMIN_EMAIL)throw new Error("Please sign in with the authorized admin account.");
+      const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg",path=key+"/"+Date.now()+"-"+crypto.randomUUID()+"."+ext;
       const {error:ue}=await supabaseClient.storage.from(BUCKET).upload(path,file,{contentType:file.type,cacheControl:"3600",upsert:false});if(ue)throw ue;
-      const {data:pd}=supabaseClient.storage.from(BUCKET).getPublicUrl(path),url=pd?.publicUrl;
-      if(!url)throw new Error("Could not create the image URL.");
+      const {data:pd}=supabaseClient.storage.from(BUCKET).getPublicUrl(path),url=pd?.publicUrl;if(!url)throw new Error("Could not create the public image URL.");
       const {error:de}=await supabaseClient.from("package_images").upsert({package_key:key,image_url:url,updated_at:new Date().toISOString(),updated_by:user.id},{onConflict:"package_key"});if(de)throw de;
-      savedUrls[key]=url;showSavedPreview();$("packageImageFile").value="";
-      status("✅ Saved! This package image is now published on the Home Page for all visitors. Refresh an already-open Home Page.");
-    }catch(e){console.error("Package image upload failed",e);status("Upload failed: "+(e?.message||String(e)),true);}
+      savedUrls[key]=url;const img=$("packageImageCurrentPreview");
+      if(img){img.onload=()=>{img.style.display="block";};img.onerror=()=>status("Image saved, but its preview could not load. Check the public Storage bucket.",true);img.src=url;img.style.display="block";}
+      $("packageImageFile").value="";status("✅ SUCCESS — "+key.replace("_"," ").toUpperCase()+" image saved. It is published for the Home Page; refresh the Home Page to see it.");
+    }catch(e){console.error("Package image upload failed",e);status("❌ Upload failed: "+(e?.message||String(e)),true);}
     finally{btn.disabled=false;btn.textContent="Upload / Update Package Image";}
   };
-  document.addEventListener("DOMContentLoaded",()=>{
+  function init(){
     $("packageImageKey")?.addEventListener("change",showSavedPreview);
-    $("packageImageFile")?.addEventListener("change",function(){const f=this.files?.[0],img=$("packageImageCurrentPreview");if(f&&img){img.src=URL.createObjectURL(f);img.style.display="block";}else showSavedPreview();});
-    loadSaved();
-  });
+    $("packageImageFile")?.addEventListener("change",function(){
+      const file=this.files?.[0],img=$("packageImageCurrentPreview");
+      if(file&&img){img.onerror=()=>status("Selected image preview failed to load. Please choose another image.",true);img.onload=()=>{img.style.display="block";};img.src=URL.createObjectURL(file);img.style.display="block";status("Preview ready: "+file.name+" ("+(file.size/1024/1024).toFixed(2)+" MB). Tap Upload / Update Package Image to publish it.");}
+      else showSavedPreview();
+    });
+    loadSaved();if(supabaseClient?.auth?.onAuthStateChange)supabaseClient.auth.onAuthStateChange(()=>{setTimeout(loadSaved,250);});
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
 </script>
 
