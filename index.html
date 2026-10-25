@@ -301,6 +301,15 @@ select{
     transition:all .2s;
 }
 
+/* Keep public Preview and Status entries visible on every screen size. */
+#previewMenuLink,
+#statusMenuLink{
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+    pointer-events:auto !important;
+}
+
 .mobile-menu a.m-link:hover{
     background:#f1f5f9;
     color:#7c3aed;
@@ -6697,7 +6706,7 @@ function escapeHtml(value){
    ADMIN PREVIEW
 ========================================================= */
 
-async function openAdminPreviewModal(){
+async async function openAdminPreviewModal(){
 
     const modal =
     document.getElementById("adminPreviewModal");
@@ -8090,7 +8099,7 @@ window.addEventListener(
   })(document, 'script');
 
 /* Load admin-published 24-hour statuses on the public homepage. */
-async function openPublicStatus(){
+async async function openPublicStatus(){
   const modal=document.getElementById("publicStatusModal");
   const box=document.getElementById("publicStatusContent");
   if(modal) modal.classList.add("active");
