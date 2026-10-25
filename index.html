@@ -2313,6 +2313,12 @@ select{
     }
 }
 
+
+/* Admin-uploaded package artwork */
+.package-artwork{display:none;width:100%;aspect-ratio:1/1;max-height:330px;padding:8px;object-fit:contain;background:radial-gradient(circle at 50% 35%,#172b58 0%,#07132d 72%);border-bottom:1px solid #e5eaf2}
+.package-artwork.is-visible{display:block}
+@media(max-width:768px){.package-artwork{max-height:290px;padding:5px}}
+
 </style>
 </head>
 
@@ -8133,5 +8139,25 @@ if(document.readyState === "loading"){
 }
 
 </script>
+
+<script>
+async function loadPublicPackageImages(){
+ if(!window.supabase||!supabaseClient)return;
+ try{
+  const {data,error}=await supabaseClient.from("package_images").select("package_key,image_url");if(error)throw error;
+  const keys={"starter package":"starter","intermediate":"intermediate","intermediate package":"intermediate","expert package":"expert","master package":"master","brahmastra":"brahmastra","brahmastra package":"brahmastra","premium pro":"premium_pro","premium pro package":"premium_pro"};
+  const urls={};(data||[]).forEach(r=>{if(r.image_url)urls[r.package_key]=r.image_url;});
+  document.querySelectorAll(".package-card").forEach(card=>{
+   const title=(card.querySelector(".pkg-title h3")?.textContent||"").trim().toLowerCase(),key=keys[title];
+   if(!key||!urls[key])return;
+   let img=card.querySelector(".package-artwork");
+   if(!img){img=document.createElement("img");img.className="package-artwork";img.alt=title+" promotional artwork";img.loading="lazy";const banner=card.querySelector(".pkg-banner");if(banner)banner.insertAdjacentElement("afterend",img);else card.prepend(img);}
+   img.src=urls[key];img.classList.add("is-visible");
+  });
+ }catch(e){console.warn("Package image loading failed",e);}
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",loadPublicPackageImages);else loadPublicPackageImages();
+</script>
+
 </body>
 </html>
