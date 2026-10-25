@@ -133,6 +133,31 @@ select{
     display:flex;
     align-items:center;
     gap:11px;
+    min-width:0;
+    max-width:min(245px,58vw);
+}
+.brand-default{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    min-width:0;
+}
+.site-brand-image{
+    display:block;
+    width:245px;
+    height:64px;
+    max-width:58vw;
+    object-fit:contain;
+    object-position:left center;
+}
+.site-brand-image[hidden]{display:none!important}
+@media(max-width:480px){
+    .navbar{padding-left:5%;padding-right:5%}
+    .brand{max-width:calc(100vw - 140px)}
+    .site-brand-image{width:100%;max-width:100%;height:58px}
+    .brand-default .logo-circle{width:36px;height:36px;font-size:15px}
+    .brand-default .brand-text h2{font-size:15px}
+    .brand-default .brand-text span{font-size:9px}
 }
 
 .logo-circle{
@@ -2417,19 +2442,17 @@ select{
 
 <nav class="navbar">
 
-<a href="#" class="brand">
+<a href="#" class="brand" id="siteBrand" aria-label="Smart Money Home">
 
-<div class="logo-circle">
-SM
+<div class="brand-default" id="brandDefault">
+  <div class="logo-circle">SM</div>
+  <div class="brand-text">
+    <h2 aria-label="Smart Money"><span class="smart-word">Smart</span><span class="money-word">Money</span></h2>
+    <span>Learn • Grow • Be Smart</span>
+  </div>
 </div>
 
-<div class="brand-text">
-
-<h2 aria-label="Smart Money"><span class="smart-word">Smart</span><span class="money-word">Money</span></h2>
-
-<span>Learn • Grow • Be Smart</span>
-
-</div>
+<img id="siteBrandImage" class="site-brand-image" alt="Smart Money" hidden>
 
 </a>
 
@@ -8206,6 +8229,14 @@ async function loadPublicPackageImages(){
   const {data,error}=await supabaseClient.from("package_images").select("package_key,image_url");if(error)throw error;
   const keys={"starter package":"starter","intermediate":"intermediate","intermediate package":"intermediate","expert package":"expert","master package":"master","brahmastra":"brahmastra","brahmastra package":"brahmastra","premium pro":"premium_pro","premium pro package":"premium_pro"};
   const urls={};(data||[]).forEach(r=>{if(r.image_url)urls[r.package_key]=r.image_url;});
+  // Optional custom horizontal logo uploaded from Admin. Keep the built-in logo as a fallback.
+  const brandImage=document.getElementById("siteBrandImage");
+  const brandDefault=document.getElementById("brandDefault");
+  if(brandImage&&urls.smart_money_logo){
+   brandImage.onload=()=>{brandImage.hidden=false;if(brandDefault)brandDefault.hidden=true;};
+   brandImage.onerror=()=>{brandImage.hidden=true;if(brandDefault)brandDefault.hidden=false;};
+   brandImage.src=urls.smart_money_logo;
+  }
   document.querySelectorAll(".package-card").forEach(card=>{
    const title=(card.querySelector(".pkg-title h3")?.textContent||"").trim().toLowerCase(),key=keys[title];
    if(!key||!urls[key])return;
@@ -8213,7 +8244,7 @@ async function loadPublicPackageImages(){
    if(!img){img=document.createElement("img");img.className="package-artwork";img.alt=title+" promotional artwork";img.loading="lazy";const banner=card.querySelector(".pkg-banner");if(banner)banner.insertAdjacentElement("afterend",img);else card.prepend(img);}
    img.src=urls[key];img.classList.add("is-visible");
   });
- }catch(e){console.warn("Package image loading failed",e);}
+ }catch(e){console.warn("Public image loading failed",e);}
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",loadPublicPackageImages);else loadPublicPackageImages();
 </script>
