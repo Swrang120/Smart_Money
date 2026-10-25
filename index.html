@@ -6707,7 +6707,7 @@ function escapeHtml(value){
    ADMIN PREVIEW
 ========================================================= */
 
-async async function openAdminPreviewModal(){
+async function openAdminPreviewModal(){
 
     const modal =
     document.getElementById("adminPreviewModal");
@@ -6787,6 +6787,23 @@ async async function openAdminPreviewModal(){
 
     }
 
+
+    // The admin panel's current preview upload is stored in global_settings.
+    // Fall back to that persistent value when admin_updates has no rows.
+    if(!imageUrl && supabaseClient){
+        try{
+            const {data:previewSetting,error:previewSettingError}=await supabaseClient
+                .from("global_settings")
+                .select("setting_value")
+                .eq("setting_key","index_preview_image")
+                .maybeSingle();
+            if(!previewSettingError && previewSetting && previewSetting.setting_value){
+                imageUrl=previewSetting.setting_value;
+            }
+        }catch(previewSettingErr){
+            console.warn("Could not load saved preview setting:",previewSettingErr);
+        }
+    }
 
     if(!imageUrl){
 
@@ -8100,7 +8117,7 @@ window.addEventListener(
   })(document, 'script');
 
 /* Load admin-published 24-hour statuses on the public homepage. */
-async async function openPublicStatus(){
+async function openPublicStatus(){
   const modal=document.getElementById("publicStatusModal");
   const box=document.getElementById("publicStatusContent");
   if(modal) modal.classList.add("active");
