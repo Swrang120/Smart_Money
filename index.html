@@ -245,12 +245,14 @@ select{
 
 .mobile-menu{
     position:fixed;
+    pointer-events:auto;
+    touch-action:pan-y;
     top:0;
     right:-100%;
     width:290px;
     height:100vh;
     background:#fff;
-    z-index:3000;
+    z-index:2147483002;
     padding:25px;
     transition:.35s;
     box-shadow:-10px 0 30px rgba(0,0,0,.12);
@@ -372,10 +374,11 @@ select{
 
 .menu-overlay{
     position:fixed;
+    pointer-events:auto;
     inset:0;
     background:rgba(15,23,42,.55);
     display:none;
-    z-index:2500;
+    z-index:2147483001;
 }
 
 .menu-overlay.active{
@@ -6533,17 +6536,15 @@ courses:[
 ========================================================= */
 
 function toggleMenu(){
-
-    const menu =
-    document.getElementById("mobileMenu");
-
-    const overlay =
-    document.getElementById("menuOverlay");
-
-    menu.classList.toggle("active");
-
-    overlay.classList.toggle("active");
-
+    const menu = document.getElementById("mobileMenu");
+    const overlay = document.getElementById("menuOverlay");
+    if (!menu || !overlay) return;
+    const shouldOpen = !menu.classList.contains("active");
+    menu.classList.toggle("active", shouldOpen);
+    overlay.classList.toggle("active", shouldOpen);
+    menu.style.pointerEvents = shouldOpen ? "auto" : "";
+    overlay.style.pointerEvents = shouldOpen ? "auto" : "none";
+    document.body.style.overflow = shouldOpen ? "hidden" : "";
 }
 
 
