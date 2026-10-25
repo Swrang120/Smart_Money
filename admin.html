@@ -8305,7 +8305,7 @@ if(document.readyState === "loading"){
       if(file&&img){img.onerror=()=>status("Selected image preview failed to load. Please choose another image.",true);img.onload=()=>{img.style.display="block";};img.src=URL.createObjectURL(file);img.style.display="block";status("Preview ready: "+file.name+" ("+(file.size/1024/1024).toFixed(2)+" MB). Tap Upload / Update Package Image to publish it.");}
       else showSavedPreview();
     });
-    loadSaved();if(supabaseClient?.auth?.onAuthStateChange)supabaseClient.auth.onAuthStateChange(()=>{setTimeout(loadSaved,250);});
+    loadSaved();if(supabaseClient?.auth?.onAuthStateChange)supabaseClient.auth.onAuthStateChange(()=>{setTimeout(()=>{loadSaved();loadSiteLogo();},250);});
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
