@@ -2405,6 +2405,22 @@ select{
 }
 
 </style>
+<style id="smartMoneyNetworkUiStyles">
+#smNetworkOverlay{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 50% 20%,rgba(54,94,255,.18),transparent 42%),rgba(5,12,35,.94);backdrop-filter:blur(12px);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff}
+#smNetworkOverlay.sm-show{display:flex;animation:smFadeIn .22s ease-out}
+#smNetworkOverlay .sm-net-card{width:min(100%,360px);padding:30px 24px 26px;text-align:center;border:1px solid rgba(255,255,255,.16);border-radius:26px;background:linear-gradient(145deg,rgba(24,37,83,.98),rgba(10,18,48,.98));box-shadow:0 24px 80px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.08)}
+#smNetworkOverlay .sm-net-mark{position:relative;display:grid;place-items:center;width:76px;height:76px;margin:0 auto 18px;border-radius:24px;background:linear-gradient(135deg,#8b5cf6,#2563eb 58%,#06b6d4);box-shadow:0 0 0 7px rgba(89,108,255,.12),0 12px 34px rgba(37,99,235,.35);font-size:25px;font-weight:900;letter-spacing:-1.5px}
+#smNetworkOverlay .sm-net-ring{position:absolute;inset:-11px;border:2px solid rgba(125,155,255,.48);border-top-color:#facc15;border-radius:30px;animation:smSpin 1.25s linear infinite}
+#smNetworkOverlay h2{margin:0 0 9px;font-size:22px;font-weight:800;letter-spacing:-.5px}
+#smNetworkOverlay .sm-net-desc{margin:0 auto 20px;max-width:280px;color:#cbd5e1;font-size:14px;line-height:1.65}
+#smNetworkOverlay .sm-net-state{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 auto 20px;color:#fde68a;font-size:12px;font-weight:750;letter-spacing:.35px}
+#smNetworkOverlay .sm-net-dot{width:8px;height:8px;border-radius:50%;background:#f59e0b;box-shadow:0 0 0 5px rgba(245,158,11,.13);animation:smPulse 1.2s infinite}
+#smNetworkOverlay .sm-net-retry{width:100%;min-height:46px;border:0;border-radius:14px;background:linear-gradient(100deg,#facc15,#f59e0b);color:#172554;font-weight:850;font-size:14px;box-shadow:0 8px 22px rgba(245,158,11,.18);cursor:pointer}
+#smNetworkOverlay .sm-net-retry:disabled{opacity:.7;cursor:wait}
+#smNetworkOverlay .sm-net-foot{margin:14px 0 0;color:#94a3b8;font-size:11px;line-height:1.5}
+@keyframes smSpin{to{transform:rotate(360deg)}}@keyframes smPulse{50%{opacity:.45;transform:scale(.82)}}@keyframes smFadeIn{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){#smNetworkOverlay *,#smNetworkOverlay *:before{animation:none!important;transition:none!important}}
+</style>
 </head>
 
 <body>
@@ -8250,5 +8266,24 @@ async function loadPublicPackageImages(){
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",loadPublicPackageImages);else loadPublicPackageImages();
 </script>
 
+<div id="smNetworkOverlay" role="alertdialog" aria-modal="true" aria-labelledby="smNetworkTitle" aria-describedby="smNetworkDesc" aria-hidden="true">
+<div class="sm-net-card"><div class="sm-net-mark" aria-hidden="true">SM<span class="sm-net-ring"></span></div>
+<h2 id="smNetworkTitle">Reconnecting Smart Money</h2><p class="sm-net-desc" id="smNetworkDesc">Your connection seems unstable. Keep this page open while we check the network and reconnect you.</p>
+<div class="sm-net-state"><span class="sm-net-dot"></span><span id="smNetworkStateText">Waiting for internet connection…</span></div>
+<button type="button" class="sm-net-retry" id="smNetworkRetry">↻ Retry Connection</button>
+<p class="sm-net-foot">Your account data is not being cleared. This screen will close automatically when the connection returns.</p></div></div>
+<script id="smartMoneyNetworkUiScript">(function(){if(window.__smartMoneyNetworkUiReady)return;window.__smartMoneyNetworkUiReady=true;
+var overlay=document.getElementById('smNetworkOverlay'),stateText=document.getElementById('smNetworkStateText'),retryBtn=document.getElementById('smNetworkRetry');if(!overlay||!stateText||!retryBtn)return;
+var visible=false,hideTimer=null,probeTimer=null,lastFailure=0;
+function show(message){clearTimeout(hideTimer);visible=true;overlay.classList.add('sm-show');overlay.setAttribute('aria-hidden','false');stateText.textContent=message||(!navigator.onLine?'Waiting for internet connection…':'Connection interrupted — reconnecting…');retryBtn.disabled=false;retryBtn.textContent='↻ Retry Connection';}
+function hide(){if(!navigator.onLine)return;clearTimeout(hideTimer);hideTimer=setTimeout(function(){visible=false;overlay.classList.remove('sm-show');overlay.setAttribute('aria-hidden','true');},900);}
+async function checkConnection(){if(!navigator.onLine){show('Waiting for internet connection…');return false;}retryBtn.disabled=true;retryBtn.textContent='Checking connection…';stateText.textContent='Checking secure connection…';
+try{var controller=new AbortController(),timeout=setTimeout(function(){controller.abort();},6500);var response=await fetch(window.location.href.split('#')[0],{method:'HEAD',cache:'no-store',signal:controller.signal});clearTimeout(timeout);if(!response.ok&&response.status>=500)throw new Error('Server temporarily unavailable');hide();retryBtn.disabled=false;retryBtn.textContent='✓ Connection Restored';stateText.textContent='Connection looks good';setTimeout(function(){if(!visible)retryBtn.textContent='↻ Retry Connection';},1300);return true;}
+catch(e){show(navigator.onLine?'Internet is unstable or the server is not responding.':'Waiting for internet connection…');retryBtn.disabled=false;retryBtn.textContent='↻ Try Again';clearTimeout(probeTimer);probeTimer=setTimeout(checkConnection,5000);return false;}}
+function networkFailure(){lastFailure=Date.now();show('Smart Money is having trouble reaching its secure server…');clearTimeout(probeTimer);probeTimer=setTimeout(function(){if(navigator.onLine&&Date.now()-lastFailure>=1800)checkConnection();},2500);}
+window.addEventListener('offline',function(){show('Waiting for internet connection…');});window.addEventListener('online',function(){show('Internet detected — checking connection…');checkConnection();});retryBtn.addEventListener('click',checkConnection);
+if(window.fetch&&!window.__smartMoneyFetchWrapped){var originalFetch=window.fetch.bind(window);window.fetch=function(input,init){var requestUrl=typeof input==='string'?input:(input&&input.url)||'';return originalFetch(input,init).then(function(response){if(/\.supabase\.co\//i.test(requestUrl)&&response.status<500&&navigator.onLine&&visible)hide();return response;}).catch(function(error){if(/\.supabase\.co\//i.test(requestUrl))networkFailure();throw error;});};window.__smartMoneyFetchWrapped=true;}
+if(!navigator.onLine)show('Waiting for internet connection…');window.addEventListener('pageshow',function(){if(!navigator.onLine)show('Waiting for internet connection…');});
+})();</script>
 </body>
 </html>
