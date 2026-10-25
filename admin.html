@@ -1343,7 +1343,21 @@ class="sidebar"
     </div>  
   
   
-    <div class="status-upload">  
+    
+    <div class="status-upload" id="packageImageManager">
+      <b>🖼️ Package Image Management</b>
+      <p style="font-size:12px;line-height:1.5;color:#cbd5e1;margin:8px 0">Upload or replace a package poster. After saving, it appears automatically on the public Home Page for everyone.</p>
+      <label for="packageImageKey" style="display:block;font-size:12px;margin:10px 0 5px">Choose package</label>
+      <select id="packageImageKey" style="width:100%;padding:10px;border-radius:8px;background:#0f172a;color:white;border:1px solid var(--border)">
+        <option value="starter">Starter Package — ₹289</option><option value="intermediate">Intermediate Package — ₹560</option><option value="expert">Expert Package — ₹1,149</option><option value="master">Master Package — ₹2,499</option><option value="brahmastra">Brahmastra Package — ₹5,499</option><option value="premium_pro">Premium Pro — ₹10,997</option>
+      </select>
+      <input type="file" id="packageImageFile" accept="image/jpeg,image/png,image/webp" style="width:100%;margin-top:10px;color:white">
+      <img id="packageImageCurrentPreview" alt="Selected package image preview" style="display:none;width:100%;max-height:210px;object-fit:contain;background:#080f27;border-radius:10px;margin-top:10px">
+      <button class="btn btn-primary" id="packageImageUploadBtn" style="width:100%;margin-top:10px" onclick="uploadPackageImage()">Upload / Update Package Image</button>
+      <div id="packageImageUploadStatus" style="font-size:12px;line-height:1.5;margin-top:10px;color:#cbd5e1" aria-live="polite">Select a package and an image to begin.</div>
+    </div>
+
+<div class="status-upload">  
   
          <div class="status-upload" id="adminApkUploadCard">
         <b>📲 Install APK — App Download</b>
@@ -8157,6 +8171,53 @@ if(document.readyState === "loading"){
   loadSmartMoneyApkAdminStatus();
 }
 
+</script>
+
+
+<script>
+(function(){
+  const BUCKET="package-images", ADMIN_EMAIL="sboro3235@gmail.com", $=id=>document.getElementById(id);
+  let savedUrls={};
+  function status(msg,bad){const el=$("packageImageUploadStatus");if(el){el.textContent=msg;el.style.color=bad?"#fca5a5":"#86efac";}}
+  async function loadSaved(){
+    if(!supabaseClient)return;
+    const {data,error}=await supabaseClient.from("package_images").select("package_key,image_url");
+    if(error){status("Could not load current images: "+error.message,true);return;}
+    savedUrls={};(data||[]).forEach(r=>savedUrls[r.package_key]=r.image_url);
+    showSavedPreview();status("Ready. Choose a package and upload its poster.");
+  }
+  function showSavedPreview(){
+    const img=$("packageImageCurrentPreview"),url=savedUrls[$("packageImageKey")?.value];
+    if(img&&url){img.src=url;img.style.display="block";}else if(img){img.removeAttribute("src");img.style.display="none";}
+  }
+  window.uploadPackageImage=async function(){
+    const btn=$("packageImageUploadBtn"),file=$("packageImageFile")?.files?.[0],key=$("packageImageKey")?.value;
+    if(!supabaseClient){status("Supabase is not ready. Refresh and try again.",true);return;}
+    if(!file){status("Choose a JPG, PNG or WebP image first.",true);return;}
+    if(!["image/jpeg","image/png","image/webp"].includes(file.type)){status("Only JPG, PNG or WebP images are supported.",true);return;}
+    if(file.size>10*1024*1024){status("Image must be 10 MB or smaller.",true);return;}
+    btn.disabled=true;btn.textContent="Uploading…";
+    try{
+      const {data:sd,error:se}=await supabaseClient.auth.getSession();if(se)throw se;
+      const user=sd?.session?.user;
+      if(!user||String(user.email||"").toLowerCase()!==ADMIN_EMAIL)throw new Error("Please sign in with the authorized admin account.");
+      const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
+      const path=key+"/"+Date.now()+"-"+crypto.randomUUID()+"."+ext;
+      const {error:ue}=await supabaseClient.storage.from(BUCKET).upload(path,file,{contentType:file.type,cacheControl:"3600",upsert:false});if(ue)throw ue;
+      const {data:pd}=supabaseClient.storage.from(BUCKET).getPublicUrl(path),url=pd?.publicUrl;
+      if(!url)throw new Error("Could not create the image URL.");
+      const {error:de}=await supabaseClient.from("package_images").upsert({package_key:key,image_url:url,updated_at:new Date().toISOString(),updated_by:user.id},{onConflict:"package_key"});if(de)throw de;
+      savedUrls[key]=url;showSavedPreview();$("packageImageFile").value="";
+      status("✅ Saved! This package image is now published on the Home Page for all visitors. Refresh an already-open Home Page.");
+    }catch(e){console.error("Package image upload failed",e);status("Upload failed: "+(e?.message||String(e)),true);}
+    finally{btn.disabled=false;btn.textContent="Upload / Update Package Image";}
+  };
+  document.addEventListener("DOMContentLoaded",()=>{
+    $("packageImageKey")?.addEventListener("change",showSavedPreview);
+    $("packageImageFile")?.addEventListener("change",function(){const f=this.files?.[0],img=$("packageImageCurrentPreview");if(f&&img){img.src=URL.createObjectURL(f);img.style.display="block";}else showSavedPreview();});
+    loadSaved();
+  });
+})();
 </script>
 
 </body>
