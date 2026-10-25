@@ -1349,6 +1349,18 @@ class="sidebar"
   
   
     
+    <div class="status-upload" id="siteLogoImageManager">
+      <b>✨ Homepage Header Logo Image</b>
+      <p style="font-size:12px;line-height:1.5;color:#cbd5e1;margin:8px 0">
+        Upload the wide Smart Money wordmark image for the red-marked header area. Recommended canvas: 1000 × 260 px (wide/transparent PNG preferred). It will fit inside the header frame without cropping and publish automatically on the Home Page.
+      </p>
+      <input type="file" id="siteLogoImageFile" accept="image/png,image/jpeg,image/webp" style="width:100%;margin-top:10px;color:white">
+      <img id="siteLogoImagePreview" alt="Homepage logo preview" style="display:none;width:100%;height:90px;object-fit:contain;object-position:left center;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;margin-top:10px">
+      <button class="btn btn-primary" id="siteLogoImageUploadBtn" style="width:100%;margin-top:10px" onclick="uploadSiteLogoImage()">Upload / Update Header Logo</button>
+      <button class="btn btn-info" id="siteLogoImageRemoveBtn" style="width:100%;margin-top:8px" onclick="removeSiteLogoImage()">Use Text Logo Instead</button>
+      <div id="siteLogoImageUploadStatus" style="font-size:12px;line-height:1.5;margin-top:10px;color:#cbd5e1" aria-live="polite">Checking saved header logo…</div>
+    </div>
+
     <div class="status-upload" id="packageImageManager">
       <b>🖼️ Package Image Management</b>
       <p style="font-size:12px;line-height:1.5;color:#cbd5e1;margin:8px 0">Upload or replace a package poster. After saving, it appears automatically on the public Home Page for everyone.</p>
@@ -8229,7 +8241,64 @@ if(document.readyState === "loading"){
     }catch(e){console.error("Package image upload failed",e);status("❌ Upload failed: "+(e?.message||String(e)),true);}
     finally{btn.disabled=false;btn.textContent="Upload / Update Package Image";}
   };
+  function logoStatus(msg,bad){
+    const el=$("siteLogoImageUploadStatus");if(!el)return;
+    el.textContent=msg;el.style.display="block";el.style.padding="10px";el.style.borderRadius="8px";
+    el.style.background=bad?"rgba(127,29,29,.25)":"rgba(20,83,45,.22)";
+    el.style.border="1px solid "+(bad?"#ef4444":"#22c55e");el.style.color=bad?"#fecaca":"#bbf7d0";
+  }
+  async function loadSiteLogo(){
+    const img=$("siteLogoImagePreview");
+    try{
+      if(!supabaseClient)throw new Error("Supabase is not ready.");
+      const {data:sessionData,error:sessionError}=await supabaseClient.auth.getSession();if(sessionError)throw sessionError;
+      const user=sessionData?.session?.user;
+      if(!user||String(user.email||"").toLowerCase()!==ADMIN_EMAIL){logoStatus("Sign in with the authorized admin account to manage the homepage logo.",true);return;}
+      const {data,error}=await supabaseClient.from("package_images").select("image_url").eq("package_key","smart_money_logo").maybeSingle();if(error)throw error;
+      if(data?.image_url&&img){img.onload=()=>{img.style.display="block";};img.onerror=()=>logoStatus("Saved logo URL exists, but the preview could not load.",true);img.src=data.image_url;img.style.display="block";logoStatus("✅ Saved header logo loaded. Upload another image to replace it.");}
+      else {if(img){img.removeAttribute("src");img.style.display="none";}logoStatus("No custom header image saved. The built-in Smart Money text logo is currently used.");}
+    }catch(e){console.error("Header logo load failed",e);logoStatus("Could not load saved header logo: "+(e?.message||String(e)),true);}
+  }
+  window.uploadSiteLogoImage=async function(){
+    const btn=$("siteLogoImageUploadBtn"),file=$("siteLogoImageFile")?.files?.[0];
+    if(!supabaseClient){logoStatus("Supabase is not ready. Refresh and try again.",true);return;}
+    if(!file){logoStatus("Choose a PNG, JPG or WebP logo image first.",true);return;}
+    if(!["image/jpeg","image/png","image/webp"].includes(file.type)){logoStatus("Only PNG, JPG or WebP images are supported.",true);return;}
+    if(file.size>10*1024*1024){logoStatus("Image must be 10 MB or smaller.",true);return;}
+    btn.disabled=true;btn.textContent="Uploading…";logoStatus("Uploading header logo image…");
+    try{
+      const {data:sd,error:se}=await supabaseClient.auth.getSession();if(se)throw se;
+      const user=sd?.session?.user;if(!user||String(user.email||"").toLowerCase()!==ADMIN_EMAIL)throw new Error("Please sign in with the authorized admin account.");
+      const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
+      const path="smart_money_logo/"+Date.now()+"-"+crypto.randomUUID()+"."+ext;
+      const {error:ue}=await supabaseClient.storage.from(BUCKET).upload(path,file,{contentType:file.type,cacheControl:"3600",upsert:false});if(ue)throw ue;
+      const {data:pd}=supabaseClient.storage.from(BUCKET).getPublicUrl(path),url=pd?.publicUrl;if(!url)throw new Error("Could not create the public image URL.");
+      const {error:de}=await supabaseClient.from("package_images").upsert({package_key:"smart_money_logo",image_url:url,updated_at:new Date().toISOString(),updated_by:user.id},{onConflict:"package_key"});if(de)throw de;
+      savedUrls.smart_money_logo=url;
+      const img=$("siteLogoImagePreview");if(img){img.onload=()=>{img.style.display="block";};img.onerror=()=>logoStatus("Image saved, but preview could not load. Check public Storage access.",true);img.src=url;img.style.display="block";}
+      $("siteLogoImageFile").value="";
+      logoStatus("✅ SUCCESS — header logo saved. Open or refresh the Home Page to see it in the red-marked frame.");
+    }catch(e){console.error("Header logo upload failed",e);logoStatus("❌ Upload failed: "+(e?.message||String(e)),true);}
+    finally{btn.disabled=false;btn.textContent="Upload / Update Header Logo";}
+  };
+  window.removeSiteLogoImage=async function(){
+    try{
+      const {data:sd,error:se}=await supabaseClient.auth.getSession();if(se)throw se;
+      const user=sd?.session?.user;if(!user||String(user.email||"").toLowerCase()!==ADMIN_EMAIL)throw new Error("Please sign in with the authorized admin account.");
+      const {error}=await supabaseClient.from("package_images").delete().eq("package_key","smart_money_logo");if(error)throw error;
+      delete savedUrls.smart_money_logo;
+      const img=$("siteLogoImagePreview");if(img){img.removeAttribute("src");img.style.display="none";}
+      $("siteLogoImageFile").value="";
+      logoStatus("✅ Custom header image removed from the Home Page. The built-in text logo will show after refresh.");
+    }catch(e){console.error("Header logo remove failed",e);logoStatus("Could not remove custom logo: "+(e?.message||String(e)),true);}
+  };
   function init(){
+    $("siteLogoImageFile")?.addEventListener("change",function(){
+      const file=this.files?.[0],img=$("siteLogoImagePreview");
+      if(file&&img){img.onerror=()=>logoStatus("Selected image preview failed to load.",true);img.onload=()=>{img.style.display="block";};img.src=URL.createObjectURL(file);img.style.display="block";logoStatus("Preview ready: "+file.name+" ("+(file.size/1024/1024).toFixed(2)+" MB). Tap Upload / Update Header Logo to publish.");}
+      else loadSiteLogo();
+    });
+    loadSiteLogo();
     $("packageImageKey")?.addEventListener("change",showSavedPreview);
     $("packageImageFile")?.addEventListener("change",function(){
       const file=this.files?.[0],img=$("packageImageCurrentPreview");
