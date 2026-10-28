@@ -497,7 +497,7 @@ async function goToPayment(event){
     proceedBtn.textContent="✓ Account Created";
 
     setTimeout(()=>{
-      location.href="razorpay-checkout.html?name="+encodeURIComponent(pkgName)+"&price="+encodeURIComponent(pkgPrice);
+      location.href="payment.html";
     },400);
 
   }catch(error){
