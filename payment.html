@@ -14,6 +14,15 @@
 <body>
 <div class="card">
 <div class="brand">SMART MONEY</div><h2>Complete Your Payment</h2><div id="sub">Scan QR or tap Pay Now</div><div id="price" class="price">₹289</div>
+<div id="razorpayPanel" style="margin-top:20px;padding:18px;border:1px solid #c4b5fd;border-radius:18px;background:linear-gradient(145deg,#faf5ff,#f0fdfa);text-align:center">
+<div style="font-weight:800;font-size:16px;color:#312e81">💳 Pay securely with Razorpay</div>
+<p style="font-size:12px;line-height:1.6;color:#64748b;margin:8px 0 14px">UPI, cards and other payment methods supported by your Razorpay checkout. Payment will be verified before your request is submitted.</p>
+<button id="razorpayPay" type="button" class="submit" style="margin-top:0">Pay ₹<span id="razorpayAmount">560</span> with Razorpay</button>
+<div id="razorpayStatus" class="status" style="text-align:left"></div>
+<button id="manualToggle" type="button" class="smallbtn" style="width:100%;margin-top:12px;background:#fff;border:1px solid #ddd6fe">Show manual UPI / screenshot payment instead</button>
+</div>
+<div id="manualPayment" style="display:none;margin-top:18px;padding-top:8px;border-top:1px dashed #cbd5e1">
+<div style="font-size:12px;text-align:center;color:#64748b;margin:0 0 12px">Manual payment is temporarily hidden by default. You can still open it here.</div>
 <div class="title">1. Choose payment account</div>
 <div class="methods">
 <button type="button" class="method active" data-method="Super Money" onclick="selectMethod('Super Money')"><span class="tick">✓</span><img src="images.png"><b>Super Money</b><small>smartmoney7@nyes</small></button>
@@ -37,6 +46,8 @@
 <div id="checks" class="checks"><b>🔎 Payment proof checks</b><div class="check"><span id="cUtr" class="circle">•</span>UTR format check</div><div class="check"><span id="cDup" class="circle">•</span>Duplicate UTR check</div><div class="check"><span id="cImg" class="circle">•</span>Screenshot readability check</div><div class="check"><span id="cAmt" class="circle">•</span>Screenshot amount check</div><div class="check"><span id="cSuccess" class="circle">•</span>Successful payment text check</div></div>
 <button id="submit" class="submit" type="submit">Submit Payment Proof</button>
 </form>
+
+</div>
 <div id="success" class="success"></div><div class="note">🔒 Never share your password or OTP.</div>
 </div>
 <script>
@@ -50,6 +61,53 @@ const METHODS={
 let selected="Super Money";let checkout={};try{checkout=JSON.parse(sessionStorage.getItem("checkout_data")||"{}")}catch(e){}
 const pkgName=String(checkout.name||"Starter Package").trim(),pkgPrice=String(checkout.price||"289").trim(),refCode=String(checkout.ref||"").trim(),fullName=String(checkout.fullname||"").trim(),mobile=String(checkout.mobile||"").trim(),email=String(checkout.email||"").trim().toLowerCase();
 document.getElementById("price").innerText="₹"+pkgPrice;document.getElementById("sub").innerText=pkgName+" ke liye exact payment karein";
+document.getElementById("razorpayAmount").textContent=Number(pkgPrice).toLocaleString("en-IN");
+document.getElementById("razorpayPay").innerHTML='Pay ₹'+Number(pkgPrice).toLocaleString("en-IN")+' with Razorpay';
+document.getElementById("manualToggle").addEventListener("click",function(){
+ const box=document.getElementById("manualPayment"),shown=box.style.display!=="none";
+ box.style.display=shown?"none":"block";
+ this.textContent=shown?"Show manual UPI / screenshot payment instead":"Hide manual UPI / screenshot payment";
+});
+document.getElementById("razorpayPay").addEventListener("click",startRazorpayPayment);
+async function startRazorpayPayment(){
+ const btn=document.getElementById("razorpayPay"),statusBox=document.getElementById("razorpayStatus");
+ const showRazorpayStatus=(msg,ok=false)=>{statusBox.textContent=msg;statusBox.className="status show "+(ok?"ok":"err");};
+ const amountValue=Number(amount(pkgPrice));
+ if(!Number.isFinite(amountValue)||amountValue<=0){showRazorpayStatus("Invalid package amount. Please return to package selection.");return;}
+ btn.disabled=true;btn.textContent="Preparing secure payment…";
+ try{
+  const {data:{user},error:authError}=await supabaseClient.auth.getUser();
+  if(authError||!user)throw new Error("Please log in to Smart Money again before paying.");
+  const orderResponse=await fetch("/api/razorpay/create-order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({packageName:pkgName,amount:amountValue,userId:user.id,email:email||user.email||"",mobile})});
+  const order=await orderResponse.json();if(!orderResponse.ok)throw new Error(order.error||"Razorpay order could not be created.");
+  const options={
+   key:order.keyId,amount:order.amount,currency:order.currency,order_id:order.orderId,
+   name:"Smart Money",description:pkgName,
+   prefill:{name:fullName,email:email||user.email||"",contact:mobile},
+   theme:{color:"#7c3aed"},
+   notes:{package_name:pkgName,user_id:user.id},
+   handler:async function(response){
+    btn.textContent="Verifying payment…";
+    try{
+     const verifyResponse=await fetch("/api/razorpay/verify-payment",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(response)});
+     const verification=await verifyResponse.json();
+     if(!verifyResponse.ok||!verification.verified)throw new Error(verification.error||"Payment verification failed.");
+     const record={user_id:user.id,full_name:fullName,email:email||user.email||"",mobile,referral_id:refCode,package_name:pkgName,package_price:amountValue,amount:amountValue,transaction_id:response.razorpay_payment_id,payment_status:"Pending",admin_note:"Razorpay signature verified; pending admin approval.",screenshot_name:null,status:"Pending",is_deleted:false,payment_method:"Razorpay"};
+     const {error:insertError}=await supabaseClient.from("payment_requests").insert([record]);
+     if(insertError)throw new Error("Payment was verified, but the payment request could not be saved. Contact support and share Payment ID: "+response.razorpay_payment_id);
+     sessionStorage.removeItem("checkout_data");
+     showRazorpayStatus("Payment verified successfully. Your package request is pending admin approval. Payment ID: "+response.razorpay_payment_id,true);
+     btn.textContent="Payment verified ✓";btn.disabled=true;
+    }catch(err){showRazorpayStatus(err.message||"Payment verification is pending. Contact support before paying again.");btn.disabled=false;btn.textContent="Retry / Check payment";}
+   },
+   modal:{ondismiss:()=>{if(!btn.disabled){btn.textContent="Pay ₹"+Number(pkgPrice).toLocaleString("en-IN")+" with Razorpay";}btn.disabled=false;}},
+  };
+  const checkout=new Razorpay(options);
+  checkout.on("payment.failed",event=>{showRazorpayStatus(event.error?.description||"Payment failed. Please try again.");btn.disabled=false;btn.textContent="Try Razorpay again";});
+  checkout.open();
+ }catch(err){showRazorpayStatus(err.message||"Could not start Razorpay checkout.");btn.disabled=false;btn.textContent="Pay ₹"+Number(pkgPrice).toLocaleString("en-IN")+" with Razorpay";}
+}
+
 const digits=v=>String(v||"").replace(/\D/g,"");const amount=v=>String(v||"").replace(/₹|rs\.?|inr/gi,"").replace(/,/g,"").replace(/\s/g,"").trim();
 function status(id,msg,type){let e=document.getElementById(id);e.textContent=msg;e.className="status show "+type}function clearStatus(id){let e=document.getElementById(id);e.textContent="";e.className="status"}function check(id,s){let e=document.getElementById(id);e.className="circle";e.textContent="•";if(s==="done"){e.classList.add("done");e.textContent="✓"}if(s==="bad"){e.classList.add("failed");e.textContent="×"}}
 function selectMethod(name){selected=name;let p=METHODS[name];document.querySelectorAll(".method").forEach(b=>b.classList.toggle("active",b.dataset.method===name));document.getElementById("methodImg").src=p.img;document.getElementById("methodName").textContent=name;document.getElementById("upi").textContent=p.upi;document.getElementById("qr").src=p.qr}
