@@ -39,12 +39,17 @@ function setVoiceGender(value){localStorage.setItem("sm_academy_voice_gender",va
 function stopLessonAudio(){if("speechSynthesis" in window){window.speechSynthesis.cancel()}activeUtterance=null;document.querySelectorAll(".audio-status").forEach(el=>el.textContent="ऑडियो बंद है")}
 function getIndianHindiVoice(gender){
  const voices=window.speechSynthesis.getVoices();
- const hindi=voices.filter(v=>v.lang.toLowerCase().startsWith("hi"));
+ const hindi=voices.filter(v=>/^hi(-|_)/i.test(v.lang||""));
  if(!hindi.length)return null;
- const femaleNames=["female","woman","girl","wavenet-a","wavenet-d"];
- const maleNames=["male","man","boy","wavenet-b","wavenet-c"];
- const names=gender==="female"?femaleNames:maleNames;
- return hindi.find(v=>names.some(n=>v.name.toLowerCase().includes(n)))||hindi.find(v=>v.lang.toLowerCase()==="hi-in")||hindi[0];
+ const identify=(v)=>{
+   const label=((v.name||"")+" "+(v.voiceURI||"")).toLowerCase().replace(/[_ ]/g,"-");
+   if(/(female|woman|girl|wavenet-a|wavenet-d|standard-a|standard-d|hi-in-x-hia)/.test(label))return "female";
+   if(/(male|man|boy|wavenet-b|wavenet-c|standard-b|standard-c|hi-in-x-hic)/.test(label))return "male";
+   return null;
+ };
+ // Do not fake a gender by changing pitch. Only return a Hindi voice whose
+ // provider metadata identifies the requested voice type.
+ return hindi.find(v=>identify(v)===gender)||null;
 }
 function speakLesson(id){
  if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){alert("आपके ब्राउज़र में Voice Reading उपलब्ध नहीं है। Chrome या किसी नए ब्राउज़र में खोलें।");return}
@@ -53,8 +58,16 @@ function speakLesson(id){
  const welcome="नमस्ते Smart Money Family! आपका Smart Money Academy में स्वागत है। हमारे कोर्स को अच्छी तरह समझने के लिए ध्यान से सुनिए और साथ-साथ अभ्यास भी कीजिए। चलिए, अब आज का पाठ शुरू करते हैं। ";
  window.speechSynthesis.cancel();
  activeUtterance=new SpeechSynthesisUtterance(welcome+lessonText);
- activeUtterance.lang="hi-IN";activeUtterance.rate=0.9;activeUtterance.pitch=gender==="female"?1.12:0.88;
- const hindi=getIndianHindiVoice(gender);if(hindi)activeUtterance.voice=hindi;
+ activeUtterance.lang="hi-IN";activeUtterance.rate=0.9;activeUtterance.pitch=1;
+ const hindi=getIndianHindiVoice(gender);
+ if(!hindi){
+   const label=gender==="male"?"Indian male":"Indian female";
+   const status=document.getElementById("audio-status-"+id);
+   if(status)status.textContent=label+" Hindi voice इस डिवाइस में उपलब्ध नहीं है।";
+   alert(label+" Hindi voice आपके फोन के Text-to-Speech engine में उपलब्ध नहीं है। कृपया फोन की Text-to-Speech settings में Hindi voice pack install करें या दूसरी Hindi voice चुनें।");
+   return;
+ }
+ activeUtterance.voice=hindi;
  const status=document.getElementById("audio-status-"+id);
  activeUtterance.onstart=()=>{if(status)status.textContent=(gender==="female"?"👩 लड़की":"👨 लड़का")+" की आवाज़ में पाठ सुनाया जा रहा है…"};
  activeUtterance.onend=()=>{if(status)status.textContent="पाठ पूरा हुआ ✓";activeUtterance=null};
