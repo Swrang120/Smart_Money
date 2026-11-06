@@ -30,7 +30,7 @@ Apply `supabase/migrations/202611060005_smart_gateway_payment_ids.sql` to the Sm
 ## Final activation checklist
 
 1. Provision the dedicated Smart Money merchant in the Gateway and configure its UPI receiving account.
-2. Configure the five server-side environment variables above.
+2. Configure all six server-side environment variables above.
 3. Apply the SQL migration.
 4. Send a test webhook and verify invalid signatures are rejected.
 5. Run one low-value end-to-end UPI payment and reconcile it against a bank statement.
