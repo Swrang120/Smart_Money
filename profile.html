@@ -330,12 +330,38 @@
         await supabaseClient
           .from("profiles")
           .select("*")
-          .eq(
-            "id",
-            currentUser.id
-          )
+          .eq("user_id", currentUser.id)
           .maybeSingle();
 
+      // Never expose profile/shop pages to unpaid or inactive accounts.
+      // A pending checkout profile is not an approved membership.
+      if (error || !profile || profile.is_deleted === true || profile.is_active !== true) {
+        let hasPendingPayment = false;
+        try {
+          const { data: pendingRows } = await supabaseClient
+            .from("payment_requests")
+            .select("id,status,payment_status")
+            .eq("user_id", currentUser.id)
+            .limit(10);
+          hasPendingPayment = Array.isArray(pendingRows) && pendingRows.some(row =>
+            ["pending","submitted","under review"].includes(String(row.status || "").toLowerCase()) ||
+            ["pending","submitted","under review"].includes(String(row.payment_status || "").toLowerCase())
+          );
+        } catch (lookupError) {
+          console.warn("Pending payment lookup unavailable:", lookupError);
+        }
+
+        document.querySelector(".form-box").innerHTML =
+          '<h1 style="text-align:center">🔒 Profile Locked</h1>' +
+          '<p style="text-align:center;line-height:1.7;color:#64748b">' +
+          (hasPendingPayment
+            ? 'Your payment request has been received and is awaiting admin verification. Profile access will open after approval.'
+            : 'No verified payment request was found for this account. Complete payment and submit valid proof before accessing your profile.') +
+          '</p><p style="text-align:center"><a href="index.html">Return to Smart Money</a></p>';
+
+        await supabaseClient.auth.signOut();
+        return;
+      }
 
       // PROFILE EXISTS
 
