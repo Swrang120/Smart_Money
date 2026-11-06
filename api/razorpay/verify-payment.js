@@ -14,7 +14,7 @@ const PACKAGES = {
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
-  const secret = process.env.RAZORPAY_KEY_SECRET || process.env.LIVE_SECRET_API;
+  const secret = process.env.RAZORPAY_KEY_SECRET || process.env.LIVE_SECRET_API || process.env.LIVE_SECRET_KEY;
   if (!secret) return res.status(503).json({ error: "Razorpay secret is not configured on the server." });
 
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body || {};
