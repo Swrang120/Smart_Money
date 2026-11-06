@@ -71,7 +71,7 @@ module.exports = async function handler(req, res) {
     const amountPaise = String(event.amountPaise || event.data?.amountPaise || "");
     if (!orderId.startsWith("SM-") || !paymentId || !prices[packageName] ||
         packagePrice !== prices[packageName] ||
-        amountPaise !== String(packagePrice * 100) ||
+        amountPaise !== String(packagePrice * 100) ||\n        String(event.currency || event.data?.currency || "INR").toUpperCase() !== "INR" ||
         fullName.length < 2 || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email) ||
         !/^[0-9]{10}$/.test(mobile) || !/^SM-smart[a-zA-Z0-9]+$/i.test(referral)) {
       return res.status(400).json({ ok: false, error: "Reconciled event details failed validation." });
