@@ -41,5 +41,5 @@ using (
   or (select auth.jwt() ->> 'email') = 'sboro3235@gmail.com'
 );
 
-revoke select on public.sm_skill_courses, public.sm_skill_lessons, public.sm_skill_meetings from anon;
+revoke all privileges on public.sm_skill_courses, public.sm_skill_lessons, public.sm_skill_meetings from anon;
 grant select on public.sm_skill_courses, public.sm_skill_lessons, public.sm_skill_meetings to authenticated;
