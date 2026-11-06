@@ -1,5 +1,4 @@
 const crypto = require("crypto");
-const { createClient } = require("@supabase/supabase-js");
 
 function safeEqualHex(expected, received) {
   if (!/^[a-f0-9]{64}$/i.test(received || "")) return false;
