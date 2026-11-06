@@ -33,10 +33,10 @@ const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
   auth: { autoRefreshToken: false, persistSession: false }
 });
 
-const json = (body: unknown, status = 200) =>
+const json = (body: unknown, status = 200, origin: string | null = null) =>
   new Response(JSON.stringify(body), {
     status,
-    headers: { ...corsHeadersFor(null), "Content-Type": "application/json", "Cache-Control": "no-store" }
+    headers: { ...corsHeadersFor(origin), "Content-Type": "application/json", "Cache-Control": "no-store" }
   });
 
 function validBuyer(data: Record<string, unknown>) {
@@ -62,9 +62,11 @@ async function findReferrer(referral: string) {
 }
 
 Deno.serve(async (req: Request) => {
-  const corsHeaders = corsHeadersFor(req.headers.get("origin"));
+  const requestOrigin = req.headers.get("origin");
+  const corsHeaders = corsHeadersFor(requestOrigin);
+  const respond = (body: unknown, status = 200) => json(body, status, requestOrigin);
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
-  if (req.method !== "POST") return json({ ok: false, error: "Method not allowed." }, 405);
+  if (req.method !== "POST") return respond({ ok: false, error: "Method not allowed." }, 405);
 
   try {
     const body = await req.json();
@@ -82,7 +84,7 @@ Deno.serve(async (req: Request) => {
       razorpayPaymentId = String(body.razorpay_payment_id || "").trim();
       const razorpaySignature = String(body.razorpay_signature || "").trim();
       if (!razorpayOrderId.startsWith("order_") || !razorpayPaymentId.startsWith("pay_") || !razorpaySignature) {
-        return json({ ok: false, error: "Missing valid Razorpay verification details." }, 400);
+        return respond({ ok: false, error: "Missing valid Razorpay verification details." }, 400);
       }
 
       const verifyResponse = await fetch(VERIFY_URL, {
@@ -96,7 +98,7 @@ Deno.serve(async (req: Request) => {
       });
       const verification = await verifyResponse.json().catch(() => ({}));
       if (!verifyResponse.ok || verification.verified !== true || !verification.checkout) {
-        return json({ ok: false, error: verification.error || "Razorpay did not confirm a captured payment." }, 400);
+        return respond({ ok: false, error: verification.error || "Razorpay did not confirm a captured payment." }, 400);
       }
       buyer = {
         full_name: verification.checkout.full_name,
@@ -119,20 +121,20 @@ Deno.serve(async (req: Request) => {
       screenshotUrl = String(body.screenshot_url || body.screenshot_name || "").trim();
 
       if (!/^[0-9]{12}$/.test(transactionId)) {
-        return json({ ok: false, error: "Enter the exact 12-digit UPI UTR." }, 400);
+        return respond({ ok: false, error: "Enter the exact 12-digit UPI UTR." }, 400);
       }
       const expectedPrefix = SUPABASE_URL + "/storage/v1/object/public/payment-proofs/";
       if (!screenshotUrl.startsWith(expectedPrefix)) {
-        return json({ ok: false, error: "Upload the original payment screenshot before submitting." }, 400);
+        return respond({ ok: false, error: "Upload the original payment screenshot before submitting." }, 400);
       }
     } else {
-      return json({ ok: false, error: "Unsupported payment method." }, 400);
+      return respond({ ok: false, error: "Unsupported payment method." }, 400);
     }
 
-    if (!validBuyer(buyer)) return json({ ok: false, error: "Buyer details or referral ID are invalid." }, 400);
+    if (!validBuyer(buyer)) return respond({ ok: false, error: "Buyer details or referral ID are invalid." }, 400);
     const expectedPrice = PACKAGE_PRICES[packageName];
     if (!expectedPrice || packagePrice !== expectedPrice) {
-      return json({ ok: false, error: "Package amount does not match the approved package price." }, 400);
+      return respond({ ok: false, error: "Package amount does not match the approved package price." }, 400);
     }
 
     const email = String(buyer.email).trim().toLowerCase();
@@ -141,12 +143,12 @@ Deno.serve(async (req: Request) => {
     const fullName = String(buyer.full_name).trim();
 
     const referrer = await findReferrer(referral);
-    if (!referrer) return json({ ok: false, error: "Referral ID does not exist." }, 400);
+    if (!referrer) return respond({ ok: false, error: "Referral ID does not exist." }, 400);
 
     const { data: existingProfile, error: profileError } = await admin
       .from("profiles").select("user_id").ilike("email", email).limit(1).maybeSingle();
     if (profileError) throw profileError;
-    if (existingProfile) return json({ ok: false, error: "An account already exists for this email. Please use the login page." }, 409);
+    if (existingProfile) return respond({ ok: false, error: "An account already exists for this email. Please use the login page." }, 409);
 
     const { data: existingRequest, error: existingRequestError } = await admin
       .from("payment_requests")
@@ -156,24 +158,24 @@ Deno.serve(async (req: Request) => {
       .limit(1)
       .maybeSingle();
     if (existingRequestError) throw existingRequestError;
-    if (existingRequest) return json({ ok: false, error: "A payment request for this email is already pending or approved. Please contact support if you need help." }, 409);
+    if (existingRequest) return respond({ ok: false, error: "A payment request for this email is already pending or approved. Please contact support if you need help." }, 409);
 
     const { data: existingMobileProfile, error: mobileProfileError } = await admin
       .from("profiles").select("user_id").eq("mobile", mobile).limit(1).maybeSingle();
     if (mobileProfileError) throw mobileProfileError;
-    if (existingMobileProfile) return json({ ok: false, error: "An account already exists for this mobile number." }, 409);
+    if (existingMobileProfile) return respond({ ok: false, error: "An account already exists for this mobile number." }, 409);
 
     if (method === "upi" && transactionId) {
       const { data: duplicateUtr, error: duplicateError } = await admin
         .from("payment_requests").select("id").eq("transaction_id", transactionId).limit(1).maybeSingle();
       if (duplicateError) throw duplicateError;
-      if (duplicateUtr) return json({ ok: false, error: "This UPI UTR has already been submitted." }, 409);
+      if (duplicateUtr) return respond({ ok: false, error: "This UPI UTR has already been submitted." }, 409);
     }
     if (method === "razorpay" && razorpayPaymentId) {
       const { data: duplicatePayment, error: duplicateError } = await admin
         .from("payment_requests").select("id").eq("razorpay_payment_id", razorpayPaymentId).limit(1).maybeSingle();
       if (duplicateError) throw duplicateError;
-      if (duplicatePayment) return json({ ok: true, already_submitted: true, payment_request_id: duplicatePayment.id, pending: true });
+      if (duplicatePayment) return respond({ ok: true, already_submitted: true, payment_request_id: duplicatePayment.id, pending: true });
     }
 
     const record = {
@@ -206,11 +208,11 @@ Deno.serve(async (req: Request) => {
       .select("id")
       .single();
     if (insertError) {
-      if (insertError.code === "23505") return json({ ok: false, error: "This payment has already been submitted." }, 409);
+      if (insertError.code === "23505") return respond({ ok: false, error: "This payment has already been submitted." }, 409);
       throw insertError;
     }
 
-    return json({
+    return respond({
       ok: true,
       payment_request_id: created.id,
       pending: true,
@@ -219,6 +221,6 @@ Deno.serve(async (req: Request) => {
     }, 201);
   } catch (error) {
     console.error("submit-payment-request error:", error?.message || error);
-    return json({ ok: false, error: error?.message || "Could not submit payment request." }, 500);
+    return respond({ ok: false, error: error?.message || "Could not submit payment request." }, 500);
   }
 });
