@@ -25,7 +25,7 @@ module.exports = async function handler(req, res) {
     const cleanMobile = String(mobile || "").trim();
     const cleanReferral = String(referralCode || "").trim();
     if (cleanName.length < 2 || cleanName.length > 80) return res.status(400).json({ error: "Enter a valid full name." });
-    if (!/^[^\s@]+@[^\s@]+\\.[^\s@]+$/.test(cleanEmail)) return res.status(400).json({ error: "Enter a valid email address." });
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) return res.status(400).json({ error: "Enter a valid email address." });
     if (!/^[0-9]{10}$/.test(cleanMobile)) return res.status(400).json({ error: "Enter a valid 10-digit mobile number." });
     if (!/^SM-smart[a-zA-Z0-9]+$/i.test(cleanReferral)) return res.status(400).json({ error: "Enter a valid referral ID." });
 
