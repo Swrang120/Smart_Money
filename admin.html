@@ -3320,7 +3320,8 @@ async function repairApprovedBuyerAccounts(){
         );
 
         for(const payment of approved){
-            const paymentId = Number(payment.id || payment.payment_id || 0);
+            const paymentId = Number(payment.id || payment.razorpay_payment_id ||
+                            payment.payment_id || 0);
             if(!Number.isInteger(paymentId) || paymentId <= 0) continue;
 
             const { data, error } = await supabaseClient.functions.invoke(
