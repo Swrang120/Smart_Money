@@ -37,7 +37,9 @@ let activeSpeechText="",activeSpeechTitle="",activeUtterance=null;
 function stopLessonAudio(){if("speechSynthesis" in window){window.speechSynthesis.cancel()}activeUtterance=null;document.querySelectorAll(".audio-status").forEach(el=>el.textContent="ऑडियो बंद है")}
 function speakLesson(id){
  if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){alert("आपके ब्राउज़र में Voice Reading उपलब्ध नहीं है। Chrome या किसी नए ब्राउज़र में खोलें।");return}
- const text=lessonSpeechText[id];if(!text)return;
+ const lessonText=lessonSpeechText[id];if(!lessonText)return;
+ const welcome="नमस्ते Smart Money Family! आपका Smart Money Academy में स्वागत है। हमारे कोर्स को अच्छी तरह समझने के लिए ध्यान से सुनिए और साथ-साथ अभ्यास भी कीजिए। चलिए, अब आज का पाठ शुरू करते हैं। ";
+ const text=welcome+lessonText;
  window.speechSynthesis.cancel();
  activeUtterance=new SpeechSynthesisUtterance(text);
  activeUtterance.lang="hi-IN";activeUtterance.rate=0.9;activeUtterance.pitch=1;
