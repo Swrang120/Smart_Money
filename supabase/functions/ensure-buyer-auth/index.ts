@@ -239,7 +239,7 @@ export default {
           const { data: generatedCode, error: generatedCodeError } =
             await admin.rpc("generate_unique_referral_code");
           if (generatedCodeError) throw generatedCodeError;
-          if (typeof generatedCode !== "string" || !/^SM-smart\\d{5}$/.test(generatedCode)) {
+          if (typeof generatedCode !== "string" || !/^SM-smart\d{5}$/.test(generatedCode)) {
             throw new Error("A unique referral ID could not be generated for the approved buyer.");
           }
           generatedReferralCode = generatedCode;
