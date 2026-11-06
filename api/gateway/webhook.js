@@ -78,41 +78,29 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ ok: false, error: "Reconciled event details failed validation." });
     }
 
-    const supabase = createClient(supabaseUrl, serviceRoleKey, {
-      auth: { autoRefreshToken: false, persistSession: false }
-    });
+    const dbHeaders = { apikey: serviceRoleKey, Authorization: "Bearer " + serviceRoleKey, "Content-Type": "application/json" };
+    const dbUrl = supabaseUrl.replace(/\\/+$/, "") + "/rest/v1/";
+    async function dbGet(path) {
+      const response = await fetch(dbUrl + path, { headers: { ...dbHeaders, Prefer: "return=representation" } });
+      const payload = await response.json().catch(() => []);
+      if (!response.ok) throw new Error("Supabase query failed: " + response.status);
+      return payload;
+    }
 
-    const { data: existing, error: lookupError } = await supabase
-      .from("payment_requests")
-      .select("id")
-      .eq("gateway_payment_id", paymentId)
-      .maybeSingle();
-    if (lookupError) throw lookupError;
-    if (existing) return res.status(200).json({ received: true, duplicate: true });
+    const existing = await dbGet("payment_requests?select=id&gateway_payment_id=eq." + encodeURIComponent(paymentId) + "&limit=1");
+    if (existing.length) return res.status(200).json({ received: true, duplicate: true });
 
-    const { data: referrer, error: refError } = await supabase
-      .from("profiles")
-      .select("user_id,referral_code,referral_id")
-      .or("referral_code.eq." + referral + ",referral_id.eq." + referral)
-      .limit(1)
-      .maybeSingle();
-    if (refError) throw refError;
-    if (!referrer) return res.status(400).json({ ok: false, error: "Referral code was not found." });
+    const refRows = await dbGet("profiles?select=user_id,referral_code,referral_id&or=" + encodeURIComponent("(referral_code.eq." + referral + ",referral_id.eq." + referral + ")") + "&limit=1");
+    if (!refRows.length) return res.status(400).json({ ok: false, error: "Referral code was not found." });
 
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles").select("user_id").ilike("email", email).limit(1).maybeSingle();
-    if (profileError) throw profileError;
-    if (profile) return res.status(200).json({ received: true, held: true, reason: "Buyer already has an account." });
+    const profiles = await dbGet("profiles?select=user_id&email=ilike." + encodeURIComponent(email) + "&limit=1");
+    if (profiles.length) return res.status(200).json({ received: true, held: true, reason: "Buyer already has an account." });
 
-    const { data: pending, error: pendingError } = await supabase
-      .from("payment_requests").select("id")
-      .ilike("email", email)
-      .or("status.eq.Pending,payment_status.eq.Pending,status.eq.Approved,payment_status.eq.Approved")
-      .limit(1).maybeSingle();
-    if (pendingError) throw pendingError;
-    if (pending) return res.status(200).json({ received: true, held: true, reason: "Existing payment request requires review." });
+    const pendingRows = await dbGet("payment_requests?select=id&email=ilike." + encodeURIComponent(email) + "&or=" + encodeURIComponent("(status.eq.Pending,payment_status.eq.Pending,status.eq.Approved,payment_status.eq.Approved)") + "&limit=1");
+    if (pendingRows.length) return res.status(200).json({ received: true, held: true, reason: "Existing payment request requires review." });
 
-    const { error: insertError } = await supabase.from("payment_requests").insert({
+    const insertResponse = await fetch(dbUrl + "payment_requests", {
+      method: "POST", headers: { ...dbHeaders, Prefer: "return=minimal" }, body: JSON.stringify({
       user_id: null,
       full_name: fullName,
       email,
@@ -132,8 +120,9 @@ module.exports = async function handler(req, res) {
       screenshot_url: null,
       is_deleted: false,
       payment_method: "Smart Gateway"
+      })
     });
-    if (insertError) throw insertError;
+    if (!insertResponse.ok) throw new Error("Supabase insert failed: " + insertResponse.status);
 
     return res.status(200).json({ received: true, pending_admin_approval: true });
   } catch (error) {
