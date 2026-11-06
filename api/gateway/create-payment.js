@@ -16,7 +16,7 @@ function json(res, status, body) {
 function config() {
   return {
     apiUrl: (process.env.SMART_GATEWAY_API_URL || "").replace(/\\/+$/, ""),
-    merchantId: process.env.SMART_GATEWAY_MERCHANT_ID || "",
+    merchantId: "a2d5d2b8-2b11-4f8d-9c31-2f6a6e0b0002",
     apiKey: process.env.SMART_GATEWAY_API_KEY || "",
     supabaseUrl: (process.env.SUPABASE_URL || "").replace(/\\/+$/, ""),
     serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
@@ -27,7 +27,13 @@ function config() {
 module.exports = async function handler(req, res) {
   if (req.method === "GET") {
     const c = config();
-    return json(res, 200, { enabled: Boolean(c.apiUrl && c.merchantId && c.apiKey && c.supabaseUrl && c.serviceRoleKey && c.webhookSecret) });
+    const missing = [];
+    if (!c.apiUrl) missing.push("SMART_GATEWAY_API_URL");
+    if (!c.apiKey) missing.push("SMART_GATEWAY_API_KEY");
+    if (!c.webhookSecret) missing.push("SMART_GATEWAY_WEBHOOK_SECRET");
+    if (!c.supabaseUrl) missing.push("SUPABASE_URL");
+    if (!c.serviceRoleKey) missing.push("SUPABASE_SERVICE_ROLE_KEY");
+    return json(res, 200, { enabled: missing.length === 0, missing });
   }
   if (req.method !== "POST") {
     res.setHeader("Allow", "GET, POST");
@@ -35,7 +41,7 @@ module.exports = async function handler(req, res) {
   }
 
   const c = config();
-  if (!c.apiUrl || !c.merchantId || !c.apiKey || !c.supabaseUrl || !c.serviceRoleKey) {
+  if (!c.apiUrl || !c.merchantId || !c.apiKey || !c.supabaseUrl || !c.serviceRoleKey || !c.webhookSecret) {
     return json(res, 503, { ok: false, error: "Smart Gateway is not configured yet." });
   }
 
