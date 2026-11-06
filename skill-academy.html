@@ -44,6 +44,15 @@ header{background:linear-gradient(110deg,#101a32,#1c2c49);color:#fff}main{backgr
 .lesson-style-workshop{border-top:4px solid #6d91a4}
 .lesson-style-project{border-top:4px solid #a45a60}
 @media(max-width:600px){.paper-row{grid-template-columns:20px minmax(0,1fr);gap:8px}.paper-sheet-head{font-size:9px}}
+
+.course h3{color:#203653!important;font-size:clamp(18px,2vw,21px);font-weight:850;line-height:1.42;min-height:2.8em;text-wrap:balance}
+.course .muted{color:#48566a!important;font-size:14px;line-height:1.7}
+.course-photo-label{color:#9a7430!important;font-size:10px;letter-spacing:1px}
+.course-number{color:#8d754b!important}
+.pdf-coming-soon{display:inline-flex;align-items:center;gap:5px;margin:0 0 9px;padding:6px 9px;border:1px solid #d7b76e;border-radius:999px;background:#fff5dc;color:#8b4b36;font-size:10px;font-weight:900;letter-spacing:.35px}
+.course-photo{height:clamp(150px,18vw,190px);object-fit:cover}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{padding:14px}.course h3{font-size:17px}.course-photo{height:140px}}
+@media(max-width:520px){.grid{grid-template-columns:1fr}.card{padding:16px}.course-photo{height:190px}.course h3{font-size:19px}}
 </style></head><body>
 <header><div class="wrap"><div class="top"><div><div class="brand">SMART MONEY • SKILL ACADEMY</div><h1>सीखें • अभ्यास करें • आगे बढ़ें</h1><p class="muted">27+ कौशल कोर्स • आसान हिंदी पाठ • अभ्यास प्रोजेक्ट</p></div><div class="top-actions"><a class="support-chip support-link" href="mailto:smartmoneysupport1@gmail.com">✉ Support</a><span id="academyUserChip" class="support-chip hidden" style="font-size:12px"><img id="academyUserAvatar" alt="" style="width:26px;height:26px;border-radius:50%;object-fit:cover;display:none"><span id="academyUserLabel"></span></span><button id="academyLogoutBtn" class="btn btn-secondary hidden" type="button">Sign out</button><button id="meetingButton" class="btn btn-secondary hidden" type="button" onclick="toggleMeetingRoom()">🎥 Meeting Room</button><a class="btn btn-secondary" href="dashboard.html">← Dashboard</a></div></div></div></header>
 <aside id="meetingDrawer" class="meeting-drawer" aria-hidden="true"><div class="drawer-head"><div><span class="brand">SMART MONEY</span><h2>🎥 Meeting Room</h2><p class="muted">आगामी क्लास और मीटिंग लिंक</p></div><button class="btn btn-secondary" type="button" onclick="toggleMeetingRoom(false)">✕</button></div><div id="meetings" class="meeting-list"><div class="empty">मीटिंग लोड हो रही हैं…</div></div></aside><div id="drawerOverlay" class="drawer-overlay" onclick="toggleMeetingRoom(false)"></div><main class="wrap">
@@ -135,35 +144,35 @@ async function load(){const {data,error}=await sb.from("sm_skill_courses").selec
 async function loadMeetings(){const {data,error}=await sb.from("sm_skill_meetings").select("*").eq("is_published",true).gte("starts_at",new Date().toISOString()).order("starts_at");if(error){document.getElementById("meetings").innerHTML='<div class="empty">मीटिंग लोड नहीं हुई।</div>';console.error(error)}else renderMeetings(data||[])}
 function courseIcon(c){const s=(c.category+" "+c.title).toLowerCase();if(s.includes("excel")||s.includes("account"))return "▦";if(s.includes("video")||s.includes("youtube")||s.includes("reel"))return "▶";if(s.includes("design")||s.includes("canva"))return "✦";if(s.includes("web")||s.includes("javascript")||s.includes("python"))return "⌘";if(s.includes("finance")||s.includes("money"))return "₹";if(s.includes("photo"))return "◉";if(s.includes("ai")||s.includes("prompt"))return "✧";if(s.includes("safety")||s.includes("internet"))return "⬡";if(s.includes("communication")||s.includes("public"))return "✺";return "◆"}
 const coursePhotos=[
-"https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1545235617-9465d2a55698?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1554224154-22dec7ec8818?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1554224155-22dec7ec8818?auto=format&fit=crop&w=1000&q=82",
-"https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1000&q=82"
+"https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-155 spreadsheet?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1545235617-9465d2a55698?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1554224154-22dec7ec8818?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1000&q=85",
+"https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1000&q=85"
 ];
-function coursePhoto(index){return coursePhotos[index]||coursePhotos[0]}
+function coursePhoto(course,index){return course.cover_url||coursePhotos[index]||coursePhotos[0]}
 
 function renderCourses(rows){
  const el=document.getElementById("courses");
