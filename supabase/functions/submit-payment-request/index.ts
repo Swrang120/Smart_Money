@@ -36,7 +36,7 @@ function validBuyer(data: Record<string, unknown>) {
   const mobile = String(data.mobile || "").trim();
   const referral = String(data.referral_id || "").trim();
   return name.length >= 2 && name.length <= 80 &&
-    /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email) &&
+    /^[^\s@]+@[^\s@]+\\.[^\s@]+$/.test(email) &&
     /^[0-9]{10}$/.test(mobile) &&
     /^SM-smart[a-zA-Z0-9]+$/i.test(referral);
 }
