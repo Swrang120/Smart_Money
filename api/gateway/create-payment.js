@@ -19,14 +19,15 @@ function config() {
     merchantId: process.env.SMART_GATEWAY_MERCHANT_ID || "",
     apiKey: process.env.SMART_GATEWAY_API_KEY || "",
     supabaseUrl: (process.env.SUPABASE_URL || "").replace(/\\/+$/, ""),
-    serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || ""
+    serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+    webhookSecret: process.env.SMART_GATEWAY_WEBHOOK_SECRET || ""
   };
 }
 
 module.exports = async function handler(req, res) {
   if (req.method === "GET") {
     const c = config();
-    return json(res, 200, { enabled: Boolean(c.apiUrl && c.merchantId && c.apiKey) });
+    return json(res, 200, { enabled: Boolean(c.apiUrl && c.merchantId && c.apiKey && c.supabaseUrl && c.serviceRoleKey && c.webhookSecret) });
   }
   if (req.method !== "POST") {
     res.setHeader("Allow", "GET, POST");
