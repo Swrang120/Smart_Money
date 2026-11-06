@@ -62,7 +62,7 @@ const METHODS={
 let selected="Super Money";let checkout={};try{checkout=JSON.parse(sessionStorage.getItem("checkout_data")||"{}")}catch(e){}
 const pkgName=String(checkout.name||"").trim(),pkgPrice=String(checkout.price||"").trim(),refCode=String(checkout.ref||"").trim(),fullName=String(checkout.fullname||"").trim(),mobile=String(checkout.mobile||"").trim(),email=String(checkout.email||"").trim().toLowerCase();
 const PACKAGE_PRICES={"Starter":289,"Starter Package":289,"Intermediate":560,"Intermediate Package":560,"Expert":1149,"Expert Package":1149,"Master":2499,"Master Package":2499,"Brahmastra":5499,"Brahmastra Package":5499,"Premium Pro":10997,"Premium Pro Package":10997};
-const validCheckout=Boolean(PACKAGE_PRICES[pkgName]===Number(pkgPrice)&&refCode&&/^SM-smart[a-zA-Z0-9]+$/i.test(refCode)&&fullName.length>=2&&/^[0-9]{10}$/.test(mobile)&&/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email));
+const validCheckout=Boolean(PACKAGE_PRICES[pkgName]===Number(pkgPrice)&&refCode&&/^SM-smart[a-zA-Z0-9]+$/i.test(refCode)&&fullName.length>=2&&/^[0-9]{10}$/.test(mobile)&&/^[^\s@]+@[^\s@]+\\.[^\s@]+$/.test(email));
 if(!validCheckout){
  document.body.innerHTML='<main style="max-width:420px;margin:12vh auto;padding:28px;text-align:center;font-family:Arial,sans-serif;background:#fff;border-radius:18px;color:#172033"><h2>Checkout session not found</h2><p>Please select your package and complete the checkout details before opening payment.</p><a href="index.html">Return to Smart Money</a></main>';
  throw new Error("Blocked direct payment-page access: missing checkout session.");
