@@ -26,7 +26,7 @@ main{padding:24px 0 60px}.grid{display:grid;grid-template-columns:repeat(auto-fi
 /* Premium print-paper Academy treatment */
 header{background:linear-gradient(110deg,#101a32,#1c2c49);color:#fff}main{background:transparent}.lesson .lesson-content{overflow-wrap:anywhere}.lesson:nth-of-type(3n+1) h3:before{content:"अध्याय • ";color:#b18a3e;font-size:.65em;letter-spacing:1px}.lesson:nth-of-type(3n+2) h3:before{content:"वर्कशॉप • ";color:#527b8d;font-size:.65em;letter-spacing:1px}.lesson:nth-of-type(3n) h3:before{content:"प्रोजेक्ट • ";color:#a24d54;font-size:.65em;letter-spacing:1px}.lesson .lesson-content{tab-size:2}.lesson .lesson-content::selection{background:#f2d78e;color:#25334b}@media(max-width:600px){.lesson{margin:16px 2px;border-radius:4px 13px 13px 4px}.lesson:before{left:30px}.lesson h3{padding:0 18px 12px 38px;font-size:22px}.lesson .pill{margin-left:38px}.lesson .lesson-content{padding:15px 17px 22px 43px;font-size:14.5px;line-height:1.9}.lesson-audio{margin:0 12px 14px}.course-detail-banner{padding:15px}}
 
-.paper-sheet-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:0 0 12px;margin:0 0 12px;border-bottom:1px solid #d6c49d;color:#98763b;font:800 10px/1.5 Arial,sans-serif;letter-spacing:1.2px}
+.academy-language-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 18px;padding:12px 14px;border:1px solid #d7c49a;border-radius:14px;background:linear-gradient(120deg,#fffdf7,#f2ead8);color:#31415b;box-shadow:0 7px 18px #51452c12}.academy-language-tools label{font-weight:800;font-size:13px}.academy-language-tools select{padding:9px 12px;border:1px solid #c7ad70;border-radius:9px;background:#fff;color:#263b5b;font-weight:750}.academy-language-tools>span{font-size:12px;color:#8e3338;font-weight:800}.translate-engine{position:absolute;left:-9999px;top:-9999px}.goog-te-banner-frame,.skiptranslate{display:none!important}body{top:0!important}.paper-sheet-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:0 0 12px;margin:0 0 12px;border-bottom:1px solid #d6c49d;color:#98763b;font:800 10px/1.5 Arial,sans-serif;letter-spacing:1.2px}
 .paper-row{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;min-height:35px;align-items:start;padding:4px 0;border-bottom:1px solid #eee8dc}
 .paper-no{color:#b5a88f;font:10px/2.7 Arial,sans-serif;text-align:right;user-select:none}
 .paper-text{white-space:pre-wrap;overflow-wrap:anywhere}
@@ -58,7 +58,7 @@ header{background:linear-gradient(110deg,#101a32,#1c2c49);color:#fff}main{backgr
 <aside id="meetingDrawer" class="meeting-drawer" aria-hidden="true"><div class="drawer-head"><div><span class="brand">SMART MONEY</span><h2>🎥 Meeting Room</h2><p class="muted">आगामी क्लास और मीटिंग लिंक</p></div><button class="btn btn-secondary" type="button" onclick="toggleMeetingRoom(false)">✕</button></div><div id="meetings" class="meeting-list"><div class="empty">मीटिंग लोड हो रही हैं…</div></div></aside><div id="drawerOverlay" class="drawer-overlay" onclick="toggleMeetingRoom(false)"></div><main class="wrap">
 <section id="academyAuthGate" class="card" style="max-width:620px;margin:38px auto;text-align:center;padding:30px 22px;border:1px solid #b88f42;background:linear-gradient(145deg,#101a32,#182846)"><div class="brand">SMART MONEY • MEMBER ACCESS</div><div style="font-size:42px;margin:12px 0">🔐</div><h2 style="color:#ffe39a;margin:8px 0">Skill Academy सिर्फ Active Dashboard Members के लिए</h2><p class="muted">Academy में अलग से कोई Google या नया login नहीं है। पहले Smart Money के अपने registered ID और password से login करें। Admin approval के बाद आपका Dashboard active होना चाहिए। उसी active account से Academy खुलेगी।</p><a class="btn" href="login.html?next=skill-academy.html" style="display:inline-block;margin:12px 6px">Smart Money ID से Login करें ↗</a><p id="authMessage" class="muted" role="status" aria-live="polite">आपका मौजूदा Smart Money login session जांचा जा रहा है।</p></section>
 <section id="academyPackageDenied" class="card hidden" style="max-width:650px;margin:38px auto;padding:30px 24px;text-align:center;border:1px solid #bd3038;background:linear-gradient(145deg,#101a32,#182846)"><div style="font-size:42px;margin-bottom:10px">🔒</div><div class="brand">SMART MONEY • ACCOUNT NOT ACTIVE</div><h2 style="color:#ffe39a;margin:10px 0">आपका Dashboard अभी Active नहीं है</h2><p class="muted">Academy access तभी खुलेगा जब आपका Smart Money account Admin द्वारा approve हो और Dashboard active हो। अपने registered ID से login करके account status देखें। अगर आपने approval का इंतजार किया है, तो Smart Money Support से संपर्क करें।</p><a class="btn" href="login.html" style="display:inline-block;margin:12px 6px">Smart Money Login खोलें ↗</a></section>
-<div id="academyContent" class="hidden">
+<div id="academyContent" class="hidden"><div id="academyLanguageTools" class="academy-language-tools"><label for="academyLanguageSelect">🌐 भाषा / Language</label><select id="academyLanguageSelect" class="academy-language-select" onchange="setAcademyLanguage(this.value)"><option value="hi">हिंदी</option><option value="en">English</option><option value="as">অসমীয়া</option></select><span>🔊 पुरुष आवाज़</span><div id="google_translate_element" class="translate-engine" aria-hidden="true"></div></div>
 <div class="notice">यहां उपलब्ध कोर्स और प्रकाशित पाठ देखें। किसी भी कोर्स से कमाई या नौकरी की गारंटी नहीं होती; वास्तविक प्रोजेक्ट उपलब्धता और गुणवत्ता पर निर्भर करते हैं।</div>
 <section id="courseSection"><h2>📚 Skill Courses</h2><div id="courses" class="grid"><div class="empty">कोर्स लोड हो रहे हैं…</div></div></section>
 
@@ -185,58 +185,49 @@ function renderCourses(rows){
 }
 function toggleMeetingRoom(force){const drawer=document.getElementById("meetingDrawer"),overlay=document.getElementById("drawerOverlay"),open=typeof force==="boolean"?force:!drawer.classList.contains("open");drawer.classList.toggle("open",open);overlay.classList.toggle("open",open);drawer.setAttribute("aria-hidden",String(!open));document.body.style.overflow=open?"hidden":"";if(open)loadMeetings()}
 let activeSpeechText="",activeSpeechTitle="",activeUtterance=null;
-function selectedVoiceGender(){return localStorage.getItem("sm_academy_voice_gender")==="female"?"female":"male"}
-function setVoiceGender(value){localStorage.setItem("sm_academy_voice_gender",value);document.querySelectorAll(".voice-gender-select").forEach(el=>el.value=value);if(activeUtterance)stopLessonAudio()}
-function stopLessonAudio(){if("speechSynthesis" in window){window.speechSynthesis.cancel()}activeUtterance=null;document.querySelectorAll(".audio-status").forEach(el=>el.textContent="ऑडियो बंद है")}
-function getIndianHindiVoice(gender){
- const voices=window.speechSynthesis.getVoices();
- const hindi=voices.filter(v=>/^hi(-|_)/i.test(v.lang||""));
- if(!hindi.length)return {voice:null,actualGender:null,available:false};
- const identify=(v)=>{
-   const label=((v.name||"")+" "+(v.voiceURI||"")).toLowerCase().replace(/[_ ]/g,"-");
-   if(/(female|woman|girl|wavenet-a|wavenet-d|standard-a|standard-d|hi-in-x-hia)/.test(label))return "female";
-   if(/(male|man|boy|wavenet-b|wavenet-c|standard-b|standard-c|hi-in-x-hic)/.test(label))return "male";
-   return null;
- };
- const requested=hindi.find(v=>identify(v)===gender);
- if(requested)return {voice:requested,actualGender:gender,available:true};
- // Do not block lesson playback when the device lacks a gender-labelled voice.
- // Prefer a Hindi voice with Indian locale, then any Hindi voice.
- const fallback=hindi.find(v=>/^hi[-_]in/i.test(v.lang||""))||hindi[0];
- return {voice:fallback,actualGender:identify(fallback),available:false};
+const academyLanguages={hi:{label:"हिंदी",locale:"hi-IN",welcome:"नमस्ते Smart Money Family! Smart Money Skill Academy में आपका स्वागत है। आज हम इस पाठ को आसान भाषा में समझेंगे।"},en:{label:"English",locale:"en-IN",welcome:"Hello Smart Money Family! Welcome to Smart Money Skill Academy. Let us understand today's lesson step by step."},as:{label:"অসমীয়া",locale:"as-IN",welcome:"নমস্কাৰ Smart Money Family! Smart Money Skill Academy লৈ আপোনাক স্বাগতম। আহক, আজি এই পাঠটো সহজকৈ বুজি লওঁ।"}};
+function selectedAcademyLanguage(){return localStorage.getItem("sm_academy_language")||"hi"}
+function setAcademyLanguage(code){
+ if(!academyLanguages[code])return;
+ localStorage.setItem("sm_academy_language",code);
+ document.querySelectorAll(".academy-language-select").forEach(el=>el.value=code);
+ const combo=document.querySelector(".goog-te-combo");
+ if(combo){combo.value=code;combo.dispatchEvent(new Event("change"))}
+ document.querySelectorAll(".audio-status").forEach(el=>el.textContent=academyLanguages[code].label+" में सुनने के लिए दबाएं");
+}
+function googleTranslateElementInit(){
+ if(window.google&&window.google.translate&&window.google.translate.TranslateElement){
+  new google.translate.TranslateElement({pageLanguage:"hi",includedLanguages:"hi,en,as",autoDisplay:false},"google_translate_element");
+  const code=selectedAcademyLanguage();
+  setTimeout(()=>{const combo=document.querySelector(".goog-te-combo");if(combo&&code!=="hi"){combo.value=code;combo.dispatchEvent(new Event("change"))}},900);
+ }
+}
+(function loadAcademyTranslator(){if(document.getElementById("academy-translate-script"))return;const script=document.createElement("script");script.id="academy-translate-script";script.src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";script.async=true;document.head.appendChild(script)})();
+function stopLessonAudio(){if("speechSynthesis" in window)window.speechSynthesis.cancel();activeUtterance=null;document.querySelectorAll(".audio-status").forEach(el=>el.textContent="ऑडियो बंद है")}
+function voiceGender(v){const n=((v.name||"")+" "+(v.voiceURI||"")).toLowerCase();if(/female|woman|girl|aria|jenny|samantha|susan|veena|lekha/.test(n))return "female";if(/male|man|boy|david|mark|guy|ravi|hemant/.test(n))return "male";return "unknown"}
+function pickNaturalMaleVoice(locale){
+ const voices=window.speechSynthesis.getVoices(),lang=locale.toLowerCase().split("-")[0];
+ const matching=voices.filter(v=>(v.lang||"").toLowerCase().startsWith(lang));
+ const indian=matching.filter(v=>(v.lang||"").toLowerCase().includes("-in"));
+ const pool=indian.length?indian:matching;
+ return pool.find(v=>voiceGender(v)==="male")||pool.find(v=>voiceGender(v)==="unknown")||null;
 }
 async function speakLesson(id){
- if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){const status=document.getElementById("audio-status-"+id);if(status)status.textContent="इस browser में Voice Reading उपलब्ध नहीं है।";return}
- const lessonText=lessonSpeechText[id];if(!lessonText)return;
- const gender=selectedVoiceGender();
- const welcome="नमस्ते Smart Money Family! आपका Smart Money Academy में स्वागत है। हमारे कोर्स को अच्छी तरह समझने के लिए ध्यान से सुनिए और साथ-साथ अभ्यास भी कीजिए। चलिए, अब आज का पाठ शुरू करते हैं। ";
- window.speechSynthesis.cancel();
- // Some Android browsers populate the voice list asynchronously.
- let voices=window.speechSynthesis.getVoices();
- if(!voices.length){
-   await new Promise(resolve=>{
-     let done=false;
-     const finish=()=>{if(done)return;done=true;window.speechSynthesis.removeEventListener("voiceschanged",finish);resolve()};
-     window.speechSynthesis.addEventListener("voiceschanged",finish);
-     setTimeout(finish,1200);
-   });
- }
- const selected=getIndianHindiVoice(gender);
  const status=document.getElementById("audio-status-"+id);
- if(!selected.voice){
-   if(status)status.textContent="फोन में Hindi Text-to-Speech voice उपलब्ध नहीं है। फोन की Text-to-Speech settings में Hindi voice install करें।";
-   return;
- }
- activeUtterance=new SpeechSynthesisUtterance(welcome+lessonText);
- activeUtterance.lang="hi-IN";activeUtterance.rate=0.88;activeUtterance.pitch=1;
- activeUtterance.voice=selected.voice;
- const requestedLabel=gender==="female"?"👩 लड़की":"👨 लड़का";
- const actualLabel=selected.actualGender==="female"?"👩 लड़की":selected.actualGender==="male"?"👨 लड़का":"Hindi";
- activeUtterance.onstart=()=>{
-   if(status)status.textContent=selected.available?requestedLabel+" की आवाज़ में पाठ सुनाया जा रहा है…":requestedLabel+" voice उपलब्ध नहीं; उपलब्ध "+actualLabel+" Hindi voice में पाठ चल रहा है…";
- };
+ if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){if(status)status.textContent="इस browser में Voice Reading उपलब्ध नहीं है।";return}
+ const code=selectedAcademyLanguage(),config=academyLanguages[code];
+ const article=document.querySelector('[data-lesson-id="'+CSS.escape(id)+'"]');
+ const textToRead=article?.querySelector(".lesson-content")?.innerText?.trim()||lessonSpeechText[id]||"";
+ if(!textToRead){if(status)status.textContent="पाठ का टेक्स्ट उपलब्ध नहीं है।";return}
+ window.speechSynthesis.cancel();
+ if(!window.speechSynthesis.getVoices().length)await new Promise(resolve=>{let done=false;const finish=()=>{if(done)return;done=true;window.speechSynthesis.removeEventListener("voiceschanged",finish);resolve()};window.speechSynthesis.addEventListener("voiceschanged",finish);setTimeout(finish,1400)});
+ const voice=pickNaturalMaleVoice(config.locale);
+ if(!voice){if(status)status.textContent=config.label+" पुरुष आवाज़ इस डिवाइस में उपलब्ध नहीं है। Android Text-to-Speech में "+config.label+" voice install करें।";return}
+ activeUtterance=new SpeechSynthesisUtterance(config.welcome+" "+textToRead);
+ activeUtterance.voice=voice;activeUtterance.lang=voice.lang||config.locale;activeUtterance.rate=0.94;activeUtterance.pitch=0.96;activeUtterance.volume=1;
+ activeUtterance.onstart=()=>{if(status)status.textContent=config.label+" में पुरुष आवाज़ में पाठ सुनाया जा रहा है…"};
  activeUtterance.onend=()=>{if(status)status.textContent="पाठ पूरा हुआ ✓";activeUtterance=null};
- activeUtterance.onerror=()=>{if(status)status.textContent="आवाज़ शुरू नहीं हो सकी। फोन की Text-to-Speech settings जांचें।";activeUtterance=null};
+ activeUtterance.onerror=()=>{if(status)status.textContent="आवाज़ शुरू नहीं हो सकी। Text-to-Speech settings जांचें।";activeUtterance=null};
  window.speechSynthesis.speak(activeUtterance);
 }
 function pauseLessonAudio(){if("speechSynthesis" in window&&window.speechSynthesis.speaking){window.speechSynthesis.pause();document.querySelectorAll(".audio-status").forEach(el=>el.textContent="⏸ ऑडियो रुका है")}}
@@ -262,7 +253,7 @@ function renderPaperLines(content){
  }).join('')+
  '<div class="paper-sheet-foot">SMART MONEY SKILL ACADEMY • READ • PRACTICE • REVIEW</div>';
 }
-async function openLessons(id,title,description,courseIndex=0){stopLessonAudio();document.getElementById("courseSection").classList.add("hidden");document.getElementById("lessonArea").classList.remove("hidden");document.getElementById("lessonHeading").textContent=title;document.getElementById("lessonIntro").textContent=description||"इस कोर्स के सभी पाठ क्रम से पढ़ें और अभ्यास पूरा करें।";document.getElementById("courseHero").innerHTML='<div class="course-detail-banner"><div class="brand">SMART MONEY • PREMIUM LEARNING</div><h2>सीखने की शुरुआत यहीं से करें</h2><p class="muted">हर पाठ पढ़ें, उदाहरण करें और अपना अभ्यास पूरा करें।</p><img class="course-detail-photo" src="'+coursePhoto(courseIndex)+'" alt="'+esc(title)+' course photo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'"></div>';const el=document.getElementById("lessons");el.innerHTML='<div class="empty">पाठ लोड हो रहे हैं…</div>';const {data,error}=await sb.from("sm_skill_lessons").select("*").eq("course_id",id).eq("is_published",true).order("sort_order");if(error){el.textContent="पाठ लोड नहीं हो सके।";return}if(!data.length){el.innerHTML='<div class="empty">इस कोर्स में अभी पाठ नहीं जोड़े गए हैं।</div>';return}stopLessonAudio();Object.keys(lessonSpeechText).forEach(k=>delete lessonSpeechText[k]);el.innerHTML=data.map(l=>{const embed=l.lesson_type==="video"?videoEmbed(l.video_url):"";lessonSpeechText[l.id]=[l.title,l.content||""].join(". ");return '<article class="lesson lesson-style-'+(Number(l.sort_order)===1?'theory':Number(l.sort_order)===2?'workshop':'project')+'"><span class="pill">'+esc(l.lesson_type)+'</span><h3>'+esc(l.title)+'</h3>'+(embed?'<iframe class="video" src="'+esc(embed)+'" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>':(safeHttpUrl(l.video_url)?'<p><a target="_blank" rel="noopener noreferrer" href="'+esc(safeHttpUrl(l.video_url))+'">संसाधन खोलें ↗</a></p>':''))+'<div class="lesson-audio"><label style="font-size:12px;color:#725b32">आवाज़ <select class="voice-gender-select" aria-label="आवाज़ चुनें" onchange="setVoiceGender(this.value)"><option value="male">👨 लड़का</option><option value="female">👩 लड़की</option></select></label><button type="button" onclick="speakLesson(\''+esc(l.id)+'\')">🔊 सुनें</button><button type="button" class="btn-secondary" onclick="pauseLessonAudio()">⏸ रोकें</button><button type="button" class="audio-stop" onclick="stopLessonAudio()">⏹ बंद करें</button><span class="audio-status" id="audio-status-'+esc(l.id)+'">हिंदी में सुनने के लिए दबाएं</span></div><div class="lesson-content">'+renderPaperLines(l.content)+'</div>'+(l.duration_minutes?'<small class="muted">समय: '+l.duration_minutes+' मिनट</small>':'')+'</article>'}).join("");document.querySelectorAll(".voice-gender-select").forEach(el=>el.value=selectedVoiceGender());document.getElementById("lessonArea").scrollIntoView({behavior:"smooth"})}
+async function openLessons(id,title,description,courseIndex=0){stopLessonAudio();document.getElementById("courseSection").classList.add("hidden");document.getElementById("lessonArea").classList.remove("hidden");document.getElementById("lessonHeading").textContent=title;document.getElementById("lessonIntro").textContent=description||"इस कोर्स के सभी पाठ क्रम से पढ़ें और अभ्यास पूरा करें।";document.getElementById("courseHero").innerHTML='<div class="course-detail-banner"><div class="brand">SMART MONEY • PREMIUM LEARNING</div><h2>सीखने की शुरुआत यहीं से करें</h2><p class="muted">हर पाठ पढ़ें, उदाहरण करें और अपना अभ्यास पूरा करें।</p><img class="course-detail-photo" src="'+coursePhoto(courseIndex)+'" alt="'+esc(title)+' course photo" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'"></div>';const el=document.getElementById("lessons");el.innerHTML='<div class="empty">पाठ लोड हो रहे हैं…</div>';const {data,error}=await sb.from("sm_skill_lessons").select("*").eq("course_id",id).eq("is_published",true).order("sort_order");if(error){el.textContent="पाठ लोड नहीं हो सके।";return}if(!data.length){el.innerHTML='<div class="empty">इस कोर्स में अभी पाठ नहीं जोड़े गए हैं।</div>';return}stopLessonAudio();Object.keys(lessonSpeechText).forEach(k=>delete lessonSpeechText[k]);el.innerHTML=data.map(l=>{const embed=l.lesson_type==="video"?videoEmbed(l.video_url):"";lessonSpeechText[l.id]=[l.title,l.content||""].join(". ");return '<article data-lesson-id="'+esc(l.id)+'" class="lesson lesson-style-'+(Number(l.sort_order)===1?'theory':Number(l.sort_order)===2?'workshop':'project')+'"><span class="pill">'+esc(l.lesson_type)+'</span><h3>'+esc(l.title)+'</h3>'+(embed?'<iframe class="video" src="'+esc(embed)+'" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>':(safeHttpUrl(l.video_url)?'<p><a target="_blank" rel="noopener noreferrer" href="'+esc(safeHttpUrl(l.video_url))+'">संसाधन खोलें ↗</a></p>':''))+'<div class="lesson-audio"><span style="font-size:12px;color:#725b32;font-weight:800">🔊 पुरुष आवाज़</span><button type="button" onclick="speakLesson(\''+esc(l.id)+'\')">🔊 सुनें</button><button type="button" class="btn-secondary" onclick="pauseLessonAudio()">⏸ रोकें</button><button type="button" class="audio-stop" onclick="stopLessonAudio()">⏹ बंद करें</button><span class="audio-status" id="audio-status-'+esc(l.id)+'">हिंदी में सुनने के लिए दबाएं</span></div><div class="lesson-content">'+renderPaperLines(l.content)+'</div>'+(l.duration_minutes?'<small class="muted">समय: '+l.duration_minutes+' मिनट</small>':'')+'</article>'}).join("");document.querySelectorAll(".academy-language-select").forEach(el=>el.value=selectedAcademyLanguage());document.getElementById("lessonArea").scrollIntoView({behavior:"smooth"})}
 function closeLessons(){stopLessonAudio();document.getElementById("lessonArea").classList.add("hidden");document.getElementById("courseSection").classList.remove("hidden");document.getElementById("courseSection").scrollIntoView({behavior:"smooth"})}
 initializeAcademyAuth();
 </script></body></html>
