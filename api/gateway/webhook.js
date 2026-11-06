@@ -61,6 +61,8 @@ module.exports = async function handler(req, res) {
     const mobile = String(metadata.mobile || "").trim();
     const referral = String(metadata.referralId || "").trim();
     const prices = {
+      "Basic": 299, "Basic Package": 299,
+      "Max Pro": 4499, "Max Pro Package": 4499,
       "Starter": 289, "Starter Package": 289,
       "Intermediate": 560, "Intermediate Package": 560,
       "Expert": 1149, "Expert Package": 1149,
@@ -71,7 +73,8 @@ module.exports = async function handler(req, res) {
     const amountPaise = String(event.amountPaise || event.data?.amountPaise || "");
     if (!orderId.startsWith("SM-") || !paymentId || !prices[packageName] ||
         packagePrice !== prices[packageName] ||
-        amountPaise !== String(packagePrice * 100) ||\n        String(event.currency || event.data?.currency || "INR").toUpperCase() !== "INR" ||
+        amountPaise !== String(packagePrice * 100) ||
+        String(event.currency || event.data?.currency || "INR").toUpperCase() !== "INR" ||\n        String(event.currency || event.data?.currency || "INR").toUpperCase() !== "INR" ||
         fullName.length < 2 || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email) ||
         !/^[0-9]{10}$/.test(mobile) || !/^SM-smart[a-zA-Z0-9]+$/i.test(referral)) {
       return res.status(400).json({ ok: false, error: "Reconciled event details failed validation." });
