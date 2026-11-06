@@ -1925,6 +1925,13 @@ async function loadDashboardProfile(){
             .maybeSingle(), "Profile loading");
         if(profileError) throw profileError;
 
+        // Enforce membership state on direct dashboard URLs as well as login.
+        if(!profile || profile.is_active !== true || profile.is_deleted === true){
+            await supabaseClient.auth.signOut();
+            window.location.replace("login.html?access=membership-required");
+            return false;
+        }
+
         // Do not block the entire dashboard on optional referral-code lookups.
         // Existing codes are used immediately; missing codes are repaired in the background.
         let permanentCode = profile?.referral_code || localStorage.getItem(`permanent_ref_code_${currentUserId}`) || "";
