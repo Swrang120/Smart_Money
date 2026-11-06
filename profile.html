@@ -333,9 +333,21 @@
           .eq("user_id", currentUser.id)
           .maybeSingle();
 
-      // Never expose profile/shop pages to unpaid or inactive accounts.
-      // A pending checkout profile is not an approved membership.
-      if (error || !profile || profile.is_deleted === true || profile.is_active !== true) {
+      // Require both an active profile and an approved payment record.
+      // A browser-created profile flag alone is never proof of payment.
+      const isAdminAccount = ["sboro3235@gmail.com","phwilawswargiary6900@gmail.com"]
+        .includes(String(currentUser.email || "").trim().toLowerCase());
+      let hasApprovedPayment = isAdminAccount;
+      if (!isAdminAccount && profile) {
+        const { data: approvedRows, error: approvedLookupError } = await supabaseClient
+          .from("payment_requests")
+          .select("id")
+          .eq("user_id", currentUser.id)
+          .or("status.eq.Approved,payment_status.eq.Approved")
+          .limit(1);
+        hasApprovedPayment = !approvedLookupError && Array.isArray(approvedRows) && approvedRows.length > 0;
+      }
+      if (!isAdminAccount && (error || !profile || profile.is_deleted === true || profile.is_active !== true || !hasApprovedPayment)) {
         let hasPendingPayment = false;
         try {
           const { data: pendingRows } = await supabaseClient
