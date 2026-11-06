@@ -54,7 +54,7 @@ module.exports = async function handler(req, res) {
       order.id === razorpay_order_id &&
       (order.status === "paid" || Number(order.amount_paid) >= Number(order.amount));
     const buyerOk = String(notes.full_name || "").trim().length >= 2 &&
-      /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(String(notes.email || "")) &&
+      /^[^\s@]+@[^\s@]+\\.[^\s@]+$/.test(String(notes.email || "")) &&
       /^[0-9]{10}$/.test(String(notes.mobile || "")) &&
       /^SM-smart[a-zA-Z0-9]+$/i.test(String(notes.referral_id || ""));
     if (!amountOk || !paymentOk || !buyerOk) {
