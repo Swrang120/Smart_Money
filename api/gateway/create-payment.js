@@ -1,5 +1,7 @@
 const PACKAGE_PRICES = {
-  "Basic": 299, "Basic Package": 299,\n  "Max Pro": 4499, "Max Pro Package": 4499,\n  "Starter": 289, "Starter Package": 289,
+  "Basic": 299, "Basic Package": 299,
+  "Max Pro": 4499, "Max Pro Package": 4499,
+  "Starter": 289, "Starter Package": 289,
   "Intermediate": 560, "Intermediate Package": 560,
   "Expert": 1149, "Expert Package": 1149,
   "Master": 2499, "Master Package": 2499,
