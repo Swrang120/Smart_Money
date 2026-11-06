@@ -29,7 +29,24 @@ async function editLesson(id){const {data}=await sb.from("sm_skill_lessons").sel
 async function deleteLesson(id){if(!confirm("Delete this lesson?"))return;const {error}=await sb.from("sm_skill_lessons").delete().eq("id",id);say(error?.message||"Lesson deleted");await refresh()}
 function clearLesson(){["lessonId","lessonTitle","lessonUrl","lessonDuration","lessonContent"].forEach(x=>$(x).value="");$("lessonOrder").value=0;$("lessonPublished").checked=false}
 async function loadMeetings(){const {data,error}=await sb.from("sm_skill_meetings").select("*,sm_skill_courses(title)").order("starts_at",{ascending:false});if(error){say(error.message);return}$("meetingList").innerHTML=(data||[]).map(m=>'<div class="row"><b>'+esc(m.title)+'</b> · '+new Date(m.starts_at).toLocaleString()+' · '+(m.is_published?"Published":"Draft")+'<p>'+esc(m.meeting_url)+'</p><button onclick="editMeeting(\''+m.id+'\')">Edit</button><button class="danger" onclick="deleteMeeting(\''+m.id+'\')">Delete</button></div>').join("")||"No meetings yet"}
-async function saveMeeting(){const id=$("meetingId").value,p={title:$("meetingTitle").value.trim(),description:$("meetingDesc").value,meeting_url:$("meetingUrl").value.trim(),starts_at:new Date($("meetingStart").value).toISOString(),ends_at:$("meetingEnd").value?new Date($("meetingEnd").value).toISOString():null,course_id:$("meetingCourse").value||null,is_published:$("meetingPublished").checked};try{const u=new URL(p.meeting_url);if(!["https:","http:"].includes(u.protocol))throw Error("Meeting URL must be http/https");}catch(e){say("Valid meeting URL और start time डालें");return}if(!p.title||!$("meetingStart").value){say("Title और start time जरूरी हैं");return}const q=id?sb.from("sm_skill_meetings").update(p).eq("id",id):sb.from("sm_skill_meetings").insert(p);const {error}=await q;if(error){say(error.message);return}say("Meeting saved");clearMeeting();await refresh()}
+async function saveMeeting(){
+ const id=$("meetingId").value;
+ const title=$("meetingTitle").value.trim();
+ const startValue=$("meetingStart").value;
+ const endValue=$("meetingEnd").value;
+ const meetingUrl=$("meetingUrl").value.trim();
+ if(!title||!startValue||!meetingUrl){say("Title, meeting URL और start time जरूरी हैं");return}
+ const startDate=new Date(startValue);
+ const endDate=endValue?new Date(endValue):null;
+ if(Number.isNaN(startDate.getTime())||(endDate&&Number.isNaN(endDate.getTime()))){say("Valid start/end date डालें");return}
+ if(endDate&&endDate<=startDate){say("End time, start time के बाद होना चाहिए");return}
+ try{const u=new URL(meetingUrl);if(!["https:","http:"].includes(u.protocol))throw Error("Invalid protocol");}
+ catch(e){say("Valid http/https meeting URL डालें");return}
+ const p={title,description:$("meetingDesc").value,meeting_url:meetingUrl,starts_at:startDate.toISOString(),ends_at:endDate?endDate.toISOString():null,course_id:$("meetingCourse").value||null,is_published:$("meetingPublished").checked};
+ const q=id?sb.from("sm_skill_meetings").update(p).eq("id",id):sb.from("sm_skill_meetings").insert(p);
+ const {error}=await q;if(error){say(error.message);return}
+ say("Meeting saved");clearMeeting();await refresh()
+}
 async function editMeeting(id){const {data}=await sb.from("sm_skill_meetings").select("*").eq("id",id).single();if(!data)return;$("meetingId").value=data.id;$("meetingTitle").value=data.title;$("meetingDesc").value=data.description;$("meetingUrl").value=data.meeting_url;$("meetingStart").value=new Date(data.starts_at).toISOString().slice(0,16);$("meetingEnd").value=data.ends_at?new Date(data.ends_at).toISOString().slice(0,16):"";$("meetingCourse").value=data.course_id||"";$("meetingPublished").checked=data.is_published;window.scrollTo({top:0,behavior:"smooth"})}
 async function deleteMeeting(id){if(!confirm("Delete meeting?"))return;const {error}=await sb.from("sm_skill_meetings").delete().eq("id",id);say(error?.message||"Meeting deleted");await refresh()}
 function clearMeeting(){["meetingId","meetingTitle","meetingDesc","meetingUrl","meetingStart","meetingEnd"].forEach(x=>$(x).value="");$("meetingCourse").value="";$("meetingPublished").checked=false}
