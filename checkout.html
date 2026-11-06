@@ -59,7 +59,7 @@ label.form-label,.form-group label{display:block;font-size:10px;font-weight:700;
   <div class="header">
     <div class="header-icon">🧾</div>
     <h1>Enter Your Details</h1>
-    <p>Verify your account details before proceeding to payment</p>
+    <p>Enter your details. Your account is created only after payment approval.</p>
   </div>
 
   <div id="topNotice" class="notice"></div>
@@ -92,9 +92,7 @@ label.form-label,.form-group label{display:block;font-size:10px;font-weight:700;
       </div>
 
       <div class="form-group">
-        <label for="password">Create Password *</label>
-        <input type="password" id="password" class="form-control" placeholder="Create your login password" autocomplete="new-password" minlength="6" maxlength="72" required>
-        <div class="password-note">🔒 Your password should be at least 6 characters.</div>
+        <div class="password-note" style="font-size:12px;line-height:1.7">🔒 Your login account will be created only after your payment request is approved. You will receive a secure email invitation to set your password.</div>
       </div>
     </div>
 
@@ -127,13 +125,14 @@ const SUPABASE_PUBLISHABLE_KEY="sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 
 const params=new URLSearchParams(location.search);
+const PACKAGE_PRICES={"Basic":299,"Basic Package":299,"Max Pro":4499,"Max Pro Package":4499,"Starter":289,"Starter Package":289,"Intermediate":560,"Intermediate Package":560,"Expert":1149,"Expert Package":1149,"Master":2499,"Master Package":2499,"Brahmastra":5499,"Brahmastra Package":5499,"Premium Pro":10997,"Premium Pro Package":10997};
 const pkgName=params.get("name")||params.get("package")||"Starter Package";
-const pkgPrice=params.get("price")||"289";
+const pkgPrice=Number(String(params.get("price")||PACKAGE_PRICES[pkgName]||"").replace(/[₹,\s]/g,""));
 const refFromUrl=(params.get("ref")||"").trim();
 
 const $=id=>document.getElementById(id);
 const refCodeInput=$("refCode"),fullNameInput=$("fullName"),mobileInput=$("mobileNumber"),
-emailInput=$("emailId"),passwordInput=$("password"),termsCheck=$("termsCheck"),
+emailInput=$("emailId"),termsCheck=$("termsCheck"),
 proceedBtn=$("proceedBtn"),refStatus=$("refStatus"),mobileStatus=$("mobileStatus"),
 emailStatus=$("emailStatus"),topNotice=$("topNotice");
 
@@ -162,6 +161,10 @@ function showNotice(msg){
   topNotice.style.display="block";
 }
 function hideNotice(){topNotice.style.display="none";topNotice.textContent="";}
+if(!Object.prototype.hasOwnProperty.call(PACKAGE_PRICES,pkgName)||PACKAGE_PRICES[pkgName]!==pkgPrice){
+  showNotice("Invalid package or price. Please return to the package selection page and choose a valid package.");
+  proceedBtn.disabled=true;
+}
 
 /* ---------------------------------------------------------
    REFERRAL LOOKUP
@@ -300,107 +303,6 @@ async function generateUniqueReferralCode(){
 }
 
 /* ---------------------------------------------------------
-   CREATE AUTH USER + PROFILE
---------------------------------------------------------- */
-async function createSmartMoneyAccount(fullName,mobile,email,password,referrer){
-  if(!referrer?.user_id)throw new Error("INVALID_REFERRER");
-
-  const current=await supabaseClient.auth.getSession();
-  if(current.error)throw new Error(current.error.message);
-
-  let session=current.data.session;
-  let user=session?.user||null;
-
-  /*
-     Never reuse a different logged-in account for a new buyer.
-     This was the source of the previous bug: an admin session could
-     accidentally become the buyer's profiles.user_id.
-  */
-  const requestedEmail = email.trim().toLowerCase();
-  const sessionEmail = String(user?.email || "").trim().toLowerCase();
-
-  if(user && sessionEmail !== requestedEmail){
-    await supabaseClient.auth.signOut();
-    session=null;
-    user=null;
-  }
-
-  if(!user){
-    const signUp=await supabaseClient.auth.signUp({
-      email:requestedEmail,
-      password,
-      options:{
-        data:{
-          full_name:fullName,
-          mobile,
-          referred_by:referrer.referral_code||referrer.referral_id||""
-        }
-      }
-    });
-
-    if(signUp.error){
-      console.error("Supabase signup error:",signUp.error);
-      throw new Error(signUp.error.message);
-    }
-
-    user=signUp.data.user;
-    session=signUp.data.session;
-  }
-
-  if(!user)throw new Error("Unable to create your Smart Money account.");
-
-  if(String(user.email || "").trim().toLowerCase() !== requestedEmail){
-    throw new Error("Account email mismatch. Please restart checkout.");
-  }
-
-  if(!session)throw new Error("ACCOUNT_CONFIRMATION_REQUIRED");
-
-  const buyerCode=await generateUniqueReferralCode();
-  const actualReferral=referrer.referral_code||referrer.referral_id;
-  if(!actualReferral)throw new Error("INVALID_REFERRER");
-
-  const profile={
-    user_id:user.id,
-    full_name:fullName,
-    email,
-    mobile,
-    // Every buyer gets their own unique ID. The entered sponsor code
-    // belongs ONLY in referred_by; copying it into referral_id caused
-    // profiles_referral_id_key duplicate-key failures during checkout.
-    referral_code:buyerCode,
-    referral_id:buyerCode,
-    referred_by:actualReferral,
-    status:"PENDING",
-    balance:0,
-    is_active:false
-  };
-
-  const existing=await supabaseClient.from("profiles").select("user_id").eq("user_id",user.id).limit(1);
-
-  if(existing.error){
-    /* If RLS blocks SELECT, try upsert directly. */
-    console.warn("Profile existence lookup blocked:",existing.error);
-  }
-
-  let profileResult;
-  if(existing.data?.length){
-    profileResult=await supabaseClient.from("profiles").update(profile).eq("user_id",user.id);
-  }else{
-    profileResult=await supabaseClient.from("profiles").insert(profile);
-    if(profileResult.error && /duplicate|unique/i.test(profileResult.error.message)){
-      profileResult=await supabaseClient.from("profiles").update(profile).eq("user_id",user.id);
-    }
-  }
-
-  if(profileResult.error){
-    console.error("Profile save error:",profileResult.error);
-    throw new Error("Profile could not be saved: "+profileResult.error.message);
-  }
-
-  return {userId:user.id,referralCode:buyerCode,referredBy:actualReferral};
-}
-
-/* ---------------------------------------------------------
    INPUT EVENTS
 --------------------------------------------------------- */
 refCodeInput.addEventListener("input",function(){
@@ -438,15 +340,13 @@ async function goToPayment(event){
   const fullName=fullNameInput.value.trim();
   const mobile=mobileInput.value.trim();
   const email=emailInput.value.trim().toLowerCase();
-  const password=passwordInput.value;
 
-  if(!ref||!fullName||!mobile||!email||!password){
+  if(!ref||!fullName||!mobile||!email){
     alert("⚠️ Please fill in all required details.");return;
   }
   if(!validReferral(ref)){alert("⚠️ Invalid Referral ID!\n\nExample: SM-smart12345");refCodeInput.focus();return;}
   if(!validMobile(mobile)){alert("⚠️ Please enter a valid 10-digit mobile number.");mobileInput.focus();return;}
   if(!validEmail(email)){alert("⚠️ Please enter a valid email address.");emailInput.focus();return;}
-  if(password.length<6){alert("⚠️ Password must contain at least 6 characters.");passwordInput.focus();return;}
   if(!termsCheck.checked){alert("⚠️ Please agree to the Terms & Privacy Policy.");return;}
 
   proceedBtn.disabled=true;
@@ -482,19 +382,20 @@ async function goToPayment(event){
       resetButton();mobileInput.focus();return;
     }
 
-    proceedBtn.textContent="⏳ Creating Smart Money Account...";
-    const account=await createSmartMoneyAccount(fullName,mobile,email,password,referral.referrer);
+    proceedBtn.textContent="⏳ Preparing Secure Checkout...";
+    const sponsorCode=String(referral.referrer.referral_code||referral.referrer.referral_id||"").trim();
+    if(!sponsorCode)throw new Error("Referral ID could not be confirmed. Please check it again.");
 
     const checkoutData={
-      name:pkgName,price:pkgPrice,ref,
+      name:pkgName,price:Number(pkgPrice),ref,
       fullname:fullName,mobile,email,
-      user_id:account.userId,
-      referral_code:account.referralCode,
-      referred_by:account.referredBy
+      referral_code:sponsorCode
     };
 
+    // Deliberately do not create a Supabase Auth user or profiles row here.
+    // Admin approval creates/invites the buyer after payment proof is reviewed.
     sessionStorage.setItem("checkout_data",JSON.stringify(checkoutData));
-    proceedBtn.textContent="✓ Account Created";
+    proceedBtn.textContent="✓ Checkout Ready";
 
     setTimeout(()=>{
       location.href="payment.html";
@@ -504,7 +405,7 @@ async function goToPayment(event){
     console.error("SMART MONEY CHECKOUT ERROR:",error);
 
     if(error.message==="ACCOUNT_CONFIRMATION_REQUIRED"){
-      alert("📧 Email Confirmation Required\n\nYour account was created, but Supabase requires email confirmation.\n\nPlease confirm your email and then continue.");
+      alert("📧 Please restart checkout. No account was created before payment.");
       resetButton();return;
     }
 
@@ -515,7 +416,7 @@ async function goToPayment(event){
       resetButton();return;
     }
 
-    alert("⚠️ Unable to create your Smart Money account.\n\n"+(error.message||"Please try again."));
+    alert("⚠️ Unable to prepare checkout.\n\n"+(error.message||"Please try again."));
     resetButton();
   }
 }

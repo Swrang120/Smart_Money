@@ -1925,8 +1925,21 @@ async function loadDashboardProfile(){
             .maybeSingle(), "Profile loading");
         if(profileError) throw profileError;
 
-        // Enforce membership state on direct dashboard URLs as well as login.
-        if(!profile || profile.is_active !== true || profile.is_deleted === true){
+        // Require an approved payment record as well as an active profile.
+        // is_active by itself is not proof that the buyer paid.
+        const signedInEmail = String(currentUserEmail || "").trim().toLowerCase();
+        const isAdminAccount = ["sboro3235@gmail.com","phwilawswargiary6900@gmail.com"].includes(signedInEmail);
+        let hasApprovedPayment = isAdminAccount;
+        if(!isAdminAccount && profile){
+            const { data: approvedRows, error: approvedLookupError } = await supabaseClient
+                .from("payment_requests")
+                .select("id")
+                .eq("user_id", currentUserId)
+                .or("status.eq.Approved,payment_status.eq.Approved")
+                .limit(1);
+            hasApprovedPayment = !approvedLookupError && Array.isArray(approvedRows) && approvedRows.length > 0;
+        }
+        if(!profile || profile.is_active !== true || profile.is_deleted === true || !hasApprovedPayment){
             await supabaseClient.auth.signOut();
             window.location.replace("login.html?access=membership-required");
             return false;

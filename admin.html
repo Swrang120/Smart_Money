@@ -3320,7 +3320,8 @@ async function repairApprovedBuyerAccounts(){
         );
 
         for(const payment of approved){
-            const paymentId = Number(payment.id || payment.payment_id || 0);
+            const paymentId = Number(payment.id || payment.razorpay_payment_id ||
+                            payment.payment_id || 0);
             if(!Number.isInteger(paymentId) || paymentId <= 0) continue;
 
             const { data, error } = await supabaseClient.functions.invoke(
@@ -3931,7 +3932,19 @@ async function approvePayment(id){
             : item
         );
 
-        const user = findUserForRequest(payment);
+        let user = findUserForRequest(payment);
+        if(!user && payment.user_id){
+            const { data: linkedProfile, error: linkedProfileError } = await supabaseClient
+                .from("profiles")
+                .select("*")
+                .eq("user_id", payment.user_id)
+                .maybeSingle();
+            if(linkedProfileError){
+                console.warn("Approved buyer profile lookup failed:", linkedProfileError);
+            }else if(linkedProfile){
+                user = linkedProfile;
+            }
+        }
 
         let activationWarning = "";
 

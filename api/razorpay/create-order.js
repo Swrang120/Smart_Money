@@ -1,6 +1,8 @@
 const crypto = require("crypto");
 
 const PACKAGES = {
+  "Basic": 299, "Basic Package": 299,
+  "Max Pro": 4499, "Max Pro Package": 4499,
   "Starter": 289, "Starter Package": 289,
   "Intermediate": 560, "Intermediate Package": 560,
   "Expert": 1149, "Expert Package": 1149,
@@ -12,15 +14,22 @@ const PACKAGES = {
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
-  const keyId = process.env.RAZORPAY_KEY_ID || process.env.LIVE_KEY_ID;
-  const keySecret = process.env.RAZORPAY_KEY_SECRET || process.env.LIVE_SECRET_API;
+  const keyId = process.env.RAZORPAY_KEY_ID || process.env.LIVE_KEY_ID || process.env.LIVE_API_KEY;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET || process.env.LIVE_SECRET_API || process.env.LIVE_SECRET_KEY;
   if (!keyId || !keySecret) return res.status(503).json({ error: "Razorpay is not configured. Add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in Vercel." });
 
   try {
-    const { packageName, amount, userId, email, mobile } = req.body || {};
+    const { packageName, amount, fullName, email, mobile, referralCode } = req.body || {};
     const expected = PACKAGES[String(packageName || "").trim()];
     if (!expected || Number(amount) !== expected) return res.status(400).json({ error: "Invalid package or amount." });
-    if (typeof userId !== "string" || !/^[0-9a-f-]{20,}$/i.test(userId)) return res.status(400).json({ error: "Please sign in again before paying." });
+    const cleanEmail = String(email || "").trim().toLowerCase();
+    const cleanName = String(fullName || "").trim();
+    const cleanMobile = String(mobile || "").trim();
+    const cleanReferral = String(referralCode || "").trim();
+    if (cleanName.length < 2 || cleanName.length > 80) return res.status(400).json({ error: "Enter a valid full name." });
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) return res.status(400).json({ error: "Enter a valid email address." });
+    if (!/^[0-9]{10}$/.test(cleanMobile)) return res.status(400).json({ error: "Enter a valid 10-digit mobile number." });
+    if (!/^SM-smart[a-zA-Z0-9]+$/i.test(cleanReferral)) return res.status(400).json({ error: "Enter a valid referral ID." });
 
     const receipt = "sm_" + crypto.randomBytes(10).toString("hex");
     const response = await fetch("https://api.razorpay.com/v1/orders", {
@@ -35,9 +44,10 @@ module.exports = async function handler(req, res) {
         receipt,
         notes: {
           package_name: String(packageName).slice(0, 80),
-          user_id: userId,
-          email: String(email || "").slice(0, 120),
-          mobile: String(mobile || "").slice(0, 20)
+          full_name: cleanName,
+          email: cleanEmail,
+          mobile: cleanMobile,
+          referral_id: cleanReferral
         }
       })
     });
