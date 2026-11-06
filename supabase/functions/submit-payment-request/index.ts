@@ -105,7 +105,7 @@ Deno.serve(async (req: Request) => {
       };
       packageName = String(body.package_name || "").trim();
       packagePrice = Number(body.package_price ?? body.amount);
-      transactionId = String(body.transaction_id || "").replace(/\\D/g, "");
+      transactionId = String(body.transaction_id || "").replace(/\D/g, "");
       screenshotUrl = String(body.screenshot_url || body.screenshot_name || "").trim();
 
       if (!/^[0-9]{12}$/.test(transactionId)) {
