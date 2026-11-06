@@ -4,12 +4,19 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const VERIFY_URL = "https://smart-money-navy.vercel.app/api/razorpay/verify-payment";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "https://smart-money-navy.vercel.app",
+const ALLOWED_ORIGINS = new Set([
+  "https://smart-money-navy.vercel.app",
+  "https://smart-money-swrang120.vercel.app",
+  "https://smart-money-git-main-swrang120.vercel.app"
+]);
+const corsHeadersFor = (origin: string | null) => ({
+  "Access-Control-Allow-Origin": origin && ALLOWED_ORIGINS.has(origin)
+    ? origin
+    : "https://smart-money-navy.vercel.app",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Vary": "Origin"
-};
+});
 
 const PACKAGE_PRICES: Record<string, number> = {
   "Basic": 299, "Basic Package": 299,
@@ -29,7 +36,7 @@ const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
     status,
-    headers: { ...corsHeaders, "Content-Type": "application/json", "Cache-Control": "no-store" }
+    headers: { ...corsHeadersFor(null), "Content-Type": "application/json", "Cache-Control": "no-store" }
   });
 
 function validBuyer(data: Record<string, unknown>) {
@@ -55,6 +62,7 @@ async function findReferrer(referral: string) {
 }
 
 Deno.serve(async (req: Request) => {
+  const corsHeaders = corsHeadersFor(req.headers.get("origin"));
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ ok: false, error: "Method not allowed." }, 405);
 
