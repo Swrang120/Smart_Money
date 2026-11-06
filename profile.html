@@ -344,7 +344,8 @@
             .eq("user_id", currentUser.id)
             .limit(10);
           hasPendingPayment = Array.isArray(pendingRows) && pendingRows.some(row =>
-            ["pending","submitted","under review"].includes(String(row.status || row.payment_status || "").toLowerCase())
+            ["pending","submitted","under review"].includes(String(row.status || "").toLowerCase()) ||
+            ["pending","submitted","under review"].includes(String(row.payment_status || "").toLowerCase())
           );
         } catch (lookupError) {
           console.warn("Pending payment lookup unavailable:", lookupError);
