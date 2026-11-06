@@ -125,8 +125,9 @@ const SUPABASE_PUBLISHABLE_KEY="sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 
 const params=new URLSearchParams(location.search);
+const PACKAGE_PRICES={"Starter":289,"Starter Package":289,"Intermediate":560,"Intermediate Package":560,"Expert":1149,"Expert Package":1149,"Master":2499,"Master Package":2499,"Brahmastra":5499,"Brahmastra Package":5499,"Premium Pro":10997,"Premium Pro Package":10997};
 const pkgName=params.get("name")||params.get("package")||"Starter Package";
-const pkgPrice=params.get("price")||"289";
+const pkgPrice=Number(String(params.get("price")||PACKAGE_PRICES[pkgName]||"").replace(/[₹,\\s]/g,""));
 const refFromUrl=(params.get("ref")||"").trim();
 
 const $=id=>document.getElementById(id);
@@ -160,6 +161,10 @@ function showNotice(msg){
   topNotice.style.display="block";
 }
 function hideNotice(){topNotice.style.display="none";topNotice.textContent="";}
+if(!Object.prototype.hasOwnProperty.call(PACKAGE_PRICES,pkgName)||PACKAGE_PRICES[pkgName]!==pkgPrice){
+  showNotice("Invalid package or price. Please return to the package selection page and choose a valid package.");
+  proceedBtn.disabled=true;
+}
 
 /* ---------------------------------------------------------
    REFERRAL LOOKUP
