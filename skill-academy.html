@@ -9,8 +9,8 @@ main{padding:24px 0 60px}.grid{display:grid;grid-template-columns:repeat(auto-fi
 </style></head><body>
 <header><div class="wrap"><div class="top"><div><div class="brand">SMART MONEY • SKILL ACADEMY</div><h1>सीखें • अभ्यास करें • आगे बढ़ें</h1><p class="muted">27+ कौशल कोर्स • आसान हिंदी पाठ • अभ्यास प्रोजेक्ट</p></div><div class="top-actions"><a class="support-chip support-link" href="mailto:smartmoneysupport1@gmail.com">✉ Support</a><span id="academyUserChip" class="support-chip hidden" style="font-size:12px"><img id="academyUserAvatar" alt="" style="width:26px;height:26px;border-radius:50%;object-fit:cover;display:none"><span id="academyUserLabel"></span></span><button id="academyLogoutBtn" class="btn btn-secondary hidden" type="button">Sign out</button><button id="meetingButton" class="btn btn-secondary hidden" type="button" onclick="toggleMeetingRoom()">🎥 Meeting Room</button><a class="btn btn-secondary" href="dashboard.html">← Dashboard</a></div></div></div></header>
 <aside id="meetingDrawer" class="meeting-drawer" aria-hidden="true"><div class="drawer-head"><div><span class="brand">SMART MONEY</span><h2>🎥 Meeting Room</h2><p class="muted">आगामी क्लास और मीटिंग लिंक</p></div><button class="btn btn-secondary" type="button" onclick="toggleMeetingRoom(false)">✕</button></div><div id="meetings" class="meeting-list"><div class="empty">मीटिंग लोड हो रही हैं…</div></div></aside><div id="drawerOverlay" class="drawer-overlay" onclick="toggleMeetingRoom(false)"></div><main class="wrap">
-<section id="academyAuthGate" class="card" style="max-width:560px;margin:38px auto;text-align:center;padding:28px 22px"><div class="brand">SMART MONEY • SECURE ACADEMY ACCESS</div><div style="font-size:42px;margin:12px 0">🔐</div><h2 style="color:#ffe39a;margin:8px 0">Skill Academy में आपका स्वागत है</h2><p class="muted">कोर्स और पाठ देखने के लिए अपने Google account से सुरक्षित रूप से साइन in करें।</p><button id="googleSignInBtn" type="button" style="width:100%;max-width:340px;margin:12px auto;background:#fff;color:#202124;border:1px solid #dadce0;padding:13px 18px;border-radius:10px;font-size:15px">G&nbsp; Google से Sign in करें</button><p id="authMessage" class="muted" role="status" aria-live="polite">आपका Academy access सुरक्षित रहेगा।</p></section>
-<section id="academyPackageDenied" class="card hidden" style="max-width:650px;margin:38px auto;padding:30px 24px;text-align:center;border:1px solid #b88f42;background:linear-gradient(145deg,#101a32,#182846)"><div style="font-size:42px;margin-bottom:10px">🔒</div><div class="brand">SMART MONEY • MEMBER ACCESS</div><h2 style="color:#ffe39a;margin:10px 0">Skill Academy पैकेज सदस्यों के लिए है</h2><p class="muted">आपका Google sign-in सफल हुआ है, लेकिन आपके Smart Money खाते में अभी कोई सक्रिय पैकेज दिखाई नहीं दे रहा। Academy के कोर्स देखने के लिए पहले Smart Money Dashboard से पैकेज खरीदें और उसके सक्रिय होने की पुष्टि होने दें।</p><a class="btn" href="https://smart-money-navy.vercel.app/" style="display:inline-block;margin:12px 6px">Smart Money Dashboard खोलें ↗</a><p class="muted" style="font-size:12px">यदि आपने पहले ही पैकेज खरीदा है, तो उसी Smart Money खाते में दर्ज ईमेल से Google sign-in करें। पैकेज सक्रिय होने के बाद दोबारा Academy खोलें।</p></section>
+<section id="academyAuthGate" class="card" style="max-width:620px;margin:38px auto;text-align:center;padding:30px 22px;border:1px solid #b88f42;background:linear-gradient(145deg,#101a32,#182846)"><div class="brand">SMART MONEY • MEMBER ACCESS</div><div style="font-size:42px;margin:12px 0">🔐</div><h2 style="color:#ffe39a;margin:8px 0">Skill Academy सिर्फ Active Dashboard Members के लिए</h2><p class="muted">Academy में अलग से कोई Google या नया login नहीं है। पहले Smart Money के अपने registered ID और password से login करें। Admin approval के बाद आपका Dashboard active होना चाहिए। उसी active account से Academy खुलेगी।</p><a class="btn" href="login.html?next=skill-academy.html" style="display:inline-block;margin:12px 6px">Smart Money ID से Login करें ↗</a><p id="authMessage" class="muted" role="status" aria-live="polite">आपका मौजूदा Smart Money login session जांचा जा रहा है।</p></section>
+<section id="academyPackageDenied" class="card hidden" style="max-width:650px;margin:38px auto;padding:30px 24px;text-align:center;border:1px solid #bd3038;background:linear-gradient(145deg,#101a32,#182846)"><div style="font-size:42px;margin-bottom:10px">🔒</div><div class="brand">SMART MONEY • ACCOUNT NOT ACTIVE</div><h2 style="color:#ffe39a;margin:10px 0">आपका Dashboard अभी Active नहीं है</h2><p class="muted">Academy access तभी खुलेगा जब आपका Smart Money account Admin द्वारा approve हो और Dashboard active हो। अपने registered ID से login करके account status देखें। अगर आपने approval का इंतजार किया है, तो Smart Money Support से संपर्क करें।</p><a class="btn" href="login.html" style="display:inline-block;margin:12px 6px">Smart Money Login खोलें ↗</a></section>
 <div id="academyContent" class="hidden">
 <div class="notice">यहां उपलब्ध कोर्स और प्रकाशित पाठ देखें। किसी भी कोर्स से कमाई या नौकरी की गारंटी नहीं होती; वास्तविक प्रोजेक्ट उपलब्धता और गुणवत्ता पर निर्भर करते हैं।</div>
 <section id="courseSection"><h2>📚 Skill Courses</h2><div id="courses" class="grid"><div class="empty">कोर्स लोड हो रहे हैं…</div></div></section>
@@ -27,38 +27,37 @@ const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
 const authGate=document.getElementById("academyAuthGate");
 const academyContent=document.getElementById("academyContent");
 const authMessage=document.getElementById("authMessage");
-const googleSignInBtn=document.getElementById("googleSignInBtn");
 const academyLogoutBtn=document.getElementById("academyLogoutBtn");
 let academyBootstrapped=false;
 async function showAcademyUser(user){
- const meta=user?.user_metadata||{};
- const name=meta.full_name||meta.name||user?.email||"Google User";
- const avatar=meta.avatar_url||meta.picture||"";
+ const {data:profile,error}=await sb.from("profiles").select("user_id,full_name,email,profile_pic,is_active,is_deleted,package_name").eq("user_id",user.id).maybeSingle();
+ const eligible=!error&&profile&&profile.is_active===true&&profile.is_deleted!==true&&String(profile.package_name||"").trim().length>0;
+ if(!eligible){
+  academyBootstrapped=false;
+  authGate.classList.add("hidden");
+  academyContent.classList.add("hidden");
+  document.getElementById("academyPackageDenied").classList.remove("hidden");
+  document.getElementById("academyUserChip").classList.add("hidden");
+  academyLogoutBtn.classList.add("hidden");
+  document.getElementById("meetingButton").classList.add("hidden");
+  document.getElementById("courses").innerHTML="";
+  document.getElementById("lessons").innerHTML="";
+  stopLessonAudio();
+  closeAcademyMeetingIfOpen();
+  authMessage.textContent=error?"आपके Dashboard की स्थिति verify नहीं हो सकी। कृपया बाद में कोशिश करें।":"";
+  return;
+ }
+ const name=profile.full_name||profile.email||user.email||"Smart Money Member";
  document.getElementById("academyUserLabel").textContent=name;
  const img=document.getElementById("academyUserAvatar");
- if(avatar){img.src=avatar;img.style.display="block"}else{img.removeAttribute("src");img.style.display="none"}
+ if(profile.profile_pic){img.src=profile.profile_pic;img.style.display="block"}else{img.removeAttribute("src");img.style.display="none"}
  document.getElementById("academyUserChip").classList.remove("hidden");
  academyLogoutBtn.classList.remove("hidden");
  authGate.classList.add("hidden");
- academyContent.classList.add("hidden");
  document.getElementById("academyPackageDenied").classList.add("hidden");
- document.getElementById("meetingButton").classList.add("hidden");
- authMessage.textContent="आपके Smart Money पैकेज की स्थिति जांची जा रही है…";
- const {data:eligible,error}=await sb.rpc("has_active_sm_package");
- if(error||eligible!==true){
-   academyBootstrapped=false;
-   document.getElementById("academyPackageDenied").classList.remove("hidden");
-   authMessage.textContent=error?"पैकेज की पुष्टि अभी नहीं हो सकी। सुरक्षा के लिए Academy access रोका गया है।":"";
-   document.getElementById("courses").innerHTML="";
-   document.getElementById("lessons").innerHTML="";
-   stopLessonAudio();
-   closeAcademyMeetingIfOpen();
-   console.warn("Academy package eligibility check failed or user has no active package",error||"not eligible");
-   return;
- }
  document.getElementById("meetingButton").classList.remove("hidden");
  academyContent.classList.remove("hidden");
- authMessage.textContent="आपका सक्रिय Smart Money पैकेज सत्यापित हो गया है।";
+ authMessage.textContent="आपका Active Smart Money Dashboard सत्यापित हो गया है।";
  if(!academyBootstrapped){academyBootstrapped=true;load()}
 }
 function hideAcademyUser(){
@@ -75,14 +74,6 @@ function hideAcademyUser(){
  closeAcademyMeetingIfOpen();
 }
 function closeAcademyMeetingIfOpen(){const drawer=document.getElementById("meetingDrawer");if(drawer?.classList.contains("open"))toggleMeetingRoom(false)}
-async function signInWithGoogle(){
- authMessage.textContent="Google sign-in खोला जा रहा है…";
- googleSignInBtn.disabled=true;
- const redirectTo=window.location.origin+window.location.pathname+window.location.search;
- const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo,queryParams:{prompt:"select_account"}}});
- if(error){authMessage.textContent="Google sign-in शुरू नहीं हुआ: "+error.message;googleSignInBtn.disabled=false}
-}
-googleSignInBtn.addEventListener("click",signInWithGoogle);
 academyLogoutBtn.addEventListener("click",async()=>{
  academyLogoutBtn.disabled=true;
  const {error}=await sb.auth.signOut();
@@ -94,7 +85,7 @@ async function initializeAcademyAuth(){
  const {data,error}=await sb.auth.getSession();
  if(error){authMessage.textContent="Session जांच नहीं हो सकी: "+error.message;return}
  if(data.session?.user)showAcademyUser(data.session.user);
- else {hideAcademyUser();authMessage.textContent="कोर्स और पाठ देखने के लिए Google से sign in करें।"}
+ else {hideAcademyUser();authMessage.textContent="पहले Smart Money के registered ID और password से login करें।"}
  sb.auth.onAuthStateChange((_event,session)=>{
    if(session?.user)showAcademyUser(session.user);
    else hideAcademyUser();
