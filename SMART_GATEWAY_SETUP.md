@@ -7,7 +7,6 @@ This branch adds a gated Smart Gateway checkout option. The existing Razorpay/ma
 Set these as encrypted Production variables:
 
 - `SMART_GATEWAY_API_URL`: public payment API origin for the deployed SMART_GATEWAY_ project (not the checkout portal URL).
-- `SMART_GATEWAY_MERCHANT_ID`: merchant UUID provisioned for Smart Money in the gateway.
 - `SMART_GATEWAY_API_KEY`: server-side merchant API key.
 - `SMART_GATEWAY_WEBHOOK_SECRET`: matching merchant webhook signing secret.
 - `SUPABASE_URL`: existing Smart Money Supabase project URL.
@@ -29,8 +28,8 @@ Apply `supabase/migrations/202611060005_smart_gateway_payment_ids.sql` to the Sm
 
 ## Final activation checklist
 
-1. Provision the dedicated Smart Money merchant in the Gateway and configure its UPI receiving account.
-2. Configure all six server-side environment variables above.
+1. Configure the Gateway project variables `SMART_MONEY_GATEWAY_API_KEY`, `SMART_MONEY_GATEWAY_WEBHOOK_SECRET`, and `SMART_MONEY_GATEWAY_WEBHOOK_URL`; the first-party merchant UUID is provisioned by the Gateway code. Configure a persistent database and an active UPI receiving account for that merchant.
+2. Configure the five server-side environment variables above. The merchant UUID is already fixed in the integration to the Smart Money first-party merchant provisioned by the Gateway repository.
 3. Apply the SQL migration.
 4. Send a test webhook and verify invalid signatures are rejected.
 5. Run one low-value end-to-end UPI payment and reconcile it against a bank statement.
