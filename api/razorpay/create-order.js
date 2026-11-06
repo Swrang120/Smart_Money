@@ -12,8 +12,8 @@ const PACKAGES = {
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
-  const keyId = process.env.RAZORPAY_KEY_ID || process.env.LIVE_KEY_ID;
-  const keySecret = process.env.RAZORPAY_KEY_SECRET || process.env.LIVE_SECRET_API;
+  const keyId = process.env.RAZORPAY_KEY_ID || process.env.LIVE_KEY_ID || process.env.LIVE_API_KEY;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET || process.env.LIVE_SECRET_API || process.env.LIVE_SECRET_KEY;
   if (!keyId || !keySecret) return res.status(503).json({ error: "Razorpay is not configured. Add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in Vercel." });
 
   try {
@@ -25,7 +25,7 @@ module.exports = async function handler(req, res) {
     const cleanMobile = String(mobile || "").trim();
     const cleanReferral = String(referralCode || "").trim();
     if (cleanName.length < 2 || cleanName.length > 80) return res.status(400).json({ error: "Enter a valid full name." });
-    if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(cleanEmail)) return res.status(400).json({ error: "Enter a valid email address." });
+    if (!/^[^\s@]+@[^\s@]+\\.[^\s@]+$/.test(cleanEmail)) return res.status(400).json({ error: "Enter a valid email address." });
     if (!/^[0-9]{10}$/.test(cleanMobile)) return res.status(400).json({ error: "Enter a valid 10-digit mobile number." });
     if (!/^SM-smart[a-zA-Z0-9]+$/i.test(cleanReferral)) return res.status(400).json({ error: "Enter a valid referral ID." });
 
