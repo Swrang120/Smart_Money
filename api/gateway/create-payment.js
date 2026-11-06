@@ -15,7 +15,9 @@ function config() {
   return {
     apiUrl: (process.env.SMART_GATEWAY_API_URL || "").replace(/\\/+$/, ""),
     merchantId: process.env.SMART_GATEWAY_MERCHANT_ID || "",
-    apiKey: process.env.SMART_GATEWAY_API_KEY || ""
+    apiKey: process.env.SMART_GATEWAY_API_KEY || "",
+    supabaseUrl: (process.env.SUPABASE_URL || "").replace(/\\/+$/, ""),
+    serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || ""
   };
 }
 
@@ -30,7 +32,7 @@ module.exports = async function handler(req, res) {
   }
 
   const c = config();
-  if (!c.apiUrl || !c.merchantId || !c.apiKey) {
+  if (!c.apiUrl || !c.merchantId || !c.apiKey || !c.supabaseUrl || !c.serviceRoleKey) {
     return json(res, 503, { ok: false, error: "Smart Gateway is not configured yet." });
   }
 
@@ -53,6 +55,23 @@ module.exports = async function handler(req, res) {
         !/^SM-smart[a-zA-Z0-9]+$/i.test(referral)) {
       return json(res, 400, { ok: false, error: "Buyer details or referral code are invalid." });
     }
+
+    const dbHeaders = { apikey: c.serviceRoleKey, Authorization: "Bearer " + c.serviceRoleKey };
+    const dbBase = c.supabaseUrl + "/rest/v1/";
+    async function dbGet(path) {
+      const response = await fetch(dbBase + path, { headers: dbHeaders, signal: AbortSignal.timeout(10000) });
+      const rows = await response.json().catch(() => []);
+      if (!response.ok) throw new Error("Buyer preflight verification failed.");
+      return rows;
+    }
+    const referralRows = await dbGet("profiles?select=user_id&or=" + encodeURIComponent("(referral_code.eq." + referral + ",referral_id.eq." + referral + ")") + "&limit=1");
+    if (!referralRows.length) return json(res, 400, { ok: false, error: "Referral code was not found." });
+    const emailRows = await dbGet("profiles?select=user_id&email=ilike." + encodeURIComponent(email) + "&limit=1");
+    if (emailRows.length) return json(res, 409, { ok: false, error: "An account already exists for this email." });
+    const mobileRows = await dbGet("profiles?select=user_id&mobile=eq." + encodeURIComponent(mobile) + "&limit=1");
+    if (mobileRows.length) return json(res, 409, { ok: false, error: "An account already exists for this mobile number." });
+    const pendingRows = await dbGet("payment_requests?select=id&email=ilike." + encodeURIComponent(email) + "&or=" + encodeURIComponent("(status.eq.Pending,payment_status.eq.Pending,status.eq.Approved,payment_status.eq.Approved)") + "&limit=1");
+    if (pendingRows.length) return json(res, 409, { ok: false, error: "A payment request for this email is already pending or approved." });
 
     const origin = "https://smart-money-navy.vercel.app";
     const orderId = "SM-" + require("crypto").randomUUID();
