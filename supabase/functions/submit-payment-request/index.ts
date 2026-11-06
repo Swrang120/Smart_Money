@@ -138,6 +138,21 @@ Deno.serve(async (req: Request) => {
     if (profileError) throw profileError;
     if (existingProfile) return json({ ok: false, error: "An account already exists for this email. Please use the login page." }, 409);
 
+    const { data: existingRequest, error: existingRequestError } = await admin
+      .from("payment_requests")
+      .select("id,status,payment_status")
+      .ilike("email", email)
+      .or("status.eq.Pending,payment_status.eq.Pending,status.eq.Approved,payment_status.eq.Approved")
+      .limit(1)
+      .maybeSingle();
+    if (existingRequestError) throw existingRequestError;
+    if (existingRequest) return json({ ok: false, error: "A payment request for this email is already pending or approved. Please contact support if you need help." }, 409);
+
+    const { data: existingMobileProfile, error: mobileProfileError } = await admin
+      .from("profiles").select("user_id").eq("mobile", mobile).limit(1).maybeSingle();
+    if (mobileProfileError) throw mobileProfileError;
+    if (existingMobileProfile) return json({ ok: false, error: "An account already exists for this mobile number." }, 409);
+
     if (method === "upi" && transactionId) {
       const { data: duplicateUtr, error: duplicateError } = await admin
         .from("payment_requests").select("id").eq("transaction_id", transactionId).limit(1).maybeSingle();
