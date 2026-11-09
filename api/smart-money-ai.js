@@ -25,22 +25,14 @@ ANSWERING RULES:
 const allowed = new Set(["payment","login","package","commission","course","withdrawal","general"]);
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
-  const origin = String(req.headers.origin || "");
-  // Allow the public GitHub Pages site, stable production aliases, and this
-  // project's Vercel deployment URLs. Do not use wildcard CORS with bearer auth.
-  const allowedOrigins = new Set([
-    "https://swrang120.github.io",
-    "https://smart-money-navy.vercel.app",
-    "https://smart-money-swrang120.vercel.app"
-  ]);
-  const isSmartMoneyVercelPreview = /^https:\/\/smart-money-[a-z0-9-]+-swrang120\.vercel\.app$/i.test(origin);
-  if (allowedOrigins.has(origin) || isSmartMoneyVercelPreview) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-    res.setHeader("Vary", "Origin");
-    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.setHeader("Access-Control-Max-Age", "86400");
-  }
+  // This API authenticates every request with the caller's Supabase bearer token.
+  // CORS is not an authorization boundary; allow browser clients hosted on the
+  // user's GitHub Pages and Vercel aliases (including future custom domains).
+  // No cookies/credentials are used by this endpoint.
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Max-Age", "86400");
   if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   const apiKey = process.env.OPEN_AI_API_KEY;
