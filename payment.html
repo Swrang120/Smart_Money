@@ -15,6 +15,12 @@
 <body>
 <div class="card">
 <div class="brand">SMART MONEY</div><h2>Complete Your Payment</h2><div id="sub">Scan QR or tap Pay Now</div><div id="price" class="price">₹289</div>
+<div id="smartGatewayPanel" style="display:none;margin-top:18px;padding:18px;border:1px solid #86efac;border-radius:18px;background:linear-gradient(145deg,#f0fdf4,#eff6ff);text-align:center">
+<div style="font-weight:800;font-size:16px;color:#166534">🔐 Pay securely with Smart Gateway</div>
+<p style="font-size:12px;line-height:1.6;color:#64748b;margin:8px 0 14px">Secure hosted checkout. Your payment request enters admin review only after bank-statement reconciliation.</p>
+<button id="smartGatewayPay" type="button" class="submit" style="margin-top:0;background:linear-gradient(135deg,#16a34a,#047857)">Continue to Smart Gateway</button>
+<div id="smartGatewayStatus" class="status" style="text-align:left"></div>
+</div>
 <div id="razorpayPanel" style="margin-top:20px;padding:18px;border:1px solid #c4b5fd;border-radius:18px;background:linear-gradient(145deg,#faf5ff,#f0fdfa);text-align:center">
 <div style="font-weight:800;font-size:16px;color:#312e81">💳 Pay securely with Razorpay</div>
 <p style="font-size:12px;line-height:1.6;color:#64748b;margin:8px 0 14px">UPI, cards and other payment methods supported by your Razorpay checkout. Payment will be verified before your request is submitted.</p>
@@ -69,6 +75,43 @@ if(!validCheckout){
 }
 document.getElementById("price").innerText="₹"+pkgPrice;document.getElementById("sub").innerText=pkgName+" ke liye exact payment karein";
 document.getElementById("razorpayAmount").textContent=Number(pkgPrice).toLocaleString("en-IN");
+const gatewayReturn=new URLSearchParams(location.search).get("gateway_return");
+if(gatewayReturn==="1"){
+ const box=document.getElementById("smartGatewayStatus");
+ box.textContent="Gateway checkout se wapas aaye hain. UPI payment bank statement se reconcile hone ke baad hi request admin review mein jayegi. Kripya dobara payment na karein.";
+ box.className="status show info";
+ document.getElementById("smartGatewayPanel").style.display="block";
+}
+(async function checkSmartGatewayAvailability(){
+ try{
+  const response=await fetch("/api/gateway/create-payment",{method:"GET",cache:"no-store"});
+  const data=await response.json();
+  if(response.ok&&data.enabled)document.getElementById("smartGatewayPanel").style.display="block";
+ }catch(error){console.warn("Smart Gateway availability check failed.");}
+})();
+document.getElementById("smartGatewayPay").addEventListener("click",startSmartGatewayPayment);
+async function startSmartGatewayPayment(){
+ const btn=document.getElementById("smartGatewayPay"),box=document.getElementById("smartGatewayStatus");
+ const show=(message,ok=false)=>{box.textContent=message;box.className="status show "+(ok?"ok":"err");};
+ if(!validCheckout){show("Checkout details are invalid. Please restart checkout.");return;}
+ btn.disabled=true;btn.textContent="Connecting to Smart Gateway…";
+ try{
+  const response=await fetch("/api/gateway/create-payment",{
+   method:"POST",headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({package_name:pkgName,amount:Number(pkgPrice),buyer:{
+    full_name:fullName,email,mobile,referral_id:refCode
+   }})
+  });
+  const result=await response.json().catch(()=>({}));
+  if(!response.ok||!result.ok||!result.checkoutUrl)throw new Error(result.error||"Smart Gateway checkout could not be started.");
+  sessionStorage.setItem("smart_gateway_order_id",result.orderId);
+  location.assign(result.checkoutUrl);
+ }catch(error){
+  show(error.message||"Smart Gateway connection failed.");
+  btn.disabled=false;btn.textContent="Try Smart Gateway again";
+ }
+}
+
 document.getElementById("razorpayPay").innerHTML='Pay ₹'+Number(pkgPrice).toLocaleString("en-IN")+' with Razorpay';
 document.getElementById("manualToggle").addEventListener("click",function(){
  const box=document.getElementById("manualPayment"),shown=box.style.display!=="none";
