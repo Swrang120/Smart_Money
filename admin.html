@@ -1145,6 +1145,125 @@ td{
 #packageImageCurrentPreview{width:100%;max-height:260px;min-height:90px;object-fit:contain;background:#080f27;border:1px solid var(--border);border-radius:10px;margin-top:10px}
 #packageImageUploadStatus{display:block!important;visibility:visible;white-space:normal;overflow-wrap:anywhere}
 
+
+
+/* =========================================================
+   SMART MONEY ADMIN — MOBILE-FIRST USABILITY PATCH
+   Keeps all existing admin controls and handlers intact.
+========================================================= */
+html { -webkit-text-size-adjust:100%; }
+body, button, input, select, textarea { -webkit-tap-highlight-color:transparent; }
+button, .btn, .filter-btn, .tab-pill, a {
+  touch-action:manipulation;
+}
+button, .btn, .filter-btn, .tab-pill {
+  min-height:40px;
+}
+input, select, textarea {
+  font-size:16px;
+  max-width:100%;
+}
+.header {
+  min-height:62px;
+  padding:10px clamp(12px,2vw,22px);
+  gap:10px;
+}
+.header-actions { flex-shrink:0; }
+.menu-btn, .refresh-btn, .logout-btn {
+  min-height:42px;
+  padding:10px 13px;
+}
+.container {
+  width:min(1440px, calc(100% - 32px));
+  padding:22px 0 72px;
+}
+.section { min-width:0; }
+.table-box {
+  width:100%;
+  max-width:100%;
+  overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+}
+.table-box table { min-width:900px; }
+th, td { padding:13px 12px; }
+td .btn { white-space:nowrap; }
+.sidebar {
+  width:min(360px, 88vw);
+  max-width:88vw;
+  padding:18px 16px calc(28px + env(safe-area-inset-bottom));
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  z-index:1200;
+}
+.overlay { z-index:1190; }
+.modal { padding:12px; }
+.modal-box {
+  width:min(900px,100%);
+  max-height:calc(100dvh - 24px);
+  padding:16px;
+  overscroll-behavior:contain;
+}
+.user-search-box { align-items:stretch; }
+.user-search-box input { min-width:0; width:100%; }
+button:focus-visible, input:focus-visible, select:focus-visible,
+textarea:focus-visible, a:focus-visible {
+  outline:2px solid #a5b4fc;
+  outline-offset:2px;
+}
+@media (max-width:768px) {
+  .header { position:sticky; top:0; z-index:1100; }
+  .logo { font-size:17px; }
+  .header-actions { gap:6px; }
+  .refresh-btn, .logout-btn, .menu-btn {
+    padding:9px 10px;
+    min-width:42px;
+  }
+  .container {
+    width:calc(100% - 24px);
+    padding-top:16px;
+  }
+  .stats {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .stat-card { padding:14px; min-width:0; }
+  .stat-card h3 { font-size:12px; line-height:1.35; }
+  .stat-card p { font-size:23px; }
+  .section { margin-bottom:28px; }
+  .section-title { align-items:flex-start; gap:10px; }
+  .filters, .tab-pill-box { gap:7px; }
+  .filter-btn, .tab-pill {
+    min-height:42px;
+    padding:10px 13px;
+  }
+  .user-search-box { flex-direction:column; padding:12px; }
+  .user-search-box input { width:100%; min-height:44px; }
+  .user-search-box button { min-height:44px; }
+  .table-box { border-radius:12px; }
+  .table-box table { min-width:820px; }
+  th, td { padding:12px 10px; }
+  .btn { min-height:40px; padding:9px 11px; margin:3px 2px; }
+  .edit-grid, .cert-layout { grid-template-columns:1fr; }
+  .edit-grid .full { grid-column:auto; }
+  .sidebar { top:0; height:100dvh; }
+}
+@media (max-width:380px) {
+  .stats { grid-template-columns:1fr; }
+  .header { gap:6px; }
+  .logo { font-size:15px; }
+  .refresh-btn, .logout-btn, .menu-btn { padding:8px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  *, *::before, *::after {
+    scroll-behavior:auto !important;
+    transition-duration:.01ms !important;
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+  }
+}
+
 </style>  
   
 <style id="smartMoneyNetworkUiStyles">
