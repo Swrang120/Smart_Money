@@ -8163,9 +8163,9 @@ window.addEventListener(
 <button id="smHelpLauncher" type="button" aria-controls="smHelpPanel" aria-expanded="false">💬 Smart Money Help</button>
 <section id="smHelpPanel" aria-label="Smart Money customer support">
  <header id="smHelpHead"><div><strong>🤖 Smart Money Help Desk</strong><small>Official customer support</small></div><button id="smHelpClose" type="button" aria-label="Close">×</button></header>
- <div id="smHelpMessages" aria-live="polite"><div class="sm-help-msg">Namaste! Welcome to Smart Money Support. 👋\nApni problem likhiye ya neeche diye gaye topic ko select kijiye.\n\nMain Smart Money ki AI support guide hoon. Main aapki query samjha kar ticket bana sakta hoon; account approvals aur changes Admin hi karega.</div></div>
+ <div id="smHelpMessages" aria-live="polite"><div class="sm-help-msg">Namaste! Welcome to Smart Money Support. 👋\nApni problem likhiye ya neeche diye gaye topic ko select kijiye.\n\nMain Smart Money ki AI support guide hoon. Main aapki query ka jawab dunga aur zarurat par support ticket Smart Money Team ko review ke liye bhejunga.</div></div>
  <div id="smHelpQuick"><button type="button" data-topic="Payment / transaction problem">💳 Payment</button><button type="button" data-topic="Login / account problem">🔐 Login</button><button type="button" data-topic="Package activation problem">📦 Package</button><button type="button" data-topic="Commission / referral problem">👥 Commission / Referral</button><button type="button" data-topic="Course access problem">🎓 Course</button><button type="button" data-topic="Withdrawal problem">🏦 Withdrawal</button></div>
- <div id="smHelpStatus">AI guidance only • Payment, withdrawal, package aur account changes sirf Admin karega.</div>
+ <div id="smHelpStatus">AI support guide • Account aur payment requests Smart Money Team review karti hai.</div>
  <form id="smHelpForm"><input id="smHelpInput" maxlength="1200" autocomplete="off" placeholder="Apni problem yahan likhein…" aria-label="Describe your issue"><button id="smHelpSend" type="submit">Send</button></form>
 </section>
 <script>
@@ -8197,7 +8197,7 @@ window.addEventListener(
    if(!response.ok)throw new Error(result.error||'AI support is temporarily unavailable.');
    add(result.reply,'bot');
    add(result.ticketSaved?'✅ Your support ticket has been saved. Ticket ID: '+result.ticketId:'Your AI reply is ready. Please contact the support team if the issue needs account-specific review.','bot');
-   status.textContent='AI guidance only • Human admin handles account changes and approvals.';
+   status.textContent='AI support guide • Smart Money Team handles account-specific reviews and approvals.';
   }catch(err){
    add(err.message||'Support could not process this request. Please try again.','bot');
    const subject=encodeURIComponent('Smart Money Support Request');
