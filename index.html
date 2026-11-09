@@ -8163,9 +8163,9 @@ window.addEventListener(
 <button id="smHelpLauncher" type="button" aria-controls="smHelpPanel" aria-expanded="false">💬 Smart Money Help</button>
 <section id="smHelpPanel" aria-label="Smart Money customer support">
  <header id="smHelpHead"><div><strong>🤖 Smart Money Help Desk</strong><small>Official customer support</small></div><button id="smHelpClose" type="button" aria-label="Close">×</button></header>
- <div id="smHelpMessages" aria-live="polite"><div class="sm-help-msg">Namaste! Welcome to Smart Money Support. 👋\nApni problem likhiye ya neeche diye gaye topic ko select kijiye.\n\nMain abhi guided support mode mein hoon. Account aur payment ki live AI checking agle phase mein connect ki jayegi.</div></div>
+ <div id="smHelpMessages" aria-live="polite"><div class="sm-help-msg">Namaste! Welcome to Smart Money Support. 👋\nApni problem likhiye ya neeche diye gaye topic ko select kijiye.\n\nMain Smart Money ki AI support guide hoon. Main aapki query samjha kar ticket bana sakta hoon; account approvals aur changes Admin hi karega.</div></div>
  <div id="smHelpQuick"><button type="button" data-topic="Payment / transaction problem">💳 Payment</button><button type="button" data-topic="Login / account problem">🔐 Login</button><button type="button" data-topic="Package activation problem">📦 Package</button><button type="button" data-topic="Commission / referral problem">👥 Commission / Referral</button><button type="button" data-topic="Course access problem">🎓 Course</button><button type="button" data-topic="Withdrawal problem">🏦 Withdrawal</button></div>
- <div id="smHelpStatus">Phase 1 active: AI actions are disabled. Nothing will approve, change, block, or modify your account.</div>
+ <div id="smHelpStatus">AI guidance only • Payment, withdrawal, package aur account changes sirf Admin karega.</div>
  <form id="smHelpForm"><input id="smHelpInput" maxlength="1200" autocomplete="off" placeholder="Apni problem yahan likhein…" aria-label="Describe your issue"><button id="smHelpSend" type="submit">Send</button></form>
 </section>
 <script>
@@ -8177,13 +8177,34 @@ window.addEventListener(
  function add(text,who){const el=document.createElement('div');el.className='sm-help-msg'+(who==='user'?' sm-user':'');el.textContent=text;messages.appendChild(el);messages.scrollTop=messages.scrollHeight;}
  launcher.addEventListener('click',()=>panel.classList.contains('sm-open')?shut():open());close.addEventListener('click',shut);
  document.querySelectorAll('#smHelpQuick button').forEach(b=>b.addEventListener('click',()=>{input.value=b.dataset.topic+' — ';input.focus();}));
- form.addEventListener('submit',e=>{
-  e.preventDefault();const issue=input.value.trim();if(!issue)return;add(issue,'user');input.value='';
-  add('Aapki query note kar li gayi hai. Is first phase mein main account database ko live check nahi karta. Aap “Email Support” se apni details team ko bhej sakte hain.\n\nPayment/Login: smartmoneysupport1@gmail.com\nGeneral Help: Smsupport7@gmail.com','bot');
-  const subject=encodeURIComponent('Smart Money Support Request');
-  const body=encodeURIComponent('Hello Smart Money Support,\n\nMy issue:\n'+issue+'\n\nMy name:\nMy User ID:\nRegistered email:\nTransaction/Course ID (if any):\n\nPlease review and guide me.\n');
-  const old=messages.querySelector('[data-sm-email-actions]');if(old)old.remove();
-  const actions=document.createElement('div');actions.dataset.smEmailActions='1';actions.className='sm-help-msg';actions.innerHTML='<strong>Send this request to our team:</strong><br><a href="mailto:smartmoneysupport1@gmail.com?subject='+subject+'&body='+body+'">Payment / Login Support</a><br><a href="mailto:Smsupport7@gmail.com?subject='+subject+'&body='+body+'">General Support</a>';messages.appendChild(actions);messages.scrollTop=messages.scrollHeight;
+ let selectedCategory='general';
+ document.querySelectorAll('#smHelpQuick button').forEach(b=>b.addEventListener('click',()=>{
+   const topic=String(b.dataset.topic||'').toLowerCase();
+   selectedCategory=topic.includes('payment')?'payment':topic.includes('login')?'login':topic.includes('package')?'package':topic.includes('commission')||topic.includes('referral')?'commission':topic.includes('course')?'course':topic.includes('withdrawal')?'withdrawal':'general';
+   input.value=b.dataset.topic+' — ';input.focus();
+ }));
+ form.addEventListener('submit',async e=>{
+  e.preventDefault();const issue=input.value.trim();if(!issue)return;
+  add(issue,'user');input.value='';const send=document.getElementById('smHelpSend');send.disabled=true;send.textContent='…';
+  const status=document.getElementById('smHelpStatus');status.textContent='Smart Money AI is checking your question…';
+  try{
+   if(!window.supabase||!supabaseClient)throw new Error('Support connection is unavailable. Please contact support by email.');
+   const {data:sessionData}=await supabaseClient.auth.getSession();
+   const accessToken=sessionData?.session?.access_token;
+   if(!accessToken)throw new Error('Please log in to Smart Money first. Then reopen Smart Money Help.');
+   const response=await fetch('/api/smart-money-ai',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+accessToken},body:JSON.stringify({message:issue,category:selectedCategory})});
+   const result=await response.json();
+   if(!response.ok)throw new Error(result.error||'AI support is temporarily unavailable.');
+   add(result.reply,'bot');
+   add(result.ticketSaved?'✅ Your support ticket has been saved. Ticket ID: '+result.ticketId:'Your AI reply is ready. Please contact the support team if the issue needs account-specific review.','bot');
+   status.textContent='AI guidance only • Human admin handles account changes and approvals.';
+  }catch(err){
+   add(err.message||'Support could not process this request. Please try again.','bot');
+   const subject=encodeURIComponent('Smart Money Support Request');
+   const body=encodeURIComponent('Hello Smart Money Support,\n\nMy issue:\n'+issue+'\n\nPlease review and guide me.\n');
+   const actions=document.createElement('div');actions.className='sm-help-msg';actions.innerHTML='<strong>Email support:</strong><br><a href="mailto:smartmoneysupport1@gmail.com?subject='+subject+'&body='+body+'">Payment / Login Support</a><br><a href="mailto:Smsupport7@gmail.com?subject='+subject+'&body='+body+'">General Support</a>';messages.appendChild(actions);
+   status.textContent='AI unavailable • Email support is available.';
+  }finally{send.disabled=false;send.textContent='Send';messages.scrollTop=messages.scrollHeight;}
  });
 })();
 </script>
