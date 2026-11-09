@@ -101,9 +101,9 @@ async function startRazorpayPayment(){
   const options={
    key:order.keyId,amount:order.amount,currency:order.currency,order_id:order.orderId,
    name:"Smart Money",description:pkgName,
-   prefill:{name:fullName,email:email||user.email||"",contact:mobile},
+   prefill:{name:fullName,email,contact:mobile},
    theme:{color:"#7c3aed"},
-   notes:{package_name:pkgName,user_id:user.id},
+   notes:{package_name:pkgName},
    handler:async function(response){
     btn.textContent="Verifying payment…";
     try{
