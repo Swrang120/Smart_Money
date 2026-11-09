@@ -11,6 +11,20 @@ Keep answers concise and practical. Do not invent Smart Money policy, package ru
 const allowed = new Set(["payment","login","package","commission","course","withdrawal","general"]);
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
+  const origin = String(req.headers.origin || "");
+  const allowedOrigins = new Set([
+    "https://swrang120.github.io",
+    "https://smart-money-navy.vercel.app",
+    "https://smart-money-swrang120.vercel.app"
+  ]);
+  if (allowedOrigins.has(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader("Access-Control-Max-Age", "86400");
+  }
+  if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
   const apiKey = process.env.OPEN_AI_API_KEY;
   if (!apiKey) return res.status(503).json({ error: "AI service is not configured yet. Please try again later or contact support." });
