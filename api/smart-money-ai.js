@@ -26,12 +26,15 @@ const allowed = new Set(["payment","login","package","commission","course","with
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   const origin = String(req.headers.origin || "");
+  // Allow the public GitHub Pages site, stable production aliases, and this
+  // project's Vercel deployment URLs. Do not use wildcard CORS with bearer auth.
   const allowedOrigins = new Set([
     "https://swrang120.github.io",
     "https://smart-money-navy.vercel.app",
     "https://smart-money-swrang120.vercel.app"
   ]);
-  if (allowedOrigins.has(origin)) {
+  const isSmartMoneyVercelPreview = /^https:\/\/smart-money-[a-z0-9-]+-swrang120\.vercel\.app$/i.test(origin);
+  if (allowedOrigins.has(origin) || isSmartMoneyVercelPreview) {
     res.setHeader("Access-Control-Allow-Origin", origin);
     res.setHeader("Vary", "Origin");
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
