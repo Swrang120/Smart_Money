@@ -8140,20 +8140,51 @@ window.addEventListener(
 );
 </script>
 
-<script type="text/javascript">
-  (function(d, t) {
-      var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
-      v.onload = function() {
-        window.voiceflow.chat.load({
-          verify: { projectID: '6a9ad01472a012b700689563' },
-          url: 'https://general-runtime.voiceflow.com',
-          voice: {
-            url: "https://runtime-api.voiceflow.com"
-          }
-        });
-      }
-      v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
-  })(document, 'script');
+<!-- Smart Money's own support widget (Phase 1: branded help desk shell) -->
+<style>
+#smHelpLauncher{position:fixed;right:18px;bottom:18px;z-index:99990;border:0;border-radius:999px;padding:12px 17px;background:linear-gradient(120deg,#7137df,#315eea);color:#fff;font-weight:800;box-shadow:0 8px 26px #263a8a55;cursor:pointer}
+#smHelpPanel{position:fixed;right:16px;bottom:78px;width:min(370px,calc(100vw - 28px));height:min(590px,calc(100dvh - 112px));z-index:99991;background:#fff;border:1px solid #dfe4f2;border-radius:18px;box-shadow:0 18px 60px #101a3540;display:none;overflow:hidden;font-family:inherit;color:#172033}
+#smHelpPanel.sm-open{display:flex;flex-direction:column}
+#smHelpHead{padding:15px 16px;background:linear-gradient(120deg,#171d38,#303b72);color:#fff;display:flex;align-items:center;justify-content:space-between}
+#smHelpHead strong{display:block;font-size:15px}#smHelpHead small{opacity:.8;font-size:11px}
+#smHelpClose{border:0;background:#ffffff20;color:#fff;border-radius:9px;padding:6px 10px;font-size:18px}
+#smHelpMessages{padding:15px;overflow:auto;flex:1;background:#f6f8fd}
+.sm-help-msg{max-width:92%;padding:11px 12px;margin:0 0 10px;border-radius:13px;background:#fff;border:1px solid #e6eaf3;font-size:13px;line-height:1.5;white-space:pre-wrap}
+.sm-help-msg.sm-user{margin-left:auto;background:#e9eaff;border-color:#d9dcff}
+#smHelpStatus{padding:9px 14px;background:#fff3d9;color:#78520b;font-size:11px;line-height:1.4}
+#smHelpForm{display:flex;gap:8px;padding:11px;border-top:1px solid #e8ebf3;background:#fff}
+#smHelpInput{min-width:0;flex:1;border:1px solid #d9deea;border-radius:10px;padding:11px;font:inherit;font-size:13px}
+#smHelpSend{border:0;border-radius:10px;padding:0 14px;background:#6545dc;color:#fff;font-weight:700}
+#smHelpQuick{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 10px;background:#f6f8fd}
+#smHelpQuick button{border:1px solid #d9def0;background:#fff;border-radius:20px;padding:7px 9px;font-size:11px;color:#38436a}
+</style>
+<button id="smHelpLauncher" type="button" aria-controls="smHelpPanel" aria-expanded="false">💬 Smart Money Help</button>
+<section id="smHelpPanel" aria-label="Smart Money customer support">
+ <header id="smHelpHead"><div><strong>🤖 Smart Money Help Desk</strong><small>Official customer support</small></div><button id="smHelpClose" type="button" aria-label="Close">×</button></header>
+ <div id="smHelpMessages" aria-live="polite"><div class="sm-help-msg">Namaste! Welcome to Smart Money Support. 👋\nApni problem likhiye ya neeche diye gaye topic ko select kijiye.\n\nMain abhi guided support mode mein hoon. Account aur payment ki live AI checking agle phase mein connect ki jayegi.</div></div>
+ <div id="smHelpQuick"><button type="button" data-topic="Payment / transaction problem">💳 Payment</button><button type="button" data-topic="Login / account problem">🔐 Login</button><button type="button" data-topic="Package activation problem">📦 Package</button><button type="button" data-topic="Commission / referral problem">👥 Commission / Referral</button><button type="button" data-topic="Course access problem">🎓 Course</button><button type="button" data-topic="Withdrawal problem">🏦 Withdrawal</button></div>
+ <div id="smHelpStatus">Phase 1 active: AI actions are disabled. Nothing will approve, change, block, or modify your account.</div>
+ <form id="smHelpForm"><input id="smHelpInput" maxlength="1200" autocomplete="off" placeholder="Apni problem yahan likhein…" aria-label="Describe your issue"><button id="smHelpSend" type="submit">Send</button></form>
+</section>
+<script>
+(function(){
+ const launcher=document.getElementById('smHelpLauncher'),panel=document.getElementById('smHelpPanel'),close=document.getElementById('smHelpClose'),form=document.getElementById('smHelpForm'),input=document.getElementById('smHelpInput'),messages=document.getElementById('smHelpMessages');
+ if(!launcher||!panel||!form||!input||!messages)return;
+ function open(){panel.classList.add('sm-open');launcher.setAttribute('aria-expanded','true');input.focus();}
+ function shut(){panel.classList.remove('sm-open');launcher.setAttribute('aria-expanded','false');}
+ function add(text,who){const el=document.createElement('div');el.className='sm-help-msg'+(who==='user'?' sm-user':'');el.textContent=text;messages.appendChild(el);messages.scrollTop=messages.scrollHeight;}
+ launcher.addEventListener('click',()=>panel.classList.contains('sm-open')?shut():open());close.addEventListener('click',shut);
+ document.querySelectorAll('#smHelpQuick button').forEach(b=>b.addEventListener('click',()=>{input.value=b.dataset.topic+' — ';input.focus();}));
+ form.addEventListener('submit',e=>{
+  e.preventDefault();const issue=input.value.trim();if(!issue)return;add(issue,'user');input.value='';
+  add('Aapki query note kar li gayi hai. Is first phase mein main account database ko live check nahi karta. Aap “Email Support” se apni details team ko bhej sakte hain.\n\nPayment/Login: smartmoneysupport1@gmail.com\nGeneral Help: Smsupport7@gmail.com','bot');
+  const subject=encodeURIComponent('Smart Money Support Request');
+  const body=encodeURIComponent('Hello Smart Money Support,\n\nMy issue:\n'+issue+'\n\nMy name:\nMy User ID:\nRegistered email:\nTransaction/Course ID (if any):\n\nPlease review and guide me.\n');
+  const old=messages.querySelector('[data-sm-email-actions]');if(old)old.remove();
+  const actions=document.createElement('div');actions.dataset.smEmailActions='1';actions.className='sm-help-msg';actions.innerHTML='<strong>Send this request to our team:</strong><br><a href="mailto:smartmoneysupport1@gmail.com?subject='+subject+'&body='+body+'">Payment / Login Support</a><br><a href="mailto:Smsupport7@gmail.com?subject='+subject+'&body='+body+'">General Support</a>';messages.appendChild(actions);messages.scrollTop=messages.scrollHeight;
+ });
+})();
+</script>
 
 /* Load admin-published 24-hour statuses on the public homepage. */
 async function openPublicStatus(){
