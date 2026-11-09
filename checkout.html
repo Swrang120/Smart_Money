@@ -65,7 +65,7 @@ label.form-label,.form-group label{display:block;font-size:10px;font-weight:700;
   <div class="header">
     <div class="header-icon">🧾</div>
     <h1>Enter Your Details</h1>
-    <p>Enter your details. Your account is created only after payment approval.</p>
+    <p>Enter your details, verify your Gmail and set a password. Package access starts only after payment approval.</p>
   </div>
 
   <div id="topNotice" class="notice"></div>
@@ -98,7 +98,7 @@ label.form-label,.form-group label{display:block;font-size:10px;font-weight:700;
       </div>
 
       <div class="form-group">
-        <div class="password-note" style="font-size:12px;line-height:1.7">🔒 Your login account will be created only after your payment request is approved. You will receive a secure email invitation to set your password.</div>
+        <div class="password-note" style="font-size:12px;line-height:1.7">🔒 Verify your Gmail and create your password first. Your Smart Money package and dashboard access remain locked until payment approval.</div>
       </div>
     </div>
 
@@ -421,6 +421,9 @@ async function goToPayment(event){
     $("otpStep").classList.add("active");
     $("sendOtpBtn").disabled=false;
     $("sendOtpBtn").textContent="Send OTP";
+    $("verifyOtpBtn").disabled=false;
+    $("verifyOtpBtn").textContent="Verify OTP";
+    otpVerified=false;
     $("emailOtp").value="";
     $("passwordStep").style.display="none";
     status($("otpStatus"),"Send an OTP to verify this email address.","checking");
@@ -478,7 +481,7 @@ $("verifyOtpBtn").addEventListener("click",async()=>{
   status($("otpStatus"),"Gmail verified successfully.","success");$("passwordStep").style.display="block";$("newPassword").focus();
  }catch(e){status($("otpStatus"),e.message||"OTP verification failed.","error");$("verifyOtpBtn").disabled=false;$("verifyOtpBtn").textContent="Verify OTP";}
 });
-$("backStep1").addEventListener("click",()=>{$("otpStep").classList.remove("active");$("checkoutForm").style.display="block";});
+$("backStep1").addEventListener("click",()=>{otpVerified=false;$("otpStep").classList.remove("active");$("checkoutForm").style.display="block";});
 $("finishAccountBtn").addEventListener("click",async()=>{
  if(!otpVerified){status($("otpStatus"),"Verify your Gmail OTP first.","error");return;}
  const password=$("newPassword").value,confirm=$("confirmPassword").value;
