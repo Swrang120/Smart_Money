@@ -1684,37 +1684,108 @@ tbody tr:hover{background:rgba(57,55,112,.34)}
 </style>
 
 <style id="smart-money-admin-mobile-drawer-fix">
-/* Fix drawer geometry: it overlays the page and never pushes the dashboard sideways. */
-*,*::before,*::after{box-sizing:border-box}
-html,body{max-width:100%;overflow-x:hidden}
-#adminApp{width:100%;max-width:100%;overflow-x:clip}
-.sidebar{
- position:fixed!important;left:0!important;top:0!important;
- width:min(350px,86vw)!important;max-width:86vw!important;
- height:100vh;height:100dvh!important;
- box-sizing:border-box!important;
- transform:translate3d(-105%,0,0)!important;
- transition:transform .28s cubic-bezier(.2,.75,.25,1)!important;
- visibility:visible!important;pointer-events:none!important;
- z-index:1402!important;overflow-y:auto!important;overflow-x:hidden!important;
- padding-left:14px!important;padding-right:14px!important;
+/* Mobile layout hardening: drawer overlays the page; dashboard never shifts. */
+html,body{
+  width:100%;max-width:100%;min-height:100%;
+  overflow-x:clip!important;
+  overscroll-behavior-x:none;
 }
-.sidebar.open{
- left:0!important;transform:translate3d(0,0,0)!important;
- visibility:visible!important;pointer-events:auto!important;
+body{position:relative}
+#adminApp{
+  position:relative;width:100%;max-width:100%;
+  min-width:0;overflow:visible!important;
+  isolation:isolate;
 }
-.overlay{
- position:fixed!important;inset:0!important;
- z-index:1401!important;touch-action:pan-y;
+.header{
+  position:sticky!important;top:0;
+  z-index:1100!important;width:100%;max-width:100%;
 }
-.header{z-index:1300!important}
+#adminSidebar{
+  position:fixed!important;
+  inset:0 auto 0 0!important;
+  width:min(360px,88vw)!important;
+  max-width:88vw!important;
+  height:100vh!important;height:100dvh!important;
+  margin:0!important;
+  transform:translate3d(-105%,0,0)!important;
+  transition:transform .26s cubic-bezier(.2,.75,.25,1)!important;
+  left:0!important;right:auto!important;
+  z-index:1401!important;
+  overflow-x:hidden!important;overflow-y:auto!important;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  padding:calc(18px + env(safe-area-inset-top)) 14px calc(22px + env(safe-area-inset-bottom))!important;
+  visibility:hidden;pointer-events:none;
+  box-shadow:18px 0 48px rgba(0,0,0,.42);
+}
+#adminSidebar.open{
+  left:0!important;
+  transform:translate3d(0,0,0)!important;
+  visibility:visible!important;pointer-events:auto!important;
+}
+#sidebarOverlay{
+  position:fixed!important;inset:0!important;
+  z-index:1400!important;
+  background:rgba(3,7,20,.76)!important;
+  -webkit-backdrop-filter:blur(3px);
+  backdrop-filter:blur(3px);
+  touch-action:pan-y;
+}
+#sidebarOverlay[style*="display: none"]{pointer-events:none}
 .container{
- width:min(1480px,calc(100% - 32px))!important;
- max-width:100%!important;margin-left:auto!important;margin-right:auto!important;
+  display:block;width:min(1480px,calc(100% - 32px))!important;
+  max-width:100%!important;min-width:0!important;
+  margin:0 auto!important;padding:22px 0 56px!important;
+  left:auto!important;right:auto!important;
+  transform:none!important;
 }
+.stats{min-width:0}
+.stat-card{min-width:0;overflow:hidden}
+.section,.section-title,.user-search-box{min-width:0;max-width:100%}
+.table-box{
+  display:block;width:100%;max-width:100%;min-width:0;
+  overflow-x:auto!important;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain;
+  touch-action:pan-x pan-y;
+}
+.table-box table{width:100%;min-width:900px}
+.user-search-box input{min-width:0;max-width:100%}
+img,video{max-width:100%;height:auto}
 @media(max-width:768px){
- .container{width:calc(100% - 20px)!important;margin-inline:auto!important}
- .sidebar{width:min(350px,88vw)!important;max-width:88vw!important}
+  .header{min-height:62px;padding:9px 12px!important;gap:8px}
+  .logo{font-size:15px!important;white-space:nowrap}
+  .header-actions{gap:6px!important;flex-shrink:0}
+  .menu-btn,.refresh-btn,.logout-btn{
+    min-width:42px;min-height:42px;padding:9px 11px!important;
+    display:inline-flex;align-items:center;justify-content:center;
+  }
+  .container{
+    width:calc(100% - 22px)!important;
+    margin:0 auto!important;padding:14px 0 42px!important;
+  }
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+  .stat-card{padding:14px!important;min-height:92px}
+  .stat-card h3{font-size:11px}
+  .stat-card p{font-size:25px}
+  .section{margin:0 0 18px!important;padding:13px!important;border-radius:15px}
+  .section-title{gap:8px;flex-wrap:wrap}
+  .section-title h2{font-size:16px}
+  .filters{gap:7px;flex-wrap:wrap}
+  .filter-btn{min-height:40px;padding:9px 12px}
+  .table-box table{min-width:900px}
+  .user-search-box{display:flex;flex-direction:column;gap:9px;padding:12px}
+  .user-search-box input{width:100%!important;flex:1 1 auto}
+  #adminSidebar{width:min(350px,88vw)!important;max-width:88vw!important}
+}
+@media(max-width:380px){
+  .stats{grid-template-columns:1fr!important}
+  .logo{font-size:13px!important}
+  .header{padding-inline:8px!important}
+  .container{width:calc(100% - 16px)!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #adminSidebar{transition:none!important}
 }
 </style>
 </head>  
