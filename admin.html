@@ -1463,6 +1463,331 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 </style>
 
+
+<style id="smart-money-admin-pro-usability">
+/* Visual refresh only. Existing HTML controls, IDs, JavaScript and backend actions are unchanged. */
+:root{
+  --sm-violet:#7657ff;--sm-blue:#347cf6;--sm-cyan:#28b8d8;
+  --sm-line:rgba(145,166,255,.17);--sm-surface:#111a31;
+  --sm-surface-2:#172440;--sm-text:#f4f6ff;--sm-muted:#aab6d0
+}
+html{scroll-padding-top:82px;-webkit-tap-highlight-color:transparent}
+body{
+  color:var(--sm-text);
+  background:
+    radial-gradient(ellipse at 8% 0%,rgba(91,55,211,.19),transparent 34%),
+    radial-gradient(ellipse at 96% 22%,rgba(32,110,221,.12),transparent 30%),
+    #080e20
+}
+.header{
+  background:linear-gradient(105deg,rgba(15,22,47,.98),rgba(12,28,58,.98));
+  border-bottom:1px solid var(--sm-line);
+  box-shadow:0 8px 28px rgba(0,0,0,.22);
+  backdrop-filter:blur(16px)
+}
+.logo{letter-spacing:.2px}
+.logo span{color:#a99aff}
+.menu-btn,.btn-primary{
+  background:linear-gradient(135deg,var(--sm-violet),#4d70ec);
+  box-shadow:0 5px 16px rgba(104,83,255,.24)
+}
+.refresh-btn{background:#1b2945;border:1px solid var(--sm-line)}
+.logout-btn{background:linear-gradient(135deg,#b83254,#84223f)}
+.menu-btn,.refresh-btn,.logout-btn,.btn,.filter-btn{
+  border-radius:10px;transition:background .18s ease,box-shadow .18s ease,transform .18s ease
+}
+button,.btn,.filter-btn,a,input,select,textarea{touch-action:manipulation}
+button,.btn,.filter-btn{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:3px solid #b6a8ff;outline-offset:3px
+}
+button:active,.btn:active,.filter-btn:active{transform:translateY(1px)}
+.sidebar{
+  z-index:1202;width:min(350px,88vw);max-width:88vw;
+  background:linear-gradient(180deg,#121d38 0%,#0d162d 100%);
+  border-right:1px solid var(--sm-line);
+  box-shadow:22px 0 60px rgba(0,0,0,.42);
+  padding-bottom:calc(26px + env(safe-area-inset-bottom));
+  overscroll-behavior:contain;-webkit-overflow-scrolling:touch
+}
+.sidebar.open{z-index:1202}
+.overlay{
+  z-index:1201;background:rgba(3,7,20,.78);
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)
+}
+.sidebar h2{font-size:20px;letter-spacing:.2px;margin:4px 0 18px}
+.sidebar-section,.logo-upload,.status-upload{
+  border:1px solid var(--sm-line);border-radius:15px;
+  background:linear-gradient(145deg,rgba(27,42,73,.98),rgba(16,27,51,.98));
+  box-shadow:0 8px 22px rgba(0,0,0,.14);
+  padding:14px;margin-top:14px
+}
+.sidebar-section h3{min-height:44px;align-items:center;gap:12px}
+.sidebar-section h3::after{margin-left:auto;color:#a99aff}
+.sidebar input:not([type=file]),.sidebar select,.sidebar textarea{
+  min-height:44px;border-radius:10px;max-width:100%;
+  border:1px solid rgba(151,170,230,.2);background:#0b1429
+}
+.container{position:relative;z-index:2}
+.section{margin-bottom:30px}
+.section-title{gap:12px}
+.section-title h2{letter-spacing:.1px}
+.stat-card{
+  min-width:0;border:1px solid var(--sm-line);border-radius:17px;
+  background:linear-gradient(145deg,rgba(27,40,72,.98),rgba(15,25,48,.98));
+  box-shadow:0 12px 30px rgba(0,0,0,.2);
+  position:relative;overflow:hidden
+}
+.stat-card::after{
+  content:"";position:absolute;right:-32px;bottom:-48px;width:120px;height:100px;
+  border-radius:50%;background:radial-gradient(circle,rgba(116,91,255,.16),transparent 70%);
+  pointer-events:none
+}
+.table-box{
+  min-width:0;max-width:100%;overflow-x:auto;overflow-y:hidden;
+  border:1px solid var(--sm-line);border-radius:14px;
+  background:rgba(17,27,49,.92);box-shadow:0 10px 26px rgba(0,0,0,.14);
+  -webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;
+  scrollbar-width:thin;scrollbar-color:#5969a5 #111b31
+}
+.table-box table{min-width:1000px}
+th{background:linear-gradient(90deg,rgba(94,77,196,.23),rgba(48,91,168,.18))}
+td,th{border-color:rgba(145,166,255,.10)}
+td .btn,td button{margin:3px;white-space:nowrap}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filter-btn{border:1px solid var(--sm-line);background:#1a2946;padding:10px 15px}
+.filter-btn.active,.filter-btn.selected{
+  background:linear-gradient(135deg,var(--sm-violet),#4b70ec);
+  box-shadow:0 5px 15px rgba(104,83,255,.22)
+}
+input,select,textarea{
+  border-radius:10px
+}
+input:focus,select:focus,textarea:focus{
+  border-color:#8978ff!important;box-shadow:0 0 0 3px rgba(118,87,255,.15)
+}
+.modal,.modal-overlay{z-index:1500}
+.modal-box{max-height:calc(100dvh - 24px);overflow:auto;overscroll-behavior:contain}
+img,video{max-width:100%}
+@media(max-width:768px){
+  .header{position:sticky;top:0;min-height:64px;padding:9px 12px;gap:8px}
+  .logo{font-size:16px}
+  .header-actions{gap:7px}
+  .menu-btn,.refresh-btn,.logout-btn{min-height:44px;min-width:44px;padding:10px}
+  .container{width:calc(100% - 20px);padding:14px 0 calc(42px + env(safe-area-inset-bottom))}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .stat-card{padding:14px;min-height:96px}
+  .stat-card p{font-size:clamp(21px,6vw,28px)}
+  .section{margin-bottom:24px}
+  .section-title{align-items:center;flex-wrap:wrap}
+  .section-title h2{font-size:17px}
+  .table-box table{min-width:1000px}
+  .sidebar{top:0;height:100dvh;width:min(350px,88vw);max-width:88vw}
+  .modal-box{width:100%;max-height:calc(100dvh - 16px);padding:14px}
+}
+@media(max-width:380px){
+  .stats{grid-template-columns:1fr}
+  .header-actions{gap:5px}
+  .logo{font-size:14px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+
+/* Reference-inspired finish: same controls and content, refreshed presentation. */
+#adminApp{background:transparent}
+.header{
+  min-height:76px;padding:14px 22px;
+  background:linear-gradient(105deg,rgba(12,18,43,.98),rgba(14,30,65,.98) 58%,rgba(20,18,62,.98));
+}
+.logo{font-size:21px;letter-spacing:.35px}
+.logo span{color:#a78bfa}
+.header-actions button{font-weight:700;letter-spacing:.1px}
+.container{width:min(1500px,96%);padding-top:24px}
+.stats{gap:16px;margin-bottom:28px}
+.stat-card{min-height:112px;padding:20px 22px}
+.stat-card:nth-child(1){
+ background:linear-gradient(125deg,#211a70,#3420a0 62%,#4d36c5);
+ border-color:rgba(139,119,255,.48)
+}
+.stat-card:nth-child(2){
+ background:linear-gradient(125deg,#073f49,#086b69 62%,#0d9a83);
+ border-color:rgba(45,212,191,.42)
+}
+.stat-card:nth-child(3){
+ background:linear-gradient(125deg,#521a43,#85264f 62%,#b33359);
+ border-color:rgba(251,113,133,.4)
+}
+.stat-card h3{color:#e0e7ff;font-size:13px;font-weight:700}
+.stat-card p{font-size:30px;position:relative;z-index:1}
+.section{
+ padding:18px;margin-bottom:22px;border-radius:18px;
+ border:1px solid rgba(112,104,220,.28);
+ background:linear-gradient(145deg,rgba(17,23,57,.94),rgba(10,17,39,.96));
+ box-shadow:0 12px 32px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.025)
+}
+.section-title{margin-bottom:16px}
+.section-title h2{font-size:19px;font-weight:800;color:#f4f4ff}
+.filters{margin-bottom:14px}
+.filter-btn{
+ min-height:40px;padding:9px 16px;border:1px solid rgba(145,166,255,.13);
+ background:linear-gradient(145deg,#1b294a,#17223d);color:#dce4ff;font-weight:700
+}
+.filter-btn.active{
+ background:linear-gradient(120deg,#873dff,#5438db);
+ color:#fff;border-color:rgba(190,160,255,.55);
+ box-shadow:0 5px 18px rgba(113,66,255,.28)
+}
+.table-box{border-radius:14px;border-color:rgba(120,119,220,.27)}
+table{border-spacing:0}
+th{
+ color:#f0edff;font-weight:800;
+ background:linear-gradient(90deg,rgba(80,55,174,.56),rgba(35,77,153,.48))
+}
+td{color:#e4eaff}
+tbody tr{background:rgba(17,28,52,.72);transition:background .18s ease}
+tbody tr:hover{background:rgba(57,55,112,.34)}
+.btn{min-height:38px;padding:9px 13px;font-weight:700;border-radius:9px}
+.btn-primary{background:linear-gradient(125deg,#8750ff,#4c62e8);color:#fff}
+.btn-info{background:linear-gradient(125deg,#145b9b,#167ba5);color:#e5f5ff}
+.btn-approve{background:rgba(16,185,129,.18);color:#6ee7b7;border:1px solid rgba(52,211,153,.2)}
+.btn-reject,.btn-delete,.btn-danger{background:linear-gradient(125deg,#a52e55,#741e43);color:#ffe4ec}
+.badge{border:1px solid rgba(255,255,255,.08)}
+.user-search-box{
+ background:linear-gradient(135deg,rgba(28,39,76,.95),rgba(17,29,55,.95));
+ border-color:rgba(126,130,230,.22);border-radius:14px;padding:16px
+}
+.user-search-box input{min-height:44px;background:#0b1430;border-color:rgba(145,166,255,.2)}
+.sidebar{
+ background:linear-gradient(180deg,#121b3b,#0b142d);
+ border-right:1px solid rgba(145,166,255,.18)
+}
+.sidebar h2{color:#f1edff}
+.logo-upload,.status-upload,.sidebar-section{
+ background:linear-gradient(145deg,rgba(27,40,73,.98),rgba(15,25,49,.98));
+ border:1px solid rgba(145,166,255,.14);border-radius:13px
+}
+.modal-box{
+ background:linear-gradient(145deg,#121c38,#0c142b);
+ border-color:rgba(145,166,255,.2);box-shadow:0 25px 70px rgba(0,0,0,.5)
+}
+@media(max-width:768px){
+ .header{min-height:64px;padding:10px 12px}
+ .container{width:calc(100% - 18px);padding-top:14px}
+ .stats{gap:9px;margin-bottom:18px}
+ .stat-card{padding:14px;min-height:94px}
+ .section{padding:13px;margin-bottom:17px;border-radius:14px}
+ .section-title h2{font-size:16px}
+ .filter-btn{padding:9px 12px;min-height:42px}
+ .table-box table{min-width:1000px}
+}
+</style>
+
+<style id="smart-money-admin-mobile-drawer-fix">
+/* Mobile layout hardening: drawer overlays the page; dashboard never shifts. */
+html,body{
+  width:100%;max-width:100%;min-height:100%;
+  overflow-x:clip!important;
+  overscroll-behavior-x:none;
+}
+body{position:relative}
+#adminApp{
+  position:relative;width:100%;max-width:100%;
+  min-width:0;overflow:visible!important;
+  isolation:isolate;
+}
+.header{
+  position:sticky!important;top:0;
+  z-index:1100!important;width:100%;max-width:100%;
+}
+#adminSidebar{
+  position:fixed!important;
+  inset:0 auto 0 0!important;
+  width:min(360px,88vw)!important;
+  max-width:88vw!important;
+  height:100vh!important;height:100dvh!important;
+  margin:0!important;
+  transform:translate3d(-105%,0,0)!important;
+  transition:transform .26s cubic-bezier(.2,.75,.25,1)!important;
+  left:0!important;right:auto!important;
+  z-index:1401!important;
+  overflow-x:hidden!important;overflow-y:auto!important;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  padding:calc(18px + env(safe-area-inset-top)) 14px calc(22px + env(safe-area-inset-bottom))!important;
+  visibility:hidden;pointer-events:none;
+  box-shadow:18px 0 48px rgba(0,0,0,.42);
+}
+#adminSidebar.open{
+  left:0!important;
+  transform:translate3d(0,0,0)!important;
+  visibility:visible!important;pointer-events:auto!important;
+}
+#sidebarOverlay{
+  position:fixed!important;inset:0!important;
+  z-index:1400!important;
+  background:rgba(3,7,20,.76)!important;
+  -webkit-backdrop-filter:blur(3px);
+  backdrop-filter:blur(3px);
+  touch-action:pan-y;
+}
+#sidebarOverlay[style*="display: none"]{pointer-events:none}
+.container{
+  display:block;width:min(1480px,calc(100% - 32px))!important;
+  max-width:100%!important;min-width:0!important;
+  margin:0 auto!important;padding:22px 0 56px!important;
+  left:auto!important;right:auto!important;
+  transform:none!important;
+}
+.stats{min-width:0}
+.stat-card{min-width:0;overflow:hidden}
+.section,.section-title,.user-search-box{min-width:0;max-width:100%}
+.table-box{
+  display:block;width:100%;max-width:100%;min-width:0;
+  overflow-x:auto!important;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain;
+  touch-action:pan-x pan-y;
+}
+.table-box table{width:100%;min-width:900px}
+.user-search-box input{min-width:0;max-width:100%}
+img,video{max-width:100%;height:auto}
+@media(max-width:768px){
+  .header{min-height:62px;padding:9px 12px!important;gap:8px}
+  .logo{font-size:15px!important;white-space:nowrap}
+  .header-actions{gap:6px!important;flex-shrink:0}
+  .menu-btn,.refresh-btn,.logout-btn{
+    min-width:42px;min-height:42px;padding:9px 11px!important;
+    display:inline-flex;align-items:center;justify-content:center;
+  }
+  .container{
+    width:calc(100% - 22px)!important;
+    margin:0 auto!important;padding:14px 0 42px!important;
+  }
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+  .stat-card{padding:14px!important;min-height:92px}
+  .stat-card h3{font-size:11px}
+  .stat-card p{font-size:25px}
+  .section{margin:0 0 18px!important;padding:13px!important;border-radius:15px}
+  .section-title{gap:8px;flex-wrap:wrap}
+  .section-title h2{font-size:16px}
+  .filters{gap:7px;flex-wrap:wrap}
+  .filter-btn{min-height:40px;padding:9px 12px}
+  .table-box table{min-width:900px}
+  .user-search-box{display:flex;flex-direction:column;gap:9px;padding:12px}
+  .user-search-box input{width:100%!important;flex:1 1 auto}
+  #adminSidebar{width:min(350px,88vw)!important;max-width:88vw!important}
+}
+@media(max-width:380px){
+  .stats{grid-template-columns:1fr!important}
+  .logo{font-size:13px!important}
+  .header{padding-inline:8px!important}
+  .container{width:calc(100% - 16px)!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #adminSidebar{transition:none!important}
+}
+</style>
 </head>  
   
 <body>  
@@ -8664,6 +8989,99 @@ window.addEventListener('offline',function(){show('Waiting for internet connecti
 if(window.fetch&&!window.__smartMoneyFetchWrapped){var originalFetch=window.fetch.bind(window);window.fetch=function(input,init){var requestUrl=typeof input==='string'?input:(input&&input.url)||'';return originalFetch(input,init).then(function(response){if(/\.supabase\.co\//i.test(requestUrl)&&response.status<500&&navigator.onLine&&visible)hide();return response;}).catch(function(error){if(/\.supabase\.co\//i.test(requestUrl))networkFailure();throw error;});};window.__smartMoneyFetchWrapped=true;}
 if(!navigator.onLine)show('Waiting for internet connection…');window.addEventListener('pageshow',function(){if(!navigator.onLine)show('Waiting for internet connection…');});
 })();</script>
+
+<style id="smart-money-admin-compact-sidebar">
+/* Compact tool drawer: keep every admin function, reveal controls only on demand. */
+#adminSidebar{padding:14px 12px 24px!important}
+#adminSidebar>h2{font-size:16px;margin:3px 2px 10px}
+#adminSidebar .admin-tool-group{
+  margin:9px 0;border:1px solid rgba(142,155,255,.17);
+  border-radius:13px;overflow:hidden;
+  background:linear-gradient(145deg,rgba(26,40,75,.94),rgba(15,26,51,.97));
+  box-shadow:0 5px 16px rgba(0,0,0,.14)
+}
+#adminSidebar .admin-tool-group-toggle{
+  width:100%;min-height:54px;padding:10px 13px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  border:0;background:transparent;color:#f3f4ff;text-align:left;
+  font:700 13px/1.3 inherit;cursor:pointer
+}
+#adminSidebar .admin-tool-group-toggle span:first-child{display:flex;align-items:center;gap:9px}
+#adminSidebar .admin-tool-group-toggle small{
+  display:block;color:#9fb0d2;font-size:10px;font-weight:500;margin-top:3px
+}
+#adminSidebar .admin-tool-group-toggle .admin-chevron{
+  color:#a99aff;font-size:15px;transition:transform .2s ease
+}
+#adminSidebar .admin-tool-group.is-open .admin-chevron{transform:rotate(180deg)}
+#adminSidebar .admin-tool-group-body{
+  display:none;padding:0 10px 11px;border-top:1px solid rgba(142,155,255,.12)
+}
+#adminSidebar .admin-tool-group.is-open .admin-tool-group-body{display:block}
+#adminSidebar .admin-tool-group-body>.logo-upload,
+#adminSidebar .admin-tool-group-body>.status-upload{
+  margin:10px 0 0!important;box-shadow:none
+}
+#adminSidebar .admin-tool-group-body>.status-upload:first-child{margin-top:10px!important}
+#adminSidebar .admin-tool-group-body input[type=file]{max-width:100%;font-size:11px}
+#adminSidebar .admin-tool-group-body .btn{min-height:40px}
+#adminSidebar .sidebar-section{margin-top:10px!important;padding:12px!important}
+#adminSidebar .sidebar-section h3{font-size:12px!important;line-height:1.4}
+#adminSidebar .sidebar-section.collapsed .sidebar-content{display:none}
+#adminSidebar .sidebar-section:not(.collapsed) .sidebar-content{display:block}
+@media(max-width:768px){
+ #adminSidebar{width:min(330px,86vw)!important;max-width:86vw!important}
+ #adminSidebar .admin-tool-group-toggle{min-height:52px}
+}
+</style>
+<script id="smart-money-admin-compact-sidebar-init">
+(function(){
+ function buildCompactAdminGroups(){
+   const sidebar=document.getElementById('adminSidebar');
+   if(!sidebar || sidebar.dataset.compactGroupsReady==='1') return;
+   const logo=sidebar.querySelector(':scope > .logo-upload');
+   const headerLogo=sidebar.querySelector(':scope > #siteLogoImageManager');
+   const packageManager=sidebar.querySelector(':scope > #packageImageManager');
+   if(!logo || !headerLogo || !packageManager) return;
+
+   function makeGroup(title,subtitle,icon,nodes){
+     const group=document.createElement('section');
+     group.className='admin-tool-group';
+     const button=document.createElement('button');
+     button.type='button';
+     button.className='admin-tool-group-toggle';
+     button.setAttribute('aria-expanded','false');
+     button.innerHTML='<span><span aria-hidden="true">'+icon+'</span><span>'+title+'<small>'+subtitle+'</small></span></span><span class="admin-chevron" aria-hidden="true">⌄</span>';
+     const body=document.createElement('div');
+     body.className='admin-tool-group-body';
+     nodes.forEach(node=>{if(node) body.appendChild(node)});
+     button.addEventListener('click',()=>{
+       const open=group.classList.toggle('is-open');
+       button.setAttribute('aria-expanded',String(open));
+     });
+     group.append(button,body);
+     return group;
+   }
+
+   // Capture the existing admin cards before moving them; their IDs and handlers remain intact.
+   const apkAndStatus=packageManager.nextElementSibling;
+   const preview=apkAndStatus && apkAndStatus.nextElementSibling;
+   const certificate=preview && preview.nextElementSibling;
+   const groups=[
+     makeGroup('Branding & Logos','Website logo and header image','🎨',[logo,headerLogo]),
+     makeGroup('Package Images','Manage all package posters','🖼️',[packageManager]),
+     makeGroup('App & Content Updates','APK, 24-hour status and preview','📲',[apkAndStatus,preview]),
+     makeGroup('Certificate Tools','Open certificate generator','🎓',[certificate])
+   ];
+   const anchor=sidebar.querySelector(':scope > a[href="skill-academy-admin.html"]');
+   groups.forEach(group=>anchor ? anchor.insertAdjacentElement('afterend',group) : sidebar.appendChild(group));
+   sidebar.dataset.compactGroupsReady='1';
+ }
+ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',buildCompactAdminGroups,{once:true});
+ else buildCompactAdminGroups();
+})();
+</script>
+
 </body>
 </html>
 
