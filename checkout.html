@@ -51,6 +51,12 @@ label.form-label,.form-group label{display:block;font-size:10px;font-weight:700;
 .security-box{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:16px;font-size:9px;color:#64748b;text-align:center}
 .notice{display:none;padding:11px 13px;border-radius:11px;margin-bottom:15px;font-size:11px;line-height:1.5;border:1px solid rgba(251,191,36,.25);background:rgba(251,191,36,.07);color:#fcd34d}
 @media(max-width:480px){body{padding:12px}.header{margin-bottom:22px}.header h1{font-size:21px}.card{padding:17px;border-radius:17px}.form-control{padding:13px;font-size:13px}}
+
+.step-card{display:none}.step-card.active{display:block;animation:stepIn .3s ease-out}
+.step-pill{display:flex;gap:7px;justify-content:center;margin:0 0 18px}.step-pill span{padding:7px 12px;border-radius:999px;font-size:10px;font-weight:800;background:#17213a;color:#8290aa;border:1px solid var(--border)}.step-pill .current{background:#30266e;color:#fff;border-color:#7667ff}
+.otp-row{display:flex;gap:8px}.otp-row .form-control{flex:1;min-width:0}.btn-secondary{border:1px solid #6d5dfc;background:#211c4b;color:#ddd6fe;border-radius:10px;padding:0 12px;font-size:10px;font-weight:800;cursor:pointer}.btn-secondary:disabled{opacity:.5}
+.step-actions{display:flex;gap:9px;margin-top:12px}.step-actions button{flex:1}.btn-back{background:#263149;color:#dbeafe;border:1px solid var(--border);padding:13px;border-radius:12px;font-weight:800}
+@keyframes stepIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 
@@ -111,6 +117,21 @@ label.form-label,.form-group label{display:block;font-size:10px;font-weight:700;
       <div class="security-box">🔐 <span>Your account details are checked before continuing.</span></div>
     </div>
   </form>
+
+  <section id="otpStep" class="card step-card">
+    <div class="step-pill"><span>1 Details ✓</span><span class="current">2 Verify &amp; Password</span><span>3 Payment</span></div>
+    <h3>📧 <span>2. Verify Your Gmail</span></h3>
+    <p style="font-size:11px;color:var(--muted);line-height:1.6">We will send a one-time code to <b id="otpTarget" style="color:#fff"></b>. Enter the code to verify that this Gmail belongs to you.</p>
+    <div class="form-group"><label for="emailOtp">Email OTP</label><div class="otp-row"><input id="emailOtp" class="form-control" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Enter email OTP"><button id="sendOtpBtn" type="button" class="btn-secondary">Send OTP</button></div><div id="otpStatus" class="field-status"></div></div>
+    <button id="verifyOtpBtn" type="button" class="btn-next">Verify OTP</button>
+    <div id="passwordStep" style="display:none;margin-top:20px">
+      <div class="notice" style="display:block;color:#86efac;border-color:#166534;background:#052e22">✓ Gmail verified. Now create your Smart Money password.</div>
+      <div class="form-group"><label for="newPassword">Create Password *</label><input id="newPassword" type="password" class="form-control" minlength="8" autocomplete="new-password" placeholder="At least 8 characters"><div class="password-note">Use at least 8 characters. Do not share your password with anyone.</div></div>
+      <div class="form-group"><label for="confirmPassword">Confirm Password *</label><input id="confirmPassword" type="password" class="form-control" minlength="8" autocomplete="new-password" placeholder="Re-enter your password"></div>
+      <div class="step-actions"><button id="backStep1" type="button" class="btn-back">← Back</button><button id="finishAccountBtn" type="button" class="btn-next">Next → Payment</button></div>
+    </div>
+  </section>
+
 </div>
 
 <script>
@@ -395,11 +416,14 @@ async function goToPayment(event){
     // Deliberately do not create a Supabase Auth user or profiles row here.
     // Admin approval creates/invites the buyer after payment proof is reviewed.
     sessionStorage.setItem("checkout_data",JSON.stringify(checkoutData));
-    proceedBtn.textContent="✓ Checkout Ready";
-
-    setTimeout(()=>{
-      location.href="payment.html";
-    },400);
+    $("otpTarget").textContent=email;
+    $("checkoutForm").style.display="none";
+    $("otpStep").classList.add("active");
+    $("sendOtpBtn").disabled=false;
+    $("sendOtpBtn").textContent="Send OTP";
+    $("emailOtp").value="";
+    $("passwordStep").style.display="none";
+    status($("otpStatus"),"Send an OTP to verify this email address.","checking");
 
   }catch(error){
     console.error("SMART MONEY CHECKOUT ERROR:",error);
@@ -425,6 +449,51 @@ function resetButton(){
   proceedBtn.textContent="Next ➔ Proceed to Payment";
   proceedBtn.disabled=false;
 }
+
+
+let otpVerified=false;
+let otpBusy=false;
+$("sendOtpBtn").addEventListener("click",async()=>{
+ if(otpBusy)return;
+ const email=emailInput.value.trim().toLowerCase();
+ if(!validEmail(email)){status($("otpStatus"),"Enter a valid email address on Step 1.","error");return;}
+ otpBusy=true;$("sendOtpBtn").disabled=true;$("sendOtpBtn").textContent="Sending…";
+ try{
+  const {error}=await supabaseClient.auth.signInWithOtp({email,options:{shouldCreateUser:true,data:{full_name:fullNameInput.value.trim(),mobile:mobileInput.value.trim()}}});
+  if(error)throw error;
+  status($("otpStatus"),"OTP sent. Check your Gmail inbox and Spam folder.","success");
+  $("sendOtpBtn").textContent="Resend OTP";
+ }catch(e){status($("otpStatus"),e.message||"Could not send OTP. Please try again.","error");$("sendOtpBtn").disabled=false;$("sendOtpBtn").textContent="Send OTP";}
+ finally{otpBusy=false;}
+});
+$("verifyOtpBtn").addEventListener("click",async()=>{
+ const email=emailInput.value.trim().toLowerCase(),token=$("emailOtp").value.replace(/\D/g,"");
+ if(token.length<6){status($("otpStatus"),"Enter the OTP from your email.","error");return;}
+ $("verifyOtpBtn").disabled=true;$("verifyOtpBtn").textContent="Verifying…";
+ try{
+  const {data,error}=await supabaseClient.auth.verifyOtp({email,token,type:"email"});
+  if(error)throw error;
+  if(!data?.session)throw new Error("OTP verified but secure login session was not created. Please request a new OTP.");
+  otpVerified=true;$("verifyOtpBtn").textContent="Gmail Verified ✓";$("verifyOtpBtn").disabled=true;$("sendOtpBtn").disabled=true;
+  status($("otpStatus"),"Gmail verified successfully.","success");$("passwordStep").style.display="block";$("newPassword").focus();
+ }catch(e){status($("otpStatus"),e.message||"OTP verification failed.","error");$("verifyOtpBtn").disabled=false;$("verifyOtpBtn").textContent="Verify OTP";}
+});
+$("backStep1").addEventListener("click",()=>{$("otpStep").classList.remove("active");$("checkoutForm").style.display="block";});
+$("finishAccountBtn").addEventListener("click",async()=>{
+ if(!otpVerified){status($("otpStatus"),"Verify your Gmail OTP first.","error");return;}
+ const password=$("newPassword").value,confirm=$("confirmPassword").value;
+ if(password.length<8){alert("Password must contain at least 8 characters.");return;}
+ if(password!==confirm){alert("Password and Confirm Password do not match.");$("confirmPassword").focus();return;}
+ const btn=$("finishAccountBtn");btn.disabled=true;btn.textContent="Saving secure password…";
+ try{
+  const {data,error}=await supabaseClient.auth.updateUser({password});
+  if(error)throw error;
+  if(!data?.user)throw new Error("Password could not be saved. Please try again.");
+  sessionStorage.setItem("checkout_email_verified","true");
+  sessionStorage.setItem("checkout_password_set","true");
+  location.href="payment.html";
+ }catch(e){alert(e.message||"Could not save password.");btn.disabled=false;btn.textContent="Next → Payment";}
+});
 
 $("checkoutForm").addEventListener("submit",goToPayment);
 $("checkoutForm").addEventListener("keydown",e=>{
