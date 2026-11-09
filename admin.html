@@ -1683,6 +1683,40 @@ tbody tr:hover{background:rgba(57,55,112,.34)}
 }
 </style>
 
+<style id="smart-money-admin-mobile-drawer-fix">
+/* Fix drawer geometry: it overlays the page and never pushes the dashboard sideways. */
+*,*::before,*::after{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
+#adminApp{width:100%;max-width:100%;overflow-x:clip}
+.sidebar{
+ position:fixed!important;left:0!important;top:0!important;
+ width:min(350px,86vw)!important;max-width:86vw!important;
+ height:100vh;height:100dvh!important;
+ box-sizing:border-box!important;
+ transform:translate3d(-105%,0,0)!important;
+ transition:transform .28s cubic-bezier(.2,.75,.25,1)!important;
+ visibility:visible!important;pointer-events:none!important;
+ z-index:1402!important;overflow-y:auto!important;overflow-x:hidden!important;
+ padding-left:14px!important;padding-right:14px!important;
+}
+.sidebar.open{
+ left:0!important;transform:translate3d(0,0,0)!important;
+ visibility:visible!important;pointer-events:auto!important;
+}
+.overlay{
+ position:fixed!important;inset:0!important;
+ z-index:1401!important;touch-action:pan-y;
+}
+.header{z-index:1300!important}
+.container{
+ width:min(1480px,calc(100% - 32px))!important;
+ max-width:100%!important;margin-left:auto!important;margin-right:auto!important;
+}
+@media(max-width:768px){
+ .container{width:calc(100% - 20px)!important;margin-inline:auto!important}
+ .sidebar{width:min(350px,88vw)!important;max-width:88vw!important}
+}
+</style>
 </head>  
   
 <body>  
