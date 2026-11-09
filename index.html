@@ -2610,6 +2610,8 @@ onclick="toggleMenu()">
 💬 Contact Support
 </a>
 
+<a href="#" class="m-link" id="smartMoneyHelpMenuLink" onclick="document.getElementById('smHelpLauncher')?.click(); toggleMenu(); return false;">🤖 Smart Money Help</a>
+
 <a href="#"
 class="m-link"
 id="previewMenuLink"
@@ -8142,7 +8144,7 @@ window.addEventListener(
 
 <!-- Smart Money's own support widget (Phase 1: branded help desk shell) -->
 <style>
-#smHelpLauncher{position:fixed;right:18px;bottom:18px;z-index:99990;border:0;border-radius:999px;padding:12px 17px;background:linear-gradient(120deg,#7137df,#315eea);color:#fff;font-weight:800;box-shadow:0 8px 26px #263a8a55;cursor:pointer}
+#smHelpLauncher{position:fixed;right:18px;bottom:96px;z-index:99990;border:0;border-radius:999px;padding:12px 17px;background:linear-gradient(120deg,#7137df,#315eea);color:#fff;font-weight:800;box-shadow:0 8px 26px #263a8a55;cursor:pointer}
 #smHelpPanel{position:fixed;right:16px;bottom:78px;width:min(370px,calc(100vw - 28px));height:min(590px,calc(100dvh - 112px));z-index:99991;background:#fff;border:1px solid #dfe4f2;border-radius:18px;box-shadow:0 18px 60px #101a3540;display:none;overflow:hidden;font-family:inherit;color:#172033}
 #smHelpPanel.sm-open{display:flex;flex-direction:column}
 #smHelpHead{padding:15px 16px;background:linear-gradient(120deg,#171d38,#303b72);color:#fff;display:flex;align-items:center;justify-content:space-between}
