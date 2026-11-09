@@ -7,7 +7,8 @@ const VERIFY_URL = "https://smart-money-navy.vercel.app/api/razorpay/verify-paym
 const ALLOWED_ORIGINS = new Set([
   "https://smart-money-navy.vercel.app",
   "https://smart-money-swrang120.vercel.app",
-  "https://smart-money-git-main-swrang120.vercel.app"
+  "https://smart-money-git-main-swrang120.vercel.app",
+  "https://smart-money.wasmer.app"
 ]);
 const corsHeadersFor = (origin: string | null) => ({
   "Access-Control-Allow-Origin": origin && ALLOWED_ORIGINS.has(origin)
