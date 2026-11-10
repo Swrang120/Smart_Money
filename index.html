@@ -4577,6 +4577,23 @@ Help Desk
 
 </section>
 
+<div id="smSupportMailModal" style="display:none;position:fixed;inset:0;z-index:100500;background:#071126aa;padding:16px;overflow:auto;align-items:center;justify-content:center">
+ <form id="smSupportMailForm" style="width:min(520px,100%);background:#fff;border-radius:18px;padding:22px;color:#172033;box-shadow:0 20px 60px #0005">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h3 style="margin:0">Smart Money Support Form</h3><button type="button" id="smSupportMailClose" style="border:0;background:#edf0f7;border-radius:8px;padding:7px 11px;font-size:20px">×</button></div>
+  <p style="font-size:13px;color:#64748b;margin:8px 0 16px">Details fill kijiye. Next karne par Gmail mein pre-filled support email khul jayega.</p>
+  <label style="display:block;font-size:13px;font-weight:700;margin:10px 0 5px">Help kis baare mein chahiye?</label>
+  <select id="smMailCategory" required style="width:100%;padding:12px;border:1px solid #ccd3e0;border-radius:9px">
+   <option value="">Select a topic</option><option>Payment / Transaction</option><option>Login / Account</option><option>Package Activation</option><option>Commission</option><option>Referral</option><option>Course Access</option><option>Withdrawal</option><option>Other</option>
+  </select>
+  <label style="display:block;font-size:13px;font-weight:700;margin:10px 0 5px">Your name</label><input id="smMailName" required maxlength="100" placeholder="Enter your name" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccd3e0;border-radius:9px">
+  <label style="display:block;font-size:13px;font-weight:700;margin:10px 0 5px">Registered email</label><input id="smMailEmail" type="email" required maxlength="150" placeholder="Your registered email" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccd3e0;border-radius:9px">
+  <label style="display:block;font-size:13px;font-weight:700;margin:10px 0 5px">Referral ID (auto-filled)</label><input id="smMailReferral" readonly placeholder="Fetching from your account…" style="width:100%;box-sizing:border-box;padding:12px;background:#f2f4f8;border:1px solid #ccd3e0;border-radius:9px">
+  <label style="display:block;font-size:13px;font-weight:700;margin:10px 0 5px">Subject</label><input id="smMailSubject" required maxlength="150" placeholder="Short title of your issue" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccd3e0;border-radius:9px">
+  <label style="display:block;font-size:13px;font-weight:700;margin:10px 0 5px">Describe your problem</label><textarea id="smMailDetails" required maxlength="3000" rows="4" placeholder="Explain what help you need…" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccd3e0;border-radius:9px;resize:vertical"></textarea>
+  <p id="smMailStatus" style="font-size:12px;color:#64748b"></p>
+  <button type="submit" style="width:100%;padding:13px;border:0;border-radius:10px;background:#6045d8;color:white;font-weight:800">Next → Open Gmail</button>
+ </form>
+</div>
 
 <!-- =========================================================
      FOOTER
@@ -8184,13 +8201,43 @@ window.addEventListener(
  const launcher=document.getElementById('smHelpLauncher'),panel=document.getElementById('smHelpPanel'),close=document.getElementById('smHelpClose'),form=document.getElementById('smHelpForm'),input=document.getElementById('smHelpInput'),messages=document.getElementById('smHelpMessages');
  if(!launcher||!panel||!form||!input||!messages)return;
  function open(){panel.classList.add('sm-open');launcher.setAttribute('aria-expanded','true');input.focus();}
- window.openSmartMoneySupport=function(kind){
-  open();
-  const topic=kind==='payment'?'Payment / transaction problem':'General inquiry / referral problem';
-  input.value=topic+' — ';
-  selectedCategory=kind==='payment'?'payment':'general';
-  input.focus();
+ window.openSmartMoneySupport=async function(kind){
+  const modal=document.getElementById('smSupportMailModal');
+  const category=document.getElementById('smMailCategory');
+  const status=document.getElementById('smMailStatus');
+  modal.style.display='flex';
+  if(category)category.value=kind==='payment'?'Payment / Transaction':'Other';
+  const {data:sessionData}=await supabaseClient?.auth?.getSession?.()||{};
+  const user=sessionData?.session?.user;
+  const email=document.getElementById('smMailEmail');
+  const name=document.getElementById('smMailName');
+  const referral=document.getElementById('smMailReferral');
+  if(user){if(email&&!email.value)email.value=user.email||'';if(name&&!name.value)name.value=user.user_metadata?.full_name||user.user_metadata?.name||'';}
+  try{
+   if(!user||!supabaseClient)throw new Error('Please log in to Smart Money to auto-fill your Referral ID.');
+   let prof=await supabaseClient.from('profiles').select('referral_id').eq('user_id',user.id).maybeSingle();
+   if(prof.error)throw prof.error;
+   referral.value=prof.data?.referral_id||'Not available in profile';
+   status.textContent=referral.value==='Not available in profile'?'Referral ID profile mein nahi mila. Please contact admin before sending.':'Your account details are ready.';
+  }catch(err){referral.value='Unable to fetch';status.textContent=err.message||'Referral ID could not be loaded.';}
+  document.getElementById('smSupportMailForm').dataset.kind=kind;
  };
+ const mailModal=document.getElementById('smSupportMailModal');
+ document.getElementById('smSupportMailClose').addEventListener('click',()=>mailModal.style.display='none');
+ mailModal.addEventListener('click',e=>{if(e.target===mailModal)mailModal.style.display='none';});
+ document.getElementById('smSupportMailForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const val=id=>document.getElementById(id).value.trim();
+  const category=val('smMailCategory'),ref=val('smMailReferral');
+  if(!category||!val('smMailName')||!val('smMailEmail')||!val('smMailSubject')||!val('smMailDetails'))return;
+  if(!ref||ref==='Fetching from your account…'||ref==='Unable to fetch'||ref==='Not available in profile'){document.getElementById('smMailStatus').textContent='Referral ID fetch nahi hua. Please login karke dobara try karein.';return;}
+  const kind=e.currentTarget.dataset.kind;
+  const recipient=kind==='payment'?'smartmoneysupport1@gmail.com':'smartmoneyhelpcare@gmail.com';
+  const body=['Smart Money Support Request','', 'Help category: '+category,'Name: '+val('smMailName'),'Registered email: '+val('smMailEmail'),'Referral ID: '+ref,'Subject: '+val('smMailSubject),'','Problem details:',val('smMailDetails')].join('\\n');
+  const mailto='mailto:'+recipient+'?subject='+encodeURIComponent('Smart Money Support - '+val('smMailSubject'))+'&body='+encodeURIComponent(body);
+  window.location.href=mailto;
+  document.getElementById('smMailStatus').textContent='Gmail compose open ho raha hai. Please Send button dabakar email bhejein.';
+ });
  function shut(){panel.classList.remove('sm-open');launcher.setAttribute('aria-expanded','false');}
  function add(text,who){const el=document.createElement('div');el.className='sm-help-msg'+(who==='user'?' sm-user':'');el.textContent=text;messages.appendChild(el);messages.scrollTop=messages.scrollHeight;}
  launcher.addEventListener('click',()=>panel.classList.contains('sm-open')?shut():open());close.addEventListener('click',shut);
