@@ -3405,83 +3405,51 @@ function isAdminUser(user){
 
 async function checkAdminSession(){
 
-    try{
+    if(!supabaseClient){
+        console.error("Admin Supabase client is not ready.");
+        showLogin();
+        return;
+    }
 
-        if(!supabaseClient){
-            throw new Error(
-                "Supabase is not initialized. Refresh the page or check whether the Supabase CDN is loading."
-            );
-        }
+    // Supabase restores local storage asynchronously on some mobile browsers.
+    // Retry transient storage/network errors before deciding that the admin is signed out.
+    let lastError = null;
+    for(let attempt=0; attempt<5; attempt++){
+        try{
+            const {data,error}=await supabaseClient.auth.getSession();
+            if(error) throw error;
+            const session=data?.session;
 
-        const {
-            data,
-            error
-        } =
-        await supabaseClient
-        .auth
-        .getSession();
-
-        if(error){
-
-            console.error(
-                "Supabase session check error:",
-                error
-            );
-
-            showLogin();
-
-            return;
-
-        }
-
-        const session =
-        data?.session;
-
-        if(
-            session?.user &&
-            isAdminUser(session.user)
-        ){
-
-            showAdmin();
-
-            return;
-
-        }
-
-        // A different account must never get access to the admin panel.
-        if(session){
-
-            try{
-
-                await supabaseClient
-                .auth
-                .signOut();
-
-            }catch(signOutError){
-
-                console.warn(
-                    "Session cleanup error:",
-                    signOutError
-                );
-
+            if(session?.user && isAdminUser(session.user)){
+                showAdmin();
+                return;
             }
 
+            if(session && !isAdminUser(session.user)){
+                await supabaseClient.auth.signOut();
+                showLogin();
+                return;
+            }
+
+            // No session on the first read can be a hydration race on Android WebView.
+            if(attempt<4){
+                await new Promise(resolve=>setTimeout(resolve,350*(attempt+1)));
+                continue;
+            }
+
+            showLogin();
+            return;
+        }catch(error){
+            lastError=error;
+            console.warn("Admin session restore attempt "+(attempt+1)+" failed:",error);
+            if(attempt<4) await new Promise(resolve=>setTimeout(resolve,400*(attempt+1)));
         }
-
-        showLogin();
-
-    }
-    catch(error){
-
-        console.error(
-            "Admin session check error:",
-            error
-        );
-
-        showLogin();
-
     }
 
+    // Do not clear or overwrite a saved admin session because of a temporary read failure.
+    console.error("Admin session restore deferred; saved session was preserved:",lastError);
+    const loginError=document.getElementById("loginError");
+    if(loginError) loginError.textContent="Connection is temporarily unavailable. Your saved admin session has been preserved. Tap refresh to retry.";
 }
 
 
@@ -9178,8 +9146,14 @@ function showSupportInbox(){
         frame.contentWindow?.postMessage({type:'SM_ADMIN_SESSION',access_token:session.access_token,refresh_token:session.refresh_token},window.location.origin);
       }catch(error){console.error('Could not share verified admin session with support inbox:',error);}
     };
-    frame.addEventListener('load',sendAdminSession,{once:true});
-    if(frame.contentDocument?.readyState==='complete')sendAdminSession();
+    if(!frame.dataset.adminSessionBridge){
+      frame.addEventListener('load',sendAdminSession);
+      frame.dataset.adminSessionBridge='1';
+    }
+    // Send more than once to cover mobile browser iframe startup/listener timing.
+    sendAdminSession();
+    setTimeout(sendAdminSession,350);
+    setTimeout(sendAdminSession,1000);
   }
   const sidebar=document.getElementById('adminSidebar');
   const overlay=document.getElementById('sidebarOverlay');
