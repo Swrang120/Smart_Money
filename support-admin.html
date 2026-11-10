@@ -50,4 +50,5 @@ function timeoutTicket(){updateTicket({blocked_until:new Date(Date.now()+15*60*1
 function toggleBlock(){const blocked=active?.blocked_until&&new Date(active.blocked_until)>new Date();updateTicket({blocked_until:blocked?null:"2099-12-31T23:59:59.000Z"},blocked?"Ticket chat unblocked.":"Ticket chat blocked.")}
 function toggleClose(){if(active.status==="closed")updateTicket({status:"pending",closed_at:null,blocked_until:null},"Ticket reopened.");else updateTicket({status:"closed",closed_at:new Date().toISOString()},"Ticket closed.")}
 init();
-</script></body></html>
+</script><!-- Vercel Git deployment refresh: support inbox session bridge build -->
+</body></html>
