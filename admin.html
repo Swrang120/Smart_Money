@@ -9148,11 +9148,17 @@ function showSupportInbox(){
     };
     if(!frame.dataset.adminSessionBridge){
       frame.addEventListener('load',sendAdminSession);
+      // Child explicitly requests the verified session after its message listener is ready.
+      window.addEventListener('message',function(event){
+        if(event.origin!==window.location.origin||event.source!==frame.contentWindow)return;
+        if(event.data&&event.data.type==='SM_SUPPORT_READY')sendAdminSession();
+      });
       frame.dataset.adminSessionBridge='1';
     }
-    // Send more than once to cover mobile browser iframe startup/listener timing.
+    // Initial attempts plus the child-ready handshake cover slow mobile iframe startup.
     sendAdminSession();
     setTimeout(sendAdminSession,350);
+    setTimeout(sendAdminSession,1200);
     setTimeout(sendAdminSession,1000);
   }
   const sidebar=document.getElementById('adminSidebar');
