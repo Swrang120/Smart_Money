@@ -6923,6 +6923,7 @@ async function openAdminPreviewModal(){
             <img
             src="${safeUrl}"
             alt="Admin Preview"
+            width="600" height="350"
             style="
             width:100%;
             height:auto;
@@ -8179,6 +8180,7 @@ window.addEventListener(
                     <img
                     src="${escapeHtml(savedProfilePic)}"
                     alt="Profile"
+                    width="96" height="96"
                     >
 
                 `;
@@ -8239,7 +8241,7 @@ async function openPublicStatus(){
       const caption=String(item.caption||"");
       const media=item.media_type==="video"
         ? '<video controls playsinline style="width:100%;max-height:360px;border-radius:12px;background:#111" src="'+escapeHtml(url)+'"></video>'
-        : '<img loading="lazy" alt="Status" style="width:100%;max-height:360px;object-fit:contain;border-radius:12px;background:#f1f5f9" src="'+escapeHtml(url)+'">';
+        : '<img loading="lazy" alt="Status" width="600" height="360" style="width:100%;max-height:360px;object-fit:contain;border-radius:12px;background:#f1f5f9" src="'+escapeHtml(url)+'">';
       return '<article style="padding:12px;border:1px solid #e2e8f0;border-radius:14px">'+media+(caption?'<p style="margin-top:8px;line-height:1.5">'+escapeHtml(caption)+'</p>':'')+'</article>';
     }).join("");
   }catch(err){
