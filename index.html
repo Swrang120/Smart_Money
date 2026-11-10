@@ -2740,16 +2740,16 @@ Join Our Community
 .sm-instagram-button span:first-child{font-size:19px}
 @media(max-width:900px){
 .sm-whatsapp-join{margin:18px auto 48px}
-.sm-whatsapp-inner{align-items:stretch;flex-wrap:wrap;justify-content:flex-start;padding:22px 20px;gap:12px}
-.sm-whatsapp-copy{flex:1 1 100%;max-width:none}
+.sm-whatsapp-inner{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;justify-content:stretch;padding:20px 18px;gap:10px}
+.sm-whatsapp-copy{grid-column:1/-1;max-width:none}
 .sm-whatsapp-copy h2{font-size:22px}
 .sm-whatsapp-copy p{font-size:12px}
-.sm-whatsapp-button,.sm-instagram-button{flex:1 1 175px;min-width:0;width:auto;padding:11px 10px;gap:7px;font-size:11px;white-space:normal;text-align:center}
-.sm-whatsapp-button span:first-child,.sm-instagram-button span:first-child{font-size:16px}
+.sm-whatsapp-button,.sm-instagram-button{display:flex;min-width:0;width:100%;padding:9px 6px;gap:6px;font-size:10px;line-height:1.25;white-space:normal;text-align:center;overflow-wrap:anywhere}
+.sm-whatsapp-button span:first-child,.sm-instagram-button span:first-child{font-size:14px}
 }
-@media(max-width:430px){
-.sm-whatsapp-inner{padding:19px 16px;gap:10px}
-.sm-whatsapp-button,.sm-instagram-button{flex-basis:100%;width:100%;padding:11px 12px}
+@media(max-width:560px){
+.sm-whatsapp-inner{grid-template-columns:1fr;padding:18px 15px;gap:9px}
+.sm-whatsapp-button,.sm-instagram-button{padding:10px 10px;font-size:11px}
 }
 </style>
 
