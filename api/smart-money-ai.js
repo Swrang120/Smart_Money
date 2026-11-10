@@ -35,8 +35,11 @@ module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Max-Age", "86400");
   if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
-  const geminiKey = process.env.GEMINI_API_KEY;
-  if (!geminiKey) return res.status(503).json({ error: "Smart Money AI is waiting for its Gemini API key. Please try again later or contact support." });
+  const configuredGeminiKey = process.env.GEMINI_API_KEY || process.env.OPEN_AI_API_KEY || "";
+  // Backward-compatible: some deployments stored the Gemini key under the older OPEN_AI_API_KEY name.
+  // Never send an OpenAI-format key to Google's Gemini endpoint.
+  const geminiKey = /^AIza/.test(configuredGeminiKey) ? configuredGeminiKey : "";
+  if (!geminiKey) return res.status(503).json({ error: "Smart Money AI is not configured yet. Add a valid Gemini API key as GEMINI_API_KEY in Vercel Production, then redeploy." });
   const geminiModel = process.env.GEMINI_MODEL || "gemini-3.8-flash";
   const auth = String(req.headers.authorization || "");
   if (!auth.startsWith("Bearer ")) return res.status(401).json({ error: "Please log in to use Smart Money AI Support." });
