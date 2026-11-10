@@ -21,7 +21,8 @@
 </div></section></div><div class="notice">Support controls only affect ticket messaging and ticket status. They do not approve payments, activate packages, change balances, commissions or withdrawals. Screenshot access uses short-lived signed URLs.</div></main>
 <script>
 const URL="https://rvprrulkjegvicbnjuft.supabase.co",KEY="sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-const sb=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+// Separate support-admin auth storage from customer sessions and the main admin page.
+const sb=window.supabase.createClient(URL,KEY,{auth:{storageKey:"smart-money-support-admin-auth-v1",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const ADMINS=["sboro3235@gmail.com","phwilawswargiary6900@gmail.com"];
 let me=null,tickets=[],profiles={},active=null,filter="all",poll=null;
 const $=id=>document.getElementById(id);
