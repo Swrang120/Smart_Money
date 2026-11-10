@@ -43,6 +43,10 @@ window.addEventListener("message",async(event)=>{
     setMsg("loginStatus","Could not verify the existing Admin Panel session. Please refresh the Admin Panel.");
   }
 });
+// Tell the parent Admin Panel that this iframe is ready to receive its existing session.
+if(window.parent&&window.parent!==window){
+  window.parent.postMessage({type:"SM_SUPPORT_READY"},window.location.origin);
+}
 async function init(){setMsg("loginStatus","Waiting for your verified Admin Panel session…");const {data,error}=await sb.auth.getSession();if(!error&&data.session)await checkAdmin(data.session.user)}
 async function logout(){clearInterval(poll);me=null;active=null;await sb.auth.signOut();$("app").classList.add("hidden");$("login").classList.remove("hidden");setMsg("loginStatus","Session ended. Return to the Admin Panel and open Support Inbox again.")}
 function setFilter(v,el){filter=v;document.querySelectorAll(".filters button").forEach(b=>b.classList.toggle("active",b===el));renderList()}
