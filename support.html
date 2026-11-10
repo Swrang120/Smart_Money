@@ -20,23 +20,46 @@ textarea,input,select{width:100%;background:#0b1422;border:1px solid #2d3b50;bor
 .chat{display:flex;flex-direction:column;gap:9px;max-height:49vh;overflow:auto;padding:3px 1px 8px}.bubble{max-width:91%;padding:10px 12px;border-radius:13px;font-size:11px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}.customer{align-self:flex-end;background:#34466d;border:1px solid #4a5e8a;border-bottom-right-radius:4px}.admin{align-self:flex-start;background:#352b1c;border:1px solid #65512d;border-bottom-left-radius:4px}.assistant{align-self:flex-start;background:#1b2a3a;border:1px solid #30445c;border-bottom-left-radius:4px}.bubble small{display:block;color:#aab7ca;font-size:8px;margin-top:5px}.msgrow{display:flex;gap:7px;margin-top:10px}.msgrow textarea{min-height:46px;max-height:100px;flex:1}.send{border:0;border-radius:12px;background:var(--gold);color:#21180b;font-weight:950;padding:0 15px}
 .empty{text-align:center;border:1px dashed #3a4960;border-radius:14px;padding:25px 12px;color:var(--muted);font-size:11px}.empty strong{display:block;color:#e6edf8;font-size:13px;margin-bottom:4px}.notice{font-size:9px;line-height:1.55;color:#a9b6c9;background:#111b2a;border:1px solid #2b3a50;border-radius:12px;padding:10px;margin-top:12px}.hidden{display:none!important}.footer{text-align:center;color:#718098;font-size:9px;padding:16px 5px 0}
 @media(min-width:600px){body{padding:18px 0}.app{border:1px solid #29364b;border-radius:25px;min-height:calc(100vh - 36px);padding:0 19px 28px;background:#0b111e;box-shadow:0 25px 90px #0008}}
+
+/* Premium Smart Money member support experience */
+:root{--bg:#070b16;--panel:#111a2b;--panel2:#18253a;--line:#34445c;--gold:#e8bd68;--gold2:#f8dfa5}
+body{background:radial-gradient(ellipse at 50% -12%,#3a2d19 0,transparent 36%),radial-gradient(ellipse at 100% 35%,#182b46 0,transparent 42%),#070b16}
+.app{max-width:760px;padding:18px 18px 38px}
+.header{padding:14px 2px 18px;border-bottom:1px solid #26354b}
+.mark{width:48px;height:48px;border-radius:16px;box-shadow:0 8px 28px #d6a34544}
+.brand{font-size:14px;letter-spacing:.1em}
+.hero{padding:28px 3px 22px}
+.hero h1{font-size:clamp(30px,6vw,44px);line-height:1.08;max-width:600px}
+.hero p{font-size:13px;max-width:560px}
+.identity{padding:14px 15px;border-radius:17px;background:linear-gradient(120deg,#18243a,#111b2b);border-color:#3b4a60;box-shadow:0 12px 35px #0003}
+.tabs{grid-template-columns:1fr 1fr;padding:6px;border-radius:16px;background:#0b1322}
+.tab{font-size:11px;padding:13px 8px}
+.panel{padding:clamp(16px,3vw,25px);border-radius:23px;background:linear-gradient(145deg,#172338,#0e1727 72%);border-color:#3b4a60;box-shadow:0 22px 55px #0005}
+.phead h2{font-size:19px;letter-spacing:-.02em}
+.support-sub{color:var(--muted);font-size:11px;margin-top:4px}
+.contact-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:15px 0 18px}
+.contact-strip>div{min-width:0;padding:11px;border:1px solid #34445c;border-radius:13px;background:#0c1626}
+.contact-strip small{display:block;color:#c4a66a;font-size:8px;letter-spacing:.1em;font-weight:900}
+.contact-strip b{display:block;font-size:10px;margin-top:5px;overflow-wrap:anywhere}
+.topic{min-height:54px;font-size:11px;padding:12px;background:linear-gradient(145deg,#142137,#0e192a);border-color:#35455c}
+.topic.sel{background:linear-gradient(130deg,#342a19,#211d17);border-color:#d7ae5e;box-shadow:inset 0 0 0 1px #d7ae5e33}
+textarea,input,select{background:#0a1322;border-color:#35455c;font-size:13px}
+textarea{min-height:145px}
+.primary{padding:16px;border-radius:14px;font-size:12px;letter-spacing:.06em;box-shadow:0 9px 24px #d6a24924}
+.primary:disabled{opacity:.6;cursor:wait}
+.attach{background:#0d1829;border-color:#8d7548}
+.notice{font-size:10px}
+.footer{padding-top:22px}
+@media(max-width:560px){.app{padding:8px 12px 30px}.hero{padding:22px 2px 18px}.contact-strip{grid-template-columns:1fr}.contact-strip>div{display:flex;justify-content:space-between;gap:12px;align-items:center}.contact-strip small{max-width:100px}.contact-strip b{text-align:right}.topicgrid{gap:8px}.topic{font-size:10px;min-height:50px}.panel{padding:15px}.header .back{font-size:10px}}
 </style>
 </head>
 <body><main class="app">
-<header class="header"><div class="brand"><div class="mark">✦</div><div>SMART MONEY</div></div><a class="back" href="dashboard.html">← Dashboard</a></header>
-<section class="hero"><div class="eyebrow">MEMBER CARE · PRIVATE CHANNEL</div><h1>How can we help<br><span style="color:var(--gold2)">you today?</span></h1><p>Get private account guidance or message the Smart Money support team.</p></section>
+<header class="header"><div class="brand"><div class="mark" id="supportBrandMark">✦</div><img id="supportBrandLogo" alt="Smart Money" hidden style="width:48px;height:48px;object-fit:contain;border-radius:13px"><div>SMART MONEY<br><small style="font-size:9px;color:#c9a45c;letter-spacing:.16em">SUPPORT TEAM</small></div></div><a class="back" href="dashboard.html">← Dashboard</a></header>
+<section class="hero"><div class="eyebrow">OFFICIAL MEMBER CARE · PRIVATE CHANNEL</div><h1>Smart Money<br><span style="color:var(--gold2)">Support Team</span></h1><p>Send your issue directly to our support staff. Your account details are securely attached to your ticket.</p></section>
 <div class="identity"><div class="avatar" id="avatar">S</div><div class="idtext"><b id="customerName">Loading account…</b><span id="customerEmail">Checking secure session</span></div><div class="secure">● SECURE</div></div>
-<nav class="tabs"><button class="tab active" id="aiTab" onclick="showTab('assistant')">✦ Assistant</button><button class="tab" id="newTab" onclick="showTab('new')">＋ New Ticket</button><button class="tab" id="historyTab" onclick="showTab('history')">▤ My Tickets</button></nav>
-<section class="panel" id="assistantPanel">
-<div class="phead"><h2>Smart Money Help</h2><span class="pill">Private · Read-only</span></div>
-<div class="topiclabel">CHOOSE A TOPIC</div><div class="topicgrid" id="aiTopics"></div>
-<div class="field"><label for="aiQuestion">ASK YOUR QUESTION</label><textarea id="aiQuestion" maxlength="1200" placeholder="Example: My package approval is still pending. Can you check?"></textarea></div>
-<button class="primary" onclick="askAssistant()">GET ACCOUNT GUIDANCE →</button><div class="status" id="aiStatus"></div>
-<div id="aiResult" class="hidden" style="margin-top:12px"><div class="bubble assistant" style="max-width:100%" id="aiAnswer"></div><button class="secondary" style="margin-top:9px;width:100%" onclick="escalateAssistant()">Create a support ticket about this</button></div>
-<div class="notice">This private assistant uses fixed support rules and read-only records from your signed-in Smart Money account. No customer data is sent to OpenAI, Gemini or another external AI provider. It is not a self-hosted language model yet.</div>
-</section>
+<nav class="tabs"><button class="tab active" id="newTab" onclick="showTab('new')">＋ Create Support Ticket</button><button class="tab" id="historyTab" onclick="showTab('history')">▤ My Tickets</button></nav>
 <section class="panel hidden" id="newPanel">
-<div class="phead"><h2>Create a support ticket</h2><span class="pill">Quick ticket</span></div>
+<div class="phead"><div><h2>Message Smart Money Support Team</h2><p class="support-sub">Your request goes directly to our authorised support staff.</p></div><span class="pill">SECURE</span></div><div class="contact-strip"><div><small>REGISTERED GMAIL</small><b id="ticketEmail">Loading…</b></div><div><small>MOBILE NUMBER</small><b id="ticketMobile">Loading…</b></div><div><small>REFERRAL ID</small><b id="ticketReferral">Loading…</b></div></div>
 <div class="topiclabel">WHAT DO YOU NEED HELP WITH?</div><div class="topicgrid" id="ticketTopics"></div>
 <div class="field"><label for="ticketSubject">SUBJECT</label><input id="ticketSubject" maxlength="120" placeholder="Short title for your issue"></div>
 <div class="field"><label for="ticketMessage">DESCRIBE THE ISSUE</label><textarea id="ticketMessage" maxlength="4000" placeholder="Share the details. Please do not include passwords, OTPs or banking PINs."></textarea></div>
@@ -52,23 +75,24 @@ textarea,input,select{width:100%;background:#0b1422;border:1px solid #2d3b50;bor
 <div id="replyArea"><div class="attach" style="margin-top:9px"><small>ATTACH SCREENSHOT (OPTIONAL) · PNG / JPG / WEBP · MAX 5 MB</small><input id="replyFile" type="file" accept="image/png,image/jpeg,image/webp"></div><div class="msgrow"><textarea id="replyText" maxlength="4000" placeholder="Write a reply…"></textarea><button class="send" onclick="sendReply()">➤</button></div><div class="status" id="replyStatus"></div></div>
 </div>
 </section>
-<div class="footer">SMART MONEY · PRIVATE CUSTOMER SUPPORT<br>Your tickets are visible only to your account and authorised support staff.</div>
+<div class="footer">SMART MONEY · OFFICIAL SUPPORT TEAM<br>Tickets and replies are private to your account and authorised support staff.</div>
 </main>
 <script>
 const SUPABASE_URL="https://rvprrulkjegvicbnjuft.supabase.co";
 const SUPABASE_KEY="sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:"smart-money-customer-support-auth-v1",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const topics=[["💳","Payment / Deposit","payment"],["📦","Package Purchase","package"],["⏳","Approval Pending","payment"],["🔐","Login / Account","login"],["🏦","Withdrawal","withdrawal"],["🔗","Commission / Referral","commission"],["🎓","Course Access","course"],["✳️","Other","general"]];
 let user=null,profile=null,aiTopic=topics[0],ticketTopic=topics[0],activeTicket=null,pollTimer=null,lastQuestion="";
 const $=id=>document.getElementById(id);
 function safeText(v){return String(v??"")}
 function fmtDate(v){try{return new Date(v).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})}catch(e){return ""}}
 function renderTopics(host,selected,setter){$(host).innerHTML=topics.map((t,i)=>'<button class="topic '+(t===selected?'sel':'')+'" data-i="'+i+'"><i>'+t[0]+'</i><span>'+t[1]+'</span></button>').join("");$(host).querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{setter(topics[Number(b.dataset.i)]);renderAllTopics()}))}
-function renderAllTopics(){renderTopics("aiTopics",aiTopic,v=>aiTopic=v);renderTopics("ticketTopics",ticketTopic,v=>ticketTopic=v)}
+function renderAllTopics(){renderTopics("ticketTopics",ticketTopic,v=>ticketTopic=v)}
 function showTab(name){["assistant","new","history"].forEach(k=>{$(k+"Panel").classList.toggle("hidden",k!==name);$(k+"Tab").classList.toggle("active",k===name)});if(name==="history")loadTickets()}
 function setStatus(id,msg){$(id).textContent=msg}
-async function init(){const {data,error}=await sb.auth.getSession();if(error||!data.session){location.replace("login.html?redirect=support.html");return}user=data.session.user;profile=await loadProfile();$("customerName").textContent=profile?.full_name||user.user_metadata?.full_name||"Smart Money Member";$("customerEmail").textContent=user.email||"Signed-in member";$("avatar").textContent=(profile?.full_name||user.email||"S").trim().charAt(0).toUpperCase();renderAllTopics();await loadTickets();window.addEventListener("beforeunload",()=>clearInterval(pollTimer))}
-async function loadProfile(){const {data,error}=await sb.from("profiles").select("full_name,referral_id,referral_code,package_name,is_active,status,created_at").eq("user_id",user.id).maybeSingle();if(error)console.warn("Profile context unavailable",error.message);return data||null}
+async function loadSupportBrand(){try{const {data,error}=await sb.from("package_images").select("image_url").eq("package_key","smart_money_logo").maybeSingle();if(!error&&data?.image_url){$("supportBrandLogo").src=data.image_url;$("supportBrandLogo").hidden=false;$("supportBrandMark").hidden=true;}}catch(e){console.warn("Support logo not available yet",e)}}
+async function init(){const {data,error}=await sb.auth.getSession();if(error||!data.session){location.replace("login.html?redirect=support.html");return}user=data.session.user;profile=await loadProfile();$("customerName").textContent=profile?.full_name||user.user_metadata?.full_name||"Smart Money Member";$("customerEmail").textContent=user.email||"Signed-in member";$("avatar").textContent=(profile?.full_name||user.email||"S").trim().charAt(0).toUpperCase();$("ticketEmail").textContent=user.email||profile?.email||"Not available";$("ticketMobile").textContent=profile?.mobile||"Not added to profile";$("ticketReferral").textContent=profile?.referral_id||profile?.referral_code||"Not available";renderAllTopics();await loadTickets();await loadSupportBrand();showTab("new");window.addEventListener("beforeunload",()=>clearInterval(pollTimer))}
+async function loadProfile(){const {data,error}=await sb.from("profiles").select("full_name,email,mobile,referral_id,referral_code,package_name,is_active,status,created_at").eq("user_id",user.id).maybeSingle();if(error)console.warn("Profile context unavailable",error.message);return data||null}
 async function getAccountContext(){const [p,pay,w,e,c]=await Promise.all([
  sb.from("profiles").select("full_name,referral_id,referral_code,package_name,is_active,status,created_at").eq("user_id",user.id).maybeSingle(),
  sb.from("payment_requests").select("id,package_name,package_type,package_price,amount,status,payment_status,created_at").eq("user_id",user.id).order("created_at",{ascending:false}).limit(5),
@@ -95,5 +119,5 @@ async function signedAttachment(path){const {data,error}=await sb.storage.from("
 async function openTicket(id){const {data:t,error}=await sb.from("sm_support_tickets").select("id,subject,status,blocked_until,closed_at,attachment_path").eq("id",id).eq("user_id",user.id).single();if(error){setStatus("replyStatus","Ticket could not be opened.");return}activeTicket=t;$("threadWrap").classList.remove("hidden");$("threadTitle").textContent=t.subject;$("threadStatus").textContent=t.status.replace("_"," ");const restricted=t.status==="closed"||(t.blocked_until&&new Date(t.blocked_until)>new Date());$("replyArea").classList.toggle("hidden",!!restricted);if(restricted)setStatus("replyStatus",t.status==="closed"?"This ticket is closed.":"Messaging is temporarily paused for this ticket.");await loadMessages();await loadTickets();clearInterval(pollTimer);pollTimer=setInterval(()=>loadMessages(true),7000)}
 async function loadMessages(silent=false){if(!activeTicket)return;const {data,error}=await sb.from("sm_support_messages").select("id,sender_role,message,attachment_path,created_at").eq("ticket_id",activeTicket.id).order("created_at",{ascending:true});if(error){if(!silent)setStatus("replyStatus","Messages could not be loaded.");return}const host=$("threadMessages");host.innerHTML="";for(const m of data||[]){const kind=m.sender_role==="customer"?"customer":m.sender_role==="admin"?"admin":"assistant";const b=document.createElement("div");b.className="bubble "+kind;b.textContent=m.message;const small=document.createElement("small");small.textContent=(m.sender_role==="customer"?"You":m.sender_role==="admin"?"Smart Money Team":"Support Assistant")+" · "+fmtDate(m.created_at);b.appendChild(small);if(m.attachment_path){const url=await signedAttachment(m.attachment_path);if(url){const link=document.createElement("a");link.href=url;link.target="_blank";link.rel="noopener";link.textContent="View attached screenshot";link.style.cssText="display:block;color:#f3d58f;font-size:10px;margin-top:7px";b.appendChild(link)}}host.appendChild(b)}if(!silent)host.scrollTop=host.scrollHeight}
 async function sendReply(){if(!activeTicket)return;const msg=$("replyText").value.trim(),file=$("replyFile")?.files?.[0];if(!msg&&!file){setStatus("replyStatus","Write a message or attach a screenshot first.");return}let path=null;try{if(file)path=await uploadAttachment(file);const {error}=await sb.rpc("send_sm_support_message",{p_ticket_id:activeTicket.id,p_message:msg||"Screenshot attached for support review.",p_attachment_path:path});if(error)throw error;$("replyText").value="";if($("replyFile"))$("replyFile").value="";setStatus("replyStatus","Message sent.");await loadMessages();await loadTickets()}catch(e){if(path)await sb.storage.from("support-attachments").remove([path]);setStatus("replyStatus",e.message||"Message could not be sent.")}}
-init().then(()=>{try{const q=sessionStorage.getItem('sm_support_pending_question');const c=sessionStorage.getItem('sm_support_pending_category');const match=topics.find(t=>t[2]===c);if(match){aiTopic=match;ticketTopic=match;}if(q){$('aiQuestion').value=q;showTab('assistant');}else if(c){showTab('new');}sessionStorage.removeItem('sm_support_pending_question');sessionStorage.removeItem('sm_support_pending_category');renderAllTopics();}catch(e){}});
+init().then(()=>{try{const c=sessionStorage.getItem('sm_support_pending_category');const match=topics.find(t=>t[2]===c);if(match)ticketTopic=match;sessionStorage.removeItem('sm_support_pending_question');sessionStorage.removeItem('sm_support_pending_category');renderAllTopics();showTab('new');}catch(e){}});
 </script></body></html>
