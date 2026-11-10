@@ -1561,8 +1561,8 @@
         setTimeout(
           function () {
 
-            window.location.href =
-              "dashboard.html";
+            const requestedDestination = new URLSearchParams(window.location.search).get("redirect");
+            window.location.href = requestedDestination === "support.html" ? "support.html" : "dashboard.html";
 
           },
           350
