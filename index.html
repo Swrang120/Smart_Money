@@ -8227,7 +8227,7 @@ window.addEventListener(
    const {data:sessionData}=await supabaseClient.auth.getSession();
    const accessToken=sessionData?.session?.access_token;
    if(!accessToken)throw new Error('Please log in to Smart Money first. Then reopen Smart Money Help.');
-   try{sessionStorage.setItem('sm_support_pending_question',issue);sessionStorage.setItem('sm_support_pending_category',selectedCategory);}catch(storageError){}
+   sessionStorage.setItem('sm_support_pending_question',issue);sessionStorage.setItem('sm_support_pending_category',selectedCategory);
     if(attachedImage){status.textContent='Question saved. Please attach the screenshot again in Direct Support.';}
     window.location.href='support.html';
     return;
