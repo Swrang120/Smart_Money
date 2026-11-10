@@ -8201,44 +8201,7 @@ window.addEventListener(
  const launcher=document.getElementById('smHelpLauncher'),panel=document.getElementById('smHelpPanel'),close=document.getElementById('smHelpClose'),form=document.getElementById('smHelpForm'),input=document.getElementById('smHelpInput'),messages=document.getElementById('smHelpMessages');
  if(!launcher||!panel||!form||!input||!messages)return;
  function open(){panel.classList.add('sm-open');launcher.setAttribute('aria-expanded','true');input.focus();}
- window.openSmartMoneySupport=async function(kind){
-  const modal=document.getElementById('smSupportMailModal');
-  const category=document.getElementById('smMailCategory');
-  const status=document.getElementById('smMailStatus');
-  modal.style.display='flex';
-  if(category)category.value=kind==='payment'?'Payment / Transaction':'Other';
-  const {data:sessionData}=await supabaseClient?.auth?.getSession?.()||{};
-  const user=sessionData?.session?.user;
-  const email=document.getElementById('smMailEmail');
-  const name=document.getElementById('smMailName');
-  const referral=document.getElementById('smMailReferral');
-  if(user){if(email&&!email.value)email.value=user.email||'';if(name&&!name.value)name.value=user.user_metadata?.full_name||user.user_metadata?.name||'';}
-  try{
-   if(!user||!supabaseClient)throw new Error('Please log in to Smart Money to auto-fill your Referral ID.');
-   let prof=await supabaseClient.from('profiles').select('referral_id').eq('user_id',user.id).maybeSingle();
-   if(prof.error)throw prof.error;
-   referral.value=prof.data?.referral_id||'Not available in profile';
-   status.textContent=referral.value==='Not available in profile'?'Referral ID profile mein nahi mila. Please contact admin before sending.':'Your account details are ready.';
-  }catch(err){referral.value='Unable to fetch';status.textContent=err.message||'Referral ID could not be loaded.';}
-  document.getElementById('smSupportMailForm').dataset.kind=kind;
- };
- const mailModal=document.getElementById('smSupportMailModal');
- document.getElementById('smSupportMailClose').addEventListener('click',()=>mailModal.style.display='none');
- mailModal.addEventListener('click',e=>{if(e.target===mailModal)mailModal.style.display='none';});
- document.getElementById('smSupportMailForm').addEventListener('submit',e=>{
-  e.preventDefault();
-  const val=id=>document.getElementById(id).value.trim();
-  const category=val('smMailCategory'),ref=val('smMailReferral');
-  if(!category||!val('smMailName')||!val('smMailEmail')||!val('smMailSubject')||!val('smMailDetails'))return;
-  if(!ref||ref==='Fetching from your account…'||ref==='Unable to fetch'||ref==='Not available in profile'){document.getElementById('smMailStatus').textContent='Referral ID fetch nahi hua. Please login karke dobara try karein.';return;}
-  const kind=e.currentTarget.dataset.kind;
-  const recipient=kind==='payment'?'smartmoneysupport1@gmail.com':'smartmoneyhelpcare@gmail.com';
-  const body=['Smart Money Support Request','', 'Help category: '+category,'Name: '+val('smMailName'),'Registered email: '+val('smMailEmail'),'Referral ID: '+ref,'Subject: '+val('smMailSubject),'','Problem details:',val('smMailDetails')].join('\\n');
-  const mailto='mailto:'+recipient+'?subject='+encodeURIComponent('Smart Money Support - '+val('smMailSubject'))+'&body='+encodeURIComponent(body);
-  window.location.href=mailto;
-  document.getElementById('smMailStatus').textContent='Gmail compose open ho raha hai. Please Send button dabakar email bhejein.';
- });
- function shut(){panel.classList.remove('sm-open');launcher.setAttribute('aria-expanded','false');}
+  function shut(){panel.classList.remove('sm-open');launcher.setAttribute('aria-expanded','false');}
  function add(text,who){const el=document.createElement('div');el.className='sm-help-msg'+(who==='user'?' sm-user':'');el.textContent=text;messages.appendChild(el);messages.scrollTop=messages.scrollHeight;}
  launcher.addEventListener('click',()=>panel.classList.contains('sm-open')?shut():open());close.addEventListener('click',shut);
  document.querySelectorAll('#smHelpQuick button').forEach(b=>b.addEventListener('click',()=>{
@@ -8402,5 +8365,55 @@ window.addEventListener('offline',function(){show('Waiting for internet connecti
 if(window.fetch&&!window.__smartMoneyFetchWrapped){var originalFetch=window.fetch.bind(window);window.fetch=function(input,init){var requestUrl=typeof input==='string'?input:(input&&input.url)||'';return originalFetch(input,init).then(function(response){if(/\.supabase\.co\//i.test(requestUrl)&&response.status<500&&navigator.onLine&&visible)hide();return response;}).catch(function(error){if(/\.supabase\.co\//i.test(requestUrl))networkFailure();throw error;});};window.__smartMoneyFetchWrapped=true;}
 if(!navigator.onLine)show('Waiting for internet connection…');window.addEventListener('pageshow',function(){if(!navigator.onLine)show('Waiting for internet connection…');});
 })();</script>
+<script>
+(function(){
+  const modal=document.getElementById('smSupportMailModal');
+  const form=document.getElementById('smSupportMailForm');
+  if(!modal||!form) return;
+  const el=id=>document.getElementById(id);
+  window.openSmartMoneySupport=async function(kind){
+    const status=el('smMailStatus'), referral=el('smMailReferral');
+    modal.style.display='flex';
+    form.dataset.kind=kind;
+    el('smMailCategory').value=kind==='payment'?'Payment / Transaction':'Other';
+    status.textContent='Account details load ho rahe hain…';
+    referral.value='Fetching from your account…';
+    try{
+      if(typeof supabaseClient==='undefined'||!supabaseClient) throw new Error('Please log in to Smart Money first.');
+      const {data,error}=await supabaseClient.auth.getSession();
+      if(error) throw error;
+      const user=data?.session?.user;
+      if(!user) throw new Error('Please log in to Smart Money first.');
+      if(!el('smMailEmail').value) el('smMailEmail').value=user.email||'';
+      if(!el('smMailName').value) el('smMailName').value=user.user_metadata?.full_name||user.user_metadata?.name||'';
+      const profile=await supabaseClient.from('profiles').select('referral_id').eq('user_id',user.id).maybeSingle();
+      if(profile.error) throw profile.error;
+      referral.value=profile.data?.referral_id||'Not available in profile';
+      status.textContent=referral.value==='Not available in profile'?'Referral ID profile mein nahi mila. Admin se contact karein.':'Details ready. Next dabayein.';
+    }catch(err){
+      referral.value='Unable to fetch';
+      status.textContent=err?.message||'Account details load nahi hue. Dobara login karein.';
+    }
+  };
+  el('smSupportMailClose')?.addEventListener('click',()=>modal.style.display='none');
+  modal.addEventListener('click',e=>{if(e.target===modal) modal.style.display='none';});
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const val=id=>el(id).value.trim();
+    const category=val('smMailCategory'),ref=val('smMailReferral');
+    if(!form.reportValidity()) return;
+    if(!ref||['Fetching from your account…','Unable to fetch','Not available in profile'].includes(ref)){
+      el('smMailStatus').textContent='Referral ID fetch nahi hua. Login karke dobara try karein.';
+      return;
+    }
+    const recipient=form.dataset.kind==='payment'?'smartmoneysupport1@gmail.com':'smartmoneyhelpcare@gmail.com';
+    const subject='Smart Money Support - '+val('smMailSubject');
+    const body=['Smart Money Support Request','','Help category: '+category,'Name: '+val('smMailName),'Registered email: '+val('smMailEmail),'Referral ID: '+ref,'Subject: '+val('smMailSubject),'','Problem details:',val('smMailDetails')].join('\n');
+    const gmail='https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(recipient)+'&su='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+    window.open(gmail,'_blank','noopener');
+    el('smMailStatus').textContent='Gmail compose khul gaya hai. Details check karke Send dabayein.';
+  });
+})();
+</script>
 </body>
 </html>
