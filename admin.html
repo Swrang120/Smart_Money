@@ -9137,6 +9137,31 @@ window.SM_getAdminSupportSession=async function(){
   if(!session?.access_token||!session?.refresh_token)throw new Error('Admin session expired. Please sign in to the Admin Panel again.');
   return {access_token:session.access_token,refresh_token:session.refresh_token};
 };
+window.SM_supportAPI={
+  async ready(){
+    if(!supabaseClient)throw new Error('Admin Panel database connection is not ready.');
+    const {data,error}=await supabaseClient.auth.getSession();if(error)throw error;
+    if(!data?.session?.user||!isAdminUser(data.session.user))throw new Error('Admin login required. Please sign in to the Smart Money Admin Panel.');
+    return {id:data.session.user.id,email:data.session.user.email};
+  },
+  async listTickets(){
+    await this.ready();
+    const {data,error}=await supabaseClient.from('sm_support_tickets').select('id,user_id,category,subject,description,status,created_at,updated_at,blocked_until,closed_at,attachment_path,contact_email,contact_mobile,referral_id').order('updated_at',{ascending:false}).limit(150);
+    if(error)throw error;const rows=data||[];const ids=[...new Set(rows.map(x=>x.user_id))];let profiles={};
+    if(ids.length){const {data:p,error:pe}=await supabaseClient.from('profiles').select('user_id,full_name,email,mobile,referral_id,referral_code,package_name,is_active,status').in('user_id',ids);if(pe)throw pe;(p||[]).forEach(x=>profiles[x.user_id]=x)}
+    return {tickets:rows,profiles};
+  },
+  async messages(ticketId){
+    await this.ready();const {data,error}=await supabaseClient.from('sm_support_messages').select('id,user_id,sender_role,message,attachment_path,created_at').eq('ticket_id',ticketId).order('created_at',{ascending:true});if(error)throw error;
+    const rows=data||[];for(const row of rows){if(row.attachment_path){const {data:u}=await supabaseClient.storage.from('support-attachments').createSignedUrl(row.attachment_path,180);row.signed_url=u?.signedUrl||null}}
+    return rows;
+  },
+  async reply(ticketId,message){
+    const me=await this.ready();const {error}=await supabaseClient.from('sm_support_messages').insert({ticket_id:ticketId,user_id:me.id,sender_role:'admin',message});if(error)throw error;
+    const {error:ue}=await supabaseClient.from('sm_support_tickets').update({status:'replied',updated_at:new Date().toISOString()}).eq('id',ticketId);if(ue)throw ue;return true;
+  },
+  async updateTicket(ticketId,values){await this.ready();const {error}=await supabaseClient.from('sm_support_tickets').update({...values,updated_at:new Date().toISOString()}).eq('id',ticketId);if(error)throw error;return true;}
+};
 function showSupportInbox(){
   const main=document.querySelector('#adminApp > main.container');
   const workspace=document.getElementById('adminSupportWorkspace');
