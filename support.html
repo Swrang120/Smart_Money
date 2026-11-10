@@ -5,111 +5,88 @@
 <meta name="theme-color" content="#090d18"><title>Smart Money Support</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{color-scheme:dark;--bg:#090d18;--panel:#121c2c;--panel2:#172438;--line:#2b3a50;--gold:#e9bd62;--gold2:#f4d895;--text:#f4f6fb;--muted:#9aa8bc;--green:#62d5a5;--red:#ff8492;--blue:#8daeff}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -15%,#29344b 0,transparent 45%),var(--bg);color:var(--text);font:14px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:540px;margin:auto;min-height:100vh;padding:0 15px 30px}
-.header{display:flex;align-items:center;justify-content:space-between;padding:17px 1px 13px}.brand{display:flex;gap:10px;align-items:center;font-weight:900;letter-spacing:.08em;font-size:13px}.mark{width:38px;height:38px;border-radius:13px;background:linear-gradient(145deg,#f6dda2,#c48d38);display:grid;place-items:center;color:#1b1509;font-size:20px;box-shadow:0 8px 22px #d6a34530}.back{color:#e8d09c;text-decoration:none;font-size:11px;font-weight:800;border:1px solid #65522e;padding:8px 11px;border-radius:11px}
-.hero{padding:16px 2px 18px}.eyebrow{color:var(--gold);font-size:9px;font-weight:900;letter-spacing:.2em}.hero h1{font-size:29px;line-height:1.15;letter-spacing:-.04em;margin:7px 0}.hero p{font-size:12px;color:var(--muted);margin:0}
-.identity{display:flex;align-items:center;gap:13px;background:#111d2d;border:1px solid var(--line);border-radius:14px;padding:11px 12px;margin:0 0 14px}.avatar{width:34px;height:34px;border-radius:50%;background:#33466a;display:grid;place-items:center;font-weight:900;color:#f3d58e}.idtext{min-width:0;flex:1}.idtext b{font-size:11px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.idtext span{font-size:9px;color:var(--muted)}.secure{font-size:9px;color:var(--green)}
-.tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;padding:5px;border:1px solid var(--line);background:#0d1422;border-radius:14px;margin-bottom:14px}.tab{border:0;background:transparent;color:var(--muted);padding:10px 4px;border-radius:10px;font-size:10px;font-weight:850}.tab.active{background:linear-gradient(120deg,#f3d58f,#d4a14a);color:#21180b}
-.panel{background:linear-gradient(155deg,#151f31,#101827);border:1px solid #2b394e;border-radius:20px;padding:15px;box-shadow:0 15px 40px #0003}.phead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px}.phead h2{font-size:15px;margin:0}.pill{font-size:9px;border-radius:20px;padding:5px 9px;background:#1c382f;color:#80e0b6;border:1px solid #315b4d}
-.topiclabel,.field label{display:block;color:#aebbd0;font-size:9px;letter-spacing:.11em;font-weight:900;margin:13px 0 7px}.topicgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.topic{display:flex;align-items:center;gap:8px;text-align:left;border:1px solid #2d3b50;background:#111d2d;color:#e7edf7;border-radius:12px;padding:10px 9px;font-size:10px;font-weight:750;min-height:44px}.topic.sel{border-color:#d9b66e;background:#2a251b;color:#f5d895}.topic i{font-style:normal;font-size:16px}
-textarea,input,select{width:100%;background:#0b1422;border:1px solid #2d3b50;border-radius:12px;color:var(--text);padding:12px;outline:none;font-size:12px}textarea{min-height:94px;resize:vertical}textarea:focus,input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px #e9bd6218}textarea::placeholder,input::placeholder{color:#718098}
-.primary{width:100%;border:0;border-radius:12px;background:linear-gradient(115deg,#f2d58f,#d6a249);color:#21180b;padding:13px 14px;font-size:11px;font-weight:950;letter-spacing:.03em;margin-top:12px}.secondary{border:1px solid #394a62;background:#1b2a40;color:#e6edf8;border-radius:10px;padding:9px 11px;font-size:10px;font-weight:800}.status{font-size:10px;color:var(--muted);min-height:15px;margin:8px 1px 0}
-.attach{border:1px dashed #3a4960;border-radius:12px;background:#0d1726;padding:10px}.attach small{display:block;color:var(--muted);font-size:9px;margin-bottom:5px}.attach input{border:0;padding:4px 0;background:transparent;font-size:10px}
-.ticketlist{display:flex;flex-direction:column;gap:7px}.ticket{width:100%;text-align:left;background:#101c2b;border:1px solid #2b3a50;border-radius:13px;padding:11px;color:var(--text)}.ticket.active{border-color:var(--gold)}.tickettop{display:flex;justify-content:space-between;gap:8px}.ticket b{font-size:11px}.ticket small{display:block;color:var(--muted);font-size:9px;margin-top:3px}.statusbadge{font-size:8px;text-transform:uppercase;letter-spacing:.06em;color:#f3d58f;background:#3a2e19;border-radius:20px;padding:4px 7px;height:max-content}
-.chat{display:flex;flex-direction:column;gap:9px;max-height:49vh;overflow:auto;padding:3px 1px 8px}.bubble{max-width:91%;padding:10px 12px;border-radius:13px;font-size:11px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}.customer{align-self:flex-end;background:#34466d;border:1px solid #4a5e8a;border-bottom-right-radius:4px}.admin{align-self:flex-start;background:#352b1c;border:1px solid #65512d;border-bottom-left-radius:4px}.assistant{align-self:flex-start;background:#1b2a3a;border:1px solid #30445c;border-bottom-left-radius:4px}.bubble small{display:block;color:#aab7ca;font-size:8px;margin-top:5px}.msgrow{display:flex;gap:7px;margin-top:10px}.msgrow textarea{min-height:46px;max-height:100px;flex:1}.send{border:0;border-radius:12px;background:var(--gold);color:#21180b;font-weight:950;padding:0 15px}
-.empty{text-align:center;border:1px dashed #3a4960;border-radius:14px;padding:25px 12px;color:var(--muted);font-size:11px}.empty strong{display:block;color:#e6edf8;font-size:13px;margin-bottom:4px}.notice{font-size:9px;line-height:1.55;color:#a9b6c9;background:#111b2a;border:1px solid #2b3a50;border-radius:12px;padding:10px;margin-top:12px}.hidden{display:none!important}.footer{text-align:center;color:#718098;font-size:9px;padding:16px 5px 0}
-@media(min-width:600px){body{padding:18px 0}.app{border:1px solid #29364b;border-radius:25px;min-height:calc(100vh - 36px);padding:0 19px 28px;background:#0b111e;box-shadow:0 25px 90px #0008}}
-
-/* Premium Smart Money member support experience */
-:root{--bg:#070b16;--panel:#111a2b;--panel2:#18253a;--line:#34445c;--gold:#e8bd68;--gold2:#f8dfa5}
-body{background:radial-gradient(ellipse at 50% -12%,#3a2d19 0,transparent 36%),radial-gradient(ellipse at 100% 35%,#182b46 0,transparent 42%),#070b16}
-.app{max-width:760px;padding:18px 18px 38px}
-.header{padding:14px 2px 18px;border-bottom:1px solid #26354b}
-.mark{width:48px;height:48px;border-radius:16px;box-shadow:0 8px 28px #d6a34544}
-.brand{font-size:14px;letter-spacing:.1em}
-.hero{padding:28px 3px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}.hero-copy{min-width:0;flex:1}.support-profile-photo{width:76px;height:76px;flex:0 0 76px;object-fit:cover;object-position:center;border-radius:50%;border:2px solid #e9c16e;box-shadow:0 0 0 4px #20385d,0 0 28px #248cff77;background:#101a2a}
-.hero h1{font-size:clamp(30px,6vw,44px);line-height:1.08;max-width:600px}
-.hero p{font-size:13px;max-width:560px}
-.identity{padding:14px 15px;border-radius:17px;background:linear-gradient(120deg,#18243a,#111b2b);border-color:#3b4a60;box-shadow:0 12px 35px #0003}
-.tabs{grid-template-columns:1fr 1fr;padding:6px;border-radius:16px;background:#0b1322}
-.tab{font-size:11px;padding:13px 8px}
-.panel{padding:clamp(16px,3vw,25px);border-radius:23px;background:linear-gradient(145deg,#172338,#0e1727 72%);border-color:#3b4a60;box-shadow:0 22px 55px #0005}
-.phead h2{font-size:19px;letter-spacing:-.02em}
-.support-sub{color:var(--muted);font-size:11px;margin-top:4px}
-.contact-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:15px 0 18px}
-.contact-strip>div{min-width:0;padding:11px;border:1px solid #34445c;border-radius:13px;background:#0c1626}
-.contact-strip small{display:block;color:#c4a66a;font-size:8px;letter-spacing:.1em;font-weight:900}
-.contact-strip b{display:block;font-size:10px;margin-top:5px;overflow-wrap:anywhere}
-.topic{min-height:54px;font-size:11px;padding:12px;background:linear-gradient(145deg,#142137,#0e192a);border-color:#35455c}
-.topic.sel{background:linear-gradient(130deg,#342a19,#211d17);border-color:#d7ae5e;box-shadow:inset 0 0 0 1px #d7ae5e33}
-textarea,input,select{background:#0a1322;border-color:#35455c;font-size:13px}
-textarea{min-height:145px}
-.primary{padding:16px;border-radius:14px;font-size:12px;letter-spacing:.06em;box-shadow:0 9px 24px #d6a24924}
-.primary:disabled{opacity:.6;cursor:wait}
-.attach{background:#0d1829;border-color:#8d7548}
-.notice{font-size:10px}
-.footer{padding-top:22px}
-@media(max-width:560px){.app{padding:8px 12px 30px}.hero{padding:22px 2px 18px;gap:10px}.support-profile-photo{width:64px;height:64px;flex-basis:64px}.contact-strip{grid-template-columns:1fr}.contact-strip>div{display:flex;justify-content:space-between;gap:12px;align-items:center}.contact-strip small{max-width:100px}.contact-strip b{text-align:right}.topicgrid{gap:8px}.topic{font-size:10px;min-height:50px}.panel{padding:15px}.header .back{font-size:10px}}
-
-/* Clean, readable member support refresh */
-:root{--bg:#080d18;--panel:#111b2c;--panel2:#18263b;--line:#34445d;--gold:#e8bd68;--gold2:#f5d995;--text:#f5f7fb;--muted:#aab6c8}
-body{background:radial-gradient(ellipse at 50% -18%,#293b56 0,transparent 43%),#080d18}
-.app{max-width:700px;padding:16px 18px 36px}
-.header{padding:10px 2px 16px}
-.brand{font-size:13px;letter-spacing:.07em}
-.mark{width:42px;height:42px;border-radius:13px}
-.back{font-size:12px;padding:9px 13px;border-color:#52627a;color:#f2d58e}
-.hero{padding:25px 2px 20px;gap:18px}
-.hero h1{font-size:clamp(30px,6vw,42px);letter-spacing:-.045em}
-.hero p{font-size:14px;line-height:1.65;color:#bdc7d6}
-.eyebrow{font-size:10px;letter-spacing:.14em}
-.hero-icon{width:58px;height:58px;flex:0 0 58px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(145deg,#f5d994,#c38d39);color:#20180b;font-size:27px;box-shadow:0 10px 28px #d5a3462b}
-.identity{padding:13px 15px;margin-bottom:15px}
-.idtext b{font-size:13px}.idtext span{font-size:11px}.secure{font-size:10px}
-.tabs{gap:8px;padding:5px;margin-bottom:16px}
-.tab{font-size:12px;padding:13px 8px}
-.panel{padding:clamp(17px,3vw,25px);border-radius:19px;background:linear-gradient(145deg,#17243a,#101a2b 75%);border-color:#3a4a62;box-shadow:0 18px 48px #0005}
-.phead{margin-bottom:15px}.phead h2{font-size:19px}
-.support-sub{font-size:13px;line-height:1.5;color:#b4c0d1}
-.contact-strip{gap:9px;margin:16px 0 20px}
-.contact-strip>div{padding:12px;border-radius:12px;background:#0d1727}
-.contact-strip small{font-size:9px;letter-spacing:.08em;color:#d9bb79}
-.contact-strip b{font-size:12px;line-height:1.4}
-.topiclabel,.field label{font-size:11px;letter-spacing:.07em;color:#c3cddd;margin:16px 0 8px}
-.topicgrid{gap:9px}
-.topic{min-height:52px;padding:12px;font-size:12px;border-radius:12px;background:#142137;border-color:#3a4a61;color:#f0f3f8}
-.topic.sel{background:#30291d;border-color:#e1bd70;color:#ffe6ad;box-shadow:inset 0 0 0 1px #e1bd7033}
-input,textarea,select{font-size:14px;padding:13px 14px;border-radius:11px;background:#0b1423;border-color:#3a4a61}
-.field label{font-size:11px}
-textarea{min-height:125px;line-height:1.55}
-textarea::placeholder,input::placeholder{color:#8290a5}
-.attach{padding:13px;background:#0d1727;border-color:#52627a}
-.attach small{font-size:10px;line-height:1.5;color:#bdc7d6}
-.attach input{font-size:12px}
-.primary{margin-top:16px;padding:15px;font-size:13px;letter-spacing:.025em;border-radius:11px;background:linear-gradient(110deg,#f3d994,#d5a04a);box-shadow:0 8px 22px #d6a24920}
-.secondary{font-size:12px;padding:10px 13px}
-.status{font-size:12px;line-height:1.5}
-.notice{font-size:11px;line-height:1.6}
-.footer{font-size:10px;line-height:1.7;color:#8391a6}
-.empty{font-size:12px;line-height:1.6}
-.ticket{padding:13px}.ticket b{font-size:13px}.ticket small{font-size:10px}
-.bubble{font-size:13px;line-height:1.6}
-.msgrow textarea{min-height:48px}
-.send{min-width:54px;font-size:16px}
-@media(max-width:560px){
- .app{padding:8px 13px 28px}
- .hero{padding:22px 1px 18px}
- .hero-icon{width:48px;height:48px;flex-basis:48px;border-radius:14px}
- .contact-strip{grid-template-columns:1fr}
- .contact-strip>div{display:flex;justify-content:space-between;gap:12px;align-items:center}
- .contact-strip small{max-width:110px}
- .contact-strip b{text-align:right;max-width:65%;overflow-wrap:anywhere}
- .panel{padding:16px}
- .topic{font-size:11px;min-height:50px}
- .phead h2{font-size:17px}
+:root{
+ color-scheme:dark;--bg:#080d18;--surface:#111b2b;--surface2:#16243a;--surface3:#0d1727;
+ --line:#34445d;--gold:#e8bd68;--gold2:#f5d995;--text:#f4f6fb;--muted:#aab6c8;
+ --green:#75d7ad;--red:#ff8996;
 }
-
+*{box-sizing:border-box}
+html{min-height:100%;background:var(--bg)}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -18%,#253b59 0,transparent 43%),var(--bg);color:var(--text);font:15px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.app{width:min(100% - 28px,760px);margin:0 auto;min-height:100vh;padding:18px 0 38px}
+.header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:0 2px 17px;border-bottom:1px solid #28364b}
+.brand{display:flex;align-items:center;gap:11px;font-size:13px;font-weight:900;letter-spacing:.1em;line-height:1.25}
+.mark{width:44px;height:44px;flex:0 0 44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#f7dfa4,#c68f3b);color:#211807;font-size:22px;box-shadow:0 7px 22px #d6a34530}
+#supportBrandLogo{width:44px!important;height:44px!important;flex:0 0 44px;border-radius:13px!important;background:#fff;padding:3px}
+.back{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:8px 13px;border:1px solid #4a5870;border-radius:10px;background:#17243a;color:#f1d28b;text-decoration:none;font-size:11px;font-weight:800;white-space:nowrap}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:25px 3px 21px}
+.hero-copy{min-width:0;flex:1}
+.eyebrow{color:var(--gold);font-size:10px;font-weight:850;letter-spacing:.16em}
+.hero h1{margin:8px 0 7px;font-size:clamp(30px,6vw,42px);line-height:1.08;letter-spacing:-.045em}
+.hero p{max-width:560px;margin:0;color:#b8c4d5;font-size:14px;line-height:1.65}
+.hero-icon{width:56px;height:56px;flex:0 0 56px;display:grid;place-items:center;border:1px solid #e6c77e;border-radius:17px;background:linear-gradient(145deg,#f6dda0,#c18b38);color:#211807;font-size:26px;box-shadow:0 10px 28px #d5a34625}
+.identity{display:flex;align-items:center;gap:12px;margin:0 0 15px;padding:13px 15px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(120deg,#17243a,#111b2b)}
+.avatar{width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;border-radius:50%;background:#304568;color:#f5d995;font-weight:900}
+.idtext{min-width:0;flex:1}.idtext b{display:block;overflow:hidden;color:var(--text);font-size:13px;text-overflow:ellipsis;white-space:nowrap}.idtext span{display:block;color:var(--muted);font-size:11px;overflow-wrap:anywhere}
+.secure,.pill{border:1px solid #315b4d;border-radius:30px;background:#18352d;color:var(--green);font-size:9px;font-weight:850;letter-spacing:.05em;padding:5px 9px;white-space:nowrap}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:0 0 15px;padding:5px;border:1px solid #34445d;border-radius:13px;background:#0d1523}
+.tab{min-height:43px;border:0;border-radius:9px;background:transparent;color:#b8c4d5;font-size:12px;font-weight:800}
+.tab.active{background:linear-gradient(110deg,#f3d994,#d5a04a);color:#211807;box-shadow:0 5px 16px #d6a24920}
+.panel{padding:clamp(17px,3vw,25px);border:1px solid #3a4a62;border-radius:18px;background:linear-gradient(145deg,#17243a,#101a2b 78%);box-shadow:0 18px 48px #0005}
+.phead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.phead h2{margin:0;color:var(--text);font-size:19px;letter-spacing:-.025em}
+.support-sub{margin:5px 0 0;color:#b4c0d1;font-size:13px;line-height:1.5}
+.contact-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:16px 0 20px}
+.contact-strip>div{min-width:0;padding:12px;border:1px solid #34445d;border-radius:11px;background:#0c1626}
+.contact-strip small{display:block;color:#d9bb79;font-size:9px;font-weight:850;letter-spacing:.08em}
+.contact-strip b{display:block;margin-top:5px;color:#f1f4f9;font-size:12px;line-height:1.4;overflow-wrap:anywhere}
+.topiclabel,.field label{display:block;margin:16px 0 8px;color:#c3cddd;font-size:11px;font-weight:850;letter-spacing:.07em}
+.topicgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.topic{display:flex;align-items:center;gap:9px;min-height:50px;padding:11px 12px;border:1px solid #3a4a61;border-radius:11px;background:#142137;color:#f0f3f8;text-align:left;font-size:12px;font-weight:750}
+.topic i{font-style:normal;font-size:16px}.topic.sel{border-color:#e1bd70;background:#30291d;color:#ffe6ad;box-shadow:inset 0 0 0 1px #e1bd7033}
+input,textarea,select{width:100%;padding:13px 14px;border:1px solid #3a4a61;border-radius:10px;outline:none;background:#0b1423;color:var(--text);font-size:14px}
+input:focus,textarea:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px #e8bd6818}
+input::placeholder,textarea::placeholder{color:#8290a5}
+textarea{min-height:125px;resize:vertical;line-height:1.6}
+.attach{padding:13px;border:1px dashed #52627a;border-radius:11px;background:#0d1727}
+.attach small{display:block;margin-bottom:7px;color:#bdc7d6;font-size:10px;line-height:1.5}
+.attach input{padding:4px 0;border:0;background:transparent;font-size:12px}
+.primary{width:100%;margin-top:16px;padding:15px;border:0;border-radius:11px;background:linear-gradient(110deg,#f3d994,#d5a04a);color:#211807;font-size:13px;font-weight:900;letter-spacing:.025em;box-shadow:0 8px 22px #d6a24920}
+.primary:disabled{opacity:.6;cursor:wait}
+.secondary{padding:10px 13px;border:1px solid #42536b;border-radius:9px;background:#1b2a40;color:#e6edf8;font-size:11px;font-weight:800}
+.status{min-height:17px;margin:9px 1px 0;color:#b9c5d5;font-size:12px;line-height:1.5}
+.ticketlist{display:flex;flex-direction:column;gap:8px}
+.ticket{width:100%;padding:13px;border:1px solid #34445d;border-radius:11px;background:#101c2b;color:var(--text);text-align:left}
+.ticket.active{border-color:var(--gold)}.tickettop{display:flex;justify-content:space-between;gap:8px}.ticket b{font-size:13px}.ticket small{display:block;margin-top:4px;color:var(--muted);font-size:10px}
+.statusbadge{height:max-content;padding:4px 8px;border-radius:20px;background:#3a2e19;color:#f3d58f;font-size:9px;text-transform:uppercase}
+.chat{display:flex;flex-direction:column;gap:10px;max-height:50vh;overflow:auto;padding:3px 1px 8px}
+.bubble{max-width:91%;padding:11px 13px;border-radius:12px;font-size:13px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.customer{align-self:flex-end;border:1px solid #4a5e8a;border-bottom-right-radius:4px;background:#34466d}
+.admin{align-self:flex-start;border:1px solid #65512d;border-bottom-left-radius:4px;background:#352b1c}
+.assistant{align-self:flex-start;border:1px solid #30445c;border-bottom-left-radius:4px;background:#1b2a3a}
+.bubble small{display:block;margin-top:5px;color:#aab7ca;font-size:9px}
+.msgrow{display:flex;gap:8px;margin-top:10px}.msgrow textarea{min-height:48px;max-height:110px;flex:1}.send{min-width:52px;border:0;border-radius:10px;background:var(--gold);color:#211807;font-weight:950}
+.empty{padding:25px 12px;border:1px dashed #3a4960;border-radius:12px;color:var(--muted);font-size:12px;line-height:1.6;text-align:center}
+.empty strong{display:block;margin-bottom:4px;color:#e6edf8;font-size:14px}
+.notice{margin-top:12px;padding:10px;border:1px solid #2b3a50;border-radius:10px;background:#111b2a;color:#a9b6c9;font-size:10px;line-height:1.6}
+.hidden{display:none!important}.footer{padding:20px 5px 0;color:#8391a6;font-size:10px;line-height:1.7;text-align:center}
+@media(max-width:620px){
+ .app{width:calc(100% - 24px);padding:10px 0 28px}
+ .hero{padding:21px 2px 17px}.hero h1{font-size:32px}.hero p{font-size:13px}
+ .hero-icon{width:48px;height:48px;flex-basis:48px;border-radius:14px}
+ .contact-strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .contact-strip>div{padding:10px}.contact-strip b{font-size:11px}
+ .panel{padding:16px}.phead h2{font-size:17px}
+ .topicgrid{gap:8px}.topic{min-height:48px;padding:10px;font-size:11px}
+ .back{font-size:10px;padding:8px 10px}
+}
+@media(max-width:380px){
+ .brand{font-size:11px}.mark,#supportBrandLogo{width:39px!important;height:39px!important;flex-basis:39px}
+ .hero h1{font-size:29px}.hero-icon{width:43px;height:43px;flex-basis:43px}
+ .tab{font-size:11px}.contact-strip b{font-size:10px}
+}
 </style>
 </head>
 <body><main class="app">
@@ -118,7 +95,7 @@ textarea::placeholder,input::placeholder{color:#8290a5}
 <div class="identity"><div class="avatar" id="avatar">S</div><div class="idtext"><b id="customerName">Loading account…</b><span id="customerEmail">Checking secure session</span></div><div class="secure">● SECURE</div></div>
 <nav class="tabs"><button class="tab active" id="newTab" onclick="showTab('new')">＋ Create Support Ticket</button><button class="tab" id="historyTab" onclick="showTab('history')">▤ My Tickets</button></nav>
 <section class="panel hidden" id="newPanel">
-<div class="phead"><div><h2>Create a support ticket</h2><p class="support-sub">Tell us what you need help with. We will reply in your ticket.</p></div><span class="pill">SECURE</span></div><div class="contact-strip"><div><small>ACCOUNT EMAIL</small><b id="ticketEmail">Loading…</b></div><div><small>PHONE</small><b id="ticketMobile">Loading…</b></div><div><small>REFERRAL ID</small><b id="ticketReferral">Loading…</b></div></div>
+<div class="phead"><div><h2>Create a support ticket</h2><p class="support-sub">Tell us what you need help with. We will reply in your ticket.</p></div><span class="pill">SECURE</span></div><div class="contact-strip"><div><small>ACCOUNT EMAIL</small><b id="ticketEmail">Loading…</b></div><div><small>MOBILE NUMBER</small><b id="ticketMobile">Loading…</b></div><div><small>REFERRAL ID</small><b id="ticketReferral">Loading…</b></div><div><small>PACKAGE</small><b id="ticketPackage">Loading…</b></div></div>
 <div class="topiclabel">SELECT A TOPIC</div><div class="topicgrid" id="ticketTopics"></div>
 <div class="field"><label for="ticketSubject">SHORT TITLE</label><input id="ticketSubject" maxlength="120" placeholder="Short title for your issue"></div>
 <div class="field"><label for="ticketMessage">WHAT HAPPENED?</label><textarea id="ticketMessage" maxlength="4000" placeholder="Describe the issue clearly. Never share your password, OTP or banking PIN."></textarea></div>
@@ -150,7 +127,7 @@ function renderAllTopics(){renderTopics("ticketTopics",ticketTopic,v=>ticketTopi
 function showTab(name){["new","history"].forEach(k=>{$(k+"Panel").classList.toggle("hidden",k!==name);$(k+"Tab").classList.toggle("active",k===name)});if(name==="history")loadTickets()}
 function setStatus(id,msg){$(id).textContent=msg}
 async function loadSupportBrand(){try{const {data,error}=await sb.from("package_images").select("image_url").eq("package_key","smart_money_logo").maybeSingle();if(!error&&data?.image_url){$("supportBrandLogo").src=data.image_url;$("supportBrandLogo").hidden=false;$("supportBrandMark").hidden=true;}}catch(e){console.warn("Support logo not available yet",e)}}
-async function init(){const {data,error}=await sb.auth.getSession();if(error||!data.session){location.replace("login.html?redirect=support.html");return}user=data.session.user;profile=await loadProfile();$("customerName").textContent=profile?.full_name||user.user_metadata?.full_name||"Smart Money Member";$("customerEmail").textContent=user.email||"Signed-in member";$("avatar").textContent=(profile?.full_name||user.email||"S").trim().charAt(0).toUpperCase();$("ticketEmail").textContent=user.email||profile?.email||"Not available";$("ticketMobile").textContent=profile?.mobile||"Not added to profile";$("ticketReferral").textContent=profile?.referral_id||profile?.referral_code||"Not available";renderAllTopics();await loadTickets();await loadSupportBrand();showTab("new");window.addEventListener("beforeunload",()=>clearInterval(pollTimer))}
+async function init(){const {data,error}=await sb.auth.getSession();if(error||!data.session){location.replace("login.html?redirect=support.html");return}user=data.session.user;profile=await loadProfile();$("customerName").textContent=profile?.full_name||user.user_metadata?.full_name||"Smart Money Member";$("customerEmail").textContent=user.email||"Signed-in member";$("avatar").textContent=(profile?.full_name||user.email||"S").trim().charAt(0).toUpperCase();$("ticketEmail").textContent=user.email||profile?.email||"Not available";$("ticketMobile").textContent=profile?.mobile||"Not added to profile";$("ticketReferral").textContent=profile?.referral_id||profile?.referral_code||"Not available";$("ticketPackage").textContent=profile?.package_name||"Not assigned";renderAllTopics();await loadTickets();await loadSupportBrand();showTab("new");window.addEventListener("beforeunload",()=>clearInterval(pollTimer))}
 async function loadProfile(){const {data,error}=await sb.from("profiles").select("full_name,email,mobile,referral_id,referral_code,package_name,is_active,status,created_at").eq("user_id",user.id).maybeSingle();if(error)console.warn("Profile context unavailable",error.message);return data||null}
 async function getAccountContext(){const [p,pay,w,e,c]=await Promise.all([
  sb.from("profiles").select("full_name,referral_id,referral_code,package_name,is_active,status,created_at").eq("user_id",user.id).maybeSingle(),
@@ -172,7 +149,7 @@ return hindi?"मैं आपके account के verified records से paym
 async function askAssistant(){const q=$("aiQuestion").value.trim();if(q.length<3){setStatus("aiStatus","Please enter a question of at least 3 characters.");return}lastQuestion=q;setStatus("aiStatus","Checking your own account records…");$("aiResult").classList.add("hidden");try{const ctx=await getAccountContext();const answer=localGuidance(q,ctx);$("aiAnswer").textContent=answer;$("aiResult").classList.remove("hidden");setStatus("aiStatus",ctx.partial?"Some records were unavailable; the response uses only data that loaded.":"Account check completed securely in Smart Money.");}catch(e){setStatus("aiStatus","Could not read account records. Please try again or create a ticket.")}}
 function escalateAssistant(){ticketTopic=aiTopic;$("ticketSubject").value=lastQuestion.slice(0,120)||"Help requested from Smart Money Assistant";$("ticketMessage").value=lastQuestion;renderAllTopics();showTab("new")}
 async function uploadAttachment(file){if(!file)return null;if(!["image/png","image/jpeg","image/webp"].includes(file.type)||file.size>5*1024*1024)throw new Error("Please use PNG, JPG or WEBP under 5 MB.");const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";const path=user.id+"/"+Date.now()+"-"+crypto.randomUUID()+"."+ext;const {error}=await sb.storage.from("support-attachments").upload(path,file,{contentType:file.type,upsert:false});if(error)throw error;return path}
-async function createTicket(){const subject=$("ticketSubject").value.trim(),message=$("ticketMessage").value.trim(),file=$("ticketFile").files[0];if(subject.length<3){setStatus("ticketStatus","Subject must be at least 3 characters.");return}if(message.length<3){setStatus("ticketStatus","Please describe your issue.");return}const btn=document.querySelector("#newPanel .primary");btn.disabled=true;btn.textContent="CREATING SECURE TICKET…";setStatus("ticketStatus","Saving your ticket securely…");let path=null;try{if(file)path=await uploadAttachment(file);const {data,error}=await sb.rpc("create_sm_support_ticket",{p_category:ticketTopic[2],p_subject:subject,p_message:message,p_attachment_path:path});if(error)throw error;const id=data;$("ticketSubject").value="";$("ticketMessage").value="";$("ticketFile").value="";setStatus("ticketStatus","Ticket created successfully: "+id);await loadTickets();showTab("history");await openTicket(id)}catch(e){if(path)await sb.storage.from("support-attachments").remove([path]).catch(()=>{});setStatus("ticketStatus",e.message||"Ticket could not be created. Please retry.");}finally{btn.disabled=false;btn.textContent="SUBMIT SUPPORT TICKET →"}}
+async function createTicket(){const subject=$("ticketSubject").value.trim(),message=$("ticketMessage").value.trim(),file=$("ticketFile").files[0];if(subject.length<3){setStatus("ticketStatus","Subject must be at least 3 characters.");return}if(message.length<3){setStatus("ticketStatus","Please describe your issue.");return}const btn=document.querySelector("#newPanel .primary");btn.disabled=true;btn.textContent="CREATING SECURE TICKET…";setStatus("ticketStatus","Saving your ticket securely…");let path=null;try{if(file)path=await uploadAttachment(file);const {data,error}=await sb.rpc("create_sm_support_ticket",{p_category:ticketTopic[2],p_subject:subject,p_message:message,p_attachment_path:path});if(error)throw error;const id=data;$("ticketSubject").value="";$("ticketMessage").value="";$("ticketFile").value="";setStatus("ticketStatus","Ticket created successfully: "+id);await loadTickets();showTab("history");await openTicket(id)}catch(e){if(path)await sb.storage.from("support-attachments").remove([path]).catch(()=>{});setStatus("ticketStatus",e.message||"Ticket could not be created. Please retry.");}finally{btn.disabled=false;btn.textContent="SEND SUPPORT REQUEST →"}}
 async function loadTickets(){const host=$("ticketList");host.innerHTML='<div class="empty">Loading your tickets…</div>';const {data,error}=await sb.from("sm_support_tickets").select("id,category,subject,status,created_at,updated_at,blocked_until,closed_at").eq("user_id",user.id).order("created_at",{ascending:false}).limit(30);if(error){host.innerHTML='<div class="empty"><strong>Could not load tickets</strong>'+safeText(error.message)+'</div>';return}if(!data?.length){host.innerHTML='<div class="empty"><strong>No support tickets yet</strong>Your submitted support requests will appear here.</div>';$("threadWrap").classList.add("hidden");return}host.innerHTML="";data.forEach(t=>{const b=document.createElement("button");b.className="ticket"+(activeTicket?.id===t.id?" active":"");const top=document.createElement("div");top.className="tickettop";const title=document.createElement("b");title.textContent=t.subject;const badge=document.createElement("span");badge.className="statusbadge";badge.textContent=t.status.replace("_"," ");top.append(title,badge);const small=document.createElement("small");small.textContent=t.id.slice(0,8).toUpperCase()+" · "+fmtDate(t.created_at);b.append(top,small);b.onclick=()=>openTicket(t.id);host.appendChild(b)})}
 async function signedAttachment(path){const {data,error}=await sb.storage.from("support-attachments").createSignedUrl(path,180);return error?null:data?.signedUrl||null}
 async function openTicket(id){const {data:t,error}=await sb.from("sm_support_tickets").select("id,subject,status,blocked_until,closed_at,attachment_path").eq("id",id).eq("user_id",user.id).single();if(error){setStatus("replyStatus","Ticket could not be opened.");return}activeTicket=t;$("threadWrap").classList.remove("hidden");$("threadTitle").textContent=t.subject;$("threadStatus").textContent=t.status.replace("_"," ");const restricted=t.status==="closed"||(t.blocked_until&&new Date(t.blocked_until)>new Date());$("replyArea").classList.toggle("hidden",!!restricted);if(restricted)setStatus("replyStatus",t.status==="closed"?"This ticket is closed.":"Messaging is temporarily paused for this ticket.");await loadMessages();await loadTickets();clearInterval(pollTimer);pollTimer=setInterval(()=>loadMessages(true),7000)}
