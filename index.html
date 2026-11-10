@@ -8170,71 +8170,19 @@ window.addEventListener(
 );
 </script>
 
-<!-- Smart Money's own support widget (Phase 1: branded help desk shell) -->
-<style>
-#smHelpLauncher{position:fixed;right:18px;top:50%;bottom:auto;transform:translateY(-50%);z-index:99990;border:0;border-radius:999px;padding:12px 17px;background:linear-gradient(120deg,#7137df,#315eea);color:#fff;font-weight:800;box-shadow:0 8px 26px #263a8a55;cursor:pointer}
-#smHelpPanel{position:fixed;right:16px;bottom:78px;width:min(370px,calc(100vw - 28px));height:min(590px,calc(100dvh - 112px));z-index:99991;background:#fff;border:1px solid #dfe4f2;border-radius:18px;box-shadow:0 18px 60px #101a3540;display:none;overflow:hidden;font-family:inherit;color:#172033}
-#smHelpPanel.sm-open{display:flex;flex-direction:column}
-#smHelpHead{padding:15px 16px;background:linear-gradient(120deg,#171d38,#303b72);color:#fff;display:flex;align-items:center;justify-content:space-between}
-#smHelpHead strong{display:block;font-size:15px}#smHelpHead small{opacity:.8;font-size:11px}
-#smHelpClose{border:0;background:#ffffff20;color:#fff;border-radius:9px;padding:6px 10px;font-size:18px}
-#smHelpMessages{padding:15px;overflow:auto;flex:1;background:#f6f8fd}
-.sm-help-msg{max-width:92%;padding:11px 12px;margin:0 0 10px;border-radius:13px;background:#fff;border:1px solid #e6eaf3;font-size:13px;line-height:1.5;white-space:pre-wrap}
-.sm-help-msg.sm-user{margin-left:auto;background:#e9eaff;border-color:#d9dcff}
-#smHelpStatus{padding:9px 14px;background:#fff3d9;color:#78520b;font-size:11px;line-height:1.4}
-#smHelpForm{display:flex;gap:8px;padding:11px;border-top:1px solid #e8ebf3;background:#fff}
-#smHelpInput{min-width:0;flex:1;border:1px solid #d9deea;border-radius:10px;padding:11px;font:inherit;font-size:13px}
-#smHelpSend{border:0;border-radius:10px;padding:0 14px;background:#6545dc;color:#fff;font-weight:700}
-#smHelpQuick{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 10px;background:#f6f8fd}
-#smHelpQuick button{border:1px solid #d9def0;background:#fff;border-radius:20px;padding:7px 9px;font-size:11px;color:#38436a}
+<!-- Smart Money private member support entry point -->
+<style id="smPrivateSupportLauncherStyle">
+#smHelpLauncher{position:fixed;right:16px;bottom:22px;z-index:99990;border:1px solid #b88b3e;border-radius:999px;padding:13px 18px;background:linear-gradient(120deg,#f3d58f,#c58b39);color:#201707;font-weight:900;font-size:13px;box-shadow:0 10px 28px #b98a3d55;cursor:pointer}
+#smHelpLauncher:active{transform:translateY(1px)}
+@media(max-width:600px){#smHelpLauncher{right:12px;bottom:14px;padding:12px 15px;font-size:12px}}
 </style>
-<button id="smHelpLauncher" type="button" aria-controls="smHelpPanel" aria-expanded="false">💬 Smart Money Help</button>
-<section id="smHelpPanel" aria-label="Smart Money customer support">
- <header id="smHelpHead"><div><strong>🤖 Smart Money Help Desk</strong><small>Official customer support</small></div><button id="smHelpClose" type="button" aria-label="Close">×</button></header>
- <div id="smHelpMessages" aria-live="polite"><div class="sm-help-msg">Namaste! Welcome to Smart Money Support. 👋\nApni problem likhiye ya neeche diye gaye topic ko select kijiye.\n\nMain Smart Money ki AI support guide hoon. Main aapki query ka jawab dunga aur zarurat par support ticket Smart Money Team ko review ke liye bhejunga.</div></div>
- <div id="smHelpQuick"><button type="button" data-topic="Payment / transaction problem">💳 Payment</button><button type="button" data-topic="Login / account problem">🔐 Login</button><button type="button" data-topic="Package activation problem">📦 Package</button><button type="button" data-topic="Commission / referral problem">👥 Commission / Referral</button><button type="button" data-topic="Course access problem">🎓 Course</button><button type="button" data-topic="Withdrawal problem">🏦 Withdrawal</button></div>
- <div id="smHelpStatus">AI support guide • Account aur payment requests Smart Money Team review karti hai.</div>
- <form id="smHelpForm"><input id="smHelpInput" maxlength="1200" autocomplete="off" placeholder="Apni problem yahan likhein…" aria-label="Describe your issue"><label for="smHelpImage" title="Attach screenshot" style="padding:10px;cursor:pointer">📷</label><input id="smHelpImage" type="file" accept="image/png,image/jpeg,image/webp" hidden><button id="smHelpSend" type="submit">Send</button></form><div id="smHelpImageName" style="padding:0 12px 8px;background:#fff;font-size:11px"></div>
-</section>
+<button id="smHelpLauncher" type="button" aria-label="Open Smart Money Support">✦ &nbsp; Smart Money Support</button>
 <script>
 (function(){
- const launcher=document.getElementById('smHelpLauncher'),panel=document.getElementById('smHelpPanel'),close=document.getElementById('smHelpClose'),form=document.getElementById('smHelpForm'),input=document.getElementById('smHelpInput'),messages=document.getElementById('smHelpMessages');
- if(!launcher||!panel||!form||!input||!messages)return;
- function open(){panel.classList.add('sm-open');launcher.setAttribute('aria-expanded','true');input.focus();}
-  function shut(){panel.classList.remove('sm-open');launcher.setAttribute('aria-expanded','false');}
- function add(text,who){const el=document.createElement('div');el.className='sm-help-msg'+(who==='user'?' sm-user':'');el.textContent=text;messages.appendChild(el);messages.scrollTop=messages.scrollHeight;}
- launcher.addEventListener('click',()=>panel.classList.contains('sm-open')?shut():open());close.addEventListener('click',shut);
- document.querySelectorAll('#smHelpQuick button').forEach(b=>b.addEventListener('click',()=>{
-  const topic=String(b.dataset.topic||'').toLowerCase();
-  selectedCategory=topic.includes('payment')?'payment':topic.includes('login')?'login':topic.includes('package')?'package':topic.includes('commission')||topic.includes('referral')?'commission':topic.includes('course')?'course':topic.includes('withdrawal')?'withdrawal':'general';
-  input.value=b.dataset.topic+' — ';input.focus();
- }));
- let selectedCategory='general';
- let attachedImage=null;
- const imageInput=document.getElementById('smHelpImage'),imageName=document.getElementById('smHelpImageName');
- if(imageInput) imageInput.addEventListener('change',()=>{const f=imageInput.files&&imageInput.files[0];if(!f)return;if(f.size>3.5*1024*1024){alert('Screenshot 3.5 MB se chhota rakhein.');imageInput.value='';return;}const reader=new FileReader();reader.onload=()=>{attachedImage=reader.result;if(imageName)imageName.textContent='Attached: '+f.name;};reader.readAsDataURL(f);});
- document.querySelectorAll('#smHelpQuick button').forEach(b=>b.addEventListener('click',()=>{
-   const topic=String(b.dataset.topic||'').toLowerCase();
-   selectedCategory=topic.includes('payment')?'payment':topic.includes('login')?'login':topic.includes('package')?'package':topic.includes('commission')||topic.includes('referral')?'commission':topic.includes('course')?'course':topic.includes('withdrawal')?'withdrawal':'general';
-   input.value=b.dataset.topic+' — ';input.focus();
- }));
- form.addEventListener('submit',async e=>{
-  e.preventDefault();const issue=input.value.trim();if(!issue)return;
-  add(issue,'user');input.value='';const send=document.getElementById('smHelpSend');send.disabled=true;send.textContent='…';
-  const status=document.getElementById('smHelpStatus');status.textContent='Smart Money AI is checking your question…';
-  try{
-   if(!window.supabase||!supabaseClient)throw new Error('Support connection is unavailable. Please contact support by email.');
-   const {data:sessionData}=await supabaseClient.auth.getSession();
-   const accessToken=sessionData?.session?.access_token;
-   if(!accessToken)throw new Error('Please log in to Smart Money first. Then reopen Smart Money Help.');
-   sessionStorage.setItem('sm_support_pending_question',issue);sessionStorage.setItem('sm_support_pending_category',selectedCategory);
-    if(attachedImage){status.textContent='Question saved. Please attach the screenshot again in Direct Support.';}
-    window.location.href='support.html';
-    return;
-   }catch(err){
-   add(err.message||'Support could not process this request. Please try again.','bot');
-   status.textContent='Support service is temporarily unavailable. Your message was not submitted. Please try again shortly.';
-  }finally{send.disabled=false;send.textContent='Send';messages.scrollTop=messages.scrollHeight;}
+ const button=document.getElementById("smHelpLauncher");
+ if(!button)return;
+ button.addEventListener("click",function(){
+   window.location.href="support.html";
  });
 })();
 </script>
