@@ -9141,7 +9141,20 @@ function showSupportInbox(){
   if(!workspace||!main)return;
   main.classList.add('hidden');
   workspace.classList.remove('hidden');
-  if(frame&&!frame.getAttribute('src'))frame.setAttribute('src',frame.dataset.src||'support-admin.html');
+  if(frame){
+    if(!frame.getAttribute('src'))frame.setAttribute('src',frame.dataset.src||'support-admin.html');
+    const sendAdminSession=async()=>{
+      try{
+        const {data,error}=await supabaseClient.auth.getSession();
+        if(error)throw error;
+        const session=data?.session;
+        if(!session?.access_token||!session?.refresh_token)throw new Error('Admin session is unavailable. Please sign in again.');
+        frame.contentWindow?.postMessage({type:'SM_ADMIN_SESSION',access_token:session.access_token,refresh_token:session.refresh_token},window.location.origin);
+      }catch(error){console.error('Could not share verified admin session with support inbox:',error);}
+    };
+    frame.addEventListener('load',sendAdminSession,{once:true});
+    if(frame.contentDocument?.readyState==='complete')sendAdminSession();
+  }
   const sidebar=document.getElementById('adminSidebar');
   const overlay=document.getElementById('sidebarOverlay');
   if(sidebar)sidebar.classList.remove('open');
