@@ -1264,6 +1264,11 @@ textarea:focus-visible, a:focus-visible {
   }
 }
 
+
+/* Integrated support inbox workspace */
+#adminSupportWorkspace.hidden{display:none!important}
+#adminSupportFrame{color-scheme:dark}
+@media(max-width:700px){#adminSupportWorkspace{width:100%!important;margin:8px auto 24px!important;padding:0 8px 20px!important}#adminSupportFrame{height:calc(100dvh - 190px)!important;min-height:680px!important}}
 </style>  
   
 <style id="smartMoneyNetworkUiStyles">
@@ -1972,10 +1977,10 @@ class="sidebar"
        style="display:flex;align-items:center;gap:10px;margin:16px 0;padding:13px 14px;border-radius:10px;background:linear-gradient(135deg,#d9ad4e,#f4d98d);color:#172033;font-weight:800;text-decoration:none">
        🎓 Skill Academy Control ↗
     </a>
-    <a href="support-admin.html" target="_blank" rel="noopener noreferrer"
-       style="display:flex;align-items:center;gap:10px;margin:10px 0;padding:13px 14px;border-radius:10px;background:linear-gradient(135deg,#243b54,#17263a);border:1px solid #536984;color:#f3d58e;font-weight:800;text-decoration:none">
-       🎧 Customer Support Inbox ↗
-    </a>  
+    <button type="button" onclick="showSupportInbox()" 
+       style="width:100%;display:flex;align-items:center;gap:10px;margin:10px 0;padding:13px 14px;border-radius:10px;background:linear-gradient(135deg,#243b54,#17263a);border:1px solid #536984;color:#f3d58e;font-weight:800;text-align:left;cursor:pointer">
+       🎧 Customer Support Inbox
+    </button>  
   
   
     <div class="logo-upload">  
@@ -2522,7 +2527,15 @@ class="sidebar"
 </section>  
   
   
-</main>  
+</main>
+
+<section id="adminSupportWorkspace" class="hidden" style="width:min(1500px,96%);margin:18px auto 40px;padding:0 0 24px;position:relative;z-index:5">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px;padding:14px 16px;border:1px solid rgba(233,189,98,.28);border-radius:14px;background:linear-gradient(135deg,#18243a,#101827)">
+    <div><b style="color:#f3d58e;font-size:15px">🎧 Customer Support Inbox</b><div style="color:#9aa8bc;font-size:11px;margin-top:4px">Manage customer tickets without leaving the Smart Money Admin Panel.</div></div>
+    <button type="button" onclick="showAdminDashboard()" style="border:0;border-radius:9px;padding:10px 14px;background:#e9bd62;color:#21180b;font-weight:800;cursor:pointer">← Back to Admin Dashboard</button>
+  </div>
+  <iframe id="adminSupportFrame" title="Smart Money Customer Support Inbox" data-src="support-admin.html" loading="lazy" style="display:block;width:100%;height:calc(100vh - 150px);min-height:720px;border:1px solid #2b3a50;border-radius:16px;background:#0b1020"></iframe>
+</section>
   
 </div>  
   
@@ -9119,6 +9132,30 @@ if(!navigator.onLine)show('Waiting for internet connection…');window.addEventL
 })();
 </script>
 
+
+<script id="smart-money-integrated-support-inbox">
+function showSupportInbox(){
+  const main=document.querySelector('#adminApp > main.container');
+  const workspace=document.getElementById('adminSupportWorkspace');
+  const frame=document.getElementById('adminSupportFrame');
+  if(!workspace||!main)return;
+  main.classList.add('hidden');
+  workspace.classList.remove('hidden');
+  if(frame&&!frame.getAttribute('src'))frame.setAttribute('src',frame.dataset.src||'support-admin.html');
+  const sidebar=document.getElementById('adminSidebar');
+  const overlay=document.getElementById('sidebarOverlay');
+  if(sidebar)sidebar.classList.remove('open');
+  if(overlay)overlay.style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showAdminDashboard(){
+  const main=document.querySelector('#adminApp > main.container');
+  const workspace=document.getElementById('adminSupportWorkspace');
+  if(workspace)workspace.classList.add('hidden');
+  if(main)main.classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
 </body>
 </html>
 
