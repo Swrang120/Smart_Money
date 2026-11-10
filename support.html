@@ -51,31 +51,90 @@ textarea{min-height:145px}
 .notice{font-size:10px}
 .footer{padding-top:22px}
 @media(max-width:560px){.app{padding:8px 12px 30px}.hero{padding:22px 2px 18px;gap:10px}.support-profile-photo{width:64px;height:64px;flex-basis:64px}.contact-strip{grid-template-columns:1fr}.contact-strip>div{display:flex;justify-content:space-between;gap:12px;align-items:center}.contact-strip small{max-width:100px}.contact-strip b{text-align:right}.topicgrid{gap:8px}.topic{font-size:10px;min-height:50px}.panel{padding:15px}.header .back{font-size:10px}}
+
+/* Clean, readable member support refresh */
+:root{--bg:#080d18;--panel:#111b2c;--panel2:#18263b;--line:#34445d;--gold:#e8bd68;--gold2:#f5d995;--text:#f5f7fb;--muted:#aab6c8}
+body{background:radial-gradient(ellipse at 50% -18%,#293b56 0,transparent 43%),#080d18}
+.app{max-width:700px;padding:16px 18px 36px}
+.header{padding:10px 2px 16px}
+.brand{font-size:13px;letter-spacing:.07em}
+.mark{width:42px;height:42px;border-radius:13px}
+.back{font-size:12px;padding:9px 13px;border-color:#52627a;color:#f2d58e}
+.hero{padding:25px 2px 20px;gap:18px}
+.hero h1{font-size:clamp(30px,6vw,42px);letter-spacing:-.045em}
+.hero p{font-size:14px;line-height:1.65;color:#bdc7d6}
+.eyebrow{font-size:10px;letter-spacing:.14em}
+.hero-icon{width:58px;height:58px;flex:0 0 58px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(145deg,#f5d994,#c38d39);color:#20180b;font-size:27px;box-shadow:0 10px 28px #d5a3462b}
+.identity{padding:13px 15px;margin-bottom:15px}
+.idtext b{font-size:13px}.idtext span{font-size:11px}.secure{font-size:10px}
+.tabs{gap:8px;padding:5px;margin-bottom:16px}
+.tab{font-size:12px;padding:13px 8px}
+.panel{padding:clamp(17px,3vw,25px);border-radius:19px;background:linear-gradient(145deg,#17243a,#101a2b 75%);border-color:#3a4a62;box-shadow:0 18px 48px #0005}
+.phead{margin-bottom:15px}.phead h2{font-size:19px}
+.support-sub{font-size:13px;line-height:1.5;color:#b4c0d1}
+.contact-strip{gap:9px;margin:16px 0 20px}
+.contact-strip>div{padding:12px;border-radius:12px;background:#0d1727}
+.contact-strip small{font-size:9px;letter-spacing:.08em;color:#d9bb79}
+.contact-strip b{font-size:12px;line-height:1.4}
+.topiclabel,.field label{font-size:11px;letter-spacing:.07em;color:#c3cddd;margin:16px 0 8px}
+.topicgrid{gap:9px}
+.topic{min-height:52px;padding:12px;font-size:12px;border-radius:12px;background:#142137;border-color:#3a4a61;color:#f0f3f8}
+.topic.sel{background:#30291d;border-color:#e1bd70;color:#ffe6ad;box-shadow:inset 0 0 0 1px #e1bd7033}
+input,textarea,select{font-size:14px;padding:13px 14px;border-radius:11px;background:#0b1423;border-color:#3a4a61}
+.field label{font-size:11px}
+textarea{min-height:125px;line-height:1.55}
+textarea::placeholder,input::placeholder{color:#8290a5}
+.attach{padding:13px;background:#0d1727;border-color:#52627a}
+.attach small{font-size:10px;line-height:1.5;color:#bdc7d6}
+.attach input{font-size:12px}
+.primary{margin-top:16px;padding:15px;font-size:13px;letter-spacing:.025em;border-radius:11px;background:linear-gradient(110deg,#f3d994,#d5a04a);box-shadow:0 8px 22px #d6a24920}
+.secondary{font-size:12px;padding:10px 13px}
+.status{font-size:12px;line-height:1.5}
+.notice{font-size:11px;line-height:1.6}
+.footer{font-size:10px;line-height:1.7;color:#8391a6}
+.empty{font-size:12px;line-height:1.6}
+.ticket{padding:13px}.ticket b{font-size:13px}.ticket small{font-size:10px}
+.bubble{font-size:13px;line-height:1.6}
+.msgrow textarea{min-height:48px}
+.send{min-width:54px;font-size:16px}
+@media(max-width:560px){
+ .app{padding:8px 13px 28px}
+ .hero{padding:22px 1px 18px}
+ .hero-icon{width:48px;height:48px;flex-basis:48px;border-radius:14px}
+ .contact-strip{grid-template-columns:1fr}
+ .contact-strip>div{display:flex;justify-content:space-between;gap:12px;align-items:center}
+ .contact-strip small{max-width:110px}
+ .contact-strip b{text-align:right;max-width:65%;overflow-wrap:anywhere}
+ .panel{padding:16px}
+ .topic{font-size:11px;min-height:50px}
+ .phead h2{font-size:17px}
+}
+
 </style>
 </head>
 <body><main class="app">
-<header class="header"><div class="brand"><div class="mark" id="supportBrandMark">✦</div><img id="supportBrandLogo" alt="Smart Money" hidden style="width:48px;height:48px;object-fit:contain;border-radius:13px"><div>SMART MONEY<br><small style="font-size:9px;color:#c9a45c;letter-spacing:.16em">SUPPORT TEAM</small></div></div><a class="back" href="dashboard.html">← Dashboard</a></header>
-<section class="hero"><div class="hero-copy"><div class="eyebrow">OFFICIAL MEMBER CARE · PRIVATE CHANNEL</div><h1>Smart Money<br><span style="color:var(--gold2)">Support Team</span></h1><p>Send your issue directly to our support staff. Your account details are securely attached to your ticket.</p></div><img class="support-profile-photo" src="assets/smart-money-live-support-profile.webp" alt="Smart Money Live Support Team" loading="eager"></section>
+<header class="header"><div class="brand"><div class="mark" id="supportBrandMark">✦</div><img id="supportBrandLogo" alt="Smart Money" hidden style="width:48px;height:48px;object-fit:contain;border-radius:13px"><div>SMART MONEY<br><small style="font-size:9px;color:#c9a45c;letter-spacing:.16em">SUPPORT TEAM</small></div></div><a class="back" href="dashboard.html">← Back to Dashboard</a></header>
+<section class="hero"><div class="hero-copy"><div class="eyebrow">SMART MONEY · CUSTOMER SUPPORT</div><h1>How can we <span style="color:var(--gold2)">help you?</span></h1><p>Choose a topic, tell us what happened, and our support team will review your request.</p></div><div class="hero-icon" aria-hidden="true">✦</div></section>
 <div class="identity"><div class="avatar" id="avatar">S</div><div class="idtext"><b id="customerName">Loading account…</b><span id="customerEmail">Checking secure session</span></div><div class="secure">● SECURE</div></div>
 <nav class="tabs"><button class="tab active" id="newTab" onclick="showTab('new')">＋ Create Support Ticket</button><button class="tab" id="historyTab" onclick="showTab('history')">▤ My Tickets</button></nav>
 <section class="panel hidden" id="newPanel">
-<div class="phead"><div><h2>Message Smart Money Support Team</h2><p class="support-sub">Your request goes directly to our authorised support staff.</p></div><span class="pill">SECURE</span></div><div class="contact-strip"><div><small>REGISTERED GMAIL</small><b id="ticketEmail">Loading…</b></div><div><small>MOBILE NUMBER</small><b id="ticketMobile">Loading…</b></div><div><small>REFERRAL ID</small><b id="ticketReferral">Loading…</b></div></div>
-<div class="topiclabel">WHAT DO YOU NEED HELP WITH?</div><div class="topicgrid" id="ticketTopics"></div>
-<div class="field"><label for="ticketSubject">SUBJECT</label><input id="ticketSubject" maxlength="120" placeholder="Short title for your issue"></div>
-<div class="field"><label for="ticketMessage">DESCRIBE THE ISSUE</label><textarea id="ticketMessage" maxlength="4000" placeholder="Share the details. Please do not include passwords, OTPs or banking PINs."></textarea></div>
-<div class="field attach"><small>ATTACH A SCREENSHOT (OPTIONAL) · PNG / JPG / WEBP · MAX 5 MB</small><input id="ticketFile" type="file" accept="image/png,image/jpeg,image/webp"></div>
-<button class="primary" onclick="createTicket()">SUBMIT SUPPORT TICKET →</button><div class="status" id="ticketStatus"></div>
+<div class="phead"><div><h2>Create a support ticket</h2><p class="support-sub">Tell us what you need help with. We will reply in your ticket.</p></div><span class="pill">SECURE</span></div><div class="contact-strip"><div><small>ACCOUNT EMAIL</small><b id="ticketEmail">Loading…</b></div><div><small>PHONE</small><b id="ticketMobile">Loading…</b></div><div><small>REFERRAL ID</small><b id="ticketReferral">Loading…</b></div></div>
+<div class="topiclabel">SELECT A TOPIC</div><div class="topicgrid" id="ticketTopics"></div>
+<div class="field"><label for="ticketSubject">SHORT TITLE</label><input id="ticketSubject" maxlength="120" placeholder="Short title for your issue"></div>
+<div class="field"><label for="ticketMessage">WHAT HAPPENED?</label><textarea id="ticketMessage" maxlength="4000" placeholder="Describe the issue clearly. Never share your password, OTP or banking PIN."></textarea></div>
+<div class="field attach"><small>ADD A SCREENSHOT (OPTIONAL) · PNG, JPG OR WEBP · MAX 5 MB</small><input id="ticketFile" type="file" accept="image/png,image/jpeg,image/webp"></div>
+<button class="primary" onclick="createTicket()">SEND SUPPORT REQUEST →</button><div class="status" id="ticketStatus"></div>
 </section>
 <section class="panel hidden" id="historyPanel">
-<div class="phead"><h2>Your support tickets</h2><button class="secondary" onclick="loadTickets()">↻ Refresh</button></div>
+<div class="phead"><h2>Your requests</h2><button class="secondary" onclick="loadTickets()">↻ Refresh</button></div>
 <div class="ticketlist" id="ticketList"><div class="empty">Loading your tickets…</div></div>
 <div id="threadWrap" class="hidden" style="margin-top:14px;border-top:1px solid var(--line);padding-top:13px">
-<div class="phead"><h2 id="threadTitle">Conversation</h2><span class="pill" id="threadStatus">OPEN</span></div>
+<div class="phead"><h2 id="threadTitle">Ticket conversation</h2><span class="pill" id="threadStatus">OPEN</span></div>
 <div class="chat" id="threadMessages"></div>
-<div id="replyArea"><div class="attach" style="margin-top:9px"><small>ATTACH SCREENSHOT (OPTIONAL) · PNG / JPG / WEBP · MAX 5 MB</small><input id="replyFile" type="file" accept="image/png,image/jpeg,image/webp"></div><div class="msgrow"><textarea id="replyText" maxlength="4000" placeholder="Write a reply…"></textarea><button class="send" onclick="sendReply()">➤</button></div><div class="status" id="replyStatus"></div></div>
+<div id="replyArea"><div class="attach" style="margin-top:9px"><small>ATTACH SCREENSHOT (OPTIONAL) · PNG / JPG / WEBP · MAX 5 MB</small><input id="replyFile" type="file" accept="image/png,image/jpeg,image/webp"></div><div class="msgrow"><textarea id="replyText" maxlength="4000" placeholder="Type your message…"></textarea><button class="send" onclick="sendReply()">➤</button></div><div class="status" id="replyStatus"></div></div>
 </div>
 </section>
-<div class="footer">SMART MONEY · OFFICIAL SUPPORT TEAM<br>Tickets and replies are private to your account and authorised support staff.</div>
+<div class="footer">SMART MONEY SUPPORT<br>Your messages are visible to you and the authorised support team.</div>
 </main>
 <script>
 const SUPABASE_URL="https://rvprrulkjegvicbnjuft.supabase.co";
