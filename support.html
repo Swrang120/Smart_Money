@@ -80,7 +80,7 @@ textarea{min-height:145px}
 <script>
 const SUPABASE_URL="https://rvprrulkjegvicbnjuft.supabase.co";
 const SUPABASE_KEY="sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:"smart-money-customer-support-auth-v1",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const topics=[["💳","Payment / Deposit","payment"],["📦","Package Purchase","package"],["⏳","Approval Pending","payment"],["🔐","Login / Account","login"],["🏦","Withdrawal","withdrawal"],["🔗","Commission / Referral","commission"],["🎓","Course Access","course"],["✳️","Other","general"]];
 let user=null,profile=null,aiTopic=topics[0],ticketTopic=topics[0],activeTicket=null,pollTimer=null,lastQuestion="";
 const $=id=>document.getElementById(id);
