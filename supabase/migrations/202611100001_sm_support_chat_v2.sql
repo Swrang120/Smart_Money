@@ -78,10 +78,9 @@ begin
  if p_attachment_path is not null and split_part(p_attachment_path,'/',1) <> v_uid::text then raise exception 'Invalid attachment ownership.'; end if;
  insert into public.sm_support_messages(ticket_id,user_id,sender_role,message,attachment_path)
  select t.id,v_uid,'customer',trim(p_message),p_attachment_path from public.sm_support_tickets t
- where t.id=p_ticket_id and t.user_id=v_uid and t.status<>'closed' and (t.blocked_until is null or t.blocked_until<=now());
- if not found then raise exception 'This ticket is closed, unavailable, or temporarily restricted.'; end if;
- update public.sm_support_tickets set status='pending',updated_at=now() where id=p_ticket_id and user_id=v_uid and status<>'closed';
- select id into v_message_id from public.sm_support_messages where ticket_id=p_ticket_id and user_id=v_uid and sender_role='customer' order by created_at desc limit 1;
+ where t.id=p_ticket_id and t.user_id=v_uid and t.status<>'closed' and (t.blocked_until is null or t.blocked_until<=now())
+ returning id into v_message_id;
+ if v_message_id is null then raise exception 'This ticket is closed, unavailable, or temporarily restricted.'; end if;
  return v_message_id;
 end; $$;
 
