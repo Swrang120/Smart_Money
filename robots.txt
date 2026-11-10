@@ -1,3 +1,10 @@
 User-agent: *
 Allow: /
-Sitemap: https://smart-money-navy.vercel.app/sitemap.xml
+Disallow: /admin/
+Disallow: /admin.html
+Disallow: /checkout.html
+Disallow: /payment.html
+Disallow: /profile.html
+Disallow: /dashboard.html
+
+Sitemap: https://smart-money.wasmer.app/sitemap.xml

@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-       <loc>https://smart-money-navy.vercel.app/index.html</loc>
-       <priority>1.0000</priority>
-  </url>
-  <url>
-       <loc>https://smart-money-navy.vercel.app/dashboard.html</loc>
-       <priority>0.8000</priority>
-  </url>
-  <url>
-       <loc>https://smart-money-navy.vercel.app/checkout.html</loc>
-       <priority>0.8000</priority>
-  </url>
+  <url><loc>https://smart-money.wasmer.app/</loc></url>
+  <url><loc>https://smart-money.wasmer.app/about.html</loc></url>
+  <url><loc>https://smart-money.wasmer.app/terms-and-conditions.html</loc></url>
+  <url><loc>https://smart-money.wasmer.app/privacy-policy.html</loc></url>
+  <url><loc>https://smart-money.wasmer.app/refund-policy.html</loc></url>
 </urlset>
