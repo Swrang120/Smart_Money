@@ -29,6 +29,20 @@ function fmt(v){try{return new Date(v).toLocaleString("en-IN",{dateStyle:"medium
 function setMsg(id,v){$(id).textContent=v||""}
 async function login(){setMsg("loginStatus","Signing in…");const {data,error}=await sb.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});if(error){setMsg("loginStatus",error.message);return}await checkAdmin(data.user)}
 async function checkAdmin(u){me=u;if(!ADMINS.includes(String(u.email||"").toLowerCase())){await sb.auth.signOut();me=null;setMsg("loginStatus","This account is not authorised for the support inbox.");return} $("login").classList.add("hidden");$("app").classList.remove("hidden");await loadTickets();clearInterval(poll);poll=setInterval(async()=>{await loadTickets();if(active)await loadMessages()},12000)}
+window.addEventListener("message",async(event)=>{
+  if(event.origin!==window.location.origin||event.source!==window.parent)return;
+  const payload=event.data;
+  if(!payload||payload.type!=="SM_ADMIN_SESSION"||!payload.access_token||!payload.refresh_token)return;
+  try{
+    const {data,error}=await sb.auth.setSession({access_token:payload.access_token,refresh_token:payload.refresh_token});
+    if(error)throw error;
+    if(!data?.user)throw new Error("Admin session could not be verified.");
+    await checkAdmin(data.user);
+  }catch(error){
+    console.error("Parent admin session verification failed:",error);
+    setMsg("loginStatus","Could not verify the existing Admin Panel session. Please refresh the Admin Panel.");
+  }
+});
 async function init(){const {data}=await sb.auth.getSession();if(data.session)await checkAdmin(data.session.user)}
 async function logout(){clearInterval(poll);await sb.auth.signOut();location.reload()}
 function setFilter(v,el){filter=v;document.querySelectorAll(".filters button").forEach(b=>b.classList.toggle("active",b===el));renderList()}
