@@ -3411,9 +3411,10 @@ async function checkAdminSession(){
         return;
     }
 
-    // Supabase restores local storage asynchronously on some mobile browsers.
-    // Retry transient storage/network errors before deciding that the admin is signed out.
+    const ADMIN_AUTH_STORAGE_KEY = "smart-money-admin-auth-v1";
     let lastError = null;
+
+    // First allow Supabase Auth to finish restoring its own persistent session.
     for(let attempt=0; attempt<5; attempt++){
         try{
             const {data,error}=await supabaseClient.auth.getSession();
@@ -3426,30 +3427,64 @@ async function checkAdminSession(){
             }
 
             if(session && !isAdminUser(session.user)){
-                await supabaseClient.auth.signOut();
+                await supabaseClient.auth.signOut({scope:"local"});
                 showLogin();
                 return;
             }
 
-            // No session on the first read can be a hydration race on Android WebView.
+            // Android browsers can briefly return an empty session while local storage hydrates.
             if(attempt<4){
-                await new Promise(resolve=>setTimeout(resolve,350*(attempt+1)));
+                await new Promise(resolve=>setTimeout(resolve,500*(attempt+1)));
                 continue;
             }
-
-            showLogin();
-            return;
         }catch(error){
             lastError=error;
             console.warn("Admin session restore attempt "+(attempt+1)+" failed:",error);
-            if(attempt<4) await new Promise(resolve=>setTimeout(resolve,400*(attempt+1)));
+            if(attempt<4) await new Promise(resolve=>setTimeout(resolve,500*(attempt+1)));
         }
     }
 
-    // Do not clear or overwrite a saved admin session because of a temporary read failure.
-    console.error("Admin session restore deferred; saved session was preserved:",lastError);
-    const loginError=document.getElementById("loginError");
-    if(loginError) loginError.textContent="Connection is temporarily unavailable. Your saved admin session has been preserved. Tap refresh to retry.";
+    // Recovery path: if Supabase returned an empty session but its saved token pair
+    // still exists, hand that pair back to Supabase. Never trust it for authorization
+    // without checking that the restored account is the configured admin.
+    try{
+        const raw = localStorage.getItem(ADMIN_AUTH_STORAGE_KEY);
+        if(raw){
+            const stored = JSON.parse(raw);
+            const saved = stored?.currentSession || stored?.session || stored;
+            if(saved?.access_token && saved?.refresh_token){
+                const {data,error}=await supabaseClient.auth.setSession({
+                    access_token:saved.access_token,
+                    refresh_token:saved.refresh_token
+                });
+                if(error) throw error;
+
+                const restored = data?.session;
+                if(restored?.user && isAdminUser(restored.user)){
+                    showAdmin();
+                    return;
+                }
+
+                if(restored){
+                    await supabaseClient.auth.signOut({scope:"local"});
+                }
+            }
+        }
+    }catch(recoveryError){
+        lastError=recoveryError;
+        console.warn("Saved admin session recovery failed:",recoveryError);
+    }
+
+    // A transient storage/network error must not erase the saved session or pretend
+    // that the user intentionally signed out.
+    if(lastError){
+        console.error("Admin session restore deferred; saved session was preserved:",lastError);
+        const loginError=document.getElementById("loginError");
+        if(loginError) loginError.textContent="Could not restore the saved admin session because the connection/storage check failed. Your saved session has not been cleared. Check internet and refresh again.";
+        return;
+    }
+
+    showLogin();
 }
 
 
