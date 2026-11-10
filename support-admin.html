@@ -25,7 +25,7 @@ let me=null,tickets=[],profiles={},active=null,filter="all",poll=null;
 const $=id=>document.getElementById(id);
 function fmt(v){try{return new Date(v).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})}catch(e){return "—"}}
 function setMsg(id,v){$(id).textContent=v||""}
-async function checkAdmin(u){me=u;if(!ADMINS.includes(String(u.email||"").toLowerCase())){me=null;setMsg("loginStatus","The current Admin Panel account is not authorised for the support inbox.");return} $("login").classList.add("hidden");$("app").classList.remove("hidden");await loadTickets();clearInterval(poll);poll=setInterval(async()=>{await loadTickets();if(active)await loadMessages()},12000)}
+async function checkAdmin(u){if(!u||!u.id||!u.email)throw new Error("The Admin Panel session could not be verified. Please refresh the Admin Panel and reopen Support Inbox.");me=u;$("login").classList.add("hidden");$("app").classList.remove("hidden");await loadTickets();clearInterval(poll);poll=setInterval(async()=>{await loadTickets();if(active)await loadMessages()},12000)}
 async function init(){
   setMsg("loginStatus","Connecting securely to the Smart Money Admin Panel…");
   try{
