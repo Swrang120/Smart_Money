@@ -30,6 +30,8 @@ create table if not exists public.sm_support_messages (
 );
 create index if not exists sm_support_messages_ticket_created_idx on public.sm_support_messages(ticket_id, created_at asc);
 alter table public.sm_support_messages enable row level security;
+grant select, insert on public.sm_support_messages to authenticated;
+grant select, insert, update on public.sm_support_tickets to authenticated;
 
 drop policy if exists "Customers view messages on own tickets" on public.sm_support_messages;
 create policy "Customers view messages on own tickets"
