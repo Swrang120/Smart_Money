@@ -29,25 +29,24 @@ const $=id=>document.getElementById(id);
 function fmt(v){try{return new Date(v).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})}catch(e){return "—"}}
 function setMsg(id,v){$(id).textContent=v||""}
 async function checkAdmin(u){me=u;if(!ADMINS.includes(String(u.email||"").toLowerCase())){me=null;setMsg("loginStatus","The current Admin Panel account is not authorised for the support inbox.");return} $("login").classList.add("hidden");$("app").classList.remove("hidden");await loadTickets();clearInterval(poll);poll=setInterval(async()=>{await loadTickets();if(active)await loadMessages()},12000)}
-window.addEventListener("message",async(event)=>{
-  if(event.origin!==window.location.origin||event.source!==window.parent)return;
-  const payload=event.data;
-  if(!payload||payload.type!=="SM_ADMIN_SESSION"||!payload.access_token||!payload.refresh_token)return;
+async function init(){
+  setMsg("loginStatus","Connecting to your Admin Panel session…");
   try{
-    const {data,error}=await sb.auth.setSession({access_token:payload.access_token,refresh_token:payload.refresh_token});
-    if(error)throw error;
-    if(!data?.user)throw new Error("Admin session could not be verified.");
-    await checkAdmin(data.user);
+    if(window.parent&&window.parent!==window&&typeof window.parent.SM_getAdminSupportSession==="function"){
+      const tokens=await window.parent.SM_getAdminSupportSession();
+      const {data,error}=await sb.auth.setSession(tokens);
+      if(error)throw error;
+      if(!data?.user)throw new Error("Admin session could not be verified.");
+      await checkAdmin(data.user);
+      return;
+    }
+    // Direct access to this page is not a supported login path: open it from the Admin Panel.
+    setMsg("loginStatus","Open Customer Support Inbox from the Smart Money Admin Panel. No separate password is used.");
   }catch(error){
-    console.error("Parent admin session verification failed:",error);
-    setMsg("loginStatus","Could not verify the existing Admin Panel session. Please refresh the Admin Panel.");
+    console.error("Admin session bridge failed:",error);
+    setMsg("loginStatus",error.message||"Could not connect to the Admin Panel session. Please sign in again.");
   }
-});
-// Tell the parent Admin Panel that this iframe is ready to receive its existing session.
-if(window.parent&&window.parent!==window){
-  window.parent.postMessage({type:"SM_SUPPORT_READY"},window.location.origin);
 }
-async function init(){setMsg("loginStatus","Waiting for your verified Admin Panel session…");const {data,error}=await sb.auth.getSession();if(!error&&data.session)await checkAdmin(data.session.user)}
 async function logout(){clearInterval(poll);me=null;active=null;await sb.auth.signOut();$("app").classList.add("hidden");$("login").classList.remove("hidden");setMsg("loginStatus","Session ended. Return to the Admin Panel and open Support Inbox again.")}
 function setFilter(v,el){filter=v;document.querySelectorAll(".filters button").forEach(b=>b.classList.toggle("active",b===el));renderList()}
 async function loadTickets(){if(!me)return;const {data,error}=await sb.from("sm_support_tickets").select("id,user_id,category,subject,description,status,created_at,updated_at,blocked_until,closed_at,attachment_path,contact_email,contact_mobile,referral_id").order("updated_at",{ascending:false}).limit(150);if(error){$("ticketList").innerHTML='<div class="empty">Could not load tickets: '+error.message+'</div>';return}tickets=data||[];const ids=[...new Set(tickets.map(t=>t.user_id))];profiles={};if(ids.length){const {data:p}=await sb.from("profiles").select("user_id,full_name,email,mobile,referral_id,referral_code,package_name,is_active,status").in("user_id",ids);(p||[]).forEach(x=>profiles[x.user_id]=x)}$("openCount").textContent=tickets.filter(t=>t.status==="pending").length;$("reviewCount").textContent=tickets.filter(t=>t.status==="under_review"||t.status==="replied").length;$("closedCount").textContent=tickets.filter(t=>t.status==="closed").length;renderList();if(active){const found=tickets.find(t=>t.id===active.id);if(found){active=found;updateStatusUI()}}}
