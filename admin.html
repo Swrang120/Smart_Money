@@ -9128,6 +9128,15 @@ if(!navigator.onLine)show('Waiting for internet connection…');window.addEventL
 
 
 <script id="smart-money-integrated-support-inbox">
+// Expose only the current authenticated admin session to the same-origin support iframe.
+window.SM_getAdminSupportSession=async function(){
+  if(!supabaseClient)throw new Error('Admin authentication is not initialized.');
+  const {data,error}=await supabaseClient.auth.getSession();
+  if(error)throw error;
+  const session=data?.session;
+  if(!session?.access_token||!session?.refresh_token)throw new Error('Admin session expired. Please sign in to the Admin Panel again.');
+  return {access_token:session.access_token,refresh_token:session.refresh_token};
+};
 function showSupportInbox(){
   const main=document.querySelector('#adminApp > main.container');
   const workspace=document.getElementById('adminSupportWorkspace');
@@ -9135,32 +9144,7 @@ function showSupportInbox(){
   if(!workspace||!main)return;
   main.classList.add('hidden');
   workspace.classList.remove('hidden');
-  if(frame){
-    if(!frame.getAttribute('src'))frame.setAttribute('src',frame.dataset.src||'support-admin.html');
-    const sendAdminSession=async()=>{
-      try{
-        const {data,error}=await supabaseClient.auth.getSession();
-        if(error)throw error;
-        const session=data?.session;
-        if(!session?.access_token||!session?.refresh_token)throw new Error('Admin session is unavailable. Please sign in again.');
-        frame.contentWindow?.postMessage({type:'SM_ADMIN_SESSION',access_token:session.access_token,refresh_token:session.refresh_token},window.location.origin);
-      }catch(error){console.error('Could not share verified admin session with support inbox:',error);}
-    };
-    if(!frame.dataset.adminSessionBridge){
-      frame.addEventListener('load',sendAdminSession);
-      // Child explicitly requests the verified session after its message listener is ready.
-      window.addEventListener('message',function(event){
-        if(event.origin!==window.location.origin||event.source!==frame.contentWindow)return;
-        if(event.data&&event.data.type==='SM_SUPPORT_READY')sendAdminSession();
-      });
-      frame.dataset.adminSessionBridge='1';
-    }
-    // Initial attempts plus the child-ready handshake cover slow mobile iframe startup.
-    sendAdminSession();
-    setTimeout(sendAdminSession,350);
-    setTimeout(sendAdminSession,1200);
-    setTimeout(sendAdminSession,1000);
-  }
+  if(frame&&!frame.getAttribute('src'))frame.setAttribute('src',frame.dataset.src||'support-admin.html');
   const sidebar=document.getElementById('adminSidebar');
   const overlay=document.getElementById('sidebarOverlay');
   if(sidebar)sidebar.classList.remove('open');
