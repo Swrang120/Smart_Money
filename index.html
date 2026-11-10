@@ -4577,23 +4577,31 @@ Help Desk
 
 </section>
 
-<div id="smSupportMailModal" style="display:none;position:fixed;inset:0;z-index:100500;background:#071126aa;padding:16px;overflow:auto;align-items:center;justify-content:center">
- <form id="smSupportMailForm" style="width:min(520px,100%);background:#fff;border-radius:18px;padding:22px;color:#172033;box-shadow:0 20px 60px #0005">
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h3 style="margin:0">Smart Money Support Form</h3><button type="button" id="smSupportMailClose" style="border:0;background:#edf0f7;border-radius:8px;padding:7px 11px;font-size:20px">×</button></div>
-  <p style="font-size:13px;color:#64748b;margin:8px 0 16px">Details fill kijiye. Next karne par Gmail mein pre-filled support email khul jayega.</p>
-  <label style="display:block;font-size:13px;font-weight:700;margin:10px 0 5px">Help kis baare mein chahiye?</label>
-  <select id="smMailCategory" required style="width:100%;padding:12px;border:1px solid #ccd3e0;border-radius:9px">
-   <option value="">Select a topic</option><option>Payment / Transaction</option><option>Login / Account</option><option>Package Activation</option><option>Commission</option><option>Referral</option><option>Course Access</option><option>Withdrawal</option><option>Other</option>
-  </select>
-  <label style="display:block;font-size:13px;font-weight:700;margin:10px 0 5px">Your name</label><input id="smMailName" required maxlength="100" placeholder="Enter your name" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccd3e0;border-radius:9px">
-  <label style="display:block;font-size:13px;font-weight:700;margin:10px 0 5px">Registered email</label><input id="smMailEmail" type="email" required maxlength="150" placeholder="Your registered email" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccd3e0;border-radius:9px">
-  <label style="display:block;font-size:13px;font-weight:700;margin:10px 0 5px">Referral ID (auto-filled)</label><input id="smMailReferral" readonly placeholder="Fetching from your account…" style="width:100%;box-sizing:border-box;padding:12px;background:#f2f4f8;border:1px solid #ccd3e0;border-radius:9px">
-  <label style="display:block;font-size:13px;font-weight:700;margin:10px 0 5px">Subject</label><input id="smMailSubject" required maxlength="150" placeholder="Short title of your issue" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccd3e0;border-radius:9px">
-  <label style="display:block;font-size:13px;font-weight:700;margin:10px 0 5px">Describe your problem</label><textarea id="smMailDetails" required maxlength="3000" rows="4" placeholder="Explain what help you need…" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccd3e0;border-radius:9px;resize:vertical"></textarea>
-  <p id="smMailStatus" style="font-size:12px;color:#64748b"></p>
-  <button type="submit" style="width:100%;padding:13px;border:0;border-radius:10px;background:#6045d8;color:white;font-weight:800">Next → Open Gmail</button>
+<div id="smSupportMailModal" class="sm-mail-overlay" aria-hidden="true">
+ <form id="smSupportMailForm" class="sm-mail-card">
+  <div class="sm-mail-head"><div><span class="sm-mail-kicker">SMART MONEY · EMAIL SUPPORT</span><h3 id="smMailTitle">Contact Support</h3><p id="smMailIntro">Tell us what happened. Your email app will open with the details ready to send.</p></div><button type="button" id="smSupportMailClose" class="sm-mail-close" aria-label="Close">×</button></div>
+  <div class="sm-mail-recipient"><span>EMAILING</span><strong id="smMailRecipient">smartmoneysupport1@gmail.com</strong></div>
+  <label for="smMailCategory">Select a topic</label>
+  <select id="smMailCategory" required><option value="">Choose a topic</option></select>
+  <label for="smMailName">Your name</label><input id="smMailName" required maxlength="100" autocomplete="name" placeholder="Enter your full name">
+  <label for="smMailEmail">Registered email</label><input id="smMailEmail" type="email" required maxlength="150" autocomplete="email" placeholder="Enter your registered email">
+  <label for="smMailReferral">Referral ID (optional)</label><input id="smMailReferral" maxlength="80" placeholder="Enter your Referral ID, if available">
+  <label for="smMailSubject">Subject</label><input id="smMailSubject" required maxlength="150" placeholder="Briefly describe the issue">
+  <label for="smMailDetails">Describe your problem</label><textarea id="smMailDetails" required maxlength="3000" rows="5" placeholder="Explain the issue and what help you need…"></textarea>
+  <p id="smMailStatus" class="sm-mail-status" role="status"></p>
+  <button type="submit" class="sm-mail-submit">Continue to Email →</button>
+  <p class="sm-mail-note">Do not include your password, OTP, banking PIN or full card details.</p>
  </form>
 </div>
+<style>
+.sm-mail-overlay{display:none;position:fixed;inset:0;z-index:100500;background:rgba(3,8,22,.82);backdrop-filter:blur(9px);padding:18px;overflow:auto;align-items:center;justify-content:center}
+.sm-mail-overlay.is-open{display:flex}
+.sm-mail-card{width:min(540px,100%);box-sizing:border-box;background:linear-gradient(150deg,#17243d,#0c1427 72%);border:1px solid #354765;border-radius:22px;padding:clamp(18px,4vw,28px);color:#eef4ff;box-shadow:0 24px 80px #0009}
+.sm-mail-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:18px}.sm-mail-kicker{font-size:10px;letter-spacing:.16em;font-weight:800;color:#72d7ed}.sm-mail-head h3{font-size:23px;margin:8px 0 5px}.sm-mail-head p{font-size:13px;line-height:1.55;color:#aebdd5;margin:0}.sm-mail-close{border:1px solid #435574;background:#22324d;color:white;border-radius:11px;width:38px;height:38px;font-size:24px;cursor:pointer;flex:0 0 auto}
+.sm-mail-recipient{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;padding:12px 14px;background:#101e34;border:1px solid #344865;border-radius:12px;margin-bottom:16px}.sm-mail-recipient span{font-size:9px;letter-spacing:.13em;color:#8ea6c8}.sm-mail-recipient strong{font-size:12px;color:#8ee7d1;overflow-wrap:anywhere}
+.sm-mail-card label{display:block;font-size:12px;font-weight:700;color:#c8d6eb;margin:13px 0 6px}.sm-mail-card input,.sm-mail-card select,.sm-mail-card textarea{display:block;width:100%;box-sizing:border-box;border:1px solid #3a4d6d;border-radius:11px;background:#0b1528;color:#f4f7ff;padding:13px;font:inherit;font-size:14px;outline:none}.sm-mail-card input:focus,.sm-mail-card select:focus,.sm-mail-card textarea:focus{border-color:#61cde6;box-shadow:0 0 0 3px #36b9d51f}.sm-mail-card select{color-scheme:dark}.sm-mail-card textarea{resize:vertical;min-height:112px}.sm-mail-submit{width:100%;margin-top:16px;border:0;border-radius:12px;padding:15px;background:linear-gradient(105deg,#655cf6,#168fbd);color:#fff;font-weight:800;font-size:14px;cursor:pointer}.sm-mail-status{min-height:16px;color:#f8c77b;font-size:12px}.sm-mail-note{margin:12px 0 0;text-align:center;color:#91a3bd;font-size:10px;line-height:1.5}
+@media(max-width:480px){.sm-mail-overlay{padding:10px;align-items:flex-start}.sm-mail-card{margin:auto 0;border-radius:17px}.sm-mail-head h3{font-size:21px}}
+</style>
 
 <!-- =========================================================
      FOOTER
@@ -8320,14 +8328,42 @@ if(window.fetch&&!window.__smartMoneyFetchWrapped){var originalFetch=window.fetc
 if(!navigator.onLine)show('Waiting for internet connection…');window.addEventListener('pageshow',function(){if(!navigator.onLine)show('Waiting for internet connection…');});
 })();</script>
 <script>
-/* Homepage support entry points use the authenticated in-site support portal. */
+/* Public email support is intentionally separate from the package-gated Live Support portal. */
 (function(){
-  window.openSmartMoneySupport = function(kind){
-    try {
-      sessionStorage.setItem("sm_support_pending_category", kind === "payment" ? "payment" : "general");
-    } catch (_) {}
-    window.location.href = "support.html?v=c2f1a574";
-  };
+ const $=id=>document.getElementById(id);
+ const routes={
+  payment:{title:"Payment & Login Support",email:"smartmoneysupport1@gmail.com",topics:["Payment / Transaction","Login / Account","Package Activation","Withdrawal","Other payment or access issue"]},
+  general:{title:"General Inquiries & Referrals",email:"smartmoneyhelpcare@gmail.com",topics:["Course Information","Referral Problem","Commission Question","Account Query","Other General Question"]}
+ };
+ let activeRoute="payment";
+ function close(){const m=$("smSupportMailModal");m.classList.remove("is-open");m.setAttribute("aria-hidden","true");}
+ window.openSmartMoneySupport=function(kind){
+  activeRoute=kind==="general"?"general":"payment";
+  const route=routes[activeRoute],select=$("smMailCategory");
+  $("smMailTitle").textContent=route.title;
+  $("smMailIntro").textContent="Complete this short form. Your email app will open with your message addressed to the correct Smart Money team.";
+  $("smMailRecipient").textContent=route.email;
+  select.innerHTML='<option value="">Choose a topic</option>'+route.topics.map(x=>'<option value="'+x.replace(/&/g,"&amp;")+'">'+x+'</option>').join("");
+  $("smMailSubject").value="";
+  $("smMailDetails").value="";
+  $("smMailStatus").textContent="";
+  $("smSupportMailModal").classList.add("is-open");
+  $("smSupportMailModal").setAttribute("aria-hidden","false");
+  document.body.style.overflow="hidden";
+  $("smMailCategory").focus();
+ };
+ $("smSupportMailClose").addEventListener("click",()=>{close();document.body.style.overflow="";});
+ $("smSupportMailModal").addEventListener("click",e=>{if(e.target===$("smSupportMailModal")){close();document.body.style.overflow="";}});
+ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("smSupportMailModal").classList.contains("is-open")){close();document.body.style.overflow="";}});
+ $("smSupportMailForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const route=routes[activeRoute],name=$("smMailName").value.trim(),email=$("smMailEmail").value.trim(),referral=$("smMailReferral").value.trim(),topic=$("smMailCategory").value,subject=$("smMailSubject").value.trim(),details=$("smMailDetails").value.trim();
+  if(!topic||!name||!email||!subject||details.length<5){$("smMailStatus").textContent="Please complete all required fields and describe the issue.";return;}
+  const body=["Smart Money — "+route.title,"","Name: "+name,"Registered Email: "+email,"Referral ID: "+(referral||"Not provided"),"Support Topic: "+topic,"Subject: "+subject,"","Problem Description:",details,"","Sent from the Smart Money website."].join("\n");
+  const mailto="mailto:"+route.email+"?subject="+encodeURIComponent("[Smart Money] "+subject)+"&body="+encodeURIComponent(body);
+  $("smMailStatus").textContent="Opening your email app…";
+  window.location.href=mailto;
+ });
 })();
 </script>
 </body>
