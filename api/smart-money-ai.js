@@ -64,7 +64,7 @@ module.exports = async function handler(req, res) {
       return r.json();
     }
     const [profileResp, paymentRows, withdrawalRows, earningRows, commissionRows] = await Promise.all([
-      fetch(SUPABASE_URL + "/rest/v1/profiles?select=referral_id,referred_by,package_name,is_active,status,balance,created_at&user_id=eq." + encodeURIComponent(user.id) + "&limit=1", { headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: "Bearer " + token } }).then(async r => r.ok ? r.json() : ({ unavailable: true })),
+      fetch(SUPABASE_URL + "/rest/v1/profiles?select=referral_id,referral_code,referred_by,package_name,is_active,status,balance,created_at&user_id=eq." + encodeURIComponent(user.id) + "&limit=1", { headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: "Bearer " + token } }).then(async r => r.ok ? r.json() : ({ unavailable: true })),
       ownRows("payment_requests", "id,package_type,package_name,package_price,amount,payment_status,status,created_at,transaction_id"),
       ownRows("withdrawal_requests", "id,amount,status,created_at,is_deleted"),
       ownRows("earnings", "amount,earning_type,created_at"),
@@ -102,7 +102,7 @@ module.exports = async function handler(req, res) {
     const ticketResp = await fetch(SUPABASE_URL + "/rest/v1/sm_support_tickets", {
       method: "POST",
       headers: { apikey: SUPABASE_PUBLISHABLE_KEY, Authorization: "Bearer " + token, "Content-Type": "application/json", Prefer: "return=representation" },
-      body: JSON.stringify({ user_id: user.id, category, subject: issue.slice(0, 120), description: issue, ai_summary: issue.slice(0, 500), ai_reply: reply })
+      body: JSON.stringify({ user_id: user.id, category, subject: issue.slice(0, 120), description: issue + "\\n\\n[Customer Referral ID: " + ((Array.isArray(profileResp) ? profileResp[0]?.referral_id : profileResp?.referral_id) || (Array.isArray(profileResp) ? profileResp[0]?.referral_code : profileResp?.referral_code) || "Not available") + "]", ai_summary: issue.slice(0, 500), ai_reply: reply })
     });
     const ticketText = await ticketResp.text();
     if (!ticketResp.ok) {
