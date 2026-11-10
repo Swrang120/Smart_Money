@@ -8227,15 +8227,11 @@ window.addEventListener(
    const {data:sessionData}=await supabaseClient.auth.getSession();
    const accessToken=sessionData?.session?.access_token;
    if(!accessToken)throw new Error('Please log in to Smart Money first. Then reopen Smart Money Help.');
-   const response=await fetch('https://smart-money-navy.vercel.app/api/smart-money-ai',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+accessToken},body:JSON.stringify({message:issue||'Please inspect my screenshot.',category:selectedCategory,imageData:attachedImage})});
-   const result=await response.json();
-   if(!response.ok)throw new Error(result.error||'AI support is temporarily unavailable.');
-   add(result.reply,'bot');
-   if('speechSynthesis' in window){const b=document.createElement('button');b.type='button';b.textContent='🔊 Listen to reply';b.onclick=()=>{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(result.reply);u.lang=/[अ-ह]/.test(result.reply)?'hi-IN':'en-IN';speechSynthesis.speak(u);};messages.appendChild(b);}
-   attachedImage=null;if(imageInput)imageInput.value='';if(imageName)imageName.textContent='';
-   add(result.ticketSaved?'✅ Your support ticket has been saved. Ticket ID: '+result.ticketId:'Your AI reply is ready. Please contact the support team if the issue needs account-specific review.','bot');
-   status.textContent='AI support guide • Smart Money Team handles account-specific reviews and approvals.';
-  }catch(err){
+   sessionStorage.setItem('sm_support_pending_question',issue);sessionStorage.setItem('sm_support_pending_category',selectedCategory);
+    if(attachedImage){status.textContent='Question saved. Please attach the screenshot again in Direct Support.';}
+    window.location.href='support.html';
+    return;
+   }catch(err){
    add(err.message||'Support could not process this request. Please try again.','bot');
    status.textContent='Support service is temporarily unavailable. Your message was not submitted. Please try again shortly.';
   }finally{send.disabled=false;send.textContent='Send';messages.scrollTop=messages.scrollHeight;}
