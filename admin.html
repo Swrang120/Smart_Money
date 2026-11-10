@@ -2933,9 +2933,35 @@ function initializeSupabaseClient(){
         );
     }
 
+    // Keep the admin login separate from customer/website sessions.
+    // The default Supabase storage key is shared by every page on this origin,
+    // so a customer login on the same device could overwrite the admin session.
+    const ADMIN_AUTH_STORAGE_KEY = "smart-money-admin-auth-v1";
+    try {
+        const existingAdminSession = localStorage.getItem(ADMIN_AUTH_STORAGE_KEY);
+        const legacySession = localStorage.getItem("sb-rvprrulkjegvicbnjuft-auth-token");
+        if (!existingAdminSession && legacySession) {
+            const parsed = JSON.parse(legacySession);
+            const legacyUser = parsed?.user || parsed?.currentSession?.user;
+            if (String(legacyUser?.email || "").trim().toLowerCase() === String(ADMIN_EMAIL).toLowerCase()) {
+                localStorage.setItem(ADMIN_AUTH_STORAGE_KEY, legacySession);
+            }
+        }
+    } catch (storageMigrationError) {
+        console.warn("Admin session migration skipped:", storageMigrationError);
+    }
+
     supabaseClient = window.supabase.createClient(
         SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
+        SUPABASE_PUBLISHABLE_KEY,
+        {
+            auth: {
+                storageKey: ADMIN_AUTH_STORAGE_KEY,
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }
     );
 
     return supabaseClient;
