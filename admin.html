@@ -2900,7 +2900,8 @@ class="modal"
    CONFIG  
 ========================================================= */  
   
-const ADMIN_EMAIL = "sboro3235@gmail.com";  
+const ADMIN_EMAIL = "sboro3235@gmail.com";
+const ADMIN_AUTH_STORAGE_KEY = "smart-money-admin-auth-v1";  
   
 const SUPABASE_URL =  
 "https://rvprrulkjegvicbnjuft.supabase.co";  
@@ -2922,8 +2923,6 @@ function initializeSupabaseClient(){
     // Keep the admin login separate from customer/website sessions.
     // The default Supabase storage key is shared by every page on this origin,
     // so a customer login on the same device could overwrite the admin session.
-    const ADMIN_AUTH_STORAGE_KEY = "smart-money-admin-auth-v1";
-
     // Use Supabase's native localStorage adapter for durable cross-refresh sessions.
     // A custom storage wrapper previously caused inconsistent restore behavior on some Android browsers.
     const adminAuthStorage = window.localStorage;
@@ -3404,10 +3403,28 @@ async function checkAdminSession(){
         return;
     }
 
-    const ADMIN_AUTH_STORAGE_KEY = "smart-money-admin-auth-v1";
     let lastError = null;
 
-    // First allow Supabase Auth to finish restoring its own persistent session.
+    // Wait for Supabase's INITIAL_SESSION event so refresh does not race
+    // the auth client's asynchronous localStorage hydration.
+    try{
+        await new Promise(resolve=>{
+            let settled=false;
+            const timer=setTimeout(()=>{if(!settled){settled=true;resolve();}},2500);
+            const {data}=supabaseClient.auth.onAuthStateChange((event)=>{
+                if(event==="INITIAL_SESSION" && !settled){
+                    settled=true;
+                    clearTimeout(timer);
+                    resolve();
+                }
+            });
+            setTimeout(()=>{try{data?.subscription?.unsubscribe();}catch(e){}},3000);
+        });
+    }catch(initialSessionWaitError){
+        console.warn("Initial admin auth hydration wait failed:",initialSessionWaitError);
+    }
+
+    // Then read the hydrated persistent session.
     for(let attempt=0; attempt<5; attempt++){
         try{
             const {data,error}=await supabaseClient.auth.getSession();
@@ -3769,6 +3786,15 @@ async function adminLogin(){
 
         }
 
+
+        // Explicitly persist the verified admin session as a recovery safeguard.
+        // Supabase normally writes this itself; this protects browsers that fail
+        // to flush the auth storage adapter immediately after password login.
+        try{
+            window.localStorage.setItem(ADMIN_AUTH_STORAGE_KEY, JSON.stringify(verifyData.session));
+        }catch(storageWriteError){
+            console.warn("Could not explicitly persist admin session:", storageWriteError);
+        }
 
         errorBox.textContent = "";
 
