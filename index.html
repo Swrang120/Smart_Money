@@ -8279,18 +8279,35 @@ if(document.readyState === "loading"){
 
 <script>
 async function loadPublicPackageImages(){
+ const brandImage=document.getElementById("siteBrandImage");
+ const brandDefault=document.getElementById("brandDefault");
+ const logoCacheKey="smart_money_dashboard_header_logo_url";
+
+ // Show the last Admin-uploaded logo immediately, before waiting for Supabase.
+ const applyBrandLogo=(url)=>{
+  const cleanUrl=String(url||"").trim();
+  if(!brandImage||!cleanUrl)return;
+  brandImage.onload=()=>{brandImage.hidden=false;if(brandDefault)brandDefault.hidden=true;};
+  brandImage.onerror=()=>{brandImage.hidden=true;if(brandDefault)brandDefault.hidden=false;};
+  brandImage.loading="eager";
+  brandImage.decoding="async";
+  brandImage.fetchPriority="high";
+  if(brandImage.src!==cleanUrl)brandImage.src=cleanUrl;
+ };
+ try{
+  const cachedLogo=localStorage.getItem(logoCacheKey);
+  if(cachedLogo)applyBrandLogo(cachedLogo);
+ }catch(e){}
+
  if(!window.supabase||!supabaseClient)return;
  try{
   const {data,error}=await supabaseClient.from("package_images").select("package_key,image_url");if(error)throw error;
-  const keys={"starter package":"starter","intermediate":"intermediate","intermediate package":"intermediate","expert package":"expert","master package":"master","brahmastra":"brahmastra","brahmastra package":"brahmastra","premium pro":"premium_pro","premium pro package":"premium_pro"};
+  const keys={"starter package":"starter","intermediate":"intermediate","intermediate package":"intermediate","expert package":"expert","master":"master","brahmastra":"brahmastra","brahmastra package":"brahmastra","premium pro":"premium_pro","premium pro package":"premium_pro"};
   const urls={};(data||[]).forEach(r=>{if(r.image_url)urls[r.package_key]=r.image_url;});
-  // Optional custom horizontal logo uploaded from Admin. Keep the built-in logo as a fallback.
-  const brandImage=document.getElementById("siteBrandImage");
-  const brandDefault=document.getElementById("brandDefault");
-  if(brandImage&&urls.smart_money_logo){
-   brandImage.onload=()=>{brandImage.hidden=false;if(brandDefault)brandDefault.hidden=true;};
-   brandImage.onerror=()=>{brandImage.hidden=true;if(brandDefault)brandDefault.hidden=false;};
-   brandImage.src=urls.smart_money_logo;
+  // Homepage logo uses the exact image uploaded in Admin Panel.
+  if(urls.smart_money_logo){
+   try{localStorage.setItem(logoCacheKey,urls.smart_money_logo);}catch(e){}
+   applyBrandLogo(urls.smart_money_logo);
   }
   document.querySelectorAll(".package-card").forEach(card=>{
    const title=(card.querySelector(".pkg-title h3")?.textContent||"").trim().toLowerCase(),key=keys[title];
