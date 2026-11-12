@@ -3768,9 +3768,19 @@ async function adminLogin(){
         // Supabase normally writes this itself; this protects browsers that fail
         // to flush the auth storage adapter immediately after password login.
         try{
-            window.localStorage.setItem(ADMIN_AUTH_STORAGE_KEY, JSON.stringify(verifyData.session));
+            const serializedSession = JSON.stringify(verifyData.session);
+            window.localStorage.setItem(ADMIN_AUTH_STORAGE_KEY, serializedSession);
+            const persistedSession = JSON.parse(window.localStorage.getItem(ADMIN_AUTH_STORAGE_KEY) || "null");
+            if(
+                !persistedSession?.access_token ||
+                !persistedSession?.refresh_token ||
+                persistedSession.access_token !== verifyData.session.access_token
+            ){
+                throw new Error("Saved session could not be verified in browser storage.");
+            }
         }catch(storageWriteError){
-            console.warn("Could not explicitly persist admin session:", storageWriteError);
+            console.error("Could not persist admin session:", storageWriteError);
+            throw new Error("Your browser is not saving the admin login. Allow site storage for smart-money.wasmer.app, then sign in again.");
         }
 
         errorBox.textContent = "";
