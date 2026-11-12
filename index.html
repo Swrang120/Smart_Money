@@ -2496,7 +2496,7 @@ select{
 
 <a href="#" class="brand" id="siteBrand" aria-label="Smart Money Home">
 
-<div class="brand-default" id="brandDefault">
+<div class="brand-default" id="brandDefault" hidden>
   <div class="logo-circle">SM</div>
   <div class="brand-text">
     <h2 aria-label="Smart Money"><span class="smart-word">Smart</span><span class="money-word">Money</span></h2>
@@ -8308,6 +8308,9 @@ async function loadPublicPackageImages(){
   if(urls.smart_money_logo){
    try{localStorage.setItem(logoCacheKey,urls.smart_money_logo);}catch(e){}
    applyBrandLogo(urls.smart_money_logo);
+  }else{
+   // Reveal the built-in text logo only after Supabase confirms no Admin logo exists.
+   if(brandDefault)brandDefault.hidden=false;
   }
   document.querySelectorAll(".package-card").forEach(card=>{
    const title=(card.querySelector(".pkg-title h3")?.textContent||"").trim().toLowerCase(),key=keys[title];
