@@ -9026,6 +9026,7 @@ if(document.readyState === "loading"){
       const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg",path=key+"/"+Date.now()+"-"+crypto.randomUUID()+"."+ext;
       const {error:ue}=await supabaseClient.storage.from(BUCKET).upload(path,file,{contentType:file.type,cacheControl:"3600",upsert:false});if(ue)throw ue;
       const {data:pd}=supabaseClient.storage.from(BUCKET).getPublicUrl(path),url=pd?.publicUrl;if(!url)throw new Error("Could not create the public image URL.");
+      try{localStorage.setItem("smart_money_dashboard_header_logo_url",url);}catch(e){}
       const {error:de}=await supabaseClient.from("package_images").upsert({package_key:key,image_url:url,updated_at:new Date().toISOString(),updated_by:user.id},{onConflict:"package_key"});if(de)throw de;
       savedUrls[key]=url;const img=$("packageImageCurrentPreview");
       if(img){img.onload=()=>{img.style.display="block";};img.onerror=()=>status("Image saved, but its preview could not load. Check the public Storage bucket.",true);img.src=url;img.style.display="block";}
