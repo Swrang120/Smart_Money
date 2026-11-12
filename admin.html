@@ -2066,8 +2066,6 @@ class="sidebar"
     <option value="general">General Announcement</option><option value="important">Important Notice</option>
     <option value="course">Course / Learning Update</option><option value="maintenance">Maintenance Update</option>
   </select>
-  <label for="notificationExpiry" style="display:block;font-size:12px;color:#cbd5e1;margin:8px 0 4px">Optional expiry date/time</label>
-  <input id="notificationExpiry" type="datetime-local">
   <button class="btn btn-primary" id="sendNotificationBtn" style="width:100%;margin-top:10px" onclick="sendDashboardNotification()">🔔 SEND NOTIFICATION TO USERS</button>
   <div id="notificationAdminStatus" style="font-size:12px;line-height:1.5;margin-top:9px;color:#cbd5e1" aria-live="polite"></div>
   <div style="height:1px;background:rgba(255,255,255,.12);margin:14px 0"></div>
@@ -7499,20 +7497,9 @@ value
   
 
 /* SMART MONEY DASHBOARD NOTIFICATIONS — admin-only writes enforced by Supabase RLS */
-function localDateTimeValue(date){
-  const pad=n=>String(n).padStart(2,"0");
-  return date.getFullYear()+"-"+pad(date.getMonth()+1)+"-"+pad(date.getDate())+"T"+pad(date.getHours())+":"+pad(date.getMinutes());
-}
-function initializeNotificationExpiry(){
-  const input=document.getElementById("notificationExpiry");if(!input)return;
-  const now=new Date(),minDate=new Date(now.getTime()+60000),defaultDate=new Date(now.getTime()+7*24*60*60*1000);
-  input.min=localDateTimeValue(minDate);
-  if(!input.value)input.value=localDateTimeValue(defaultDate);
-  input.addEventListener("focus",()=>{input.min=localDateTimeValue(new Date(Date.now()+60000));});
-}
 async function sendDashboardNotification(){
   const titleEl=document.getElementById("notificationTitle"),messageEl=document.getElementById("notificationMessage");
-  const typeEl=document.getElementById("notificationType"),expiryEl=document.getElementById("notificationExpiry");
+  const typeEl=document.getElementById("notificationType");
   const statusEl=document.getElementById("notificationAdminStatus"),button=document.getElementById("sendNotificationBtn");
   const title=(titleEl?.value||"").trim(),message=(messageEl?.value||"").trim();
   if(!title||!message){if(statusEl)statusEl.textContent="Please enter both title and message.";return;}
@@ -7521,27 +7508,14 @@ async function sendDashboardNotification(){
   try{
     const sessionResult=await supabaseClient.auth.getSession(),user=sessionResult?.data?.session?.user;
     if(!user||String(user.email||"").toLowerCase()!=="sboro3235@gmail.com")throw new Error("Admin session verification failed. Please sign in again.");
-    let expiryValue=null;
-    const rawExpiry=String(expiryEl?.value||"").trim();
-    if(rawExpiry){
-      const match=rawExpiry.match(/^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})$/);
-      if(!match)throw new Error("Please choose a valid expiry date and time, or leave it empty.");
-      const [,year,month,day,hour,minute]=match;
-      const localExpiry=new Date(Number(year),Number(month)-1,Number(day),Number(hour),Number(minute),0,0);
-      if(Number.isNaN(localExpiry.getTime())||localExpiry.getTime()<=Date.now()+30000)throw new Error("Expiry time must be at least 1 minute in the future. The default is 7 days.");
-      expiryValue=localExpiry.toISOString();
-    }
-    const {error}=await supabaseClient.from("user_notifications").insert({title,message,notification_type:typeEl.value||"general",is_active:true,expires_at:expiryValue,created_by:user.id});
+    const {error}=await supabaseClient.from("user_notifications").insert({title,message,notification_type:typeEl.value||"general",is_active:true,created_by:user.id});
     if(error)throw error;
     titleEl.value="";messageEl.value="";
-    if(expiryEl){expiryEl.value=localDateTimeValue(new Date(Date.now()+7*24*60*60*1000));expiryEl.min=localDateTimeValue(new Date(Date.now()+60000));}
-    if(statusEl){statusEl.textContent="✓ Notification sent. It is now visible in user Dashboards.";statusEl.style.color="#86efac";}
+    if(statusEl){statusEl.textContent="✓ Notification sent. It will stay visible until you delete it.";statusEl.style.color="#86efac";}
     await loadDashboardNotifications();
   }catch(error){if(statusEl){statusEl.textContent="Could not send: "+(error.message||"Unknown error");statusEl.style.color="#fca5a5";}}
   finally{button.disabled=false;button.textContent="🔔 SEND NOTIFICATION TO USERS";}
 }
-if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initializeNotificationExpiry,{once:true});
-else initializeNotificationExpiry();
 async function loadDashboardNotifications(){
   const box=document.getElementById("adminNotificationList");if(!box||!supabaseClient)return;
   try{
@@ -7551,12 +7525,18 @@ async function loadDashboardNotifications(){
     box.innerHTML=data.map(n=>`<div style="padding:10px;margin:8px 0;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:rgba(255,255,255,.04)">
       <div style="font-weight:800;color:#fff">${escapeHtml(n.title)}</div><div style="margin:5px 0;color:#cbd5e1;white-space:pre-wrap">${escapeHtml(n.message)}</div>
       <div style="font-size:10px;color:#a5b4fc">${escapeHtml(String(n.notification_type||"general").toUpperCase())} · ${n.is_active?"ACTIVE":"HIDDEN"} · ${new Date(n.created_at).toLocaleString()}</div>
-      <button class="btn btn-primary" style="margin-top:7px;padding:6px 10px" onclick="setDashboardNotificationActive('${n.id}',${!n.is_active})">${n.is_active?"Hide from users":"Show to users"}</button></div>`).join("");
+      <button class="btn btn-primary" style="margin-top:7px;padding:6px 10px" onclick="deleteDashboardNotification('${n.id}')" >🗑️ DELETE NOTIFICATION</button></div>`).join("");
   }catch(error){box.innerHTML='<p style="color:#fca5a5">Unable to load notifications: '+escapeHtml(error.message||"Database error")+'</p>';}
 }
-async function setDashboardNotificationActive(id,active){
-  try{const {error}=await supabaseClient.from("user_notifications").update({is_active:Boolean(active)}).eq("id",id);if(error)throw error;await loadDashboardNotifications();}
-  catch(error){alert("Could not update notification: "+(error.message||"Unknown error"));}
+async function deleteDashboardNotification(id){
+  if(!confirm("Delete this notification permanently? It will disappear from all user Dashboards."))return;
+  try{
+    const sessionResult=await supabaseClient.auth.getSession(),user=sessionResult?.data?.session?.user;
+    if(!user||String(user.email||"").toLowerCase()!=="sboro3235@gmail.com")throw new Error("Admin session verification failed.");
+    const {error}=await supabaseClient.from("user_notifications").delete().eq("id",id);
+    if(error)throw error;
+    await loadDashboardNotifications();
+  }catch(error){alert("Could not delete notification: "+(error.message||"Unknown error"));}
 }
 /* =========================================================  
    PREVIEW IMAGE  
