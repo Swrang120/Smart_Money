@@ -90,7 +90,7 @@ body.authenticated .mobile-nav{display:flex}
 const SUPABASE_URL='https://rvprrulkjegvicbnjuft.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ';
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-let authUser=null,canPublish=false,isAdmin=false,authCheckInProgress=false,people=[],activeProfile=null,filter='for-you';
+let authUser=null,canPublish=false,isAdmin=false,authCheckInProgress=false,socialRealtimeChannel=null,socialRealtimeTimer=null,people=[],activeProfile=null,filter='for-you';
 let db={posts:[],stories:[],following:[],followersById:{},saved:[],notifications:[],reported:[]};
 const bucket='smart-money-social';
 const $=id=>document.getElementById(id);
@@ -131,9 +131,10 @@ async function applyAuthSession(user){
   $('sideName').textContent=profile.display_name||profile.username||'Community Member';
   $('accessNotice').textContent=canPublish?'Your Social account is active. You can publish posts and stories.':'You can view the entire community and interact. Posting photos, videos and stories unlocks after Social admin approval.';
   await loadSocialData();
- }catch(e){console.error('Social startup failed:',e);showToast('Could not load Social: '+(e.message||'Please refresh.'));document.body.classList.add('authenticated');$('authScreen').style.display='none';}finally{authCheckInProgress=false;}
+  subscribeSocialRealtime();
+ }catch(e){console.error('Social startup failed':,e);showToast('Could not load Social: '+(e.message||'Please refresh.'));document.body.classList.add('authenticated');$('authScreen').style.display='none';}finally{authCheckInProgress=false;}
 }
-async function logout(){try{const {error}=await supabaseClient.auth.signOut();if(error)throw error;authUser=null;showSmartMoneyLogin();}catch(e){showToast(e.message||'Logout failed');}}
+async function logout(){try{if(socialRealtimeChannel){await supabaseClient.removeChannel(socialRealtimeChannel);socialRealtimeChannel=null;}const {error}=await supabaseClient.auth.signOut();if(error)throw error;authUser=null;showSmartMoneyLogin();}catch(e){showToast(e.message||'Logout failed');}}
 supabaseClient.auth.onAuthStateChange((event,session)=>{if(session?.user)setTimeout(()=>applyAuthSession(session.user),0);else if(event==='SIGNED_OUT'){authUser=null;showSmartMoneyLogin();}});
 (async()=>{try{const {data,error}=await supabaseClient.auth.getSession();if(error)throw error;if(data?.session?.user)await applyAuthSession(data.session.user);else showSmartMoneyLogin();}catch(e){console.error(e);showSmartMoneyLogin();}})();
 
@@ -162,6 +163,22 @@ async function loadSocialData(){
  db.reported=[];
  renderAll();
 }
+function subscribeSocialRealtime(){
+ if(!myId())return;
+ if(socialRealtimeChannel)supabaseClient.removeChannel(socialRealtimeChannel);
+ socialRealtimeChannel=supabaseClient.channel('smart-money-social-'+myId())
+  .on('postgres_changes',{event:'*',schema:'public',table:'social_posts'},queueSocialRefresh)
+  .on('postgres_changes',{event:'*',schema:'public',table:'social_stories'},queueSocialRefresh)
+  .on('postgres_changes',{event:'*',schema:'public',table:'social_profiles'},queueSocialRefresh)
+  .on('postgres_changes',{event:'*',schema:'public',table:'social_likes'},queueSocialRefresh)
+  .on('postgres_changes',{event:'*',schema:'public',table:'social_comments'},queueSocialRefresh)
+  .on('postgres_changes',{event:'*',schema:'public',table:'social_follows'},queueSocialRefresh)
+  .on('postgres_changes',{event:'*',schema:'public',table:'social_saved_posts'},queueSocialRefresh)
+  .on('postgres_changes',{event:'*',schema:'public',table:'social_notifications'},queueSocialRefresh)
+  .on('postgres_changes',{event:'*',schema:'public',table:'social_access',filter:'user_id=eq.'+myId()},async()=>{try{const {data}=await supabaseClient.from('social_access').select('access_status').eq('user_id',myId()).maybeSingle();canPublish=isAdmin||data?.access_status==='approved';$('accessNotice').textContent=canPublish?'Your Social account is active. You can publish posts and stories.':'You can view the entire community and interact. Posting photos, videos and stories unlocks after Social admin approval.';}catch(e){console.warn(e);}})
+  .subscribe();
+}
+function queueSocialRefresh(){clearTimeout(socialRealtimeTimer);socialRealtimeTimer=setTimeout(()=>loadSocialData().catch(e=>console.error('Social realtime refresh:',e)),350);}
 function showView(v){document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));$('view-'+v)?.classList.add('active');document.querySelectorAll('[data-view]').forEach(e=>e.classList.toggle('active',e.dataset.view===v));if(v==='profile')renderProfile();if(v==='notifications')renderNotifications();if(v==='explore')renderExplore();if(v==='saved')renderSaved();window.scrollTo({top:0,behavior:'smooth'});}
 function openProfile(id=myId()){activeProfile=id;showView('profile');}
 function setFilter(f,el){filter=f;document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));el.classList.add('active');renderFeed();}
