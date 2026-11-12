@@ -57,14 +57,11 @@ body.authenticated .mobile-nav{display:flex}
 <body>
 <section class="auth-screen" id="authScreen"><div class="auth-card">
 <div class="auth-brand"><div class="logo">S</div><div>SMART MONEY <small style="display:block;color:#85899a;font-size:10px;letter-spacing:2px">SOCIAL COMMUNITY</small></div></div>
-<h2 id="authTitle" style="margin:0 0 5px">Welcome back</h2><p class="muted tiny" id="authSubtitle">Sign in to continue to your community.</p>
-<div class="auth-tabs"><button id="loginTab" class="active" onclick="switchAuthMode('login')">Login</button><button id="signupTab" onclick="switchAuthMode('signup')">Create account</button></div>
-<div class="field" id="nameField" style="display:none"><label>Full name</label><input id="authName" type="text" autocomplete="name" maxlength="60" placeholder="Enter your name"></div>
-<div class="field"><label>Email address</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
-<div class="field"><label>Password</label><input id="authPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters"></div>
-<div class="auth-message" id="authMessage" role="status" aria-live="polite"></div>
-<button class="primary auth-submit" id="authSubmit" onclick="submitAuth()">Login Securely</button>
-<p class="tiny muted" style="margin:14px 0 0;text-align:center">New accounts may require email verification and admin approval for Social access.</p>
+<h2 style="margin:0 0 5px">Continue with Smart Money</h2>
+<p class="muted tiny">Social uses your existing Smart Money account. No separate signup or password is needed here.</p>
+<div class="preview-note">Please sign in to Smart Money using the Google / Gmail authentication already configured in your account. After login, return to Social on this same browser.</div>
+<a class="primary auth-submit" href="/login.html" style="display:block;text-align:center;text-decoration:none">Continue to Smart Money Login ↗</a>
+<a class="soft" href="/" style="display:block;text-align:center;text-decoration:none;margin-top:10px">Back to Smart Money Home</a>
 </div></section>
 <section id="pendingScreen" style="display:none;min-height:100vh;padding:22px;background:#f4f5f7"><div class="auth-status"><div style="font-size:38px">🕒</div><h2>Access approval pending</h2><p class="muted">Your account is created successfully. Social access opens after administrator approval.</p><p class="tiny muted" id="pendingEmail"></p><button class="soft" onclick="logout()">Logout</button></div></section>
 <div class="app">
@@ -90,17 +87,67 @@ body.authenticated .mobile-nav{display:flex}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+/* Reuse the SAME Supabase Auth session as the main Smart Money website.
+   Do not create a second Social-only account or password flow. */
 const SUPABASE_URL='https://rvprrulkjegvicbnjuft.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ';
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-let authMode='login',authUser=null,authBusy=false;
-function authMessage(message,isError=false){const el=document.getElementById('authMessage');el.textContent=message;el.className='auth-message show'+(isError?' error':'')}
-function switchAuthMode(mode){authMode=mode;document.getElementById('nameField').style.display=mode==='signup'?'grid':'none';document.getElementById('authTitle').textContent=mode==='signup'?'Create your account':'Welcome back';document.getElementById('authSubtitle').textContent=mode==='signup'?'Join Smart Money Social with your email.':'Sign in to continue to your community.';document.getElementById('authSubmit').textContent=mode==='signup'?'Create Account':'Login Securely';document.getElementById('loginTab').classList.toggle('active',mode==='login');document.getElementById('signupTab').classList.toggle('active',mode==='signup');document.getElementById('authMessage').className='auth-message';document.getElementById('authPassword').autocomplete=mode==='signup'?'new-password':'current-password'}
-async function submitAuth(){if(authBusy)return;const email=document.getElementById('authEmail').value.trim().toLowerCase(),password=document.getElementById('authPassword').value,name=document.getElementById('authName').value.trim();if(!email||!password){authMessage('Please enter your email and password.',true);return}if(password.length<8){authMessage('Password must contain at least 8 characters.',true);return}if(authMode==='signup'&&!name){authMessage('Please enter your full name.',true);return}authBusy=true;const btn=document.getElementById('authSubmit');btn.disabled=true;btn.textContent='Please wait…';try{if(authMode==='signup'){const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{full_name:name},emailRedirectTo:location.origin+location.pathname}});if(error)throw error;if(data.session){await applyAuthSession(data.user)}else{authMessage('Account created. Check your email, verify your address, then log in here.')}}else{const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;await applyAuthSession(data.user)}}catch(e){authMessage(e.message||'Authentication failed. Please try again.',true)}finally{authBusy=false;btn.disabled=false;btn.textContent=authMode==='signup'?'Create Account':'Login Securely'}}
-async function applyAuthSession(user){authUser=user;document.getElementById('accountPill').textContent=user.email||'Signed in';document.getElementById('pendingEmail').textContent=user.email||'';const {data,error}=await supabaseClient.from('social_access').select('access_status').eq('user_id',user.id).maybeSingle();const isAdmin=['admin','super_admin'].includes(user.app_metadata?.role);if(error||(!isAdmin&&(!data||data.access_status!=='approved'))){document.getElementById('authScreen').style.display='none';document.getElementById('pendingScreen').style.display='block';document.body.classList.remove('authenticated');return}document.getElementById('pendingScreen').style.display='none';document.body.classList.add('authenticated');const p=people[0];p.name=user.user_metadata?.full_name||user.email?.split('@')[0]||'Community Member';p.handle='@'+(p.name.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'')||'member');p.bio='Welcome to Smart Money Social.';renderAll()}
-async function logout(){try{const {error}=await supabaseClient.auth.signOut({scope:'local'});if(error)throw error}catch(e){showToast(e.message||'Logout failed');return}authUser=null;document.body.classList.remove('authenticated');document.getElementById('pendingScreen').style.display='none';document.getElementById('authScreen').style.display='grid';document.getElementById('authEmail').value='';document.getElementById('authPassword').value='';switchAuthMode('login');authMessage('You have been logged out.')}
-supabaseClient.auth.onAuthStateChange((event,session)=>{if(session?.user)setTimeout(()=>applyAuthSession(session.user),0);else if(event==='SIGNED_OUT'){authUser=null;document.body.classList.remove('authenticated');document.getElementById('pendingScreen').style.display='none';document.getElementById('authScreen').style.display='grid'}});
-(async()=>{const {data:{session}}=await supabaseClient.auth.getSession();if(session?.user)await applyAuthSession(session.user)})();
+let authUser=null,authCheckInProgress=false;
+function showSmartMoneyLogin(){
+ document.body.classList.remove('authenticated');
+ document.getElementById('pendingScreen').style.display='none';
+ document.getElementById('authScreen').style.display='grid';
+}
+async function applyAuthSession(user){
+ if(!user||authCheckInProgress)return;
+ authCheckInProgress=true;
+ try{
+  authUser=user;
+  const pill=document.getElementById('accountPill');
+  if(pill)pill.textContent=user.email||'Smart Money Account';
+  document.getElementById('pendingEmail').textContent=user.email||'';
+  const {data,error}=await supabaseClient.from('social_access').select('access_status').eq('user_id',user.id).maybeSingle();
+  const isAdmin=['admin','super_admin'].includes(user.app_metadata?.role);
+  if(error||(!isAdmin&&(!data||data.access_status!=='approved'))){
+   document.getElementById('authScreen').style.display='none';
+   document.getElementById('pendingScreen').style.display='block';
+   document.body.classList.remove('authenticated');
+   return;
+  }
+  document.getElementById('authScreen').style.display='none';
+  document.getElementById('pendingScreen').style.display='none';
+  document.body.classList.add('authenticated');
+  const p=people[0];
+  p.name=user.user_metadata?.full_name||user.user_metadata?.name||user.email?.split('@')[0]||'Community Member';
+  p.handle='@'+(p.name.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'')||'member');
+  p.bio='Welcome to Smart Money Social.';
+  renderAll();
+ }catch(e){
+  console.error('Smart Money session check failed:',e);
+  showSmartMoneyLogin();
+ }finally{authCheckInProgress=false;}
+}
+async function logout(){
+ try{
+  /* Global sign-out keeps Smart Money and Social authentication consistent. */
+  const {error}=await supabaseClient.auth.signOut();
+  if(error)throw error;
+  authUser=null;
+  showSmartMoneyLogin();
+ }catch(e){showToast(e.message||'Logout failed. Please try again.');}
+}
+supabaseClient.auth.onAuthStateChange((event,session)=>{
+ if(session?.user){setTimeout(()=>applyAuthSession(session.user),0);}
+ else if(event==='SIGNED_OUT'){authUser=null;showSmartMoneyLogin();}
+});
+(async()=>{
+ try{
+  const {data,error}=await supabaseClient.auth.getSession();
+  if(error)throw error;
+  if(data?.session?.user)await applyAuthSession(data.session.user);
+  else showSmartMoneyLogin();
+ }catch(e){console.error('Could not read Smart Money login session:',e);showSmartMoneyLogin();}
+})();
 </script>
 
 <script>
