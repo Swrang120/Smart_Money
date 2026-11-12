@@ -2748,32 +2748,30 @@ Join Our Community
 </section>
 <style>
 .sm-whatsapp-join{width:min(1180px,92%);margin:28px auto 72px;padding:0}
-.sm-whatsapp-inner{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:28px 32px;border-radius:22px;background:linear-gradient(115deg,#082f49 0%,#123b72 55%,#075e54 100%);box-shadow:0 18px 40px rgba(15,23,42,.16);color:#fff}
+.sm-whatsapp-inner{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(300px,.95fr);align-items:center;gap:14px 28px;padding:30px 34px;border-radius:22px;background:linear-gradient(115deg,#082f49 0%,#123b72 55%,#075e54 100%);box-shadow:0 18px 40px rgba(15,23,42,.16);color:#fff}
 .sm-whatsapp-inner:after{content:"";position:absolute;width:220px;height:220px;border:1px solid rgba(255,255,255,.12);border-radius:50%;right:23%;top:-135px;pointer-events:none}
-.sm-whatsapp-copy{position:relative;z-index:1;max-width:720px}
+.sm-whatsapp-copy{position:relative;z-index:1;grid-column:1;grid-row:1/5;max-width:620px}
 .sm-whatsapp-kicker{font-size:10px;font-weight:800;letter-spacing:1.5px;color:#a7f3d0}
-.sm-whatsapp-copy h2{margin-top:8px;font-size:clamp(20px,3vw,29px);line-height:1.2;font-weight:800;color:#fff}
-.sm-whatsapp-copy p{margin-top:9px;max-width:680px;font-size:13px;line-height:1.7;color:#dbeafe}
-.sm-whatsapp-button{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;gap:10px;flex-shrink:0;padding:15px 20px;border-radius:13px;background:#25d366;color:#063b2b;font-size:13px;font-weight:800;box-shadow:0 9px 22px rgba(0,0,0,.18);transition:transform .2s,box-shadow .2s}
-.sm-whatsapp-button:hover{transform:translateY(-3px);box-shadow:0 13px 26px rgba(0,0,0,.24)}
-.sm-whatsapp-button span:first-child{font-size:19px}
-.sm-connect-team-button{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:54px;margin-top:14px;padding:14px 18px;border-radius:18px;text-decoration:none;font-weight:800;color:#fff;background:linear-gradient(100deg,#8b5cf6 0%,#2563eb 52%,#0f766e 100%);box-shadow:0 8px 22px rgba(37,99,235,.22);transition:transform .2s ease,filter .2s ease}
-.sm-connect-team-button:hover{transform:translateY(-2px);filter:brightness(1.08)}
-.sm-instagram-button{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;gap:10px;flex-shrink:0;padding:15px 20px;border-radius:13px;background:linear-gradient(115deg,#833ab4,#fd1d1d,#fcb045);color:#fff;font-size:13px;font-weight:800;box-shadow:0 9px 22px rgba(0,0,0,.18);transition:transform .2s,box-shadow .2s}
-.sm-instagram-button:hover{transform:translateY(-3px);box-shadow:0 13px 26px rgba(0,0,0,.24)}
-.sm-instagram-button span:first-child{font-size:19px}
-@media(max-width:900px){
-.sm-whatsapp-join{margin:18px auto 48px}
-.sm-whatsapp-inner{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;justify-content:stretch;padding:20px 18px;gap:10px}
-.sm-whatsapp-copy{grid-column:1/-1;max-width:none}
-.sm-whatsapp-copy h2{font-size:22px}
-.sm-whatsapp-copy p{font-size:12px}
-.sm-whatsapp-button,.sm-instagram-button{display:flex;min-width:0;width:100%;padding:9px 6px;gap:6px;font-size:10px;line-height:1.25;white-space:normal;text-align:center;overflow-wrap:anywhere}
-.sm-whatsapp-button span:first-child,.sm-instagram-button span:first-child{font-size:14px}
+.sm-whatsapp-copy h2{margin-top:8px;font-size:clamp(22px,2.5vw,30px);line-height:1.2;font-weight:800;color:#fff}
+.sm-whatsapp-copy p{margin-top:10px;max-width:620px;font-size:14px;line-height:1.7;color:#dbeafe}
+.sm-whatsapp-button,.sm-instagram-button,.sm-connect-team-button{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-width:0;min-height:52px;padding:13px 16px;border-radius:14px;text-decoration:none;font-size:14px;line-height:1.3;font-weight:800;text-align:center;white-space:normal;overflow-wrap:anywhere;box-shadow:0 9px 22px rgba(0,0,0,.16);transition:transform .2s,filter .2s}
+.sm-whatsapp-button{grid-column:2;background:#25d366;color:#063b2b}
+.sm-instagram-button{grid-column:2;background:linear-gradient(115deg,#833ab4,#fd1d1d,#fcb045);color:#fff}
+.sm-connect-team-button{grid-column:2;background:linear-gradient(100deg,#8b5cf6 0%,#2563eb 52%,#0f766e 100%);color:#fff}
+.sm-whatsapp-button:hover,.sm-instagram-button:hover,.sm-connect-team-button:hover{transform:translateY(-2px);filter:brightness(1.06)}
+.sm-whatsapp-button span:first-child,.sm-instagram-button span:first-child{font-size:18px}
+@media(max-width:1100px){
+ .sm-whatsapp-join{width:min(900px,92%);margin:20px auto 48px}
+ .sm-whatsapp-inner{grid-template-columns:minmax(0,1fr);gap:12px;padding:24px 22px}
+ .sm-whatsapp-copy{grid-column:1;grid-row:auto;max-width:none;margin-bottom:4px}
+ .sm-whatsapp-button,.sm-instagram-button,.sm-connect-team-button{grid-column:1;min-height:48px;padding:12px 16px;font-size:13px}
+ .sm-whatsapp-copy h2{font-size:clamp(22px,3vw,28px)}
+ .sm-whatsapp-copy p{font-size:13px}
 }
 @media(max-width:560px){
-.sm-whatsapp-inner{grid-template-columns:1fr;padding:18px 15px;gap:9px}
-.sm-whatsapp-button,.sm-instagram-button{padding:10px 10px;font-size:11px}
+ .sm-whatsapp-inner{padding:19px 16px;gap:10px;border-radius:19px}
+ .sm-whatsapp-copy h2{font-size:22px}
+ .sm-whatsapp-button,.sm-instagram-button,.sm-connect-team-button{min-height:46px;padding:11px 12px;font-size:12px}
 }
 </style>
 
