@@ -3086,7 +3086,6 @@ window.addEventListener("DOMContentLoaded", async () => {
     };
 
     // Keep public/admin panels independent from user profile loading.
-    safeRun("Admin updates", loadAdminStatus);
     safeRun("Global logo", loadGlobalTopLogo);
 
     let profileLoaded = false;
@@ -3100,6 +3099,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (currentUserId) {
+        safeRun("Admin updates", loadAdminStatus);
         setupLogout();
         setupRealtimeListener();
         safeRun("Earnings", loadEarningsData);
