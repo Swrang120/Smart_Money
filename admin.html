@@ -1987,6 +1987,13 @@ class="sidebar"
       <div id="workRegLinkStatus" style="font-size:11px;line-height:1.4;color:#b8c8dd;margin-top:8px" aria-live="polite">Enter and save the official WhatsApp number first.</div>
     </div>
 
+    <div id="connectTeamLinkCard" style="margin:12px 0;padding:14px;border:1px solid rgba(231,190,105,.55);border-radius:14px;background:linear-gradient(145deg,#17243a,#091528)">
+      <b style="display:block;color:#f3ce78;font-size:13px;margin-bottom:7px">✉️ Connect SMART MONEY Team</b>
+      <p style="font-size:11px;line-height:1.45;color:#c5d2e4;margin:0 0 9px">Copy the separate enquiry form link. User details and selected package open in an email draft to smartmoneyhelpcare@gmail.com.</p>
+      <button type="button" onclick="copyConnectTeamLink()" style="width:100%;padding:11px;border:0;border-radius:8px;background:linear-gradient(100deg,#d6a94c,#f4dc9c);color:#182033;font-weight:900;cursor:pointer">Copy Connect Team Link</button>
+      <div id="connectTeamLinkStatus" style="font-size:11px;line-height:1.4;color:#b8c8dd;margin-top:8px" aria-live="polite">Ready to copy.</div>
+    </div>
+
     <button type="button" onclick="showSupportInbox()" 
        style="width:100%;display:flex;align-items:center;gap:10px;margin:10px 0;padding:13px 14px;border-radius:10px;background:linear-gradient(110deg,#6559e8,#168eae);border:1px solid #6e83e8;color:#ffffff;box-shadow:0 8px 24px #3d58c433;font-weight:800;text-align:left;cursor:pointer">
        🎧 Customer Support Inbox
@@ -9308,6 +9315,14 @@ function showAdminDashboard(){
 })();
 </script>
 
+<script>
+window.copyConnectTeamLink=async function(){
+ const link='https://smart-money.wasmer.app/connect-smart-money-team.html';
+ const status=document.getElementById('connectTeamLinkStatus');
+ try{await navigator.clipboard.writeText(link);status.textContent='Copied! Share this link: '+link;status.style.color='#9ce7b0';}
+ catch(e){status.textContent='Copy this link: '+link;status.style.color='#ffe2a1';}
+};
+</script>
 </body>
 </html>
 
