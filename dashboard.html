@@ -1390,9 +1390,9 @@ button{
         </li>
 
         <li>
-            <button onclick="openUpiModal()">
+            <button onclick="openBankDetailsModal()">
                 <span class="side-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 9 9-6 9 6H3ZM5 10v8m4-8v8m6-8v8m4-8v8M3 21h18M2 18h20"/></svg></span>
-                <span>Bank / UPI Details</span>
+                <span>Bank Details</span>
                 <span class="side-arrow">›</span>
             </button>
         </li>
@@ -1661,8 +1661,8 @@ button{
 <!-- PAYMENT DETAILS -->
 <div id="profileSettingsModal" class="modal-overlay">
     <div class="modal-box">
-        <h3 style="margin-top:0;color:#7c3aed">🏦 Payment Details</h3>
-        <p id="payoutInfoText" style="font-size:13px;color:#64748b;line-height:1.6">Choose one payment method.</p>
+        <h3 style="margin-top:0;color:#7c3aed">🏦 Bank Details</h3>
+        <p id="payoutInfoText" style="font-size:13px;color:#64748b;line-height:1.6">Enter your bank account details for withdrawals.</p>
         
         <div class="payout-tabs">
             <div class="payout-tab active" id="tabBank" style="flex:1">🏦 Bank Account (Withdrawal)</div>
@@ -1695,7 +1695,7 @@ button{
             </div>
         </div>
 
-        <button onclick="updateUserPayoutDetails()" class="btn-action" id="saveProfileBtn">Save Payment Details</button>
+        <button onclick="updateUserPayoutDetails()" class="btn-action" id="saveProfileBtn">Save Bank Details</button>
 
         <button id="customerCareBtn" onclick="connectCustomerCare()" style="display:none;width:100%;margin-top:10px;padding:13px;border:none;border-radius:10px;background:#0f172a;color:#fff;font-weight:700;cursor:pointer">
             📧 CONNECT CUSTOMER CARE
@@ -1858,18 +1858,16 @@ function openKycModal(){
 
 /* PAYMENT & BANK DETAILS LOCK SYSTEM */
 function hasSavedPaymentDetails(){
-    const account = String(currentProfile?.bank_account_number || "").trim();
+    const account = String(currentProfile?.bank_account_number || currentProfile?.account_number || "").trim();
     const holder = String(currentProfile?.account_holder_name || "").trim();
     const bank = String(currentProfile?.bank_name || "").trim();
     const ifsc = String(currentProfile?.ifsc_code || "").trim();
-    return String(currentProfile?.payout_type || "").trim().toLowerCase() === "bank" &&
-           Boolean(account && holder && bank && ifsc);
+    return Boolean(account && holder && bank && ifsc);
 }
 
-function openUpiModal(){
+function openBankDetailsModal(){
     closeSidebar();
     const locked = hasSavedPaymentDetails();
-    const savedType = String(currentProfile?.payout_type || "").trim().toLowerCase();
 
     const accNameInput = document.getElementById("editAccName");
     const bankNameInput = document.getElementById("editBankName");
@@ -1888,7 +1886,7 @@ function openUpiModal(){
     ifscInput.value = currentProfile?.ifsc_code || "";
 
     if(locked){
-        switchPayoutMode(savedType === "bank" ? "bank" : "upi", true);
+        switchPayoutMode("bank", true);
         bankNameInput.disabled = true;
         confirmAccNoInput.disabled = true;
         accNameInput.disabled = true;
@@ -1901,7 +1899,7 @@ function openUpiModal(){
         saveBtn.style.display = "none";
         careBtn.style.display = "block";
         lockedMessage.style.display = "block";
-        infoText.innerHTML = `<b style="color:#dc2626">🔒 Payment Details Locked</b><br>Your ${savedType === "bank" ? "Bank Account" : "UPI ID"} is permanently saved.`;
+        infoText.innerHTML = `<b style="color:#dc2626">🔒 Payment Details Locked</b><br>Your Bank Account is saved. Contact Smart Money support if it needs to be changed.`;
     }else{
         bankNameInput.disabled = false;
         confirmAccNoInput.disabled = false;
@@ -1915,7 +1913,7 @@ function openUpiModal(){
         saveBtn.style.display = "block";
         careBtn.style.display = "none";
         lockedMessage.style.display = "none";
-        infoText.innerHTML = `Bank account details are required for every withdrawal. Choose your bank and enter matching account details. Once saved, details are locked permanently.`;
+        infoText.innerHTML = `Bank account details are required for every withdrawal. Enter the account holder name, bank, account number and IFSC correctly. Once saved, details are locked.`;
         switchPayoutMode("bank");
     }
 
@@ -1934,7 +1932,7 @@ function switchPayoutMode(mode, force = false){
     if(bankTab) bankTab.className = "payout-tab active";
 }
 
-/* PERMANENT BANK/UPI SAVE WITH SUPABASE UPSERT & LOCAL CACHE */
+/* BANK-ONLY PAYOUT DETAILS SAVE WITH SUPABASE & LOCAL CACHE */
 async function updateUserPayoutDetails(){
     if(hasSavedPaymentDetails()){
         showPaymentChangeBlocked();
@@ -1969,6 +1967,7 @@ async function updateUserPayoutDetails(){
         payout_type: "bank",
         bank_name: bankName,
         account_holder_name: accountHolder,
+        account_number: accountNumber,
         bank_account_number: accountNumber,
         ifsc_code: ifscCode,
         upi_id: null
@@ -2018,7 +2017,7 @@ function connectCustomerCare(){
           " | IFSC: " + (currentProfile?.ifsc_code || "N/A")
         : "No saved bank details";
 
-    const subject = encodeURIComponent("Payment Details Change Request");
+    const subject = encodeURIComponent("Bank Details Change Request");
     const body = encodeURIComponent([
         "Hello Support Team,",
         "",
@@ -2049,16 +2048,11 @@ async function openWithdrawModal(){
     }
 
     const preview = document.getElementById("withdrawPaymentDetailsContent");
-    const savedType = String(currentProfile?.payout_type || "").trim().toLowerCase();
-    if(savedType === "bank"){
-        const accName = currentProfile?.account_holder_name || "N/A";
-        const accNo = currentProfile?.bank_account_number || "N/A";
-        const ifsc = currentProfile?.ifsc_code || "N/A";
-        preview.innerHTML = `🏦 <b>Bank Account:</b> ${escapeHtml(accNo)}<br><span style="font-size:11px;color:#64748b">Holder: ${escapeHtml(accName)} | IFSC: ${escapeHtml(ifsc)}</span>`;
-    }else{
-        const upi = currentProfile?.upi_id || "N/A";
-        preview.innerHTML = `⚡ <b>UPI ID:</b> <span style="color:#7c3aed">${escapeHtml(upi)}</span>`;
-    }
+    const accName = currentProfile?.account_holder_name || "N/A";
+    const bankName = currentProfile?.bank_name || "N/A";
+    const accNo = currentProfile?.bank_account_number || currentProfile?.account_number || "N/A";
+    const ifsc = currentProfile?.ifsc_code || "N/A";
+    preview.innerHTML = `🏦 <b>Bank Account:</b> ${escapeHtml(accNo)}<br><span style="font-size:11px;color:#64748b">Holder: ${escapeHtml(accName)} | Bank: ${escapeHtml(bankName)} | IFSC: ${escapeHtml(ifsc)}</span>`;
 
     const balanceText = document.getElementById("withdrawModalBalanceText");
     if(balanceText) balanceText.textContent = "Loading available balance…";
@@ -2413,25 +2407,29 @@ async function loadDashboardProfile(){
             }
 
             if(localPayout){
-                if(localPayout.payout_type && profile.payout_type !== localPayout.payout_type){
-                    profile.payout_type = localPayout.payout_type;
-                    updatesNeeded.payout_type = localPayout.payout_type;
-                }
-                if(localPayout.upi_id && profile.upi_id !== localPayout.upi_id){
-                    profile.upi_id = localPayout.upi_id;
-                    updatesNeeded.upi_id = localPayout.upi_id;
+                const cachedAccount = localPayout.bank_account_number || localPayout.account_number || "";
+                if(cachedAccount && profile.bank_account_number !== cachedAccount){
+                    profile.bank_account_number = cachedAccount;
+                    profile.account_number = cachedAccount;
+                    updatesNeeded.bank_account_number = cachedAccount;
+                    updatesNeeded.account_number = cachedAccount;
                 }
                 if(localPayout.account_holder_name && profile.account_holder_name !== localPayout.account_holder_name){
                     profile.account_holder_name = localPayout.account_holder_name;
                     updatesNeeded.account_holder_name = localPayout.account_holder_name;
                 }
-                if(localPayout.bank_account_number && profile.bank_account_number !== localPayout.bank_account_number){
-                    profile.bank_account_number = localPayout.bank_account_number;
-                    updatesNeeded.bank_account_number = localPayout.bank_account_number;
+                if(localPayout.bank_name && profile.bank_name !== localPayout.bank_name){
+                    profile.bank_name = localPayout.bank_name;
+                    updatesNeeded.bank_name = localPayout.bank_name;
                 }
                 if(localPayout.ifsc_code && profile.ifsc_code !== localPayout.ifsc_code){
                     profile.ifsc_code = localPayout.ifsc_code;
                     updatesNeeded.ifsc_code = localPayout.ifsc_code;
+                }
+                if(cachedAccount && localPayout.account_holder_name && localPayout.bank_name && localPayout.ifsc_code){
+                    profile.payout_type = "bank";
+                    updatesNeeded.payout_type = "bank";
+                    updatesNeeded.upi_id = null;
                 }
             }
 
@@ -2473,10 +2471,11 @@ async function loadDashboardProfile(){
         }
         if(currentProfile.payout_type){
             localStorage.setItem(`payout_details_${currentUserId}`, JSON.stringify({
-                payout_type: currentProfile.payout_type,
-                upi_id: currentProfile.upi_id || null,
+                payout_type: "bank",
                 account_holder_name: currentProfile.account_holder_name || null,
-                bank_account_number: currentProfile.bank_account_number || null,
+                bank_name: currentProfile.bank_name || null,
+                account_number: currentProfile.account_number || currentProfile.bank_account_number || null,
+                bank_account_number: currentProfile.bank_account_number || currentProfile.account_number || null,
                 ifsc_code: currentProfile.ifsc_code || null
             }));
         }
