@@ -1849,20 +1849,52 @@ async function removeProfilePicture(){
     }
 }
 
-/* GLOBAL TOP LOGO */
+/* DASHBOARD HEADER LOGO — use the exact image uploaded in Admin > Homepage Header Logo,
+   matching index.html's package_images.smart_money_logo source. */
 async function loadGlobalTopLogo(){
+    const navLogo = document.getElementById("navBrandLogoImg");
+    if(!navLogo || !supabaseClient) return;
+
     try{
-        const { data } = await supabaseClient
+        // This is the same source of truth used by index.html.
+        const { data, error } = await supabaseClient
+            .from("package_images")
+            .select("image_url")
+            .eq("package_key", "smart_money_logo")
+            .maybeSingle();
+
+        if(error) throw error;
+
+        const uploadedUrl = String(data?.image_url || "").trim();
+        if(uploadedUrl){
+            navLogo.onload = () => {
+                navLogo.style.visibility = "visible";
+            };
+            navLogo.onerror = () => {
+                navLogo.style.visibility = "visible";
+                console.warn("Admin-uploaded Smart Money header logo could not be loaded.");
+            };
+            // Cache-bust without changing the stored public URL.
+            const separator = uploadedUrl.includes("?") ? "&" : "?";
+            navLogo.src = uploadedUrl + separator + "dashboard_header=" + Date.now();
+            navLogo.alt = "Smart Money";
+            return;
+        }
+
+        // Legacy fallback only when no homepage header image has been uploaded.
+        const { data: legacy } = await supabaseClient
             .from("global_settings")
             .select("setting_value")
             .eq("setting_key", "admin_top_logo")
             .maybeSingle();
 
-        if(data?.setting_value){
-            document.getElementById("navBrandLogoImg").src = data.setting_value;
-            document.getElementById("sidebarLogo").src = data.setting_value;
+        if(legacy?.setting_value){
+            navLogo.src = legacy.setting_value;
+            navLogo.alt = "Smart Money";
         }
-    }catch(e){}
+    }catch(e){
+        console.warn("Dashboard header logo load failed:", e);
+    }
 }
 
 /* PERMANENT USER ID / REFERRAL CODE */
