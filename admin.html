@@ -1977,6 +1977,16 @@ class="sidebar"
        style="display:flex;align-items:center;gap:10px;margin:16px 0;padding:13px 14px;border-radius:10px;background:linear-gradient(135deg,#d9ad4e,#f4d98d);color:#172033;font-weight:800;text-decoration:none">
        🎓 Skill Academy Control ↗
     </a>
+    <div id="workRegistrationLinkCard" style="margin:12px 0;padding:14px;border:1px solid rgba(37,201,255,.4);border-radius:14px;background:linear-gradient(145deg,#102744,#10182b)">
+      <b style="display:block;color:#8de7ff;font-size:13px;margin-bottom:7px">📋 Work Registration Form Link</b>
+      <p style="font-size:11px;line-height:1.45;color:#c5d2e4;margin:0 0 9px">Set the SMART MONEY WhatsApp number. Users will fill the form and send their enquiry directly to this number.</p>
+      <label for="workRegWhatsapp" style="display:block;font-size:11px;color:#e7edf7;margin-bottom:5px">WhatsApp number (India: 10 digits)</label>
+      <input id="workRegWhatsapp" type="tel" inputmode="numeric" maxlength="16" placeholder="e.g. 9876543210" style="width:100%;box-sizing:border-box;padding:10px;border-radius:8px;background:#081426;color:#fff;border:1px solid #425776">
+      <button type="button" onclick="saveWorkRegWhatsapp()" style="width:100%;margin-top:8px;padding:10px;border:0;border-radius:8px;background:#167eac;color:#fff;font-weight:800;cursor:pointer">Save WhatsApp Number</button>
+      <button type="button" onclick="copyWorkRegistrationLink()" style="width:100%;margin-top:8px;padding:11px;border:0;border-radius:8px;background:linear-gradient(100deg,#d6a94c,#f4dc9c);color:#182033;font-weight:900;cursor:pointer">Copy Registration Link</button>
+      <div id="workRegLinkStatus" style="font-size:11px;line-height:1.4;color:#b8c8dd;margin-top:8px" aria-live="polite">Enter and save the official WhatsApp number first.</div>
+    </div>
+
     <button type="button" onclick="showSupportInbox()" 
        style="width:100%;display:flex;align-items:center;gap:10px;margin:10px 0;padding:13px 14px;border-radius:10px;background:linear-gradient(110deg,#6559e8,#168eae);border:1px solid #6e83e8;color:#ffffff;box-shadow:0 8px 24px #3d58c433;font-weight:800;text-align:left;cursor:pointer">
        🎧 Customer Support Inbox
@@ -9257,6 +9267,47 @@ function showAdminDashboard(){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 </script>
+
+<script>
+(function(){
+  const key='smartMoneyWorkRegistrationWhatsapp';
+  function normalizeWorkRegNumber(raw){
+    let n=String(raw||'').replace(/\\D/g,'');
+    if(n.length===10)n='91'+n;
+    return /^91[6-9]\\d{9}$/.test(n)?n:'';
+  }
+  window.saveWorkRegWhatsapp=function(){
+    const input=document.getElementById('workRegWhatsapp');
+    const status=document.getElementById('workRegLinkStatus');
+    const n=normalizeWorkRegNumber(input&&input.value);
+    if(!n){status.textContent='Please enter a valid Indian mobile number (10 digits).';status.style.color='#ffaaaa';return}
+    localStorage.setItem(key,n);
+    input.value=n.slice(2);
+    status.textContent='Saved. Registration messages will open to +'+n+'. Now copy the link.';
+    status.style.color='#9ce7b0';
+  };
+  window.copyWorkRegistrationLink=async function(){
+    const status=document.getElementById('workRegLinkStatus');
+    const n=normalizeWorkRegNumber(localStorage.getItem(key)|| (document.getElementById('workRegWhatsapp')||{}).value);
+    if(!n){status.textContent='Save a valid WhatsApp number first.';status.style.color='#ffaaaa';return}
+    const link='https://smart-money.wasmer.app/work-registration.html?to='+n;
+    try{
+      await navigator.clipboard.writeText(link);
+      status.textContent='Copied! Send this link to new users: '+link;
+      status.style.color='#9ce7b0';
+    }catch(e){
+      status.textContent='Copy this link: '+link;
+      status.style.color='#ffe2a1';
+    }
+  };
+  document.addEventListener('DOMContentLoaded',function(){
+    const input=document.getElementById('workRegWhatsapp');
+    const n=localStorage.getItem(key);
+    if(input&&n)input.value=n.slice(2);
+  });
+})();
+</script>
+
 </body>
 </html>
 
