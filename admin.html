@@ -7499,6 +7499,17 @@ value
   
 
 /* SMART MONEY DASHBOARD NOTIFICATIONS — admin-only writes enforced by Supabase RLS */
+function localDateTimeValue(date){
+  const pad=n=>String(n).padStart(2,"0");
+  return date.getFullYear()+"-"+pad(date.getMonth()+1)+"-"+pad(date.getDate())+"T"+pad(date.getHours())+":"+pad(date.getMinutes());
+}
+function initializeNotificationExpiry(){
+  const input=document.getElementById("notificationExpiry");if(!input)return;
+  const now=new Date(),minDate=new Date(now.getTime()+60000),defaultDate=new Date(now.getTime()+7*24*60*60*1000);
+  input.min=localDateTimeValue(minDate);
+  if(!input.value)input.value=localDateTimeValue(defaultDate);
+  input.addEventListener("focus",()=>{input.min=localDateTimeValue(new Date(Date.now()+60000));});
+}
 async function sendDashboardNotification(){
   const titleEl=document.getElementById("notificationTitle"),messageEl=document.getElementById("notificationMessage");
   const typeEl=document.getElementById("notificationType"),expiryEl=document.getElementById("notificationExpiry");
@@ -7510,16 +7521,27 @@ async function sendDashboardNotification(){
   try{
     const sessionResult=await supabaseClient.auth.getSession(),user=sessionResult?.data?.session?.user;
     if(!user||String(user.email||"").toLowerCase()!=="sboro3235@gmail.com")throw new Error("Admin session verification failed. Please sign in again.");
-    const expiryValue=expiryEl?.value?new Date(expiryEl.value).toISOString():null;
-    if(expiryValue&&new Date(expiryValue)<=new Date())throw new Error("Expiry must be a future date and time.");
+    let expiryValue=null;
+    const rawExpiry=String(expiryEl?.value||"").trim();
+    if(rawExpiry){
+      const match=rawExpiry.match(/^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})$/);
+      if(!match)throw new Error("Please choose a valid expiry date and time, or leave it empty.");
+      const [,year,month,day,hour,minute]=match;
+      const localExpiry=new Date(Number(year),Number(month)-1,Number(day),Number(hour),Number(minute),0,0);
+      if(Number.isNaN(localExpiry.getTime())||localExpiry.getTime()<=Date.now()+30000)throw new Error("Expiry time must be at least 1 minute in the future. The default is 7 days.");
+      expiryValue=localExpiry.toISOString();
+    }
     const {error}=await supabaseClient.from("user_notifications").insert({title,message,notification_type:typeEl.value||"general",is_active:true,expires_at:expiryValue,created_by:user.id});
     if(error)throw error;
-    titleEl.value="";messageEl.value="";expiryEl.value="";
+    titleEl.value="";messageEl.value="";
+    if(expiryEl){expiryEl.value=localDateTimeValue(new Date(Date.now()+7*24*60*60*1000));expiryEl.min=localDateTimeValue(new Date(Date.now()+60000));}
     if(statusEl){statusEl.textContent="✓ Notification sent. It is now visible in user Dashboards.";statusEl.style.color="#86efac";}
     await loadDashboardNotifications();
   }catch(error){if(statusEl){statusEl.textContent="Could not send: "+(error.message||"Unknown error");statusEl.style.color="#fca5a5";}}
   finally{button.disabled=false;button.textContent="🔔 SEND NOTIFICATION TO USERS";}
 }
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initializeNotificationExpiry,{once:true});
+else initializeNotificationExpiry();
 async function loadDashboardNotifications(){
   const box=document.getElementById("adminNotificationList");if(!box||!supabaseClient)return;
   try{
