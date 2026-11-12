@@ -1831,9 +1831,15 @@ function applyProfileImage(imgUrl, userName){
     const removeLi = document.getElementById("removePhotoLi");
 
     if(imgUrl && String(imgUrl).trim() !== ""){
-        if(mainImg) mainImg.src = imgUrl;
-        if(sidebarImg) sidebarImg.src = imgUrl;
-        if(navAvatar) navAvatar.src = imgUrl;
+        const firstLetter = (userName && userName !== "Loading..." && userName.trim() !== "" ? userName : "U").charAt(0).toUpperCase();
+        const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(firstLetter)}&background=7c3aed&color=fff&size=128&bold=true`;
+        [mainImg,sidebarImg,navAvatar].filter(Boolean).forEach(img=>{
+            img.onerror = function(){
+                this.onerror = null;
+                this.src = fallbackUrl;
+            };
+            if(img.getAttribute("src") !== imgUrl) img.src = imgUrl;
+        });
         if(removeLi) removeLi.style.display = "block";
         return;
     }
@@ -2050,6 +2056,22 @@ async function loadDashboardProfile(){
     currentUserId = user.id;
     currentUserEmail = user.email || "";
 
+    // Show the last verified identity immediately while the fresh profile
+    // request runs. Cache is scoped to the authenticated Supabase user ID.
+    try{
+        const cachedIdentity = JSON.parse(localStorage.getItem("sm_dashboard_identity_" + currentUserId) || "null");
+        if(cachedIdentity && typeof cachedIdentity === "object"){
+            const cachedName = String(cachedIdentity.full_name || currentUserEmail.split("@")[0] || "User");
+            const nameNode = document.getElementById("userName");
+            const sideNameNode = document.getElementById("sidebarUserName");
+            const sideEmailNode = document.getElementById("sidebarUserEmail");
+            if(nameNode) nameNode.textContent = cachedName;
+            if(sideNameNode) sideNameNode.textContent = cachedName;
+            if(sideEmailNode) sideEmailNode.textContent = currentUserEmail;
+            applyProfileImage(cachedIdentity.profile_pic || null, cachedName);
+        }
+    }catch(cacheError){ console.warn("Cached dashboard identity unavailable:",cacheError); }
+
     try{
         let { data: profile, error: profileError } = await withTimeout(supabaseClient
             .from("profiles")
@@ -2182,6 +2204,14 @@ async function loadDashboardProfile(){
         if(localPic) currentProfile.profile_pic = localPic;
 
         renderProfile(currentProfile);
+        // Save only the display identity after the live profile has passed
+        // the existing active-account and approved-payment checks.
+        try{
+            localStorage.setItem("sm_dashboard_identity_" + currentUserId, JSON.stringify({
+                full_name: currentProfile.full_name || "",
+                profile_pic: currentProfile.profile_pic || null
+            }));
+        }catch(cacheError){ console.warn("Dashboard identity cache write skipped:",cacheError); }
         return true;
 
     }catch(error){
