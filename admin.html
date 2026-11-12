@@ -2575,7 +2575,7 @@ class="modal"
         <div class="modal-header">  
   
             <h2 id="paymentDetailsModalTitle">  
-                Edit Bank / UPI Details  
+                Edit Bank Details  
             </h2>  
   
             <button  
@@ -4805,6 +4805,20 @@ async function rejectPayment(id){
    WITHDRAWALS  
 ========================================================= */  
   
+async function copyWithdrawalBankValue(button){
+    const value = button?.dataset?.copy || "";
+    if(!value) return;
+    try{ await navigator.clipboard.writeText(value); }
+    catch(error){
+        const field = document.createElement("textarea");
+        field.value = value; field.style.position = "fixed"; field.style.opacity = "0";
+        document.body.appendChild(field); field.select();
+        const copied = document.execCommand("copy"); field.remove();
+        if(!copied){ alert("Copy failed. Please copy the details manually."); return; }
+    }
+    const oldText = button.textContent; button.textContent = "Copied!";
+    setTimeout(()=>{button.textContent = oldText;},1200);
+}
 async function loadWithdrawals(){  
   
     const {  
@@ -5061,14 +5075,7 @@ function renderWithdrawals(){
             );  
   
   
-            const account =  
-            val(  
-  
-                item.account_number,  
-  
-                user?.account_number  
-  
-            );  
+            const account = val(item.bank_account_number, item.account_number, user?.bank_account_number, user?.account_number);  
   
   
             const ifsc =  
@@ -5108,23 +5115,16 @@ function renderWithdrawals(){
                 <td>  
   
                     <b>  
-                        ${escapeHtml(userName)}  
-                    </b>  
-  
-                    <br>  
-  
-                    <span class="small">  
-                        ${escapeHtml(email)}  
-                    </span>  
-  
-                    <br>  
-  
-                    <span class="small">  
-                        ID:  
-                        ${escapeHtml(userId)}  
-                    </span>  
-  
-                </td>  
+                        ${hasBank ? `
+<b>🏦 BANK TRANSFER</b><br>
+<div style="margin-top:7px;line-height:1.8">
+<div><b>Account Holder:</b> ${escapeHtml(holder)} <button type="button" class="btn btn-small" data-copy="${escapeHtml(holder)}" onclick="copyWithdrawalBankValue(this)">Copy</button></div>
+<div><b>Bank:</b> ${escapeHtml(bank)} <button type="button" class="btn btn-small" data-copy="${escapeHtml(bank)}" onclick="copyWithdrawalBankValue(this)">Copy</button></div>
+<div><b>Account No:</b> ${escapeHtml(account)} <button type="button" class="btn btn-small" data-copy="${escapeHtml(account)}" onclick="copyWithdrawalBankValue(this)">Copy</button></div>
+<div><b>IFSC:</b> ${escapeHtml(ifsc)} <button type="button" class="btn btn-small" data-copy="${escapeHtml(ifsc)}" onclick="copyWithdrawalBankValue(this)">Copy</button></div>
+</div>
+<button type="button" class="btn btn-primary btn-small" style="margin-top:8px" data-copy="${escapeHtml("Account Holder: "+holder+"\nBank: "+bank+"\nAccount No: "+account+"\nIFSC: "+ifsc)}" onclick="copyWithdrawalBankValue(this)">Copy All Bank Details</button>
+` : `<span class="small">Bank details are missing. Ask the user to update their bank details.</span>`}</td>  
   
   
                 <td>  
@@ -5788,7 +5788,7 @@ function renderUsers(){
                     class="btn btn-info"  
                     onclick="openPaymentDetailsModal('${key}')"  
                     >  
-                        Edit Bank / UPI  
+                        Edit Bank Details  
                     </button>  
   
   
@@ -6069,19 +6069,8 @@ function openPaymentDetailsModal(id){
     user;  
   
   
-    editModalTab =  
-  
-    user.upi_id  
-  
-    ?  
-  
-    "upi"  
-  
-    :  
-  
-    "bank";  
-  
-  
+    editModalTab = "bank";
+
     renderPaymentDetailsModal();  
   
   
@@ -6107,236 +6096,24 @@ function switchEditModalTab(tab){
 }  
   
   
-function renderPaymentDetailsModal(){  
-  
-    const user =  
-    currentEditUser;  
-  
-  
-    if(!user){  
-  
-        return;  
-  
-    }  
-  
-  
-    document  
-    .getElementById(  
-        "paymentDetailsModalTitle"  
-    )  
-    .textContent =  
-  
-    `Edit Payment Details - ${  
-        user.full_name ||  
-        "User"  
-    }`;  
-  
-  
-    document  
-    .getElementById(  
-        "paymentDetailsContent"  
-    )  
-    .innerHTML =  
-  
-    `  
-  
-    <div class="info-card">  
-  
-        <b>User:</b>  
-        ${escapeHtml(  
-            user.full_name ||  
-            "User"  
-        )}  
-  
-        <br>  
-  
-        <b>Email:</b>  
-        ${escapeHtml(  
-            user.email ||  
-            "N/A"  
-        )}  
-  
-        <br>  
-  
-        <b>Referral ID:</b>  
-        ${escapeHtml(  
-            user.referral_code ||  
-            "N/A"  
-        )}  
-  
-    </div>  
-  
-  
-    <div class="tab-pill-box">  
-  
-        <button  
-        class="  
-        tab-pill  
-        ${  
-            editModalTab === "bank"  
-            ?  
-            "active"  
-            :  
-            ""  
-        }  
-        "  
-        onclick="switchEditModalTab('bank')"  
-        >  
-            🏦 Bank  
-        </button>  
-  
-  
-        <button  
-        class="  
-        tab-pill  
-        ${  
-            editModalTab === "upi"  
-            ?  
-            "active"  
-            :  
-            ""  
-        }  
-        "  
-        onclick="switchEditModalTab('upi')"  
-        >  
-            📱 UPI  
-        </button>  
-  
-    </div>  
-  
-  
-    <div class="edit-grid">  
-  
-        ${  
-  
-            editModalTab ===  
-            "upi"  
-  
-            ?  
-  
-            `  
-  
-            <div class="full">  
-  
-                <label>  
-                    UPI ID  
-                </label>  
-  
-                <input  
-                id="edit_upi_id"  
-                value="${escapeHtml(  
-                    user.upi_id ||  
-                    ""  
-                )}"  
-                placeholder="example@upi"  
-                >  
-  
-            </div>  
-  
-            `  
-  
-            :  
-  
-            `  
-  
-            <div class="full">  
-  
-                <label>  
-                    Account Holder Name  
-                </label>  
-  
-                <input  
-                id="edit_account_holder_name"  
-                value="${escapeHtml(  
-                    user.account_holder_name ||  
-                    ""  
-                )}"  
-                >  
-  
-            </div>  
-  
-  
-            <div>  
-  
-                <label>  
-                    Account Number  
-                </label>  
-  
-                <input  
-                id="edit_account_number"  
-                value="${escapeHtml(  
-                    user.account_number ||  
-                    ""  
-                )}"  
-                >  
-  
-            </div>  
-  
-  
-            <div>  
-  
-                <label>  
-                    Confirm Account  
-                </label>  
-  
-                <input  
-                id="edit_confirm_account_number"  
-                value="${escapeHtml(  
-                    user.account_number ||  
-                    ""  
-                )}"  
-                >  
-  
-            </div>  
-  
-  
-            <div class="full">  
-  
-                <label>  
-                    IFSC Code  
-                </label>  
-  
-                <input  
-                id="edit_ifsc_code"  
-                value="${escapeHtml(  
-                    user.ifsc_code ||  
-                    ""  
-                )}"  
-                >  
-  
-            </div>  
-  
-            `  
-  
-        }  
-  
-  
-        <div class="full">  
-  
-            <button  
-            class="btn btn-primary"  
-            onclick="savePaymentDetails()"  
-            >  
-                Save Details  
-            </button>  
-  
-  
-            <button  
-            class="btn btn-delete"  
-            onclick="closePaymentDetailsModal()"  
-            >  
-                Cancel  
-            </button>  
-  
-        </div>  
-  
-    </div>  
-  
-    `;  
-  
-}  
-  
-  
+function renderPaymentDetailsModal(){
+    const user = currentEditUser;
+    if(!user) return;
+    const accountNumber = user.bank_account_number || user.account_number || "";
+    document.getElementById("paymentDetailsModalTitle").textContent = "Edit Bank Details - " + (user.full_name || "User");
+    document.getElementById("paymentDetailsContent").innerHTML = `
+        <div class="info-card"><b>User:</b> ${escapeHtml(user.full_name || "User")}<br><b>Email:</b> ${escapeHtml(user.email || "N/A")}<br><b>Referral ID:</b> ${escapeHtml(user.referral_code || "N/A")}</div>
+        <div class="edit-grid">
+            <div class="full"><label>Account Holder Name</label><input id="edit_account_holder_name" value="${escapeHtml(user.account_holder_name || "")}" maxlength="100" autocomplete="off"></div>
+            <div class="full"><label>Bank Name</label><input id="edit_bank_name" value="${escapeHtml(user.bank_name || "")}" maxlength="100" autocomplete="off"></div>
+            <div class="full"><label>Account Number</label><input id="edit_account_number" value="${escapeHtml(accountNumber)}" inputmode="numeric" maxlength="18" autocomplete="off"></div>
+            <div class="full"><label>Confirm Account Number</label><input id="edit_confirm_account_number" value="${escapeHtml(accountNumber)}" inputmode="numeric" maxlength="18" autocomplete="off"></div>
+            <div class="full"><label>IFSC Code</label><input id="edit_ifsc_code" value="${escapeHtml(user.ifsc_code || "")}" maxlength="11" style="text-transform:uppercase" autocomplete="off"></div>
+            <div class="full"><button class="btn btn-primary" onclick="savePaymentDetails()">Save Bank Details</button><button class="btn btn-delete" onclick="closePaymentDetailsModal()">Cancel</button></div>
+        </div>
+    `;
+}
+
 function closePaymentDetailsModal(){  
   
     document  
@@ -6355,172 +6132,25 @@ function closePaymentDetailsModal(){
 }  
   
   
-async function savePaymentDetails(){  
-  
-    if(!currentEditUser){  
-  
-        return;  
-  
-    }  
-  
-  
-    const key =  
-    getUserKey(  
-        currentEditUser  
-    );  
-  
-  
-    let payload =  
-    {};  
-  
-  
-    if(  
-  
-        editModalTab ===  
-        "upi"  
-  
-    ){  
-  
-        payload = {  
-  
-            upi_id:  
-  
-            document  
-            .getElementById(  
-                "edit_upi_id"  
-            )  
-            .value  
-            .trim(),  
-  
-            account_holder_name:  
-            null,  
-  
-            bank_name:  
-            null,  
-  
-            account_number:  
-            null,  
-  
-            ifsc_code:  
-            null  
-  
-        };  
-  
-    }  
-  
-    else{  
-  
-        const account =  
-        document  
-        .getElementById(  
-            "edit_account_number"  
-        )  
-        .value  
-        .trim();  
-  
-  
-        const confirmAccount =  
-        document  
-        .getElementById(  
-            "edit_confirm_account_number"  
-        )  
-        .value  
-        .trim();  
-  
-  
-        if(  
-  
-            account !==  
-            confirmAccount  
-  
-        ){  
-  
-            alert(  
-                "Account numbers do not match."  
-            );  
-  
-            return;  
-  
-        }  
-  
-  
-        payload = {  
-  
-            upi_id:  
-            null,  
-  
-            account_holder_name:  
-  
-            document  
-            .getElementById(  
-                "edit_account_holder_name"  
-            )  
-            .value  
-            .trim(),  
-  
-            account_number:  
-            account,  
-  
-            ifsc_code:  
-  
-            document  
-            .getElementById(  
-                "edit_ifsc_code"  
-            )  
-            .value  
-            .trim()  
-  
-        };  
-  
-    }  
-  
-  
-    const {  
-  
-        error  
-  
-    } =  
-    await supabaseClient  
-  
-    .from(  
-        "profiles"  
-    )  
-  
-    .update(  
-        payload  
-    )  
-  
-    .eq(  
-        "id",  
-        key  
-    );  
-  
-  
-    if(error){  
-  
-        alert(  
-            "Update failed: " +  
-            error.message  
-        );  
-  
-        return;  
-  
-    }  
-  
-  
-    alert(  
-        "Payment details updated."  
-    );  
-  
-  
-    closePaymentDetailsModal();  
-  
-  
-    await refreshAllData();  
-  
-}  
-  
-  
+async function savePaymentDetails(){
+    if(!currentEditUser) return;
+    const key = getUserKey(currentEditUser);
+    const holder = document.getElementById("edit_account_holder_name").value.trim();
+    const bank = document.getElementById("edit_bank_name").value.trim();
+    const account = document.getElementById("edit_account_number").value.trim();
+    const confirmAccount = document.getElementById("edit_confirm_account_number").value.trim();
+    const ifsc = document.getElementById("edit_ifsc_code").value.trim().toUpperCase();
+    if(!holder || !bank || !account || !ifsc){ alert("Please fill all bank details."); return; }
+    if(account !== confirmAccount){ alert("Account numbers do not match."); return; }
+    if(!/^[0-9]{9,18}$/.test(account)){ alert("Enter a valid account number (9–18 digits)."); return; }
+    if(!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(ifsc)){ alert("Enter a valid 11-character IFSC code."); return; }
+    const payload = { payout_type:"bank", upi_id:null, account_holder_name:holder, bank_name:bank, account_number:account, bank_account_number:account, ifsc_code:ifsc };
+    const {error} = await supabaseClient.from("profiles").update(payload).eq("id",key);
+    if(error){ alert("Bank details update failed: " + error.message); return; }
+    alert("Bank details updated successfully.");
+    closePaymentDetailsModal();
+    await refreshAllData();
+}
 /* =========================================================  
    USER ACTIONS  
 ========================================================= */  
