@@ -3403,29 +3403,42 @@ async function checkAdminSession(){
         return;
     }
 
-    let lastError = null;
-
-    // Wait for Supabase's INITIAL_SESSION event so refresh does not race
-    // the auth client's asynchronous localStorage hydration.
+    // Restore the saved token pair BEFORE asking getSession(). On some Android
+    // WebViews the SDK's first storage hydration can briefly return null.
+    // setSession() validates the refresh token with Supabase before access is granted.
+    let savedSession = null;
     try{
-        await new Promise(resolve=>{
-            let settled=false;
-            const timer=setTimeout(()=>{if(!settled){settled=true;resolve();}},2500);
-            const {data}=supabaseClient.auth.onAuthStateChange((event)=>{
-                if(event==="INITIAL_SESSION" && !settled){
-                    settled=true;
-                    clearTimeout(timer);
-                    resolve();
-                }
-            });
-            setTimeout(()=>{try{data?.subscription?.unsubscribe();}catch(e){}},3000);
-        });
-    }catch(initialSessionWaitError){
-        console.warn("Initial admin auth hydration wait failed:",initialSessionWaitError);
+        const raw = window.localStorage.getItem(ADMIN_AUTH_STORAGE_KEY);
+        if(raw){
+            const parsed = JSON.parse(raw);
+            savedSession = parsed?.currentSession || parsed?.session || parsed;
+        }
+    }catch(storageReadError){
+        console.error("Could not read saved admin session:", storageReadError);
     }
 
-    // Then read the hydrated persistent session.
-    for(let attempt=0; attempt<5; attempt++){
+    if(savedSession?.access_token && savedSession?.refresh_token){
+        try{
+            const {data,error} = await supabaseClient.auth.setSession({
+                access_token:savedSession.access_token,
+                refresh_token:savedSession.refresh_token
+            });
+            if(error) throw error;
+            if(data?.session?.user && isAdminUser(data.session.user)){
+                showAdmin();
+                return;
+            }
+            if(data?.session){
+                await supabaseClient.auth.signOut({scope:"local"});
+            }
+        }catch(restoreError){
+            console.warn("Saved admin session could not be restored; checking SDK session:",restoreError);
+        }
+    }
+
+    // Fallback to the SDK-managed session, including legacy/default storage migration.
+    let lastError = null;
+    for(let attempt=0; attempt<4; attempt++){
         try{
             const {data,error}=await supabaseClient.auth.getSession();
             if(error) throw error;
@@ -3436,63 +3449,27 @@ async function checkAdminSession(){
                 return;
             }
 
-            // Only reject a definite, fully identified non-admin account.
-            // A temporarily incomplete session during Android refresh must not be signed out.
             if(session?.user && !isAdminUser(session.user)){
                 await supabaseClient.auth.signOut({scope:"local"});
                 showLogin();
                 return;
             }
 
-            // Android browsers can briefly return an empty session while local storage hydrates.
-            if(attempt<4){
-                await new Promise(resolve=>setTimeout(resolve,500*(attempt+1)));
-                continue;
-            }
+            if(attempt<3) await new Promise(resolve=>setTimeout(resolve,400*(attempt+1)));
         }catch(error){
             lastError=error;
             console.warn("Admin session restore attempt "+(attempt+1)+" failed:",error);
-            if(attempt<4) await new Promise(resolve=>setTimeout(resolve,500*(attempt+1)));
+            if(attempt<3) await new Promise(resolve=>setTimeout(resolve,400*(attempt+1)));
         }
     }
 
-    // Recovery path: if Supabase returned an empty session but its saved token pair
-    // still exists, hand that pair back to Supabase. Never trust it for authorization
-    // without checking that the restored account is the configured admin.
-    try{
-        const raw = window.localStorage.getItem(ADMIN_AUTH_STORAGE_KEY);
-        if(raw){
-            const stored = JSON.parse(raw);
-            const saved = stored?.currentSession || stored?.session || stored;
-            if(saved?.access_token && saved?.refresh_token){
-                const {data,error}=await supabaseClient.auth.setSession({
-                    access_token:saved.access_token,
-                    refresh_token:saved.refresh_token
-                });
-                if(error) throw error;
-
-                const restored = data?.session;
-                if(restored?.user && isAdminUser(restored.user)){
-                    showAdmin();
-                    return;
-                }
-
-                if(restored){
-                    await supabaseClient.auth.signOut({scope:"local"});
-                }
-            }
-        }
-    }catch(recoveryError){
-        lastError=recoveryError;
-        console.warn("Saved admin session recovery failed:",recoveryError);
-    }
-
-    // A transient storage/network error must not erase the saved session or pretend
-    // that the user intentionally signed out.
+    // Do not erase saved credentials on transient errors. Show a useful message
+    // rather than silently presenting the login screen as if the user signed out.
     if(lastError){
         console.error("Admin session restore deferred; saved session was preserved:",lastError);
         const loginError=document.getElementById("loginError");
-        if(loginError) loginError.textContent="Could not restore the saved admin session because the connection/storage check failed. Your saved session has not been cleared. Check internet and refresh again.";
+        if(loginError) loginError.textContent="Session check failed. Your saved login was preserved. Check internet access and refresh again.";
+        showLogin();
         return;
     }
 
