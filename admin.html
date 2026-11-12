@@ -5112,19 +5112,11 @@ function renderWithdrawals(){
   
             <tr>  
   
-                <td>  
-  
-                    <b>  
-                        ${hasBank ? `
-<b>🏦 BANK TRANSFER</b><br>
-<div style="margin-top:7px;line-height:1.8">
-<div><b>Account Holder:</b> ${escapeHtml(holder)} <button type="button" class="btn btn-small" data-copy="${escapeHtml(holder)}" onclick="copyWithdrawalBankValue(this)">Copy</button></div>
-<div><b>Bank:</b> ${escapeHtml(bank)} <button type="button" class="btn btn-small" data-copy="${escapeHtml(bank)}" onclick="copyWithdrawalBankValue(this)">Copy</button></div>
-<div><b>Account No:</b> ${escapeHtml(account)} <button type="button" class="btn btn-small" data-copy="${escapeHtml(account)}" onclick="copyWithdrawalBankValue(this)">Copy</button></div>
-<div><b>IFSC:</b> ${escapeHtml(ifsc)} <button type="button" class="btn btn-small" data-copy="${escapeHtml(ifsc)}" onclick="copyWithdrawalBankValue(this)">Copy</button></div>
-</div>
-<button type="button" class="btn btn-primary btn-small" style="margin-top:8px" data-copy="${escapeHtml("Account Holder: "+holder+"\nBank: "+bank+"\nAccount No: "+account+"\nIFSC: "+ifsc)}" onclick="copyWithdrawalBankValue(this)">Copy All Bank Details</button>
-` : `<span class="small">Bank details are missing. Ask the user to update their bank details.</span>`}</td>  
+                <td>
+    <b>${escapeHtml(userName)}</b><br>
+    <span class="small">${escapeHtml(email)}</span><br>
+    <span class="small">ID: ${escapeHtml(userId)}</span>
+</td>  
   
   
                 <td>  
@@ -5139,79 +5131,18 @@ function renderWithdrawals(){
                 </td>  
   
   
-                <td>  
-  
-                    ${  
-  
-                        hasUpi  
-  
-                        ?  
-  
-                        `  
-  
-                        <b>  
-                            📱 UPI  
-                        </b>  
-  
-                        <br>  
-  
-                        ${escapeHtml(upi)}  
-  
-                        `  
-  
-                        :  
-  
-                        (  
-  
-                            hasBank  
-  
-                            ?  
-  
-                            `  
-  
-                            <b>  
-                                🏦 BANK  
-                            </b>  
-  
-                            <br>  
-  
-                            Holder:  
-                            ${escapeHtml(holder)}  
-  
-                            <br>  
-  
-                            Bank:  
-                            ${escapeHtml(bank)}  
-  
-                            <br>  
-  
-                            Account:  
-                            ${escapeHtml(account)}  
-  
-                            <br>  
-  
-                            IFSC:  
-                            ${escapeHtml(ifsc)}  
-  
-                            `  
-  
-                            :  
-  
-                            `  
-  
-                            <span class="small">  
-  
-                                No payment details.  
-  
-                            </span>  
-  
-                            `  
-  
-                        )  
-  
-                    }  
-  
-                </td>  
+                <td>
+    ${hasBank ? `
+        <b>🏦 BANK TRANSFER</b><br>
+        <div style="margin-top:7px;line-height:1.8">
+            <div><b>Account Holder:</b> ${escapeHtml(holder)} <button type="button" class="btn btn-small" data-copy="${escapeHtml(holder)}" onclick="copyWithdrawalBankValue(this)">Copy</button></div>
+            <div><b>Bank:</b> ${escapeHtml(bank)} <button type="button" class="btn btn-small" data-copy="${escapeHtml(bank)}" onclick="copyWithdrawalBankValue(this)">Copy</button></div>
+            <div><b>Account No:</b> ${escapeHtml(account)} <button type="button" class="btn btn-small" data-copy="${escapeHtml(account)}" onclick="copyWithdrawalBankValue(this)">Copy</button></div>
+            <div><b>IFSC:</b> ${escapeHtml(ifsc)} <button type="button" class="btn btn-small" data-copy="${escapeHtml(ifsc)}" onclick="copyWithdrawalBankValue(this)">Copy</button></div>
+        </div>
+        <button type="button" class="btn btn-primary btn-small" style="margin-top:8px" data-copy="${escapeHtml("Account Holder: "+holder+"\nBank: "+bank+"\nAccount No: "+account+"\nIFSC: "+ifsc)}" onclick="copyWithdrawalBankValue(this)">Copy All Bank Details</button>
+    ` : `<span class="small">Bank details are missing. Ask the user to update their bank details.</span>`}
+</td>  
   
   
                 <td>  
