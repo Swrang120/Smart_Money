@@ -2447,6 +2447,20 @@ select{
 @keyframes smSpin{to{transform:rotate(360deg)}}@keyframes smPulse{50%{opacity:.45;transform:scale(.82)}}@keyframes smFadeIn{from{opacity:0}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){#smNetworkOverlay *,#smNetworkOverlay *:before{animation:none!important;transition:none!important}}
 </style>
+<style id="smartMoneyNetworkPremiumEnhancements">
+#smNetworkOverlay{background:radial-gradient(ellipse at 50% 16%,rgba(35,91,220,.28),transparent 48%),radial-gradient(ellipse at 50% 100%,rgba(212,162,55,.12),transparent 48%),rgba(3,8,24,.96)!important}
+#smNetworkOverlay .sm-net-card{position:relative;overflow:hidden;width:min(100%,390px);padding:34px 26px 27px;border:1px solid rgba(232,190,91,.42);border-radius:28px;background:linear-gradient(155deg,#17264c 0%,#0b1735 52%,#081126 100%);box-shadow:0 28px 90px rgba(0,0,0,.58),0 0 42px rgba(38,93,210,.18),inset 0 1px rgba(255,255,255,.12)}
+#smNetworkOverlay .sm-net-card:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,transparent,#f6d27a,#fff0bc,#c18b2d,transparent)}
+#smNetworkOverlay .sm-net-mark{background:linear-gradient(145deg,#f8df9a,#bd8728 48%,#785015)!important;color:#17213b;box-shadow:0 0 0 8px rgba(231,190,92,.1),0 14px 36px rgba(201,151,48,.25)!important}
+#smNetworkOverlay .sm-net-ring{border-color:rgba(245,211,135,.4);border-top-color:#fff0bd}
+#smNetworkOverlay .sm-net-badge{display:inline-flex;margin:0 auto 12px;padding:6px 11px;border:1px solid rgba(255,190,90,.35);border-radius:99px;background:rgba(185,112,29,.13);color:#ffd88a;font-size:10px;font-weight:850;letter-spacing:1.6px}
+#smNetworkOverlay h2{font-size:23px;letter-spacing:-.65px}
+#smNetworkOverlay .sm-net-state{padding:12px 13px;border:1px solid rgba(255,255,255,.09);border-radius:13px;background:rgba(255,255,255,.045);color:#ffdc91}
+#smNetworkOverlay .sm-net-progress{height:4px;margin:-7px 0 19px;overflow:hidden;border-radius:99px;background:rgba(255,255,255,.09)}
+#smNetworkOverlay .sm-net-progress span{display:block;width:38%;height:100%;border-radius:99px;background:linear-gradient(90deg,#b77b22,#ffe6a3);animation:smNetProgress 1.6s ease-in-out infinite alternate}
+#smNetworkOverlay .sm-net-retry{background:linear-gradient(105deg,#ffe7a6,#d6a33e 55%,#b77b22)!important;color:#15213e!important;box-shadow:0 9px 25px rgba(199,150,54,.25)!important}
+@keyframes smNetProgress{from{transform:translateX(-10%)}to{transform:translateX(190%)}}
+</style>
 </head>
 
 <body>
@@ -8370,15 +8384,20 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 
 <div id="smNetworkOverlay" role="alertdialog" aria-modal="true" aria-labelledby="smNetworkTitle" aria-describedby="smNetworkDesc" aria-hidden="true">
 <div class="sm-net-card"><div class="sm-net-mark" aria-hidden="true">SM<span class="sm-net-ring"></span></div>
-<h2 id="smNetworkTitle">Reconnecting Smart Money</h2><p class="sm-net-desc" id="smNetworkDesc">Your connection seems unstable. Keep this page open while we check the network and reconnect you.</p>
+<div class="sm-net-badge">⚠ NETWORK ALERT</div>
+<h2 id="smNetworkTitle">Connection Interrupted</h2><p class="sm-net-desc" id="smNetworkDesc">Smart Money is temporarily offline. Please check your internet connection. Your account data remains safe.</p>
 <div class="sm-net-state"><span class="sm-net-dot"></span><span id="smNetworkStateText">Waiting for internet connection…</span></div>
-<button type="button" class="sm-net-retry" id="smNetworkRetry">↻ Retry Connection</button>
-<p class="sm-net-foot">Your account data is not being cleared. This screen will close automatically when the connection returns.</p></div></div>
+<div class="sm-net-progress" aria-hidden="true"><span></span></div>
+<button type="button" class="sm-net-retry" id="smNetworkRetry">↻ Reconnect Now</button>
+<p class="sm-net-foot">This screen will close automatically after your connection is restored.</p></div></div>
 <script id="smartMoneyNetworkUiScript">(function(){if(window.__smartMoneyNetworkUiReady)return;window.__smartMoneyNetworkUiReady=true;
 var overlay=document.getElementById('smNetworkOverlay'),stateText=document.getElementById('smNetworkStateText'),retryBtn=document.getElementById('smNetworkRetry');if(!overlay||!stateText||!retryBtn)return;
-var visible=false,hideTimer=null,probeTimer=null,lastFailure=0;
-function show(message){clearTimeout(hideTimer);visible=true;overlay.classList.add('sm-show');overlay.setAttribute('aria-hidden','false');stateText.textContent=message||(!navigator.onLine?'Waiting for internet connection…':'Connection interrupted — reconnecting…');retryBtn.disabled=false;retryBtn.textContent='↻ Retry Connection';}
-function hide(){if(!navigator.onLine)return;clearTimeout(hideTimer);hideTimer=setTimeout(function(){visible=false;overlay.classList.remove('sm-show');overlay.setAttribute('aria-hidden','true');},900);}
+var visible=false,hideTimer=null,probeTimer=null,lastFailure=0,warningPlayed=false,audioContext=null,audioReady=false;
+function unlockWarningAudio(){try{var Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)return;audioContext=audioContext||new Ctx();if(audioContext.state==='suspended')audioContext.resume();audioReady=true;}catch(e){}}
+window.addEventListener('pointerdown',unlockWarningAudio,{once:true,passive:true});window.addEventListener('keydown',unlockWarningAudio,{once:true});
+function playWarningSound(){if(!audioReady||!audioContext||warningPlayed)return;warningPlayed=true;try{var now=audioContext.currentTime;[880,660].forEach(function(freq,index){var osc=audioContext.createOscillator(),gain=audioContext.createGain();osc.type='sine';osc.frequency.value=freq;gain.gain.setValueAtTime(0.0001,now+index*.19);gain.gain.exponentialRampToValueAtTime(.12,now+index*.19+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+index*.19+.16);osc.connect(gain);gain.connect(audioContext.destination);osc.start(now+index*.19);osc.stop(now+index*.19+.18);});}catch(e){}}
+function show(message){clearTimeout(hideTimer);visible=true;overlay.classList.add('sm-show');overlay.setAttribute('aria-hidden','false');stateText.textContent=message||(!navigator.onLine?'Waiting for internet connection…':'Connection interrupted — reconnecting…');retryBtn.disabled=false;retryBtn.textContent='↻ Reconnect Now';playWarningSound();}
+function hide(){if(!navigator.onLine)return;clearTimeout(hideTimer);hideTimer=setTimeout(function(){visible=false;warningPlayed=false;overlay.classList.remove('sm-show');overlay.setAttribute('aria-hidden','true');},900);}
 async function checkConnection(){if(!navigator.onLine){show('Waiting for internet connection…');return false;}retryBtn.disabled=true;retryBtn.textContent='Checking connection…';stateText.textContent='Checking secure connection…';
 try{var controller=new AbortController(),timeout=setTimeout(function(){controller.abort();},6500);var response=await fetch(window.location.href.split('#')[0],{method:'HEAD',cache:'no-store',signal:controller.signal});clearTimeout(timeout);if(!response.ok&&response.status>=500)throw new Error('Server temporarily unavailable');hide();retryBtn.disabled=false;retryBtn.textContent='✓ Connection Restored';stateText.textContent='Connection looks good';setTimeout(function(){if(!visible)retryBtn.textContent='↻ Retry Connection';},1300);return true;}
 catch(e){show(navigator.onLine?'Internet is unstable or the server is not responding.':'Waiting for internet connection…');retryBtn.disabled=false;retryBtn.textContent='↻ Try Again';clearTimeout(probeTimer);probeTimer=setTimeout(checkConnection,5000);return false;}}
