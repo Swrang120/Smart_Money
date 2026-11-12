@@ -2056,36 +2056,25 @@ class="sidebar"
         <div id="adminApkUploadStatus" style="font-size:12px;line-height:1.5;margin-top:10px;color:#cbd5e1" aria-live="polite">Checking current APK…</div>
     </div>
 
-<b>📱 Upload 24 Hour Status</b>  
-  
-        <input  
-        type="file"  
-        id="statusFileInput"  
-        accept="image/*,video/*"  
-        >  
-  
-        <input  
-        type="text"  
-        id="statusUrlInput"  
-        placeholder="Image / Video URL"  
-        >  
-  
-        <textarea  
-        id="statusCaption"  
-        placeholder="Status caption"  
-        ></textarea>  
-  
-        <button  
-        class="btn btn-primary"  
-        onclick="uploadStatus()"  
-        >  
-            Upload Status  
-        </button>  
-  
-    </div>  
-  
-  
-    <div class="status-upload">  
+
+<div class="status-upload" id="adminNotificationManager">
+  <b>🔔 SMART MONEY USER NOTIFICATIONS</b>
+  <p style="font-size:12px;line-height:1.55;color:#cbd5e1;margin:8px 0 12px">Send an announcement to signed-in users. It will appear in their Dashboard notification panel.</p>
+  <input id="notificationTitle" type="text" maxlength="120" placeholder="Notification title">
+  <textarea id="notificationMessage" maxlength="3000" rows="4" placeholder="Write your announcement..." style="width:100%;margin:8px 0;color:white;background:#0f172a;border:1px solid var(--border);padding:10px;border-radius:8px"></textarea>
+  <select id="notificationType" style="width:100%;margin:8px 0;padding:10px;border-radius:8px;background:#0f172a;color:white;border:1px solid var(--border)">
+    <option value="general">General Announcement</option><option value="important">Important Notice</option>
+    <option value="course">Course / Learning Update</option><option value="maintenance">Maintenance Update</option>
+  </select>
+  <label for="notificationExpiry" style="display:block;font-size:12px;color:#cbd5e1;margin:8px 0 4px">Optional expiry date/time</label>
+  <input id="notificationExpiry" type="datetime-local">
+  <button class="btn btn-primary" id="sendNotificationBtn" style="width:100%;margin-top:10px" onclick="sendDashboardNotification()">🔔 SEND NOTIFICATION TO USERS</button>
+  <div id="notificationAdminStatus" style="font-size:12px;line-height:1.5;margin-top:9px;color:#cbd5e1" aria-live="polite"></div>
+  <div style="height:1px;background:rgba(255,255,255,.12);margin:14px 0"></div>
+  <b style="font-size:13px">Recent Notifications</b>
+  <div id="adminNotificationList" style="font-size:12px;line-height:1.5;margin-top:10px;color:#e2e8f0">Loading notifications…</div>
+</div>
+<div class="status-upload">  
   
         <b>🖼️ Upload Preview Image</b>  
   
@@ -2147,25 +2136,7 @@ class="sidebar"
     </div>  
   
   
-    <div  
-    class="sidebar-section collapsed"  
-    onclick="toggleAccordion(this)"  
-    >  
-  
-        <h3>📱 Active Status</h3>  
-  
-        <div  
-        class="sidebar-content"  
-        onclick="event.stopPropagation()"  
-        >  
-  
-            <div id="statusList">  
-                Loading...  
-            </div>  
-  
-        </div>  
-  
-    </div>  
+      
   
   
     <div  
@@ -3928,7 +3899,8 @@ function showAdmin(){
     );  
   
   
-    refreshAllData();  
+    refreshAllData();
+    loadDashboardNotifications();  
   
 }  
   
@@ -4012,10 +3984,7 @@ function toggleSidebar(){
     ){  
   
         loadTrashAndHistoryData();  
-  
-        loadActiveStatuses();  
-  
-        loadActivePreviewImage();  
+loadActivePreviewImage();  
   
     }  
   
@@ -7528,439 +7497,45 @@ value
 }  
   
   
-/* =========================================================  
-   STATUS  
-========================================================= */  
-  
-async function uploadStatus(){  
-  
-    const file =  
-    document  
-    .getElementById(  
-        "statusFileInput"  
-    )  
-    .files[0];  
-  
-  
-    const directUrl =  
-    document  
-    .getElementById(  
-        "statusUrlInput"  
-    )  
-    .value  
-    .trim();  
-  
-  
-    const caption =  
-    document  
-    .getElementById(  
-        "statusCaption"  
-    )  
-    .value  
-    .trim();  
-  
-  
-    let mediaUrl =  
-    "";  
-  
-    let mediaType =  
-    "image";  
-  
-  
-    try{  
-  
-        if(directUrl){  
-  
-            mediaUrl =  
-            directUrl;  
-  
-  
-            if(  
-  
-                /\.(mp4|webm|ogg)$/i  
-                .test(  
-                    directUrl  
-                )  
-  
-            ){  
-  
-                mediaType =  
-                "video";  
-  
-            }  
-  
-        }  
-  
-        else if(file){  
-  
-            mediaType =  
-  
-            file.type.startsWith(  
-                "video/"  
-            )  
-  
-            ?  
-  
-            "video"  
-  
-            :  
-  
-            "image";  
-  
-  
-            const fileName =  
-  
-            "status_" +  
-  
-            Date.now() +  
-  
-            "_" +  
-  
-            file.name.replace(  
-                /[^a-zA-Z0-9._-]/g,  
-                "_"  
-            );  
-  
-  
-            const {  
-  
-                error  
-  
-            } =  
-            await supabaseClient  
-  
-            .storage  
-  
-            .from(  
-                "status"  
-            )  
-  
-            .upload(  
-  
-                fileName,  
-  
-                file,  
-  
-                {  
-  
-                    contentType:  
-                    file.type  
-  
-                }  
-  
-            );  
-  
-  
-            if(error){  
-  
-                throw error;  
-  
-            }  
-  
-  
-            const {  
-  
-                data  
-  
-            } =  
-            supabaseClient  
-  
-            .storage  
-  
-            .from(  
-                "status"  
-            )  
-  
-            .getPublicUrl(  
-                fileName  
-            );  
-  
-  
-            mediaUrl =  
-            data.publicUrl;  
-  
-        }  
-  
-        else{  
-  
-            alert(  
-                "Select media or enter URL."  
-            );  
-  
-            return;  
-  
-        }  
-  
-  
-        const {  
-  
-            error  
-  
-        } =  
-        await supabaseClient  
-  
-        .from(  
-            "status_posts"  
-        )  
-  
-        .insert([{  
-  
-            media_url:  
-            mediaUrl,  
-  
-            media_type:  
-            mediaType,  
-  
-            caption:  
-            caption,  
-  
-            expires_at:  
-  
-            new Date(  
-                Date.now() +  
-                86400000  
-            )  
-            .toISOString(),  
-  
-            is_deleted:  
-            false  
-  
-        }]);  
-  
-  
-        if(error){  
-  
-            throw error;  
-  
-        }  
-  
-  
-        alert(  
-            "Status uploaded."  
-        );  
-  
-  
-        loadActiveStatuses();  
-  
-    }  
-  
-    catch(error){  
-  
-        alert(  
-            error.message  
-        );  
-  
-    }  
-  
-}  
-  
-  
-async function loadActiveStatuses(){  
-  
-    const box =  
-    document  
-    .getElementById(  
-        "statusList"  
-    );  
-  
-  
-    try{  
-  
-        const {  
-  
-            data,  
-  
-            error  
-  
-        } =  
-        await supabaseClient  
-  
-        .from(  
-            "status_posts"  
-        )  
-  
-        .select(  
-            "*"  
-        )  
-  
-        .or(  
-            "is_deleted.eq.false,is_deleted.is.null"  
-        )  
-  
-        .gt(  
-  
-            "expires_at",  
-  
-            new Date()  
-            .toISOString()  
-  
-        )  
-  
-        .order(  
-            "created_at",  
-            {  
-                ascending:false  
-            }  
-        );  
-  
-  
-        if(error){  
-  
-            throw error;  
-  
-        }  
-  
-  
-        box.innerHTML =  
-  
-        data?.length  
-  
-        ?  
-  
-        data  
-        .map(  
-            item =>  
-  
-            `  
-  
-            <div class="history-item">  
-  
-                <b>  
-                    ${escapeHtml(  
-                        item.media_type  
-                    )}  
-                </b>  
-  
-                ${  
-  
-                    item.media_type ===  
-                    "video"  
-  
-                    ?  
-  
-                    `  
-  
-                    <video  
-                    src="${escapeHtml(item.media_url)}"  
-                    class="status-preview"  
-                    controls  
-                    ></video>  
-  
-                    `  
-  
-                    :  
-  
-                    `  
-  
-                    <img  
-                    src="${escapeHtml(item.media_url)}"  
-                    class="status-preview"  
-                    >  
-  
-                    `  
-  
-                }  
-  
-  
-                <div class="small">  
-  
-                    ${escapeHtml(  
-                        item.caption ||  
-                        ""  
-                    )}  
-  
-                </div>  
-  
-  
-                <button  
-                class="btn btn-delete"  
-                onclick="deleteStatus('${item.id}')"  
-                >  
-                    Delete  
-                </button>  
-  
-            </div>  
-  
-            `  
-  
-        )  
-        .join(  
-            ""  
-        )  
-  
-        :  
-  
-        "No active status.";  
-  
-    }  
-  
-    catch(error){  
-  
-        box.innerHTML =  
-        escapeHtml(  
-            error.message  
-        );  
-  
-    }  
-  
-}  
-  
-  
-async function deleteStatus(id){  
-  
-    if(  
-  
-        !confirm(  
-            "Delete this status?"  
-        )  
-  
-    ){  
-  
-        return;  
-  
-    }  
-  
-  
-    const {  
-  
-        error  
-  
-    } =  
-    await supabaseClient  
-  
-    .from(  
-        "status_posts"  
-    )  
-  
-    .update({  
-  
-        is_deleted:  
-        true  
-  
-    })  
-  
-    .eq(  
-        "id",  
-        id  
-    );  
-  
-  
-    if(error){  
-  
-        alert(  
-            error.message  
-        );  
-  
-        return;  
-  
-    }  
-  
-  
-    loadActiveStatuses();  
-  
-}  
-  
-  
+
+/* SMART MONEY DASHBOARD NOTIFICATIONS — admin-only writes enforced by Supabase RLS */
+async function sendDashboardNotification(){
+  const titleEl=document.getElementById("notificationTitle"),messageEl=document.getElementById("notificationMessage");
+  const typeEl=document.getElementById("notificationType"),expiryEl=document.getElementById("notificationExpiry");
+  const statusEl=document.getElementById("notificationAdminStatus"),button=document.getElementById("sendNotificationBtn");
+  const title=(titleEl?.value||"").trim(),message=(messageEl?.value||"").trim();
+  if(!title||!message){if(statusEl)statusEl.textContent="Please enter both title and message.";return;}
+  if(!supabaseClient){if(statusEl)statusEl.textContent="Database connection is not ready.";return;}
+  button.disabled=true;button.textContent="Sending…";
+  try{
+    const sessionResult=await supabaseClient.auth.getSession(),user=sessionResult?.data?.session?.user;
+    if(!user||String(user.email||"").toLowerCase()!=="sboro3235@gmail.com")throw new Error("Admin session verification failed. Please sign in again.");
+    const expiryValue=expiryEl?.value?new Date(expiryEl.value).toISOString():null;
+    if(expiryValue&&new Date(expiryValue)<=new Date())throw new Error("Expiry must be a future date and time.");
+    const {error}=await supabaseClient.from("user_notifications").insert({title,message,notification_type:typeEl.value||"general",is_active:true,expires_at:expiryValue,created_by:user.id});
+    if(error)throw error;
+    titleEl.value="";messageEl.value="";expiryEl.value="";
+    if(statusEl){statusEl.textContent="✓ Notification sent. It is now visible in user Dashboards.";statusEl.style.color="#86efac";}
+    await loadDashboardNotifications();
+  }catch(error){if(statusEl){statusEl.textContent="Could not send: "+(error.message||"Unknown error");statusEl.style.color="#fca5a5";}}
+  finally{button.disabled=false;button.textContent="🔔 SEND NOTIFICATION TO USERS";}
+}
+async function loadDashboardNotifications(){
+  const box=document.getElementById("adminNotificationList");if(!box||!supabaseClient)return;
+  try{
+    const {data,error}=await supabaseClient.from("user_notifications").select("id,title,message,notification_type,is_active,created_at,expires_at").order("created_at",{ascending:false}).limit(20);
+    if(error)throw error;
+    if(!data?.length){box.innerHTML='<p style="color:#cbd5e1">No notifications sent yet.</p>';return;}
+    box.innerHTML=data.map(n=>`<div style="padding:10px;margin:8px 0;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:rgba(255,255,255,.04)">
+      <div style="font-weight:800;color:#fff">${escapeHtml(n.title)}</div><div style="margin:5px 0;color:#cbd5e1;white-space:pre-wrap">${escapeHtml(n.message)}</div>
+      <div style="font-size:10px;color:#a5b4fc">${escapeHtml(String(n.notification_type||"general").toUpperCase())} · ${n.is_active?"ACTIVE":"HIDDEN"} · ${new Date(n.created_at).toLocaleString()}</div>
+      <button class="btn btn-primary" style="margin-top:7px;padding:6px 10px" onclick="setDashboardNotificationActive('${n.id}',${!n.is_active})">${n.is_active?"Hide from users":"Show to users"}</button></div>`).join("");
+  }catch(error){box.innerHTML='<p style="color:#fca5a5">Unable to load notifications: '+escapeHtml(error.message||"Database error")+'</p>';}
+}
+async function setDashboardNotificationActive(id,active){
+  try{const {error}=await supabaseClient.from("user_notifications").update({is_active:Boolean(active)}).eq("id",id);if(error)throw error;await loadDashboardNotifications();}
+  catch(error){alert("Could not update notification: "+(error.message||"Unknown error"));}
+}
 /* =========================================================  
    PREVIEW IMAGE  
 ========================================================= */  
