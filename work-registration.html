@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SMART MONEY | Work & Skills Enquiry</title>
+<meta name="description" content="Register your interest in SMART MONEY skill-learning and part-time task opportunities.">
+<meta name="robots" content="noindex,nofollow">
+<style>
+:root{color-scheme:dark;--gold:#e9bd62;--cyan:#25c9ff;--bg:#071225;--card:#101e35;--muted:#a9b8cd}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,#123b68 0,transparent 36%),linear-gradient(145deg,#050b18,#0a1830);font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#f6f8fc;min-height:100vh;padding:26px 14px}
+.wrap{max-width:680px;margin:auto}.brand{display:flex;align-items:center;gap:13px;margin:4px 0 20px}.brand img{width:58px;height:58px;object-fit:cover;border-radius:14px;border:1px solid #1e9fe0}.brand b{font-size:18px;letter-spacing:.5px}.brand small{display:block;color:#8edfff;font-size:11px;letter-spacing:2px}
+.card{background:linear-gradient(155deg,rgba(18,35,61,.97),rgba(8,18,35,.98));border:1px solid rgba(71,181,235,.35);border-radius:22px;padding:24px;box-shadow:0 20px 70px #0008}
+h1{font-size:clamp(24px,5vw,34px);line-height:1.15;margin:0 0 9px}.lead{color:var(--muted);line-height:1.55;margin:0 0 22px}.tag{display:inline-block;color:#071225;background:linear-gradient(90deg,var(--gold),#fff0b5);font-weight:800;padding:6px 11px;border-radius:30px;font-size:11px;margin-bottom:12px}
+label{display:block;font-size:13px;font-weight:700;margin:15px 0 7px}input,select,textarea{width:100%;padding:13px 14px;border:1px solid #344b69;border-radius:11px;background:#09162a;color:#fff;font:inherit;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #25c9ff20}.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.check{display:flex;align-items:flex-start;gap:10px;color:#c6d2e2;font-size:12px;line-height:1.5;margin:18px 0}.check input{width:17px;height:17px;margin:1px 0;flex:none}.btn{width:100%;border:0;border-radius:12px;padding:15px;background:linear-gradient(100deg,#13b9e8,#1676d2);color:white;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 9px 24px #087cc455}.note{font-size:11px;color:#9caec4;line-height:1.55;margin-top:14px}.err{display:none;color:#ffb4b4;font-size:12px;margin-top:9px}.foot{text-align:center;color:#71849f;font-size:11px;margin:16px}
+@media(max-width:540px){.grid{grid-template-columns:1fr}.card{padding:19px}}
+</style></head>
+<body><div class="wrap">
+<div class="brand"><img src="https://raw.githubusercontent.com/Swrang120/Smart_Money/main/smart-money-logo-optimized.jpg" alt="SMART MONEY logo"><div><b>SMART MONEY</b><small>LEARN • GROW • BE SMART</small></div></div>
+<div class="card"><span class="tag">WORK & SKILLS ENQUIRY</span><h1>Start with your details</h1>
+<p class="lead">Tell us what you would like to learn or enquire about. Your details will be placed into a WhatsApp message to the SMART MONEY contact configured by the admin.</p>
+<form id="enquiryForm">
+<label for="name">Full name *</label><input id="name" name="name" autocomplete="name" maxlength="80" required placeholder="Enter your full name">
+<div class="grid"><div><label for="email">Email address *</label><input id="email" type="email" name="email" autocomplete="email" maxlength="120" required placeholder="name@example.com"></div><div><label for="phone">Your WhatsApp number *</label><input id="phone" type="tel" name="phone" inputmode="tel" maxlength="16" required placeholder="10-digit mobile number"></div></div>
+<label for="state">State *</label><select id="state" required><option value="">Select your state</option><option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Assam</option><option>Bihar</option><option>Chhattisgarh</option><option>Goa</option><option>Gujarat</option><option>Haryana</option><option>Himachal Pradesh</option><option>Jharkhand</option><option>Karnataka</option><option>Kerala</option><option>Madhya Pradesh</option><option>Maharashtra</option><option>Manipur</option><option>Meghalaya</option><option>Mizoram</option><option>Nagaland</option><option>Odisha</option><option>Punjab</option><option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option><option>Telangana</option><option>Tripura</option><option>Uttar Pradesh</option><option>Uttarakhand</option><option>West Bengal</option><option>Other / Outside India</option></select>
+<label for="interest">What are you interested in? *</label><select id="interest" required><option value="">Choose an area</option><option>Content writing & script writing</option><option>Video editing & graphic design</option><option>Data entry & spreadsheet skills</option><option>Digital marketing & social media</option><option>AI tools & technology</option><option>Affiliate / referral programme information</option><option>General course information</option></select>
+<label for="device">Available device *</label><select id="device" required><option value="">Select device</option><option>Smartphone</option><option>Laptop / Desktop</option><option>Both</option></select>
+<label for="message">Any question? (optional)</label><textarea id="message" rows="3" maxlength="500" placeholder="Write your question here"></textarea>
+<label class="check"><input type="checkbox" id="consent" required><span>I agree to share the details above with SMART MONEY through WhatsApp for this enquiry. I understand that income is not guaranteed; any paid work, eligibility, tasks and compensation must be explained and confirmed separately before I accept.</span></label>
+<button class="btn" type="submit">Continue to WhatsApp →</button><div class="err" id="error" role="alert"></div>
+</form><p class="note">Privacy: This form does not upload or store your details in a database. It opens WhatsApp with a draft message; review it and press Send yourself. Do not send passwords, OTPs, bank details, identity documents or payment to anyone for a job enquiry.</p>
+</div><div class="foot">© SMART MONEY • Learn • Grow • Be Smart</div></div>
+<script>
+const params=new URLSearchParams(location.search);const target=(params.get('to')||'').replace(/\D/g,'');
+document.getElementById('enquiryForm').addEventListener('submit',e=>{
+ e.preventDefault();const err=document.getElementById('error');err.style.display='none';
+ if(!/^\d{10,15}$/.test(target)){err.textContent='The SMART MONEY WhatsApp contact is not configured. Please request a fresh form link from the admin.';err.style.display='block';return}
+ const val=id=>document.getElementById(id).value.trim();
+ const msg=['SMART MONEY — NEW WORK & SKILLS ENQUIRY','', 'Full Name: '+val('name'),'Email: '+val('email'),'WhatsApp: '+val('phone'),'State: '+val('state'),'Interested In: '+val('interest'),'Device: '+val('device'),'Question: '+(val('message')||'Not provided'),'','Consent: User agreed to share these details for this enquiry.','Note: This is an enquiry only; no income or job guarantee is implied.'].join('\n');
+ location.href='https://wa.me/'+target+'?text='+encodeURIComponent(msg);
+});
+</script></body></html>
