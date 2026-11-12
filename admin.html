@@ -2959,6 +2959,10 @@ function initializeSupabaseClient(){
         }
     };
 
+    // Keep the same adapter accessible to the refresh-recovery routine below.
+    // Previously it was function-scoped, so recovery threw ReferenceError after refresh.
+    window.SM_ADMIN_AUTH_STORAGE = adminAuthStorage;
+
     try {
         const existingAdminSession = adminAuthStorage.getItem(ADMIN_AUTH_STORAGE_KEY);
         const legacySession = localStorage.getItem("sb-rvprrulkjegvicbnjuft-auth-token");
@@ -3449,7 +3453,9 @@ async function checkAdminSession(){
                 return;
             }
 
-            if(session && !isAdminUser(session.user)){
+            // Only reject a definite, fully identified non-admin account.
+            // A temporarily incomplete session during Android refresh must not be signed out.
+            if(session?.user && !isAdminUser(session.user)){
                 await supabaseClient.auth.signOut({scope:"local"});
                 showLogin();
                 return;
@@ -3471,7 +3477,8 @@ async function checkAdminSession(){
     // still exists, hand that pair back to Supabase. Never trust it for authorization
     // without checking that the restored account is the configured admin.
     try{
-        const raw = adminAuthStorage.getItem(ADMIN_AUTH_STORAGE_KEY);
+        const storage = window.SM_ADMIN_AUTH_STORAGE;
+        const raw = storage?.getItem(ADMIN_AUTH_STORAGE_KEY);
         if(raw){
             const stored = JSON.parse(raw);
             const saved = stored?.currentSession || stored?.session || stored;
