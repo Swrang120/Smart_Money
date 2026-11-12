@@ -1459,8 +1459,8 @@ button{
     <!-- ADMIN STATUS -->
     <div id="adminStatusContainer" class="admin-status">
         <div class="admin-status-title">
-            <span>📢</span>
-            <h3>Admin Updates & Status</h3>
+            <span>🔔</span>
+            <h3>SMART MONEY NOTIFICATIONS</h3>
         </div>
         <div id="statusList">
             <span class="status-loading">Loading updates...</span>
@@ -3027,35 +3027,31 @@ function setupLogout(){
     };
 }
 
-/* ADMIN UPDATES FETCH */
+
+/* SMART MONEY USER NOTIFICATIONS */
 async function loadAdminStatus(){
-    const container = document.getElementById("statusList");
-    if(!container) return;
-
+    const container=document.getElementById("statusList");if(!container)return;
     try{
-        const { data } = await supabaseClient
-            .from("admin_updates")
-            .select("*")
-            .order("created_at", { ascending: false });
-
-        if(!data || data.length === 0){
-            container.innerHTML = `<p style="color:#64748b;margin:0;font-size:12px">No updates from admin yet.</p>`;
-            return;
-        }
-
-        container.innerHTML = data.map(item=>{
-            return `
-            <div class="admin-update">
-                ${item.title ? `<div class="admin-update-title">${escapeHtml(item.title)}</div>` : ""}
-                <div class="admin-update-message">${escapeHtml(item.message || "")}</div>
-                ${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="Update">` : ""}
-            </div>`;
+        const {data,error}=await supabaseClient.from("user_notifications")
+          .select("id,title,message,notification_type,created_at,expires_at")
+          .eq("is_active",true).order("created_at",{ascending:false}).limit(30);
+        if(error)throw error;
+        const now=Date.now(),visible=(data||[]).filter(item=>!item.expires_at||new Date(item.expires_at).getTime()>now);
+        if(!visible.length){container.innerHTML='<p style="color:#64748b;margin:0;font-size:12px">No new notifications right now.</p>';return;}
+        const styles={important:"background:#fff1f2;color:#be123c;border-color:#fecdd3",course:"background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe",maintenance:"background:#fff7ed;color:#c2410c;border-color:#fed7aa",general:"background:#f5f3ff;color:#6d28d9;border-color:#ddd6fe"};
+        container.innerHTML=visible.map(item=>{
+          const type=String(item.notification_type||"general").toLowerCase();
+          return `<article class="admin-update" style="padding:12px 0">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+              <div class="admin-update-title">${escapeHtml(item.title||"SMART MONEY UPDATE")}</div>
+              <span style="font-size:9px;font-weight:900;letter-spacing:.5px;padding:4px 8px;border:1px solid;border-radius:20px;${styles[type]||styles.general}">${escapeHtml(type.replace("_"," ").toUpperCase())}</span>
+            </div>
+            <div class="admin-update-message" style="white-space:pre-wrap">${escapeHtml(item.message||"")}</div>
+            <div style="font-size:10px;color:#94a3b8;margin-top:7px">${escapeHtml(new Date(item.created_at).toLocaleString())}</div>
+          </article>`;
         }).join("");
-    }catch(error){
-        container.innerHTML = `<p style="color:#64748b;margin:0;font-size:12px">No updates from admin yet.</p>`;
-    }
+    }catch(error){console.error("Smart Money notifications failed:",error);container.innerHTML='<p style="color:#b45309;margin:0;font-size:12px">Notifications are temporarily unavailable. Please refresh later.</p>';}
 }
-
 /* APP INIT — bounded startup and explicit errors instead of endless Loading labels. */
 window.addEventListener("DOMContentLoaded", async () => {
     const timeout = (ms, label) => new Promise((_, reject) =>
