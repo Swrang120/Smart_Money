@@ -9059,18 +9059,35 @@ if(document.readyState === "loading"){
     if(!["image/jpeg","image/png","image/webp"].includes(file.type)){logoStatus("Only PNG, JPG or WebP images are supported.",true);return;}
     if(file.size>10*1024*1024){logoStatus("Image must be 10 MB or smaller.",true);return;}
     btn.disabled=true;btn.textContent="Uploading…";logoStatus("Uploading header logo image…");
+    // Compress large phone photos/artwork before upload so the navbar logo loads quickly.
+    let uploadFile=file;
+    try{
+      const bitmap=await createImageBitmap(file);
+      const scale=Math.min(1,1200/Math.max(bitmap.width,bitmap.height));
+      const canvas=document.createElement("canvas");
+      canvas.width=Math.max(1,Math.round(bitmap.width*scale));
+      canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+      const ctx=canvas.getContext("2d");
+      ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
+      bitmap.close?.();
+      const optimized=await new Promise(resolve=>canvas.toBlob(resolve,"image/webp",0.82));
+      if(optimized && optimized.size<file.size){
+        uploadFile=new File([optimized],(file.name.replace(/\\.[^.]+$/,"")||"smart-money-logo")+".webp",{type:"image/webp"});
+      }
+    }catch(optimizeError){console.warn("Logo optimization skipped; uploading original image.",optimizeError);}
+
     try{
       const {data:sd,error:se}=await supabaseClient.auth.getSession();if(se)throw se;
       const user=sd?.session?.user;if(!user||String(user.email||"").toLowerCase()!==ADMIN_EMAIL)throw new Error("Please sign in with the authorized admin account.");
-      const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
+      const ext=uploadFile.type==="image/png"?"png":uploadFile.type==="image/webp"?"webp":"jpg";
       const path="smart_money_logo/"+Date.now()+"-"+crypto.randomUUID()+"."+ext;
-      const {error:ue}=await supabaseClient.storage.from(BUCKET).upload(path,file,{contentType:file.type,cacheControl:"3600",upsert:false});if(ue)throw ue;
+      const {error:ue}=await supabaseClient.storage.from(BUCKET).upload(path,uploadFile,{contentType:uploadFile.type,cacheControl:"31536000",upsert:false});if(ue)throw ue;
       const {data:pd}=supabaseClient.storage.from(BUCKET).getPublicUrl(path),url=pd?.publicUrl;if(!url)throw new Error("Could not create the public image URL.");
       const {error:de}=await supabaseClient.from("package_images").upsert({package_key:"smart_money_logo",image_url:url,updated_at:new Date().toISOString(),updated_by:user.id},{onConflict:"package_key"});if(de)throw de;
       savedUrls.smart_money_logo=url;
       const img=$("siteLogoImagePreview");if(img){img.onload=()=>{img.style.display="block";};img.onerror=()=>logoStatus("Image saved, but preview could not load. Check public Storage access.",true);img.src=url;img.style.display="block";}
       $("siteLogoImageFile").value="";
-      logoStatus("✅ SUCCESS — header logo saved. Open or refresh the Home Page to see it in the red-marked frame.");
+      logoStatus("✅ SUCCESS — optimized header logo saved and shared with Home Page + Dashboard. Refresh both pages to see it.");
     }catch(e){console.error("Header logo upload failed",e);logoStatus("❌ Upload failed: "+(e?.message||String(e)),true);}
     finally{btn.disabled=false;btn.textContent="Upload / Update Header Logo";}
   };
