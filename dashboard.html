@@ -1678,8 +1678,8 @@ button{
                 <option value="State Bank of India"></option><option value="HDFC Bank"></option><option value="ICICI Bank"></option><option value="Axis Bank"></option><option value="Kotak Mahindra Bank"></option><option value="Punjab National Bank"></option><option value="Bank of Baroda"></option><option value="Canara Bank"></option><option value="Union Bank of India"></option><option value="Indian Bank"></option><option value="Bank of India"></option><option value="Central Bank of India"></option><option value="Indian Overseas Bank"></option><option value="UCO Bank"></option><option value="Bank of Maharashtra"></option><option value="Punjab & Sind Bank"></option><option value="IDBI Bank"></option><option value="Yes Bank"></option><option value="IndusInd Bank"></option><option value="Federal Bank"></option><option value="South Indian Bank"></option><option value="Karnataka Bank"></option><option value="Karur Vysya Bank"></option><option value="City Union Bank"></option><option value="Tamilnad Mercantile Bank"></option><option value="RBL Bank"></option><option value="Bandhan Bank"></option><option value="IDFC FIRST Bank"></option><option value="AU Small Finance Bank"></option><option value="Ujjivan Small Finance Bank"></option><option value="Equitas Small Finance Bank"></option><option value="Jana Small Finance Bank"></option><option value="ESAF Small Finance Bank"></option><option value="Suryoday Small Finance Bank"></option><option value="Unity Small Finance Bank"></option><option value="Capital Small Finance Bank"></option><option value="North East Small Finance Bank"></option><option value="Airtel Payments Bank"></option><option value="India Post Payments Bank"></option><option value="Fino Payments Bank"></option><option value="Jio Payments Bank"></option><option value="Paytm Payments Bank"></option><option value="Assam Gramin Vikash Bank"></option><option value="Arunachal Pradesh Rural Bank"></option><option value="Tripura Gramin Bank"></option><option value="Baroda UP Bank"></option><option value="Kerala Gramin Bank"></option><option value="Karnataka Gramin Bank"></option><option value="Odisha Gramya Bank"></option><option value="Madhya Pradesh Gramin Bank"></option><option value="Rajasthan Marudhara Gramin Bank"></option><option value="Uttar Bihar Gramin Bank"></option><option value="Dakshin Bihar Gramin Bank"></option><option value="Other Indian Bank"></option>
             </datalist>
 
-            <label style="font-size:13px;font-weight:700;color:#334155">Account No. (9–11 digits)</label>
-            <input type="text" id="editAccNo" class="input-field" placeholder="Enter 9 to 11 digit account number" inputmode="numeric" autocomplete="off" maxlength="11" pattern="[0-9]{9,11}">
+            <label style="font-size:13px;font-weight:700;color:#334155">Account No. (9–18 digits)</label>
+            <input type="text" id="editAccNo" class="input-field" placeholder="Enter 9 to 18 digit account number" inputmode="numeric" autocomplete="off" maxlength="18" pattern="[0-9]{9,18}">
 
             <label style="font-size:13px;font-weight:700;color:#334155">Confirm Account No.</label>
             <input type="text" id="editConfirmAccNo" class="input-field" placeholder="Re-enter account number" inputmode="numeric" autocomplete="off" maxlength="11" pattern="[0-9]{9,11}">
@@ -1882,7 +1882,7 @@ function openBankDetailsModal(){
     accNameInput.value = currentProfile?.account_holder_name || "";
     bankNameInput.value = currentProfile?.bank_name || "";
     accNoInput.value = currentProfile?.bank_account_number || currentProfile?.account_number || "";
-    confirmAccNoInput.value = currentProfile?.bank_account_number || "";
+    confirmAccNoInput.value = currentProfile?.bank_account_number || currentProfile?.account_number || "";
     ifscInput.value = currentProfile?.ifsc_code || "";
 
     if(locked){
@@ -1950,8 +1950,8 @@ async function updateUserPayoutDetails(){
         alert("Please enter account holder name and select a bank.");
         return;
     }
-    if(!/^[0-9]{9,11}$/.test(accountNumber)){
-        alert("Account number must contain 9 to 11 digits.");
+    if(!/^[0-9]{9,18}$/.test(accountNumber)){
+        alert("Account number must contain 9 to 18 digits.");
         return;
     }
     if(accountNumber !== confirmAccountNumber){
@@ -2012,7 +2012,7 @@ function connectCustomerCare(){
     const userId = userRefCode || "Not Available";
     const oldDetails = String(currentProfile?.payout_type || "").toLowerCase() === "bank"
         ? "Bank: " + (currentProfile?.bank_name || "N/A") +
-          " | Account No: " + (currentProfile?.bank_account_number || "N/A") +
+          " | Account No: " + (currentProfile?.bank_account_number || currentProfile?.account_number || "N/A") +
           " | Holder: " + (currentProfile?.account_holder_name || "N/A") +
           " | IFSC: " + (currentProfile?.ifsc_code || "N/A")
         : "No saved bank details";
