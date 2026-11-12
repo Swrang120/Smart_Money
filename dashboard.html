@@ -1778,7 +1778,7 @@ let currentUserId = null;
 let currentProfile = {};
 let userCurrentBalance = 0;
 let userRefCode = "";
-let payoutMode = "upi";
+let payoutMode = "bank";
 let currentUserEmail = "";
 let allReferralsData = [];
 let allEarningsData = [];
@@ -1881,7 +1881,7 @@ function openBankDetailsModal(){
 
     accNameInput.value = currentProfile?.account_holder_name || "";
     bankNameInput.value = currentProfile?.bank_name || "";
-    accNoInput.value = currentProfile?.bank_account_number || "";
+    accNoInput.value = currentProfile?.bank_account_number || currentProfile?.account_number || "";
     confirmAccNoInput.value = currentProfile?.bank_account_number || "";
     ifscInput.value = currentProfile?.ifsc_code || "";
 
@@ -2043,7 +2043,7 @@ async function openWithdrawModal(){
     closeSidebar();
     if(!hasSavedPaymentDetails()){
         alert("⚠️ Please save your bank account details before requesting withdrawal!");
-        openUpiModal();
+        openBankDetailsModal();
         return;
     }
 
@@ -2469,7 +2469,7 @@ async function loadDashboardProfile(){
                 date_of_birth: currentProfile.date_of_birth
             }));
         }
-        if(currentProfile.payout_type){
+        if(currentProfile.bank_account_number || currentProfile.account_number){
             localStorage.setItem(`payout_details_${currentUserId}`, JSON.stringify({
                 payout_type: "bank",
                 account_holder_name: currentProfile.account_holder_name || null,
@@ -2905,7 +2905,7 @@ async function submitWithdrawal(){
     if(!hasSavedPaymentDetails()){
         alert("⚠️ Please save bank account details first.");
         closeModal("withdrawModal");
-        openUpiModal();
+        openBankDetailsModal();
         return;
     }
 
