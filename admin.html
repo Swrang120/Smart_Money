@@ -9272,9 +9272,9 @@ function showAdminDashboard(){
 (function(){
   const key='smartMoneyWorkRegistrationWhatsapp';
   function normalizeWorkRegNumber(raw){
-    let n=String(raw||'').replace(/\\D/g,'');
+    let n=String(raw||'').replace(/\D/g,'');
     if(n.length===10)n='91'+n;
-    return /^91[6-9]\\d{9}$/.test(n)?n:'';
+    return /^91[6-9]\d{9}$/.test(n)?n:'';
   }
   window.saveWorkRegWhatsapp=function(){
     const input=document.getElementById('workRegWhatsapp');
