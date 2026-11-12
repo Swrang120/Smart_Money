@@ -1030,7 +1030,7 @@ button{
 
     <div class="sidebar-header">
         <a href="dashboard.html" class="brand-logo">
-            <img id="sidebarLogo" src="smart-money-logo-optimized.jpg" alt="Smart Money">
+            <img id="sidebarLogo" alt="Smart Money" src="" style="opacity:0;transition:opacity .2s ease">
             <span>Smart Money</span>
         </a>
         <button class="sidebar-close" onclick="closeSidebar()">✕</button>
@@ -1147,7 +1147,7 @@ button{
 <!-- NAVBAR -->
 <header class="navbar">
     <a href="dashboard.html" class="brand-logo navbar-brand-image" aria-label="Smart Money">
-        <img id="navBrandLogoImg" src="smart-money-header-logo.jpg?v=1" alt="Smart Money — Learn, Grow, Be Smart">
+        <img id="navBrandLogoImg" alt="Smart Money — Learn, Grow, Be Smart" src="" style="opacity:0;transition:opacity .2s ease">
     </a>
     <div class="nav-right">
         <a href="index.html" class="nav-home-btn">🌐 Home</a>
@@ -1920,57 +1920,81 @@ async function removeProfilePicture(){
     }
 }
 
-/* DASHBOARD HEADER LOGO — show cached Admin upload immediately, then refresh from Supabase. */
+/* DASHBOARD HEADER + SIDEBAR LOGO — use the exact Admin Panel upload, with versioned cache. */
 async function loadGlobalTopLogo(){
-    const navLogo = document.getElementById("navBrandLogoImg");
-    if(!navLogo) return;
+    const logoNodes = [
+        document.getElementById("navBrandLogoImg"),
+        document.getElementById("sidebarLogo")
+    ].filter(Boolean);
+    if(!logoNodes.length) return;
 
-    const cacheKey = "smart_money_dashboard_header_logo_url";
-    const applyLogo = (url) => {
-        const cleanUrl = String(url || "").trim();
+    const cacheKey = "smart_money_dashboard_header_logo_v2";
+    const applyLogo = (rawUrl, version = "") => {
+        const cleanUrl = String(rawUrl || "").trim();
         if(!cleanUrl) return;
-        navLogo.loading = "eager";
-        navLogo.decoding = "async";
-        navLogo.fetchPriority = "high";
-        navLogo.alt = "Smart Money";
-        // Keep the original public URL stable so the browser/CDN can cache the image.
-        if(navLogo.src !== cleanUrl) navLogo.src = cleanUrl;
+        let finalUrl = cleanUrl;
+        if(version){
+            try{
+                const parsed = new URL(cleanUrl, window.location.href);
+                parsed.searchParams.set("sm_logo_v", String(version));
+                finalUrl = parsed.href;
+            }catch(e){}
+        }
+        logoNodes.forEach(img => {
+            img.alt = "Smart Money";
+            img.loading = "eager";
+            img.decoding = "async";
+            img.fetchPriority = "high";
+            img.style.opacity = "0";
+            img.onload = () => { img.style.opacity = "1"; };
+            img.onerror = () => { img.style.opacity = "0"; };
+            if(img.src !== finalUrl) img.src = finalUrl;
+            else if(img.complete && img.naturalWidth > 0) img.style.opacity = "1";
+        });
     };
 
-    // Fast first paint on repeat visits; the database remains the source of truth.
-    try {
-        const cachedUrl = localStorage.getItem(cacheKey);
-        if(cachedUrl) applyLogo(cachedUrl);
-    } catch(e) {}
+    // Use the last confirmed Admin upload immediately while the latest row is checked.
+    try{
+        const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
+        if(cached?.url) applyLogo(cached.url, cached.version || "");
+    }catch(e){}
 
     if(!supabaseClient) return;
 
     try{
         const { data, error } = await supabaseClient
             .from("package_images")
-            .select("image_url")
+            .select("image_url, updated_at")
             .eq("package_key", "smart_money_logo")
             .maybeSingle();
-
         if(error) throw error;
 
         const uploadedUrl = String(data?.image_url || "").trim();
         if(uploadedUrl){
-            try { localStorage.setItem(cacheKey, uploadedUrl); } catch(e) {}
-            applyLogo(uploadedUrl);
-        } else {
-            // Legacy fallback only if no Homepage Header Logo has been uploaded.
-            const { data: legacy } = await supabaseClient
-                .from("global_settings")
-                .select("setting_value")
-                .eq("setting_key", "admin_top_logo")
-                .maybeSingle();
-            if(legacy?.setting_value) applyLogo(legacy.setting_value);
+            const version = data?.updated_at || "";
+            try{ localStorage.setItem(cacheKey, JSON.stringify({url:uploadedUrl,version})); }catch(e){}
+            applyLogo(uploadedUrl, version);
+            return;
+        }
+
+        // Legacy Admin setting is used only when the current Admin logo row is absent.
+        const { data: legacy, error: legacyError } = await supabaseClient
+            .from("global_settings")
+            .select("setting_value")
+            .eq("setting_key", "admin_top_logo")
+            .maybeSingle();
+        if(legacyError) throw legacyError;
+        if(legacy?.setting_value){
+            const legacyUrl = String(legacy.setting_value).trim();
+            try{ localStorage.setItem(cacheKey, JSON.stringify({url:legacyUrl,version:"legacy"})); }catch(e){}
+            applyLogo(legacyUrl, "legacy");
         }
     }catch(e){
-        console.warn("Dashboard header logo refresh failed:", e);
+        console.warn("Dashboard Admin logo load failed:", e);
+        // Keep the cached Admin upload if available; never flash the bundled placeholder logo.
     }
 }
+
 /* PERMANENT USER ID / REFERRAL CODE */
 function generateReferralCode(){
     return "SM-smart" + Math.floor(10000 + Math.random() * 90000);
