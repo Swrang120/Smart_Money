@@ -1030,7 +1030,7 @@ button{
 
     <div class="sidebar-header">
         <a href="dashboard.html" class="brand-logo">
-            <img id="sidebarLogo" alt="Smart Money" src="" style="opacity:0;transition:opacity .2s ease">
+            <img id="sidebarLogo" alt="Smart Money" style="opacity:0;transition:opacity .2s ease">
             <span>Smart Money</span>
         </a>
         <button class="sidebar-close" onclick="closeSidebar()">✕</button>
@@ -1147,7 +1147,7 @@ button{
 <!-- NAVBAR -->
 <header class="navbar">
     <a href="dashboard.html" class="brand-logo navbar-brand-image" aria-label="Smart Money">
-        <img id="navBrandLogoImg" alt="Smart Money — Learn, Grow, Be Smart" src="" style="opacity:0;transition:opacity .2s ease">
+        <img id="navBrandLogoImg" alt="Smart Money — Learn, Grow, Be Smart" style="opacity:0;transition:opacity .2s ease">
     </a>
     <div class="nav-right">
         <a href="index.html" class="nav-home-btn">🌐 Home</a>
@@ -1920,78 +1920,68 @@ async function removeProfilePicture(){
     }
 }
 
-/* DASHBOARD HEADER + SIDEBAR LOGO — use the exact Admin Panel upload, with versioned cache. */
+/* DASHBOARD LOGO — share the exact Admin-uploaded logo cache used by index.html. */
 async function loadGlobalTopLogo(){
-    const logoNodes = [
+    const nodes = [
         document.getElementById("navBrandLogoImg"),
         document.getElementById("sidebarLogo")
     ].filter(Boolean);
-    if(!logoNodes.length) return;
+    if(!nodes.length) return;
 
-    const cacheKey = "smart_money_dashboard_header_logo_v2";
-    const applyLogo = (rawUrl, version = "") => {
-        const cleanUrl = String(rawUrl || "").trim();
-        if(!cleanUrl) return;
-        let finalUrl = cleanUrl;
-        if(version){
-            try{
-                const parsed = new URL(cleanUrl, window.location.href);
-                parsed.searchParams.set("sm_logo_v", String(version));
-                finalUrl = parsed.href;
-            }catch(e){}
-        }
-        logoNodes.forEach(img => {
-            img.alt = "Smart Money";
+    const cacheKey = "smart_money_dashboard_header_logo_url";
+    const showLogo = (url) => {
+        const clean = String(url || "").trim();
+        if(!clean) return;
+        nodes.forEach(img => {
+            img.alt = "Smart Money — Learn, Grow, Be Smart";
             img.loading = "eager";
             img.decoding = "async";
             img.fetchPriority = "high";
-            img.style.opacity = "0";
             img.onload = () => { img.style.opacity = "1"; };
             img.onerror = () => { img.style.opacity = "0"; };
-            if(img.src !== finalUrl) img.src = finalUrl;
-            else if(img.complete && img.naturalWidth > 0) img.style.opacity = "1";
+            if(img.getAttribute("src") !== clean) img.src = clean;
+            else if(img.complete && img.naturalWidth) img.style.opacity = "1";
         });
     };
 
-    // Use the last confirmed Admin upload immediately while the latest row is checked.
-    try{
-        const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
-        if(cached?.url) applyLogo(cached.url, cached.version || "");
-    }catch(e){}
+    // Same key and same plain-URL format as the homepage, so both pages show
+    // the identical last Admin upload immediately without waiting for Supabase.
+    try {
+        const cachedUrl = localStorage.getItem(cacheKey);
+        if(cachedUrl) showLogo(cachedUrl);
+    } catch(e) {}
 
     if(!supabaseClient) return;
-
-    try{
-        const { data, error } = await supabaseClient
+    try {
+        const {data,error} = await supabaseClient
             .from("package_images")
             .select("image_url, updated_at")
-            .eq("package_key", "smart_money_logo")
+            .eq("package_key","smart_money_logo")
             .maybeSingle();
         if(error) throw error;
 
-        const uploadedUrl = String(data?.image_url || "").trim();
-        if(uploadedUrl){
-            const version = data?.updated_at || "";
-            try{ localStorage.setItem(cacheKey, JSON.stringify({url:uploadedUrl,version})); }catch(e){}
-            applyLogo(uploadedUrl, version);
+        const latestUrl = String(data?.image_url || "").trim();
+        if(latestUrl) {
+            try { localStorage.setItem(cacheKey,latestUrl); } catch(e) {}
+            showLogo(latestUrl);
             return;
         }
 
-        // Legacy Admin setting is used only when the current Admin logo row is absent.
-        const { data: legacy, error: legacyError } = await supabaseClient
+        // Compatibility fallback for the older Admin logo setting.
+        const {data:legacy,error:legacyError} = await supabaseClient
             .from("global_settings")
             .select("setting_value")
-            .eq("setting_key", "admin_top_logo")
+            .eq("setting_key","admin_top_logo")
             .maybeSingle();
         if(legacyError) throw legacyError;
-        if(legacy?.setting_value){
-            const legacyUrl = String(legacy.setting_value).trim();
-            try{ localStorage.setItem(cacheKey, JSON.stringify({url:legacyUrl,version:"legacy"})); }catch(e){}
-            applyLogo(legacyUrl, "legacy");
+        const legacyUrl = String(legacy?.setting_value || "").trim();
+        if(legacyUrl) {
+            try { localStorage.setItem(cacheKey,legacyUrl); } catch(e) {}
+            showLogo(legacyUrl);
         }
-    }catch(e){
-        console.warn("Dashboard Admin logo load failed:", e);
-        // Keep the cached Admin upload if available; never flash the bundled placeholder logo.
+    } catch(error) {
+        console.warn("Dashboard Admin logo refresh failed:",error);
+        // Keep the last known-good Admin logo visible when the network is slow.
     }
 }
 
