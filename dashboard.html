@@ -2058,18 +2058,20 @@ async function loadDashboardProfile(){
 
     // Show the last verified identity immediately while the fresh profile
     // request runs. Cache is scoped to the authenticated Supabase user ID.
+    let identityShownEarly = false;
     try{
         const cachedIdentity = JSON.parse(localStorage.getItem("sm_dashboard_identity_" + currentUserId) || "null");
-        if(cachedIdentity && typeof cachedIdentity === "object"){
-            const cachedName = String(cachedIdentity.full_name || currentUserEmail.split("@")[0] || "User");
-            const nameNode = document.getElementById("userName");
-            const sideNameNode = document.getElementById("sidebarUserName");
-            const sideEmailNode = document.getElementById("sidebarUserEmail");
-            if(nameNode) nameNode.textContent = cachedName;
-            if(sideNameNode) sideNameNode.textContent = cachedName;
-            if(sideEmailNode) sideEmailNode.textContent = currentUserEmail;
-            applyProfileImage(cachedIdentity.profile_pic || null, cachedName);
-        }
+        const metadata = user.user_metadata || {};
+        const earlyName = String(cachedIdentity?.full_name || metadata.full_name || metadata.name || metadata.display_name || currentUserEmail.split("@")[0] || "User");
+        const earlyPhoto = cachedIdentity?.profile_pic || metadata.avatar_url || metadata.picture || null;
+        const nameNode = document.getElementById("userName");
+        const sideNameNode = document.getElementById("sidebarUserName");
+        const sideEmailNode = document.getElementById("sidebarUserEmail");
+        if(nameNode) nameNode.textContent = earlyName;
+        if(sideNameNode) sideNameNode.textContent = earlyName;
+        if(sideEmailNode) sideEmailNode.textContent = currentUserEmail;
+        applyProfileImage(earlyPhoto, earlyName);
+        identityShownEarly = true;
     }catch(cacheError){ console.warn("Cached dashboard identity unavailable:",cacheError); }
 
     try{
@@ -2086,13 +2088,20 @@ async function loadDashboardProfile(){
         const isAdminAccount = ["sboro3235@gmail.com","phwilawswargiary6900@gmail.com"].includes(signedInEmail);
         let hasApprovedPayment = isAdminAccount;
         if(!isAdminAccount && profile){
-            const { data: approvedRows, error: approvedLookupError } = await supabaseClient
-                .from("payment_requests")
-                .select("id")
-                .eq("user_id", currentUserId)
-                .or("status.eq.Approved,payment_status.eq.Approved")
-                .limit(1);
-            hasApprovedPayment = !approvedLookupError && Array.isArray(approvedRows) && approvedRows.length > 0;
+            const { data: approvedRows, error: approvedLookupError } = await withTimeout(
+                supabaseClient
+                    .from("payment_requests")
+                    .select("id")
+                    .eq("user_id", currentUserId)
+                    .or("status.eq.Approved,payment_status.eq.Approved")
+                    .limit(1),
+                "Payment approval check",
+                8000
+            );
+            // A failed/slow approval lookup is a temporary loading error, not
+            // proof of unpaid status. Fail closed without signing the user out.
+            if(approvedLookupError) throw approvedLookupError;
+            hasApprovedPayment = Array.isArray(approvedRows) && approvedRows.length > 0;
         }
         if(!profile || profile.is_active !== true || profile.is_deleted === true || !hasApprovedPayment){
             await supabaseClient.auth.signOut();
