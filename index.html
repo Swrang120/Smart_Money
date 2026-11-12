@@ -8198,33 +8198,6 @@ window.addEventListener(
 );
 </script>
 
-<!-- Smart Money premium live-support profile launcher -->
-<style id="smPrivateSupportLauncherStyle">
-#smHelpLauncher{position:fixed;right:13px;top:39%;z-index:99990;width:88px;min-height:112px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:9px 7px;border:1px solid rgba(226,190,112,.72);border-radius:20px;background:linear-gradient(155deg,rgba(20,34,55,.97),rgba(7,16,31,.97));color:#f7e6bd;box-shadow:0 12px 34px rgba(2,8,23,.42),0 0 20px rgba(215,173,91,.17),inset 0 1px 0 rgba(255,255,255,.12);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);cursor:pointer;transition:transform .2s,box-shadow .2s}
-#smHelpLauncher:hover{transform:translateX(-3px);box-shadow:0 16px 38px rgba(2,8,23,.5),0 0 25px rgba(215,173,91,.26)}
-#smHelpLauncher:active{transform:scale(.96)}
-#smHelpLauncher .sm-support-photo{display:block;width:62px;height:62px;object-fit:cover;object-position:center;border-radius:50%;border:2px solid #e8c77f;box-shadow:0 0 0 3px rgba(232,199,127,.13),0 5px 16px rgba(0,0,0,.35);background:#101a2a}
-#smHelpLauncher .sm-live-label{display:flex;align-items:center;gap:4px;font-size:8px;font-weight:900;letter-spacing:.13em;color:#a8f0cf;line-height:1}
-#smHelpLauncher .sm-live-dot{width:6px;height:6px;border-radius:50%;background:#42df9b;box-shadow:0 0 8px #42df9b}
-#smHelpLauncher small{font-size:9px;font-weight:950;letter-spacing:.12em;line-height:1.1;color:#f7e6bd}
-@media(max-width:600px){#smHelpLauncher{right:8px;top:38%;width:78px;min-height:101px;border-radius:18px;padding:7px 5px;gap:4px}#smHelpLauncher .sm-support-photo{width:55px;height:55px}#smHelpLauncher small{font-size:8px}}
-@media(prefers-reduced-motion:reduce){#smHelpLauncher{transition:none}}
-</style>
-<button id="smHelpLauncher" type="button" aria-label="Open Smart Money Live Support">
-<img class="sm-support-photo" src="assets/smart-money-live-support-profile.webp" alt="Smart Money Live Support Team" loading="eager">
-<span class="sm-live-label"><i class="sm-live-dot" aria-hidden="true"></i> LIVE</span>
-<small>SUPPORT</small>
-</button>
-<script>
-(function(){
- const button=document.getElementById("smHelpLauncher");
- if(!button)return;
- button.addEventListener("click",function(){
-   window.location.href="support.html?v=c2f1a574";
- });
-})();
-</script>
-
 <script>
 /* Load admin-published 24-hour statuses on the public homepage. */
 async function openPublicStatus(){
