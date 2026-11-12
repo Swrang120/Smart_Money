@@ -35,9 +35,40 @@ body{background:#f4f5f7;color:#202124}
 .mobile-nav{background:#fff;border-top-color:#e8eaf0}
 .preview-note{background:#f7f5ff;border-color:#d9d2f3;color:#6253a4}
 
+
+.auth-screen{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at top right,#ece9ff 0,transparent 38%),#f4f5f7}
+.auth-card{width:min(440px,100%);background:#fff;border:1px solid #e6e8ef;border-radius:24px;padding:26px;box-shadow:0 18px 60px #26324a12}
+.auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:22px;font-weight:900}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#f3f4f8;padding:5px;border-radius:13px;margin:18px 0}
+.auth-tabs button{border:0;background:transparent;padding:10px;border-radius:10px;color:#777;font-weight:750}
+.auth-tabs button.active{background:#fff;color:#4f46a5;box-shadow:0 2px 8px #17203312}
+.auth-card input{width:100%;padding:13px;border:1px solid #e2e5ec;border-radius:12px;background:#fafbfc;color:#202124}
+.auth-submit{width:100%;padding:13px;margin-top:12px}
+.auth-message{display:none;padding:11px 12px;border-radius:12px;margin:12px 0;font-size:13px;background:#f2f5ff;color:#46549b}
+.auth-message.error{background:#fff0f1;color:#b4233b}.auth-message.show{display:block}
+.auth-status{max-width:520px;margin:18px auto;padding:26px;border-radius:20px;background:white;border:1px solid #e6e8ef;text-align:center}
+.auth-status button{margin-top:14px}
+.app,.mobile-nav{display:none}
+body.authenticated .auth-screen{display:none}
+body.authenticated .app{display:block}
+body.authenticated .mobile-nav{display:flex}
+@media(min-width:681px){body.authenticated .mobile-nav{display:none}}
 </style></head>
-<body><div class="app">
-<header class="top"><div class="brand"><div class="logo">S</div><div>SMART MONEY <small>SOCIAL COMMUNITY · PREVIEW</small></div></div><div class="top-actions"><span class="pill tiny">✨ Preview Mode</span><button class="iconbtn" onclick="showView('notifications')" title="Notifications">♧</button><button class="iconbtn" onclick="openProfile()" title="Profile">👤</button></div></header>
+<body>
+<section class="auth-screen" id="authScreen"><div class="auth-card">
+<div class="auth-brand"><div class="logo">S</div><div>SMART MONEY <small style="display:block;color:#85899a;font-size:10px;letter-spacing:2px">SOCIAL COMMUNITY</small></div></div>
+<h2 id="authTitle" style="margin:0 0 5px">Welcome back</h2><p class="muted tiny" id="authSubtitle">Sign in to continue to your community.</p>
+<div class="auth-tabs"><button id="loginTab" class="active" onclick="switchAuthMode('login')">Login</button><button id="signupTab" onclick="switchAuthMode('signup')">Create account</button></div>
+<div class="field" id="nameField" style="display:none"><label>Full name</label><input id="authName" type="text" autocomplete="name" maxlength="60" placeholder="Enter your name"></div>
+<div class="field"><label>Email address</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
+<div class="field"><label>Password</label><input id="authPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters"></div>
+<div class="auth-message" id="authMessage" role="status" aria-live="polite"></div>
+<button class="primary auth-submit" id="authSubmit" onclick="submitAuth()">Login Securely</button>
+<p class="tiny muted" style="margin:14px 0 0;text-align:center">New accounts may require email verification and admin approval for Social access.</p>
+</div></section>
+<section id="pendingScreen" style="display:none;min-height:100vh;padding:22px;background:#f4f5f7"><div class="auth-status"><div style="font-size:38px">🕒</div><h2>Access approval pending</h2><p class="muted">Your account is created successfully. Social access opens after administrator approval.</p><p class="tiny muted" id="pendingEmail"></p><button class="soft" onclick="logout()">Logout</button></div></section>
+<div class="app">
+<header class="top"><div class="brand"><div class="logo">S</div><div>SMART MONEY <small>SOCIAL COMMUNITY · PREVIEW</small></div></div><div class="top-actions"><span class="pill tiny" id="accountPill">Signed in</span><button class="iconbtn" onclick="showView('notifications')" title="Notifications">♧</button><button class="iconbtn" onclick="openProfile()" title="Profile">👤</button><button class="soft tiny" onclick="logout()" title="Logout">Logout ↗</button></div></header>
 <div class="layout">
 <aside class="side"><div class="card"><div class="side-profile"><div class="avatar" id="sideAvatar">S</div><div><b id="sideName">Swrang Creator</b><div class="tiny muted">Preview account</div></div></div><nav class="nav" id="sideNav"><button class="active" data-view="home" onclick="showView('home')"><span class="ico">⌂</span> Home Feed</button><button data-view="explore" onclick="showView('explore')"><span class="ico">⌕</span> Explore</button><button onclick="openComposer()"><span class="ico">＋</span> Create Post</button><button data-view="notifications" onclick="showView('notifications')"><span class="ico">♧</span> Notifications</button><button data-view="profile" onclick="openProfile()"><span class="ico">◉</span> My Profile</button><button data-view="saved" onclick="showView('saved')"><span class="ico">▣</span> Saved Posts</button><button onclick="openAdmin()"><span class="ico">⚙</span> Community Admin</button></nav></div><div class="preview-note">This is a standalone preview. Posts and actions are saved in this browser only.</div></aside>
 <main>
@@ -56,6 +87,22 @@ body{background:#f4f5f7;color:#202124}
 </div>
 <nav class="mobile-nav"><button class="active" data-view="home" onclick="showView('home')"><b>⌂</b>Home</button><button data-view="explore" onclick="showView('explore')"><b>⌕</b>Explore</button><button onclick="openComposer()"><b>⊕</b>Create</button><button data-view="notifications" onclick="showView('notifications')"><b>♧</b>Alerts</button><button data-view="profile" onclick="openProfile()"><b>◉</b>Profile</button></nav>
 <div class="modal-back" id="modalBack" onclick="if(event.target===this)closeModal()"><div class="modal" id="modal"></div></div><div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL='https://rvprrulkjegvicbnjuft.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ';
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+let authMode='login',authUser=null,authBusy=false;
+function authMessage(message,isError=false){const el=document.getElementById('authMessage');el.textContent=message;el.className='auth-message show'+(isError?' error':'')}
+function switchAuthMode(mode){authMode=mode;document.getElementById('nameField').style.display=mode==='signup'?'grid':'none';document.getElementById('authTitle').textContent=mode==='signup'?'Create your account':'Welcome back';document.getElementById('authSubtitle').textContent=mode==='signup'?'Join Smart Money Social with your email.':'Sign in to continue to your community.';document.getElementById('authSubmit').textContent=mode==='signup'?'Create Account':'Login Securely';document.getElementById('loginTab').classList.toggle('active',mode==='login');document.getElementById('signupTab').classList.toggle('active',mode==='signup');document.getElementById('authMessage').className='auth-message';document.getElementById('authPassword').autocomplete=mode==='signup'?'new-password':'current-password'}
+async function submitAuth(){if(authBusy)return;const email=document.getElementById('authEmail').value.trim().toLowerCase(),password=document.getElementById('authPassword').value,name=document.getElementById('authName').value.trim();if(!email||!password){authMessage('Please enter your email and password.',true);return}if(password.length<8){authMessage('Password must contain at least 8 characters.',true);return}if(authMode==='signup'&&!name){authMessage('Please enter your full name.',true);return}authBusy=true;const btn=document.getElementById('authSubmit');btn.disabled=true;btn.textContent='Please wait…';try{if(authMode==='signup'){const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{full_name:name},emailRedirectTo:location.origin+location.pathname}});if(error)throw error;if(data.session){await applyAuthSession(data.user)}else{authMessage('Account created. Check your email, verify your address, then log in here.')}}else{const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;await applyAuthSession(data.user)}}catch(e){authMessage(e.message||'Authentication failed. Please try again.',true)}finally{authBusy=false;btn.disabled=false;btn.textContent=authMode==='signup'?'Create Account':'Login Securely'}}
+async function applyAuthSession(user){authUser=user;document.getElementById('accountPill').textContent=user.email||'Signed in';document.getElementById('pendingEmail').textContent=user.email||'';const {data,error}=await supabaseClient.from('social_access').select('access_status').eq('user_id',user.id).maybeSingle();if(error||!data||data.access_status!=='approved'){document.getElementById('authScreen').style.display='none';document.getElementById('pendingScreen').style.display='block';document.body.classList.remove('authenticated');return}document.getElementById('pendingScreen').style.display='none';document.body.classList.add('authenticated');const p=people[0];p.name=user.user_metadata?.full_name||user.email?.split('@')[0]||'Community Member';p.handle='@'+(p.name.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'')||'member');p.bio='Welcome to Smart Money Social.';renderAll()}
+async function logout(){try{const {error}=await supabaseClient.auth.signOut({scope:'local'});if(error)throw error}catch(e){showToast(e.message||'Logout failed');return}authUser=null;document.body.classList.remove('authenticated');document.getElementById('pendingScreen').style.display='none';document.getElementById('authScreen').style.display='grid';document.getElementById('authEmail').value='';document.getElementById('authPassword').value='';switchAuthMode('login');authMessage('You have been logged out.')}
+supabaseClient.auth.onAuthStateChange((event,session)=>{if(session?.user)setTimeout(()=>applyAuthSession(session.user),0);else if(event==='SIGNED_OUT'){authUser=null;document.body.classList.remove('authenticated');document.getElementById('pendingScreen').style.display='none';document.getElementById('authScreen').style.display='grid'}});
+(async()=>{const {data:{session}}=await supabaseClient.auth.getSession();if(session?.user)await applyAuthSession(session.user)})();
+</script>
+
 <script>
 const KEY='sm_social_preview_v1';
 const current='me';
