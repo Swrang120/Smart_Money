@@ -6,13 +6,35 @@
 <meta name="description" content="Register your interest in SMART MONEY skill-learning and part-time task opportunities.">
 <meta name="robots" content="noindex,nofollow">
 <style>
-:root{color-scheme:dark;--gold:#e9bd62;--cyan:#25c9ff;--bg:#071225;--card:#101e35;--muted:#a9b8cd}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,#123b68 0,transparent 36%),linear-gradient(145deg,#050b18,#0a1830);font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#f6f8fc;min-height:100vh;padding:26px 14px}
-.wrap{max-width:680px;margin:auto}.brand{display:flex;align-items:center;gap:13px;margin:4px 0 20px}.brand img{width:58px;height:58px;object-fit:cover;border-radius:14px;border:1px solid #1e9fe0}.brand b{font-size:18px;letter-spacing:.5px}.brand small{display:block;color:#8edfff;font-size:11px;letter-spacing:2px}
-.card{background:linear-gradient(155deg,rgba(18,35,61,.97),rgba(8,18,35,.98));border:1px solid rgba(71,181,235,.35);border-radius:22px;padding:24px;box-shadow:0 20px 70px #0008}
-h1{font-size:clamp(24px,5vw,34px);line-height:1.15;margin:0 0 9px}.lead{color:var(--muted);line-height:1.55;margin:0 0 22px}.tag{display:inline-block;color:#071225;background:linear-gradient(90deg,var(--gold),#fff0b5);font-weight:800;padding:6px 11px;border-radius:30px;font-size:11px;margin-bottom:12px}
-label{display:block;font-size:13px;font-weight:700;margin:15px 0 7px}input,select,textarea{width:100%;padding:13px 14px;border:1px solid #344b69;border-radius:11px;background:#09162a;color:#fff;font:inherit;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #25c9ff20}.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.check{display:flex;align-items:flex-start;gap:10px;color:#c6d2e2;font-size:12px;line-height:1.5;margin:18px 0}.check input{width:17px;height:17px;margin:1px 0;flex:none}.btn{width:100%;border:0;border-radius:12px;padding:15px;background:linear-gradient(100deg,#13b9e8,#1676d2);color:white;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 9px 24px #087cc455}.note{font-size:11px;color:#9caec4;line-height:1.55;margin-top:14px}.err{display:none;color:#ffb4b4;font-size:12px;margin-top:9px}.foot{text-align:center;color:#71849f;font-size:11px;margin:16px}
-@media(max-width:540px){.grid{grid-template-columns:1fr}.card{padding:19px}}
+:root{color-scheme:dark;--gold:#f3ce78;--gold2:#fff0bd;--blue:#20c8ff;--muted:#b8c5d9}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;padding:30px 14px 38px;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#f7f9ff;background:radial-gradient(ellipse at 12% 5%,rgba(0,136,255,.28),transparent 34%),radial-gradient(ellipse at 92% 22%,rgba(179,126,36,.16),transparent 32%),linear-gradient(145deg,#030711 0%,#07152b 48%,#080d1b 100%)}
+.wrap{max-width:700px;margin:auto}
+.brand{display:flex;align-items:center;gap:14px;margin:2px 0 22px;padding:0 4px}
+.brand img{width:62px;height:62px;object-fit:cover;border-radius:17px;border:1px solid rgba(64,203,255,.72);box-shadow:0 0 24px rgba(0,174,255,.24)}
+.brand b{font-size:19px;letter-spacing:1.3px;background:linear-gradient(90deg,#fff,#9fe8ff 55%,#f4d58c);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand small{display:block;color:#a9dfff;font-size:10px;letter-spacing:3px;margin-top:4px}
+.card{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(17,32,56,.97),rgba(6,14,29,.985));border:1px solid rgba(225,190,112,.42);border-radius:26px;padding:27px;box-shadow:0 26px 85px rgba(0,0,0,.58),inset 0 1px 0 rgba(255,255,255,.07)}
+.card:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,transparent,#28caff,#f2cb73,#28caff,transparent);opacity:.95}
+h1{font-size:clamp(26px,5.5vw,37px);line-height:1.12;letter-spacing:-.7px;margin:0 0 11px;color:#fff}
+.lead{color:var(--muted);line-height:1.65;margin:0 0 23px;font-size:14px}
+.tag{display:inline-flex;align-items:center;gap:7px;color:#201707;background:linear-gradient(100deg,#c9953e,#ffedb2 52%,#d7a84e);font-weight:900;letter-spacing:1.15px;padding:7px 13px;border-radius:30px;font-size:10px;margin-bottom:14px;box-shadow:0 5px 20px rgba(213,166,77,.18)}
+label{display:block;font-size:12px;font-weight:800;letter-spacing:.25px;color:#e9effb;margin:17px 0 8px}
+input,select,textarea{width:100%;padding:14px 15px;border:1px solid rgba(125,157,197,.34);border-radius:13px;background:linear-gradient(180deg,#0b1b32,#081426);color:#fff;font:inherit;outline:none;transition:border-color .2s,box-shadow .2s,transform .2s}
+input::placeholder,textarea::placeholder{color:#71839e}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#9edfff 50%),linear-gradient(135deg,#9edfff 50%,transparent 50%),linear-gradient(180deg,#0b1b32,#081426);background-position:calc(100% - 20px) 20px,calc(100% - 14px) 20px,0 0;background-size:6px 6px,6px 6px,100% 100%;background-repeat:no-repeat;padding-right:40px}
+select option{background:#0b1b32;color:#fff}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(32,200,255,.14),0 0 20px rgba(32,200,255,.08)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.package-note{margin:9px 0 0;padding:11px 13px;border:1px solid rgba(224,187,105,.24);border-radius:12px;background:linear-gradient(100deg,rgba(201,149,62,.10),rgba(22,150,211,.08));font-size:11px;line-height:1.55;color:#c5d3e7}
+.check{display:flex;align-items:flex-start;gap:10px;color:#c6d2e2;font-size:12px;line-height:1.55;margin:20px 0}
+.check input{width:17px;height:17px;margin:1px 0;flex:none;accent-color:#1cbbe9}
+.btn{width:100%;border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:16px;background:linear-gradient(105deg,#087dbb 0%,#12bfe7 48%,#d6a64d 100%);color:#04101d;font-size:15px;font-weight:950;letter-spacing:.3px;cursor:pointer;box-shadow:0 12px 30px rgba(0,150,210,.23),inset 0 1px 0 rgba(255,255,255,.45);transition:transform .2s,filter .2s}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.note{font-size:11px;color:#93a7c2;line-height:1.65;margin-top:15px}
+.err{display:none;color:#ffb4b4;font-size:12px;margin-top:10px}
+.foot{text-align:center;color:#7285a1;font-size:11px;margin:18px}
+@media(max-width:540px){body{padding:20px 12px 28px}.grid{grid-template-columns:1fr}.card{padding:21px 18px;border-radius:21px}.brand img{width:55px;height:55px}}
 </style></head>
 <body><div class="wrap">
 <div class="brand"><img src="https://raw.githubusercontent.com/Swrang120/Smart_Money/main/smart-money-logo-optimized.jpg" alt="SMART MONEY logo"><div><b>SMART MONEY</b><small>LEARN • GROW • BE SMART</small></div></div>
@@ -23,8 +45,9 @@ label{display:block;font-size:13px;font-weight:700;margin:15px 0 7px}input,selec
 <div class="grid"><div><label for="email">Email address *</label><input id="email" type="email" name="email" autocomplete="email" maxlength="120" required placeholder="name@example.com"></div><div><label for="phone">Your WhatsApp number *</label><input id="phone" type="tel" name="phone" inputmode="tel" maxlength="16" required placeholder="10-digit mobile number"></div></div>
 <label for="state">State *</label><select id="state" required><option value="">Select your state</option><option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Assam</option><option>Bihar</option><option>Chhattisgarh</option><option>Goa</option><option>Gujarat</option><option>Haryana</option><option>Himachal Pradesh</option><option>Jharkhand</option><option>Karnataka</option><option>Kerala</option><option>Madhya Pradesh</option><option>Maharashtra</option><option>Manipur</option><option>Meghalaya</option><option>Mizoram</option><option>Nagaland</option><option>Odisha</option><option>Punjab</option><option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option><option>Telangana</option><option>Tripura</option><option>Uttar Pradesh</option><option>Uttarakhand</option><option>West Bengal</option><option>Other / Outside India</option></select>
 <label for="interest">What are you interested in? *</label><select id="interest" required><option value="">Choose an area</option><option>Content writing & script writing</option><option>Video editing & graphic design</option><option>Data entry & spreadsheet skills</option><option>Digital marketing & social media</option><option>AI tools & technology</option><option>Affiliate / referral programme information</option><option>General course information</option></select>
+<label for="package">Select a package *</label><select id="package" required><option value="">Choose a package or enquiry option</option><option value="Only want course / work details — no package selected">Only want course / work details — no package selected</option><option>Starter — ₹289</option><option>Intermediate — ₹560</option><option>Expert — ₹1,149</option><option>Master — ₹2,499</option><option>Brahmastra — ₹5,499</option><option>Premium Pro — ₹10,997</option></select>
+<p class="package-note">Package selection is only an enquiry preference. It does not place an order or require payment. Review the course contents, terms and any available work details independently before making a purchase. No job or income is guaranteed.</p>
 <label for="device">Available device *</label><select id="device" required><option value="">Select device</option><option>Smartphone</option><option>Laptop / Desktop</option><option>Both</option></select>
-<label for="message">Any question? (optional)</label><textarea id="message" rows="3" maxlength="500" placeholder="Write your question here"></textarea>
 <label class="check"><input type="checkbox" id="consent" required><span>I agree to share the details above with SMART MONEY through WhatsApp for this enquiry. I understand that income is not guaranteed; any paid work, eligibility, tasks and compensation must be explained and confirmed separately before I accept.</span></label>
 <button class="btn" type="submit">Continue to WhatsApp →</button><div class="err" id="error" role="alert"></div>
 </form><p class="note">Privacy: This form does not upload or store your details in a database. It opens WhatsApp with a draft message; review it and press Send yourself. Do not send passwords, OTPs, bank details, identity documents or payment to anyone for a job enquiry.</p>
@@ -35,7 +58,7 @@ document.getElementById('enquiryForm').addEventListener('submit',e=>{
  e.preventDefault();const err=document.getElementById('error');err.style.display='none';
  if(!/^\d{10,15}$/.test(target)){err.textContent='The SMART MONEY WhatsApp contact is not configured. Please request a fresh form link from the admin.';err.style.display='block';return}
  const val=id=>document.getElementById(id).value.trim();
- const msg=['SMART MONEY — NEW WORK & SKILLS ENQUIRY','', 'Full Name: '+val('name'),'Email: '+val('email'),'WhatsApp: '+val('phone'),'State: '+val('state'),'Interested In: '+val('interest'),'Device: '+val('device'),'Question: '+(val('message')||'Not provided'),'','Consent: User agreed to share these details for this enquiry.','Note: This is an enquiry only; no income or job guarantee is implied.'].join('\n');
+ const msg=['SMART MONEY — NEW WORK & SKILLS ENQUIRY','', 'Full Name: '+val('name'),'Email: '+val('email'),'WhatsApp: '+val('phone'),'State: '+val('state'),'Interested In: '+val('interest'),'Selected Package: '+val('package'),'Device: '+val('device'),'','Consent: User agreed to share these details for this enquiry.','Note: This is an enquiry only; no income or job guarantee is implied.'].join('\n');
  location.href='https://wa.me/'+target+'?text='+encodeURIComponent(msg);
 });
 </script></body></html>
