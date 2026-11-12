@@ -2924,53 +2924,19 @@ function initializeSupabaseClient(){
     // so a customer login on the same device could overwrite the admin session.
     const ADMIN_AUTH_STORAGE_KEY = "smart-money-admin-auth-v1";
 
-    // Use durable localStorage first, with a same-tab sessionStorage mirror.
-    // This protects refresh restores on mobile browsers where localStorage can
-    // be temporarily unavailable, without changing the Supabase auth identity.
-    const adminAuthStorage = {
-        getItem(key) {
-            try {
-                const durable = window.localStorage.getItem(key);
-                if (durable !== null) return durable;
-            } catch (storageReadError) {
-                console.warn("Admin localStorage read unavailable; checking sessionStorage.", storageReadError);
-            }
-            try { return window.sessionStorage.getItem(key); }
-            catch (sessionReadError) {
-                console.warn("Admin sessionStorage read unavailable.", sessionReadError);
-                return null;
-            }
-        },
-        setItem(key, value) {
-            let stored = false;
-            try { window.localStorage.setItem(key, value); stored = true; }
-            catch (storageWriteError) {
-                console.warn("Admin localStorage write unavailable; using sessionStorage.", storageWriteError);
-            }
-            try { window.sessionStorage.setItem(key, value); stored = true; }
-            catch (sessionWriteError) {
-                console.warn("Admin sessionStorage mirror unavailable.", sessionWriteError);
-            }
-            if (!stored) throw new Error("This browser is blocking storage required to keep the admin session.");
-        },
-        removeItem(key) {
-            try { window.localStorage.removeItem(key); } catch (_) {}
-            try { window.sessionStorage.removeItem(key); } catch (_) {}
-        }
-    };
+    // Use Supabase's native localStorage adapter for durable cross-refresh sessions.
+    // A custom storage wrapper previously caused inconsistent restore behavior on some Android browsers.
+    const adminAuthStorage = window.localStorage;
 
-    // Keep the same adapter accessible to the refresh-recovery routine below.
-    // Previously it was function-scoped, so recovery threw ReferenceError after refresh.
-    window.SM_ADMIN_AUTH_STORAGE = adminAuthStorage;
-
+    // Migrate an older default Supabase session only when it belongs to the configured admin.
     try {
         const existingAdminSession = adminAuthStorage.getItem(ADMIN_AUTH_STORAGE_KEY);
-        const legacySession = localStorage.getItem("sb-rvprrulkjegvicbnjuft-auth-token");
+        const legacySession = adminAuthStorage.getItem("sb-rvprrulkjegvicbnjuft-auth-token");
         if (!existingAdminSession && legacySession) {
             const parsed = JSON.parse(legacySession);
             const legacyUser = parsed?.user || parsed?.currentSession?.user;
             if (String(legacyUser?.email || "").trim().toLowerCase() === String(ADMIN_EMAIL).toLowerCase()) {
-                localStorage.setItem(ADMIN_AUTH_STORAGE_KEY, legacySession);
+                adminAuthStorage.setItem(ADMIN_AUTH_STORAGE_KEY, legacySession);
             }
         }
     } catch (storageMigrationError) {
@@ -2983,7 +2949,7 @@ function initializeSupabaseClient(){
         {
             auth: {
                 storageKey: ADMIN_AUTH_STORAGE_KEY,
-                storage: adminAuthStorage,
+                storage: window.localStorage,
                 persistSession: true,
                 autoRefreshToken: true,
                 detectSessionInUrl: true
@@ -3477,8 +3443,7 @@ async function checkAdminSession(){
     // still exists, hand that pair back to Supabase. Never trust it for authorization
     // without checking that the restored account is the configured admin.
     try{
-        const storage = window.SM_ADMIN_AUTH_STORAGE;
-        const raw = storage?.getItem(ADMIN_AUTH_STORAGE_KEY);
+        const raw = window.localStorage.getItem(ADMIN_AUTH_STORAGE_KEY);
         if(raw){
             const stored = JSON.parse(raw);
             const saved = stored?.currentSession || stored?.session || stored;
