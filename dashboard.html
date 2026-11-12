@@ -938,6 +938,12 @@ button{
 #smNetworkOverlay .sm-net-foot{margin:14px 0 0;color:#94a3b8;font-size:11px;line-height:1.5}
 @keyframes smSpin{to{transform:rotate(360deg)}}@keyframes smPulse{50%{opacity:.45;transform:scale(.82)}}@keyframes smFadeIn{from{opacity:0}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){#smNetworkOverlay *,#smNetworkOverlay *:before{animation:none!important;transition:none!important}}
+
+/* Wide official Smart Money artwork in the dashboard top navbar only */
+.navbar .navbar-brand-image{gap:0;flex:1;min-width:0;max-width:calc(100% - 112px)}
+.navbar #navBrandLogoImg{display:block;width:230px;height:64px;min-width:0;max-width:100%;object-fit:contain;object-position:left center;border:0;border-radius:0;background:transparent}
+.navbar .navbar-brand-image span{display:none}
+@media(max-width:600px){.navbar #navBrandLogoImg{width:205px;height:58px}}
 </style>
 </head>
 
@@ -1069,9 +1075,8 @@ button{
 
 <!-- NAVBAR -->
 <header class="navbar">
-    <a href="dashboard.html" class="brand-logo">
-        <img id="navBrandLogoImg" src="smart-money-logo-optimized.jpg" alt="Smart Money Logo">
-        <span>Smart Money</span>
+    <a href="dashboard.html" class="brand-logo navbar-brand-image" aria-label="Smart Money">
+        <img id="navBrandLogoImg" src="smart-money-header-logo.jpg?v=1" alt="Smart Money — Learn, Grow, Be Smart">
     </a>
     <div class="nav-right">
         <a href="index.html" class="nav-home-btn">🌐 Home</a>
