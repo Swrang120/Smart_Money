@@ -651,6 +651,77 @@ button{
 .bg-alltime{ background:linear-gradient(135deg,#0284c7,#075985); }
 .bg-passive{ background:linear-gradient(135deg,#d97706,#b45309); }
 
+/* PREMIUM MICRO-ANIMATIONS — earnings cards */
+.stats-stack .v-card{
+    isolation:isolate;
+    transform:translateY(14px);
+    opacity:0;
+    animation:smRevenueEnter .7s cubic-bezier(.2,.75,.25,1) forwards;
+    transition:transform .28s ease,box-shadow .28s ease,filter .28s ease;
+}
+.stats-stack .v-card:nth-child(1){animation-delay:.06s}
+.stats-stack .v-card:nth-child(2){animation-delay:.14s}
+.stats-stack .v-card:nth-child(3){animation-delay:.22s}
+.stats-stack .v-card:nth-child(4){animation-delay:.30s}
+.stats-stack .v-card:nth-child(5){animation-delay:.38s}
+.stats-stack .v-card:before{
+    content:"";
+    position:absolute;
+    z-index:0;
+    top:-35%;
+    left:-75%;
+    width:42%;
+    height:170%;
+    pointer-events:none;
+    transform:skewX(-18deg);
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),transparent);
+    animation:smRevenueShimmer 5.8s ease-in-out infinite;
+}
+.stats-stack .v-card:nth-child(2):before{animation-delay:.6s}
+.stats-stack .v-card:nth-child(3):before{animation-delay:1.2s}
+.stats-stack .v-card:nth-child(4):before{animation-delay:1.8s}
+.stats-stack .v-card:nth-child(5):before{animation-delay:2.4s}
+.stats-stack .v-card:after{
+    animation:smRevenueOrb 7s ease-in-out infinite alternate;
+    pointer-events:none;
+}
+.stats-stack .v-card > *{position:relative;z-index:1}
+.stats-stack .v-card h2{
+    animation:smRevenueTextIn .65s ease-out both;
+    animation-delay:.22s;
+}
+@keyframes smRevenueEnter{
+    to{opacity:1;transform:translateY(0)}
+}
+@keyframes smRevenueShimmer{
+    0%,58%{left:-75%;opacity:0}
+    66%{opacity:1}
+    88%,100%{left:140%;opacity:0}
+}
+@keyframes smRevenueOrb{
+    from{transform:translate3d(0,0,0) scale(1)}
+    to{transform:translate3d(-13px,10px,0) scale(1.13)}
+}
+@keyframes smRevenueTextIn{
+    from{opacity:.45;transform:translateY(7px)}
+    to{opacity:1;transform:translateY(0)}
+}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
+    .stats-stack .v-card:hover{
+        transform:translateY(-4px);
+        box-shadow:0 16px 34px rgba(15,23,42,.2);
+        filter:saturate(1.08);
+    }
+}
+@media (prefers-reduced-motion:reduce){
+    .stats-stack .v-card,.stats-stack .v-card:before,.stats-stack .v-card:after,.stats-stack .v-card h2{
+        animation:none!important;
+        opacity:1!important;
+        transform:none!important;
+        transition:none!important;
+    }
+}
+
 /* REFERRALS */
 .section-box{
     background:#fff;
