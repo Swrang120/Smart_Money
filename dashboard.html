@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -526,6 +527,116 @@ button{
     cursor:pointer;
 }
 
+/* PREMIUM SMART MONEY PROFILE CARD */
+.profile-card{
+    min-height:204px;
+    padding:28px 30px;
+    gap:25px;
+    border-radius:24px;
+    background:
+      radial-gradient(circle at 92% 12%,rgba(168,85,247,.14),transparent 27%),
+      linear-gradient(120deg,#ffffff 0%,#fbfaff 52%,#f0ebff 100%);
+    border:1px solid rgba(124,58,237,.18);
+    box-shadow:0 16px 38px rgba(35,24,70,.10),inset 0 1px 0 rgba(255,255,255,.95);
+}
+.profile-card:before{
+    content:"";
+    position:absolute;
+    left:0;top:18px;bottom:18px;
+    width:5px;
+    border-radius:0 8px 8px 0;
+    background:linear-gradient(180deg,#f5b942,#9b5cf6,#2878ef);
+}
+.profile-card:after{
+    content:"";
+    position:absolute;
+    width:190px;height:190px;
+    right:-72px;bottom:-118px;
+    border:1px solid rgba(124,58,237,.13);
+    border-radius:50%;
+    box-shadow:0 0 0 18px rgba(124,58,237,.025),0 0 0 38px rgba(124,58,237,.02);
+    pointer-events:none;
+}
+.profile-card,.profile-card *{
+    font-family:'Roboto',Arial,sans-serif !important;
+    text-transform:uppercase;
+}
+.profile-img-wrap{
+    position:relative;
+    z-index:1;
+    width:108px;height:108px;min-width:108px;
+    padding:4px;
+    border:2px solid transparent;
+    background:linear-gradient(#fff,#fff) padding-box,linear-gradient(145deg,#f6c453,#8b5cf6,#2563eb) border-box;
+    box-shadow:0 9px 25px rgba(67,43,130,.20),0 0 0 5px rgba(124,58,237,.06);
+}
+.profile-img{border:2px solid #fff;}
+.user-info{position:relative;z-index:1;gap:12px;}
+.profile-info-row{gap:5px;}
+.profile-label{
+    color:#7c8497;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1.7px;
+}
+.user-info h2{
+    color:#111827;
+    font-size:clamp(21px,3vw,29px);
+    font-weight:900;
+    letter-spacing:.35px;
+    line-height:1.18;
+}
+.profile-value{
+    color:#475569;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:.45px;
+}
+.id-value{
+    color:#7138d4;
+    font-size:15px;
+    font-weight:900;
+    letter-spacing:.6px;
+}
+.package-badge{
+    z-index:2;
+    padding:9px 18px 9px 20px;
+    border-bottom-left-radius:15px;
+    background:linear-gradient(110deg,#f4b12f,#ec4899);
+    box-shadow:0 5px 14px rgba(236,72,153,.18);
+    font-size:9px;
+    font-weight:900;
+    letter-spacing:1px;
+}
+.copy-btn{
+    padding:7px 12px;
+    border:1px solid rgba(124,58,237,.16);
+    border-radius:9px;
+    background:linear-gradient(135deg,#f3e8ff,#e9ddff);
+    color:#6d28d9;
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.7px;
+    box-shadow:0 3px 9px rgba(124,58,237,.08);
+}
+.copy-btn:active{transform:scale(.97);}
+@media(max-width:600px){
+    .profile-card{min-height:174px;padding:25px 16px 22px 20px;gap:14px;border-radius:20px;}
+    .profile-img-wrap{width:82px;height:82px;min-width:82px;}
+    .user-info{gap:10px;}
+    .user-info h2{font-size:clamp(18px,5vw,23px);letter-spacing:0;}
+    .profile-label{font-size:9px;letter-spacing:1.3px;}
+    .profile-value,.id-value{font-size:12px;letter-spacing:.2px;}
+    .id-value-wrap{gap:6px;flex-wrap:wrap;}
+    .copy-btn{padding:6px 9px;font-size:9px;}
+    .package-badge{font-size:8px;padding:8px 11px;letter-spacing:.6px;}
+}
+@media(max-width:360px){
+    .profile-card{gap:10px;padding-left:14px;}
+    .profile-img-wrap{width:70px;height:70px;min-width:70px;}
+    .user-info h2{font-size:17px;}
+}
+ 
 /* ADMIN STATUS */
 .admin-status{
     background:#fff;
