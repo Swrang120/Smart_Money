@@ -821,6 +821,12 @@
     </button>
 
 
+
+    <button type="button" class="social-btn" id="googleLoginBtn" onclick="signInWithGoogle()" style="width:100%;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #dbe2ea;border-radius:12px;padding:13px;background:#fff;color:#202124;font-weight:750;cursor:pointer">
+      <span aria-hidden="true" style="font-size:18px;font-weight:900">G</span><span>Continue with Google</span>
+    </button>
+    <p id="googleLoginMessage" style="display:none;margin:9px 0 0;color:#b4233b;font-size:12px"></p>
+
     <!-- Social sign-in is intentionally limited to Skill Academy. -->
 
 
@@ -1665,6 +1671,30 @@
     /* =====================================================
        GOOGLE / APPLE LOGIN
     ===================================================== */
+
+    /* =====================================================
+       GOOGLE OAUTH — EXISTING SMART MONEY SUPABASE PROJECT
+    ===================================================== */
+    async function signInWithGoogle(){
+      const button=document.getElementById("googleLoginBtn");
+      const message=document.getElementById("googleLoginMessage");
+      if(button){button.disabled=true;button.style.opacity=".65";}
+      if(message){message.style.display="none";message.textContent="";}
+      try{
+        const params=new URLSearchParams(window.location.search);
+        const requested=params.get("next")||"/dashboard.html";
+        const safeNext=requested.startsWith("/")&&!requested.startsWith("//")?requested:"/dashboard.html";
+        const {error}=await supabaseClient.auth.signInWithOAuth({
+          provider:"google",
+          options:{redirectTo:window.location.origin+safeNext,queryParams:{prompt:"select_account"}}
+        });
+        if(error)throw error;
+      }catch(error){
+        console.error("Google sign-in failed:",error);
+        if(message){message.textContent=error.message||"Google sign-in could not start. Please try again.";message.style.display="block";}
+        if(button){button.disabled=false;button.style.opacity="1";}
+      }
+    }
 
     /* =====================================================
        EXISTING SESSION CHECK
