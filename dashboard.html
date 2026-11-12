@@ -1849,14 +1849,32 @@ async function removeProfilePicture(){
     }
 }
 
-/* DASHBOARD HEADER LOGO — use the exact image uploaded in Admin > Homepage Header Logo,
-   matching index.html's package_images.smart_money_logo source. */
+/* DASHBOARD HEADER LOGO — show cached Admin upload immediately, then refresh from Supabase. */
 async function loadGlobalTopLogo(){
     const navLogo = document.getElementById("navBrandLogoImg");
-    if(!navLogo || !supabaseClient) return;
+    if(!navLogo) return;
+
+    const cacheKey = "smart_money_dashboard_header_logo_url";
+    const applyLogo = (url) => {
+        const cleanUrl = String(url || "").trim();
+        if(!cleanUrl) return;
+        navLogo.loading = "eager";
+        navLogo.decoding = "async";
+        navLogo.fetchPriority = "high";
+        navLogo.alt = "Smart Money";
+        // Keep the original public URL stable so the browser/CDN can cache the image.
+        if(navLogo.src !== cleanUrl) navLogo.src = cleanUrl;
+    };
+
+    // Fast first paint on repeat visits; the database remains the source of truth.
+    try {
+        const cachedUrl = localStorage.getItem(cacheKey);
+        if(cachedUrl) applyLogo(cachedUrl);
+    } catch(e) {}
+
+    if(!supabaseClient) return;
 
     try{
-        // This is the same source of truth used by index.html.
         const { data, error } = await supabaseClient
             .from("package_images")
             .select("image_url")
@@ -1867,36 +1885,21 @@ async function loadGlobalTopLogo(){
 
         const uploadedUrl = String(data?.image_url || "").trim();
         if(uploadedUrl){
-            navLogo.onload = () => {
-                navLogo.style.visibility = "visible";
-            };
-            navLogo.onerror = () => {
-                navLogo.style.visibility = "visible";
-                console.warn("Admin-uploaded Smart Money header logo could not be loaded.");
-            };
-            // Cache-bust without changing the stored public URL.
-            const separator = uploadedUrl.includes("?") ? "&" : "?";
-            navLogo.src = uploadedUrl + separator + "dashboard_header=" + Date.now();
-            navLogo.alt = "Smart Money";
-            return;
-        }
-
-        // Legacy fallback only when no homepage header image has been uploaded.
-        const { data: legacy } = await supabaseClient
-            .from("global_settings")
-            .select("setting_value")
-            .eq("setting_key", "admin_top_logo")
-            .maybeSingle();
-
-        if(legacy?.setting_value){
-            navLogo.src = legacy.setting_value;
-            navLogo.alt = "Smart Money";
+            try { localStorage.setItem(cacheKey, uploadedUrl); } catch(e) {}
+            applyLogo(uploadedUrl);
+        } else {
+            // Legacy fallback only if no Homepage Header Logo has been uploaded.
+            const { data: legacy } = await supabaseClient
+                .from("global_settings")
+                .select("setting_value")
+                .eq("setting_key", "admin_top_logo")
+                .maybeSingle();
+            if(legacy?.setting_value) applyLogo(legacy.setting_value);
         }
     }catch(e){
-        console.warn("Dashboard header logo load failed:", e);
+        console.warn("Dashboard header logo refresh failed:", e);
     }
 }
-
 /* PERMANENT USER ID / REFERRAL CODE */
 function generateReferralCode(){
     return "SM-smart" + Math.floor(10000 + Math.random() * 90000);
