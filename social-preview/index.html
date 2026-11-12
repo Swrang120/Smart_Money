@@ -132,7 +132,7 @@ async function applyAuthSession(user){
   $('accessNotice').textContent=canPublish?'Your Social account is active. You can publish posts and stories.':'You can view the entire community and interact. Posting photos, videos and stories unlocks after Social admin approval.';
   await loadSocialData();
   subscribeSocialRealtime();
- }catch(e){console.error('Social startup failed':,e);showToast('Could not load Social: '+(e.message||'Please refresh.'));document.body.classList.add('authenticated');$('authScreen').style.display='none';}finally{authCheckInProgress=false;}
+ }catch(e){console.error('Social startup failed:',e);showToast('Could not load Social: '+(e.message||'Please refresh.'));document.body.classList.add('authenticated');$('authScreen').style.display='none';}finally{authCheckInProgress=false;}
 }
 async function logout(){try{if(socialRealtimeChannel){await supabaseClient.removeChannel(socialRealtimeChannel);socialRealtimeChannel=null;}const {error}=await supabaseClient.auth.signOut();if(error)throw error;authUser=null;showSmartMoneyLogin();}catch(e){showToast(e.message||'Logout failed');}}
 supabaseClient.auth.onAuthStateChange((event,session)=>{if(session?.user)setTimeout(()=>applyAuthSession(session.user),0);else if(event==='SIGNED_OUT'){authUser=null;showSmartMoneyLogin();}});
