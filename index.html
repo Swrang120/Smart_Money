@@ -8302,7 +8302,7 @@ async function loadPublicPackageImages(){
  if(!window.supabase||!supabaseClient)return;
  try{
   const {data,error}=await supabaseClient.from("package_images").select("package_key,image_url");if(error)throw error;
-  const keys={"starter package":"starter","intermediate":"intermediate","intermediate package":"intermediate","expert package":"expert","master":"master","brahmastra":"brahmastra","brahmastra package":"brahmastra","premium pro":"premium_pro","premium pro package":"premium_pro"};
+  const keys={"starter package":"starter","intermediate":"intermediate","intermediate package":"intermediate","expert package":"expert","master":"master","master package":"master","brahmastra":"brahmastra","brahmastra package":"brahmastra","premium pro":"premium_pro","premium pro package":"premium_pro"};
   const urls={};(data||[]).forEach(r=>{if(r.image_url)urls[r.package_key]=r.image_url;});
   // Homepage logo uses the exact image uploaded in Admin Panel.
   if(urls.smart_money_logo){
