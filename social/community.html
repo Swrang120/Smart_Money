@@ -15,6 +15,78 @@ body.auth-screen #login>p{text-align:center;font-size:14px;line-height:1.6;margi
 body.auth-screen #login .notice{padding:13px 15px;border:1px solid #ece9ff;background:#f7f5ff;border-radius:14px;line-height:1.6}
 body.auth-screen #login button{min-height:54px;border-radius:15px;font-size:15px;box-shadow:0 9px 22px #6655c733}
 @media(max-width:480px){body.auth-screen #login{margin-top:clamp(55px,13vh,110px);padding:27px 20px}}
+
+/* SMART MONEY SOCIAL — premium purple & gold redesign */
+:root{--bg:#080616;--card:#15102b;--ink:#f7f3ff;--muted:#b6accd;--line:#33264e;--violet:#8b4dff;--soft:#261843;--red:#ff647d}
+html{background:#080616;scroll-behavior:smooth}
+body{background:radial-gradient(ellipse at 12% -8%,#32136a 0,transparent 38%),radial-gradient(ellipse at 100% 30%,#17104a 0,transparent 34%),#080616;color:var(--ink);min-height:100vh}
+.top{background:#0c0820eF;border-bottom:1px solid #39265c;box-shadow:0 10px 35px #0006}
+.topin{max-width:1240px;padding:14px 20px}
+.brand{font-size:18px;color:#fff;letter-spacing:.8px}
+.brand:before{content:'♛';display:inline-grid;place-items:center;width:34px;height:34px;margin-right:10px;border-radius:11px;background:linear-gradient(145deg,#ffe28a,#bd7a12);color:#291344;font-size:21px;vertical-align:middle;box-shadow:0 5px 18px #f5b93b44}
+.brand span{margin-left:44px;color:#d6b96f;font-size:9px}
+.wrap{max-width:1240px;padding:22px}
+.grid{grid-template-columns:310px minmax(0,1fr);gap:22px;margin-top:22px}
+.card{background:linear-gradient(155deg,#1b1434,#100c22);border:1px solid #3a2a58;border-radius:22px;padding:20px;box-shadow:0 16px 45px #0005,inset 0 1px #ffffff08}
+h2,h3{color:#fff;letter-spacing:-.35px}
+h2{font-size:25px}
+h3{font-size:18px}
+.muted{color:#b9afcf}
+.tiny{font-size:12px}
+button{border-radius:13px;transition:transform .18s ease,filter .18s ease,box-shadow .18s ease}
+button:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.primary{background:linear-gradient(110deg,#ffe08a,#e8a82c 52%,#bd7913);color:#26133c;font-weight:850;box-shadow:0 9px 24px #d99b2940}
+.soft{background:#2b1b49;color:#f5dc9b;border:1px solid #60448a}
+.danger{background:#3a172c;color:#ff9bad;border:1px solid #71334c}
+.search,.field input,.field textarea,.field select,.composer input{background:#0d0920;border:1px solid #47335f;color:#fff;border-radius:13px}
+.search::placeholder,.composer input::placeholder,.field input::placeholder{color:#887b9e}
+.field label{color:#d2c3e9}
+.notice{background:#211638;border:1px solid #4a3470;color:#dfd1f6;border-radius:14px}
+.person{border-bottom-color:#35264e}
+.chatitem{background:#100b22;border-color:#3a2a58;color:#f5efff}
+.chatitem.active{border-color:#d4a13c;background:#2a1d3c}
+.chatbox{background:#0c081b;border-color:#3b2a59}
+.bubble{background:#302344;color:#f8f1ff}
+.bubble.mine{background:linear-gradient(130deg,#7d43df,#5125a3);color:white}
+.profile-cover{height:220px;border-radius:17px;background:linear-gradient(120deg,#28104d,#6638a7 55%,#e1ad47);border:1px solid #73518c;box-shadow:inset 0 -45px 80px #10072288}
+.profile-cover button{background:#fff0c9;color:#38204b;font-weight:800}
+.profilehead{padding:0 16px;gap:16px}
+.profilehead .avatar{border:4px solid #17102c;box-shadow:0 0 0 2px #d6a33e}
+.avatar{background:linear-gradient(135deg,#ffe49b,#b87a1a);color:#2a1742}
+.stats{border-top:1px solid #35264e;margin-top:16px}
+.stats b{color:#f6d78c;font-size:22px}
+.link{color:#e6bd66}
+.tabs button.active{background:#51318a;color:#ffe29a}
+.empty{color:#b7a9cd}
+.composer input{min-height:46px}
+#login.card{background:linear-gradient(155deg,#211344,#100a26 65%,#28174b);border:1px solid #674a8e;box-shadow:0 28px 90px #0009,0 0 50px #7439d52b}
+body.auth-screen{background:radial-gradient(ellipse at 50% 8%,#482078 0,transparent 42%),radial-gradient(ellipse at 100% 100%,#31204e 0,transparent 40%),#080616}
+body.auth-screen #login{margin:clamp(48px,10vh,100px) auto 30px;padding:34px 28px;border-radius:28px}
+body.auth-screen #login:before{content:'♛';width:76px;height:76px;border-radius:24px;background:linear-gradient(145deg,#ffe59b,#d39320 65%,#8f5311);color:#30164a;font-size:39px;box-shadow:0 12px 32px #d89d3b55}
+body.auth-screen #login h2{font-size:29px;background:linear-gradient(90deg,#fff,#f4d78e);-webkit-background-clip:text;background-clip:text;color:transparent}
+body.auth-screen #login>p{color:#c7bbdc}
+body.auth-screen #login .notice{background:#24173b;border-color:#4b3670;color:#dfd2f3}
+body.auth-screen #login button{min-height:58px;font-size:16px}
+#login .primary{width:100%;margin-top:8px}
+#profilePane>.card:first-child{overflow:hidden}
+@media(max-width:760px){
+ .topin{padding:11px 13px;flex-wrap:wrap}
+ .brand{font-size:15px}
+ .brand span{margin-left:43px}
+ .topin>.actions{width:100%;overflow:auto;flex-wrap:nowrap}
+ .topin>.actions button{white-space:nowrap;padding:9px 11px;font-size:12px}
+ .grid{grid-template-columns:1fr;gap:12px;margin-top:12px}
+ .wrap{padding:10px}
+ .card{padding:15px;border-radius:18px}
+ .profile-cover{height:155px}
+ .profilehead{padding:0 8px;gap:10px}
+ .profilehead .avatar{width:74px;height:74px}
+ .stats{justify-content:space-around;gap:8px;padding:13px 5px}
+ .stats b{font-size:19px}
+ .auth{width:calc(100% - 24px)}
+ body.auth-screen #login{margin-top:clamp(42px,9vh,80px);padding:28px 20px}
+}
+
 </style></head><body class="auth-screen">
 <header class="top"><div class="topin"><div class="brand">SMART MONEY SOCIAL<span>COMMUNITY · PROFILE · MESSAGES</span></div><div class="actions"><button class="soft" onclick="showPane('profile')">My Profile</button><button class="soft" onclick="showPane('messages')">Messages</button><button class="soft" onclick="logout()">Logout</button></div></div></header>
 <section id="login" class="card auth"><h2>Social Community</h2><p class="muted">Sign in with your separate Smart Money Social Google session.</p><div class="notice">This community preview uses your existing Social Google login, not the main Smart Money login.</div><button class="primary" style="width:100%" onclick="login()">Continue with Google</button></section>
