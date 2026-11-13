@@ -53,6 +53,39 @@ body.authenticated .auth-screen{display:none}
 body.authenticated .app{display:block}
 body.authenticated .mobile-nav{display:flex}
 @media(min-width:681px){body.authenticated .mobile-nav{display:none}}
+
+/* SMART MONEY SOCIAL — cohesive premium violet UI v2 */
+:root{--bg:#f4f5fb;--panel:#fff;--panel2:#f3efff;--line:#e8e5f1;--text:#28253d;--muted:#77748d;--gold:#7653d5;--gold2:#8d68eb;--blue:#4e79dc;--red:#df5472;--green:#289b78;--radius:20px}
+html,body{background:#f4f5fb!important;color:#28253d!important}
+body{background:radial-gradient(ellipse at 8% 0%,#e9e1ff 0,transparent 34%),radial-gradient(ellipse at 94% 10%,#deebff 0,transparent 32%),linear-gradient(180deg,#f8f8ff,#f1f3fa)!important}
+.app{max-width:1320px!important;padding:18px 24px 112px!important}
+.top{background:#ffffffed!important;border-bottom:1px solid #e8e5f1!important;box-shadow:0 8px 28px #30205d0c!important}
+.brand{color:#292540!important}.logo{background:linear-gradient(145deg,#a78bfa,#6843ca)!important;box-shadow:0 7px 20px #7855d933!important}
+.layout{grid-template-columns:240px minmax(0,680px) 280px!important;gap:22px!important}
+.card{background:linear-gradient(155deg,#fff,#fcfbff)!important;border:1px solid #e8e5f1!important;border-radius:20px!important;box-shadow:0 12px 34px #32215d0a,0 2px 6px #32215d05!important}
+.nav button{border-radius:14px!important;color:#716c86!important}.nav button.active,.nav button:hover{background:#f1edff!important;color:#6849c5!important}
+.primary{background:linear-gradient(120deg,#9d7af5,#7049d0)!important;color:#fff!important;box-shadow:0 9px 22px #7955d52b!important;border:0!important}
+.soft,.pill,.iconbtn,.tab,.filter{background:#f7f5fc!important;border:1px solid #e8e4f1!important;color:#625a79!important}
+.filter.active{background:linear-gradient(120deg,#9d7af5,#7049d0)!important;color:#fff!important;border:0!important}
+.muted{color:#77748d!important}.tiny{color:#77748d!important}
+.story-ring{background:linear-gradient(135deg,#9b70f0,#6f4bd0,#76a9ec)!important}.story-ring .avatar{border:2px solid #fff!important}
+.composer input,.commentbox input,.field input,.field textarea,.field select{background:#fbfaff!important;border:1px solid #e5e1ef!important;color:#28253d!important;border-radius:14px!important}
+.post{overflow:hidden!important}.post-head{gap:12px!important}.post-text{color:#34304a!important;line-height:1.7!important}.post-media{background:#f4f3f9!important;border:1px solid #eeeaf5!important;border-radius:15px!important}
+.post-actions{border-top:1px solid #eeeaf5!important}.action{color:#746e87!important}.action:hover{background:#f3efff!important;color:#6849c5!important}
+.action.liked{color:#e64d79!important}.action.saved{color:#7653d5!important}
+.comment{border-top:1px solid #eeeaf5!important;color:#4e4962!important}
+.badge{background:#f1edff!important;color:#6849c5!important;border-color:#e2d9ff!important}
+.stat{background:#f8f7fc!important;border-color:#e9e5f1!important}.stat b{color:#7653d5!important}
+.follow{border-color:#ded4fb!important;color:#6849c5!important;background:#f4f0ff!important}.follow.on{background:#edf4ff!important;color:#4777d1!important;border-color:#d8e5ff!important}
+.profile-cover{background:linear-gradient(115deg,#c8d7ff,#bba8ef 48%,#f1d9c4)!important;border:1px solid #ddd5f0!important;box-shadow:inset 0 -55px 80px #29204418!important}
+.profile-main .avatar{border:4px solid #fff!important;box-shadow:0 4px 20px #2e205522!important}
+.profile-stats{border-top:1px solid #eeeaf5!important}.profile-stats b{color:#6849c5!important}
+.modal{background:#fff!important;border:1px solid #e8e3f2!important;box-shadow:0 25px 90px #25184922!important;color:#28253d!important}
+.modal h3{color:#292540!important}.field label{color:#655d7c!important;font-weight:700!important}
+.preview-note{background:#f5f1ff!important;border:1px dashed #c8b8f3!important;color:#594a8d!important}
+.toast{background:linear-gradient(120deg,#8d68eb,#6849c5)!important;box-shadow:0 8px 28px #50319a33!important}
+@media(max-width:1050px){.layout{grid-template-columns:210px minmax(0,1fr)!important;gap:16px!important}}
+@media(max-width:680px){.app{padding:0 10px 104px!important}.top{height:60px!important}.layout{grid-template-columns:1fr!important;gap:12px!important;padding-top:13px!important}.card{border-radius:17px!important;padding:14px!important}.mobile-nav{background:#ffffffed!important;border:1px solid #e7e3f1!important;border-radius:19px 19px 0 0!important;box-shadow:0 -8px 28px #2c205018!important;backdrop-filter:blur(18px)!important;padding-bottom:calc(7px + env(safe-area-inset-bottom))!important}.mobile-nav button{color:#77718d!important}.mobile-nav button.active{color:#6849c5!important;background:#f1edff!important;border-radius:13px!important}.profile-cover{height:145px!important}.profile-main .avatar{width:78px!important;height:78px!important;border-color:#fff!important}.profile-stats{justify-content:space-around!important;gap:8px!important}.composer{gap:9px!important}.post-actions{gap:0!important}.action{padding:9px 7px!important}.action span{font-size:11px!important}}
 </style></head>
 <body>
 <section class="auth-screen" id="authScreen"><div class="auth-card">
