@@ -306,6 +306,47 @@ body.auth-screen #login button{box-shadow:0 8px 20px #39234418!important}
 .community-bottom-nav button:focus,.community-bottom-nav button:hover{color:#a77a3e!important;background:#faf6fb!important}
 @media(max-width:760px){.wrap{padding:10px!important}.grid{grid-template-columns:1fr!important;gap:12px!important;margin-top:12px!important}.card{padding:15px!important;border-radius:18px!important}.profile-cover{height:165px!important}.topin{padding:11px 13px!important}.brand{font-size:15px!important}.stats{justify-content:space-around!important;gap:8px!important}.stats b{font-size:19px!important}.chatbox{height:55vh!important}}
 
+
+/* SIGNATURE EDITION — matching midnight emerald, pearl and champagne */
+:root{--bg:#f4f2eb;--card:#fffdf8;--ink:#172b25;--muted:#718078;--line:#e4dfd1;--violet:#1e5b45;--soft:#eaf0e8;--red:#c95b62}
+html{background:#f4f2eb}
+body{background:radial-gradient(ellipse at 8% 0%,#e9dfc7 0,transparent 34%),radial-gradient(ellipse at 100% 20%,#dce9df 0,transparent 34%),#f4f2eb;color:#172b25}
+.top{background:#102b24f2;border-bottom:1px solid #c5a45d66;box-shadow:0 12px 32px #13281f20}
+.topin{max-width:1260px;padding:15px 22px}
+.brand{color:#fff;font-size:18px;letter-spacing:1px}
+.brand span{color:#dfc17b}
+.brand:before{background:linear-gradient(145deg,#f2d994,#a97b32);color:#18372b;box-shadow:0 6px 22px #d5b36a44}
+.wrap{max-width:1260px;padding:24px}
+.grid{grid-template-columns:300px minmax(0,1fr);gap:23px}
+.card{background:linear-gradient(160deg,#fffefb,#f8f5ec);border:1px solid #e6dfcf;border-radius:22px;box-shadow:0 12px 34px #20392c0c,0 2px 5px #20392c08}
+.profile-cover{background:linear-gradient(115deg,#102f26,#28634d 52%,#d1ad67)!important;border:1px solid #c7a45f55}
+.avatar{background:linear-gradient(145deg,#d9bd7a,#2c7058);color:#fff;border:4px solid #fff}
+.profilehead .avatar{box-shadow:0 8px 22px #173b2b25}
+h2,h3{color:#173d30}
+.muted{color:#718078}
+.primary{background:linear-gradient(135deg,#cba65d,#a77b35)!important;color:#172b25!important;border:1px solid #e3c985!important;box-shadow:0 8px 20px #a77b3530;font-weight:850}
+.soft{background:#eaf0e8;color:#245b46;border:1px solid #d5e1d4}
+.danger{background:#fff0ef;color:#b34f52}
+.field input,.field textarea,.field select,.search,.composer input{background:#faf9f4;border:1px solid #e4dfd2;color:#1b3028;border-radius:13px}
+.field input:focus,.field textarea:focus,.field select:focus,.search:focus{outline:2px solid #c9aa6a55;border-color:#b58a43}
+.notice{background:#f4efdf;color:#725526;border:1px solid #e8d9b7;border-radius:14px}
+.tabs button{background:#f2f0e8;color:#65766d}
+.tabs button.active{background:#173e32;color:#f5dfaa}
+.chatitem{background:#f7f7f0;border:1px solid #e6e2d6;color:#23382e}
+.chatitem.active{background:#eaf0e8;border-color:#a9c3ae}
+.chatbox{background:#f8f8f2;border:1px solid #e4dfd2}
+.bubble{background:#e9eee7;color:#20392d;border:1px solid #dce6da}
+.bubble.mine{background:#173e32;color:#fff7e7;border-color:#285d49}
+.person{border-color:#ece6d9}
+.link{color:#946d2f}
+body.auth-screen{background:radial-gradient(ellipse at 12% 8%,#e9dfc7 0,transparent 38%),radial-gradient(ellipse at 90% 90%,#dce9df 0,transparent 40%),#f4f2eb}
+body.auth-screen #login{border:1px solid #e6dfcf;box-shadow:0 24px 70px #173b2b18;background:#fffdf8}
+body.auth-screen #login:before{background:linear-gradient(145deg,#f2d994,#a97b32);color:#18372b;box-shadow:0 10px 24px #b58a4344}
+body.auth-screen #login h2{color:#173d30}
+body.auth-screen #login .notice{border-color:#e8d9b7;background:#f4efdf;color:#725526}
+body.auth-screen #login button{box-shadow:0 9px 22px #a77b3533}
+@media(max-width:760px){.wrap{padding:12px}.grid{grid-template-columns:1fr;gap:14px}.topin{padding:12px}.chatbox{height:55vh}.card{border-radius:18px}}
+
 </style></head><body class="auth-screen">
 <header class="top"><div class="topin"><div class="brand">SMART MONEY SOCIAL<span>COMMUNITY · PROFILE · MESSAGES</span></div><div class="actions"><button class="soft" onclick="location.href=SOCIAL_BASE">Open Social Feed</button><button class="soft" onclick="showPane('profile')">My Profile</button><button class="soft" onclick="showPane('messages')">Messages</button><button class="soft" onclick="logout()">Logout</button></div></div></header>
 <section id="login" class="card auth"><h2>Social Community</h2><p class="muted">Sign in with your separate Smart Money Social Google session.</p><div class="notice">This community preview uses your existing Social Google login, not the main Smart Money login.</div><button class="primary" style="width:100%" onclick="login()">Continue with Google</button></section>
