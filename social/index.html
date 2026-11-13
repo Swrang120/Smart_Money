@@ -140,13 +140,14 @@ async function applyAuthSession(user){
   $('accountPill').textContent=user.email||'Smart Money Account';
   $('sideName').textContent=profile.display_name||profile.username||'Community Member';
   $('accessNotice').textContent=canPublish?'Your Social account is active. You can publish posts and stories.':'You can publish photos, videos and stories. New posts and stories are reviewed by Social admins before public display.';
-  await loadSocialData();
-  subscribeSocialRealtime();
-  // OAuth callback uses the already-allowlisted /social/ URL, then returns to Community.
+  // Return to Community as soon as the Social session/profile is ready.
+  // Feed/RLS errors must not trap the OAuth callback page.
   if(new URLSearchParams(location.search).get('openCommunity')==='1'){
    location.replace(window.location.origin+'/social/community.html');
    return;
   }
+  await loadSocialData();
+  subscribeSocialRealtime();
  }catch(e){console.error('Social startup failed:',e);showToast('Could not load Social: '+(e.message||'Please refresh.'));document.body.classList.add('authenticated');$('authScreen').style.display='none';}finally{authCheckInProgress=false;}
 }
 async function logout(){try{if(socialRealtimeChannel){await supabaseClient.removeChannel(socialRealtimeChannel);socialRealtimeChannel=null;}const {error}=await supabaseClient.auth.signOut({scope:'local'});if(error)throw error;authUser=null;showSmartMoneyLogin();}catch(e){showToast(e.message||'Logout failed');}}
