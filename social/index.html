@@ -142,7 +142,8 @@ async function applyAuthSession(user){
   $('accessNotice').textContent=canPublish?'Your Social account is active. You can publish posts and stories.':'You can publish photos, videos and stories. New posts and stories are reviewed by Social admins before public display.';
   // Return to Community as soon as the Social session/profile is ready.
   // Feed/RLS errors must not trap the OAuth callback page.
-  if(new URLSearchParams(location.search).get('openCommunity')==='1'){
+  if(new URLSearchParams(location.search).get('openCommunity')==='1'||localStorage.getItem('sm_social_open_community_after_oauth')==='1'){
+   localStorage.removeItem('sm_social_open_community_after_oauth');
    location.replace(window.location.origin+'/social/community.html');
    return;
   }
