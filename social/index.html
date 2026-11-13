@@ -182,7 +182,7 @@ body{background:radial-gradient(ellipse at 4% 0%,#eee2f0 0,transparent 36%),radi
 <div class="app">
 <header class="top"><div class="brand"><div class="logo">S</div><div>SMART MONEY <small>SOCIAL COMMUNITY</small></div></div><div class="top-actions"><span class="pill tiny" id="accountPill">Signed in</span><button class="iconbtn" onclick="showView('notifications')" title="Notifications">♧</button><button class="iconbtn" onclick="openProfile()" title="Profile">👤</button><button class="soft tiny" onclick="logout()" title="Logout">Logout ↗</button></div></header>
 <div class="layout">
-<aside class="side"><div class="card"><div class="side-profile"><div class="avatar" id="sideAvatar">S</div><div><b id="sideName">Swrang Creator</b><div class="tiny muted">Smart Money member</div></div></div><nav class="nav" id="sideNav"><button class="active" data-view="home" onclick="showView('home')"><span class="ico">⌂</span> Home Feed</button><button data-view="explore" onclick="showView('explore')"><span class="ico">⌕</span> Explore</button><button onclick="openComposer()"><span class="ico">＋</span> Create Post</button><button data-view="notifications" onclick="showView('notifications')"><span class="ico">♧</span> Notifications</button><button data-view="profile" onclick="openProfile()"><span class="ico">◉</span> My Profile</button><button data-view="saved" onclick="showView('saved')"><span class="ico">▣</span> Saved Posts</button><button onclick="window.location.href='/social/community.html?messages=1'"><span class="ico">✉</span> Messages</button><button onclick="openAdmin()"><span class="ico">⚙</span> Community Admin</button></nav></div><div class="preview-note" id="accessNotice">Connected to Smart Money Social.</div></aside>
+<aside class="side"><div class="card"><div class="side-profile"><div class="avatar" id="sideAvatar">S</div><div><b id="sideName">Swrang Creator</b><div class="tiny muted">Smart Money member</div></div></div><nav class="nav" id="sideNav"><button class="active" data-view="home" onclick="showView('home')"><span class="ico">⌂</span> Home Feed</button><button data-view="explore" onclick="showView('explore')"><span class="ico">⌕</span> Explore</button><button onclick="openComposer()"><span class="ico">＋</span> Create Post</button><button data-view="notifications" onclick="showView('notifications')"><span class="ico">♧</span> Notifications</button><button data-view="profile" onclick="openProfile()"><span class="ico">◉</span> My Profile</button><button data-view="saved" onclick="showView('saved')"><span class="ico">▣</span> Saved Posts</button><button onclick="window.location.href=SOCIAL_BASE+'community.html?messages=1'"><span class="ico">✉</span> Messages</button><button onclick="openAdmin()"><span class="ico">⚙</span> Community Admin</button></nav></div><div class="preview-note" id="accessNotice">Connected to Smart Money Social.</div></aside>
 <main>
 <section id="view-home" class="view active">
 <div class="card" style="margin-bottom:14px"><div class="section-head"><h2>Stories</h2><button class="primary" style="padding:8px 13px" onclick="openStoryComposer()">＋ Add Story</button></div><div class="stories" id="stories"></div></div>
@@ -204,6 +204,8 @@ body{background:radial-gradient(ellipse at 4% 0%,#eee2f0 0,transparent 36%),radi
 <script>
 const SUPABASE_URL='https://rvprrulkjegvicbnjuft.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ';
+// GitHub Pages project-site base path (works locally and on alternate hosts too).
+const SOCIAL_BASE=new URL('.',window.location.href).pathname;
 // Dedicated auth storage for Smart Money Social; it does not reuse Smart Money's browser session.
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{storageKey:'smart-money-social-auth-v1',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 let authUser=null,canPublish=false,isAdmin=false,authCheckInProgress=false,socialRealtimeChannel=null,socialRealtimeTimer=null,people=[],activeProfile=null,filter='for-you';
@@ -215,7 +217,7 @@ function showAuthMessage(message,isError=false){const box=$('authMessage');if(!b
 async function signInWithGoogle(){
  const btn=$('googleLoginBtn');if(btn){btn.disabled=true;btn.textContent='Connecting to Google…';}
  try{
-  const redirectTo=window.location.origin+'/social/';
+  const redirectTo=window.location.origin+SOCIAL_BASE;
   const {error}=await supabaseClient.auth.signInWithOAuth({provider:'google',options:{redirectTo,queryParams:{access_type:'offline',prompt:'select_account'}}});
   if(error)throw error;
  }catch(error){
@@ -259,7 +261,7 @@ async function applyAuthSession(user){
   localStorage.removeItem('sm_social_open_community_after_oauth');
   if(localStorage.getItem('sm_social_return_to')==='messages'){
    localStorage.removeItem('sm_social_return_to');
-   location.replace(window.location.origin+'/social/community.html?messages=1');
+   location.replace(window.location.origin+SOCIAL_BASE+'community.html?messages=1');
    return;
   }
   await loadSocialData();
