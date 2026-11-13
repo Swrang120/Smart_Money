@@ -28,7 +28,7 @@ const sb=window.supabase.createClient(URL,KEY,{auth:{storageKey:'smart-money-soc
 let me=null,myProfile=null,profiles=[],currentPeer=null,channel=null,messages=[];
 const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function showPane(which){$('profilePane').classList.toggle('hidden',which!=='profile');$('messagesPane').classList.toggle('hidden',which!=='messages');}
-async function login(){const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname,queryParams:{prompt:'select_account'}}});if(error)alert(error.message)}
+async function login(){const btn=document.querySelector('#login button');if(btn){btn.disabled=true;btn.textContent='Connecting to Google…'}try{const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+'/social/?openCommunity=1',queryParams:{access_type:'offline',prompt:'select_account'}}});if(error)throw error}catch(error){console.error('Social Google sign-in failed:',error);alert('Google login could not start: '+(error.message||'Please try again.'));if(btn){btn.disabled=false;btn.textContent='Continue with Google'}}}
 async function logout(){await sb.auth.signOut({scope:'local'});location.reload()}
 async function signed(path){if(!path)return '';const {data,error}=await sb.storage.from(BUCKET).createSignedUrl(path,3600);if(error){console.warn(error);return ''}return data.signedUrl}
 async function start(user){me=user;$('login').classList.add('hidden');$('app').classList.remove('hidden');await ensureMe();await refreshProfiles();await renderMine();await loadChatList();subscribe();}
