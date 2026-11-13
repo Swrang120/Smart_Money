@@ -35,7 +35,7 @@ body.auth-screen #login button{min-height:54px;border-radius:15px;font-size:15px
 <div id="modalHost"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 const URL='https://rvprrulkjegvicbnjuft.supabase.co',KEY='sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ',BUCKET='smart-money-social';
-const sb=window.supabase.createClient(URL,KEY,{auth:{storageKey:'smart-money-social-auth-v1',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+var sb=window.supabase.createClient(URL,KEY,{auth:{storageKey:'smart-money-social-auth-v1',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 let me=null,myProfile=null,profiles=[],currentPeer=null,channel=null,messages=[];
 const $=id=>document.getElementById(id),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function showPane(which){$('profilePane').classList.toggle('hidden',which!=='profile');$('messagesPane').classList.toggle('hidden',which!=='messages');}
