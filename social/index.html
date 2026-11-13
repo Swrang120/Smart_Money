@@ -142,6 +142,11 @@ async function applyAuthSession(user){
   $('accessNotice').textContent=canPublish?'Your Social account is active. You can publish posts and stories.':'You can publish photos, videos and stories. Posts and stories are visible to all signed-in Social members.';
   // OAuth always returns to the main Social feed. Keep the Social session independent.
   localStorage.removeItem('sm_social_open_community_after_oauth');
+  if(localStorage.getItem('sm_social_return_to')==='messages'){
+   localStorage.removeItem('sm_social_return_to');
+   location.replace(window.location.origin+'/social/community.html?messages=1');
+   return;
+  }
   await loadSocialData();
   subscribeSocialRealtime();
  }catch(e){console.error('Social startup failed:',e);showToast('Could not load Social: '+(e.message||'Please refresh.'));document.body.classList.add('authenticated');$('authScreen').style.display='none';}finally{authCheckInProgress=false;}
