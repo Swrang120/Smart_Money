@@ -798,7 +798,8 @@ document.getElementById("paymentSupportForm").addEventListener("submit",async e=
   const categoryLabels={payment_delay:"Payment review delay",payment_issue:"Payment / UTR / screenshot issue",request_rejection:"Request rejection",cancel_request:"Cancel payment request",refund_request:"Refund request",other:"Other"};
   const subject="Payment support: "+categoryLabels[category];
   const description="Payment Request ID: "+String(savedPaymentTracking?.id||"Not available")+"\nUTR: "+String(savedPaymentTracking?.utr||"Not available")+"\nPackage: "+String(savedPaymentTracking?.package||"Not available")+"\nAmount: ₹"+String(savedPaymentTracking?.amount||"Not available")+"\n\nCustomer message:\n"+message;
-  const {error:insertError}=await supabaseClient.from("sm_support_tickets").insert({user_id:user.id,category,subject,description,status:"pending",attachment_path:attachmentPath,contact_email:user.email||savedPaymentTracking?.email||null});
+  const ticketCategory=category==="other"?"general":"payment";
+  const {error:insertError}=await supabaseClient.from("sm_support_tickets").insert({user_id:user.id,category:ticketCategory,subject,description,status:"pending",attachment_path:attachmentPath,contact_email:user.email||savedPaymentTracking?.email||null});
   if(insertError)throw new Error("Support request could not be submitted: "+insertError.message);
   supportStatus("Your support request has been submitted. The team can review it in Smart Money Support.","success");
   document.getElementById("paymentSupportForm").reset();submit.textContent="Request Submitted";
