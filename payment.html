@@ -575,6 +575,50 @@ h2{text-align:left!important;margin:0!important;color:#172b43!important;font-siz
 .tracking-panel>small{display:block;margin-top:13px;color:#91a0ad;font-size:9px}
 @media(max-width:480px){.tracking-panel{padding:18px 14px}.tracking-panel h2{font-size:22px}}
 
+
+/* Premium payment tracking timer + support request */
+.tracking-panel{max-width:620px!important;padding:30px!important;border-radius:30px!important;background:linear-gradient(160deg,#fff 0%,#f7f9fc 100%)!important;box-shadow:0 24px 65px rgba(20,42,66,.11)!important}
+.tracking-brand{justify-content:center!important;font-size:13px!important;letter-spacing:2px!important}
+.tracking-mark{width:42px!important;height:42px!important;border-radius:14px!important;font-size:21px!important}
+.tracking-status-icon{width:78px!important;height:78px!important;margin:28px auto 16px!important;background:#fff5df!important;border:1px solid #f1e2bf!important;box-shadow:0 8px 24px rgba(166,124,44,.08)!important}
+.tracking-eyebrow{letter-spacing:2.1px!important;font-size:10px!important}
+.tracking-panel h2{text-align:center!important;font-size:clamp(25px,5vw,34px)!important;letter-spacing:-1px!important}
+.tracking-panel>p{font-size:14px!important;max-width:460px!important}
+.tracking-details{gap:11px!important;margin-top:24px!important}
+.tracking-details>div{padding:16px!important;border-radius:16px!important;background:linear-gradient(160deg,#fff,#fbfcfe)!important;box-shadow:0 3px 10px rgba(22,45,68,.025)!important}
+.tracking-details span{font-size:10px!important;letter-spacing:1px!important}
+.tracking-details b{font-size:14px!important}
+.tracking-pending-note{margin-top:18px!important;padding:17px!important;border-radius:16px!important;font-size:13px!important;background:#fff9ec!important}
+.tracking-elapsed{margin-top:16px;padding:17px 15px;border:1px solid #dfe7ef;border-radius:17px;background:linear-gradient(135deg,#f3f7fa,#fff);text-align:center}
+.tracking-elapsed span,.tracking-elapsed small{display:block;color:#7c8b9a;font-size:9px;font-weight:800;letter-spacing:1.2px}
+.tracking-elapsed strong{display:block;margin:7px 0;color:#1d405e;font-size:clamp(21px,5vw,28px);font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.5px}
+.tracking-elapsed small{font-size:10px;font-weight:500;letter-spacing:0}
+.tracking-actions button,.tracking-actions a{min-height:54px!important;border-radius:15px!important;font-size:13px!important}
+#trackingSupport{border:1px solid #d8e1e9!important;background:#edf2f6!important;color:#294966!important}
+.tracking-panel>small{font-size:10px!important}
+.support-overlay{position:fixed;inset:0;z-index:100100;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(13,27,43,.58);backdrop-filter:blur(7px)}
+.support-overlay[hidden]{display:none!important}
+.support-card{width:min(100%,510px);max-height:min(90svh,780px);overflow:auto;padding:25px;border:1px solid #e0e6ed;border-radius:24px;background:linear-gradient(155deg,#fff,#f6f8fb);box-shadow:0 28px 90px rgba(0,0,0,.25);color:#20334a}
+.support-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:20px}
+.support-kicker{color:#a17c37;font-size:9px;font-weight:900;letter-spacing:1.6px}
+.support-head h3{margin:5px 0;color:#1c344d;font-size:24px;letter-spacing:-.6px}
+.support-head p{margin:0;color:#788799;font-size:12px}
+.support-close{width:36px;height:36px;flex:0 0 36px;border:1px solid #dce3eb;border-radius:11px;background:#f1f4f7;color:#34506a;font-size:25px;cursor:pointer}
+.support-card>label,.support-optional>label{display:block;margin:15px 0 7px;color:#304861;font-size:11px;font-weight:800}
+.support-input{width:100%;padding:13px 14px;border:1px solid #d8e1e9;border-radius:12px;background:#fff;color:#20334a;font:inherit;font-size:13px;outline:none}
+.support-input:focus{border-color:#b99a5c;box-shadow:0 0 0 3px rgba(185,154,92,.12)}
+textarea.support-input{resize:vertical;min-height:120px;line-height:1.55}
+.support-optional{margin-top:13px}
+.support-optional small{display:block;margin-top:5px;color:#8a97a5;font-size:10px}
+.support-form-status{display:none;margin-top:12px;padding:11px;border-radius:11px;font-size:12px;line-height:1.5}
+.support-form-status.show{display:block}
+.support-form-status.error{background:#fff0f0;color:#a33b3b;border:1px solid #f0cccc}
+.support-form-status.success{background:#edf8f1;color:#236447;border:1px solid #cce7d6}
+.support-submit{width:100%;min-height:49px;margin-top:17px;border:0;border-radius:13px;background:linear-gradient(135deg,#244d70,#173650);color:#fff;font-size:13px;font-weight:800;cursor:pointer}
+.support-submit:disabled{opacity:.6;cursor:wait}
+.support-foot{display:block;margin-top:12px;text-align:center;color:#8794a3;font-size:10px}
+@media(max-width:480px){.tracking-panel{padding:22px 16px!important;border-radius:24px!important}.tracking-details>div{padding:13px!important}.tracking-details b{font-size:12px!important}.support-card{padding:19px;border-radius:20px}}
+
 </style>
 </head>
 <body>
@@ -628,11 +672,33 @@ h2{text-align:left!important;margin:0!important;color:#172b43!important;font-siz
  <h2 id="trackingTitle">Payment Pending</h2>
  <p id="trackingDescription">Your payment proof has been received and is waiting for team verification.</p>
  <div class="tracking-details"><div><span>Package</span><b id="trackingPackage">—</b></div><div><span>Amount</span><b id="trackingAmount">—</b></div><div><span>Request ID</span><b id="trackingRequestId">—</b></div><div><span>UTR</span><b id="trackingUtr">—</b></div></div>
- <div id="trackingPendingNote" class="tracking-pending-note">Please keep this page open. Status updates automatically. You do not need to submit another payment.</div>
+ <div id="trackingPendingNote" class="tracking-pending-note">Your payment proof is safely submitted. The team will review it. You do not need to submit another payment.</div>
  <div id="trackingRejectedNote" class="tracking-rejected-note" hidden></div>
- <div class="tracking-actions"><button id="trackingRefresh" type="button">↻ Check Status</button><a id="trackingSupport" href="mailto:smartmoneysupport1@gmail.com?subject=Smart%20Money%20Payment%20Support">✉ Contact Support</a></div>
+ <div class="tracking-elapsed"><span>TIME SINCE SUBMISSION</span><strong id="trackingElapsed">0d 00h 00m 00s</strong><small id="trackingSubmittedAt">Submitted time: —</small></div>
+ <div class="tracking-actions"><button id="trackingRefresh" type="button">↻ Check Status</button><button id="trackingSupport" type="button">✉ Contact Support</button></div>
  <small id="trackingLastChecked">Checking payment status…</small>
 </section>
+<div id="paymentSupportModal" class="support-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="supportTitle">
+ <form id="paymentSupportForm" class="support-card">
+  <div class="support-head"><div><span class="support-kicker">SMART MONEY • PAYMENT HELP</span><h3 id="supportTitle">Contact Support</h3><p>Tell us what happened. No referral ID is required.</p></div><button type="button" id="supportClose" class="support-close" aria-label="Close">×</button></div>
+  <label for="supportCategory">What do you need help with?</label>
+  <select id="supportCategory" class="support-input" required>
+   <option value="">Select a reason</option>
+   <option value="payment_delay">Payment review is taking too long</option>
+   <option value="payment_issue">Payment / UTR / screenshot problem</option>
+   <option value="request_rejection">I want to request rejection of this payment request</option>
+   <option value="cancel_request">I want to cancel this payment request</option>
+   <option value="refund_request">I want to request a refund / get my payment back</option>
+   <option value="other">Other issue</option>
+  </select>
+  <label for="supportMessage">Describe your problem</label>
+  <textarea id="supportMessage" class="support-input" rows="5" maxlength="4000" placeholder="Explain what happened and what help you need…" required></textarea>
+  <div class="support-optional"><label for="supportProof">Attach proof (optional)</label><input id="supportProof" class="support-input" type="file" accept="image/jpeg,image/png,image/webp"><small>JPG, PNG or WEBP • Maximum 5 MB</small></div>
+  <div id="supportFormStatus" class="support-form-status" role="status"></div>
+  <button id="supportSubmit" class="support-submit" type="submit">Submit Support Request</button>
+  <small class="support-foot">Support email: smartmoneysupport1@gmail.com</small>
+ </form>
+</div>
 <div id="paymentNoticeOverlay" role="alertdialog" aria-modal="true" aria-labelledby="paymentNoticeTitle" aria-describedby="paymentNoticeText">
  <div id="paymentNoticeCard">
   <div id="paymentNoticeBrand"><span id="paymentNoticeMark">S</span> SMART MONEY</div>
@@ -694,6 +760,52 @@ document.getElementById("file").addEventListener("change",function(){let f=this.
 async function submitProof(e){e.preventDefault();playUiTone("submit");let btn=document.getElementById("submit"),u=digits(document.getElementById("utr").value),f=document.getElementById("file").files[0];document.getElementById("checks").classList.add("show");["cUtr","cDup","cImg","cAmt","cSuccess"].forEach(x=>check(x));if(!/^[0-9]{12}$/.test(u)){check("cUtr","bad");status("utrStatus","Exactly 12 digits required.","err");return}check("cUtr","done");let fv=fileValid(f);if(!fv.ok){check("cImg","bad");status("fileStatus",fv.msg,"err");return}btn.disabled=true;try{btn.textContent="Checking Transaction ID...";if(await duplicate(u)){check("cDup","bad");throw new Error("This UTR has already been submitted.")}check("cDup","done");btn.textContent="Checking Screenshot...";let ir=await imageReadable(f);if(!ir.ok){check("cImg","bad");throw new Error(ir.msg)}check("cImg","done");btn.textContent="Verifying Screenshot...";status("fileStatus","Reading screenshot. Please wait...","info");let o=await ocrCheck(f);if(!o.amt){check("cAmt","bad");throw new Error("Exact amount ₹"+pkgPrice+" could not be clearly detected.")}check("cAmt","done");if(!o.success){check("cSuccess","bad");throw new Error("Successful payment status could not be clearly detected.")}check("cSuccess","done");btn.textContent="Uploading Screenshot...";let ext=(f.name.split(".").pop()||"jpg").toLowerCase(),rnd=crypto.randomUUID?crypto.randomUUID():Date.now()+"_"+Math.random().toString(36).slice(2),fn="pending/"+Date.now()+"_"+rnd+"."+ext;let{error:ue}=await supabaseClient.storage.from("payment-proofs").upload(fn,f,{cacheControl:"3600",upsert:false,contentType:f.type});if(ue)throw new Error("Screenshot upload failed: "+ue.message);let{data:pu}=supabaseClient.storage.from("payment-proofs").getPublicUrl(fn),url=pu&&pu.publicUrl;if(!url)throw new Error("Screenshot URL could not be created.");btn.textContent="Submitting Payment Request...";let{data:submission,error:submissionError}=await supabaseClient.functions.invoke("submit-payment-request",{body:{payment_method:"UPI",full_name:fullName,email,mobile,referral_id:refCode,package_name:pkgName,package_price:Number(pkgPrice),amount:Number(pkgPrice),transaction_id:u,screenshot_url:url,screenshot_name:url}});if(submissionError){let serverMessage="";try{const response=submissionError.context;if(response&&typeof response.clone==="function"){const payload=await response.clone().json();serverMessage=payload?.error||payload?.message||""}}catch(parseError){}const detail=serverMessage||submissionError.message||"The payment service could not process this request.";throw new Error(detail)}if(!submission?.ok)throw new Error(submission?.error||"Payment request could not be submitted.");console.log("Created payment request",submission.payment_request_id);const trackingRecord={id:submission.payment_request_id,email,utr:u,package:pkgName,amount:pkgPrice,createdAt:new Date().toISOString()};try{localStorage.setItem(PAYMENT_TRACK_KEY,JSON.stringify(trackingRecord))}catch(e){}try{await emailjs.send("service_qsy07qr","template_s9exuls",{to_name:fullName,to_email:email,utr_code:u,package_name:pkgName,payment_method:selected,amount:pkgPrice})}catch(x){console.warn("Email failed",x)}sessionStorage.removeItem("checkout_data");sessionStorage.removeItem("checkout_email_verified");sessionStorage.removeItem("checkout_password_set");btn.textContent="Payment Proof Submitted";document.getElementById("success").innerHTML="<strong>✓ Payment proof submitted successfully.</strong><br><br>Request ID: <strong>"+submission.payment_request_id+"</strong><br>Amount: <strong>₹"+pkgPrice+"</strong><br>Payment Method: <strong>"+selected+"</strong><br>UTR: <strong>"+u+"</strong><br><br>Your payment proof is now <strong>Pending Team Review</strong>. Your package and account access will be activated only after the Smart Money team verifies and approves the payment.";document.getElementById("success").classList.add("show");showPaymentTracking(trackingRecord);}catch(err){console.error("Smart Money payment submission:",err);showPaymentNotice(err.message||"The payment request could not be processed.");btn.disabled=false;btn.textContent="Submit Payment Proof"}}
 
 
+let trackingClockTimer=null;
+function updateTrackingElapsed(){
+ const t=savedPaymentTracking;if(!t?.createdAt)return;
+ const start=new Date(t.createdAt).getTime();if(!Number.isFinite(start))return;
+ const seconds=Math.max(0,Math.floor((Date.now()-start)/1000));
+ const days=Math.floor(seconds/86400),hours=Math.floor(seconds%86400/3600),minutes=Math.floor(seconds%3600/60),secs=seconds%60;
+ const el=document.getElementById("trackingElapsed");if(el)el.textContent=days+"d "+String(hours).padStart(2,"0")+"h "+String(minutes).padStart(2,"0")+"m "+String(secs).padStart(2,"0")+"s";
+ const submitted=document.getElementById("trackingSubmittedAt");
+ if(submitted)submitted.textContent="Submitted: "+new Intl.DateTimeFormat("en-IN",{timeZone:"Asia/Kolkata",dateStyle:"medium",timeStyle:"short"}).format(new Date(start))+" IST";
+}
+function startTrackingClock(){updateTrackingElapsed();if(trackingClockTimer)clearInterval(trackingClockTimer);trackingClockTimer=setInterval(updateTrackingElapsed,1000)}
+function openPaymentSupport(){document.getElementById("paymentSupportModal").hidden=false;document.body.style.overflow="hidden"}
+function closePaymentSupport(){document.getElementById("paymentSupportModal").hidden=true;document.body.style.overflow=""}
+document.getElementById("trackingSupport").addEventListener("click",openPaymentSupport);
+document.getElementById("supportClose").addEventListener("click",closePaymentSupport);
+document.getElementById("paymentSupportModal").addEventListener("click",e=>{if(e.target.id==="paymentSupportModal")closePaymentSupport()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!document.getElementById("paymentSupportModal").hidden)closePaymentSupport()});
+function supportStatus(message,type){const el=document.getElementById("supportFormStatus");el.textContent=message;el.className="support-form-status show "+type}
+document.getElementById("paymentSupportForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const submit=document.getElementById("supportSubmit"),category=document.getElementById("supportCategory").value,message=document.getElementById("supportMessage").value.trim(),file=document.getElementById("supportProof").files[0];
+ if(!category||message.length<3){supportStatus("Please select a reason and describe the issue.", "error");return}
+ if(message.length>4000){supportStatus("Please keep your message within 4,000 characters.","error");return}
+ if(file&&(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5*1024*1024)){supportStatus("Please attach a JPG, PNG or WEBP image up to 5 MB.","error");return}
+ submit.disabled=true;submit.textContent="Submitting…";
+ try{
+  const {data:authData,error:authError}=await supabaseClient.auth.getUser();
+  const user=authData?.user;if(authError||!user?.id)throw new Error("Your account session could not be verified. Please sign in to submit a support request.");
+  let attachmentPath=null;
+  if(file){
+   const ext=file.name.split(".").pop().toLowerCase(),path=user.id+"/payment-support-"+Date.now()+"."+ext;
+   const {error:uploadError}=await supabaseClient.storage.from("support-attachments").upload(path,file,{upsert:false,contentType:file.type,cacheControl:"3600"});
+   if(uploadError)throw new Error("Attachment upload failed: "+uploadError.message);
+   attachmentPath=path;
+  }
+  const categoryLabels={payment_delay:"Payment review delay",payment_issue:"Payment / UTR / screenshot issue",request_rejection:"Request rejection",cancel_request:"Cancel payment request",refund_request:"Refund request",other:"Other"};
+  const subject="Payment support: "+categoryLabels[category];
+  const description="Payment Request ID: "+String(savedPaymentTracking?.id||"Not available")+"\nUTR: "+String(savedPaymentTracking?.utr||"Not available")+"\nPackage: "+String(savedPaymentTracking?.package||"Not available")+"\nAmount: ₹"+String(savedPaymentTracking?.amount||"Not available")+"\n\nCustomer message:\n"+message;
+  const {error:insertError}=await supabaseClient.from("sm_support_tickets").insert({user_id:user.id,category,subject,description,status:"pending",attachment_path:attachmentPath,contact_email:user.email||savedPaymentTracking?.email||null});
+  if(insertError)throw new Error("Support request could not be submitted: "+insertError.message);
+  supportStatus("Your support request has been submitted. The team can review it in Smart Money Support.","success");
+  document.getElementById("paymentSupportForm").reset();submit.textContent="Request Submitted";
+  setTimeout(closePaymentSupport,1800);
+ }catch(err){supportStatus(err.message||"Unable to submit your support request. Please try again.","error");submit.disabled=false;submit.textContent="Submit Support Request"}
+});
+
 async function refreshPaymentTracking(){
  const t=savedPaymentTracking;if(!t)return;
  const panel=document.getElementById("paymentTrackingPanel");if(!panel)return;
@@ -721,13 +833,13 @@ async function refreshPaymentTracking(){
    desc.textContent="Your payment proof has been received and is waiting for team verification.";
    pending.hidden=false;rejected.hidden=true;
   }
-  document.getElementById("trackingLastChecked").textContent="Last checked: "+new Date().toLocaleTimeString("en-IN");
+  document.getElementById("trackingLastChecked").textContent="Last checked: "+new Intl.DateTimeFormat("en-IN",{timeZone:"Asia/Kolkata",hour:"numeric",minute:"2-digit",second:"2-digit",hour12:true}).format(new Date())+" IST";
  }catch(e){document.getElementById("trackingLastChecked").textContent="Status check unavailable. Retrying automatically…";console.warn("Payment status check:",e)}
 }
 let paymentTrackingTimer=null;
 function stopPaymentTracking(){if(paymentTrackingTimer){clearInterval(paymentTrackingTimer);paymentTrackingTimer=null}}
 function showPaymentTracking(record){
- savedPaymentTracking=record;try{localStorage.setItem(PAYMENT_TRACK_KEY,JSON.stringify(record))}catch(e){}
+ savedPaymentTracking=record;startTrackingClock();try{localStorage.setItem(PAYMENT_TRACK_KEY,JSON.stringify(record))}catch(e){}
  const card=document.querySelector(".card");if(card)card.style.display="none";
  document.getElementById("paymentTrackingPanel").hidden=false;
  document.getElementById("paymentTrackingPanel").scrollIntoView({behavior:"instant",block:"start"});
