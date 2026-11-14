@@ -261,6 +261,81 @@ h2{text-align:left!important;margin:0!important;color:#172b43!important;font-siz
  .review-badge{font-size:7px!important;padding:5px 6px!important}
 }
 
+
+/* Responsive desktop + mobile layout correction */
+@media (min-width: 900px) {
+  body{
+    display:block!important; min-height:100vh!important; padding:42px 28px 64px!important;
+    background:#eef2f6!important;
+  }
+  .card{
+    width:min(100%,1120px)!important; max-width:1120px!important;
+    margin:12px auto!important; padding:38px 42px!important;
+    border-radius:28px!important; box-shadow:0 22px 70px rgba(20,39,61,.11)!important;
+  }
+  .brand{justify-content:flex-start!important;margin-bottom:24px!important}
+  .brand-mark{
+    width:46px!important;height:46px!important;border-radius:50%!important;
+    background:#173b59!important;color:#e9d29b!important;
+    border:2px solid #c7a968!important;box-shadow:none!important;
+    font-size:0!important;position:relative!important;
+  }
+  .brand-mark:before{
+    content:"S";font-family:Georgia,serif;font-size:25px;font-weight:700;
+    color:#f0dcae;line-height:1;
+  }
+  .brand-name{font-size:13px!important;letter-spacing:3px!important}
+  h2{font-size:32px!important;margin-top:2px!important}
+  #sub{font-size:13px!important;max-width:680px}
+  .price{max-width:100%!important;padding:19px 22px!important;font-size:31px!important}
+  .manual-payment{
+    display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    grid-template-areas:
+      "review review"
+      "step methods"
+      "paybox paybox"
+      "guide warning"
+      "form form";
+    gap:0 22px!important;align-items:start!important;
+  }
+  .review-banner{grid-area:review!important}
+  .manual-payment>.title{grid-area:step!important;align-self:end!important}
+  .methods{grid-area:methods!important;grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  .method{min-height:112px!important}
+  .method img{width:38px!important;height:38px!important}
+  .paybox{grid-area:paybox!important;display:grid!important;grid-template-columns:1fr 1fr!important;grid-template-areas:
+    "caption selected" "qr qr" "label label" "upi upi" "buttons buttons";
+    align-items:center!important;max-width:100%!important;padding:24px!important;margin-top:20px!important}
+  .paybox>div:first-child{grid-area:caption!important;text-align:left!important;font-size:12px!important}
+  .selected{grid-area:selected!important;justify-content:flex-end!important}
+  .qr{grid-area:qr!important;width:230px!important;height:230px!important}
+  .upiLabel{grid-area:label!important}
+  .upi{grid-area:upi!important;max-width:520px!important;width:100%!important;justify-self:center!important}
+  .row{grid-area:buttons!important;max-width:520px!important;width:100%!important;justify-self:center!important}
+  .guide{grid-area:guide!important;min-height:100%!important;margin-top:18px!important;padding:18px!important}
+  .warning{grid-area:warning!important;min-height:100%!important;margin-top:18px!important;padding:18px!important}
+  #form{grid-area:form!important;display:grid!important;grid-template-columns:1fr 1fr!important;column-gap:22px!important;align-items:start!important;margin-top:20px!important;padding:20px!important;background:#f8fafc!important;border:1px solid #e2e8ef!important;border-radius:17px!important}
+  #form .group:first-child{grid-column:1!important}
+  #form .group:nth-child(2){grid-column:2!important;grid-row:1 / span 2!important}
+  #form #checks{grid-column:1!important}
+  #form .submit{grid-column:1 / -1!important}
+  .input{font-size:13px!important}
+  .note{font-size:10px!important}
+}
+@media (min-width: 1400px) {
+  .card{width:min(100%,1220px)!important;max-width:1220px!important;padding:44px 52px!important}
+  h2{font-size:35px!important}
+  .qr{width:250px!important;height:250px!important}
+}
+@media (max-width: 899px) {
+  body{display:block!important;min-height:100svh!important;padding:12px 10px 28px!important}
+  .card{width:100%!important;max-width:540px!important;margin:8px auto!important}
+  .brand-mark{width:40px!important;height:40px!important;border-radius:13px!important}
+  .methods{grid-template-columns:1fr 1fr!important}
+  .paybox{display:block!important}
+  #form{display:block!important}
+}
+
 </style>
 </head>
 <body>
