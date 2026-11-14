@@ -673,6 +673,46 @@
 
     }
 
+  
+
+  /* SMART MONEY — PREMIUM GOLD AUTH THEME */
+  body{
+    background:radial-gradient(ellipse at 50% 0%,rgba(174,132,54,.20),transparent 42%),linear-gradient(145deg,#090d16 0%,#151a25 52%,#080b12 100%)!important;
+    padding:32px 18px!important;
+  }
+  .auth-card{
+    max-width:470px!important;padding:38px 34px 32px!important;border-radius:28px!important;
+    background:linear-gradient(155deg,rgba(30,34,43,.97),rgba(15,19,27,.98))!important;
+    border:1px solid rgba(215,177,99,.35)!important;
+    box-shadow:0 28px 80px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.07),0 0 38px rgba(190,148,68,.08)!important;
+  }
+  .husky-container{width:104px!important;height:104px!important;margin:-4px auto 20px!important}
+  .auth-logo{width:104px!important;height:104px!important;border:3px solid #c9a45d!important;box-shadow:0 0 0 6px rgba(201,164,93,.10),0 12px 30px rgba(0,0,0,.38)!important}
+  .auth-header{margin-bottom:28px!important}
+  .auth-header h2{font-size:clamp(27px,5vw,34px)!important;font-weight:800!important;letter-spacing:-1px!important;color:#f8f4e9!important}
+  .auth-header p{font-size:13px!important;color:#b5b0a5!important}
+  .input-group{margin-bottom:19px!important}
+  .input-group label{color:#d6bd88!important;font-size:11px!important;font-weight:700!important;letter-spacing:1.1px!important}
+  .input-field{min-height:56px!important;padding:15px 17px!important;border:1px solid rgba(218,190,133,.25)!important;border-radius:14px!important;background:rgba(255,255,255,.055)!important;color:#fff!important;font-size:14px!important}
+  .input-field::placeholder{color:#858b96!important}
+  .input-field:focus{border-color:#d6b46e!important;background:rgba(255,255,255,.075)!important;box-shadow:0 0 0 4px rgba(214,180,110,.13)!important}
+  .password-toggle{color:#c9ad72!important}
+  .password-toggle:hover{color:#f0d69c!important}
+  .form-options{gap:12px!important;margin:5px 0 23px!important;flex-wrap:wrap!important}
+  .remember-wrap{color:#c3c0b8!important;font-size:12px!important}
+  .remember-wrap input{accent-color:#c49a4a!important}
+  .forgot-link-wrap a,.auth-footer a{color:#e0bd76!important;font-weight:700!important}
+  .forgot-link-wrap a:hover,.auth-footer a:hover{color:#ffe0a0!important}
+  .btn-submit{min-height:58px!important;border:1px solid rgba(255,232,184,.45)!important;border-radius:15px!important;background:linear-gradient(135deg,#f0d28b 0%,#c69b4c 48%,#9b7130 100%)!important;color:#20180a!important;font-size:16px!important;font-weight:850!important;box-shadow:0 12px 28px rgba(174,128,48,.25),inset 0 1px 0 rgba(255,255,255,.48)!important;transition:transform .2s,filter .2s!important}
+  .btn-submit:hover{filter:brightness(1.07)!important;transform:translateY(-1px)!important}
+  .door-icon-box{background:rgba(53,37,11,.12)!important;color:#38280d!important}
+  .auth-footer{margin-top:27px!important;color:#b7b4ad!important;font-size:12px!important}
+  .modal-box{background:linear-gradient(155deg,#252a34,#141922)!important;border:1px solid rgba(214,180,110,.35)!important}
+  .modal-box h3{color:#f2d79e!important}
+  .modal-box label{color:#d4bd8b!important}
+  .cancel-btn:hover{color:#f2d79e!important}
+  @media(max-width:430px){body{padding:18px 13px!important}.auth-card{padding:30px 21px 25px!important;border-radius:23px!important}.husky-container{margin:0 auto 17px!important}}
+
   </style>
 </head>
 
@@ -819,15 +859,7 @@
       </div>
 
     </button>
-
-
-
-    <button type="button" class="social-btn" id="googleLoginBtn" onclick="signInWithGoogle()" style="width:100%;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #dbe2ea;border-radius:12px;padding:13px;background:#fff;color:#202124;font-weight:750;cursor:pointer">
-      <span aria-hidden="true" style="font-size:18px;font-weight:900">G</span><span>Continue with Google</span>
-    </button>
-    <p id="googleLoginMessage" style="display:none;margin:9px 0 0;color:#b4233b;font-size:12px"></p>
-
-    <!-- Social sign-in is intentionally limited to Skill Academy. -->
+    <!-- Smart Money uses its own email/password and Gmail-code login. -->
 
 
     <!-- FOOTER -->
@@ -1666,36 +1698,7 @@
       );
 
     }
-
-
-    /* =====================================================
-       GOOGLE / APPLE LOGIN
-    ===================================================== */
-
-    /* =====================================================
-       GOOGLE OAUTH — EXISTING SMART MONEY SUPABASE PROJECT
-    ===================================================== */
-    async function signInWithGoogle(){
-      const button=document.getElementById("googleLoginBtn");
-      const message=document.getElementById("googleLoginMessage");
-      if(button){button.disabled=true;button.style.opacity=".65";}
-      if(message){message.style.display="none";message.textContent="";}
-      try{
-        const params=new URLSearchParams(window.location.search);
-        const requested=params.get("next")||"/dashboard.html";
-        const safeNext=requested.startsWith("/")&&!requested.startsWith("//")?requested:"/dashboard.html";
-        const {error}=await supabaseClient.auth.signInWithOAuth({
-          provider:"google",
-          options:{redirectTo:window.location.origin+safeNext,queryParams:{prompt:"select_account"}}
-        });
-        if(error)throw error;
-      }catch(error){
-        console.error("Google sign-in failed:",error);
-        if(message){message.textContent=error.message||"Google sign-in could not start. Please try again.";message.style.display="block";}
-        if(button){button.disabled=false;button.style.opacity="1";}
-      }
-    }
-
+    /* Smart Money login: email/password and Gmail verification code only. */
     /* =====================================================
        EXISTING SESSION CHECK
     ===================================================== */
