@@ -713,6 +713,18 @@
   .cancel-btn:hover{color:#f2d79e!important}
   @media(max-width:430px){body{padding:18px 13px!important}.auth-card{padding:30px 21px 25px!important;border-radius:23px!important}.husky-container{margin:0 auto 17px!important}}
 
+  
+  .otp-notice{display:flex;align-items:flex-start;gap:11px;margin:0 0 17px;padding:13px 14px;border-radius:14px;text-align:left;border:1px solid rgba(214,180,110,.34);background:linear-gradient(135deg,rgba(205,164,83,.15),rgba(255,255,255,.035));color:#f5e6c5;animation:otpNoticeIn .22s ease-out}
+  .otp-notice[hidden]{display:none!important}
+  .otp-notice.success{border-color:rgba(91,177,125,.35);background:linear-gradient(135deg,rgba(46,145,91,.17),rgba(255,255,255,.035));color:#d8f4df}
+  .otp-notice.error{border-color:rgba(220,105,105,.38);background:linear-gradient(135deg,rgba(177,57,57,.16),rgba(255,255,255,.035));color:#ffdede}
+  .otp-notice-icon{display:grid;place-items:center;flex:0 0 27px;height:27px;border-radius:50%;background:rgba(214,180,110,.2);color:#f1d28e;font-size:14px;font-weight:900}
+  .otp-notice.success .otp-notice-icon{background:rgba(69,160,103,.2);color:#8ee0a8}
+  .otp-notice.error .otp-notice-icon{background:rgba(190,75,75,.2);color:#ffaaaa}
+  .otp-notice strong{display:block;margin:1px 0 3px;font-size:12px;font-weight:800;letter-spacing:.2px}
+  .otp-notice p{margin:0!important;color:inherit!important;font-size:11px!important;line-height:1.55}
+  @keyframes otpNoticeIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+
   </style>
 </head>
 
@@ -888,9 +900,12 @@
       <h3>📧 Login with Gmail Code</h3>
 
       <p id="otpHelpText">
-        Apni registered Gmail enter karein.
-        Hum aapko 6-digit login code bhejenge.
+        Enter your registered Gmail address. We will send you a secure verification code.
       </p>
+      <div id="otpNotice" class="otp-notice" role="status" aria-live="polite" hidden>
+        <span class="otp-notice-icon" id="otpNoticeIcon">✓</span>
+        <div><strong id="otpNoticeTitle">Code sent</strong><p id="otpNoticeText"></p></div>
+      </div>
 
       <label for="forgotEmail">Gmail Address</label>
 
@@ -1860,14 +1875,28 @@
     }
 
 
+    function showOtpNotice(type,title,message){
+      const box=document.getElementById("otpNotice");
+      const icon=document.getElementById("otpNoticeIcon");
+      const heading=document.getElementById("otpNoticeTitle");
+      const copy=document.getElementById("otpNoticeText");
+      if(!box)return;
+      box.className="otp-notice "+(type||"success");
+      box.hidden=false;
+      if(icon)icon.textContent=type==="error"?"!":"✓";
+      if(heading)heading.textContent=title||"Smart Money";
+      if(copy)copy.textContent=message||"";
+    }
+
     async function sendEmailOtp() {
       const input = document.getElementById("forgotEmail");
       if (!input) return;
       const email = input.value.trim().toLowerCase();
       if (!email || !isValidEmail(email)) {
-        alert("⚠️ Please registered Gmail address enter karein.");
+        showOtpNotice("error","Check your email","Enter a valid registered Gmail address to continue.");
         return;
       }
+      const notice=document.getElementById("otpNotice");if(notice)notice.hidden=true;
       setOtpButtonLoading("resetBtn", true, "Sending Code...");
       try {
         const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
@@ -1878,12 +1907,12 @@
         document.getElementById("otpInputWrap").style.display = "block";
         document.getElementById("verifyOtpBtn").style.display = "flex";
         const help = document.getElementById("otpHelpText");
-        if (help) help.innerText = "Aapke Gmail par password recovery code bheja gaya hai. Code enter karke password reset karein.";
+        if (help) help.innerText = "Enter the verification code sent to your Gmail address. Check your Inbox and Spam folder.";
         document.getElementById("emailOtp")?.focus();
-        alert("📧 Gmail par recovery code bheja gaya hai. Inbox/Spam check karein.");
+        showOtpNotice("success","Verification email sent","A secure recovery code has been sent to "+email+". Check your Inbox and Spam folder.");
       } catch (error) {
         console.error("Password Recovery Error:", error);
-        alert("⚠️ Code bhejne mein problem aayi.\n\n" + (error?.message || "Please try again."));
+        showOtpNotice("error","Unable to send code",error?.message || "Please try again in a moment.");
       } finally {
         setOtpButtonLoading("resetBtn", false, "Send Code Again");
       }
@@ -1893,13 +1922,14 @@
       const email = otpEmail || (document.getElementById("forgotEmail")?.value || "").trim().toLowerCase();
       const token = (document.getElementById("emailOtp")?.value || "").trim();
       if (!email || !isValidEmail(email)) {
-        alert("⚠️ Email address missing hai.");
+        showOtpNotice("error","Email required","Enter your registered Gmail address first.");
         return;
       }
       if (!/^\d{6,8}$/.test(token)) {
-        alert("⚠️ Gmail se mila recovery code enter karein.");
+        showOtpNotice("error","Code required","Enter the verification code received in your Gmail inbox.");
         return;
       }
+      const notice=document.getElementById("otpNotice");if(notice)notice.hidden=true;
       setOtpButtonLoading("verifyOtpBtn", true, "Verifying...");
       try {
         const { data, error } = await supabaseClient.auth.verifyOtp({
@@ -1911,11 +1941,10 @@
         if (!data?.user) throw new Error("Recovery code verify hua, lekin recovery session create nahi hui.");
         localStorage.setItem("passwordRecoveryEmail", data.user.email || email);
         closeModal("forgotModal");
-        alert("✅ Recovery code verified. Ab naya password set karein.");
         window.location.href = "update-password.html";
       } catch (error) {
         console.error("Password Recovery OTP Verification Error:", error);
-        alert("⚠️ Verification failed.\n\n" + (error?.message || "Invalid or expired recovery code."));
+        showOtpNotice("error","Verification failed",error?.message || "The code is invalid or expired. Request a new code and try again.");
       } finally {
         setOtpButtonLoading("verifyOtpBtn", false, "Verify Code & Continue");
       }
