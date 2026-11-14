@@ -433,6 +433,106 @@ h2{text-align:left!important;margin:0!important;color:#172b43!important;font-siz
  .smallbtn{font-size:11px!important;padding:11px 6px!important}
 }
 
+
+/* PREMIUM PAYMENT UI V2 — explicit selectors for every requested control */
+#price{
+ width:100%!important;max-width:100%!important;margin:18px 0!important;
+ display:flex!important;flex-direction:column!important;align-items:flex-start!important;
+ justify-content:center!important;min-height:88px!important;padding:17px 20px!important;
+ border-radius:17px!important;border:1px solid #8db5d0!important;
+ background:linear-gradient(120deg,#2f6f9d 0%,#347fa8 52%,#4b91ad 100%)!important;
+ color:#fff!important;box-shadow:0 9px 22px rgba(36,103,148,.20)!important;
+ text-shadow:none!important;font-size:30px!important;letter-spacing:-.5px!important;
+}
+#price:before{content:"TOTAL AMOUNT";display:block;margin-bottom:5px;color:#e4f2fa;font-size:9px;letter-spacing:1.5px;font-weight:800}
+#price:after{content:"INR • SECURE CHECKOUT";display:block;margin-top:5px;color:#e1edf5;font-size:9px;letter-spacing:.3px;font-weight:500}
+#manualPayment .methods{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:9px!important}
+#manualPayment .method{
+ position:relative!important;display:flex!important;flex-direction:column!important;align-items:center!important;
+ justify-content:center!important;min-width:0!important;min-height:112px!important;padding:13px 5px 11px!important;
+ border:1px solid #d9e3ec!important;border-radius:17px!important;
+ background:linear-gradient(155deg,#fff 0%,#f3f7fb 100%)!important;
+ box-shadow:0 6px 15px rgba(29,57,82,.07)!important;
+}
+#manualPayment .method img{
+ width:42px!important;height:42px!important;object-fit:contain!important;padding:8px!important;
+ border-radius:14px!important;background:#fff!important;border:1px solid #e3eaf0!important;
+ box-shadow:0 3px 9px rgba(25,48,70,.10)!important;
+}
+#manualPayment .method[data-method="Super Money"] img{background:#f0edff!important;border-color:#d8d0ff!important}
+#manualPayment .method[data-method="PhonePe"] img{background:#f5edff!important;border-color:#e4d4ff!important}
+#manualPayment .method[data-method="Google Pay"] img{background:#f2f7ff!important;border-color:#d8e5f7!important}
+#manualPayment .method[data-method="BharatPe"] img{background:#eaf9fa!important;border-color:#cdebed!important}
+#manualPayment .method b{margin-top:8px!important;color:#203b55!important;font-size:11px!important;font-weight:800!important}
+#manualPayment .method small{display:block!important;max-width:100%!important;margin-top:4px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;color:#78899a!important;font-size:7px!important}
+#manualPayment .method.active{
+ border:1.5px solid #c4a15b!important;background:linear-gradient(145deg,#fffaf0,#f4f7fa)!important;
+ box-shadow:0 0 0 3px rgba(196,161,91,.13),0 8px 17px rgba(29,57,82,.08)!important;
+}
+#manualPayment .method .tick{background:#b48b42!important;color:#fff!important}
+#manualPayment .paybox{background:linear-gradient(145deg,#f8fafc,#eef3f8)!important;border:1px solid #dfe7ef!important}
+#manualPayment .row{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important;margin-top:14px!important}
+#manualPayment .smallbtn{
+ min-height:49px!important;border-radius:13px!important;padding:12px 9px!important;
+ border:1px solid #d3dfe9!important;background:linear-gradient(180deg,#f5f8fb,#e5edf4)!important;
+ color:#294966!important;font-size:12px!important;font-weight:800!important;
+ box-shadow:0 5px 13px rgba(32,65,94,.09)!important;
+}
+#manualPayment .smallbtn.paynow{
+ border:1px solid #285477!important;background:linear-gradient(135deg,#397da7,#1e4d70)!important;
+ color:#fff!important;box-shadow:0 7px 16px rgba(31,78,112,.22)!important;
+}
+#manualPayment #form{
+ display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+ gap:15px 18px!important;padding:17px!important;margin-top:18px!important;
+ border:1px solid #dce5ed!important;border-radius:18px!important;
+ background:linear-gradient(145deg,#fff,#f5f8fb)!important;
+}
+#manualPayment #form .group{
+ min-width:0!important;margin:0!important;padding:15px!important;
+ border:1px solid #e0e8ef!important;border-radius:15px!important;
+ background:linear-gradient(180deg,#fff,#f7f9fc)!important;
+ box-shadow:0 5px 15px rgba(31,57,80,.05)!important;
+}
+#manualPayment #form .group label{display:block!important;margin-bottom:9px!important;color:#29465f!important;font-size:12px!important;font-weight:800!important}
+#manualPayment #form .input{
+ width:100%!important;min-height:48px!important;padding:12px 13px!important;
+ border:1px solid #cedbe6!important;border-radius:12px!important;
+ background:#fff!important;color:#1e344a!important;font-size:13px!important;
+ box-shadow:inset 0 1px 2px rgba(22,48,70,.03)!important;
+}
+#manualPayment #form .input:focus{outline:0!important;border-color:#4b87ae!important;box-shadow:0 0 0 3px rgba(75,135,174,.13)!important}
+#manualPayment #form #file{height:auto!important;padding:9px!important;border:1px dashed #aebfce!important;background:#f7fafc!important}
+#manualPayment #form #file::file-selector-button{
+ margin-right:9px!important;padding:9px 12px!important;border:0!important;border-radius:9px!important;
+ background:#e4edf5!important;color:#294c68!important;font-size:11px!important;font-weight:800!important;
+}
+#manualPayment #form .hint{color:#7d8fa0!important;font-size:10px!important;line-height:1.55!important}
+#manualPayment #form #checks{
+ display:block!important;grid-column:1!important;margin:0!important;padding:15px!important;
+ border:1px solid #dce8e3!important;border-radius:15px!important;
+ background:linear-gradient(145deg,#f5fbf8,#edf7f2)!important;
+}
+#manualPayment #form #checks b{display:block!important;margin-bottom:10px!important;color:#294d40!important;font-size:12px!important}
+#manualPayment #form #checks .check{margin:8px 0!important;color:#526f65!important;font-size:10px!important}
+#manualPayment #form #preview{
+ margin-top:12px!important;padding:13px!important;border:1px solid #dce5ed!important;
+ border-radius:14px!important;background:#f7f9fc!important;
+}
+#manualPayment #form #preview b{display:block!important;margin-bottom:9px!important;color:#29465f!important}
+#manualPayment #form #preview .previewWrap{padding:9px!important;border:1px solid #dce5ed!important;border-radius:12px!important;background:#fff!important}
+#manualPayment #form #preview img{max-width:100%!important;max-height:430px!important;object-fit:contain!important;border-radius:9px!important}
+#manualPayment #form .submit{grid-column:1/-1!important;min-height:50px!important;margin:0!important;border-radius:13px!important;background:linear-gradient(135deg,#397da7,#1e4d70)!important;box-shadow:0 8px 18px rgba(31,78,112,.18)!important}
+@media(max-width:600px){
+ #price{min-height:82px!important;font-size:28px!important}
+ #manualPayment .methods{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #manualPayment .method{min-height:105px!important}
+ #manualPayment #form{grid-template-columns:minmax(0,1fr)!important;padding:12px!important}
+ #manualPayment #form .group,#manualPayment #form #checks,#manualPayment #form .submit{grid-column:1!important}
+ #manualPayment .row{gap:8px!important}
+ #manualPayment .smallbtn{font-size:11px!important}
+}
+
 </style>
 </head>
 <body>
