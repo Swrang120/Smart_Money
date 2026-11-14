@@ -182,6 +182,7 @@ function renderCourses(rows){
    const course=rows.find(item=>item.id===button.dataset.courseId);
    if(course) openLessons(course.id,course.title,course.description,Number(button.dataset.courseIndex));
  }));
+ requestEnglishTranslation();
 }
 function toggleMeetingRoom(force){const drawer=document.getElementById("meetingDrawer"),overlay=document.getElementById("drawerOverlay"),open=typeof force==="boolean"?force:!drawer.classList.contains("open");drawer.classList.toggle("open",open);overlay.classList.toggle("open",open);drawer.setAttribute("aria-hidden",String(!open));document.body.style.overflow=open?"hidden":"";if(open)loadMeetings()}
 let activeSpeechText="",activeSpeechTitle="",activeUtterance=null;
