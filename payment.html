@@ -336,6 +336,22 @@ h2{text-align:left!important;margin:0!important;color:#172b43!important;font-siz
   #form{display:block!important}
 }
 
+
+/* Smart Money branded payment feedback — replaces browser alert dialogs */
+#paymentNoticeOverlay{display:none;position:fixed;inset:0;z-index:100000;background:rgba(10,20,34,.62);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:18px}
+#paymentNoticeOverlay.show{display:flex;animation:noticeFade .18s ease-out}
+#paymentNoticeCard{width:min(440px,100%);padding:25px 23px 21px;border-radius:22px;background:#fff;border:1px solid #e1e7ee;box-shadow:0 28px 90px rgba(10,24,42,.28);color:#1c3047;text-align:left;animation:noticePop .25s ease-out}
+#paymentNoticeBrand{display:flex;align-items:center;gap:9px;margin-bottom:18px;font-size:10px;font-weight:800;letter-spacing:2px;color:#294762}
+#paymentNoticeMark{width:34px;height:34px;border-radius:11px;background:#193956;color:#f0d79f;display:grid;place-items:center;font-family:Georgia,serif;font-size:17px;letter-spacing:0}
+#paymentNoticeIcon{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:#fff4dc;color:#94691d;font-size:24px;margin-bottom:13px}
+#paymentNoticeTitle{font-size:20px;font-weight:800;line-height:1.3;color:#1b3048;margin:0 0 8px}
+#paymentNoticeText{font-size:12px;line-height:1.75;color:#627286;margin:0}
+#paymentNoticeHint{margin-top:13px;padding:11px 12px;border-radius:11px;background:#f3f6f9;border:1px solid #e3e9ef;color:#53677d;font-size:10px;line-height:1.6}
+#paymentNoticeClose{width:100%;margin-top:18px;border:0;border-radius:11px;padding:13px;background:#1d3d5b;color:#fff;font-weight:800;font-size:12px}
+#paymentNoticeClose:focus-visible{outline:3px solid #c9a65f;outline-offset:3px}
+@keyframes noticeFade{from{opacity:0}to{opacity:1}}@keyframes noticePop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){#paymentNoticeOverlay.show,#paymentNoticeCard{animation:none}}
+
 </style>
 </head>
 <body>
@@ -371,6 +387,18 @@ h2{text-align:left!important;margin:0!important;color:#172b43!important;font-siz
 <div id="success" class="success"></div><div class="note">🔒 Never share your password or OTP.</div>
 </div>
 
+
+<div id="paymentNoticeOverlay" role="alertdialog" aria-modal="true" aria-labelledby="paymentNoticeTitle" aria-describedby="paymentNoticeText">
+ <div id="paymentNoticeCard">
+  <div id="paymentNoticeBrand"><span id="paymentNoticeMark">S</span> SMART MONEY</div>
+  <div id="paymentNoticeIcon">!</div>
+  <h3 id="paymentNoticeTitle">Payment request needs attention</h3>
+  <p id="paymentNoticeText"></p>
+  <div id="paymentNoticeHint">Your payment has not been approved by this message. Do not pay again until the status is checked.</div>
+  <button id="paymentNoticeClose" type="button">I Understand</button>
+ </div>
+</div>
+
 <div id="thankYouOverlay" role="dialog" aria-modal="true" aria-labelledby="tyTitle"><div id="thankYouCard"><div id="tyCheck">✓</div><h2 id="tyTitle">Thank You!</h2><p id="tyMessage">Your payment request has been received.</p><button id="tyClose" type="button">Continue</button></div></div>
 <script>
 emailjs.init("FxcimUvl0-ZxAauRx");
@@ -400,7 +428,40 @@ async function duplicate(utr){let{data,error}=await supabaseClient.from("payment
 async function ocrCheck(f){let r=await Tesseract.recognize(f,"eng");let t=String(r.data.text||"").replace(/,/g,"").replace(/\s+/g," ").trim(),a=amount(pkgPrice);let amt=new RegExp("(^|[^0-9])"+a+"(?:\.00)?([^0-9]|$)").test(t);let success=/payment\s+(successful|success)|transaction\s+(successful|success)|paid\s+successfully|successfully\s+paid/i.test(t);return{amt,success,text:t}}
 document.getElementById("utr").addEventListener("input",function(){this.value=digits(this.value).slice(0,12);this.classList.remove("invalid","valid");if(this.value.length===12)this.classList.add("valid");clearStatus("utrStatus")});
 document.getElementById("file").addEventListener("change",function(){let f=this.files[0],v=fileValid(f),p=document.getElementById("preview");clearStatus("fileStatus");if(!f){p.classList.remove("show");return}if(!v.ok){this.value="";this.classList.add("invalid");p.classList.remove("show");status("fileStatus",v.msg,"err");return}this.classList.remove("invalid");this.classList.add("valid");let r=new FileReader();r.onload=e=>{document.getElementById("previewImg").src=e.target.result;p.classList.add("show")};r.readAsDataURL(f);status("fileStatus","Screenshot selected. Preview check karein.","ok")});
-async function submitProof(e){e.preventDefault();playUiTone("submit");let btn=document.getElementById("submit"),u=digits(document.getElementById("utr").value),f=document.getElementById("file").files[0];document.getElementById("checks").classList.add("show");["cUtr","cDup","cImg","cAmt","cSuccess"].forEach(x=>check(x));if(!/^[0-9]{12}$/.test(u)){check("cUtr","bad");status("utrStatus","Exactly 12 digits required.","err");return}check("cUtr","done");let fv=fileValid(f);if(!fv.ok){check("cImg","bad");status("fileStatus",fv.msg,"err");return}btn.disabled=true;try{btn.textContent="Checking Transaction ID...";if(await duplicate(u)){check("cDup","bad");throw new Error("This UTR has already been submitted.")}check("cDup","done");btn.textContent="Checking Screenshot...";let ir=await imageReadable(f);if(!ir.ok){check("cImg","bad");throw new Error(ir.msg)}check("cImg","done");btn.textContent="Verifying Screenshot...";status("fileStatus","Reading screenshot. Please wait...","info");let o=await ocrCheck(f);if(!o.amt){check("cAmt","bad");throw new Error("Exact amount ₹"+pkgPrice+" could not be clearly detected.")}check("cAmt","done");if(!o.success){check("cSuccess","bad");throw new Error("Successful payment status could not be clearly detected.")}check("cSuccess","done");btn.textContent="Uploading Screenshot...";let ext=(f.name.split(".").pop()||"jpg").toLowerCase(),rnd=crypto.randomUUID?crypto.randomUUID():Date.now()+"_"+Math.random().toString(36).slice(2),fn="pending/"+Date.now()+"_"+rnd+"."+ext;let{error:ue}=await supabaseClient.storage.from("payment-proofs").upload(fn,f,{cacheControl:"3600",upsert:false,contentType:f.type});if(ue)throw new Error("Screenshot upload failed: "+ue.message);let{data:pu}=supabaseClient.storage.from("payment-proofs").getPublicUrl(fn),url=pu&&pu.publicUrl;if(!url)throw new Error("Screenshot URL could not be created.");btn.textContent="Submitting Payment Request...";let{data:submission,error:submissionError}=await supabaseClient.functions.invoke("submit-payment-request",{body:{payment_method:"UPI",full_name:fullName,email,mobile,referral_id:refCode,package_name:pkgName,package_price:Number(pkgPrice),amount:Number(pkgPrice),transaction_id:u,screenshot_url:url,screenshot_name:url}});if(submissionError)throw new Error("Payment request could not be submitted: "+submissionError.message);if(!submission?.ok)throw new Error(submission?.error||"Payment request could not be submitted.");console.log("Created payment request",submission.payment_request_id);try{await emailjs.send("service_qsy07qr","template_s9exuls",{to_name:fullName,to_email:email,utr_code:u,package_name:pkgName,payment_method:selected,amount:pkgPrice})}catch(x){console.warn("Email failed",x)}sessionStorage.removeItem("checkout_data");sessionStorage.removeItem("checkout_email_verified");sessionStorage.removeItem("checkout_password_set");btn.textContent="Payment Proof Submitted";document.getElementById("success").innerHTML="<strong>✓ Payment proof submitted successfully.</strong><br><br>Request ID: <strong>"+submission.payment_request_id+"</strong><br>Amount: <strong>₹"+pkgPrice+"</strong><br>Payment Method: <strong>"+selected+"</strong><br>UTR: <strong>"+u+"</strong><br><br>Your payment proof is now <strong>Pending Team Review</strong>. Your package and account access will be activated only after the Smart Money team verifies and approves the payment.";document.getElementById("success").classList.add("show");document.getElementById("form").style.display="none";showThankYou("Your payment proof has been submitted. It is pending manual verification; package access starts only after team approval.","Thank You!");}catch(err){console.error(err);alert(err.message||"Payment request failed.");btn.disabled=false;btn.textContent="Submit Payment Proof"}}
+async function submitProof(e){e.preventDefault();playUiTone("submit");let btn=document.getElementById("submit"),u=digits(document.getElementById("utr").value),f=document.getElementById("file").files[0];document.getElementById("checks").classList.add("show");["cUtr","cDup","cImg","cAmt","cSuccess"].forEach(x=>check(x));if(!/^[0-9]{12}$/.test(u)){check("cUtr","bad");status("utrStatus","Exactly 12 digits required.","err");return}check("cUtr","done");let fv=fileValid(f);if(!fv.ok){check("cImg","bad");status("fileStatus",fv.msg,"err");return}btn.disabled=true;try{btn.textContent="Checking Transaction ID...";if(await duplicate(u)){check("cDup","bad");throw new Error("This UTR has already been submitted.")}check("cDup","done");btn.textContent="Checking Screenshot...";let ir=await imageReadable(f);if(!ir.ok){check("cImg","bad");throw new Error(ir.msg)}check("cImg","done");btn.textContent="Verifying Screenshot...";status("fileStatus","Reading screenshot. Please wait...","info");let o=await ocrCheck(f);if(!o.amt){check("cAmt","bad");throw new Error("Exact amount ₹"+pkgPrice+" could not be clearly detected.")}check("cAmt","done");if(!o.success){check("cSuccess","bad");throw new Error("Successful payment status could not be clearly detected.")}check("cSuccess","done");btn.textContent="Uploading Screenshot...";let ext=(f.name.split(".").pop()||"jpg").toLowerCase(),rnd=crypto.randomUUID?crypto.randomUUID():Date.now()+"_"+Math.random().toString(36).slice(2),fn="pending/"+Date.now()+"_"+rnd+"."+ext;let{error:ue}=await supabaseClient.storage.from("payment-proofs").upload(fn,f,{cacheControl:"3600",upsert:false,contentType:f.type});if(ue)throw new Error("Screenshot upload failed: "+ue.message);let{data:pu}=supabaseClient.storage.from("payment-proofs").getPublicUrl(fn),url=pu&&pu.publicUrl;if(!url)throw new Error("Screenshot URL could not be created.");btn.textContent="Submitting Payment Request...";let{data:submission,error:submissionError}=await supabaseClient.functions.invoke("submit-payment-request",{body:{payment_method:"UPI",full_name:fullName,email,mobile,referral_id:refCode,package_name:pkgName,package_price:Number(pkgPrice),amount:Number(pkgPrice),transaction_id:u,screenshot_url:url,screenshot_name:url}});if(submissionError){let serverMessage="";try{const response=submissionError.context;if(response&&typeof response.clone==="function"){const payload=await response.clone().json();serverMessage=payload?.error||payload?.message||""}}catch(parseError){}const detail=serverMessage||submissionError.message||"The payment service could not process this request.";throw new Error(detail)}if(!submission?.ok)throw new Error(submission?.error||"Payment request could not be submitted.");console.log("Created payment request",submission.payment_request_id);try{await emailjs.send("service_qsy07qr","template_s9exuls",{to_name:fullName,to_email:email,utr_code:u,package_name:pkgName,payment_method:selected,amount:pkgPrice})}catch(x){console.warn("Email failed",x)}sessionStorage.removeItem("checkout_data");sessionStorage.removeItem("checkout_email_verified");sessionStorage.removeItem("checkout_password_set");btn.textContent="Payment Proof Submitted";document.getElementById("success").innerHTML="<strong>✓ Payment proof submitted successfully.</strong><br><br>Request ID: <strong>"+submission.payment_request_id+"</strong><br>Amount: <strong>₹"+pkgPrice+"</strong><br>Payment Method: <strong>"+selected+"</strong><br>UTR: <strong>"+u+"</strong><br><br>Your payment proof is now <strong>Pending Team Review</strong>. Your package and account access will be activated only after the Smart Money team verifies and approves the payment.";document.getElementById("success").classList.add("show");document.getElementById("form").style.display="none";showThankYou("Your payment proof has been submitted. It is pending manual verification; package access starts only after team approval.","Thank You!");}catch(err){console.error("Smart Money payment submission:",err);showPaymentNotice(err.message||"The payment request could not be processed.");btn.disabled=false;btn.textContent="Submit Payment Proof"}}
+
+
+function showPaymentNotice(message){
+ const text=String(message||"").trim();
+ const lower=text.toLowerCase();
+ let title="Payment request needs attention",icon="!",body=text||"We could not submit this request.",hint="Your payment has not been approved by this message. Do not pay again until the status is checked.";
+ if(/already been submitted|already submitted|already exists|pending or approved|already.*account|duplicate|already.*utr|already.*payment/.test(lower)){
+  title="Existing request detected";icon="↻";
+  body="Smart Money found an account, payment request, or UTR that may already be registered. This protection prevents duplicate submissions.";
+  hint="Please do not make another payment. If you have already paid, contact Smart Money Support with your registered email and transaction reference so the team can check the existing record.";
+ }else if(/successful payment status|exact amount|screenshot|utr|transaction id/.test(lower)){
+  title="Payment proof could not be verified";icon="!";
+  body=text;
+  hint="Check that the screenshot is original, the amount matches your package, and the UTR is correct. A screenshot upload alone does not confirm that money was received.";
+ }else if(/referral id|buyer details|package amount/.test(lower)){
+  title="Details need correction";icon="✎";
+  body=text;
+  hint="Review your registration details and selected package. No new payment request was accepted.";
+ }else if(/failed|could not|error|temporarily|network|fetch/.test(lower)){
+  title="Submission temporarily unavailable";icon="!";
+  body="Smart Money could not complete the request with the payment service. Your payment proof may not have been recorded. Do not submit another payment until you check the request status.";
+  hint="Please wait a moment and contact Smart Money Support if the issue continues. Share your UTR so the team can check whether a request was created.";
+ }
+ document.getElementById("paymentNoticeTitle").textContent=title;
+ document.getElementById("paymentNoticeIcon").textContent=icon;
+ document.getElementById("paymentNoticeText").textContent=body;
+ document.getElementById("paymentNoticeHint").textContent=hint;
+ document.getElementById("paymentNoticeOverlay").classList.add("show");
+}
+function closePaymentNotice(){document.getElementById("paymentNoticeOverlay").classList.remove("show")}
+document.getElementById("paymentNoticeClose").addEventListener("click",closePaymentNotice);
+document.getElementById("paymentNoticeOverlay").addEventListener("click",e=>{if(e.target.id==="paymentNoticeOverlay")closePaymentNotice()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closePaymentNotice()});
 
 let smAudioContext=null;
 function playUiTone(kind="submit"){
