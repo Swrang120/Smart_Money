@@ -185,7 +185,7 @@ function renderCourses(rows){
 }
 function toggleMeetingRoom(force){const drawer=document.getElementById("meetingDrawer"),overlay=document.getElementById("drawerOverlay"),open=typeof force==="boolean"?force:!drawer.classList.contains("open");drawer.classList.toggle("open",open);overlay.classList.toggle("open",open);drawer.setAttribute("aria-hidden",String(!open));document.body.style.overflow=open?"hidden":"";if(open)loadMeetings()}
 let activeSpeechText="",activeSpeechTitle="",activeUtterance=null;
-const academyLanguages={hi:{label:"Hindi",locale:"hi-IN",welcome:"नमस्ते Smart Money Family! Smart Money Skill Academy में आपका स्वागत है। आज हम इस पाठ को आसान भाषा में समझेंगे।"},en:{label:"English",locale:"en-IN",welcome:"Hello Smart Money Family! Welcome to Smart Money Skill Academy. Let us understand today's lesson step by step."},as:{label:"Assamese",locale:"as-IN",welcome:"নমস্কাৰ Smart Money Family! Smart Money Skill Academy লৈ আপোনাক স্বাগতম। আহক, আজি এই পাঠটো সহজকৈ বুজি লওঁ।"}};
+const academyLanguages={en:{label:"English",locale:"en-IN",welcome:"Hello Smart Money Family! Welcome to Smart Money Skill Academy. Let us understand today’s lesson step by step."}}
 function selectedAcademyLanguage(){return "en"}
 function setAcademyLanguage(code){code="en";
  if(!academyLanguages[code])return;
@@ -197,9 +197,9 @@ function setAcademyLanguage(code){code="en";
 }
 function googleTranslateElementInit(){
  if(window.google&&window.google.translate&&window.google.translate.TranslateElement){
-  new google.translate.TranslateElement({pageLanguage:"hi",includedLanguages:"hi,en,as",autoDisplay:false},"google_translate_element");
+  new google.translate.TranslateElement({pageLanguage:"en",includedLanguages:"en",autoDisplay:false},"google_translate_element");
   const code=selectedAcademyLanguage();
-  setTimeout(()=>{const combo=document.querySelector(".goog-te-combo");if(combo&&code!=="hi"){combo.value=code;combo.dispatchEvent(new Event("change"))}},900);
+  setTimeout(()=>{const combo=document.querySelector(".goog-te-combo");if(combo&&code==="en"){combo.value=code;combo.dispatchEvent(new Event("change"))}},900);
  }
 }
 (function loadAcademyTranslator(){if(document.getElementById("academy-translate-script"))return;const script=document.createElement("script");script.id="academy-translate-script";script.src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";script.async=true;document.head.appendChild(script)})();
@@ -225,7 +225,7 @@ async function speakLesson(id){
  if(!voice){if(status)status.textContent=config.label+" Male Voice  is not available on this device. Install the "+config.label+"  voice in Android Text-to-Speech.";return}
  activeUtterance=new SpeechSynthesisUtterance(config.welcome+" "+textToRead);
  activeUtterance.voice=voice;activeUtterance.lang=voice.lang||config.locale;activeUtterance.rate=0.94;activeUtterance.pitch=0.96;activeUtterance.volume=1;
- activeUtterance.onstart=()=>{if(status)status.textContent=config.label+" में Male Voice में पाठ सुनाया जा रहा है…"};
+ activeUtterance.onstart=()=>{if(status)status.textContent="Reading the lesson in English with a male voice…"};
  activeUtterance.onend=()=>{if(status)status.textContent="Lesson completed ✓";activeUtterance=null};
  activeUtterance.onerror=()=>{if(status)status.textContent="Could not start audio. Check your Text-to-Speech settings.";activeUtterance=null};
  window.speechSynthesis.speak(activeUtterance);
