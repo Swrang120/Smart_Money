@@ -66,13 +66,83 @@ h2{color:#fff;font-size:24px}
 .review-banner small{font-size:10px;line-height:1.5;color:#b7c4d7;margin-top:2px}
 .review-badge{margin-left:auto;white-space:nowrap;font-size:8px;font-weight:800;letter-spacing:.7px;color:#f5d995;border:1px solid rgba(245,217,149,.35);border-radius:999px;padding:6px 8px}
 @media(max-width:480px){.card{padding:16px}.manual-payment{padding:12px}.review-banner{align-items:flex-start}.review-badge{font-size:7px;padding:5px}}
+
+/* Refined premium app UI — restrained color, crisp surfaces, no neon glow */
+body{
+ background:#edf0f4!important;color:#182235!important;
+ padding:22px 16px!important;align-items:flex-start!important;
+}
+.card{
+ width:min(100%,500px)!important;max-width:500px!important;
+ margin:28px auto!important;padding:26px!important;
+ background:#fff!important;color:#182235!important;
+ border:1px solid #dce2ea!important;border-radius:26px!important;
+ box-shadow:0 16px 44px rgba(20,32,52,.10)!important;
+}
+.brand{display:flex!important;align-items:center!important;justify-content:center!important;gap:10px!important;color:#17243a!important;letter-spacing:1.8px!important;font-size:12px!important;margin:2px 0 12px!important}
+.brand-mark{width:36px;height:36px;display:grid;place-items:center;border-radius:11px;background:#172b45;color:#f0d28d;font-size:13px;font-weight:800;letter-spacing:-.5px;border:1px solid #d5b66f}
+.brand-name{font-weight:800;letter-spacing:2.4px}
+h2{color:#17243a!important;font-size:24px!important;letter-spacing:-.5px!important}
+#sub{color:#748096!important;line-height:1.55!important;font-size:12px!important}
+.price{background:#f8f1df!important;border:1px solid #e6d4a8!important;color:#75551c!important;box-shadow:none!important;font-size:24px!important;padding:8px 22px!important}
+.manual-payment{background:#f8fafc!important;border:1px solid #e1e6ed!important;border-radius:20px!important;padding:18px!important}
+.review-banner{background:#f3f6fa!important;border:1px solid #dfe5ed!important;border-radius:14px!important}
+.review-icon{background:#19324f!important;color:#f4d58d!important;border-radius:9px!important}
+.review-banner strong{color:#20344f!important;font-size:12px!important}
+.review-banner small{color:#77849a!important}
+.review-badge{color:#284361!important;background:#e9eff5!important;border:1px solid #d4dee8!important;font-size:8px!important}
+.title{color:#304761!important;font-size:12px!important;letter-spacing:.25px!important;margin:20px 0 10px!important}
+.method{background:#fff!important;color:#1e2b40!important;border:1px solid #dce3eb!important;border-radius:14px!important;min-height:92px!important;box-shadow:none!important}
+.method:hover{transform:translateY(-1px)!important;border-color:#b99a5c!important}
+.method.active{background:#f8f4e9!important;border:1.5px solid #c6a45e!important;box-shadow:inset 0 0 0 1px rgba(198,164,94,.12)!important}
+.method b{font-size:11px!important;color:#20334d!important}
+.method small{color:#8290a3!important}
+.tick{background:#c4a15d!important;color:#fff!important}
+.paybox{background:#fff!important;border:1px solid #dce3eb!important;border-radius:17px!important;color:#1c2c42!important}
+.paybox>div:first-child{color:#718097!important}
+.selected{color:#203b5a!important;font-size:16px!important}
+.qr{width:208px!important;height:208px!important;border:1px solid #d7dee7!important;border-radius:13px!important;box-shadow:0 4px 14px rgba(26,43,66,.08)!important;padding:7px!important}
+.upiLabel{color:#7d899a!important}
+.upi{background:#f7f9fc!important;border:1px solid #dce3eb!important;color:#20334d!important;border-radius:10px!important}
+.smallbtn{background:#edf1f6!important;color:#29415e!important;border:1px solid #dce3eb!important}
+.paynow{background:#203b5a!important;color:#fff!important;border:1px solid #203b5a!important}
+.guide{background:#f1f6fb!important;border:1px solid #dce7f1!important;border-radius:14px!important;color:#53657c!important}
+.guide b{color:#24496e!important}
+.guide ul{color:#66778d!important}
+.warning{background:#fbf7ed!important;border:1px solid #eadbb8!important;border-radius:14px!important}
+.warning b{color:#866323!important}
+.warning p{color:#786b4e!important}
+.group label{color:#334861!important}
+.input{background:#fff!important;border:1px solid #d7dfe8!important;color:#1d2d43!important;border-radius:10px!important}
+.input::placeholder{color:#98a3b2!important}
+.input:focus{border-color:#b99a5c!important;box-shadow:0 0 0 3px rgba(185,154,92,.12)!important}
+.hint{color:#8491a2!important}
+.preview,.checks{background:#f7f9fc!important;border:1px solid #dce3eb!important;color:#273b55!important}
+.previewWrap{background:#fff!important;border:1px solid #dce3eb!important}
+.submit{background:#203b5a!important;color:#fff!important;border:1px solid #203b5a!important;border-radius:12px!important;box-shadow:none!important;min-height:48px!important}
+.submit:hover{background:#294b70!important}
+.success{background:#edf7f2!important;border-color:#c9e5d6!important;color:#236447!important}
+.note{color:#8995a5!important}
+#thankYouCard{background:#fff!important}
+#thankYouCard h2{color:#203b5a!important}
+#tyCheck{background:#e7f3ec!important;color:#28724e!important}
+#tyClose{background:#203b5a!important}
+@media(max-width:480px){
+ body{padding:12px!important}
+ .card{margin:10px auto!important;padding:18px!important;border-radius:22px!important}
+ .manual-payment{padding:13px!important}
+ .qr{width:190px!important;height:190px!important}
+ .review-banner{gap:8px!important}
+ .review-badge{padding:5px 6px!important}
+}
+
 </style>
 </head>
 <body>
 <div class="card">
-<div class="brand">SMART MONEY</div><h2>Complete Your Payment</h2><div id="sub">Choose a payment app, pay the exact package amount, then submit your proof for admin review.</div><div id="price" class="price">₹289</div>
+<div class="brand"><span class="brand-mark">SM</span><span class="brand-name">SMART MONEY</span></div><h2>Complete Your Payment</h2><div id="sub">Choose a payment app, pay the exact package amount, then submit your proof for team review.</div><div id="price" class="price">₹289</div>
 <div id="manualPayment" class="manual-payment">
-<div class="review-banner"><span class="review-icon">✓</span><div><strong>Manual UPI Payment</strong><small>Pay directly, upload your original proof, and wait for Smart Money admin verification.</small></div><span class="review-badge">ADMIN REVIEW</span></div>
+<div class="review-banner"><span class="review-icon">✓</span><div><strong>Manual UPI Payment</strong><small>Pay directly, upload your original proof, and wait for Smart Money team verification.</small></div><span class="review-badge">TEAM REVIEW</span></div>
 <div class="title">01 · Choose your payment app</div>
 <div class="methods">
 <button type="button" class="method active" data-method="Super Money" onclick="selectMethod('Super Money')"><span class="tick">✓</span><img src="images.png"><b>Super Money</b><small>smartmoney7@nyes</small></button>
@@ -130,7 +200,7 @@ async function duplicate(utr){let{data,error}=await supabaseClient.from("payment
 async function ocrCheck(f){let r=await Tesseract.recognize(f,"eng");let t=String(r.data.text||"").replace(/,/g,"").replace(/\s+/g," ").trim(),a=amount(pkgPrice);let amt=new RegExp("(^|[^0-9])"+a+"(?:\.00)?([^0-9]|$)").test(t);let success=/payment\s+(successful|success)|transaction\s+(successful|success)|paid\s+successfully|successfully\s+paid/i.test(t);return{amt,success,text:t}}
 document.getElementById("utr").addEventListener("input",function(){this.value=digits(this.value).slice(0,12);this.classList.remove("invalid","valid");if(this.value.length===12)this.classList.add("valid");clearStatus("utrStatus")});
 document.getElementById("file").addEventListener("change",function(){let f=this.files[0],v=fileValid(f),p=document.getElementById("preview");clearStatus("fileStatus");if(!f){p.classList.remove("show");return}if(!v.ok){this.value="";this.classList.add("invalid");p.classList.remove("show");status("fileStatus",v.msg,"err");return}this.classList.remove("invalid");this.classList.add("valid");let r=new FileReader();r.onload=e=>{document.getElementById("previewImg").src=e.target.result;p.classList.add("show")};r.readAsDataURL(f);status("fileStatus","Screenshot selected. Preview check karein.","ok")});
-async function submitProof(e){e.preventDefault();playUiTone("submit");let btn=document.getElementById("submit"),u=digits(document.getElementById("utr").value),f=document.getElementById("file").files[0];document.getElementById("checks").classList.add("show");["cUtr","cDup","cImg","cAmt","cSuccess"].forEach(x=>check(x));if(!/^[0-9]{12}$/.test(u)){check("cUtr","bad");status("utrStatus","Exactly 12 digits required.","err");return}check("cUtr","done");let fv=fileValid(f);if(!fv.ok){check("cImg","bad");status("fileStatus",fv.msg,"err");return}btn.disabled=true;try{btn.textContent="Checking Transaction ID...";if(await duplicate(u)){check("cDup","bad");throw new Error("This UTR has already been submitted.")}check("cDup","done");btn.textContent="Checking Screenshot...";let ir=await imageReadable(f);if(!ir.ok){check("cImg","bad");throw new Error(ir.msg)}check("cImg","done");btn.textContent="Verifying Screenshot...";status("fileStatus","Reading screenshot. Please wait...","info");let o=await ocrCheck(f);if(!o.amt){check("cAmt","bad");throw new Error("Exact amount ₹"+pkgPrice+" could not be clearly detected.")}check("cAmt","done");if(!o.success){check("cSuccess","bad");throw new Error("Successful payment status could not be clearly detected.")}check("cSuccess","done");btn.textContent="Uploading Screenshot...";let ext=(f.name.split(".").pop()||"jpg").toLowerCase(),rnd=crypto.randomUUID?crypto.randomUUID():Date.now()+"_"+Math.random().toString(36).slice(2),fn="pending/"+Date.now()+"_"+rnd+"."+ext;let{error:ue}=await supabaseClient.storage.from("payment-proofs").upload(fn,f,{cacheControl:"3600",upsert:false,contentType:f.type});if(ue)throw new Error("Screenshot upload failed: "+ue.message);let{data:pu}=supabaseClient.storage.from("payment-proofs").getPublicUrl(fn),url=pu&&pu.publicUrl;if(!url)throw new Error("Screenshot URL could not be created.");btn.textContent="Submitting Payment Request...";let{data:submission,error:submissionError}=await supabaseClient.functions.invoke("submit-payment-request",{body:{payment_method:"UPI",full_name:fullName,email,mobile,referral_id:refCode,package_name:pkgName,package_price:Number(pkgPrice),amount:Number(pkgPrice),transaction_id:u,screenshot_url:url,screenshot_name:url}});if(submissionError)throw new Error("Payment request could not be submitted: "+submissionError.message);if(!submission?.ok)throw new Error(submission?.error||"Payment request could not be submitted.");console.log("Created payment request",submission.payment_request_id);try{await emailjs.send("service_qsy07qr","template_s9exuls",{to_name:fullName,to_email:email,utr_code:u,package_name:pkgName,payment_method:selected,amount:pkgPrice})}catch(x){console.warn("Email failed",x)}sessionStorage.removeItem("checkout_data");sessionStorage.removeItem("checkout_email_verified");sessionStorage.removeItem("checkout_password_set");btn.textContent="Payment Proof Submitted";document.getElementById("success").innerHTML="<strong>✓ Payment proof submitted successfully.</strong><br><br>Request ID: <strong>"+submission.payment_request_id+"</strong><br>Amount: <strong>₹"+pkgPrice+"</strong><br>Payment Method: <strong>"+selected+"</strong><br>UTR: <strong>"+u+"</strong><br><br>Your payment proof is now <strong>Pending Admin Review</strong>. Your package and account access will be activated only after the Smart Money admin verifies and approves the payment.";document.getElementById("success").classList.add("show");document.getElementById("form").style.display="none";showThankYou("Your payment proof has been submitted. It is pending manual verification; package access starts only after admin approval.","Thank You!");}catch(err){console.error(err);alert(err.message||"Payment request failed.");btn.disabled=false;btn.textContent="Submit Payment Proof"}}
+async function submitProof(e){e.preventDefault();playUiTone("submit");let btn=document.getElementById("submit"),u=digits(document.getElementById("utr").value),f=document.getElementById("file").files[0];document.getElementById("checks").classList.add("show");["cUtr","cDup","cImg","cAmt","cSuccess"].forEach(x=>check(x));if(!/^[0-9]{12}$/.test(u)){check("cUtr","bad");status("utrStatus","Exactly 12 digits required.","err");return}check("cUtr","done");let fv=fileValid(f);if(!fv.ok){check("cImg","bad");status("fileStatus",fv.msg,"err");return}btn.disabled=true;try{btn.textContent="Checking Transaction ID...";if(await duplicate(u)){check("cDup","bad");throw new Error("This UTR has already been submitted.")}check("cDup","done");btn.textContent="Checking Screenshot...";let ir=await imageReadable(f);if(!ir.ok){check("cImg","bad");throw new Error(ir.msg)}check("cImg","done");btn.textContent="Verifying Screenshot...";status("fileStatus","Reading screenshot. Please wait...","info");let o=await ocrCheck(f);if(!o.amt){check("cAmt","bad");throw new Error("Exact amount ₹"+pkgPrice+" could not be clearly detected.")}check("cAmt","done");if(!o.success){check("cSuccess","bad");throw new Error("Successful payment status could not be clearly detected.")}check("cSuccess","done");btn.textContent="Uploading Screenshot...";let ext=(f.name.split(".").pop()||"jpg").toLowerCase(),rnd=crypto.randomUUID?crypto.randomUUID():Date.now()+"_"+Math.random().toString(36).slice(2),fn="pending/"+Date.now()+"_"+rnd+"."+ext;let{error:ue}=await supabaseClient.storage.from("payment-proofs").upload(fn,f,{cacheControl:"3600",upsert:false,contentType:f.type});if(ue)throw new Error("Screenshot upload failed: "+ue.message);let{data:pu}=supabaseClient.storage.from("payment-proofs").getPublicUrl(fn),url=pu&&pu.publicUrl;if(!url)throw new Error("Screenshot URL could not be created.");btn.textContent="Submitting Payment Request...";let{data:submission,error:submissionError}=await supabaseClient.functions.invoke("submit-payment-request",{body:{payment_method:"UPI",full_name:fullName,email,mobile,referral_id:refCode,package_name:pkgName,package_price:Number(pkgPrice),amount:Number(pkgPrice),transaction_id:u,screenshot_url:url,screenshot_name:url}});if(submissionError)throw new Error("Payment request could not be submitted: "+submissionError.message);if(!submission?.ok)throw new Error(submission?.error||"Payment request could not be submitted.");console.log("Created payment request",submission.payment_request_id);try{await emailjs.send("service_qsy07qr","template_s9exuls",{to_name:fullName,to_email:email,utr_code:u,package_name:pkgName,payment_method:selected,amount:pkgPrice})}catch(x){console.warn("Email failed",x)}sessionStorage.removeItem("checkout_data");sessionStorage.removeItem("checkout_email_verified");sessionStorage.removeItem("checkout_password_set");btn.textContent="Payment Proof Submitted";document.getElementById("success").innerHTML="<strong>✓ Payment proof submitted successfully.</strong><br><br>Request ID: <strong>"+submission.payment_request_id+"</strong><br>Amount: <strong>₹"+pkgPrice+"</strong><br>Payment Method: <strong>"+selected+"</strong><br>UTR: <strong>"+u+"</strong><br><br>Your payment proof is now <strong>Pending Team Review</strong>. Your package and account access will be activated only after the Smart Money team verifies and approves the payment.";document.getElementById("success").classList.add("show");document.getElementById("form").style.display="none";showThankYou("Your payment proof has been submitted. It is pending manual verification; package access starts only after team approval.","Thank You!");}catch(err){console.error(err);alert(err.message||"Payment request failed.");btn.disabled=false;btn.textContent="Submit Payment Proof"}}
 
 let smAudioContext=null;
 function playUiTone(kind="submit"){
