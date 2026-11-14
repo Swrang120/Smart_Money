@@ -700,7 +700,7 @@ async function refreshPaymentTracking(){
  try{
   const {data,error}=await supabaseClient.functions.invoke("check-payment-status",{body:{payment_request_id:t.id,email:t.email,transaction_id:t.utr}});
   if(error)throw error;if(!data?.ok)throw new Error(data?.error||"Status check failed.");
-  const state=data.status;
+  const state=data.status;savedPaymentTracking.status=state;try{localStorage.setItem(PAYMENT_TRACK_KEY,JSON.stringify(savedPaymentTracking))}catch(e){}
   const title=document.getElementById("trackingTitle"),desc=document.getElementById("trackingDescription"),icon=document.getElementById("trackingStatusIcon");
   document.getElementById("trackingPackage").textContent=data.package_name||t.package||"—";
   document.getElementById("trackingAmount").textContent="₹"+(data.amount??t.amount??"—");
@@ -765,7 +765,7 @@ function showPaymentNotice(message){
 function closePaymentNotice(){document.getElementById("paymentNoticeOverlay").classList.remove("show")}
 document.getElementById("paymentNoticeClose").addEventListener("click",closePaymentNotice);
 if(savedPaymentTracking&&Number.isSafeInteger(Number(savedPaymentTracking.id))&&savedPaymentTracking.email&&savedPaymentTracking.utr){showPaymentTracking(savedPaymentTracking)}
-window.addEventListener("beforeunload",function(e){if(savedPaymentTracking){e.preventDefault();e.returnValue=""}});
+window.addEventListener("beforeunload",function(e){if(savedPaymentTracking&&savedPaymentTracking.status!=="approved"&&savedPaymentTracking.status!=="rejected"){e.preventDefault();e.returnValue=""}});
 
 document.getElementById("paymentNoticeOverlay").addEventListener("click",e=>{if(e.target.id==="paymentNoticeOverlay")closePaymentNotice()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closePaymentNotice()});
