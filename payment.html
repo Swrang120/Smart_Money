@@ -595,6 +595,10 @@ h2{text-align:left!important;margin:0!important;color:#172b43!important;font-siz
 .tracking-elapsed small{font-size:10px;font-weight:500;letter-spacing:0}
 .tracking-actions button,.tracking-actions a{min-height:54px!important;border-radius:15px!important;font-size:13px!important}
 #trackingSupport{border:1px solid #d8e1e9!important;background:#edf2f6!important;color:#294966!important}
+.approved-continue{margin-top:15px;padding:16px;border:1px solid #cfe6d8;border-radius:16px;background:linear-gradient(145deg,#f0fbf4,#fff)}
+.approved-continue[hidden]{display:none!important}
+.approved-continue button{width:100%;min-height:52px;border:0;border-radius:14px;background:linear-gradient(135deg,#20865a,#12613e);color:#fff;font-size:14px;font-weight:850;cursor:pointer;box-shadow:0 8px 20px rgba(22,112,71,.16)}
+.approved-continue small{display:block;margin-top:9px;color:#56816a;font-size:11px}
 .tracking-panel>small{font-size:10px!important}
 .support-overlay{position:fixed;inset:0;z-index:100100;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(13,27,43,.58);backdrop-filter:blur(7px)}
 .support-overlay[hidden]{display:none!important}
@@ -676,6 +680,7 @@ textarea.support-input{resize:vertical;min-height:120px;line-height:1.55}
  <div id="trackingRejectedNote" class="tracking-rejected-note" hidden></div>
  <div class="tracking-elapsed"><span>TIME SINCE SUBMISSION</span><strong id="trackingElapsed">0d 00h 00m 00s</strong><small id="trackingSubmittedAt">Submitted time: —</small></div>
  <div class="tracking-actions"><button id="trackingRefresh" type="button">↻ Check Status</button><button id="trackingSupport" type="button">✉ Contact Support</button></div>
+ <div id="approvedContinue" class="approved-continue" hidden><button id="approvedLoginButton" type="button">Continue to Login →</button><small id="approvedRedirectHint">Redirecting to login in 5 seconds…</small></div>
  <small id="trackingLastChecked">Checking payment status…</small>
 </section>
 <div id="paymentSupportModal" class="support-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="supportTitle">
@@ -807,6 +812,10 @@ document.getElementById("paymentSupportForm").addEventListener("submit",async e=
  }catch(err){supportStatus(err.message||"Unable to submit your support request. Please try again.","error");submit.disabled=false;submit.textContent="Submit Support Request"}
 });
 
+let approvedRedirectTimer=null;let approvedRedirectStarted=false;let approvedRedirectSeconds=5;
+function goToApprovedLogin(){if(approvedRedirectTimer){clearInterval(approvedRedirectTimer);approvedRedirectTimer=null}window.location.href="login.html?redirect=dashboard.html&payment=approved"}
+function beginApprovedLoginRedirect(){if(approvedRedirectStarted)return;approvedRedirectStarted=true;const box=document.getElementById("approvedContinue"),hint=document.getElementById("approvedRedirectHint");if(box)box.hidden=false;const button=document.getElementById("approvedLoginButton");if(button)button.addEventListener("click",goToApprovedLogin,{once:true});if(hint)hint.textContent="Redirecting to login in "+approvedRedirectSeconds+" seconds…";approvedRedirectTimer=setInterval(function(){approvedRedirectSeconds--;if(approvedRedirectSeconds<=0){goToApprovedLogin();return}if(hint)hint.textContent="Redirecting to login in "+approvedRedirectSeconds+" seconds…"},1000)}
+
 async function refreshPaymentTracking(){
  const t=savedPaymentTracking;if(!t)return;
  const panel=document.getElementById("paymentTrackingPanel");if(!panel)return;
@@ -823,7 +832,7 @@ async function refreshPaymentTracking(){
   if(state==="approved"){
    title.textContent="Payment Approved";icon.textContent="✓";icon.style.background="#e4f7ed";icon.style.color="#15804b";
    desc.textContent="Your payment has been verified and approved by the Smart Money team.";
-   pending.hidden=true;rejected.hidden=true;stopPaymentTracking();
+   pending.hidden=true;rejected.hidden=true;stopPaymentTracking();beginApprovedLoginRedirect();
   }else if(state==="rejected"){
    title.textContent="Payment Rejected";icon.textContent="×";icon.style.background="#fff0f0";icon.style.color="#c24141";
    desc.textContent="The Smart Money team has reviewed your payment request.";
