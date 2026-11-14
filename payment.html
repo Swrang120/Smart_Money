@@ -352,11 +352,92 @@ h2{text-align:left!important;margin:0!important;color:#172b43!important;font-siz
 @keyframes noticeFade{from{opacity:0}to{opacity:1}}@keyframes noticePop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(prefers-reduced-motion:reduce){#paymentNoticeOverlay.show,#paymentNoticeCard{animation:none}}
 
+
+/* Premium refresh requested: shared homepage identity + refined payment controls */
+.brand{justify-content:flex-start!important;text-align:left!important;margin:0 0 20px!important;gap:11px!important;color:#203b5b!important;letter-spacing:2px!important}
+.brand-mark{width:42px!important;height:42px!important;flex:0 0 42px!important;display:grid!important;place-items:center!important;border-radius:50%!important;background:#173b59!important;color:#f0dcae!important;border:2px solid #c7a968!important;font-family:Georgia,serif!important;font-size:23px!important;font-weight:700!important;box-shadow:none!important}
+.brand-name{font-size:12px!important;letter-spacing:3px!important;font-weight:800!important;color:#203b5b!important}
+.payment-brand-image{display:block;width:min(245px,70vw);height:58px;object-fit:contain;object-position:left center}
+.payment-brand-image[hidden]{display:none!important}
+#paymentBrand.logo-loaded .brand-mark,#paymentBrand.logo-loaded .brand-name{display:none!important}
+.price{
+ background:linear-gradient(115deg,#244d70 0%,#315f83 58%,#3d6e8c 100%)!important;
+ color:#fff!important;border:1px solid #6f91a9!important;
+ box-shadow:0 10px 24px rgba(31,69,101,.16)!important;
+}
+.price:before{color:#e0eaf1!important}
+.price:after{color:#f4dfb2!important}
+.methods{gap:10px!important}
+.method{
+ min-height:108px!important;padding:14px 9px!important;border-radius:17px!important;
+ border:1px solid #d9e2eb!important;background:linear-gradient(180deg,#fff,#f7f9fc)!important;
+ box-shadow:0 5px 15px rgba(29,51,74,.055)!important;
+}
+.method img{
+ width:40px!important;height:40px!important;padding:5px!important;
+ border-radius:12px!important;background:#fff!important;
+ border:1px solid #e7ebf0!important;box-shadow:0 3px 9px rgba(25,45,67,.08)!important;
+}
+.method b{margin-top:7px!important;font-size:11px!important;font-weight:800!important}
+.method small{margin-top:3px!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:8px!important}
+.method.active{
+ background:linear-gradient(145deg,#fffaf0,#f5f7fa)!important;
+ border:1.5px solid #c5a45e!important;
+ box-shadow:0 0 0 3px rgba(197,164,94,.12),0 8px 18px rgba(31,52,75,.07)!important;
+}
+.tick{width:20px!important;height:20px!important;right:8px!important;top:8px!important;box-shadow:0 2px 6px rgba(0,0,0,.12)!important}
+.price{letter-spacing:-.5px!important}
+.row{gap:10px!important;margin-top:14px!important}
+.smallbtn{
+ min-height:48px!important;border-radius:13px!important;padding:12px 10px!important;
+ font-size:12px!important;font-weight:800!important;letter-spacing:.1px!important;
+ background:linear-gradient(180deg,#f0f4f8,#e7edf3)!important;color:#29445f!important;
+ border:1px solid #d5dfe8!important;box-shadow:0 4px 10px rgba(31,55,79,.06)!important;
+ transition:transform .18s ease,box-shadow .18s ease!important;
+}
+.smallbtn:active{transform:translateY(1px)!important}
+.paynow{
+ background:linear-gradient(135deg,#315f83,#1d3d5b)!important;color:#fff!important;
+ border:1px solid #244a6b!important;box-shadow:0 7px 16px rgba(29,61,91,.18)!important;
+}
+.group{
+ padding:16px!important;margin-top:16px!important;border:1px solid #e1e7ed!important;
+ border-radius:16px!important;background:linear-gradient(180deg,#fff,#f8fafc)!important;
+ box-shadow:0 5px 16px rgba(28,48,70,.045)!important;
+}
+.group label{display:flex!important;align-items:center!important;gap:7px!important;color:#29445f!important;font-size:12px!important;font-weight:800!important}
+.input{
+ min-height:48px!important;padding:13px 14px!important;border:1px solid #d3dde7!important;
+ border-radius:12px!important;background:#fff!important;color:#1d3046!important;
+ box-shadow:inset 0 1px 2px rgba(20,40,60,.025)!important;font-size:13px!important;
+}
+.input.valid{border-color:#68b58e!important;background:#fbfffc!important}
+#file{padding:9px!important;background:#f8fafc!important;border:1px dashed #b9c8d7!important}
+#file::file-selector-button{
+ margin-right:10px;padding:9px 12px;border:0;border-radius:9px;
+ background:#e7eef5;color:#294b6a;font:700 11px Poppins,sans-serif;cursor:pointer;
+}
+#file:focus-visible,.input:focus-visible,.smallbtn:focus-visible{outline:3px solid rgba(185,154,92,.25)!important;outline-offset:2px!important}
+.hint{font-size:10px!important;line-height:1.55!important}
+.preview,.checks{border-radius:14px!important;padding:14px!important}
+.previewWrap{padding:10px!important;border-radius:13px!important}
+.preview img{max-height:440px!important;border-radius:10px!important}
+@media(max-width:600px){
+ .brand{margin-bottom:17px!important}
+ .payment-brand-image{height:50px;max-width:70vw}
+ .price{padding:16px!important;font-size:29px!important}
+ .method{min-height:104px!important;padding:12px 7px!important}
+ .method img{width:38px!important;height:38px!important}
+ .group{padding:13px!important}
+ .row{gap:8px!important}
+ .smallbtn{font-size:11px!important;padding:11px 6px!important}
+}
+
 </style>
 </head>
 <body>
 <div class="card">
-<div class="brand"><span class="brand-mark">SM</span><span class="brand-name">SMART MONEY</span></div><h2>Complete Your Payment</h2><div id="sub">Choose a payment app, pay the exact package amount, then submit your proof for team review.</div><div id="price" class="price">₹289</div>
+<div class="brand" id="paymentBrand"><img id="paymentBrandImage" class="payment-brand-image" alt="Smart Money logo" hidden><span class="brand-mark" id="paymentBrandFallback">S</span><span class="brand-name">SMART MONEY</span></div><h2>Complete Your Payment</h2><div id="sub">Choose a payment app, pay the exact package amount, then submit your proof for team review.</div><div id="price" class="price">₹289</div>
 <div id="manualPayment" class="manual-payment">
 <div class="review-banner"><span class="review-icon">✓</span><div><strong>Manual UPI Payment</strong><small>Pay directly, upload your original proof, and wait for Smart Money team verification.</small></div><span class="review-badge">TEAM REVIEW</span></div>
 <div class="title">01 · Choose your payment app</div>
@@ -403,6 +484,23 @@ h2{text-align:left!important;margin:0!important;color:#172b43!important;font-siz
 <script>
 emailjs.init("FxcimUvl0-ZxAauRx");
 const supabaseClient=window.supabase.createClient("https://rvprrulkjegvicbnjuft.supabase.co","sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ");
+/* Use the same Admin-uploaded Smart Money logo as the homepage header. */
+(async function loadPaymentBrand(){
+ const img=document.getElementById("paymentBrandImage"),fallback=document.getElementById("paymentBrandFallback"),wrap=document.getElementById("paymentBrand");
+ const cacheKey="smart_money_dashboard_header_logo_url";
+ const apply=url=>{
+  const clean=String(url||"").trim();if(!clean)return;
+  img.onload=()=>{img.hidden=false;fallback.hidden=true;wrap.classList.add("logo-loaded")};
+  img.onerror=()=>{img.hidden=true;fallback.hidden=false;wrap.classList.remove("logo-loaded")};
+  img.loading="eager";img.decoding="async";img.src=clean;
+ };
+ try{const cached=localStorage.getItem(cacheKey);if(cached)apply(cached)}catch(e){}
+ try{
+  const {data,error}=await supabaseClient.from("package_images").select("package_key,image_url").eq("package_key","smart_money_logo").maybeSingle();
+  if(error)throw error;
+  if(data&&data.image_url){try{localStorage.setItem(cacheKey,data.image_url)}catch(e){}apply(data.image_url)}
+ }catch(e){console.info("Using built-in Smart Money payment logo",e)}
+})();
 const METHODS={
 "Super Money":{img:"images.png",upi:"smartmoney7@nyes",pn:"SANTIRAM SWARGIARY",qr:"IMG_20260826_034558.png"},
 "PhonePe":{img:"08be068f3e4fb0c701ff73760b6f83f8.jpg",upi:"smartmoney7@nyes",pn:"SANTIRAM SWARGIARY",qr:"Screenshot_2026-09-04-01-43-38-47_96b26121e545231a3c569311a54cda96.jpg"},
