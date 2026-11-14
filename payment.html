@@ -533,11 +533,43 @@ h2{text-align:left!important;margin:0!important;color:#172b43!important;font-siz
  #manualPayment .smallbtn{font-size:11px!important}
 }
 
+
+/* Single, top-level How To Pay guide */
+.how-to-pay-trigger{display:flex;align-items:center;justify-content:center;width:100%;min-height:46px;margin:13px 0 17px;padding:11px 16px;border:1px solid #c9d9e6;border-radius:13px;background:linear-gradient(135deg,#f7fbff,#eaf2f8);color:#245577;font-size:13px;font-weight:800;box-shadow:0 5px 14px rgba(30,70,100,.08);cursor:pointer}
+.how-to-pay-overlay{display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;padding:16px;background:rgba(10,26,43,.62);backdrop-filter:blur(5px)}
+.how-to-pay-overlay.open{display:flex}
+.how-to-pay-card{width:min(100%,490px);max-height:88vh;overflow:auto;padding:20px;border:1px solid #dbe5ee;border-radius:21px;background:linear-gradient(155deg,#fff,#f5f8fc);box-shadow:0 22px 65px rgba(8,27,46,.28)}
+.how-to-pay-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+.how-to-pay-kicker{font-size:9px;font-weight:900;letter-spacing:1.5px;color:#8b7447}
+.how-to-pay-head h3{margin:5px 0 0;color:#1c3852;font-size:23px}
+.how-to-pay-close{width:34px;height:34px;border:0;border-radius:11px;background:#eaf0f5;color:#38546b;font-size:25px;line-height:1;cursor:pointer}
+.how-to-pay-step{display:flex;gap:12px;margin:10px 0;padding:13px;border:1px solid #e0e8ef;border-radius:14px;background:#fff}
+.how-to-pay-step>span{flex:0 0 30px;width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:#eaf2f8;color:#285a7e;font-size:11px;font-weight:900}
+.how-to-pay-step b{display:block;color:#243f58;font-size:12px}
+.how-to-pay-step p,.how-to-pay-note p{margin:5px 0 0;color:#687d8f;font-size:11px;line-height:1.6}
+.how-to-pay-note{margin-top:13px;padding:14px;border:1px solid #eadfbe;border-radius:14px;background:linear-gradient(145deg,#fffaf0,#f7f1e3)}
+.how-to-pay-note b{color:#80652c;font-size:12px}
+.how-to-pay-note p{color:#776a4d}
+.how-to-pay-done{width:100%;min-height:46px;margin-top:14px;border:0;border-radius:13px;background:linear-gradient(135deg,#397da7,#1e4d70);color:#fff;font-size:13px;font-weight:800;cursor:pointer}
+@media(max-width:480px){.how-to-pay-card{padding:16px;border-radius:18px}.how-to-pay-head h3{font-size:21px}}
+
 </style>
 </head>
 <body>
 <div class="card">
 <div class="brand" id="paymentBrand"><img id="paymentBrandImage" class="payment-brand-image" alt="Smart Money logo" hidden><span class="brand-mark" id="paymentBrandFallback">S</span><span class="brand-name">SMART MONEY</span></div><h2>Complete Your Payment</h2><div id="sub">Choose a payment app, pay the exact package amount, then submit your proof for team review.</div><div id="price" class="price">₹289</div>
+<button type="button" class="how-to-pay-trigger" onclick="openHowToPay()">ⓘ &nbsp; How To Pay</button>
+<div id="howToPayModal" class="how-to-pay-overlay" role="dialog" aria-modal="true" aria-labelledby="howToPayTitle" aria-hidden="true">
+ <div class="how-to-pay-card">
+  <div class="how-to-pay-head"><div><span class="how-to-pay-kicker">SMART MONEY PAYMENT GUIDE</span><h3 id="howToPayTitle">How To Pay</h3></div><button type="button" class="how-to-pay-close" onclick="closeHowToPay()" aria-label="Close">×</button></div>
+  <div class="how-to-pay-step"><span>01</span><div><b>Choose a Payment App</b><p>Select Super Money, PhonePe, Google Pay, or BharatPe.</p></div></div>
+  <div class="how-to-pay-step"><span>02</span><div><b>Pay the Exact Amount</b><p>Scan the QR code or copy the UPI ID. Tap Pay Now to open a compatible UPI app. Verify the recipient and amount before completing payment.</p></div></div>
+  <div class="how-to-pay-step"><span>03</span><div><b>Enter Your UTR</b><p>Return to this page and enter the exact 12-digit UTR or transaction ID shown in your payment app.</p></div></div>
+  <div class="how-to-pay-step"><span>04</span><div><b>Upload Payment Screenshot</b><p>Upload the original JPG, PNG, or WEBP screenshot. The exact amount and successful payment status must be clearly visible. Maximum file size: 5 MB.</p></div></div>
+  <div class="how-to-pay-note"><b>⚠️ Verification Notice</b><p>Submitting payment proof does not activate your package immediately. The Smart Money team will review your UTR and screenshot. Package access is activated only after successful verification and approval. Do not submit duplicate payments.</p></div>
+  <button type="button" class="how-to-pay-done" onclick="closeHowToPay()">Got It</button>
+ </div>
+</div>
 <div id="manualPayment" class="manual-payment">
 <div class="review-banner"><span class="review-icon">✓</span><div><strong>Manual UPI Payment</strong><small>Pay directly, upload your original proof, and wait for Smart Money team verification.</small></div><span class="review-badge">TEAM REVIEW</span></div>
 <div class="title">01 · Choose your payment app</div>
@@ -554,8 +586,6 @@ h2{text-align:left!important;margin:0!important;color:#172b43!important;font-siz
 <div class="upiLabel">UPI ID</div><div id="upi" class="upi">smartmoney7@nyes</div>
 <div class="row"><button type="button" class="smallbtn" onclick="copyUpi()">📋 Copy UPI</button><button type="button" class="smallbtn paynow" onclick="payNow()">💳 Pay Now</button></div>
 </div>
-<div class="guide"><b>📱 How Pay Now Works</b><ul><li>Tap Pay Now to open a compatible installed UPI app or the UPI app chooser.</li><li>Verify the recipient and exact amount, then complete the payment.</li><li>After payment, return to this page and submit your UTR and original screenshot.</li></ul></div>
-<div class="warning"><b>⚠️ Verification notice</b><p>The exact amount and successful payment status must be clearly visible in the screenshot. You will receive an update after payment verification is complete.</p></div>
 <form id="form" onsubmit="submitProof(event)">
 <div class="group"><label>03 · UTR / Transaction ID</label><input id="utr" class="input" type="text" inputmode="numeric" maxlength="12" placeholder="Enter exact 12-digit UTR" required><div class="hint">Enter the exact 12-digit transaction ID shown in your payment app.</div><div id="utrStatus" class="status"></div></div>
 <div class="group"><label>04 · Upload successful payment screenshot</label><input id="file" class="input" type="file" accept="image/jpeg,image/png,image/webp" required><div class="hint">JPG, PNG or WEBP. Maximum 5 MB.</div><div id="fileStatus" class="status"></div>
@@ -679,5 +709,11 @@ document.getElementById("tyClose").addEventListener("click",()=>document.getElem
 document.getElementById("thankYouOverlay").addEventListener("click",e=>{if(e.target.id==="thankYouOverlay")e.currentTarget.classList.remove("show")});
 
 selectMethod("Super Money");
+</script>
+<script>
+function openHowToPay(){const m=document.getElementById("howToPayModal");if(!m)return;m.classList.add("open");m.setAttribute("aria-hidden","false");document.body.style.overflow="hidden"}
+function closeHowToPay(){const m=document.getElementById("howToPayModal");if(!m)return;m.classList.remove("open");m.setAttribute("aria-hidden","true");document.body.style.overflow=""}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeHowToPay()});
+document.addEventListener("click",e=>{if(e.target&&e.target.id==="howToPayModal")closeHowToPay()});
 </script>
 </body></html>
