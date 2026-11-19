@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-       <loc>https://smart-money.wasmer.app/index.html</loc>
+       <loc>https://smartmoney.wasmer.app/index.html</loc>
        <priority>1.0000</priority>
   </url>
   <url>
-       <loc>https://smart-money.wasmer.app/dashboard.html</loc>
+       <loc>https://smartmoney.wasmer.app/dashboard.html</loc>
        <priority>0.8000</priority>
   </url>
   <url>
-       <loc>https://smart-money.wasmer.app/checkout.html</loc>
+       <loc>https://smartmoney.wasmer.app/checkout.html</loc>
        <priority>0.8000</priority>
   </url>
 </urlset>
