@@ -57,6 +57,115 @@ label.form-label,.form-group label{display:block;font-size:10px;font-weight:700;
 .otp-row{display:flex;gap:8px}.otp-row .form-control{flex:1;min-width:0}.btn-secondary{border:1px solid #6d5dfc;background:#211c4b;color:#ddd6fe;border-radius:10px;padding:0 12px;font-size:10px;font-weight:800;cursor:pointer}.btn-secondary:disabled{opacity:.5}
 .step-actions{display:flex;gap:9px;margin-top:12px}.step-actions button{flex:1}.btn-back{background:#263149;color:#dbeafe;border:1px solid var(--border);padding:13px;border-radius:12px;font-weight:800}
 @keyframes stepIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== PREMIUM RESPONSIVE CHECKOUT REFRESH ===== */
+:root{
+  --bg:#080d19;--card:rgba(19,29,49,.94);--border:rgba(214,179,105,.24);
+  --primary:#c7a45b;--accent:#e7c982;--success:#5bd6a1;--danger:#ff8295;
+  --warning:#f5c76b;--text:#f8f5ed;--muted:#a7b1c2;
+}
+html{scroll-behavior:smooth}
+body{
+  padding:clamp(18px,3vw,42px);
+  background:
+    radial-gradient(ellipse at 12% 8%,rgba(45,86,126,.28),transparent 34%),
+    radial-gradient(ellipse at 88% 14%,rgba(181,139,63,.13),transparent 30%),
+    linear-gradient(145deg,#080d19 0%,#101a2b 52%,#11172a 100%);
+}
+.container{width:min(100%,1120px);max-width:1120px;margin:0 auto;padding-bottom:64px}
+.header{margin-bottom:34px;padding:22px 16px 8px}
+.header-icon{
+  width:62px;height:62px;border-radius:20px;margin-bottom:18px;
+  color:#f4dfad;font-size:27px;
+  background:linear-gradient(145deg,rgba(218,181,105,.22),rgba(67,111,151,.18));
+  border:1px solid rgba(224,190,119,.4);
+  box-shadow:0 14px 38px rgba(0,0,0,.32),inset 0 1px rgba(255,255,255,.14);
+}
+.header h1{
+  font-size:clamp(28px,3.2vw,40px);letter-spacing:-1.2px;line-height:1.15;
+  background:linear-gradient(100deg,#fff7e5 0%,#e9cc8b 45%,#f8f1df 78%,#c7a45b 100%);
+  background-size:100% auto;animation:none;
+}
+.header p{max-width:620px;margin:10px auto 0;font-size:13px;line-height:1.75;color:#aeb9c9}
+#checkoutForm{
+  display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.82fr);
+  gap:22px;align-items:start;
+}
+#checkoutForm>.card{margin:0;padding:clamp(22px,2.4vw,30px);border-radius:22px}
+#checkoutForm>.card:first-child{grid-column:1;grid-row:1}
+#checkoutForm>.card:nth-child(2){grid-column:2;grid-row:1;position:sticky;top:24px}
+.card{
+  background:linear-gradient(145deg,rgba(24,38,61,.96),rgba(13,23,41,.97));
+  border:1px solid rgba(210,177,111,.22);
+  box-shadow:0 22px 55px rgba(0,0,0,.3),inset 0 1px rgba(255,255,255,.055);
+  backdrop-filter:blur(18px);
+}
+.card:before{
+  content:"";position:absolute;left:0;top:0;width:100%;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(229,194,123,.8),rgba(116,166,201,.55),transparent);
+  opacity:.75;
+}
+.card h3{
+  font-size:15px;color:#f6e6c2;padding-bottom:16px;margin-bottom:22px;
+  border-bottom:1px solid rgba(226,195,132,.14);letter-spacing:.1px
+}
+.form-group{margin-bottom:20px}
+label.form-label,.form-group label{
+  color:#c6b58f;font-size:10px;letter-spacing:.85px;margin-bottom:9px
+}
+.form-control{
+  min-height:48px;padding:14px 16px;border-radius:12px;font-size:13px;
+  color:#f8f5ed;background:rgba(5,13,27,.62);
+  border:1px solid rgba(150,174,199,.2);
+}
+.form-control::placeholder{color:#74839a}
+.form-control:focus{
+  border-color:#d7b66f;box-shadow:0 0 0 3px rgba(215,182,111,.12),0 0 22px rgba(215,182,111,.08)
+}
+.form-control.valid{border-color:rgba(91,214,161,.7)}
+.form-control.invalid{border-color:rgba(255,130,149,.75)}
+.password-note{color:#a6b3c4}
+.order-summary{font-size:13px;color:#b8c2d0;margin-bottom:18px}
+.order-summary b{color:#e7ce98;font-weight:800}
+.total-row{
+  margin-top:20px!important;padding-top:20px!important;
+  border-top:1px solid rgba(226,195,132,.2);font-size:16px!important;color:#f4ead5
+}
+.total-price{font-size:clamp(25px,2.2vw,30px)!important;color:#f2d28d!important;letter-spacing:-.5px}
+.terms-box{font-size:11px;line-height:1.7;color:#aeb9c9;margin:22px 0}
+#termsCheck{accent-color:#c7a45b;width:16px;height:16px}
+.btn-next{
+  min-height:52px;padding:15px 18px;border-radius:13px;font-size:13px;
+  color:#171b25;background:linear-gradient(105deg,#f0d99f,#c7a45b 52%,#e9cc8b);
+  border:1px solid rgba(255,240,201,.48);
+  box-shadow:0 12px 28px rgba(185,145,67,.22);letter-spacing:.1px;
+}
+.btn-next:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 16px 34px rgba(185,145,67,.3)}
+.security-box{font-size:10px;color:#93a4b8;line-height:1.6;margin-top:18px}
+.notice{border-radius:12px}
+#otpStep{max-width:760px;margin:26px auto 0;padding:26px}
+.step-pill{flex-wrap:wrap}
+.step-pill span{background:rgba(7,16,31,.75);border-color:rgba(214,179,105,.2)}
+.step-pill .current{background:rgba(199,164,91,.2);color:#f4dfad;border-color:#c7a45b}
+.btn-secondary{border-color:#c7a45b;background:rgba(199,164,91,.12);color:#f2d99e}
+.btn-back{background:rgba(122,145,173,.12);color:#e1e8f0;border-color:rgba(160,180,205,.2)}
+@media(max-width:760px){
+  body{padding:14px}
+  .container{max-width:560px}
+  .header{padding:10px 8px 4px;margin-bottom:22px}
+  .header h1{font-size:25px;letter-spacing:-.5px}
+  .header p{font-size:11px;line-height:1.65}
+  #checkoutForm{display:flex;flex-direction:column;gap:14px}
+  #checkoutForm>.card{width:100%;padding:19px;margin:0;position:relative!important;top:auto!important}
+  .form-group{margin-bottom:16px}
+  .form-control{min-height:46px}
+  .total-price{font-size:23px!important}
+  #otpStep{padding:20px}
+}
+@media(min-width:761px) and (max-width:980px){
+  #checkoutForm{grid-template-columns:minmax(0,1.2fr) minmax(270px,.8fr);gap:16px}
+}
+
 </style>
 </head>
 
