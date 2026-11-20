@@ -2924,7 +2924,17 @@ Community Registration Open
 <div class="who-section">
 
 
-<div class="who-title">
+<div class="who-title who-title-compact">
+<span class="who-eyebrow">SMART MONEY COMMUNITY</span>
+<div class="who-title-row">
+<h3>Who Can Join &amp; Explore Opportunities?</h3>
+<div class="who-slider-controls" aria-label="Audience slider controls">
+<button type="button" class="who-slide-prev" aria-label="Previous audience">‹</button>
+<button type="button" class="who-slide-next" aria-label="Next audience">›</button>
+</div>
+</div>
+<p>Flexible learning for different lifestyles and goals.</p>
+</div>
 
 <h3>
 Who Can Join & Explore Opportunities?
@@ -4817,6 +4827,45 @@ Help Desk
  border:1px solid rgba(255,255,255,.13);
 }
 @media(max-width:420px){.mobile-menu{width:min(310px,88vw);padding:20px}.mobile-menu a.m-link{min-height:50px}}
+
+
+/* Compact premium audience carousel */
+.who-section{padding:20px 24px 26px}
+.who-title-compact{
+ max-width:100%;text-align:left;margin:0 0 15px;padding:14px 17px;
+ border:1px solid rgba(108,126,225,.2);border-radius:16px;
+ background:linear-gradient(110deg,#f7f8ff 0%,#eef5ff 55%,#f5f2ff 100%);
+ box-shadow:0 8px 22px rgba(29,47,91,.07)
+}
+.who-eyebrow{display:block;margin-bottom:5px;font-size:9px;font-weight:900;letter-spacing:1.5px;color:#6b62c9}
+.who-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.who-title-compact h3{margin:0;font-size:clamp(15px,1.8vw,19px);line-height:1.3;font-weight:850;color:#172746}
+.who-title-compact p{margin:4px 0 0;font-size:11px;line-height:1.4;color:#66758e}
+.who-slider-controls{display:flex;gap:6px;flex-shrink:0}
+.who-slider-controls button{width:30px;height:30px;border:1px solid rgba(101,111,220,.2);border-radius:10px;background:linear-gradient(135deg,#6258db,#397fbd);color:#fff;font-size:21px;line-height:1;cursor:pointer;box-shadow:0 4px 12px rgba(75,87,190,.18)}
+.who-slider-controls button:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.audience-grid{
+ display:flex!important;gap:13px!important;overflow-x:auto;overflow-y:hidden;
+ padding:3px 2px 13px;scroll-snap-type:x mandatory;scroll-behavior:smooth;
+ scrollbar-width:thin;scrollbar-color:#8b91d9 transparent;
+}
+.audience-card{
+ flex:0 0 clamp(205px,24vw,245px);min-width:0;
+ padding:16px 14px 15px!important;border-radius:17px!important;gap:9px!important;
+ scroll-snap-align:start;box-shadow:0 7px 20px rgba(20,34,70,.07)!important;
+}
+.audience-card:before{height:3px!important;background:linear-gradient(90deg,#6c63e8,#48a9d8,#8b79e8)!important}
+.audience-photo-wrap{width:76px!important;height:76px!important;padding:4px!important;background:linear-gradient(135deg,#7469e9,#4eadd0,#8c7ce8)!important}
+.audience-info h4{font-size:13px!important}
+.audience-info p{font-size:10px!important;min-height:30px!important;line-height:1.45!important}
+@media(max-width:560px){
+ .who-section{padding:16px 13px 20px}
+ .who-title-compact{padding:12px 13px;margin-bottom:12px}
+ .who-title-compact h3{font-size:14px}
+ .who-title-compact p{font-size:10px}
+ .who-slider-controls button{width:28px;height:28px}
+ .audience-card{flex-basis:190px!important;padding:14px 11px!important}
+}
 
 </style>
 
@@ -8557,5 +8606,18 @@ if(!navigator.onLine)show('Waiting for internet connection…');window.addEventL
  });
 })();
 </script>
+
+<script>
+(function(){
+ const track=document.querySelector('.audience-grid');
+ const prev=document.querySelector('.who-slide-prev');
+ const next=document.querySelector('.who-slide-next');
+ if(!track||!prev||!next)return;
+ const step=()=>Math.max(200,Math.round(track.clientWidth*.72));
+ prev.addEventListener('click',()=>track.scrollBy({left:-step(),behavior:'smooth'}));
+ next.addEventListener('click',()=>track.scrollBy({left:step(),behavior:'smooth'}));
+})();
+</script>
+
 </body>
 </html>
