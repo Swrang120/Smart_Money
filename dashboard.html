@@ -1150,14 +1150,19 @@ button{
   box-shadow:0 8px 24px rgba(0,0,0,.12);
 }
 .sidebar-header .brand-logo{
-  flex:1;min-width:0;display:flex;align-items:center;gap:0;
+  flex:0 1 auto;min-width:0;display:flex;align-items:center;gap:0;
   max-width:calc(100% - 54px);
+  padding:7px 10px;
+  border-radius:15px;
+  background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(235,240,255,.96));
+  border:1px solid rgba(196,181,253,.34);
+  box-shadow:0 5px 18px rgba(0,0,0,.16),0 0 18px rgba(124,58,237,.10);
 }
 .sidebar-header .brand-logo img#sidebarLogo{
   display:block!important;opacity:1;width:225px;height:58px;max-width:100%;
   min-width:0;object-fit:contain;object-position:left center;
-  border:0;border-radius:0;background:transparent;
-  filter:drop-shadow(0 3px 10px rgba(90,120,255,.20));
+  border:0;border-radius:8px;background:transparent;
+  filter:drop-shadow(0 2px 5px rgba(20,25,55,.12));
 }
 .sidebar-header .brand-logo span{display:none!important}
 .sidebar-close{
