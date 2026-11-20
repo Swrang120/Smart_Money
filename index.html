@@ -2467,6 +2467,25 @@ select{
 #smNetworkOverlay .sm-net-retry{background:linear-gradient(105deg,#ffe7a6,#d6a33e 55%,#b77b22)!important;color:#15213e!important;box-shadow:0 9px 25px rgba(199,150,54,.25)!important}
 @keyframes smNetProgress{from{transform:translateX(-10%)}to{transform:translateX(190%)}}
 </style>
+<style>
+/* Hero banner: cinematic 2.35:1 frame */
+.hero{
+  width:100%;
+  aspect-ratio:2.35 / 1;
+  min-height:0 !important;
+  height:auto;
+}
+.hero-content{padding:clamp(18px,3.2vw,48px) 0 !important}
+@media(max-width:650px){
+  .hero{aspect-ratio:2.35 / 1;min-height:0 !important}
+  .hero-content{width:94%;padding:9px 0 !important}
+  .hero-badge{font-size:8px;padding:4px 8px;margin-bottom:7px;gap:4px}
+  .hero h1{font-size:clamp(17px,5.1vw,21px);line-height:1.04;letter-spacing:-.7px}
+  .hero p{font-size:9px;line-height:1.35;margin-top:7px}
+  .hero-buttons{gap:7px;margin-top:9px}
+  .hero-btn-primary,.hero-btn-secondary{font-size:9px;padding:7px 10px;border-radius:8px}
+}
+</style>
 </head>
 
 <body>
