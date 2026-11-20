@@ -240,7 +240,7 @@ label.form-label,.form-group label{color:#d5def2}
 
       <div class="form-group">
         <label for="emailId">Email ID / Gmail *</label>
-        <input type="email" id="emailId" class="form-control" placeholder="your@gmail.com" autocomplete="email" maxlength="120" required>
+        <input type="email" id="emailId" class="form-control" placeholder="example@gmail.com" autocomplete="email" maxlength="120" pattern="[a-zA-Z0-9._%+-]+@gmail\.com" title="Please enter a complete Gmail address ending in @gmail.com" required>
         <div id="emailStatus" class="field-status"></div>
       </div>
 
@@ -322,7 +322,7 @@ function inputState(el,state){
   if(state)el.classList.add(state);
 }
 function validReferral(v){return /^SM-smart[a-zA-Z0-9]+$/i.test(v.trim());}
-function validEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());}
+function validEmail(v){return /^[a-zA-Z0-9._%+-]+@gmail\.com$/i.test(v.trim());}
 function validMobile(v){return /^[0-9]{10}$/.test(v.trim());}
 function showNotice(msg){
   topNotice.textContent=msg;
