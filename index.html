@@ -410,20 +410,37 @@ select{
     display:flex;
     align-items:center;
     overflow:hidden;
+    isolation:isolate;
+    background:#101827;
+}
 
-    background:
-    linear-gradient(
+/* Silent, looping office-work background video */
+.hero-background-video{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+}
+
+.hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+    background:linear-gradient(
         90deg,
-        rgba(15,23,42,.94),
-        rgba(15,23,42,.66)
-    ),
-    url("https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1800&q=90");
-
-    background-size:cover;
-    background-position:center;
+        rgba(15,23,42,.88),
+        rgba(15,23,42,.60)
+    );
 }
 
 .hero-content{
+    position:relative;
+    z-index:2;
     width:min(1180px,92%);
     margin:auto;
     color:#fff;
@@ -2715,6 +2732,17 @@ id="authMenuLink">
 
 <section class="hero"
 id="home">
+
+<video class="hero-background-video"
+       autoplay
+       muted
+       loop
+       playsinline
+       preload="metadata"
+       poster="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1800&q=90"
+       aria-hidden="true">
+  <source src="https://videos.pexels.com/video-files/6396255/6396255-uhd_2560_1080_25fps.mp4" type="video/mp4">
+</video>
 
 <div class="hero-content">
 
