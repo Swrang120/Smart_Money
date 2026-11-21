@@ -1326,16 +1326,7 @@ button{
         <button class="sidebar-close" onclick="closeSidebar()">✕</button>
     </div>
 
-    <section id="referralLeaderboard" aria-label="Referral leaderboard" style="margin:0 14px 20px;padding:15px 13px;border:1px solid rgba(245,198,107,.28);border-radius:18px;background:linear-gradient(145deg,rgba(245,198,107,.10),rgba(124,58,237,.12));box-shadow:0 10px 25px rgba(0,0,0,.18)">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
-            <strong style="font-size:12px;letter-spacing:1px;color:#ffe0a0">🏆 TOP REFERRERS</strong>
-            <span style="font-size:9px;color:#b9c5df">LIVE</span>
-        </div>
-        <div style="font-size:9px;color:#aab6d0;margin-bottom:12px">Members with the most successful referrals</div>
-        <div id="referralLeaderboardList" aria-live="polite" style="display:grid;gap:9px">
-            <div style="font-size:11px;color:#cbd5e1">Loading leaderboard…</div>
-        </div>
-    </section>
+ion>
 
     <div class="sidebar-profile">
         <img id="sidebarProfileImage" class="sidebar-profile-img" src="1000819130.jpg" alt="Profile">
@@ -1356,6 +1347,13 @@ button{
     <div class="sidebar-section-title">Dashboard</div>
 
     <ul class="sidebar-menu">
+        <li>
+            <button type="button" onclick="openReferralLeaderboardModal();closeSidebar()">
+                <span class="side-icon">🏆</span>
+                <span>Leader Board</span>
+                <span class="side-arrow">›</span>
+            </button>
+        </li>
         <li>
             <a href="index.html">
                 <span class="side-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg></span>
@@ -1446,6 +1444,19 @@ button{
     </ul>
 
 </aside>
+
+<div id="referralLeaderboardModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="referralLeaderboardTitle" style="display:none">
+  <div class="modal-box" style="max-width:390px;background:linear-gradient(155deg,#111827,#1e1b4b);border:1px solid rgba(196,181,253,.25);color:#fff">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px">
+      <h3 id="referralLeaderboardTitle" style="margin:0;color:#f5d58b">🏆 Leader Board — Top 3</h3>
+      <button type="button" onclick="closeReferralLeaderboardModal()" aria-label="Close leaderboard" style="border:0;background:rgba(255,255,255,.12);color:#fff;border-radius:9px;width:34px;height:34px;font-size:18px">×</button>
+    </div>
+    <div id="referralLeaderboardList" aria-live="polite" style="display:grid;gap:13px">
+      <div style="font-size:12px;color:#cbd5e1">Loading top members…</div>
+    </div>
+    <button type="button" onclick="closeReferralLeaderboardModal()" style="margin-top:18px;width:100%;padding:11px;border:1px solid rgba(196,181,253,.3);border-radius:11px;background:rgba(124,58,237,.2);color:#fff;font-weight:800">Close</button>
+  </div>
+</div>
 
 <!-- NAVBAR -->
 <header class="navbar">
@@ -1570,33 +1581,6 @@ button{
 
     <!-- REFERRALS -->
     
-<!-- QUICK REFERRAL COMMISSION CALCULATOR -->
-<div id="quickCommissionCalculator" class="section-box" style="border:1px solid #ddd6fe;background:linear-gradient(145deg,#fff,#faf5ff)">
-  <h3 style="margin:0 0 6px;color:#6d28d9">🧮 Quick Commission Calculator</h3>
-  <p style="margin:0 0 16px;font-size:12px;line-height:1.6;color:#64748b">Estimate possible referral commission by package and team sales. This is an estimate only; actual credit happens after admin approves a valid package payment.</p>
-  <label for="qcPackage" style="display:block;font-size:12px;font-weight:800;margin-bottom:6px">Select Package</label>
-  <select id="qcPackage" onchange="calculateQuickCommission()" style="width:100%;padding:12px;border:1px solid #c4b5fd;border-radius:10px;background:#fff;color:#0f172a;margin-bottom:12px">
-    <option value="289|0.30|0.08|0.05">Starter — ₹289</option>
-    <option value="560|0.50|0.08|0.05">Intermediate — ₹560</option>
-    <option value="1149|0.70|0.08|0.05">Expert — ₹1,149</option>
-    <option value="2499|0.75|0.08|0.05">Master — ₹2,499</option>
-    <option value="5499|0.85|0.08|0.05">Brahmastra — ₹5,499</option>
-    <option value="10997|0.85|0.08|0.05">Premium Pro — ₹10,997</option>
-  </select>
-  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px">
-    <div><label for="qcDirect" style="display:block;font-size:11px;font-weight:800;margin-bottom:5px">Direct sales (L1)</label><input id="qcDirect" type="number" min="0" max="100000" step="1" value="1" oninput="calculateQuickCommission()" style="width:100%;padding:11px 7px;border:1px solid #e2e8f0;border-radius:9px"></div>
-    <div><label for="qcSecond" style="display:block;font-size:11px;font-weight:800;margin-bottom:5px">Level 2 sales</label><input id="qcSecond" type="number" min="0" max="100000" step="1" value="0" oninput="calculateQuickCommission()" style="width:100%;padding:11px 7px;border:1px solid #e2e8f0;border-radius:9px"></div>
-    <div><label for="qcThird" style="display:block;font-size:11px;font-weight:800;margin-bottom:5px">Level 3 sales</label><input id="qcThird" type="number" min="0" max="100000" step="1" value="0" oninput="calculateQuickCommission()" style="width:100%;padding:11px 7px;border:1px solid #e2e8f0;border-radius:9px"></div>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px">
-    <div style="padding:13px;border-radius:12px;background:#f3e8ff"><div style="font-size:11px;color:#6d28d9;font-weight:800">DIRECT (L1)</div><div id="qcDirectAmount" style="font-size:19px;font-weight:800;color:#4c1d95;margin-top:5px">₹86.70</div></div>
-    <div style="padding:13px;border-radius:12px;background:#eef2ff"><div style="font-size:11px;color:#4338ca;font-weight:800">LEVEL 2</div><div id="qcSecondAmount" style="font-size:19px;font-weight:800;color:#312e81;margin-top:5px">₹0.00</div></div>
-    <div style="padding:13px;border-radius:12px;background:#ecfdf5"><div style="font-size:11px;color:#047857;font-weight:800">LEVEL 3</div><div id="qcThirdAmount" style="font-size:19px;font-weight:800;color:#065f46;margin-top:5px">₹0.00</div></div>
-    <div style="padding:13px;border-radius:12px;background:#0f172a"><div style="font-size:11px;color:#cbd5e1;font-weight:800">ESTIMATED TOTAL</div><div id="qcTotalAmount" style="font-size:21px;font-weight:800;color:#fff;margin-top:5px">₹86.70</div></div>
-  </div>
-  <p id="qcCalculatorNote" aria-live="polite" style="font-size:11px;line-height:1.5;color:#64748b;margin:12px 0 0">Estimate only—not guaranteed earnings. Levels 2 and 3 require eligible sponsors in your referral chain.</p>
-</div>
-
 <div class="section-box">
         <h3>👥 My Referrals & Joins</h3>
         <div class="referral-tabs">
@@ -3054,37 +3038,46 @@ function setupLogout(){
 
 
 /* SMART MONEY USER NOTIFICATIONS */
+function openReferralLeaderboardModal(){
+    const modal=document.getElementById("referralLeaderboardModal");
+    if(!modal) return;
+    modal.style.display="flex";
+    document.body.style.overflow="hidden";
+    loadReferralLeaderboard();
+}
+function closeReferralLeaderboardModal(){
+    const modal=document.getElementById("referralLeaderboardModal");
+    if(modal) modal.style.display="none";
+    document.body.style.overflow="";
+}
 async function loadReferralLeaderboard(){
     const box=document.getElementById("referralLeaderboardList");
     if(!box || !currentUserId) return;
-    box.innerHTML='<div style="font-size:11px;color:#cbd5e1">Loading leaderboard…</div>';
+    box.innerHTML='<div style="font-size:12px;color:#cbd5e1">Loading top members…</div>';
     try{
-        const {data,error}=await supabaseClient.rpc("get_referral_leaderboard",{p_limit:10});
+        const {data,error}=await supabaseClient.rpc("get_referral_leaderboard",{p_limit:3});
         if(error) throw error;
         if(!Array.isArray(data) || data.length===0){
-            box.innerHTML='<div style="font-size:11px;color:#cbd5e1;line-height:1.5">No successful referrals yet. Be the first to appear here!</div>';
+            box.innerHTML='<div style="font-size:12px;color:#cbd5e1">No referral leaders to show yet.</div>';
             return;
         }
-        box.innerHTML=data.map((item,index)=>{
+        box.innerHTML=data.slice(0,3).map((item,index)=>{
             const name=String(item.full_name||"Smart Money Member").trim();
             const photo=String(item.photo_url||"").trim();
             const safePhoto=/^(https:\/\/|data:image\/(png|jpeg|jpg|webp);base64,)/i.test(photo)?photo:"";
             const initials=name.split(/\s+/).slice(0,2).map(part=>part.charAt(0)).join("").toUpperCase()||"SM";
             const avatar=safePhoto
-                ? '<img src="'+escapeHtml(safePhoto)+'" alt="" loading="lazy" style="width:34px;height:34px;border-radius:50%;object-fit:cover;border:1px solid rgba(245,198,107,.55)" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'grid\'">'
-                  +'<span style="display:none;width:34px;height:34px;border-radius:50%;place-items:center;background:#55409a;color:#fff;font-size:11px;font-weight:900">'+escapeHtml(initials)+'</span>'
-                : '<span style="display:grid;width:34px;height:34px;border-radius:50%;place-items:center;background:#55409a;color:#fff;font-size:11px;font-weight:900">'+escapeHtml(initials)+'</span>';
+                ? '<img src="'+escapeHtml(safePhoto)+'" alt="'+escapeHtml(name)+'" style="width:54px;height:54px;border-radius:50%;object-fit:cover;border:2px solid #d8b86a" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'grid\'">'
+                  +'<span style="display:none;width:54px;height:54px;border-radius:50%;place-items:center;background:#55409a;color:#fff;font-size:15px;font-weight:900">'+escapeHtml(initials)+'</span>'
+                : '<span style="display:grid;width:54px;height:54px;border-radius:50%;place-items:center;background:#55409a;color:#fff;font-size:15px;font-weight:900">'+escapeHtml(initials)+'</span>';
             const medals=["🥇","🥈","🥉"];
-            return '<div style="display:flex;align-items:center;gap:8px;min-width:0">'
-                +'<span style="width:17px;font-size:12px">'+(medals[index]||("#"+(index+1)))+'</span>'
-                +avatar
-                +'<div style="min-width:0;flex:1"><div style="font-size:10px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(name)+'</div>'
-                +'<div style="font-size:8px;color:#aab6d0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">ID: '+escapeHtml(item.referral_id||"—")+'</div></div>'
-                +'<strong style="font-size:11px;color:#ffe0a0;white-space:nowrap">'+Number(item.referral_count||0)+' joins</strong></div>';
+            return '<div style="display:flex;align-items:center;gap:13px;padding:12px;border:1px solid rgba(255,255,255,.10);border-radius:14px;background:rgba(255,255,255,.06)">'
+                +'<span style="font-size:20px;width:26px">'+medals[index]+'</span>'+avatar
+                +'<div style="min-width:0;flex:1"><div style="font-size:14px;font-weight:900;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(name)+'</div></div></div>';
         }).join("");
     }catch(error){
         console.error("Referral leaderboard failed:",error);
-        box.innerHTML='<div role="status" style="font-size:10px;color:#fca5a5;line-height:1.5">Leaderboard is temporarily unavailable. <button type="button" onclick="loadReferralLeaderboard()" style="margin-top:6px;padding:5px 9px;border:1px solid rgba(245,198,107,.5);border-radius:8px;background:transparent;color:#ffe0a0">Retry</button></div>';
+        box.innerHTML='<div role="status" style="font-size:12px;color:#fecaca">Leaderboard is temporarily unavailable. <button type="button" onclick="loadReferralLeaderboard()" style="margin-left:5px;padding:5px 8px;border:1px solid rgba(245,198,107,.5);border-radius:8px;background:transparent;color:#ffe0a0">Retry</button></div>';
     }
 }
 
@@ -3184,31 +3177,6 @@ window.addEventListener("DOMContentLoaded", async () => {
         }
     }
 });
-
-/* Quick commission estimate only; it never writes to wallet or database. */
-function calculateQuickCommission(){
-  const packageSelect = document.getElementById("qcPackage");
-  if(!packageSelect) return;
-  const parts = String(packageSelect.value || "289|0.30|0.08|0.05").split("|").map(Number);
-  const base = Number(parts[0]) || 0;
-  const rates = [Number(parts[1])||0, Number(parts[2])||0, Number(parts[3])||0];
-  const readCount = id => {
-    const el = document.getElementById(id);
-    const n = el ? Math.floor(Number(el.value)||0) : 0;
-    const safe = Math.max(0, Math.min(100000, n));
-    if(el && String(safe)!==el.value) el.value = String(safe);
-    return safe;
-  };
-  const counts = [readCount("qcDirect"),readCount("qcSecond"),readCount("qcThird")];
-  const amounts = counts.map((count,i)=>Math.round(base*rates[i]*count*100)/100);
-  const money = n => new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",minimumFractionDigits:2,maximumFractionDigits:2}).format(n);
-  document.getElementById("qcDirectAmount").textContent = money(amounts[0]);
-  document.getElementById("qcSecondAmount").textContent = money(amounts[1]);
-  document.getElementById("qcThirdAmount").textContent = money(amounts[2]);
-  document.getElementById("qcTotalAmount").textContent = money(amounts.reduce((a,b)=>a+b,0));
-  const note = document.getElementById("qcCalculatorNote");
-  if(note) note.textContent = "Estimate only. L1 rate depends on selected package; L2 is 8% and L3 is 5%. Actual commissions are credited only after admin approval, valid package amount, and a valid referral chain. Self-referrals are not eligible.";
-}
 
 </script>
 <div id="smNetworkOverlay" role="alertdialog" aria-modal="true" aria-labelledby="smNetworkTitle" aria-describedby="smNetworkDesc" aria-hidden="true">
