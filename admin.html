@@ -6471,6 +6471,8 @@ async function loadTrashAndHistoryData(){
   
         ]);  
   
+        const failedQuery = results.find(result => result && result.error);  
+        if(failedQuery) throw failedQuery.error;  
   
         renderApprovedHistory(  
             results[0].data ||  
@@ -7324,6 +7326,9 @@ async function loadActivePreviewImage(){
             <img  
             src="${escapeHtml(data.setting_value)}"  
             class="status-preview"  
+            alt="Active homepage preview image"  
+            loading="lazy"  
+            onerror="this.onerror=null;this.parentElement.innerHTML='<p role=&quot;status&quot; style=&quot;color:#fca5a5;font-size:12px&quot;>Saved preview URL is unavailable. Re-upload the preview image.</p>'"  
             >  
   
             <button  
