@@ -6496,9 +6496,14 @@ async function loadTrashAndHistoryData(){
   
     catch(error){  
   
-        console.error(  
-            error  
-        );  
+        console.error("Trash and history could not be loaded:",error);  
+        const message = "Could not load this section. Check your connection and admin access, then retry.";  
+        ["approvedHistoryList","deletedUsersList","deletedPaymentsList","deletedWithdrawalsList"].forEach(id=>{  
+            const el=document.getElementById(id);  
+            if(el && /Loading/i.test(el.textContent)){  
+                el.innerHTML='<div role="status" style="color:#fca5a5;font-size:12px;line-height:1.5">'+message+' <button type="button" class="btn" onclick="loadTrashAndHistoryData()">Retry</button></div>';  
+            }  
+        });  
   
     }  
   
@@ -7336,10 +7341,8 @@ async function loadActivePreviewImage(){
   
     catch(error){  
   
-        box.innerHTML =  
-        escapeHtml(  
-            error.message  
-        );  
+        console.error("Preview image could not be loaded:",error);  
+        box.innerHTML = '<div role="status" style="color:#fca5a5;font-size:12px;line-height:1.5">Preview image could not be loaded. Check the saved image URL and storage access. <button type="button" class="btn" onclick="loadActivePreviewImage()">Retry</button></div>';  
   
     }  
   
