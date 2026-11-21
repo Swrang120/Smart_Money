@@ -1320,12 +1320,22 @@ button{
 <aside class="sidebar" id="sidebar">
 
     <div class="sidebar-header">
-        <a href="dashboard.html" class="brand-logo">
-            <img id="sidebarLogo" alt="Smart Money" style="opacity:0;transition:opacity .2s ease">
-            <span>Smart Money</span>
-        </a>
+        <div style="display:flex;align-items:center;gap:9px;color:#ffe0a0;font-size:12px;font-weight:900;letter-spacing:.8px">
+            <span aria-hidden="true">🏆</span><span>TOP REFERRERS</span>
+        </div>
         <button class="sidebar-close" onclick="closeSidebar()">✕</button>
     </div>
+
+    <section id="referralLeaderboard" aria-label="Referral leaderboard" style="margin:0 14px 20px;padding:15px 13px;border:1px solid rgba(245,198,107,.28);border-radius:18px;background:linear-gradient(145deg,rgba(245,198,107,.10),rgba(124,58,237,.12));box-shadow:0 10px 25px rgba(0,0,0,.18)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+            <strong style="font-size:12px;letter-spacing:1px;color:#ffe0a0">🏆 TOP REFERRERS</strong>
+            <span style="font-size:9px;color:#b9c5df">LIVE</span>
+        </div>
+        <div style="font-size:9px;color:#aab6d0;margin-bottom:12px">Members with the most successful referrals</div>
+        <div id="referralLeaderboardList" aria-live="polite" style="display:grid;gap:9px">
+            <div style="font-size:11px;color:#cbd5e1">Loading leaderboard…</div>
+        </div>
+    </section>
 
     <div class="sidebar-profile">
         <img id="sidebarProfileImage" class="sidebar-profile-img" src="1000819130.jpg" alt="Profile">
@@ -1341,16 +1351,7 @@ button{
         <button class="sidebar-balance-action" onclick="openWithdrawModal()">💸 Withdraw Balance</button>
     </div>
 
-    <section id="referralLeaderboard" aria-label="Referral leaderboard" style="margin:0 14px 20px;padding:15px 13px;border:1px solid rgba(245,198,107,.28);border-radius:18px;background:linear-gradient(145deg,rgba(245,198,107,.10),rgba(124,58,237,.12));box-shadow:0 10px 25px rgba(0,0,0,.18)">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
-            <strong style="font-size:12px;letter-spacing:1px;color:#ffe0a0">🏆 TOP REFERRERS</strong>
-            <span style="font-size:9px;color:#b9c5df">LIVE</span>
-        </div>
-        <div style="font-size:9px;color:#aab6d0;margin-bottom:12px">Members with the most successful referrals</div>
-        <div id="referralLeaderboardList" aria-live="polite" style="display:grid;gap:9px">
-            <div style="font-size:11px;color:#cbd5e1">Loading leaderboard…</div>
-        </div>
-    </section>
+    
 
     <div class="sidebar-section-title">Dashboard</div>
 
