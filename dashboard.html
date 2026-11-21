@@ -1446,17 +1446,44 @@ ion>
 </aside>
 
 <div id="referralLeaderboardModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="referralLeaderboardTitle" style="display:none">
-  <div class="modal-box" style="max-width:390px;background:linear-gradient(155deg,#111827,#1e1b4b);border:1px solid rgba(196,181,253,.25);color:#fff">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px">
-      <h3 id="referralLeaderboardTitle" style="margin:0;color:#f5d58b">🏆 Leader Board — Top 3</h3>
-      <button type="button" onclick="closeReferralLeaderboardModal()" aria-label="Close leaderboard" style="border:0;background:rgba(255,255,255,.12);color:#fff;border-radius:9px;width:34px;height:34px;font-size:18px">×</button>
+  <div class="modal-box sm-leaderboard-modal">
+    <div class="sm-leaderboard-head">
+      <div><div class="sm-leaderboard-kicker">SMART MONEY COMMUNITY</div><h3 id="referralLeaderboardTitle">🏆 Leader Board</h3></div>
+      <button type="button" onclick="closeReferralLeaderboardModal()" aria-label="Close leaderboard" class="sm-leaderboard-close">×</button>
     </div>
-    <div id="referralLeaderboardList" aria-live="polite" style="display:grid;gap:13px">
-      <div style="font-size:12px;color:#cbd5e1">Loading top members…</div>
+    <div id="referralLeaderboardList" aria-live="polite" class="sm-leaderboard-content">
+      <div class="sm-leaderboard-loading">Loading top members…</div>
     </div>
-    <button type="button" onclick="closeReferralLeaderboardModal()" style="margin-top:18px;width:100%;padding:11px;border:1px solid rgba(196,181,253,.3);border-radius:11px;background:rgba(124,58,237,.2);color:#fff;font-weight:800">Close</button>
+    <button type="button" onclick="closeReferralLeaderboardModal()" class="sm-leaderboard-dismiss">Close</button>
   </div>
 </div>
+<style>
+.sm-leaderboard-modal{width:100%;max-width:560px;max-height:88vh;overflow-y:auto;padding:20px;background:radial-gradient(circle at 50% 0%,rgba(99,72,165,.28),transparent 42%),linear-gradient(155deg,#101323,#19152f 60%,#111827);border:1px solid rgba(218,190,119,.32);border-radius:22px;color:#fff;box-shadow:0 24px 70px rgba(0,0,0,.48)}
+.sm-leaderboard-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}
+.sm-leaderboard-kicker{font-size:9px;letter-spacing:2px;font-weight:900;color:#b7a5e7}
+.sm-leaderboard-head h3{margin:5px 0 0;color:#f5d58b;font-size:22px;font-weight:900}
+.sm-leaderboard-close{border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.08);color:#fff;border-radius:10px;width:36px;height:36px;font-size:21px;cursor:pointer}
+.sm-leaderboard-content{display:flex;flex-direction:column;gap:15px}
+.sm-leaderboard-loading{font-size:12px;color:#cbd5e1;padding:22px;text-align:center}
+.sm-podium{display:grid;grid-template-columns:1fr 1.12fr 1fr;align-items:end;gap:9px;padding:8px 0 17px}
+.sm-podium-card{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:12px 6px 13px;border:1px solid rgba(255,255,255,.13);border-radius:15px 15px 11px 11px;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.025));}
+.sm-podium-card.rank-1{min-height:190px;border-color:rgba(245,202,94,.55);background:linear-gradient(180deg,rgba(190,143,42,.35),rgba(255,255,255,.035));box-shadow:0 8px 28px rgba(222,173,62,.12)}
+.sm-podium-card.rank-2,.sm-podium-card.rank-3{min-height:164px}
+.sm-podium-medal{font-size:23px;line-height:1.2;margin-bottom:9px}
+.sm-podium-avatar{width:65px;height:65px;border-radius:50%;object-fit:cover;border:2px solid #c7b5f4;background:#42366c;box-shadow:0 5px 15px rgba(0,0,0,.28)}
+.rank-1 .sm-podium-avatar{width:76px;height:76px;border-color:#f0c75e}
+.sm-podium-fallback{display:grid;place-items:center;color:#fff;font-weight:900;font-size:19px}
+.sm-podium-name{width:100%;margin-top:9px;color:#fff;font-size:12px;font-weight:800;line-height:1.35;overflow-wrap:anywhere}
+.sm-podium-rank{margin-top:5px;color:#e8c66d;font-size:10px;font-weight:900;letter-spacing:.7px}
+.sm-podium-list{display:grid;gap:8px;padding:12px;border:1px solid rgba(255,255,255,.10);border-radius:16px;background:rgba(5,8,20,.35)}
+.sm-podium-row{display:flex;align-items:center;gap:12px;min-height:58px;padding:7px 9px;border-bottom:1px solid rgba(255,255,255,.07)}
+.sm-podium-row:last-child{border-bottom:0}
+.sm-podium-row .sm-podium-avatar{width:43px;height:43px;min-width:43px;border-color:rgba(197,176,239,.65)}
+.sm-podium-position{width:30px;height:30px;min-width:30px;display:grid;place-items:center;border:1px solid rgba(225,190,105,.42);border-radius:50%;color:#f0d28c;font-size:11px;font-weight:900}
+.sm-podium-row-name{min-width:0;color:#f8fafc;font-size:13px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sm-leaderboard-dismiss{margin-top:17px;width:100%;padding:11px;border:1px solid rgba(196,181,253,.3);border-radius:11px;background:rgba(124,58,237,.2);color:#fff;font-weight:800;cursor:pointer}
+@media(max-width:420px){.sm-leaderboard-modal{padding:14px;border-radius:18px}.sm-podium{gap:6px}.sm-podium-card{padding:10px 4px}.sm-podium-card.rank-1{min-height:172px}.sm-podium-card.rank-2,.sm-podium-card.rank-3{min-height:150px}.sm-podium-avatar{width:54px;height:54px}.rank-1 .sm-podium-avatar{width:64px;height:64px}.sm-podium-name{font-size:10px}.sm-podium-medal{font-size:20px}}
+</style>
 
 <!-- NAVBAR -->
 <header class="navbar">
@@ -3053,31 +3080,47 @@ function closeReferralLeaderboardModal(){
 async function loadReferralLeaderboard(){
     const box=document.getElementById("referralLeaderboardList");
     if(!box || !currentUserId) return;
-    box.innerHTML='<div style="font-size:12px;color:#cbd5e1">Loading top members…</div>';
+    box.innerHTML='<div class="sm-leaderboard-loading">Loading top members…</div>';
     try{
-        const {data,error}=await supabaseClient.rpc("get_referral_leaderboard",{p_limit:3});
+        const {data,error}=await supabaseClient.rpc("get_referral_leaderboard",{p_limit:12});
         if(error) throw error;
         if(!Array.isArray(data) || data.length===0){
-            box.innerHTML='<div style="font-size:12px;color:#cbd5e1">No referral leaders to show yet.</div>';
+            box.innerHTML='<div class="sm-leaderboard-loading">No referral leaders to show yet.</div>';
             return;
         }
-        box.innerHTML=data.slice(0,3).map((item,index)=>{
-            const name=String(item.full_name||"Smart Money Member").trim();
-            const photo=String(item.photo_url||"").trim();
-            const safePhoto=/^(https:\/\/|data:image\/(png|jpeg|jpg|webp);base64,)/i.test(photo)?photo:"";
-            const initials=name.split(/\s+/).slice(0,2).map(part=>part.charAt(0)).join("").toUpperCase()||"SM";
-            const avatar=safePhoto
-                ? '<img src="'+escapeHtml(safePhoto)+'" alt="'+escapeHtml(name)+'" style="width:54px;height:54px;border-radius:50%;object-fit:cover;border:2px solid #d8b86a" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'grid\'">'
-                  +'<span style="display:none;width:54px;height:54px;border-radius:50%;place-items:center;background:#55409a;color:#fff;font-size:15px;font-weight:900">'+escapeHtml(initials)+'</span>'
-                : '<span style="display:grid;width:54px;height:54px;border-radius:50%;place-items:center;background:#55409a;color:#fff;font-size:15px;font-weight:900">'+escapeHtml(initials)+'</span>';
-            const medals=["🥇","🥈","🥉"];
-            return '<div style="display:flex;align-items:center;gap:13px;padding:12px;border:1px solid rgba(255,255,255,.10);border-radius:14px;background:rgba(255,255,255,.06)">'
-                +'<span style="font-size:20px;width:26px">'+medals[index]+'</span>'+avatar
-                +'<div style="min-width:0;flex:1"><div style="font-size:14px;font-weight:900;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(name)+'</div></div></div>';
+        const members=data.slice(0,12);
+        const medals=["🥇","🥈","🥉"];
+        const safeName=item=>String(item.full_name||"Smart Money Member").trim();
+        const safePhoto=item=>{
+            const value=String(item.photo_url||"").trim();
+            return /^(https:\/\/|data:image\/(png|jpeg|jpg|webp);base64,)/i.test(value)?value:"";
+        };
+        const initials=name=>name.split(/\s+/).slice(0,2).map(part=>part.charAt(0)).join("").toUpperCase()||"SM";
+        const avatar=(item,large=false)=>{
+            const name=safeName(item),photo=safePhoto(item),size=large?65:43;
+            const fallback='<span class="sm-podium-avatar sm-podium-fallback" style="width:'+size+'px;height:'+size+'px;min-width:'+size+'px">'+escapeHtml(initials(name))+'</span>';
+            return photo
+                ? '<img class="sm-podium-avatar" src="'+escapeHtml(photo)+'" alt="'+escapeHtml(name)+'" loading="lazy" onerror="this.outerHTML=\''+fallback.replace(/'/g,"&#39;")+'\'">'
+                : fallback;
+        };
+        const podiumOrder=[1,0,2].filter(index=>members[index]);
+        const podium=podiumOrder.map(index=>{
+            const item=members[index],rank=index+1,name=safeName(item);
+            return '<article class="sm-podium-card rank-'+rank+'">'
+                +'<div class="sm-podium-medal">'+medals[index]+'</div>'+avatar(item,true)
+                +'<div class="sm-podium-name">'+escapeHtml(name)+'</div>'
+                +'<div class="sm-podium-rank">RANK '+rank+'</div></article>';
         }).join("");
+        const remaining=members.slice(3).map((item,index)=>{
+            const rank=index+4,name=safeName(item);
+            return '<div class="sm-podium-row"><span class="sm-podium-position">'+rank+'</span>'
+                +avatar(item,false)+'<div class="sm-podium-row-name">'+escapeHtml(name)+'</div></div>';
+        }).join("");
+        box.innerHTML=(podium?'<div class="sm-podium">'+podium+'</div>':"")
+            +(remaining?'<div class="sm-podium-list">'+remaining+'</div>':"");
     }catch(error){
         console.error("Referral leaderboard failed:",error);
-        box.innerHTML='<div role="status" style="font-size:12px;color:#fecaca">Leaderboard is temporarily unavailable. <button type="button" onclick="loadReferralLeaderboard()" style="margin-left:5px;padding:5px 8px;border:1px solid rgba(245,198,107,.5);border-radius:8px;background:transparent;color:#ffe0a0">Retry</button></div>';
+        box.innerHTML='<div role="status" class="sm-leaderboard-loading" style="color:#fecaca">Leaderboard is temporarily unavailable. <button type="button" onclick="loadReferralLeaderboard()" style="margin-left:5px;padding:5px 8px;border:1px solid rgba(245,198,107,.5);border-radius:8px;background:transparent;color:#ffe0a0">Retry</button></div>';
     }
 }
 
