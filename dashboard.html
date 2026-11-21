@@ -1341,6 +1341,17 @@ button{
         <button class="sidebar-balance-action" onclick="openWithdrawModal()">💸 Withdraw Balance</button>
     </div>
 
+    <section id="referralLeaderboard" aria-label="Referral leaderboard" style="margin:0 14px 20px;padding:15px 13px;border:1px solid rgba(245,198,107,.28);border-radius:18px;background:linear-gradient(145deg,rgba(245,198,107,.10),rgba(124,58,237,.12));box-shadow:0 10px 25px rgba(0,0,0,.18)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+            <strong style="font-size:12px;letter-spacing:1px;color:#ffe0a0">🏆 TOP REFERRERS</strong>
+            <span style="font-size:9px;color:#b9c5df">LIVE</span>
+        </div>
+        <div style="font-size:9px;color:#aab6d0;margin-bottom:12px">Members with the most successful referrals</div>
+        <div id="referralLeaderboardList" aria-live="polite" style="display:grid;gap:9px">
+            <div style="font-size:11px;color:#cbd5e1">Loading leaderboard…</div>
+        </div>
+    </section>
+
     <div class="sidebar-section-title">Dashboard</div>
 
     <ul class="sidebar-menu">
@@ -2333,6 +2344,7 @@ async function loadDashboardProfile(){
     }
 
     currentUserId = user.id;
+        loadReferralLeaderboard();
     currentUserEmail = user.email || "";
 
     // Show the last verified identity immediately while the fresh profile
@@ -3041,6 +3053,40 @@ function setupLogout(){
 
 
 /* SMART MONEY USER NOTIFICATIONS */
+async function loadReferralLeaderboard(){
+    const box=document.getElementById("referralLeaderboardList");
+    if(!box || !currentUserId) return;
+    box.innerHTML='<div style="font-size:11px;color:#cbd5e1">Loading leaderboard…</div>';
+    try{
+        const {data,error}=await supabaseClient.rpc("get_referral_leaderboard",{p_limit:10});
+        if(error) throw error;
+        if(!Array.isArray(data) || data.length===0){
+            box.innerHTML='<div style="font-size:11px;color:#cbd5e1;line-height:1.5">No successful referrals yet. Be the first to appear here!</div>';
+            return;
+        }
+        box.innerHTML=data.map((item,index)=>{
+            const name=String(item.full_name||"Smart Money Member").trim();
+            const photo=String(item.photo_url||"").trim();
+            const safePhoto=/^(https:\/\/|data:image\/(png|jpeg|jpg|webp);base64,)/i.test(photo)?photo:"";
+            const initials=name.split(/\s+/).slice(0,2).map(part=>part.charAt(0)).join("").toUpperCase()||"SM";
+            const avatar=safePhoto
+                ? '<img src="'+escapeHtml(safePhoto)+'" alt="" loading="lazy" style="width:34px;height:34px;border-radius:50%;object-fit:cover;border:1px solid rgba(245,198,107,.55)" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'grid\'">'
+                  +'<span style="display:none;width:34px;height:34px;border-radius:50%;place-items:center;background:#55409a;color:#fff;font-size:11px;font-weight:900">'+escapeHtml(initials)+'</span>'
+                : '<span style="display:grid;width:34px;height:34px;border-radius:50%;place-items:center;background:#55409a;color:#fff;font-size:11px;font-weight:900">'+escapeHtml(initials)+'</span>';
+            const medals=["🥇","🥈","🥉"];
+            return '<div style="display:flex;align-items:center;gap:8px;min-width:0">'
+                +'<span style="width:17px;font-size:12px">'+(medals[index]||("#"+(index+1)))+'</span>'
+                +avatar
+                +'<div style="min-width:0;flex:1"><div style="font-size:10px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(name)+'</div>'
+                +'<div style="font-size:8px;color:#aab6d0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">ID: '+escapeHtml(item.referral_id||"—")+'</div></div>'
+                +'<strong style="font-size:11px;color:#ffe0a0;white-space:nowrap">'+Number(item.referral_count||0)+' joins</strong></div>';
+        }).join("");
+    }catch(error){
+        console.error("Referral leaderboard failed:",error);
+        box.innerHTML='<div role="status" style="font-size:10px;color:#fca5a5;line-height:1.5">Leaderboard is temporarily unavailable. <button type="button" onclick="loadReferralLeaderboard()" style="margin-top:6px;padding:5px 9px;border:1px solid rgba(245,198,107,.5);border-radius:8px;background:transparent;color:#ffe0a0">Retry</button></div>';
+    }
+}
+
 async function loadAdminStatus(){
     const container=document.getElementById("statusList");if(!container)return;
     try{
