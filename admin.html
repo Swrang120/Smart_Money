@@ -8161,24 +8161,47 @@ if(document.readyState === "loading"){
     }catch(e){console.error("Package image manager load failed:",e);status("Could not load package images: "+(e?.message||String(e)),true);}
     finally{loading=false;}
   }
+  async function compressPackageArtwork(file){
+    // Resize and convert large admin artwork to efficient WebP before upload.
+    if(!file.type.startsWith("image/"))throw new Error("Please choose a valid image file.");
+    if(!("createImageBitmap" in window))return file;
+    const bitmap=await createImageBitmap(file);
+    const maxSide=1440,scale=Math.min(1,maxSide/Math.max(bitmap.width,bitmap.height));
+    const width=Math.max(1,Math.round(bitmap.width*scale)),height=Math.max(1,Math.round(bitmap.height*scale));
+    const canvas=document.createElement("canvas");canvas.width=width;canvas.height=height;
+    const ctx=canvas.getContext("2d",{alpha:false});ctx.drawImage(bitmap,0,0,width,height);bitmap.close?.();
+    const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/webp",0.82));
+    if(!blob)return file;
+    // Keep the original if WebP conversion unexpectedly increases file size.
+    if(blob.size>=file.size)return file;
+    return new File([blob],file.name.replace(/\.[^.]+$/,"")+".webp",{type:"image/webp",lastModified:Date.now()});
+  }
   window.uploadPackageImage=async function(){
     const btn=$("packageImageUploadBtn"),file=$("packageImageFile")?.files?.[0],key=$("packageImageKey")?.value;
     if(!supabaseClient){status("Supabase is not ready. Refresh and try again.",true);return;}
     if(!file){status("Choose a JPG, PNG or WebP image first. The saved image preview is shown above when available.",true);return;}
     if(!["image/jpeg","image/png","image/webp"].includes(file.type)){status("Only JPG, PNG or WebP images are supported.",true);return;}
     if(file.size>10*1024*1024){status("Image must be 10 MB or smaller.",true);return;}
-    btn.disabled=true;btn.textContent="Uploading…";status("Uploading image and saving it for the Home Page…");
+    btn.disabled=true;btn.textContent="Optimizing…";status("Optimizing artwork for faster Home Page loading…");
     try{
       const {data:sd,error:se}=await supabaseClient.auth.getSession();if(se)throw se;
       const user=sd?.session?.user;if(!user||String(user.email||"").toLowerCase()!==ADMIN_EMAIL)throw new Error("Please sign in with the authorized admin account.");
-      const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg",path=key+"/"+Date.now()+"-"+crypto.randomUUID()+"."+ext;
-      const {error:ue}=await supabaseClient.storage.from(BUCKET).upload(path,file,{contentType:file.type,cacheControl:"3600",upsert:false});if(ue)throw ue;
+      const optimized=await compressPackageArtwork(file);
+      const ext=optimized.type==="image/png"?"png":optimized.type==="image/webp"?"webp":"jpg",path=key+"/"+Date.now()+"-"+crypto.randomUUID()+"."+ext;
+      btn.textContent="Uploading optimized image…";
+      const {error:ue}=await supabaseClient.storage.from(BUCKET).upload(path,optimized,{contentType:optimized.type,cacheControl:"31536000",upsert:false});if(ue)throw ue;
       const {data:pd}=supabaseClient.storage.from(BUCKET).getPublicUrl(path),url=pd?.publicUrl;if(!url)throw new Error("Could not create the public image URL.");
-      try{localStorage.setItem("smart_money_dashboard_header_logo_url",url);}catch(e){}
       const {error:de}=await supabaseClient.from("package_images").upsert({package_key:key,image_url:url,updated_at:new Date().toISOString(),updated_by:user.id},{onConflict:"package_key"});if(de)throw de;
+      try{
+        const cacheKey="smart_money_public_package_image_urls_v1",cache=JSON.parse(localStorage.getItem(cacheKey)||"{}");
+        cache[key]=url;localStorage.setItem(cacheKey,JSON.stringify(cache));
+        if(key==="smart_money_logo")localStorage.setItem("smart_money_dashboard_header_logo_url",url);
+      }catch(e){}
       savedUrls[key]=url;const img=$("packageImageCurrentPreview");
       if(img){img.onload=()=>{img.style.display="block";};img.onerror=()=>status("Image saved, but its preview could not load. Check the public Storage bucket.",true);img.src=url;img.style.display="block";}
-      $("packageImageFile").value="";status("✅ SUCCESS — "+key.replace("_"," ").toUpperCase()+" image saved. It is published for the Home Page; refresh the Home Page to see it.");
+      $("packageImageFile").value="";
+      const savedKB=Math.round(optimized.size/1024),originalKB=Math.round(file.size/1024);
+      status("✅ SUCCESS — "+key.replace("_"," ").toUpperCase()+" optimized image saved ("+savedKB+" KB; original "+originalKB+" KB). It is published for the Home Page.");
     }catch(e){console.error("Package image upload failed",e);status("❌ Upload failed: "+(e?.message||String(e)),true);}
     finally{btn.disabled=false;btn.textContent="Upload / Update Package Image";}
   };
