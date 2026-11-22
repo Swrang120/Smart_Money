@@ -8523,47 +8523,54 @@ async function loadPublicPackageImages(){
  const brandImage=document.getElementById("siteBrandImage");
  const brandDefault=document.getElementById("brandDefault");
  const logoCacheKey="smart_money_dashboard_header_logo_url";
-
- // Show the last Admin-uploaded logo immediately, before waiting for Supabase.
- const applyBrandLogo=(url)=>{
-  const cleanUrl=String(url||"").trim();
-  if(!brandImage||!cleanUrl)return;
-  brandImage.onload=()=>{brandImage.hidden=false;if(brandDefault)brandDefault.hidden=true;};
-  brandImage.onerror=()=>{brandImage.hidden=true;if(brandDefault)brandDefault.hidden=false;};
-  brandImage.loading="eager";
-  brandImage.decoding="async";
-  brandImage.fetchPriority="high";
-  if(brandImage.src!==cleanUrl)brandImage.src=cleanUrl;
+ const packageCacheKey="smart_money_public_package_image_urls_v1";
+ const keys={"starter package":"starter","intermediate":"intermediate","intermediate package":"intermediate","expert package":"expert","master":"master","master package":"master","brahmastra":"brahmastra","brahmastra package":"brahmastra","premium pro":"premium_pro","premium pro package":"premium_pro"};
+ const renderPackageImages=(urls,fromCache=false)=>{
+  document.querySelectorAll(".package-card").forEach((card,index)=>{
+   const title=(card.querySelector(".pkg-title h3")?.textContent||"").trim().toLowerCase(),key=keys[title],url=key&&urls[key];
+   if(!url)return;
+   let img=card.querySelector(".package-artwork");
+   if(!img){
+    img=document.createElement("img");img.className="package-artwork";img.alt=title+" promotional artwork";
+    img.decoding="async";img.loading=index<2?"eager":"lazy";
+    if(index<2)img.fetchPriority="high";
+    const banner=card.querySelector(".pkg-banner");if(banner)banner.insertAdjacentElement("afterend",img);else card.prepend(img);
+   }
+   if(img.dataset.imageUrl!==url){
+    img.dataset.imageUrl=url;
+    img.onload=()=>img.classList.add("is-visible");
+    img.onerror=()=>{img.classList.remove("is-visible");console.warn("Package artwork failed to load:",key);};
+    img.src=url;
+   }
+  });
  };
+ // Paint previously fetched Admin image URLs immediately on repeat visits.
  try{
+  const cached=JSON.parse(localStorage.getItem(packageCacheKey)||"{}");
+  if(cached&&typeof cached==="object")renderPackageImages(cached,true);
   const cachedLogo=localStorage.getItem(logoCacheKey);
-  if(cachedLogo)applyBrandLogo(cachedLogo);
- }catch(e){}
-
+  if(cachedLogo&&brandImage){
+   brandImage.onload=()=>{brandImage.hidden=false;if(brandDefault)brandDefault.hidden=true;};
+   brandImage.onerror=()=>{brandImage.hidden=true;if(brandDefault)brandDefault.hidden=false;};
+   brandImage.decoding="async";brandImage.fetchPriority="high";brandImage.src=cachedLogo;
+  }
+ }catch(e){console.warn("Homepage image cache unavailable:",e);}
  if(!window.supabase||!supabaseClient)return;
  try{
-  const {data,error}=await supabaseClient.from("package_images").select("package_key,image_url");if(error)throw error;
-  const keys={"starter package":"starter","intermediate":"intermediate","intermediate package":"intermediate","expert package":"expert","master":"master","master package":"master","brahmastra":"brahmastra","brahmastra package":"brahmastra","premium pro":"premium_pro","premium pro package":"premium_pro"};
-  const urls={};(data||[]).forEach(r=>{if(r.image_url)urls[r.package_key]=r.image_url;});
-  // Homepage logo uses the exact image uploaded in Admin Panel.
-  if(urls.smart_money_logo){
+  const {data,error}=await supabaseClient.from("package_images").select("package_key,image_url");
+  if(error)throw error;
+  const urls={};(data||[]).forEach(row=>{if(row.image_url)urls[row.package_key]=row.image_url;});
+  try{localStorage.setItem(packageCacheKey,JSON.stringify(urls));}catch(e){}
+  renderPackageImages(urls);
+  if(urls.smart_money_logo&&brandImage){
    try{localStorage.setItem(logoCacheKey,urls.smart_money_logo);}catch(e){}
-   applyBrandLogo(urls.smart_money_logo);
-  }else{
-   // Reveal the built-in text logo only after Supabase confirms no Admin logo exists.
-   if(brandDefault)brandDefault.hidden=false;
-  }
-  document.querySelectorAll(".package-card").forEach(card=>{
-   const title=(card.querySelector(".pkg-title h3")?.textContent||"").trim().toLowerCase(),key=keys[title];
-   if(!key||!urls[key])return;
-   let img=card.querySelector(".package-artwork");
-   if(!img){img=document.createElement("img");img.className="package-artwork";img.alt=title+" promotional artwork";img.loading="lazy";const banner=card.querySelector(".pkg-banner");if(banner)banner.insertAdjacentElement("afterend",img);else card.prepend(img);}
-   img.src=urls[key];img.classList.add("is-visible");
-  });
- }catch(e){console.warn("Public image loading failed",e);}
+   brandImage.onload=()=>{brandImage.hidden=false;if(brandDefault)brandDefault.hidden=true;};
+   brandImage.onerror=()=>{brandImage.hidden=true;if(brandDefault)brandDefault.hidden=false;};
+   brandImage.decoding="async";brandImage.fetchPriority="high";brandImage.src=urls.smart_money_logo;
+  }else if(brandDefault&&!brandImage?.src){brandDefault.hidden=false;}
+ }catch(e){console.warn("Public image loading failed:",e);}
 }
-if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",loadPublicPackageImages);else loadPublicPackageImages();
-</script>
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",loadPublicPackageImages,{once:true});else loadPublicPackageImages();</script>
 
 <div id="smNetworkOverlay" role="alertdialog" aria-modal="true" aria-labelledby="smNetworkTitle" aria-describedby="smNetworkDesc" aria-hidden="true">
 <div class="sm-net-card"><div class="sm-net-mark" aria-hidden="true">SM<span class="sm-net-ring"></span></div>
