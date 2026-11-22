@@ -1317,9 +1317,7 @@
 
       if (!email || !password) {
 
-        alert(
-          "⚠️ Kripya Email aur Password bharein!"
-        );
+        showSmartMoneyNotice("Please enter your email address and password.", "Missing Login Details", "✉️");
 
         return;
       }
@@ -1327,9 +1325,7 @@
 
       if (!isValidEmail(email)) {
 
-        alert(
-          "⚠️ Please valid email address enter karein."
-        );
+        showSmartMoneyNotice("Please enter a valid email address.", "Invalid Email", "✉️");
 
         return;
       }
@@ -1390,16 +1386,11 @@
             )
           ) {
 
-            alert(
-              "📧 Aapka email abhi verify nahi hua hai.\n\n" +
-              "Apne email inbox mein verification link check karein."
-            );
+            showSmartMoneyNotice("Your email address has not been verified yet. Please check your inbox for the verification link.", "Email Verification Required", "✉️");
 
           } else {
 
-            alert(
-              "⚠️ Invalid Email or Password!"
-            );
+            showSmartMoneyNotice("The email address or password you entered is incorrect. Please check your details and try again.", "Unable to Sign In", "🔐");
 
           }
 
@@ -1596,10 +1587,7 @@
             .signOut();
 
 
-          alert(
-            "❌ Aapka account deleted hai.\n\n" +
-            "Please support se contact karein."
-          );
+          showSmartMoneyNotice("This account is no longer active. Please contact Smart Money Support for assistance.", "Account Unavailable", "⚠️");
 
 
           resetLoginButton();
@@ -1621,10 +1609,7 @@
             .signOut();
 
 
-          alert(
-            "⏳ Aapka account abhi active nahi hai.\n\n" +
-            "Admin approval ke baad aap dashboard access kar sakenge."
-          );
+          showSmartMoneyNotice("Your account is awaiting approval. Dashboard access will be available after admin approval.", "Approval Pending", "⏳");
 
 
           resetLoginButton();
@@ -1750,15 +1735,7 @@
         );
 
 
-        alert(
-          "⚠️ Login mein problem aayi:\n\n" +
-          (
-            error &&
-            error.message
-              ? error.message
-              : "Unknown error"
-          )
-        );
+        showSmartMoneyNotice("We couldn't complete your sign-in. Please try again. If the issue continues, contact Smart Money Support.", "Sign-In Error", "⚠️");
 
 
         resetLoginButton();
