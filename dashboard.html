@@ -159,22 +159,27 @@ button{
 .sidebar{
     position:fixed;
     top:0;
-    left:-350px;
+    left:0;
     width:335px;
     max-width:90vw;
-    height:100%;
+    height:100vh;
+    height:100dvh;
+    transform:translate3d(-101%,0,0);
+    will-change:transform;
     background:
         radial-gradient(circle at 20% 0%,rgba(124,58,237,.25),transparent 32%),
         linear-gradient(180deg,#0b1220,#0f172a 55%,#080d18);
     z-index:9999;
-    transition:left .3s cubic-bezier(.4,0,.2,1);
+    transition:transform .18s cubic-bezier(.2,.8,.2,1);
     overflow-y:auto;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
     box-shadow:15px 0 45px rgba(0,0,0,.38);
     color:#fff;
 }
 
 .sidebar.active{
-    left:0;
+    transform:translate3d(0,0,0);
 }
 
 .sidebar::-webkit-scrollbar{
@@ -2413,6 +2418,19 @@ async function loadDashboardProfile(){
     let identityShownEarly = false;
     try{
         const cachedIdentity = JSON.parse(localStorage.getItem("sm_dashboard_identity_" + currentUserId) || "null");
+        // Render last verified profile details immediately; this cache is display-only.
+        if(cachedIdentity){
+            userRefCode = cachedIdentity.referral_code || "";
+            const cachedIdEl = document.getElementById("topUserId");
+            const cachedDobEl = document.getElementById("dobDisplayInfo");
+            const cachedPackageEl = document.getElementById("activePackageBadge");
+            if(cachedIdEl && cachedIdentity.referral_code) cachedIdEl.textContent = cachedIdentity.referral_code;
+            if(cachedDobEl && cachedIdentity.date_of_birth) cachedDobEl.textContent = cachedIdentity.date_of_birth;
+            if(cachedPackageEl && cachedIdentity.package_name){
+                cachedPackageEl.textContent = cachedIdentity.package_name.toUpperCase() + " 👑";
+                cachedPackageEl.classList.add("active");
+            }
+        }
         const metadata = user.user_metadata || {};
         const earlyName = String(cachedIdentity?.full_name || metadata.full_name || metadata.name || metadata.display_name || currentUserEmail.split("@")[0] || "User");
         const earlyPhoto = cachedIdentity?.profile_pic || metadata.avatar_url || metadata.picture || null;
@@ -2575,7 +2593,10 @@ async function loadDashboardProfile(){
         try{
             localStorage.setItem("sm_dashboard_identity_" + currentUserId, JSON.stringify({
                 full_name: currentProfile.full_name || "",
-                profile_pic: currentProfile.profile_pic || null
+                profile_pic: currentProfile.profile_pic || null,
+                referral_code: currentProfile.referral_code || "",
+                date_of_birth: currentProfile.date_of_birth || "",
+                package_name: currentProfile.package_name || ""
             }));
         }catch(cacheError){ console.warn("Dashboard identity cache write skipped:",cacheError); }
         return true;
