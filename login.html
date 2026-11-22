@@ -725,10 +725,37 @@
   .otp-notice p{margin:0!important;color:inherit!important;font-size:11px!important;line-height:1.55}
   @keyframes otpNoticeIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
 
+  
+  /* Smart Money branded authentication notice — replaces browser-native alerts. */
+  .sm-notice-backdrop{position:fixed;inset:0;z-index:99999;display:none;place-items:center;padding:22px;background:rgba(3,7,18,.78);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+  .sm-notice-backdrop.open{display:grid;animation:smNoticeFade .18s ease-out}
+  .sm-notice-card{width:min(420px,100%);padding:26px 23px 22px;border-radius:24px;text-align:center;color:#f8fafc;background:radial-gradient(circle at 50% 0%,rgba(214,166,73,.19),transparent 43%),linear-gradient(155deg,#172033,#0b1220 72%);border:1px solid rgba(218,178,95,.42);box-shadow:0 24px 80px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.07)}
+  .sm-notice-logo{width:62px;height:62px;object-fit:cover;border-radius:17px;border:1px solid rgba(232,190,105,.5);box-shadow:0 7px 24px rgba(218,166,73,.18);margin:0 auto 13px;display:block}
+  .sm-notice-brand{font-size:10px;letter-spacing:2.8px;font-weight:900;color:#e8c779}
+  .sm-notice-icon{width:46px;height:46px;margin:17px auto 10px;border-radius:50%;display:grid;place-items:center;background:rgba(225,170,68,.13);border:1px solid rgba(225,170,68,.35);font-size:22px}
+  .sm-notice-card h3{font-size:20px;margin:8px 0;color:#fff;font-weight:850}
+  .sm-notice-card p{font-size:13px;line-height:1.65;color:#cbd5e1;margin:0 auto;max-width:330px}
+  .sm-notice-card .sm-notice-help{font-size:11px;color:#e7c77f;margin-top:10px}
+  .sm-notice-ok{width:100%;margin-top:20px;padding:13px 18px;border:0;border-radius:13px;background:linear-gradient(135deg,#f0d18a,#bd8a35);color:#17120a;font-weight:900;box-shadow:0 8px 22px rgba(201,151,61,.2)}
+  @keyframes smNoticeFade{from{opacity:0}to{opacity:1}}
+  @media(max-width:420px){.sm-notice-card{padding:23px 18px 19px;border-radius:21px}.sm-notice-card h3{font-size:18px}}
+
   </style>
 </head>
 
 <body>
+
+  <div id="smNoticeBackdrop" class="sm-notice-backdrop" role="dialog" aria-modal="true" aria-labelledby="smNoticeTitle">
+    <div class="sm-notice-card">
+      <img class="sm-notice-logo" src="1000819130.jpg" alt="Smart Money" onerror="this.style.display='none'">
+      <div class="sm-notice-brand">SMART MONEY</div>
+      <div class="sm-notice-icon" id="smNoticeIcon">⚠️</div>
+      <h3 id="smNoticeTitle">Account Notice</h3>
+      <p id="smNoticeMessage"></p>
+      <p class="sm-notice-help" id="smNoticeHelp">Please contact Smart Money Support for assistance.</p>
+      <button type="button" class="sm-notice-ok" onclick="closeSmartMoneyNotice()">Okay</button>
+    </div>
+  </div>
 
   <!-- =====================================================
        LOGIN CARD
@@ -1441,10 +1468,10 @@
             .signOut();
 
 
-          alert(
-            "⚠️ Login successful hua,\n" +
-            "lekin aapka profile database mein nahi mila.\n\n" +
-            "Please support/admin se contact karein."
+          showSmartMoneyNotice(
+            "Aapka login verify ho gaya, lekin Smart Money profile record abhi database mein nahi mila. Aapka account access filhaal roka gaya hai.",
+            "Profile Not Found",
+            "⚠️"
           );
 
 
@@ -1713,6 +1740,33 @@
       );
 
     }
+
+    function showSmartMoneyNotice(message, title = "Account Notice", icon = "⚠️") {
+      const backdrop = document.getElementById("smNoticeBackdrop");
+      const messageEl = document.getElementById("smNoticeMessage");
+      const titleEl = document.getElementById("smNoticeTitle");
+      const iconEl = document.getElementById("smNoticeIcon");
+      if (!backdrop || !messageEl || !titleEl || !iconEl) {
+        console.error("Smart Money notice UI is unavailable:", message);
+        return;
+      }
+      titleEl.textContent = title;
+      messageEl.textContent = message;
+      iconEl.textContent = icon;
+      backdrop.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeSmartMoneyNotice() {
+      document.getElementById("smNoticeBackdrop")?.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeSmartMoneyNotice();
+    });
+
+
     /* Smart Money login: email/password and Gmail verification code only. */
     /* =====================================================
        EXISTING SESSION CHECK
