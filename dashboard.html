@@ -1109,6 +1109,35 @@ button{
     .v-card h2{ font-size:28px; }
     .sidebar{ width:330px; }
 }
+
+/* NAVBAR NOTIFICATION BELL */
+.sm-notification-trigger{position:relative;width:46px;height:44px;border:1px solid #e5e7eb;border-radius:14px;background:linear-gradient(145deg,#fff,#f4f2ff);color:#4338a8;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(30,41,59,.08);transition:transform .18s ease,box-shadow .18s ease}
+.sm-notification-trigger:active{transform:scale(.95)}
+.sm-notification-trigger svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.sm-notification-count{position:absolute;right:-6px;top:-7px;min-width:19px;height:19px;padding:0 5px;border:2px solid #fff;border-radius:20px;background:#ef3340;color:#fff;font-size:10px;font-weight:900;line-height:15px;text-align:center}
+.sm-notification-dot{position:absolute;right:7px;top:7px;width:9px;height:9px;border:2px solid #fff;border-radius:50%;background:#ef3340}
+.sm-notifications-overlay{position:fixed;inset:0;z-index:10020;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(8,14,32,.64);backdrop-filter:blur(8px)}
+.sm-notifications-overlay.open{display:flex}
+.sm-notifications-panel{width:min(100%,560px);max-height:min(82dvh,720px);display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(148,163,184,.25);border-radius:22px;background:linear-gradient(160deg,#fff 0%,#f7f8ff 100%);box-shadow:0 24px 80px rgba(2,6,23,.3)}
+.sm-notifications-header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:21px 21px 16px;border-bottom:1px solid #e8eaf2}
+.sm-notifications-eyebrow{font-size:9px;font-weight:900;letter-spacing:1.8px;color:#6d55c8}
+.sm-notifications-header h2{margin:5px 0 3px;font-size:22px;font-weight:900;color:#111827}
+.sm-notifications-header p{margin:0;font-size:12px;color:#64748b}
+.sm-notifications-close{width:36px;height:36px;border:1px solid #e2e8f0;border-radius:11px;background:#fff;color:#475569;font-size:25px;line-height:1;cursor:pointer}
+.sm-notifications-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 18px;background:#f1f3fb;color:#64748b;font-size:11px;font-weight:700}
+.sm-notifications-toolbar button{border:0;background:transparent;color:#6550bd;font-size:11px;font-weight:800;cursor:pointer}
+.sm-notifications-list{padding:5px 18px 18px;overflow:auto}
+.sm-notification-item{position:relative;margin-top:12px;padding:14px 42px 14px 14px;border:1px solid #e5e7f0;border-radius:15px;background:#fff;box-shadow:0 4px 12px rgba(15,23,42,.035)}
+.sm-notification-item.unread{border-color:#c9c2f7;background:linear-gradient(110deg,#fff,#faf9ff)}
+.sm-notification-item.unread:before{content:"";position:absolute;left:0;top:13px;bottom:13px;width:3px;border-radius:0 4px 4px 0;background:#ef3340}
+.sm-notification-item h3{margin:0 0 6px;color:#172033;font-size:13px;font-weight:900}
+.sm-notification-item p{margin:0;color:#475569;font-size:12px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
+.sm-notification-meta{display:flex;align-items:center;gap:7px;margin-top:9px;color:#94a3b8;font-size:10px}
+.sm-notification-type{padding:3px 7px;border-radius:20px;background:#f1efff;color:#6650b8;font-size:9px;font-weight:900;text-transform:uppercase}
+.sm-notification-delete{position:absolute;right:10px;top:10px;width:28px;height:28px;border:1px solid #fee2e2;border-radius:9px;background:#fff7f7;color:#dc2626;font-size:15px;cursor:pointer}
+.sm-notifications-empty{padding:35px 12px;text-align:center;color:#64748b;font-size:13px}
+@media(max-width:600px){.sm-notifications-overlay{padding:10px;align-items:flex-end}.sm-notifications-panel{max-height:84dvh;border-radius:22px 22px 14px 14px}.sm-notifications-header{padding:18px 16px 14px}.sm-notifications-list{padding:4px 13px 15px}}
+
 </style>
 <style id="smartMoneyNetworkUiStyles">
 #smNetworkOverlay{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 50% 20%,rgba(54,94,255,.18),transparent 42%),rgba(5,12,35,.94);backdrop-filter:blur(12px);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff}
@@ -1558,7 +1587,11 @@ button{
     </a>
     <div class="nav-right">
         <a href="index.html" class="nav-home-btn">🌐 Home</a>
-        <img src="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22%3E%3Crect width=%22128%22 height=%22128%22 rx=%2264%22 fill=%22%237c3aed%22/%3E%3Ccircle cx=%2264%22 cy=%2247%22 r=%2223%22 fill=%22%23e9d5ff%22/%3E%3Cpath d=%22M20 119c4-25 21-38 44-38s40 13 44 38%22 fill=%22%23e9d5ff%22/%3E%3C/svg%3E" class="nav-avatar" alt="Avatar" id="navAvatarImg">
+        <button type="button" class="sm-notification-trigger" id="smNotificationButton" onclick="openUserNotifications()" aria-label="Open notifications" aria-haspopup="dialog" aria-controls="smNotificationsModal">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
+          <span class="sm-notification-count" id="smNotificationCount" hidden>0</span>
+          <span class="sm-notification-dot" id="smNotificationDot" hidden></span>
+        </button>
         <button class="menu-btn" onclick="toggleSidebar()">☰</button>
     </div>
 </header>
@@ -1591,16 +1624,7 @@ button{
         </div>
     </div>
 
-    <!-- ADMIN STATUS -->
-    <div id="adminStatusContainer" class="admin-status">
-        <div class="admin-status-title">
-            <span>🔔</span>
-            <h3>SMART MONEY NOTIFICATIONS</h3>
-        </div>
-        <div id="statusList">
-            <span class="status-loading">Loading updates...</span>
-        </div>
-    </div>
+    <!-- Notifications are opened from the navbar bell button. -->
 
     <!-- EARNINGS -->
     <div class="stats-stack">
@@ -1690,6 +1714,18 @@ button{
 <!-- TOAST -->
 <div id="toastNotification">
     ⚡ <span id="toastMessage">Success Message</span>
+</div>
+
+<!-- SMART MONEY USER NOTIFICATIONS MODAL -->
+<div id="smNotificationsModal" class="sm-notifications-overlay" role="dialog" aria-modal="true" aria-labelledby="smNotificationsTitle">
+  <section class="sm-notifications-panel">
+    <header class="sm-notifications-header">
+      <div><span class="sm-notifications-eyebrow">SMART MONEY</span><h2 id="smNotificationsTitle">Notifications</h2><p>Important updates from your platform.</p></div>
+      <button type="button" class="sm-notifications-close" onclick="closeUserNotifications()" aria-label="Close notifications">×</button>
+    </header>
+    <div class="sm-notifications-toolbar"><span id="smNotificationsSummary">Your latest updates</span><button type="button" onclick="markAllNotificationsRead()">Mark all as read</button></div>
+    <div id="smNotificationsList" class="sm-notifications-list"><div class="sm-notifications-empty">Loading notifications…</div></div>
+  </section>
 </div>
 
 <!-- EARNINGS MODAL -->
@@ -3221,32 +3257,88 @@ async function loadReferralLeaderboard(){
     }
 }
 
-async function loadAdminStatus(){
-    const container=document.getElementById("statusList");if(!container)return;
-    try{
-        const {data,error}=await supabaseClient.from("user_notifications")
-          .select("id,title,message,notification_type,created_at,expires_at")
-          .eq("is_active",true).order("created_at",{ascending:false}).limit(30);
-        if(error)throw error;
-        const now=Date.now(),visible=(data||[]).filter(item=>!item.expires_at||new Date(item.expires_at).getTime()>now);
-        if(!visible.length){container.innerHTML='<p style="color:#64748b;margin:0;font-size:12px">No new notifications right now.</p>';return;}
-        const styles={important:"background:#fff1f2;color:#be123c;border-color:#fecdd3",course:"background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe",maintenance:"background:#fff7ed;color:#c2410c;border-color:#fed7aa",general:"background:#f5f3ff;color:#6d28d9;border-color:#ddd6fe"};
-        container.innerHTML=visible.map(item=>{
-          const type=String(item.notification_type||"general").toLowerCase();
-          return `<article class="admin-update" style="padding:12px 0">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
-              <div class="admin-update-title">${escapeHtml(item.title||"SMART MONEY UPDATE")}</div>
-              <span style="font-size:9px;font-weight:900;letter-spacing:.5px;padding:4px 8px;border:1px solid;border-radius:20px;${styles[type]||styles.general}">${escapeHtml(type.replace("_"," ").toUpperCase())}</span>
-            </div>
-            <div class="admin-update-message" style="white-space:pre-wrap">${escapeHtml(item.message||"")}</div>
-            <div style="font-size:10px;color:#94a3b8;margin-top:7px">${escapeHtml(new Date(item.created_at).toLocaleString())}</div>
-          </article>`;
-        }).join("");
-    }catch(error){
-        console.error("Smart Money notifications failed:",error);
-        container.innerHTML='<div role="status" style="color:#b45309;margin:0;font-size:12px;line-height:1.6">Notifications could not be loaded right now. Your account and wallet are not affected.<br><button type="button" onclick="loadAdminStatus()" style="margin-top:8px;padding:7px 12px;border:1px solid #d6a44a;border-radius:8px;background:rgba(214,164,74,.10);color:inherit;font-weight:700;cursor:pointer">Retry notifications</button></div>';
-    }
+
+/* SMART MONEY USER NOTIFICATIONS — per-user read and dismiss state on this device. */
+let smUserNotificationItems=[];
+function smNotificationStateKey(kind){
+  return "sm_user_notifications_"+kind+"_"+String(currentUserId||"guest");
 }
+function smGetNotificationState(kind){
+  try{return JSON.parse(localStorage.getItem(smNotificationStateKey(kind))||"[]").map(String);}
+  catch(error){return [];}
+}
+function smSaveNotificationState(kind,ids){
+  try{localStorage.setItem(smNotificationStateKey(kind),JSON.stringify([...new Set(ids.map(String))]));}catch(error){}
+}
+function smUpdateNotificationBadge(){
+  const read=new Set(smGetNotificationState("read"));
+  const dismissed=new Set(smGetNotificationState("dismissed"));
+  const unread=smUserNotificationItems.filter(item=>!dismissed.has(String(item.id))&&!read.has(String(item.id))).length;
+  const count=document.getElementById("smNotificationCount"),dot=document.getElementById("smNotificationDot");
+  if(count){count.textContent=unread>99?"99+":String(unread);count.hidden=unread===0;}
+  if(dot)dot.hidden=unread===0;
+}
+function renderUserNotifications(){
+  const box=document.getElementById("smNotificationsList");
+  if(!box)return;
+  const read=new Set(smGetNotificationState("read"));
+  const dismissed=new Set(smGetNotificationState("dismissed"));
+  const items=smUserNotificationItems.filter(item=>!dismissed.has(String(item.id)));
+  const summary=document.getElementById("smNotificationsSummary");
+  if(summary)summary.textContent=items.length?items.length+" update"+(items.length===1?"":"s"):"No active updates";
+  if(!items.length){box.innerHTML='<div class="sm-notifications-empty">You are all caught up. No notifications right now. ✨</div>';return;}
+  box.innerHTML=items.map(item=>{
+    const id=String(item.id),type=String(item.notification_type||"general").replace(/_/g," ");
+    const date=item.created_at?new Date(item.created_at).toLocaleString():"";
+    return '<article class="sm-notification-item '+(read.has(id)?"":"unread")+'">'
+      +'<button type="button" class="sm-notification-delete" aria-label="Delete notification" title="Delete notification" onclick="deleteUserNotification('+JSON.stringify(id)+')">✕</button>'
+      +'<h3>'+escapeHtml(item.title||"SMART MONEY UPDATE")+'</h3>'
+      +'<p>'+escapeHtml(item.message||"")+'</p>'
+      +'<div class="sm-notification-meta"><span class="sm-notification-type">'+escapeHtml(type)+'</span><span>'+escapeHtml(date)+'</span></div>'
+      +'</article>';
+  }).join("");
+}
+function openUserNotifications(){
+  const modal=document.getElementById("smNotificationsModal");
+  if(!modal)return;
+  const read=smGetNotificationState("read");
+  const dismissed=new Set(smGetNotificationState("dismissed"));
+  smSaveNotificationState("read",[...read,...smUserNotificationItems.filter(item=>!dismissed.has(String(item.id))).map(item=>String(item.id))]);
+  renderUserNotifications();smUpdateNotificationBadge();
+  modal.classList.add("open");document.body.style.overflow="hidden";
+}
+function closeUserNotifications(){
+  document.getElementById("smNotificationsModal")?.classList.remove("open");
+  document.body.style.overflow="";
+}
+function markAllNotificationsRead(){
+  const dismissed=new Set(smGetNotificationState("dismissed"));
+  smSaveNotificationState("read",[...smGetNotificationState("read"),...smUserNotificationItems.filter(item=>!dismissed.has(String(item.id))).map(item=>String(item.id))]);
+  renderUserNotifications();smUpdateNotificationBadge();
+}
+function deleteUserNotification(id){
+  if(!confirm("Delete this notification from your list?"))return;
+  smSaveNotificationState("dismissed",[...smGetNotificationState("dismissed"),String(id)]);
+  renderUserNotifications();smUpdateNotificationBadge();
+}
+async function loadAdminStatus(){
+  try{
+    const {data,error}=await supabaseClient.from("user_notifications")
+      .select("id,title,message,notification_type,created_at,expires_at")
+      .eq("is_active",true).order("created_at",{ascending:false}).limit(30);
+    if(error)throw error;
+    const now=Date.now();
+    smUserNotificationItems=(data||[]).filter(item=>!item.expires_at||new Date(item.expires_at).getTime()>now);
+    renderUserNotifications();smUpdateNotificationBadge();
+  }catch(error){
+    console.error("Smart Money notifications failed:",error);
+    const box=document.getElementById("smNotificationsList");
+    if(box)box.innerHTML='<div class="sm-notifications-empty">Notifications could not be loaded. Please try again.<br><button type="button" onclick="loadAdminStatus()" style="margin-top:12px;padding:8px 13px;border:0;border-radius:9px;background:#6550bd;color:#fff;font-weight:800">Retry</button></div>';
+  }
+}
+document.addEventListener("keydown",event=>{if(event.key==="Escape")closeUserNotifications();});
+document.getElementById("smNotificationsModal")?.addEventListener("click",event=>{if(event.target.id==="smNotificationsModal")closeUserNotifications();});
+
 /* APP INIT — bounded startup and explicit errors instead of endless Loading labels. */
 window.addEventListener("DOMContentLoaded", async () => {
     const timeout = (ms, label) => new Promise((_, reject) =>
