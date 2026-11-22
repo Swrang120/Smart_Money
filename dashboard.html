@@ -1698,12 +1698,12 @@ button{
       </div>
     </section>
     <section class="sm-package-section">
-      <div class="sm-package-section-title"><span>01</span><div><b>Referral Commission</b><small>Illustrative rates for this package</small></div></div>
+      <div class="sm-package-section-title"><span>01</span><div><b>Referral Commission</b><small>Referral level commission rates</small></div></div>
       <div class="sm-package-table">
         <div class="sm-package-table-head"><span>LEVEL</span><span>RATE / EXAMPLE</span></div>
-        <div class="sm-package-row"><span><i class="sm-level-dot direct"></i><span><b>Level A</b><small>Direct referral</small></span></span><strong id="modalPkgL1">—</strong></div>
-        <div class="sm-package-row"><span><i class="sm-level-dot second"></i><span><b>Level B</b><small>Second level</small></span></span><strong id="modalPkgL2">—</strong></div>
-        <div class="sm-package-row"><span><i class="sm-level-dot third"></i><span><b>Level C</b><small>Third level</small></span></span><strong id="modalPkgL3">—</strong></div>
+        <div class="sm-package-row"><span><i class="sm-level-dot direct"></i><span><b>Level 1</b><small>Direct referral</small></span></span><strong id="modalPkgL1">2%</strong></div>
+        <div class="sm-package-row"><span><i class="sm-level-dot second"></i><span><b>Level 2</b><small>Second level</small></span></span><strong id="modalPkgL2">1%</strong></div>
+        <div class="sm-package-row"><span><i class="sm-level-dot third"></i><span><b>Level 3</b><small>Third level</small></span></span><strong id="modalPkgL3">0.5%</strong></div>
       </div>
     </section>
     <section class="sm-package-section sm-package-benefits">
@@ -1715,7 +1715,7 @@ button{
         <li><span>✓</span> Request a withdrawal when the minimum is met.</li>
       </ul>
     </section>
-    <p id="modalPkgNote" class="sm-package-note">Commissions are subject to package rules, valid referral verification and approved payments. Earnings are not guaranteed.</p>
+
     <button type="button" onclick="closeModal('packageModal')" class="sm-package-close">Close Details <span>→</span></button>
   </section>
 </div>
@@ -2657,17 +2657,11 @@ function updatePackageModal(){
     setText("modalPkgWithdraw", hasPackage ? "₹100 Minimum" : "₹200 Minimum");
     setText("modalPkgPrice", pkg ? "Package price: " + money(pkg.price) : (hasPackage ? "Package price: Please contact support to confirm" : "No package purchased"));
 
-    if(pkg){
-        setText("modalPkgL1", Math.round(pkg.l1*100) + "% / " + money(pkg.price*pkg.l1));
-        setText("modalPkgL2", "8% / " + money(pkg.price*0.08));
-        setText("modalPkgL3", "5% / " + money(pkg.price*0.05));
-        setText("modalPkgNote", "These are illustrative rates for a referral buying this package. Actual commission depends on the referred user's package, valid referral chain, and admin-approved payment. No commission is guaranteed.");
-    } else {
-        setText("modalPkgL1", "Package-specific rate");
-        setText("modalPkgL2", "8% if eligible");
-        setText("modalPkgL3", "5% if eligible");
-        setText("modalPkgNote", hasPackage ? "We could not match this package name to the configured rate table. Please contact support to confirm the correct price and rates." : "Buy/activate a package to see its package-specific details. Commission is credited only after valid payment approval and referral validation.");
-    }
+    // Smart Money referral-level commission rates
+    // These are fixed level rates, separate from package-tier direct commission.
+    setText("modalPkgL1", "2%");
+    setText("modalPkgL2", "1%");
+    setText("modalPkgL3", "0.5%");
 }
 
 /* EMAILJS APPROVED TRIGGER (FIXED) */
