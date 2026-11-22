@@ -3258,22 +3258,32 @@ async function loadReferralLeaderboard(){
 }
 
 
-/* SMART MONEY USER NOTIFICATIONS — per-user read and dismiss state on this device. */
+
+/* SMART MONEY USER NOTIFICATIONS — server-persisted, isolated per-user state. */
 let smUserNotificationItems=[];
-function smNotificationStateKey(kind){
-  return "sm_user_notifications_"+kind+"_"+String(currentUserId||"guest");
-}
-function smGetNotificationState(kind){
-  try{return JSON.parse(localStorage.getItem(smNotificationStateKey(kind))||"[]").map(String);}
-  catch(error){return [];}
-}
-function smSaveNotificationState(kind,ids){
-  try{localStorage.setItem(smNotificationStateKey(kind),JSON.stringify([...new Set(ids.map(String))]));}catch(error){}
+let smUserNotificationState=new Map();
+async function smPersistNotificationState(notificationIds,changes){
+  if(!currentUserId || !Array.isArray(notificationIds) || !notificationIds.length) return false;
+  const rows=notificationIds.map(id=>({
+    user_id:currentUserId,
+    notification_id:String(id),
+    ...changes,
+    updated_at:new Date().toISOString()
+  }));
+  const {error}=await supabaseClient.from("user_notification_states")
+    .upsert(rows,{onConflict:"user_id,notification_id"});
+  if(error)throw error;
+  rows.forEach(row=>{
+    const previous=smUserNotificationState.get(row.notification_id)||{};
+    smUserNotificationState.set(row.notification_id,{...previous,...changes});
+  });
+  return true;
 }
 function smUpdateNotificationBadge(){
-  const read=new Set(smGetNotificationState("read"));
-  const dismissed=new Set(smGetNotificationState("dismissed"));
-  const unread=smUserNotificationItems.filter(item=>!dismissed.has(String(item.id))&&!read.has(String(item.id))).length;
+  const unread=smUserNotificationItems.filter(item=>{
+    const state=smUserNotificationState.get(String(item.id))||{};
+    return !state.is_read && !state.is_dismissed;
+  }).length;
   const count=document.getElementById("smNotificationCount"),dot=document.getElementById("smNotificationDot");
   if(count){count.textContent=unread>99?"99+":String(unread);count.hidden=unread===0;}
   if(dot)dot.hidden=unread===0;
@@ -3281,58 +3291,83 @@ function smUpdateNotificationBadge(){
 function renderUserNotifications(){
   const box=document.getElementById("smNotificationsList");
   if(!box)return;
-  const read=new Set(smGetNotificationState("read"));
-  const dismissed=new Set(smGetNotificationState("dismissed"));
-  const items=smUserNotificationItems.filter(item=>!dismissed.has(String(item.id)));
+  const items=smUserNotificationItems.filter(item=>{
+    const state=smUserNotificationState.get(String(item.id))||{};
+    return !state.is_dismissed;
+  });
   const summary=document.getElementById("smNotificationsSummary");
-  if(summary)summary.textContent=items.length?items.length+" update"+(items.length===1?"":"s"):"No active updates";
+  if(summary)summary.textContent=items.length+" update"+(items.length===1?"":"s");
   if(!items.length){box.innerHTML='<div class="sm-notifications-empty">You are all caught up. No notifications right now. ✨</div>';return;}
   box.innerHTML=items.map(item=>{
-    const id=String(item.id),type=String(item.notification_type||"general").replace(/_/g," ");
+    const id=String(item.id),state=smUserNotificationState.get(id)||{};
+    const type=String(item.notification_type||"general").replace(/_/g," ");
     const date=item.created_at?new Date(item.created_at).toLocaleString():"";
-    return '<article class="sm-notification-item '+(read.has(id)?"":"unread")+'">'
-      +'<button type="button" class="sm-notification-delete" aria-label="Delete notification" title="Delete notification" onclick="deleteUserNotification('+JSON.stringify(id)+')">✕</button>'
+    return '<article class="sm-notification-item '+(state.is_read?"":"unread")+'">'
+      +'<button type="button" class="sm-notification-delete" aria-label="Hide this notification from your account" title="Remove from my notifications" onclick="deleteUserNotification('+JSON.stringify(id)+')">✕</button>'
       +'<h3>'+escapeHtml(item.title||"SMART MONEY UPDATE")+'</h3>'
       +'<p>'+escapeHtml(item.message||"")+'</p>'
       +'<div class="sm-notification-meta"><span class="sm-notification-type">'+escapeHtml(type)+'</span><span>'+escapeHtml(date)+'</span></div>'
       +'</article>';
   }).join("");
 }
-function openUserNotifications(){
+async function openUserNotifications(){
   const modal=document.getElementById("smNotificationsModal");
   if(!modal)return;
-  const read=smGetNotificationState("read");
-  const dismissed=new Set(smGetNotificationState("dismissed"));
-  smSaveNotificationState("read",[...read,...smUserNotificationItems.filter(item=>!dismissed.has(String(item.id))).map(item=>String(item.id))]);
-  renderUserNotifications();smUpdateNotificationBadge();
   modal.classList.add("open");document.body.style.overflow="hidden";
+  const ids=smUserNotificationItems.filter(item=>!(smUserNotificationState.get(String(item.id))||{}).is_dismissed).map(item=>String(item.id));
+  try{
+    await smPersistNotificationState(ids,{is_read:true});
+    renderUserNotifications();smUpdateNotificationBadge();
+  }catch(error){
+    console.error("Could not save notification read state:",error);
+    showToast("Could not sync read status. Please try again.");
+  }
 }
 function closeUserNotifications(){
   document.getElementById("smNotificationsModal")?.classList.remove("open");
   document.body.style.overflow="";
 }
-function markAllNotificationsRead(){
-  const dismissed=new Set(smGetNotificationState("dismissed"));
-  smSaveNotificationState("read",[...smGetNotificationState("read"),...smUserNotificationItems.filter(item=>!dismissed.has(String(item.id))).map(item=>String(item.id))]);
-  renderUserNotifications();smUpdateNotificationBadge();
+async function markAllNotificationsRead(){
+  const ids=smUserNotificationItems.filter(item=>!(smUserNotificationState.get(String(item.id))||{}).is_dismissed).map(item=>String(item.id));
+  try{
+    await smPersistNotificationState(ids,{is_read:true});
+    renderUserNotifications();smUpdateNotificationBadge();
+    showToast("All notifications marked as read.");
+  }catch(error){console.error(error);showToast("Unable to update notifications. Please retry.");}
 }
-function deleteUserNotification(id){
-  if(!confirm("Delete this notification from your list?"))return;
-  smSaveNotificationState("dismissed",[...smGetNotificationState("dismissed"),String(id)]);
-  renderUserNotifications();smUpdateNotificationBadge();
+async function deleteUserNotification(id){
+  if(!confirm("Remove this notification from your account? It will remain available to other users and the Admin."))return;
+  try{
+    await smPersistNotificationState([String(id)],{is_dismissed:true,is_read:true});
+    renderUserNotifications();smUpdateNotificationBadge();
+    showToast("Notification removed from your list.");
+  }catch(error){
+    console.error("Notification dismissal failed:",error);
+    showToast("Could not remove this notification. Please retry.");
+  }
 }
 async function loadAdminStatus(){
+  const box=document.getElementById("smNotificationsList");
   try{
-    const {data,error}=await supabaseClient.from("user_notifications")
-      .select("id,title,message,notification_type,created_at,expires_at")
-      .eq("is_active",true).order("created_at",{ascending:false}).limit(30);
-    if(error)throw error;
+    if(!currentUserId)throw new Error("User session is not ready.");
+    const [notificationsResult,stateResult]=await Promise.all([
+      supabaseClient.from("user_notifications")
+        .select("id,title,message,notification_type,created_at,expires_at")
+        .eq("is_active",true).order("created_at",{ascending:false}).limit(30),
+      supabaseClient.from("user_notification_states")
+        .select("notification_id,is_read,is_dismissed")
+        .eq("user_id",currentUserId)
+    ]);
+    if(notificationsResult.error)throw notificationsResult.error;
+    if(stateResult.error)throw stateResult.error;
     const now=Date.now();
-    smUserNotificationItems=(data||[]).filter(item=>!item.expires_at||new Date(item.expires_at).getTime()>now);
+    smUserNotificationItems=(notificationsResult.data||[]).filter(item=>!item.expires_at||new Date(item.expires_at).getTime()>now);
+    smUserNotificationState=new Map((stateResult.data||[]).map(row=>[String(row.notification_id),{
+      is_read:!!row.is_read,is_dismissed:!!row.is_dismissed
+    }]));
     renderUserNotifications();smUpdateNotificationBadge();
   }catch(error){
     console.error("Smart Money notifications failed:",error);
-    const box=document.getElementById("smNotificationsList");
     if(box)box.innerHTML='<div class="sm-notifications-empty">Notifications could not be loaded. Please try again.<br><button type="button" onclick="loadAdminStatus()" style="margin-top:12px;padding:8px 13px;border:0;border-radius:9px;background:#6550bd;color:#fff;font-weight:800">Retry</button></div>';
   }
 }
