@@ -1355,6 +1355,29 @@ button{
 .sm-package-close span{font-size:17px}
 @media(max-width:520px){.sm-package-overlay{padding:10px!important;align-items:center!important}.sm-package-card{max-height:90dvh!important;padding:17px!important;border-radius:20px!important}.sm-package-header{margin-bottom:17px}.sm-package-hero{padding:17px}.sm-package-meta{gap:7px}.sm-package-meta b{font-size:10px}.sm-package-row{padding:11px 10px}.sm-package-row strong{font-size:10px}.sm-package-table-head{padding:10px}.sm-package-section{margin-top:18px}}
 </style>
+
+<style id="smEarningsPremiumStyles">
+.sm-earnings-overlay{background:rgba(3,8,22,.78);backdrop-filter:blur(12px);padding:16px}
+.sm-earnings-modal{width:min(100%,520px);max-width:520px;padding:0!important;overflow:hidden!important;border:1px solid rgba(148,163,184,.22);border-radius:24px!important;background:linear-gradient(155deg,#111c32 0%,#0b1426 58%,#101b31 100%)!important;color:#f8fafc;box-shadow:0 30px 90px rgba(0,0,0,.5),inset 0 1px rgba(255,255,255,.06)!important}
+.sm-earnings-heading{display:flex;align-items:center;gap:14px;padding:22px 22px 19px;border-bottom:1px solid rgba(148,163,184,.16);background:linear-gradient(110deg,rgba(59,130,246,.13),rgba(99,102,241,.08),transparent)}
+.sm-earnings-icon{width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(145deg,#2563eb,#4f46e5);box-shadow:0 9px 24px rgba(37,99,235,.28)}
+.sm-earnings-icon svg{width:24px;height:24px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sm-earnings-kicker{display:block;margin-bottom:5px;color:#93c5fd;font-size:9px;font-weight:800;letter-spacing:1.5px}
+.sm-earnings-heading h3{margin:0;color:#f8fafc;font-size:18px;font-weight:800;letter-spacing:-.35px}
+.sm-earnings-heading p{margin:5px 0 0;color:#a8b6ca;font-size:12px;line-height:1.45}
+.sm-earnings-x{margin-left:auto;align-self:flex-start;width:32px;height:32px;flex:0 0 32px;border:1px solid rgba(203,213,225,.2);border-radius:10px;background:rgba(255,255,255,.06);color:#dbeafe;font-size:22px;line-height:1;cursor:pointer}
+.sm-earnings-content{max-height:min(62vh,560px);overflow:auto;padding:17px 20px;color:#e2e8f0}
+.sm-earnings-content #earningsHistoryList{display:grid;gap:10px}
+.sm-earnings-content #earningsHistoryList>div{border:1px solid rgba(148,163,184,.18);border-radius:14px;background:rgba(30,45,69,.72);padding:13px;color:#e2e8f0!important}
+.sm-earnings-content #earningsHistoryList strong,.sm-earnings-content #earningsHistoryList b{color:#f8fafc}
+.sm-earnings-content #earningsHistoryList small,.sm-earnings-content #earningsHistoryList p{color:#aebdd1}
+.sm-earnings-loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:26px!important;color:#b8c7dc!important;font-size:13px}
+.sm-earnings-loading span{width:16px;height:16px;border:2px solid rgba(147,197,253,.25);border-top-color:#60a5fa;border-radius:50%;animation:smEarnSpin .7s linear infinite}
+@keyframes smEarnSpin{to{transform:rotate(360deg)}}
+.sm-earnings-close{display:flex;align-items:center;justify-content:center;gap:10px;width:calc(100% - 40px);margin:0 20px 20px;padding:13px;border:1px solid rgba(96,165,250,.35);border-radius:13px;background:linear-gradient(100deg,#2563eb,#4f46e5);color:#fff;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 10px 24px rgba(37,99,235,.2)}
+.sm-earnings-close span{font-size:17px}
+@media(max-width:480px){.sm-earnings-modal{border-radius:20px!important}.sm-earnings-heading{padding:18px 16px;gap:11px}.sm-earnings-heading h3{font-size:16px}.sm-earnings-content{padding:14px;max-height:64vh}.sm-earnings-close{width:calc(100% - 28px);margin:0 14px 14px}}
+</style>
 </head>
 
 <body>
@@ -1726,14 +1749,24 @@ button{
 </div>
 
 <!-- EARNINGS HISTORY -->
-<div id="earningsHistoryModal" class="modal-overlay">
-    <div class="modal-box">
-        <h3 style="color:#7c3aed;margin-top:0">📊 My Earnings & Transactions</h3>
-        <p style="font-size:13px;color:#64748b">Your commission and earnings history.</p>
-        <div id="earningsHistoryList">
-            <div style="text-align:center;color:#64748b;font-size:13px;padding:20px">Loading earnings...</div>
+<div id="earningsHistoryModal" class="modal-overlay sm-earnings-overlay">
+    <div class="modal-box sm-earnings-modal">
+        <div class="sm-earnings-heading">
+            <div class="sm-earnings-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h17M8 15v-4m4 4V7m4 8V4m4 11V9"/></svg>
+            </div>
+            <div><span class="sm-earnings-kicker">SMART MONEY • ACCOUNT ACTIVITY</span>
+                <h3>My Earnings &amp; Transactions</h3>
+                <p>Track your commission and transaction history.</p>
+            </div>
+            <button type="button" class="sm-earnings-x" onclick="closeModal('earningsHistoryModal')" aria-label="Close">×</button>
         </div>
-        <button onclick="closeModal('earningsHistoryModal')" class="btn-action" style="margin-top:15px">Close</button>
+        <div class="sm-earnings-content">
+            <div id="earningsHistoryList">
+                <div class="sm-earnings-loading"><span></span>Loading earnings...</div>
+            </div>
+        </div>
+        <button onclick="closeModal('earningsHistoryModal')" class="sm-earnings-close">Close Window <span>→</span></button>
     </div>
 </div>
 
