@@ -2442,7 +2442,7 @@ select{
 
 
 /* Admin-uploaded package artwork */
-.package-artwork{display:none;width:100%;aspect-ratio:1/1;max-height:330px;padding:8px;object-fit:contain;background:radial-gradient(circle at 50% 35%,#172b58 0%,#07132d 72%);border-bottom:1px solid #e5eaf2}
+.package-artwork{display:block;width:100%;aspect-ratio:1/1;max-height:330px;padding:8px;object-fit:contain;background:radial-gradient(circle at 50% 35%,#172b58 0%,#07132d 72%);border-bottom:1px solid #e5eaf2;min-height:180px}
 .package-artwork.is-visible{display:block}
 @media(max-width:768px){.package-artwork{max-height:290px;padding:5px}}
 
@@ -8603,14 +8603,14 @@ async function loadPublicPackageImages(){
    let img=card.querySelector(".package-artwork");
    if(!img){
     img=document.createElement("img");img.className="package-artwork";img.alt=title+" promotional artwork";
-    img.decoding="async";img.loading=index<2?"eager":"lazy";
-    if(index<2)img.fetchPriority="high";
+    img.decoding="async";img.loading="eager";
+    img.fetchPriority=index<2?"high":"auto";
     const banner=card.querySelector(".pkg-banner");if(banner)banner.insertAdjacentElement("afterend",img);else card.prepend(img);
    }
    if(img.dataset.imageUrl!==url){
     img.dataset.imageUrl=url;
     img.onload=()=>img.classList.add("is-visible");
-    img.onerror=()=>{img.classList.remove("is-visible");console.warn("Package artwork failed to load:",key);};
+    img.onerror=()=>{img.classList.add("is-visible");img.alt=title+" artwork is temporarily unavailable";console.warn("Package artwork failed to load:",key,url);};
     img.src=url;
    }
   });
