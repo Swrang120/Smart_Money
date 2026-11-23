@@ -1932,6 +1932,19 @@ if(window.emailjs){
     try{ emailjs.init(EMAILJS_PUBLIC_KEY); }catch(e){}
 }
 
+function getPackageDisplayName(value){
+    const key=String(value||"").trim().toLowerCase();
+    const names={
+        "starter":"Smart Launchpad","starter package":"Smart Launchpad","smart launchpad":"Smart Launchpad",
+        "intermediate":"Skill Builder","intermediate package":"Skill Builder","skill builder":"Skill Builder",
+        "expert":"Creator Lab","expert package":"Creator Lab","creator lab":"Creator Lab",
+        "master":"Pro Studio","master package":"Pro Studio","pro studio":"Pro Studio",
+        "brahmastra":"Growth Suite","brahmastra package":"Growth Suite","growth suite":"Growth Suite",
+        "premium pro":"All Access","premium pro package":"All Access","all access":"All Access"
+    };
+    return names[key] || String(value||"").trim();
+}
+
 /* GLOBAL STATE */
 let currentUserId = null;
 let currentProfile = {};
@@ -2496,7 +2509,7 @@ async function loadDashboardProfile(){
             if(cachedIdEl && cachedIdentity.referral_code) cachedIdEl.textContent = cachedIdentity.referral_code;
             if(cachedDobEl && cachedIdentity.date_of_birth) cachedDobEl.textContent = cachedIdentity.date_of_birth;
             if(cachedPackageEl && cachedIdentity.package_name){
-                cachedPackageEl.textContent = cachedIdentity.package_name.toUpperCase() + " 👑";
+                cachedPackageEl.textContent = getPackageDisplayName(cachedIdentity.package_name).toUpperCase() + " 👑";
                 cachedPackageEl.classList.add("active");
             }
         }
@@ -2700,7 +2713,7 @@ function renderProfile(profile){
 
     const badge = document.getElementById("activePackageBadge");
     if(packageName && packageName.trim() !== "" && packageName.toLowerCase() !== "none"){
-        badge.innerText = packageName.toUpperCase() + " 👑";
+        badge.innerText = getPackageDisplayName(packageName).toUpperCase() + " 👑";
         badge.classList.add("active");
     }else{
         badge.innerText = "NO PACKAGE";
