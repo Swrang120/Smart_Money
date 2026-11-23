@@ -2604,7 +2604,44 @@ select{
 .apk-menu-copy{display:flex;flex-direction:column;gap:3px}
 .apk-menu-copy small{font-size:9px;font-weight:800;letter-spacing:.7px;color:#a5b4fc}
 @media(max-width:640px){.package-card .commission-box{margin-top:10px}}
-</style></head>
+</style><style id="smOriginalPackageIdentitySystem">
+/* Original Smart Money package identity — native vector artwork, no stock promotional posters */
+.packages-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.package-card{border:1px solid #e2e8f0;border-radius:22px;background:#fff;box-shadow:0 12px 32px rgba(15,23,42,.065);overflow:hidden;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.package-card:hover{transform:translateY(-5px);border-color:#c7d2fe;box-shadow:0 20px 42px rgba(15,23,42,.11)}
+.package-card .pkg-banner{min-height:83px;padding:18px 20px;background:#101b32!important;position:relative}
+.package-card:nth-child(2) .pkg-banner{background:#102b32!important}
+.package-card:nth-child(3) .pkg-banner{background:#21183c!important}
+.package-card:nth-child(4) .pkg-banner{background:#202b3d!important}
+.package-card:nth-child(5) .pkg-banner{background:#351b2b!important}
+.package-card:nth-child(6) .pkg-banner{background:#102b42!important}
+.package-card .pkg-title h3{margin:0;color:#fff;font-size:18px;font-weight:850;letter-spacing:-.35px}
+.package-card .pkg-title p{margin:5px 0 0;color:#cbd5e1;font-size:10px;letter-spacing:.25px}
+.sm-pkg-index{color:#dbeafe;font-size:25px;font-weight:850;letter-spacing:-1px;opacity:.75}
+.sm-package-visual{position:relative;display:flex;align-items:center;justify-content:center;min-height:148px;margin:14px 14px 0;padding:12px 18px;border:1px solid color-mix(in srgb,var(--sm-accent) 22%,#e2e8f0);border-radius:17px;background:radial-gradient(ellipse at 76% 28%,color-mix(in srgb,var(--sm-accent) 13%,white),transparent 48%),linear-gradient(145deg,#f8fafc,#fff);overflow:hidden}
+.sm-package-visual:after{content:"";position:absolute;inset:auto 0 0;height:3px;background:linear-gradient(90deg,transparent,var(--sm-accent),transparent);opacity:.7}
+.sm-package-visual svg{width:min(100%,260px);height:132px;position:relative;z-index:1}
+.sm-visual-tag{position:absolute;left:14px;top:12px;color:var(--sm-accent);font-size:8px;font-weight:900;letter-spacing:1.1px}
+.sm-visual-price{position:absolute;right:13px;bottom:12px;color:#334155;font-size:10px;font-weight:850}
+.package-card .pkg-body{padding:17px}
+.package-card .pkg-summary-text{min-height:0;margin:0 0 12px;color:#475569;font-size:12px;line-height:1.65}
+.package-card .course-box{margin-top:0;border-radius:14px;border-color:#e2e8f0}
+.package-card .course-box-header{background:#f8fafc}
+.package-card .course-box-title{color:#1e293b}
+.package-card .course-count{background:#eef2ff;color:#4338ca}
+.package-card .commission-box{margin-top:12px;padding:10px 12px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8f0}
+.package-card .commission-rate{font-size:13px;color:#475569}
+.package-card .commission-label span:first-child{font-size:9px;color:#64748b}
+.package-card .commission-amount strong{font-size:12px;color:#475569}
+.package-card .pkg-footer{padding:14px 17px;border-top:1px solid #edf0f5;background:#fff}
+.package-card .current-price{font-size:19px;font-weight:900;color:#111827}
+.package-card .buy-btn{border-radius:10px;background:#263cba;box-shadow:0 5px 12px rgba(38,60,186,.18)}
+.package-card .buy-btn:hover{background:#1d2f98}
+.package-card .package-artwork{display:none!important}
+@media(max-width:900px){.packages-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}
+@media(max-width:560px){.packages-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.package-card{border-radius:15px}.package-card .pkg-banner{min-height:72px;padding:12px}.package-card .pkg-title h3{font-size:14px}.package-card .pkg-title p{font-size:8px}.sm-pkg-index{font-size:19px}.sm-package-visual{min-height:108px;margin:9px 9px 0;padding:7px}.sm-package-visual svg{height:95px}.sm-visual-tag{left:9px;top:8px;font-size:6px}.sm-visual-price{right:8px;bottom:7px;font-size:8px}.package-card .pkg-body{padding:10px}.package-card .pkg-summary-text{font-size:10px;line-height:1.5}.package-card .course-box-header{padding:9px}.package-card .course-preview-list{padding:7px}.package-card .course-preview-item{padding:5px 0}.package-card .course-name{font-size:9px}.package-card .commission-box{padding:8px}.package-card .commission-note{font-size:8px}.package-card .pkg-footer{padding:10px}.package-card .current-price{font-size:14px}.package-card .buy-btn{font-size:9px;padding:8px 9px}}
+</style>
+</head>
 
 <body>
 
@@ -3307,28 +3344,15 @@ Learning Package
 
 <div class="package-card">
 
-<div class="pkg-banner bg-1">
-
-<div class="pkg-title">
-
-<h3>
-Starter Package
-</h3>
-
-<p>
-Beginner Growth
-</p>
-
-</div>
-
-<div class="pkg-badge">
-🚀
-</div>
-
-</div>
-
-
-<div class="pkg-body">
+<div class="pkg-banner bg-1 sm-pkg-banner">
+ <div class="pkg-title"><h3>Smart Launchpad</h3><p>Digital foundations · 2 courses</p></div>
+ <span class="sm-pkg-index">01</span>
+ </div>
+ <div class="sm-package-visual" style="--sm-accent:#4f46e5">
+ <div class="sm-visual-tag">FOUNDATION</div><svg viewBox="0 0 260 132" role="img" aria-label="Launchpad learning illustration"><circle cx="204" cy="57" r="42" fill="#c7d2fe" opacity=".5"/><path d="M35 101h190" stroke="#c7d2fe" stroke-width="2"/><rect x="56" y="42" width="74" height="49" rx="8" fill="#fff" stroke="#a5b4fc" stroke-width="2"/><path d="M68 55h49M68 65h35M68 75h26" stroke="#818cf8" stroke-width="3" stroke-linecap="round"/><path d="m168 89 20-48 20 48-20-10-20 10Z" fill="#4f46e5"/><path d="m188 41 8-15 8 15" fill="#818cf8"/><circle cx="188" cy="78" r="5" fill="#fff"/></svg>
+ <span class="sm-visual-price">₹289</span>
+ </div>
+ <div class="pkg-body">
 
 
 <p class="pkg-summary-text">
@@ -3444,7 +3468,7 @@ View All Courses →
 
 <button
 class="details-btn"
-onclick="openPackageModal('Starter Package','2 Essential Courses','30% Commission','₹86.70','₹100 - ₹800','1 Time / Day','7 Days','2%')">
+onclick="openPackageModal('Smart Launchpad','2 Essential Courses','30% Commission','₹86.70','₹100 - ₹800','1 Time / Day','7 Days','2%')">
 
 🔍 View Package Details
 
@@ -3485,28 +3509,15 @@ Buy Now
 
 <div class="package-card">
 
-<div class="pkg-banner bg-2">
-
-<div class="pkg-title">
-
-<h3>
-Intermediate
-</h3>
-
-<p>
-Skill Advancement
-</p>
-
-</div>
-
-<div class="pkg-badge">
-💻
-</div>
-
-</div>
-
-
-<div class="pkg-body">
+<div class="pkg-banner bg-2 sm-pkg-banner">
+ <div class="pkg-title"><h3>Skill Builder</h3><p>Practical skills · 5 courses</p></div>
+ <span class="sm-pkg-index">02</span>
+ </div>
+ <div class="sm-package-visual" style="--sm-accent:#0f766e">
+ <div class="sm-visual-tag">SKILL DEVELOPMENT</div><svg viewBox="0 0 260 132" role="img" aria-label="Skill building illustration"><rect x="48" y="32" width="84" height="62" rx="9" fill="#fff" stroke="#99f6e4" stroke-width="2"/><path d="M61 48h56M61 60h43M61 72h30" stroke="#14b8a6" stroke-width="4" stroke-linecap="round"/><path d="m153 88 22-22 16 13 28-36" fill="none" stroke="#0f766e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="219" cy="43" r="7" fill="#5eead4"/><path d="M38 105h184" stroke="#99f6e4" stroke-width="2"/></svg>
+ <span class="sm-visual-price">₹560</span>
+ </div>
+ <div class="pkg-body">
 
 <p class="pkg-summary-text">
 
@@ -3669,28 +3680,15 @@ Buy Now
 
 <div class="package-card">
 
-<div class="pkg-banner bg-3">
-
-<div class="pkg-title">
-
-<h3>
-Expert Package
-</h3>
-
-<p>
-Professional Tier
-</p>
-
-</div>
-
-<div class="pkg-badge">
-⚡
-</div>
-
-</div>
-
-
-<div class="pkg-body">
+<div class="pkg-banner bg-3 sm-pkg-banner">
+ <div class="pkg-title"><h3>Creator Lab</h3><p>Creative production · 10 courses</p></div>
+ <span class="sm-pkg-index">03</span>
+ </div>
+ <div class="sm-package-visual" style="--sm-accent:#7c3aed">
+ <div class="sm-visual-tag">CREATOR TRACK</div><svg viewBox="0 0 260 132" role="img" aria-label="Creator studio illustration"><rect x="43" y="32" width="105" height="67" rx="10" fill="#fff" stroke="#ddd6fe" stroke-width="2"/><rect x="54" y="43" width="83" height="45" rx="5" fill="#ede9fe"/><path d="m88 54 22 11-22 11V54Z" fill="#7c3aed"/><circle cx="190" cy="58" r="28" fill="#c4b5fd"/><path d="M177 58h26M190 45v26" stroke="#6d28d9" stroke-width="4" stroke-linecap="round"/><path d="M37 108h187" stroke="#ddd6fe" stroke-width="2"/></svg>
+ <span class="sm-visual-price">₹1,149</span>
+ </div>
+ <div class="pkg-body">
 
 <p class="pkg-summary-text">
 
@@ -3812,7 +3810,7 @@ View All 10 Courses →
 
 <button
 class="details-btn"
-onclick="openPackageModal('Expert Package','10 Advanced Courses','70% Commission','₹804.30','₹100 - ₹4,500','2 Times / Day','5 Days','2%')">
+onclick="openPackageModal('Creator Lab','10 Advanced Courses','70% Commission','₹804.30','₹100 - ₹4,500','2 Times / Day','5 Days','2%')">
 
 🔍 View Package Details
 
@@ -3853,28 +3851,15 @@ Buy Now
 
 <div class="package-card">
 
-<div class="pkg-banner bg-4">
-
-<div class="pkg-title">
-
-<h3>
-Master Package
-</h3>
-
-<p>
-Advanced Mastery
-</p>
-
-</div>
-
-<div class="pkg-badge">
-👑
-</div>
-
-</div>
-
-
-<div class="pkg-body">
+<div class="pkg-banner bg-4 sm-pkg-banner">
+ <div class="pkg-title"><h3>Pro Studio</h3><p>Advanced practice · 16 courses</p></div>
+ <span class="sm-pkg-index">04</span>
+ </div>
+ <div class="sm-package-visual" style="--sm-accent:#334155">
+ <div class="sm-visual-tag">PROFESSIONAL TRACK</div><svg viewBox="0 0 260 132" role="img" aria-label="Professional studio illustration"><rect x="47" y="35" width="102" height="62" rx="8" fill="#fff" stroke="#cbd5e1" stroke-width="2"/><path d="M58 48h80v37H58z" fill="#e2e8f0"/><path d="M68 74 83 60l12 9 19-14 13 19" fill="none" stroke="#475569" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="190" cy="63" r="29" fill="#cbd5e1"/><path d="m190 43 6 13 14 2-10 10 2 14-12-7-12 7 2-14-10-10 14-2 6-13Z" fill="#334155"/><path d="M37 108h187" stroke="#cbd5e1" stroke-width="2"/></svg>
+ <span class="sm-visual-price">₹2,499</span>
+ </div>
+ <div class="pkg-body">
 
 <p class="pkg-summary-text">
 
@@ -3996,7 +3981,7 @@ View All 16 Courses →
 
 <button
 class="details-btn"
-onclick="openPackageModal('Master Package','16 Elite Masterclasses','75% Commission','₹1,874.25','₹100 - ₹10,000','Unlimited','Instant','0%')">
+onclick="openPackageModal('Pro Studio','16 Elite Masterclasses','75% Commission','₹1,874.25','₹100 - ₹10,000','Unlimited','Instant','0%')">
 
 🔍 View Package Details
 
@@ -4037,28 +4022,15 @@ Buy Now
 
 <div class="package-card">
 
-<div class="pkg-banner bg-5">
-
-<div class="pkg-title">
-
-<h3>
-Brahmastra
-</h3>
-
-<p>
-Ultimate Growth
-</p>
-
-</div>
-
-<div class="pkg-badge">
-🔥
-</div>
-
-</div>
-
-
-<div class="pkg-body">
+<div class="pkg-banner bg-5 sm-pkg-banner">
+ <div class="pkg-title"><h3>Growth Suite</h3><p>Business & advanced skills · 20 courses</p></div>
+ <span class="sm-pkg-index">05</span>
+ </div>
+ <div class="sm-package-visual" style="--sm-accent:#be123c">
+ <div class="sm-visual-tag">ADVANCED GROWTH</div><svg viewBox="0 0 260 132" role="img" aria-label="Growth suite illustration"><path d="M49 95V70h27v25M88 95V53h27v42M127 95V35h27v60" fill="#ffe4e6" stroke="#fb7185" stroke-width="2"/><path d="m54 59 39-23 34 7 45-25" fill="none" stroke="#be123c" stroke-width="4" stroke-linecap="round"/><path d="m160 18 14-1-5 13" fill="none" stroke="#be123c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="202" cy="74" r="22" fill="#fecdd3"/><path d="m191 75 8 8 15-18" fill="none" stroke="#be123c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M37 108h187" stroke="#fecdd3" stroke-width="2"/></svg>
+ <span class="sm-visual-price">₹5,499</span>
+ </div>
+ <div class="pkg-body">
 
 <p class="pkg-summary-text">
 
@@ -4221,28 +4193,15 @@ Buy Now
 
 <div class="package-card">
 
-<div class="pkg-banner bg-6">
-
-<div class="pkg-title">
-
-<h3>
-Premium Pro
-</h3>
-
-<p>
-Top Tier Access
-</p>
-
-</div>
-
-<div class="pkg-badge">
-💎
-</div>
-
-</div>
-
-
-<div class="pkg-body">
+<div class="pkg-banner bg-6 sm-pkg-banner">
+ <div class="pkg-title"><h3>All Access</h3><p>Complete learning library · 23 courses</p></div>
+ <span class="sm-pkg-index">06</span>
+ </div>
+ <div class="sm-package-visual" style="--sm-accent:#0369a1">
+ <div class="sm-visual-tag">COMPLETE ACCESS</div><svg viewBox="0 0 260 132" role="img" aria-label="All access learning illustration"><rect x="44" y="32" width="61" height="66" rx="8" fill="#fff" stroke="#bae6fd" stroke-width="2"/><rect x="57" y="44" width="61" height="66" rx="8" fill="#e0f2fe" stroke="#7dd3fc" stroke-width="2"/><rect x="70" y="56" width="61" height="54" rx="8" fill="#fff" stroke="#38bdf8" stroke-width="2"/><path d="M82 72h36M82 82h29M82 92h22" stroke="#0284c7" stroke-width="3" stroke-linecap="round"/><circle cx="190" cy="65" r="31" fill="#bae6fd"/><path d="m190 43 7 14 16 2-12 11 3 16-14-8-14 8 3-16-12-11 16-2 7-14Z" fill="#0369a1"/><path d="M37 116h187" stroke="#bae6fd" stroke-width="2"/></svg>
+ <span class="sm-visual-price">₹10,997</span>
+ </div>
+ <div class="pkg-body">
 
 <p class="pkg-summary-text">
 
