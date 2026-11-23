@@ -6853,8 +6853,16 @@ function openCourseModal(packageName){
         return;
     }
 
+    const displayPackageNames={
+        "Starter Package":"Smart Launchpad",
+        "Intermediate Package":"Skill Builder",
+        "Expert Package":"Creator Lab",
+        "Master Package":"Pro Studio",
+        "Brahmastra Package":"Growth Suite",
+        "Premium Pro Package":"All Access"
+    };
     title.innerText =
-    packageName + " — Course Roadmap";
+    (displayPackageNames[packageName] || packageName) + " — Course Roadmap";
 
 
     list.innerHTML="";
