@@ -8419,12 +8419,12 @@ async function loadPublicPackageImages(){
  const brandImage=document.getElementById("siteBrandImage");
  const brandDefault=document.getElementById("brandDefault");
  const logoCacheKey="smart_money_dashboard_header_logo_url";
- const packageCacheKey="smart_money_public_package_image_urls_v1";
+ const packageCacheKey="smart_money_public_package_image_urls_v2";
  const keys={"smart launchpad":"starter","starter package":"starter","skill builder":"intermediate","intermediate":"intermediate","intermediate package":"intermediate","creator lab":"expert","expert package":"expert","pro studio":"master","master":"master","master package":"master","growth suite":"brahmastra","brahmastra":"brahmastra","brahmastra package":"brahmastra","all access":"premium_pro","premium pro":"premium_pro","premium pro package":"premium_pro"};
  const renderPackageImages=(urls,fromCache=false)=>{
   document.querySelectorAll(".package-card").forEach((card,index)=>{
    const title=(card.querySelector(".pkg-title h3")?.textContent||"").trim().toLowerCase(),key=keys[title],url=key&&urls[key];
-   if(!url){card.classList.remove("has-admin-package-artwork");return;}
+   if(!url){card.classList.remove("has-admin-package-artwork");const staleImg=card.querySelector(".package-artwork");if(staleImg)staleImg.remove();return;}
    card.classList.add("has-admin-package-artwork");
    let img=card.querySelector(".package-artwork");
    if(!img){
