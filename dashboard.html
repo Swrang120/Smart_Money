@@ -2724,18 +2724,18 @@ function updatePackageModal(){
     const packageName = rawName.toLowerCase();
     const hasPackage = Boolean(packageName && packageName !== "none");
     const packages = {
-        "starter package": {name:"Starter Package", price:289, l1:0.30},
-        "starter": {name:"Starter Package", price:289, l1:0.30},
-        "intermediate package": {name:"Intermediate Package", price:560, l1:0.50},
-        "intermediate": {name:"Intermediate Package", price:560, l1:0.50},
-        "expert package": {name:"Expert Package", price:1149, l1:0.70},
-        "expert": {name:"Expert Package", price:1149, l1:0.70},
-        "master package": {name:"Master Package", price:2499, l1:0.75},
-        "master": {name:"Master Package", price:2499, l1:0.75},
-        "brahmastra package": {name:"Brahmastra Package", price:5499, l1:0.85},
-        "brahmastra": {name:"Brahmastra Package", price:5499, l1:0.85},
-        "premium pro package": {name:"Premium Pro Package", price:10997, l1:0.85},
-        "premium pro": {name:"Premium Pro Package", price:10997, l1:0.85}
+        "starter package": {name:"Smart Launchpad", price:289, l1:0.30},
+        "starter": {name:"Smart Launchpad", price:289, l1:0.30},
+        "intermediate package": {name:"Skill Builder", price:560, l1:0.50},
+        "intermediate": {name:"Skill Builder", price:560, l1:0.50},
+        "expert package": {name:"Creator Lab", price:1149, l1:0.70},
+        "expert": {name:"Creator Lab", price:1149, l1:0.70},
+        "master package": {name:"Pro Studio", price:2499, l1:0.75},
+        "master": {name:"Pro Studio", price:2499, l1:0.75},
+        "brahmastra package": {name:"Growth Suite", price:5499, l1:0.85},
+        "brahmastra": {name:"Growth Suite", price:5499, l1:0.85},
+        "premium pro package": {name:"All Access", price:10997, l1:0.85},
+        "premium pro": {name:"All Access", price:10997, l1:0.85}
     };
     const pkg = packages[packageName] || null;
     const displayName = hasPackage ? (pkg?.name || rawName) : "No Package Active";
