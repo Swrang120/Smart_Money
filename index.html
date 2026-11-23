@@ -2558,6 +2558,35 @@ select{
   .hero-btn-primary,.hero-btn-secondary{font-size:9px;padding:7px 10px;border-radius:8px}
 }
 </style>
+<style id="smHomeAboutRefresh">
+.sm-home-about{position:relative;overflow:hidden;background:linear-gradient(180deg,#f7f9ff 0%,#fff 100%);padding:76px 0}
+.sm-home-about:before{content:"";position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,#4338ca,#2563eb,#0f766e)}
+.sm-home-about .container{position:relative;max-width:1120px}
+.sm-home-about-head{max-width:790px;margin:0 auto 34px;text-align:center}
+.sm-home-eyebrow{display:inline-flex;align-items:center;gap:8px;color:#4f46e5;font-size:10px;font-weight:850;letter-spacing:1.7px}
+.sm-home-about-head h2{margin:13px 0 12px;color:#111827;font-size:clamp(27px,4vw,42px);line-height:1.15;font-weight:850}
+.sm-home-about-head h2 span{color:#4f46e5}
+.sm-home-about-head>p{margin:0;color:#64748b;font-size:14px;line-height:1.85}
+.sm-home-highlight-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.sm-home-highlight{display:flex;align-items:flex-start;gap:15px;min-height:140px;padding:22px;border:1px solid #e3e8f2;border-radius:19px;background:rgba(255,255,255,.94);box-shadow:0 10px 28px rgba(15,23,42,.045);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.sm-home-highlight:hover{transform:translateY(-3px);border-color:#c7d2fe;box-shadow:0 15px 32px rgba(30,41,59,.08)}
+.sm-home-icon{width:46px;height:46px;flex:0 0 46px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(145deg,#eef2ff,#eaf1ff);color:#4338ca}
+.sm-home-icon svg{width:25px;height:25px}
+.sm-home-highlight h3{margin:2px 0 7px;color:#172033;font-size:15px;font-weight:800}
+.sm-home-highlight p{margin:0;color:#64748b;font-size:12px;line-height:1.75}
+.sm-home-highlight p a{color:#4338ca;font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.sm-home-about-bottom{display:flex;align-items:center;justify-content:space-between;gap:28px;margin-top:28px;padding:25px 26px;border:1px solid #e5eaf3;border-radius:20px;background:#fff;box-shadow:0 10px 28px rgba(15,23,42,.04)}
+.sm-home-about-bottom>div:first-child{max-width:600px}
+.sm-home-about-bottom h3{margin:8px 0;color:#172033;font-size:20px}
+.sm-home-about-bottom p{margin:0;color:#64748b;font-size:12px;line-height:1.8}
+.sm-home-about-actions{display:flex;flex-wrap:wrap;gap:9px;justify-content:flex-end;max-width:430px}
+.sm-home-action{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:11px 15px;border:1px solid #dbe3f0;border-radius:11px;background:#fff;color:#334155!important;font-size:11px;font-weight:800;text-decoration:none!important;white-space:nowrap;transition:all .18s ease}
+.sm-home-action:hover{border-color:#a5b4fc;background:#f5f7ff;transform:translateY(-1px)}
+.sm-home-action-primary{border-color:#4338ca;background:linear-gradient(110deg,#4338ca,#2563eb);color:#fff!important;box-shadow:0 7px 16px rgba(67,56,202,.18)}
+.sm-home-action-primary:hover{background:linear-gradient(110deg,#3730a3,#1d4ed8);color:#fff!important}
+@media(max-width:720px){.sm-home-about{padding:54px 0}.sm-home-highlight-grid{grid-template-columns:1fr}.sm-home-highlight{min-height:0;padding:18px}.sm-home-about-bottom{align-items:flex-start;flex-direction:column;padding:20px}.sm-home-about-actions{justify-content:flex-start;max-width:none}}
+@media(max-width:420px){.sm-home-about-head{text-align:left}.sm-home-about-head>p{font-size:13px}.sm-home-about-actions{display:grid;grid-template-columns:1fr;width:100%}.sm-home-action{width:100%}}
+</style>
 </head>
 
 <body>
@@ -4370,93 +4399,38 @@ Buy Now
      ABOUT
 ========================================================= -->
 
-<section class="section"
-id="about">
-
+<section class="section sm-home-about" id="about">
 <div class="container">
-
-<div class="about-grid">
-
-
-<div class="about-text">
-
-<div class="section-tag">
-ABOUT US
-</div>
-
-
-<h2 class="section-title">
-
-Discover Our
-<span>
-Journey Of Growth
-</span>
-
-</h2>
-
-
-<p>
-
-Smart Money brings together structured digital learning, practical skill-building and guided online task opportunities. Depending on the package and the work currently available, learners may study topics such as content writing, script-based tasks, online promotion and digital uploads. We aim to explain the learning process clearly and help users understand the package terms before they decide to join.
-
-Some packages may include additional courses or access to eligible tasks such as photo, video or ad uploads. Task availability, workload, payment and access duration depend on the applicable written terms; earnings and job outcomes are not guaranteed. Visit the About page to understand the platform, learning approach and work-related information.
-
-</p>
-
-
-<div class="mission-vision">
-
-
-<div class="mv-box">
-
-<h5>
-🚀 Our Mission
-</h5>
-
-<p>
-To inspire continuous learning through practical,
-flexible and accessible digital education.
-</p>
-
-</div>
-
-
-<div class="mv-box">
-
-<h5>
-💡 Our Vision
-</h5>
-
-<p>
-To build a positive community of learners, creators
-and digitally skilled individuals.
-</p>
-
-</div>
-
-
-</div>
-
-<div class="udyam-inline" id="udyam-registration" aria-label="Udyam registration details">
-  <div class="udyam-inline-main">
-    <strong>SMART MONEY LEARNING PLATFORM</strong>
-    <small>Registration No. UDYAM-AS-08-0029426 · Services</small>
+  <div class="sm-home-about-head">
+    <div class="sm-home-eyebrow">SMART MONEY · LEARN WITH PURPOSE</div>
+    <h2>Built from Assam, <span>with a simple purpose.</span></h2>
+    <p>Smart Money began with a simple belief: digital learning should feel clear and approachable, even when someone is starting from zero. We help beginners explore useful skills, practise at their own pace and understand how digital tools can support their ideas.</p>
   </div>
-  <a class="udyam-inline-verify" href="https://udyamregistration.gov.in/Udyam_Verify.aspx" target="_blank" rel="noopener noreferrer">Verify Registration ↗</a>
+
+  <div class="sm-home-highlight-grid">
+    <article class="sm-home-highlight">
+      <div class="sm-home-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19.5h16M6.5 16V8.5L12 5l5.5 3.5V16M9 16v-4h6v4M12 5V2.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="m9.5 8.7 2.5-1.5 2.5 1.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+      <div><h3>Practical Digital Skills</h3><p>Explore useful digital, creative and communication skills through structured learning.</p></div>
+    </article>
+    <article class="sm-home-highlight">
+      <div class="sm-home-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H20v17H7.5A2.5 2.5 0 0 0 5 21.5v-17Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M5 5v16.5M9 6h7M9 10h7M9 14h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+      <div><h3>Structured Learning</h3><p>Follow organised learning paths and practise concepts at your own pace.</p></div>
+    </article>
+    <article class="sm-home-highlight">
+      <div class="sm-home-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 21h8M12 17v4M7.5 9h9M7.5 12.5h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+      <div><h3>Work Opportunities</h3><p>Discover eligible tasks when genuine opportunities are available. Work and payment are not guaranteed.</p></div>
+    </article>
+    <article class="sm-home-highlight">
+      <div class="sm-home-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 19 6v5.2c0 4.5-2.9 7.8-7 9.8-4.1-2-7-5.3-7-9.8V6l7-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m8.8 12 2.1 2.1 4.4-4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div><h3>30-Day Refund Commitment</h3><p>Eligible users who earn ₹0 from Smart Money work during the first 30 days after package activation may qualify for the published full package refund. <a href="refund-policy.html">Read refund terms</a>.</p></div>
+    </article>
+  </div>
+
+  <div class="sm-home-about-bottom">
+    <div><span class="sm-home-eyebrow">OUR APPROACH</span><h3>Learn with clarity. Grow with practice.</h3><p>We value clear package information, responsible technology, respectful communication, privacy and steady improvement. Review course and package details before making a decision.</p></div>
+    <div class="sm-home-about-actions"><a class="sm-home-action sm-home-action-primary" href="about.html">Read Our Story <span aria-hidden="true">→</span></a><a class="sm-home-action" href="faq.html">Frequently Asked Questions <span aria-hidden="true">→</span></a><a class="sm-home-action" href="#support">Contact Support <span aria-hidden="true">→</span></a></div>
+  </div>
 </div>
-
-</div>
-
-
-
-
-
-<!-- About photos removed as requested; keep About text and Mission/Vision cards. -->
-
-</div>
-
-</div>
-
 </section>
 
 <!-- FEEDBACK FORM -->
