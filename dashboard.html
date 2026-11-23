@@ -1407,6 +1407,74 @@ button{
 .sm-earnings-close span{font-size:17px}
 @media(max-width:480px){.sm-earnings-modal{border-radius:20px!important}.sm-earnings-heading{padding:18px 16px;gap:11px}.sm-earnings-heading h3{font-size:16px}.sm-earnings-content{padding:14px;max-height:64vh}.sm-earnings-close{width:calc(100% - 28px);margin:0 14px 14px}}
 </style>
+
+<style id="smPremiumProfileReferralSkin">
+/* Premium navy / indigo profile treatment */
+.profile-card{
+  background:
+    radial-gradient(circle at 88% 12%,rgba(99,102,241,.28),transparent 32%),
+    radial-gradient(circle at 8% 100%,rgba(14,165,233,.16),transparent 38%),
+    linear-gradient(125deg,#101b31 0%,#172b49 52%,#202b55 100%) !important;
+  border:1px solid rgba(148,163,184,.28)!important;
+  box-shadow:0 18px 42px rgba(15,23,42,.22),inset 0 1px 0 rgba(255,255,255,.10)!important;
+}
+.profile-card:before{
+  background:linear-gradient(180deg,#60a5fa,#818cf8,#a78bfa)!important;
+  box-shadow:0 0 18px rgba(99,102,241,.45)!important;
+}
+.profile-card:after{
+  content:"";position:absolute;width:190px;height:190px;right:-90px;bottom:-125px;
+  border:1px solid rgba(191,219,254,.12);border-radius:50%;
+  box-shadow:0 0 0 22px rgba(191,219,254,.035),0 0 0 46px rgba(191,219,254,.025);
+  pointer-events:none;
+}
+.profile-card .profile-label{color:#a9b9d2!important}
+.profile-card .user-info h2{color:#f8fafc!important}
+.profile-card .profile-value{color:#e2eaf7!important}
+.profile-card .id-value{color:#a5c8ff!important}
+.profile-card .copy-btn{
+  color:#eaf2ff!important;background:linear-gradient(135deg,#345a91,#4f46a5)!important;
+  border:1px solid rgba(191,219,254,.24)!important;border-radius:8px!important;
+  box-shadow:0 5px 14px rgba(0,0,0,.18)!important
+}
+.profile-card .package-badge.active{
+  background:linear-gradient(120deg,#2563eb,#6366f1)!important;
+  color:#fff!important;border:1px solid rgba(255,255,255,.22)!important
+}
+/* Premium referral section and member rows */
+.section-box:has(#referralsListContainer){
+  background:linear-gradient(145deg,#111d33 0%,#172b49 58%,#202b50 100%)!important;
+  border:1px solid rgba(148,163,184,.24)!important;border-radius:20px!important;
+  box-shadow:0 16px 38px rgba(15,23,42,.16)!important;color:#f8fafc!important;
+}
+.section-box:has(#referralsListContainer) h3{color:#f8fafc!important}
+.section-box:has(#referralsListContainer) .ref-tab{
+  background:rgba(255,255,255,.08)!important;color:#cbd5e1!important;
+  border:1px solid rgba(203,213,225,.12)!important
+}
+.section-box:has(#referralsListContainer) .ref-tab.active{
+  background:linear-gradient(120deg,#2563eb,#6366f1)!important;color:#fff!important;
+  border-color:rgba(191,219,254,.32)!important;box-shadow:0 5px 15px rgba(37,99,235,.25)!important
+}
+.section-box:has(#referralsListContainer) .referral-card-item{
+  background:linear-gradient(110deg,rgba(255,255,255,.10),rgba(148,163,184,.07))!important;
+  border:1px solid rgba(203,213,225,.17)!important;border-radius:14px!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06)!important
+}
+.section-box:has(#referralsListContainer) .ref-user-info h4{color:#f8fafc!important}
+.section-box:has(#referralsListContainer) .ref-user-info span{color:#a5c8ff!important}
+.section-box:has(#referralsListContainer) .ref-date{color:#cbd5e1!important}
+@media(max-width:600px){
+ .profile-card{padding:20px 16px!important;gap:15px!important;min-height:170px!important}
+ .profile-card .user-info h2{font-size:clamp(17px,4.4vw,22px)!important}
+ .section-box:has(#referralsListContainer){padding:15px!important}
+}
+@media(prefers-reduced-motion:no-preference){
+ .profile-card{animation:smProfileAmbient 8s ease-in-out infinite alternate}
+ @keyframes smProfileAmbient{from{box-shadow:0 16px 36px rgba(15,23,42,.18),inset 0 1px 0 rgba(255,255,255,.08)}to{box-shadow:0 20px 46px rgba(37,99,235,.20),inset 0 1px 0 rgba(255,255,255,.12)}}
+}
+</style>
+
 </head>
 
 <body>
