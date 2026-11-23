@@ -2445,6 +2445,7 @@ select{
 .package-artwork{display:block;width:100%;aspect-ratio:1/1;max-height:330px;padding:8px;object-fit:contain;background:radial-gradient(circle at 50% 35%,#172b58 0%,#07132d 72%);border-bottom:1px solid #e5eaf2;min-height:180px}
 .package-artwork.is-visible{display:block}
 @media(max-width:768px){.package-artwork{max-height:290px;padding:5px}}
+.package-card.has-admin-package-artwork .sm-package-visual{display:none!important;}
 
 
 /* Compact package cards: full information opens on tap */
@@ -8419,11 +8420,12 @@ async function loadPublicPackageImages(){
  const brandDefault=document.getElementById("brandDefault");
  const logoCacheKey="smart_money_dashboard_header_logo_url";
  const packageCacheKey="smart_money_public_package_image_urls_v1";
- const keys={"starter package":"starter","intermediate":"intermediate","intermediate package":"intermediate","expert package":"expert","master":"master","master package":"master","brahmastra":"brahmastra","brahmastra package":"brahmastra","premium pro":"premium_pro","premium pro package":"premium_pro"};
+ const keys={"smart launchpad":"starter","starter package":"starter","skill builder":"intermediate","intermediate":"intermediate","intermediate package":"intermediate","creator lab":"expert","expert package":"expert","pro studio":"master","master":"master","master package":"master","growth suite":"brahmastra","brahmastra":"brahmastra","brahmastra package":"brahmastra","all access":"premium_pro","premium pro":"premium_pro","premium pro package":"premium_pro"};
  const renderPackageImages=(urls,fromCache=false)=>{
   document.querySelectorAll(".package-card").forEach((card,index)=>{
    const title=(card.querySelector(".pkg-title h3")?.textContent||"").trim().toLowerCase(),key=keys[title],url=key&&urls[key];
-   if(!url)return;
+   if(!url){card.classList.remove("has-admin-package-artwork");return;}
+   card.classList.add("has-admin-package-artwork");
    let img=card.querySelector(".package-artwork");
    if(!img){
     img=document.createElement("img");img.className="package-artwork";img.alt=title+" promotional artwork";
