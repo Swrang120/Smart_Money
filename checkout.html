@@ -293,9 +293,11 @@ const SUPABASE_PUBLISHABLE_KEY="sb_publishable_IdI5j4Q4qcd-1knRMVeGKw_O3Ek42ZJ";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 
 const params=new URLSearchParams(location.search);
-const PACKAGE_PRICES={"Basic":299,"Basic Package":299,"Max Pro":4499,"Max Pro Package":4499,"Starter":289,"Starter Package":289,"Intermediate":560,"Intermediate Package":560,"Expert":1149,"Expert Package":1149,"Master":2499,"Master Package":2499,"Brahmastra":5499,"Brahmastra Package":5499,"Premium Pro":10997,"Premium Pro Package":10997};
-const pkgName=params.get("name")||params.get("package")||"Starter Package";
-const pkgPrice=Number(String(params.get("price")||PACKAGE_PRICES[pkgName]||"").replace(/[₹,\s]/g,""));
+const PACKAGE_PRICES={"Basic":299,"Basic Package":299,"Max Pro":4499,"Max Pro Package":4499,"Starter":289,"Starter Package":289,"Intermediate":560,"Intermediate Package":560,"Expert":1149,"Expert Package":1149,"Master":2499,"Master Package":2499,"Brahmastra":5499,"Brahmastra Package":5499,"Premium Pro":10997,"Premium Pro Package":10997,"Smart Launchpad":289,"Skill Builder":560,"Creator Lab":1149,"Pro Studio":2499,"Growth Suite":5499,"All Access":10997};
+const NEW_TO_LEGACY_PACKAGE={"Smart Launchpad":"Starter Package","Skill Builder":"Intermediate Package","Creator Lab":"Expert Package","Pro Studio":"Master Package","Growth Suite":"Brahmastra Package","All Access":"Premium Pro Package"};
+const pkgName=params.get("name")||params.get("package")||"Smart Launchpad";
+const legacyPkgName=NEW_TO_LEGACY_PACKAGE[pkgName]||pkgName;
+const pkgPrice=Number(String(params.get("price")||PACKAGE_PRICES[pkgName]||"").replace(/[₹,\\s]/g,""));
 const refFromUrl=(params.get("ref")||"").trim();
 
 const $=id=>document.getElementById(id);
@@ -555,7 +557,7 @@ async function goToPayment(event){
     if(!sponsorCode)throw new Error("Referral ID could not be confirmed. Please check it again.");
 
     const checkoutData={
-      name:pkgName,price:Number(pkgPrice),ref,
+      name:legacyPkgName,price:Number(pkgPrice),ref,
       fullname:fullName,mobile,email,
       referral_code:sponsorCode
     };
