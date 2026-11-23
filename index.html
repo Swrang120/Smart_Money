@@ -2665,42 +2665,50 @@ select{
 </style>
 
 <style id="smPackagePosterMotion">
-/* Clearly visible, accessible motion for Admin-uploaded package artwork */
+/* Elegant light-sweep animation: keep the artwork still and let a soft highlight pass over it */
 .package-card.has-admin-package-artwork{
-  position:relative!important;
-  overflow:hidden;
-  border:1px solid rgba(99,102,241,.48)!important;
-  animation:smPackageCardGlow 3.8s ease-in-out infinite!important;
-  transition:transform .35s ease,box-shadow .35s ease!important;
+  border:1px solid rgba(100,116,139,.22)!important;
+  box-shadow:0 10px 26px rgba(15,23,42,.075)!important;
+  transition:transform .35s ease,box-shadow .35s ease,border-color .35s ease!important;
+}
+.package-card.has-admin-package-artwork .sm-package-artwork-frame{
+  position:relative!important;display:block!important;width:100%!important;
+  height:auto!important;overflow:hidden!important;isolation:isolate;
+  line-height:0;background:#f8fafc;
+}
+.package-card.has-admin-package-artwork .sm-package-artwork-frame::after{
+  content:"";position:absolute;inset:-20% auto -20% -75%;width:38%;
+  background:linear-gradient(105deg,transparent 0%,rgba(255,255,255,.04) 25%,rgba(255,255,255,.42) 50%,rgba(255,255,255,.07) 72%,transparent 100%);
+  transform:skewX(-18deg);pointer-events:none;z-index:2;
+  animation:smPackageLightSweep 7.2s ease-in-out infinite;
 }
 .package-card.has-admin-package-artwork .package-artwork,
 .package-card.has-admin-package-artwork .package-artwork.is-visible{
-  display:block!important;
+  display:block!important;position:relative!important;z-index:1;
   width:100%!important;height:auto!important;max-height:none!important;
   min-height:0!important;aspect-ratio:auto!important;
   object-fit:contain!important;object-position:center!important;
-  animation:smPackagePosterMotion 3.8s ease-in-out infinite!important;
-  transform-origin:center center!important;
-  will-change:transform,filter;
+  padding:0!important;margin:0!important;transform:none!important;
+  filter:none!important;animation:none!important;
 }
-@keyframes smPackagePosterMotion{
-  0%,100%{transform:translateY(0) scale(1);filter:brightness(1) drop-shadow(0 0 2px rgba(59,130,246,.12))}
-  50%{transform:translateY(-5px) scale(1.018);filter:brightness(1.10) drop-shadow(0 7px 16px rgba(59,130,246,.42))}
-}
-@keyframes smPackageCardGlow{
-  0%,100%{box-shadow:0 9px 24px rgba(15,23,42,.09),0 0 0 1px rgba(99,102,241,.08)}
-  50%{box-shadow:0 16px 34px rgba(37,99,235,.18),0 0 20px rgba(99,102,241,.22)}
+@keyframes smPackageLightSweep{
+  0%,18%{left:-75%;opacity:0}
+  28%{opacity:1}
+  58%{left:145%;opacity:.85}
+  68%,100%{left:145%;opacity:0}
 }
 @media(hover:hover){
  .package-card.has-admin-package-artwork:hover{
-  transform:translateY(-6px)!important;
-  box-shadow:0 22px 44px rgba(15,23,42,.18),0 0 28px rgba(99,102,241,.22)!important
+  transform:translateY(-3px)!important;
+  border-color:rgba(99,102,241,.42)!important;
+  box-shadow:0 16px 34px rgba(30,41,59,.13)!important
  }
+ .package-card.has-admin-package-artwork:hover .package-artwork{transform:scale(1.012)!important;transition:transform .6s ease!important}
 }
 @media(prefers-reduced-motion:reduce){
  .package-card.has-admin-package-artwork,
- .package-card.has-admin-package-artwork .package-artwork,
- .package-card.has-admin-package-artwork .package-artwork.is-visible{
+ .package-card.has-admin-package-artwork .sm-package-artwork-frame::after,
+ .package-card.has-admin-package-artwork .package-artwork{
   animation:none!important;transition:none!important;transform:none!important
  }
 }
@@ -8496,6 +8504,11 @@ async function loadPublicPackageImages(){
     img.decoding="async";img.loading="eager";
     img.fetchPriority=index<2?"high":"auto";
     const banner=card.querySelector(".pkg-banner");if(banner)banner.insertAdjacentElement("afterend",img);else card.prepend(img);
+   }
+   let frame=img.parentElement;
+   if(!frame||!frame.classList.contains("sm-package-artwork-frame")){
+    frame=document.createElement("div");frame.className="sm-package-artwork-frame";
+    img.parentNode.insertBefore(frame,img);frame.appendChild(img);
    }
    if(img.dataset.imageUrl!==url){
     img.dataset.imageUrl=url;
