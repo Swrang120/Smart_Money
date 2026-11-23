@@ -2587,7 +2587,24 @@ select{
 @media(max-width:720px){.sm-home-about{padding:54px 0}.sm-home-highlight-grid{grid-template-columns:1fr}.sm-home-highlight{min-height:0;padding:18px}.sm-home-about-bottom{align-items:flex-start;flex-direction:column;padding:20px}.sm-home-about-actions{justify-content:flex-start;max-width:none}}
 @media(max-width:420px){.sm-home-about-head{text-align:left}.sm-home-about-head>p{font-size:13px}.sm-home-about-actions{display:grid;grid-template-columns:1fr;width:100%}.sm-home-action{width:100%}}
 </style>
-</head>
+<style id="smTrustClarityFixes">
+/* Keep learning outcomes first; referral information remains visible but secondary. */
+.package-card .pkg-body{display:flex;flex-direction:column}
+.package-card .pkg-summary-text{order:0}
+.package-card .course-box{order:1;margin-top:14px}
+.package-card .commission-box{order:2;margin-top:12px;padding:10px 12px;border:1px solid #e2e8f0;border-radius:12px;background:#f8fafc;box-shadow:none}
+.package-card .commission-label{margin-bottom:4px}
+.package-card .commission-label span:first-child{font-size:9px;letter-spacing:.35px;color:#64748b}
+.package-card .commission-label span:first-child::first-letter{color:inherit}
+.package-card .commission-rate{font-size:13px;font-weight:750;color:#475569}
+.package-card .commission-amount{padding-top:6px;border-top:1px solid #e2e8f0}
+.package-card .commission-amount span:first-child{font-size:9px}
+.package-card .commission-amount strong{font-size:12px;color:#475569}
+.package-card .commission-note{font-size:9px;color:#64748b}
+.apk-menu-copy{display:flex;flex-direction:column;gap:3px}
+.apk-menu-copy small{font-size:9px;font-weight:800;letter-spacing:.7px;color:#a5b4fc}
+@media(max-width:640px){.package-card .commission-box{margin-top:10px}}
+</style></head>
 
 <body>
 
@@ -2769,7 +2786,7 @@ onclick="toggleMenu()">
 
 
 
-<a href="#" class="m-link" id="installApkMenuLink" onclick="downloadSmartMoneyApk(event); toggleMenu();"><span class="index-side-icon"><svg viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M4 17v4h16v-4"/></svg></span><span>INSTALL APK</span></a>
+<a href="#" class="m-link" id="installApkMenuLink" onclick="downloadSmartMoneyApk(event); toggleMenu();"><span class="index-side-icon"><svg viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M4 17v4h16v-4"/></svg></span><span class="apk-menu-copy">INSTALL APK <small>BETA · TEST BUILD</small></span></a>
 
 <a href="dashboard.html"
 class="mobile-dashboard-btn"
@@ -4418,11 +4435,11 @@ Buy Now
     </article>
     <article class="sm-home-highlight">
       <div class="sm-home-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 21h8M12 17v4M7.5 9h9M7.5 12.5h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
-      <div><h3>Work Opportunities</h3><p>Discover eligible tasks when genuine opportunities are available. Work and payment are not guaranteed.</p></div>
+      <div><h3>Work Opportunities</h3><p>Smart Money commits to providing active package members with learning guidance and assigned work opportunities. Payments are made for tasks completed and approved at the published rates.</p></div>
     </article>
     <article class="sm-home-highlight">
       <div class="sm-home-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 19 6v5.2c0 4.5-2.9 7.8-7 9.8-4.1-2-7-5.3-7-9.8V6l7-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m8.8 12 2.1 2.1 4.4-4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div><h3>30-Day Refund Commitment</h3><p>Eligible users who earn ₹0 from Smart Money work during the first 30 days after package activation may qualify for the published full package refund. <a href="refund-policy.html">Read refund terms</a>.</p></div>
+      <div><h3>30-Day Refund Commitment</h3><p>If no approved work earnings are credited during the first 30 days after package activation, members may qualify for the published package refund, subject to the stated eligibility and verification terms. Smart Money provides learning guidance and assigned work opportunities; payment is calculated for completed and approved tasks. <a href="refund-policy.html">Read refund terms</a>.</p></div>
     </article>
   </div>
 
@@ -4502,6 +4519,8 @@ Rating
 <select
 id="fbRating"
 required>
+
+<option value="" selected disabled>Select Rating</option>
 
 <option value="5 Stars - ★★★★★">
 ★★★★★ (5 Stars - Excellent)
@@ -8413,6 +8432,10 @@ function downloadSmartMoneyApk(event){
   if(!link || link.dataset.apkReady !== "true" || !link.href || link.href === location.href+"#"){
     if(event) event.preventDefault();
     alert("Smart Money APK abhi admin ne upload nahi kiya hai.");
+    return;
+  }
+  if(event && !window.confirm("Smart Money APK is a beta/test build. Install only if you trust this source. Continue to download?")){
+    event.preventDefault();
   }
 }
 if(document.readyState === "loading"){
