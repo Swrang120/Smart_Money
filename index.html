@@ -2482,6 +2482,24 @@ select{
 }
 
 
+/* UDYAM CERTIFICATE VIEW MODAL */
+.udyam-view-box{width:min(620px,100%);padding:0;overflow:hidden;background:#f5f7fc}
+.udyam-view-head{padding:20px 24px;background:linear-gradient(120deg,#514a88,#34316c);color:#fff}
+.udyam-view-head small{display:block;font-size:9px;letter-spacing:1.2px;font-weight:800;opacity:.85}
+.udyam-view-head h2{margin:7px 45px 0 0;color:#fff;font-size:20px}
+.udyam-view-paper{margin:18px;padding:18px;border:1px solid #d8deea;background:#fff;box-shadow:0 8px 24px rgba(15,23,42,.08)}
+.udyam-view-gov{padding:12px;background:#514a88;color:#fff;text-align:center}
+.udyam-view-gov strong{display:block;font-family:Georgia,serif;font-size:15px}
+.udyam-view-gov span{display:block;margin-top:4px;font-size:8px;letter-spacing:.8px}
+.udyam-view-title{margin:17px 0;text-align:center;color:#172033;font-family:Georgia,serif;font-size:18px;font-weight:900}
+.udyam-view-row{display:grid;grid-template-columns:1fr 1.25fr;gap:12px;padding:10px 4px;border-bottom:1px solid #e5e9f1;font-size:11px}
+.udyam-view-row span{color:#64748b}
+.udyam-view-row strong{color:#172033;text-align:right;overflow-wrap:anywhere}
+.udyam-view-status{width:max-content;max-width:100%;margin:17px auto 4px;padding:8px 13px;border:2px solid #16834b;border-radius:5px;color:#16834b;font-size:10px;font-weight:900;letter-spacing:1px}
+.udyam-view-foot{padding:0 20px 20px;color:#64748b;font-size:10px;line-height:1.6}
+.udyam-view-foot a{color:#5146ad;font-weight:800}
+@media(max-width:520px){.udyam-view-paper{margin:12px;padding:12px}.udyam-view-row{font-size:10px;grid-template-columns:.9fr 1.1fr}.udyam-view-head{padding:18px}.udyam-view-head h2{font-size:17px}}
+
 /* COMPACT UDYAM REGISTRATION INSIDE ABOUT */
 .udyam-inline{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:22px;padding:15px 17px;border:1px solid #dce4f4;border-left:4px solid #6254c7;border-radius:14px;background:linear-gradient(110deg,#fff,#f2f5ff);box-shadow:0 8px 22px rgba(37,55,105,.07)}
 .udyam-inline-main{min-width:0}
@@ -4785,6 +4803,7 @@ Help Desk
     <div>
       <h4>Useful Links</h4>
       <a href="privacy-policy.html">Privacy &amp; Policy</a>
+      <a href="#udyamCertificateModal" onclick="openUdyamCertificate();return false;">Udyam Registration Certificate</a>
       <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
       <a href="refund-policy.html">Refund Policy</a>
     </div>
@@ -4795,6 +4814,32 @@ Help Desk
 </div>
 </footer>
 
+
+<!-- UDYAM REGISTRATION CERTIFICATE VIEW -->
+<div class="modal-overlay" id="udyamCertificateModal" onclick="if(event.target===this)closeUdyamCertificate()">
+  <div class="modal-box udyam-view-box" role="dialog" aria-modal="true" aria-labelledby="udyamViewTitle">
+    <button class="modal-close" type="button" aria-label="Close certificate" onclick="closeUdyamCertificate()">✕</button>
+    <div class="udyam-view-head">
+      <small>BUSINESS REGISTRATION DETAILS</small>
+      <h2 id="udyamViewTitle">Udyam Registration Certificate</h2>
+    </div>
+    <div class="udyam-view-paper">
+      <div class="udyam-view-gov"><strong>GOVERNMENT OF INDIA</strong><span>MINISTRY OF MICRO, SMALL &amp; MEDIUM ENTERPRISES</span></div>
+      <div class="udyam-view-title">UDYAM REGISTRATION DETAILS</div>
+      <div class="udyam-view-row"><span>Enterprise Name</span><strong>SMART MONEY LEARNING PLATFORM</strong></div>
+      <div class="udyam-view-row"><span>Registration Number</span><strong>UDYAM-AS-08-0029426</strong></div>
+      <div class="udyam-view-row"><span>Enterprise Type</span><strong>MICRO</strong></div>
+      <div class="udyam-view-row"><span>Major Activity</span><strong>SERVICES</strong></div>
+      <div class="udyam-view-row"><span>Classification Year</span><strong>2026–27</strong></div>
+      <div class="udyam-view-row"><span>Classification Date</span><strong>23/11/2026</strong></div>
+      <div class="udyam-view-row"><span>Udyam Registration Date</span><strong>23/11/2026</strong></div>
+      <div class="udyam-view-status">UDYAM · MICRO ENTERPRISE</div>
+    </div>
+    <div class="udyam-view-foot">
+      This is a website display of the registration details supplied to Smart Money, not a scan or replacement of the government-issued certificate. Verify the registration on the <a href="https://udyamregistration.gov.in/Udyam_Verify.aspx" target="_blank" rel="noopener noreferrer">official Udyam portal ↗</a>.
+    </div>
+  </div>
+</div>
 
 <!-- =========================================================
      PACKAGE DETAILS MODAL
@@ -6811,6 +6856,19 @@ function openPackageModal(
 
 }
 
+
+function openUdyamCertificate(){
+    const modal=document.getElementById("udyamCertificateModal");
+    if(!modal)return;
+    modal.style.display="flex";
+    document.body.classList.add("modal-open");
+}
+function closeUdyamCertificate(){
+    const modal=document.getElementById("udyamCertificateModal");
+    if(!modal)return;
+    modal.style.display="none";
+    document.body.classList.remove("modal-open");
+}
 
 function closePackageModal(){
 
