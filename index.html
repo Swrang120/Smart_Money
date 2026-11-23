@@ -2665,32 +2665,44 @@ select{
 </style>
 
 <style id="smPackagePosterMotion">
-/* Subtle premium motion for artwork uploaded from the Admin Panel */
+/* Clearly visible, accessible motion for Admin-uploaded package artwork */
 .package-card.has-admin-package-artwork{
-  border-color:rgba(99,102,241,.22)!important;
-  box-shadow:0 10px 28px rgba(15,23,42,.08),0 0 0 1px rgba(99,102,241,.035)!important;
-  transition:transform .35s ease,box-shadow .35s ease,border-color .35s ease!important;
+  position:relative!important;
+  overflow:hidden;
+  border:1px solid rgba(99,102,241,.48)!important;
+  animation:smPackageCardGlow 3.8s ease-in-out infinite!important;
+  transition:transform .35s ease,box-shadow .35s ease!important;
 }
-.package-card.has-admin-package-artwork .package-artwork{
-  display:block!important;width:100%!important;height:auto!important;
-  max-height:none!important;min-height:0!important;aspect-ratio:auto!important;
+.package-card.has-admin-package-artwork .package-artwork,
+.package-card.has-admin-package-artwork .package-artwork.is-visible{
+  display:block!important;
+  width:100%!important;height:auto!important;max-height:none!important;
+  min-height:0!important;aspect-ratio:auto!important;
   object-fit:contain!important;object-position:center!important;
-  animation:smPackagePosterMotion 5.8s ease-in-out infinite;
-  transform-origin:center center;will-change:transform,filter;
+  animation:smPackagePosterMotion 3.8s ease-in-out infinite!important;
+  transform-origin:center center!important;
+  will-change:transform,filter;
 }
 @keyframes smPackagePosterMotion{
-  0%,100%{transform:translateY(0) scale(1);filter:brightness(1) drop-shadow(0 0 0 rgba(59,130,246,0))}
-  50%{transform:translateY(-2px) scale(1.008);filter:brightness(1.045) drop-shadow(0 5px 12px rgba(59,130,246,.22))}
+  0%,100%{transform:translateY(0) scale(1);filter:brightness(1) drop-shadow(0 0 2px rgba(59,130,246,.12))}
+  50%{transform:translateY(-5px) scale(1.018);filter:brightness(1.10) drop-shadow(0 7px 16px rgba(59,130,246,.42))}
+}
+@keyframes smPackageCardGlow{
+  0%,100%{box-shadow:0 9px 24px rgba(15,23,42,.09),0 0 0 1px rgba(99,102,241,.08)}
+  50%{box-shadow:0 16px 34px rgba(37,99,235,.18),0 0 20px rgba(99,102,241,.22)}
 }
 @media(hover:hover){
  .package-card.has-admin-package-artwork:hover{
-  transform:translateY(-5px)!important;border-color:rgba(99,102,241,.48)!important;
-  box-shadow:0 20px 42px rgba(15,23,42,.15),0 0 24px rgba(99,102,241,.10)!important
+  transform:translateY(-6px)!important;
+  box-shadow:0 22px 44px rgba(15,23,42,.18),0 0 28px rgba(99,102,241,.22)!important
  }
 }
 @media(prefers-reduced-motion:reduce){
- .package-card.has-admin-package-artwork .package-artwork{animation:none!important}
- .package-card.has-admin-package-artwork{transition:none!important}
+ .package-card.has-admin-package-artwork,
+ .package-card.has-admin-package-artwork .package-artwork,
+ .package-card.has-admin-package-artwork .package-artwork.is-visible{
+  animation:none!important;transition:none!important;transform:none!important
+ }
 }
 </style>
 
