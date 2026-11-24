@@ -1,0 +1,107 @@
+name: Build Smart Money Android APK
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: smart-money-android-apk
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Smart Money APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Smart Money
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Create Capacitor Android wrapper
+        run: |
+          mkdir -p www
+          cat > www/index.html <<'HTML'
+          <!doctype html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+            <meta name="theme-color" content="#101827">
+            <title>SMART MONEY</title>
+            <style>
+              * { box-sizing: border-box; }
+              html, body { margin: 0; width: 100%; height: 100%; background: #101827; }
+              iframe { display: block; width: 100%; height: 100%; border: 0; }
+              #fallback { display:none; color:#fff; font:16px system-ui; text-align:center; padding:32px 20px; }
+            </style>
+          </head>
+          <body>
+            <iframe id="app" title="SMART MONEY" src="https://smartmoney.wasmer.app/"></iframe>
+            <div id="fallback">
+              <h2>SMART MONEY</h2>
+              <p>Internet connection is required. Please check your connection and reopen the app.</p>
+              <button onclick="document.getElementById('app').src='https://smartmoney.wasmer.app/'">Try again</button>
+            </div>
+            <script>
+              const frame = document.getElementById('app');
+              frame.addEventListener('error', () => {
+                document.getElementById('fallback').style.display = 'block';
+              });
+            </script>
+          </body>
+          </html>
+          HTML
+
+          npm init -y
+          npm install --save-exact @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
+
+          npx cap init "SMART MONEY" "com.smartmoney.learning" --web-dir=www
+
+          cat > capacitor.config.json <<'JSON'
+          {
+            "appId": "com.smartmoney.learning",
+            "appName": "SMART MONEY",
+            "webDir": "www",
+            "server": {
+              "url": "https://smartmoney.wasmer.app/",
+              "cleartext": false,
+              "allowNavigation": [
+                "smartmoney.wasmer.app",
+                "*.wasmer.app",
+                "*.supabase.co",
+                "*.supabase.in"
+              ]
+            }
+          }
+          JSON
+
+          npx cap add android
+          npx cap sync android
+
+      - name: Build debug APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload Smart Money APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: smart-money-android-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
