@@ -69,8 +69,6 @@ jobs:
           npm init -y
           npm install --save-exact @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
 
-          npx cap init "SMART MONEY" "com.smartmoney.learning" --web-dir=www
-
           cat > capacitor.config.json <<'JSON'
           {
             "appId": "com.smartmoney.learning",
