@@ -8,7 +8,8 @@ const ALLOWED_ORIGINS = new Set([
   "https://smart-money-navy.vercel.app",
   "https://smart-money-swrang120.vercel.app",
   "https://smart-money-git-main-swrang120.vercel.app",
-  "https://smart-money.wasmer.app"
+  "https://smart-money.wasmer.app",
+  "https://smart-money-learning-platform.web.app"
 ]);
 const corsHeadersFor = (origin: string | null) => ({
   "Access-Control-Allow-Origin": origin && ALLOWED_ORIGINS.has(origin)
@@ -27,7 +28,9 @@ const PACKAGE_PRICES: Record<string, number> = {
   "Expert": 1149, "Expert Package": 1149,
   "Master": 2499, "Master Package": 2499,
   "Brahmastra": 5499, "Brahmastra Package": 5499,
-  "Premium Pro": 10997, "Premium Pro Package": 10997
+  "Premium Pro": 10997, "Premium Pro Package": 10997,
+  "Smart Launchpad": 289, "Skill Builder": 560, "Creator Lab": 1149,
+  "Pro Studio": 2499, "Growth Suite": 5499, "All Access": 10997
 };
 
 const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
@@ -76,7 +79,7 @@ Deno.serve(async (req: Request) => {
     let packageName: string;
     let packagePrice: number;
     let transactionId: string | null = null;
-    let screenshotUrl: string | null = null;
+    let screenshotPath: string | null = null;
     let razorpayOrderId: string | null = null;
     let razorpayPaymentId: string | null = null;
 
@@ -119,14 +122,22 @@ Deno.serve(async (req: Request) => {
       packageName = String(body.package_name || "").trim();
       packagePrice = Number(body.package_price ?? body.amount);
       transactionId = String(body.transaction_id || "").replace(/\D/g, "");
-      screenshotUrl = String(body.screenshot_url || body.screenshot_name || "").trim();
+      screenshotPath = String(body.screenshot_path || "").trim();
 
       if (!/^[0-9]{12}$/.test(transactionId)) {
         return respond({ ok: false, error: "Enter the exact 12-digit UPI UTR." }, 400);
       }
-      const expectedPrefix = SUPABASE_URL + "/storage/v1/object/public/payment-proofs/";
-      if (!screenshotUrl.startsWith(expectedPrefix)) {
+      if (!/^pending\/[A-Za-z0-9_-]{16,80}\.(?:jpg|jpeg|png|webp)$/i.test(screenshotPath || "")) {
         return respond({ ok: false, error: "Upload the original payment screenshot before submitting." }, 400);
+      }
+      const { data: proofFile, error: proofError } = await admin.storage
+        .from("payment-proofs").download(screenshotPath!);
+      if (proofError || !proofFile) {
+        return respond({ ok: false, error: "Payment screenshot could not be verified. Please upload it again." }, 400);
+      }
+      if (proofFile.size < 10 * 1024 || proofFile.size > 5 * 1024 * 1024 ||
+          !["image/jpeg", "image/png", "image/webp"].includes(proofFile.type)) {
+        return respond({ ok: false, error: "Payment screenshot file is invalid or exceeds the 5 MB limit." }, 400);
       }
     } else {
       return respond({ ok: false, error: "Unsupported payment method." }, 400);
@@ -197,8 +208,8 @@ Deno.serve(async (req: Request) => {
       admin_note: method === "razorpay"
         ? "Razorpay captured payment verified server-side; awaiting admin package approval."
         : "UPI proof submitted; awaiting manual bank/UTR verification.",
-      screenshot_name: screenshotUrl,
-      screenshot_url: screenshotUrl,
+      screenshot_name: screenshotPath,
+      screenshot_url: screenshotPath,
       is_deleted: false,
       payment_method: method === "razorpay" ? "Razorpay" : String(body.payment_method || "UPI")
     };
