@@ -2805,18 +2805,24 @@ function updatePackageModal(){
     const packageName = rawName.toLowerCase();
     const hasPackage = Boolean(packageName && packageName !== "none");
     const packages = {
-        "starter package": {name:"Smart Launchpad", price:289, l1:0.30},
-        "starter": {name:"Smart Launchpad", price:289, l1:0.30},
-        "intermediate package": {name:"Skill Builder", price:560, l1:0.50},
-        "intermediate": {name:"Skill Builder", price:560, l1:0.50},
-        "expert package": {name:"Creator Lab", price:1149, l1:0.70},
-        "expert": {name:"Creator Lab", price:1149, l1:0.70},
-        "master package": {name:"Pro Studio", price:2499, l1:0.75},
-        "master": {name:"Pro Studio", price:2499, l1:0.75},
-        "brahmastra package": {name:"Growth Suite", price:5499, l1:0.85},
-        "brahmastra": {name:"Growth Suite", price:5499, l1:0.85},
-        "premium pro package": {name:"All Access", price:10997, l1:0.85},
-        "premium pro": {name:"All Access", price:10997, l1:0.85}
+        "smart launchpad": {name:"Smart Launchpad", price:289, l1:0.02},
+        "starter package": {name:"Smart Launchpad", price:289, l1:0.02},
+        "starter": {name:"Smart Launchpad", price:289, l1:0.02},
+        "skill builder": {name:"Skill Builder", price:560, l1:0.02},
+        "intermediate package": {name:"Skill Builder", price:560, l1:0.02},
+        "intermediate": {name:"Skill Builder", price:560, l1:0.02},
+        "creator lab": {name:"Creator Lab", price:1149, l1:0.02},
+        "expert package": {name:"Creator Lab", price:1149, l1:0.02},
+        "expert": {name:"Creator Lab", price:1149, l1:0.02},
+        "pro studio": {name:"Pro Studio", price:2499, l1:0.02},
+        "master package": {name:"Pro Studio", price:2499, l1:0.02},
+        "master": {name:"Pro Studio", price:2499, l1:0.02},
+        "growth suite": {name:"Growth Suite", price:5499, l1:0.02},
+        "brahmastra package": {name:"Growth Suite", price:5499, l1:0.02},
+        "brahmastra": {name:"Growth Suite", price:5499, l1:0.02},
+        "all access": {name:"All Access", price:10997, l1:0.02},
+        "premium pro package": {name:"All Access", price:10997, l1:0.02},
+        "premium pro": {name:"All Access", price:10997, l1:0.02}
     };
     const pkg = packages[packageName] || null;
     const displayName = hasPackage ? (pkg?.name || rawName) : "No Package Active";
